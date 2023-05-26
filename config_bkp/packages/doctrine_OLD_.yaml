@@ -1,0 +1,44 @@
+doctrine:
+    dbal:
+          default_connection: MONTERREY
+          connections:
+            MONTERREY:
+            driver: 'sqlsrv'
+            host: '192.168.0.113\CRM360'
+            port: 51817
+            dbname: 'EMPRESA2'
+            user: '20091'
+            password: '20091'
+            charset: 'UTF-8' 
+    
+    orm:
+        auto_generate_proxy_classes: false
+        metadata_cache_driver:
+            type: service
+            id: doctrine.system_cache_provider
+        query_cache_driver:
+            type: service
+            id: doctrine.system_cache_provider
+        result_cache_driver:
+            type: service
+            id: doctrine.result_cache_provider
+
+services:
+    doctrine.result_cache_provider:
+        class: Symfony\Component\Cache\DoctrineProvider
+        public: false
+        arguments:
+            - '@doctrine.result_cache_pool'
+    doctrine.system_cache_provider:
+        class: Symfony\Component\Cache\DoctrineProvider
+        public: false
+        arguments:
+            - '@doctrine.system_cache_pool'
+
+framework:
+    cache:
+        pools:
+            doctrine.result_cache_pool:
+                adapter: cache.app
+            doctrine.system_cache_pool:
+                adapter: cache.system

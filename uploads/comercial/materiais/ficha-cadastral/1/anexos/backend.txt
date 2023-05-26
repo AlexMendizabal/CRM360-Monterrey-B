@@ -1,0 +1,5 @@
+instala wsl
+docker load -i caminho da imagem
+execut run.bat
+shell composer install 
+php -S 0.0.0.0:8080 -t public

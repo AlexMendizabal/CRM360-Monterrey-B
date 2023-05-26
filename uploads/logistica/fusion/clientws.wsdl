@@ -1,0 +1,896 @@
+<?xml version="1.0"?>
+<wsdl:definitions name="FusiontrakWS" 
+ targetNamespace="urn:myTargetNamespace"
+ xmlns:tns="urn:myTargetNamespace"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" >
+
+ <message name="atualizarEntregaCargaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+</message>
+
+<message name="obtemDesviosRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="paginacao" type="xsd:string"/>
+</message>
+
+<message name="sendMotoristasRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+</message>
+
+<message name="sendEventsRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="password" type="xsd:string"/>
+  <part name="jsonData" type="xsd:string"/>
+</message>
+
+
+<message name="atualizaCargaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="password" type="xsd:string"/>
+  <part name="jsonData" type="xsd:string"/>
+</message>
+
+<message name="atualizaVeiculoCargaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="password" type="xsd:string"/>
+  <part name="jsonData" type="xsd:string"/>
+</message>
+
+<message name="cancelaCargaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="password" type="xsd:string"/>
+  <part name="jsonData" type="xsd:string"/>
+  <part name="LimpaCargaDaEntrega" type="xsd:string"/>
+</message>
+
+
+<message name="listaCargasRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="data_ini" type="xsd:string"/>
+  <part name="data_fin" type="xsd:string"/>
+  <part name="status" type="xsd:string"/>
+ </message>
+
+<message name="getIntErpRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="limite_padrao" type="xsd:string"/>
+</message>
+
+<message name="setIntErpRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="int_id" type="xsd:string"/>
+  <part name="retorno_carga" type="xsd:string"/>
+  <part name="carga" type="xsd:string"/>
+  <part name="lista_int" type="xsd:string"/>
+  <part name="atualizaCargaDaEntrega" type="xsd:string"/>  
+</message>
+
+<message name="getIntErpFilialRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="filial" type="xsd:string"/>
+</message>
+
+<message name="detalheCargaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="carga" type="xsd:string"/>
+  <part name="sn_romaneio" type="xsd:string"/>
+  <part name="data_inicio" type="xsd:string"/>
+  <part name="data_fim" type="xsd:string"/>
+</message>
+
+ <message name="detalheEntregaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="pedido_erp" type="xsd:string"/>
+ </message>
+
+ <message name="obtemEventosRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="idInicial" type="xsd:string"/>
+ </message>
+
+ <message name="obtemEventosItensDevolvidosRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="idEvento" type="xsd:string"/>
+ </message>
+
+ <message name="savePontoReferenciaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+<message name="saveEntregaServicoRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+ <message name="saveNFEntregaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+ <message name="saveDiasCompensacoesRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+ <message name="saveCargaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+<message name="saveCargaEntregasIntRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message> 
+
+ <message name="sendVeiculosRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+  <message name="atualizaSituVeicRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="pSitu" type="xsd:string"/>
+  <part name="pVeic" type="xsd:string"/>
+ </message>
+
+ <message name="sendClientesRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+ <message name="sendClientesPorRotaRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+ <message name="myResponse">
+  <part name="resParam" type="xsd:string"/>
+ </message>
+
+ <message name="saveCombustivelRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="kilometragem" type="xsd:decimal"/>
+  <part name="placa" type="xsd:string"/>
+  <part name="litros" type="xsd:decimal"/>
+  <part name="valor_litro" type="xsd:decimal"/>
+  <part name="tanque_empresa" type="xsd:string"/>
+  <part name="motorista" type="xsd:string"/>
+  <part name="tipo_abastecimento" type="xsd:string"/>
+  <part name="entrada_saida" type="xsd:string"/>
+  <part name="tanque" type="xsd:integer"/>
+  <part name="nome_conferente" type="xsd:string"/>
+ </message>
+
+ <message name="obtemTanquesCombustivelRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+ </message>
+
+ <message name="obtemDespesasRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <!--Esses abaixo campos sao opcionais Obs: sao string por que pode receber varios separados por virgulas-->
+  <part name="romaneio_id" type="xsd:string"/>
+  <part name="periodo_inicial" type="xsd:string"/>
+  <part name="periodo_final" type="xsd:string"/>
+  <part name="motorista_codigo_erp" type="xsd:string"/>
+  <part name="veiculo_codigo_erp" type="xsd:string"/>
+
+
+ </message>
+
+<message name="consultarTodosVeiculosRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+ <message name="consultarVeiculoRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="placaOuId" type="xsd:string"/>
+ </message>
+
+ <message name="atualizarVeiculoRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="placaOuId" type="xsd:string"/>
+  <part name="status" type="xsd:string"/>
+  <part name="km" type="xsd:string"/>
+  <part name="consumoMedio" type="xsd:string"/>
+ </message>
+
+ <message name="obtemAbastecimentoVeiculoRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/> 
+  <part name="data_inicio" type="xsd:string"/>
+  <part name="data_fim" type="xsd:string"/>  
+ </message>
+
+<message name="obtemMediaAbastecimentoVeiculoRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="data_inicio" type="xsd:string"/>
+  <part name="data_fim" type="xsd:string"/>  
+ </message>
+
+ <message name="atualizaValorAdicional">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="tipo_atualizacao" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+</message>
+
+<message name="atualizaValorAdicionalRequest">
+  <part name="login" type="xsd:string"/>
+  <part name="senha" type="xsd:string"/>
+  <part name="tipo_atualizacao" type="xsd:string"/>
+  <part name="array_dados" type="xsd:string"/>
+ </message>
+
+ <wsdl:portType name="samplePortType">
+
+  <operation name="getIntErp">
+    <input message="tns:getIntErpRequest"/>
+    <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="setIntErp">
+    <input message="tns:setIntErpRequest"/>
+    <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="getIntErpFilial">
+    <input message="tns:getIntErpFilialRequest"/>
+    <output message="tns:myResponse"/>
+  </operation>
+
+<operation name="obtemDesvios">
+   <input message="tns:obtemDesviosRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="atualizarEntregaCarga">
+    <input message="tns:atualizarEntregaCargaRequest"/>
+    <output message="tns:myResponse"/>
+   </operation>
+
+  <operation name="sendMotoristas">
+   <input message="tns:sendMotoristasRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="sendEvents">
+   <input message="tns:sendEventsRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+ 
+  <operation name="atualizaCarga">
+   <input message="tns:atualizaCargaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="atualizaVeiculoCarga">
+   <input message="tns:atualizaVeiculoCargaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+  
+
+  <operation name="cancelaCarga">
+   <input message="tns:cancelaCargaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="listaCargas">
+   <input message="tns:listaCargasRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="detalheCarga">
+   <input message="tns:detalheCargaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="detalheEntrega">
+   <input message="tns:detalheEntregaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="obtemEventos">
+   <input message="tns:obtemEventosRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="obtemEventosItensDevolvidos">
+   <input message="tns:obtemEventosItensDevolvidosRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="savePontoReferencia">
+   <input message="tns:savePontoReferenciaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="saveEntregaServico">
+   <input message="tns:saveEntregaServicoRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="saveNFEntrega">
+   <input message="tns:saveNFEntregaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+  
+<operation name="saveDiasCompensacoes">
+   <input message="tns:saveDiasCompensacoesRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="saveCarga">
+   <input message="tns:saveCargaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+<operation name="saveCargaEntregasInt">
+   <input message="tns:saveCargaEntregasIntRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+  
+
+ <operation name="sendClientes">
+   <input message="tns:sendClientesRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+<operation name="sendClientesPorRota">
+   <input message="tns:sendClientesPorRotaRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+  <operation name="sendVeiculos">
+   <input message="tns:sendVeiculosRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="atualizaSituVeic">
+   <input message="tns:atualizaSituVeicRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="saveCombustivel">
+   <input message="tns:saveCombustivelRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="obtemTanquesCombustivel">
+   <input message="tns:obtemTanquesCombustivelRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="obtemDespesas">
+   <input message="tns:obtemDespesasRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+  <operation name="consultarTodosVeiculos">
+   <input message="tns:consultarTodosVeiculosRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+  <operation name="consultarVeiculo">
+   <input message="tns:consultarVeiculoRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="atualizarVeiculo">
+   <input message="tns:atualizarVeiculoRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="obtemAbastecimentoVeiculo">
+   <input message="tns:obtemAbastecimentoVeiculoRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="obtemMediaAbastecimentoVeiculo">
+   <input message="tns:obtemMediaAbastecimentoVeiculoRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+  <operation name="atualizaValorAdicional">
+   <input message="tns:atualizaValorAdicionalRequest"/>
+   <output message="tns:myResponse"/>
+  </operation>
+
+ </wsdl:portType>
+
+
+ <wsdl:binding name="MyBinding" type="tns:samplePortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+  <operation name="getIntErp">
+    <soap:operation soapAction="urn:getIntErp"/>
+      <input>
+        <soap:body use="encoded"
+          namespace="urn:myInputNamespace"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+    <output>
+    <soap:body use="encoded"
+      namespace="urn:myOutputNamespace"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+    </output>
+  </operation>
+
+  <operation name="setIntErp">
+    <soap:operation soapAction="urn:setIntErp"/>
+      <input>
+        <soap:body use="encoded"
+          namespace="urn:myInputNamespace"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+    <output>
+    <soap:body use="encoded"
+      namespace="urn:myOutputNamespace"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+    </output>
+  </operation>
+
+   <operation name="getIntErpFilial">
+    <soap:operation soapAction="urn:getIntErpFilial"/>
+      <input>
+        <soap:body use="encoded"
+          namespace="urn:myInputNamespace"
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+    <output>
+    <soap:body use="encoded"
+      namespace="urn:myOutputNamespace"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+    </output>
+  </operation>
+
+<operation name="obtemDesvios">
+   <soap:operation soapAction="urn:obtemDesvios"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="atualizarEntregaCarga">
+    <soap:operation soapAction="urn:atualizarEntregaCarga"/>
+    <input>
+     <soap:body use="encoded"
+      namespace="urn:myInputNamespace"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+    </input>
+    <output>
+     <soap:body use="encoded"
+      namespace="urn:myOutputNamespace"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+    </output>
+   </operation>
+
+  <operation name="sendMotoristas">
+   <soap:operation soapAction="urn:sendMotoristas"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="sendEvents">
+   <soap:operation soapAction="urn:sendEvents"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+ <operation name="atualizaCarga">
+   <soap:operation soapAction="urn:atualizaCarga"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="atualizaVeiculoCarga">
+   <soap:operation soapAction="urn:atualizaVeiculoCarga"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="cancelaCarga">
+   <soap:operation soapAction="urn:cancelaCarga"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="listaCargas">
+   <soap:operation soapAction="urn:listaCargas"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="detalheCarga">
+   <soap:operation soapAction="urn:detalheCarga"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="detalheEntrega">
+   <soap:operation soapAction="urn:detalheEntrega"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="obtemEventos">
+   <soap:operation soapAction="urn:obtemEventos"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="obtemEventosItensDevolvidos">
+   <soap:operation soapAction="urn:obtemEventosItensDevolvidos"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="savePontoReferencia">
+   <soap:operation soapAction="urn:savePontoReferencia"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="saveEntregaServico">
+   <soap:operation soapAction="urn:saveEntregaServico"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="saveNFEntrega">
+   <soap:operation soapAction="urn:saveNFEntrega"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+   <operation name="saveDiasCompensacoes">
+   <soap:operation soapAction="urn:saveDiasCompensacoes"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+
+  <operation name="saveCarga">
+   <soap:operation soapAction="urn:saveCarga"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="saveCargaEntregasInt">
+   <soap:operation soapAction="urn:saveCargaEntregasInt"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+   <operation name="sendVeiculos">
+   <soap:operation soapAction="urn:sendVeiculos"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+   <operation name="atualizaSituVeic">
+   <soap:operation soapAction="urn:atualizaSituVeic"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+  
+   <operation name="sendClientes">
+   <soap:operation soapAction="urn:sendClientes"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+  
+  <operation name="sendClientesPorRota">
+   <soap:operation soapAction="urn:sendClientesPorRota"/>
+   <input>
+    <soap:body use="encoded"
+     namespace="urn:myInputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+     namespace="urn:myOutputNamespace"
+     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="saveCombustivel">
+   <soap:operation soapAction="urn:saveCombustivel"/>
+   <input>
+    <soap:body use="encoded"
+               namespace="urn:myInputNamespace"
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+               namespace="urn:myOutputNamespace"
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="obtemTanquesCombustivel">
+   <soap:operation soapAction="urn:obtemTanquesCombustivel"/>
+   <input>
+    <soap:body use="encoded"
+               namespace="urn:myInputNamespace"
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+               namespace="urn:myOutputNamespace"
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="obtemDespesas">
+   <soap:operation soapAction="urn:obtemDespesas"/>
+   <input>
+    <soap:body use="encoded"
+               namespace="urn:myInputNamespace"
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded"
+               namespace="urn:myOutputNamespace"
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>  
+
+  <operation name="consultarTodosVeiculos">
+   <soap:operation soapAction="urn:consultarTodosVeiculos"/>
+   <input>
+    <soap:body use="encoded" namespace="urn:myInputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded" namespace="urn:myOutputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="consultarVeiculo">
+   <soap:operation soapAction="urn:consultarVeiculo"/>
+   <input>
+    <soap:body use="encoded" namespace="urn:myInputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded" namespace="urn:myOutputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="atualizarVeiculo">
+   <soap:operation soapAction="urn:atualizarVeiculo"/>
+   <input>
+    <soap:body use="encoded" namespace="urn:myInputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded" namespace="urn:myOutputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+ </operation>
+
+  <operation name="obtemAbastecimentoVeiculo">
+   <soap:operation soapAction="urn:obtemAbastecimentoVeiculo"/>
+   <input>
+    <soap:body use="encoded" namespace="urn:myInputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded" namespace="urn:myOutputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+   <operation name="obtemMediaAbastecimentoVeiculo">
+   <soap:operation soapAction="urn:obtemMediaAbastecimentoVeiculo"/>
+   <input>
+    <soap:body use="encoded" namespace="urn:myInputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded" namespace="urn:myOutputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+  <operation name="atualizaValorAdicional">
+   <soap:operation soapAction="urn:atualizaValorAdicional"/>
+   <input>
+    <soap:body use="encoded" namespace="urn:myInputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </input>
+   <output>
+    <soap:body use="encoded" namespace="urn:myOutputNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </output>
+  </operation>
+
+ </wsdl:binding>
+ <wsdl:service name="FusiontrakWSService">
+  <documentation>Returns a greeting string.
+  </documentation>
+    <port name="MyPort" binding="tns:MyBinding">
+      <soap:address location="http://int.fusiondms.com.br/clientws/clientws.php"/>
+    </port>    
+ </wsdl:service>
+</wsdl:definitions>
