@@ -24,6 +24,8 @@ class AtividadesController
      */
     public function index(Connection $connection, Request $request): JsonResponse
     {
+       
+
         try {
 
             $id                     = $request->query->get("id");
