@@ -23,7 +23,7 @@ use PDO;
  */
 class AgendaController extends AbstractController
 {
-    /**
+        /**
      * @Route(
      *  "/comercial/agenda/acessos",
      *  name="comercial.agenda-acessos",
@@ -385,23 +385,7 @@ class AgendaController extends AbstractController
                     }
                     break;
                 case '3':
-
-                    $status = 3;
-                    $cor = "#21C710";
-                    if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
-                        $uploadedFile = new UploadedFile(
-                            $_FILES['document']['tmp_name'],
-                            $_FILES['document']['name'],
-                            $_FILES['document']['type'],
-                            $_FILES['document']['size'],
-                            $_FILES['document']['error'],
-                            true
-                        );
-                        $fileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
-                        $uploadedFile->move('uploads', $fileName);
-                        $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $fileName;
-                    }
-
+                    $this->finalizarCompromisso($connection, $request);
                     break;
                 case '4':
                     $this->rescheduleCompromisso($connection, $request);
@@ -449,6 +433,71 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
+     /**
+     * @Route(
+     *  "/comercial/agenda/compromisso/finalizar",
+     *  name="comercial.agenda-compromisso-finalizar",
+     *  methods={"POST"}
+     * )
+     * @return JsonResponse
+     */
+
+    public function finalizarCompromisso(Connection $connection, Request $request)
+    {   
+        
+        try {
+       
+        $data = json_decode($request->getContent(), true);
+        $idCompromissoReagendado = $data['ID_AGENDA'];
+        $obs_final = !empty($data['obsFinalizar']) ? strtoupper($data['obsFinalizar']) : '';
+        $codTitulo = $data['codTitulo'];
+        $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
+        $formaContato = $data['formContactId'];
+        $idVendedor = $data['idVendedor'];
+        $meioContato = $data['typeContactId'];
+        
+        if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
+            $uploadedFile = new UploadedFile(
+                $_FILES['document']['tmp_name'],
+                $_FILES['document']['name'],
+                $_FILES['document']['type'],
+                $_FILES['document']['size'],
+                $_FILES['document']['error'],
+                true
+            );
+            $fileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
+            $uploadedFile->move('uploads', $fileName);
+            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $fileName;
+        }
+
+        $finalizar = $connection->query(
+        "EXEC [PRC_AGEN_VEND_CADA]
+            @AGENDA = '{$idCompromissoReagendado}',
+            @COR = '#21C710',    
+            @STATUS = '3',
+            @OBS_FINAL = '{$obs_final}'"
+        )->fetchAll();
+
+        dd($finalizar);
+
+        if ($finalizar[0]['MSG'] == 'TRUE') {
+            $message = array('responseCode' => 200);
+        } else {
+            $message = array('responseCode' => 204);
+        }
+    } catch (DBALException $e) {
+        $message = array(
+            'responseCode' => $e->getCode(),
+            'message' => $e->getMessage()
+        );
+    }
+
+    $response = new JsonResponse($message);
+    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+    return $response;
+    }
+
     /**
      * @Route(
      *  "/comercial/agenda/compromiso/eliminar",
@@ -574,6 +623,7 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     } */
+
     /**
      * @Route(
      *  "/comercial/agenda/compromisso/reagendar",
@@ -758,53 +808,7 @@ class AgendaController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route(
-     *  "/comercial/agenda/estados",
-     *  name="comercial.agenda-estados",
-     *  methods={"GET"}
-     * )
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function estadosAgenda(Connection $connection, Request $request): JsonResponse
-    {
-        $usuariocontroller = new UsuarioController();
-        $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
-        try {
-            $estados = [];
-            $res = $connection->query("
-            EXEC [PCR_OBTENER_ESTADOS]
-        ")->fetchAll();
 
-            if (!empty($res)) {
-                foreach ($res as $row) {
-                    $estado = new \stdClass;
-                    $estado->id = (int)$row['ID_ESTADO'];
-                    $estado->nombre = $row['NOMBRE_ESTADO'];
-                    $estados[] = $estado;
-                }
-                $message = [
-                    'responseCode' => 200,
-                    'result' => $estados
-                ];
-            } else {
-                $message = [
-                    'responseCode' => 204,
-                    'result' => $estados
-                ];
-            }
-        } catch (DBALException $e) {
-            $message = [
-                'responseCode' => $e->getCode(),
-                'message' => $e->getMessage()
-            ];
-        }
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
 
      /**
      * @Route(
