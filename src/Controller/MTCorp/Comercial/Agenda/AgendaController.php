@@ -143,7 +143,7 @@ class AgendaController extends AbstractController
     public function getCompromisso(Connection $connection, Request $request, $id)
     {
         $usuariocontroller = new UsuarioController();
-
+      
         if ($request->isMethod('GET')) {
             try {
                 $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
@@ -249,26 +249,7 @@ class AgendaController extends AbstractController
             } else {
                 $id_vendedor = $infoUsuario->idVendedor;
             }
-            $anexo = $data['anexo'];
-            //anexo archivo
-
-            // El JSON se decodificó correctamente
-            // Acceder a la URL de la imagen
-            $path = $data['anexo']['path'];
-            $document   = new ParseFileFromRequestController();
-            $document
-            ->setRequest($request)
-            ->setPath($path)
-            ->save();
-                          
-            $documentoLocalFisico = $document->getFileLink();
-
-            $pattern        = "/^.*\.(jpeg|gif|png|apng|svg|bmp|ico|jpg)$/i";
-            $match          = preg_match($pattern, $documentoLocalFisico);
-
-            $documentoTipo  = $match ? "IMAGEM" : "DOCUMENTO";
-            // Utilizar la URL de la imagen según tus necesidades
-            echo "URL de la imagen: " . $path;
+            
 
             $save = $connection->query("
                     EXEC [PRC_AGEN_VEND_CADA]
@@ -682,21 +663,49 @@ class AgendaController extends AbstractController
 
      /**
      * @Route(
-     *  "/comercial/agenda/reporte",
-     *  name="comercial.reporte",
+     *  "/comercial/agenda/ruta",
+     *  name="comercial.agenda-ruta",
      *  methods={"POST"}
      * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
-/*     public function agenadaestado(Connection $connection, Request $request)
+    public function rutasVendedor(Connection $connection, Request $request)
     {
+        $usuariocontroller = new UsuarioController();
+        $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
+
         try {
             $data = json_decode($request->getContent(), true);
-            $id_vendedor = $data['id_vendedor'];
-             
+            $id_agenda = $data['id_agenda'];
+            $datetime = $data['datetime'];
+            $latitud =   $data['latitud'];
+            $longitud = $data['longitud'];
+            if(!$infoUsuario->id )
+            {
+           $rutas = $connection->query("
+                EXEC [MTCORP_MODU_AGE_REPORT]
+                    @id_agenda = '{$id_agenda}'
+                    ,@datetime = '{$datetime}'
+                    ,@latitud = '{$latitud}'
+                    ,@longitud = '{$longitud}'
+                 ")->fetchAll();
+            }
 
+            if(count($rutas)>0)
+            { 
+                $message = array(
+                'responseCode' => 200,
+                'result' => 'La ruta fue agregada'
+                );
+            }
+            else{
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => ''
+                    );
+            }
 
         } catch (DBALException $e) {
             $message = array(
@@ -708,5 +717,5 @@ class AgendaController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
-    } */
+    }
 }
