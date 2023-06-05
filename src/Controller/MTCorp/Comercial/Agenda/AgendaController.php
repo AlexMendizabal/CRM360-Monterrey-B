@@ -34,11 +34,14 @@ class AgendaController extends AbstractController
      * @return JsonResponse
      */
     public function getAcessos(Connection $connection, Request $request)
-    {
+    {   
+        $usuariocontroller = new UsuarioController();
+        $functionscontroller = new FunctionsController();
+        $comercialcontroller = new ComercialController();
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
-            $simuladorVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
+            $simuladorVendas = $comercialcontroller->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
 
             $res = array(
                 array(
@@ -47,14 +50,14 @@ class AgendaController extends AbstractController
             );
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
-                return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
+                return $functionscontroller->Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                return $functionscontroller->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return $functionscontroller->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(
+            return $functionscontroller->Retorno(
                 false,
                 'Erro ao retornar dados.',
                 $e->getMessage(),
@@ -73,8 +76,10 @@ class AgendaController extends AbstractController
      */
     public function getCompromissos(Connection $connection, Request $request)
     {
+        $usuariocontroller = new UsuarioController();
+
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
             /* dd($infoUsuario); */
             $params = $request->query->all();
             $inicio = date('d/m/Y', strtotime($params['inicio'])) . ' 00:00:00';
@@ -143,15 +148,17 @@ class AgendaController extends AbstractController
      */
     public function getCompromisso(Connection $connection, Request $request, $id)
     {
+        $usuariocontroller = new UsuarioController();
+
         if ($request->isMethod('GET')) {
             try {
-                $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+                $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
                 $res = $connection->query(
-                    "
+                "
                 EXEC [PRC_AGEN_VEND_CONS]
                 @ID_AGENDA = '{$id}'
-            "
+                "
                 )->fetchAll();
 
                 if (!empty($res)) {
@@ -244,7 +251,8 @@ class AgendaController extends AbstractController
      * @return JsonResponse
      */
     public function saveCompromisso(Connection $connection, Request $request)
-    {
+    {   
+        $usuariocontroller = new UsuarioController();
         try {
             /* Variables de control */
             $swAgenda = false;
@@ -253,12 +261,12 @@ class AgendaController extends AbstractController
             $longitud = '';
             $codigo_cliente = '';
 
-
             $data = json_decode($request->getContent(), true);
 
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $cor = "";
+            
             if ($infoUsuario->matricula == 1) {
                 $cor = "#0033ff";
             } else {
@@ -445,19 +453,13 @@ class AgendaController extends AbstractController
 
     public function finalizarCompromisso(Connection $connection, Request $request)
     {   
-        
         try {
-       
         $data = json_decode($request->getContent(), true);
-        $idCompromissoReagendado = $data['ID_AGENDA'];
+        $id_agenda = $data['ID_AGENDA'];
         $obs_final = !empty($data['obsFinalizar']) ? strtoupper($data['obsFinalizar']) : '';
-        $codTitulo = $data['codTitulo'];
-        $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
-        $formaContato = $data['formContactId'];
-        $idVendedor = $data['idVendedor'];
-        $meioContato = $data['typeContactId'];
-        
-        if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
+        $destination = "c:\imagen\ipd.png";
+
+       if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
             $uploadedFile = new UploadedFile(
                 $_FILES['document']['tmp_name'],
                 $_FILES['document']['name'],
@@ -470,17 +472,16 @@ class AgendaController extends AbstractController
             $uploadedFile->move('uploads', $fileName);
             $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $fileName;
         }
-
+      
         $finalizar = $connection->query(
-        "EXEC [PRC_AGEN_VEND_CADA]
-            @AGENDA = '{$idCompromissoReagendado}',
-            @COR = '#21C710',    
-            @STATUS = '3',
-            @OBS_FINAL = '{$obs_final}'"
-        )->fetchAll();
-
-        dd($finalizar);
-
+            "EXEC [PRC_AGEN_VEND_FIN]
+                @AGENDA = '{$id_agenda}',
+                @COR = '#21C710',    
+                @STATUS = 3,
+                @OBS_FINAL = '{$obs_final}',
+                @DESTINO_DOCUMENTO = '{$destination}'"
+            )->fetchAll();
+            
         if ($finalizar[0]['MSG'] == 'TRUE') {
             $message = array('responseCode' => 200);
         } else {
@@ -809,6 +810,50 @@ class AgendaController extends AbstractController
     }
 
 
+    /**
+     * @Route(
+     *  "/comercial/agenda/getruta",
+     *  name="comercial.agenda-getruta",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getrutasVendedor(Connection $connection, Request $request)
+    {   
+        try {
+            $params = $request->query->all();
+            $id_agenda = $params['id_agenda'];
+            $array_vacio = [];
+            $rutas = $connection->query("
+                EXEC [PROC_AGEN_VEN_UB_GET]
+                    @id_agenda = '{$id_agenda}'
+                 ")->fetchAll();
+
+            if (count($rutas) > 0) {
+                $message = [
+                    'responseCode' => 200,
+                    'result' => $rutas
+                ];
+            } else {
+                $message = [
+                    'responseCode' => 204,
+                    'result' => $array_vacio
+                ];
+            }
+
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
 
      /**
      * @Route(

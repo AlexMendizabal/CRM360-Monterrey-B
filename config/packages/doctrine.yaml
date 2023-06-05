@@ -1,30 +1,36 @@
+#doctrine:
+#  dbal:
+#    default_connection: default
+#    connections:
+#      MONTERREY:
+#        driver: "pdo_sqlsrv"
+# server_version: "DESKTOP-0EIJ7PA"
+#        host: "localhost" # o el nombre del servidor de base de datos
+#        port: 1433
+#        dbname: "EMPRESA2"
+#        user: "DESKTOP-0EIJ7PA/A."
+#        password: ""
+
 doctrine:
-    dbal:
-        default_connection: MONTERREY
-        connections:
-            MONTERREY:
-                # driver: 'pdo_sqlsrv'
-                # host: 'SDMTSQL01\DMANETONI'
-                # port: 60040
-                # dbname: 'MTCORP'
-                # user: 'appMTCorp'
-                # password: 'appMTCorp'
-                # charset: 'UTF-8'
-                driver: "pdo_sqlsrv"
-                host: '192.168.0.113\CRM360'
-                port: 51817
-                dbname: 'CRM360'
-                user: 'appCRM360'
-                password: 'p5D7*L3%4O'
-                charset: "UTF-8"
-    # orm:
-    #     auto_generate_proxy_classes: true
-    #     naming_strategy: doctrine.orm.naming_strategy.underscore
-    #     auto_mapping: true
-    #     mappings:
-    #         App:
-    #             is_bundle: false
-    #             type: annotation
-    #             dir: '%kernel.project_dir%/src/Entity'
-    #             prefix: 'App\Entity'
-    #             alias: App
+  dbal:
+    default_connection: default
+    connections:
+      default:
+        driver: pdo_sqlsrv
+        host: localhost
+        port: 1433
+        dbname: CRM360
+        user: reflo
+        password: "123"
+
+  # orm:
+  #     auto_generate_proxy_classes: true
+  #     naming_strategy: doctrine.orm.naming_strategy.underscore
+  #     auto_mapping: true
+  #     mappings:
+  #         App:
+  #             is_bundle: false
+  #             type: annotation
+  #             dir: '%kernel.project_dir%/src/Entity'
+  #             prefix: 'App\Entity'
+  #             alias: App
