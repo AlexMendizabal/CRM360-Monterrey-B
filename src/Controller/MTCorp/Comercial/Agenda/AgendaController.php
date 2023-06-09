@@ -249,6 +249,7 @@ class AgendaController extends AbstractController
      */
     public function saveCompromisso(Connection $connection, Request $request)
     {
+        $usuariocontroller = new UsuarioController();
         try {
             /* Variables de control */
             $swAgenda = false;
@@ -449,51 +450,45 @@ class AgendaController extends AbstractController
     {   
         
         try {
-       
-        $data = json_decode($request->getContent(), true);
-        $idCompromissoReagendado = $data['ID_AGENDA'];
-        $obs_final = !empty($data['obsFinalizar']) ? strtoupper($data['obsFinalizar']) : '';
-        $codTitulo = $data['codTitulo'];
-        $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
-        $formaContato = $data['formContactId'];
-        $idVendedor = $data['idVendedor'];
-        $meioContato = $data['typeContactId'];
-        
-        if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
-            $uploadedFile = new UploadedFile(
-                $_FILES['document']['tmp_name'],
-                $_FILES['document']['name'],
-                $_FILES['document']['type'],
-                $_FILES['document']['size'],
-                $_FILES['document']['error'],
-                true
+            $jsonData = $request->getContent();
+            $data = json_decode($jsonData, true);
+            $id_agenda = !empty($data['id_agenda']) ? $data['id_agenda'] : 'no se permite nulos';
+            $obs_final = !empty($data['obs_final']) ? $data['obs_final'] : 'no se permite nulos';
+            $anexo = !empty($data['anexo']) ? $data['anexo'] : 'no se permite nulos';
+
+
+            
+            $statement = $connection->prepare("EXEC PRC_AGEN_VEND_FIN ?,?,?");
+            $statement->bindValue(1, $id_agenda);
+            $statement->bindValue(2, $obs_final);
+            $statement->bindValue(2, $anexo);
+            $statement->execute();
+          
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            $msg = $row['MSG'];
+            
+            if($msg == "FALSE")
+            {
+                $message = array(
+                    'responseCode' => 200,
+                    'estado' => true,
+                    'message' => 'success'
+                );
+            }
+            else{
+                $message = array(
+                    'responseCode' => 403,
+                    'estado' => false,
+                    'message' => "Prohibido el acceso"
+                );
+            }
+
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
             );
-            $fileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
-            $uploadedFile->move('uploads', $fileName);
-            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $fileName;
         }
-
-        $finalizar = $connection->query(
-        "EXEC [PRC_AGEN_VEND_CADA]
-            @AGENDA = '{$idCompromissoReagendado}',
-            @COR = '#21C710',    
-            @STATUS = '3',
-            @OBS_FINAL = '{$obs_final}'"
-        )->fetchAll();
-
-        dd($finalizar);
-
-        if ($finalizar[0]['MSG'] == 'TRUE') {
-            $message = array('responseCode' => 200);
-        } else {
-            $message = array('responseCode' => 204);
-        }
-    } catch (DBALException $e) {
-        $message = array(
-            'responseCode' => $e->getCode(),
-            'message' => $e->getMessage()
-        );
-    }
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
