@@ -35,9 +35,6 @@ class AgendaController extends AbstractController
      */
     public function getAcessos(Connection $connection, Request $request)
     {
-        $usuariocontroller = new UsuarioController();
-        $functionscontroller = new FunctionsController();
-        $comercialcontroller = new ComercialController();
         try {
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
@@ -155,7 +152,7 @@ class AgendaController extends AbstractController
                 $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
                 $res = $connection->query(
-                    "
+                "
                 EXEC [PRC_AGEN_VEND_CONS]
                 @ID_AGENDA = '{$id}'
                 "
@@ -252,7 +249,6 @@ class AgendaController extends AbstractController
      */
     public function saveCompromisso(Connection $connection, Request $request)
     {
-        $usuariocontroller = new UsuarioController();
         try {
             /* Variables de control */
             $swAgenda = false;
@@ -266,7 +262,6 @@ class AgendaController extends AbstractController
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $cor = "";
-
             if ($infoUsuario->matricula == 1) {
                 $cor = "#0033ff";
             } else {
@@ -451,45 +446,54 @@ class AgendaController extends AbstractController
      */
 
     public function finalizarCompromisso(Connection $connection, Request $request)
-    {
+    {   
+        
         try {
-            $data = json_decode($request->getContent(), true);
-            $id_agenda = $data['ID_AGENDA'];
-            $obs_final = !empty($data['obsFinalizar']) ? strtoupper($data['obsFinalizar']) : '';
-            $destination = "c:\imagen\ipd.png";
-
-            /* if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
-                $uploadedFile = new UploadedFile(
-                    $_FILES['document']['tmp_name'],
-                    $_FILES['document']['name'],
-                    $_FILES['document']['type'],
-                    $_FILES['document']['size'],
-                    $_FILES['document']['error'],
-                    true
-                );
-                $fileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
-                $uploadedFile->move('uploads', $fileName);
-                $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $fileName;
-            } */
-
-            $finalizar = $connection->query(
-                "EXEC [PRC_AGEN_VEND_FIN]
-                @AGENDA = '{$id_agenda}',
-                @OBS_FINAL = '{$obs_final}',
-                @DESTINO_DOCUMENTO = '{$destination}'"
-            )->fetchAll();
-
-            if ($finalizar[0]['MSG'] == 'TRUE') {
-                $message = array('responseCode' => 200);
-            } else {
-                $message = array('responseCode' => 204);
-            }
-        } catch (DBALException $e) {
-            $message = array(
-                'responseCode' => $e->getCode(),
-                'message' => $e->getMessage()
+       
+        $data = json_decode($request->getContent(), true);
+        $idCompromissoReagendado = $data['ID_AGENDA'];
+        $obs_final = !empty($data['obsFinalizar']) ? strtoupper($data['obsFinalizar']) : '';
+        $codTitulo = $data['codTitulo'];
+        $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
+        $formaContato = $data['formContactId'];
+        $idVendedor = $data['idVendedor'];
+        $meioContato = $data['typeContactId'];
+        
+        if (!empty($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['document']['tmp_name'])) {
+            $uploadedFile = new UploadedFile(
+                $_FILES['document']['tmp_name'],
+                $_FILES['document']['name'],
+                $_FILES['document']['type'],
+                $_FILES['document']['size'],
+                $_FILES['document']['error'],
+                true
             );
+            $fileName = md5(uniqid()) . '.' . $uploadedFile->guessExtension();
+            $uploadedFile->move('uploads', $fileName);
+            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $fileName;
         }
+
+        $finalizar = $connection->query(
+        "EXEC [PRC_AGEN_VEND_CADA]
+            @AGENDA = '{$idCompromissoReagendado}',
+            @COR = '#21C710',    
+            @STATUS = '3',
+            @OBS_FINAL = '{$obs_final}'"
+        )->fetchAll();
+
+        dd($finalizar);
+
+        if ($finalizar[0]['MSG'] == 'TRUE') {
+            $message = array('responseCode' => 200);
+        } else {
+            $message = array('responseCode' => 204);
+        }
+    } catch (DBALException $e) {
+        $message = array(
+            'responseCode' => $e->getCode(),
+            'message' => $e->getMessage()
+        );
+    }
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
@@ -895,42 +899,6 @@ class AgendaController extends AbstractController
     }
 
 
-    /**
-     * @Route(
-     *  "/comercial/agenda/getruta",
-     *  name="comercial.agenda-getruta",
-     *  methods={"GET"}
-     * )
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getrutasVendedor(Connection $connection, Request $request)
-    {
-        try {
-            $params = $request->query->all();
-            $id_agenda = $params['id_agenda'];
-            $rutas = $connection->executeQuery('EXEC [PROC_AGEN_VEN_UB_GET] @id_agenda = :id_agenda',
-            ['id_agenda' => $id_agenda])->fetchAll();
-
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($rutas));
-           
-            $response = new JsonResponse($rutas);
-            return $response;
-
-        } catch (DBALException $e) {
-            $message = array(
-                'responseCode' => $e->getCode(),
-                'message' => $e->getMessage()
-            );
-        }
-
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
 
     /**
      * @Route(
