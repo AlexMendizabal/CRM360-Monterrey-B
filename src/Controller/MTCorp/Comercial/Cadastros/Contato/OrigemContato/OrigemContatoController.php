@@ -160,7 +160,8 @@ class OrigemContatoController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $descricao = $params['descricao'];
       $codSituacao = $params['codSituacao'];
@@ -198,7 +199,8 @@ class OrigemContatoController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codOrigemContato = $params['codOrigemContato'];
       $descricao = $params['descricao'];
@@ -239,7 +241,8 @@ class OrigemContatoController extends AbstractController
     {
       try {
           $codOrigemContato = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_ORIG_CONT_CADA]
@@ -273,7 +276,8 @@ class OrigemContatoController extends AbstractController
     {
       try {
           $codOrigemContato = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_ORIG_CONT_CADA]

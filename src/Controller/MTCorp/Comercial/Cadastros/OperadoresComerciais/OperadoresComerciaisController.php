@@ -147,7 +147,8 @@ class OperadoresComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $nomeOperador = strtoupper(FunctionsController::limpaCaracteresEspeciais($params['nomeOperador']));
             $sobrenomeOperador = strtoupper(FunctionsController::limpaCaracteresEspeciais($params['sobrenomeOperador']));
@@ -234,7 +235,8 @@ class OperadoresComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $codOperador = $params['codOperador'];
             $nomeOperador = strtoupper(FunctionsController::limpaCaracteresEspeciais($params['nomeOperador']));
@@ -323,7 +325,8 @@ class OperadoresComerciaisController extends AbstractController
     {
         try {
             $codOperador = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CADA] 
@@ -357,7 +360,8 @@ class OperadoresComerciaisController extends AbstractController
     {
         try {
             $codOperador = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CADA] 
@@ -458,7 +462,8 @@ class OperadoresComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codOperador = $params['codOperador'];
             $operadores = $params['operadores'];
@@ -510,7 +515,8 @@ class OperadoresComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codAssociacao = $params['codAssociacao'];
             $codOperador = $params['codOperador'];

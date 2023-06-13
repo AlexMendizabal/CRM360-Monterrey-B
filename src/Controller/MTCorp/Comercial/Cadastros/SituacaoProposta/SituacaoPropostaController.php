@@ -169,7 +169,8 @@ class SituacaoPropostaController extends AbstractController
     {
       try {
           $params = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
           
           $situacaoProposta = null;
           $codParametroSituacaoProposta = null;
@@ -218,7 +219,8 @@ class SituacaoPropostaController extends AbstractController
     {
       try {
           $params = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $codSituacaoProposta = null;
           $situacaoProposta = null;
@@ -269,7 +271,8 @@ class SituacaoPropostaController extends AbstractController
     {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
               EXECUTE [dbo].[PRC_SITU_PROP_CADA] 
@@ -303,7 +306,8 @@ class SituacaoPropostaController extends AbstractController
     {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
               EXECUTE [dbo].[PRC_SITU_PROP_CADA] 

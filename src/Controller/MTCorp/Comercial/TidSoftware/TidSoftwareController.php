@@ -158,7 +158,7 @@ class TidSoftwareController extends AbstractController
 
     for ($i = 0; $i < count($scanDir); $i++) {
       unlink($scanDir[$i]);
-    }
+}
 
     if ($_ENV['APP_ENV'] == 'dev') {
       $servidorRDP = '10.130.10.82';
@@ -269,20 +269,22 @@ class TidSoftwareController extends AbstractController
 
   private function verificaPermissao($acao, $empresas, $request, $connection)
   {
-    $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+    $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
     $unidades = array();
 
     switch ($acao) {
 
       case $acao == 'vendas':
         // Comercial - Tid Vendas
-        $hasAcessoDuqueVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_DUQUE_VENDAS');
-        $hasAcessoTieteVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TIETE_VENDAS');
-        $hasAcessoTaipasVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TAIPAS_VENDAS');
-        $hasAcessoRdpVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_RDP_VENDAS');
-        $hasAcessoOsascoVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_OSASCO_VENDAS');
-        $hasAcessoCamanducaiaVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_CAMANDUCAIA_VENDAS');
-        $hasAcessoCorteDobraVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_CORTE_DOBRA_VENDAS');
+        $ComercialController = new ComercialController();
+        $hasAcessoDuqueVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_DUQUE_VENDAS');
+        $hasAcessoTieteVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TIETE_VENDAS');
+        $hasAcessoTaipasVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TAIPAS_VENDAS');
+        $hasAcessoRdpVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_RDP_VENDAS');
+        $hasAcessoOsascoVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_OSASCO_VENDAS');
+        $hasAcessoCamanducaiaVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_CAMANDUCAIA_VENDAS');
+        $hasAcessoCorteDobraVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_CORTE_DOBRA_VENDAS');
         $unidades = $empresas;
 
         if ($hasAcessoDuqueVendas === false) {
@@ -352,10 +354,11 @@ class TidSoftwareController extends AbstractController
 
       case $acao == 'estoques':
         // Comercial - Estoque
-        $hasAcessoDuqueEstoque = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_DUQUE_ESTOQUE');
-        $hasAcessoTieteEstoque = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TIETE_ESTOQUE');
-        $hasAcessoTaipasEstoque = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TAIPAS_ESTOQUE');
-        $hasAcessoOsascoEstoque = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_OSASCO_ESTOQUE');
+        $ComercialController = new ComercialController();
+        $hasAcessoDuqueEstoque = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_DUQUE_ESTOQUE');
+        $hasAcessoTieteEstoque = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TIETE_ESTOQUE');
+        $hasAcessoTaipasEstoque = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TAIPAS_ESTOQUE');
+        $hasAcessoOsascoEstoque = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_OSASCO_ESTOQUE');
 
         $unidades = $empresas;
 
@@ -405,10 +408,11 @@ class TidSoftwareController extends AbstractController
 
       case $acao == 'entregas':
         // Comercial - Controle de Entregas
-        $hasAcessoDuqueEntregas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_DUQUE_ENTREGAS');
-        $hasAcessoTieteEntregas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TIETE_ENTREGAS');
-        $hasAcessoTaipasEntregas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TAIPAS_ENTREGAS');
-        $hasAcessoOsascoEntregas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_OSASCO_ENTREGAS');
+        $ComercialController = new ComercialController();
+        $hasAcessoDuqueEntregas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_DUQUE_ENTREGAS');
+        $hasAcessoTieteEntregas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TIETE_ENTREGAS');
+        $hasAcessoTaipasEntregas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_TAIPAS_ENTREGAS');
+        $hasAcessoOsascoEntregas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ACESSO_OSASCO_ENTREGAS');
 
         $unidades = $empresas;
 
@@ -632,7 +636,8 @@ class TidSoftwareController extends AbstractController
     if ($request->isMethod('POST')) {
       try {
         $data = json_decode($request->getContent(), true);
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         // $infoUsuario->matriculaTid = 1642;
 

@@ -138,7 +138,8 @@ class TipoOperadoresController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $tipo = null;
             $codSituacao = null;
@@ -178,7 +179,8 @@ class TipoOperadoresController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $codTipoOperador = null;
             $tipo = null;
@@ -221,7 +223,8 @@ class TipoOperadoresController extends AbstractController
     {
         try {
             $codTipoOperador = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CADA] 
@@ -255,7 +258,8 @@ class TipoOperadoresController extends AbstractController
     {
         try {
             $codTipoOperador = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CADA] 
