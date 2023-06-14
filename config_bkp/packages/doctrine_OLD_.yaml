@@ -4,11 +4,11 @@ doctrine:
           connections:
             MONTERREY:
             driver: 'sqlsrv'
-            host: '192.168.0.113\CRM360'
-            port: 51817
-            dbname: 'EMPRESA2'
-            user: '20091'
-            password: '20091'
+            host: 'localhost'
+            port: 1433
+            dbname: 'CRM360'
+            user: 'CRM'
+            password: 'CRM1234'
             charset: 'UTF-8' 
     
     orm:

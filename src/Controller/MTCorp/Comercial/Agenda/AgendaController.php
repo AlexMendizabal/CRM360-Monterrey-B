@@ -14,6 +14,7 @@ use Doctrine\DBAL\DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
+use PhpParser\Node\Stmt\TryCatch;
 
 /**
  * Class AgendaController
@@ -647,4 +648,6 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+    
+    
 }

@@ -1,9 +1,9 @@
 <?php
-$serverName = "192.168.0.113\CRM360";
+$serverName = "localhost";
 $connectionOptions = array(
-    "database" => "EMPRESA2",
-    "uid" => "20091",
-    "pwd" => "20091"
+    "database" => "CRM360",
+    "uid" => "CRM",
+    "pwd" => "CRM1234"
 );
 
 function exception_handler($exception) {
