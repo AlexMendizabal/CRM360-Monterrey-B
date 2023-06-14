@@ -278,8 +278,8 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   {
     try {
       $data = json_decode($request->getContent(), true);
-
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $idEndereco = 0;
       $idCliente = 0;
@@ -428,8 +428,8 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   {
 
     try {
-
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));  
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));  
         $codEndereco = $request->query->get("codEndereco");
 
       $document   = new ParseFileFromRequestController();
@@ -442,9 +442,8 @@ class AuditoriaEnderecosEntregaController extends AbstractController
       
       $descAnexo     = $document->getFileName();               
       $urlAnexo       = $document->getFileLink();
-
-
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -483,7 +482,8 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = null;
 

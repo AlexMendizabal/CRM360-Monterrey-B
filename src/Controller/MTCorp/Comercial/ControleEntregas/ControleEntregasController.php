@@ -30,7 +30,8 @@ class ControleEntregasController extends AbstractController
     {
         try {
 
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $dataInicial            = $request->query->get('DT_INIC');
             $dataFinal              = $request->query->get('DT_FINA');

@@ -186,7 +186,8 @@ class CombosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $combo = new \stdClass;
             $combo->codMaterial = $params['codMaterial'];
@@ -233,7 +234,8 @@ class CombosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $combo = new \stdClass;
             $combo->codCombo = $params['codCombo'];
@@ -360,7 +362,8 @@ class CombosController extends AbstractController
     public function deleteAssociacao(Connection $connection, Request $request, $codCombo, $codAssociacao)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
@@ -393,7 +396,8 @@ class CombosController extends AbstractController
     {
         try {
             $codCombo = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
@@ -427,7 +431,8 @@ class CombosController extends AbstractController
     {
         try {
             $codCombo = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]

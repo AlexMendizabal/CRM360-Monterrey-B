@@ -4,11 +4,11 @@ doctrine:
         connections:
             MONTERREY:
                  driver: 'pdo_sqlsrv'
-                 host: 'localhost'
+                 host: 'MTPIRA1350N'
                  port: 1433
                  dbname: 'CRM360'
-                 user: 'CRM'
-                 password: 'CRM1234'
+                 user: 'diego'
+                 password: 'diego123'
                  charset: 'UTF-8'
                 
     # orm:# 

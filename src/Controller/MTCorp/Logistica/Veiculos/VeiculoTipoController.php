@@ -34,7 +34,8 @@ class VeiculoTipoController
             $tipoVeiculo    = isset($data->NM_VEIC_TIPO)        ? $data->NM_VEIC_TIPO       : '';
             $capacidade     = isset($data->TT_CAPA)             ? $data->TT_CAPA            : '';
 
-            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $nrMatricula    = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
             

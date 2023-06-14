@@ -468,7 +468,8 @@ class GenericController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       //GET Request
       $c = curl_init('https://topdesk.manetoni.com.br/tas/public/login/form');

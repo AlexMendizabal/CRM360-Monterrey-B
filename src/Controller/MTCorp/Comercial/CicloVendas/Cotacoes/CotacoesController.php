@@ -34,9 +34,10 @@ class CotacoesController extends AbstractController
     public function getPermissoesAcesso(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
-            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $ComercialController = new ComercialController();
+            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $historicoExclusao = true;
             $duplicataCarteira = true;
 
@@ -79,9 +80,10 @@ class CotacoesController extends AbstractController
     {
         try {
 
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
-            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $ComercialController = new ComercialController();
+            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             $params = $request->query->all();
 
@@ -391,7 +393,8 @@ class CotacoesController extends AbstractController
     public function postTransfereFaturamento(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $params = json_decode($request->getContent(), true);
 
@@ -446,7 +449,8 @@ class CotacoesController extends AbstractController
     public function postTrocarCliente(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $params = json_decode($request->getContent(), true);
 
@@ -494,7 +498,8 @@ class CotacoesController extends AbstractController
     public function postDuplicarProposta(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 
             $params = json_decode($request->getContent(), true);
@@ -536,7 +541,8 @@ class CotacoesController extends AbstractController
     public function postDesdobrarProposta(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 
 
@@ -597,7 +603,8 @@ class CotacoesController extends AbstractController
     public function postTrocarEmpresa(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 
 
@@ -814,7 +821,8 @@ class CotacoesController extends AbstractController
     {
         try {
             $empresa = $request->query->get("codEmpresa");
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 
 
@@ -852,7 +860,8 @@ class CotacoesController extends AbstractController
     public function getCotacao(Connection $connection, Request $request, $codCotacao, $idEmpresa)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
@@ -1640,7 +1649,8 @@ class CotacoesController extends AbstractController
     public function postGerarDuplicatas(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $params = json_decode($request->getContent(), true);
 
             $codCotacao = $params['codCotacao'];
@@ -1784,7 +1794,8 @@ class CotacoesController extends AbstractController
     {
         try {
 
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
 
             $codDeposito = $params['codDeposito'];
@@ -1875,7 +1886,8 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             /* Dados Cotaçao */
             $codCotacao = isset($params['codCotacao']) ? $params['codCotacao'] : null;
@@ -2203,7 +2215,8 @@ class CotacoesController extends AbstractController
             $linkAnexo       = $document->getFileLink();
 
 
-            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $matricula      = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -2241,7 +2254,8 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codAnexo = null;
 

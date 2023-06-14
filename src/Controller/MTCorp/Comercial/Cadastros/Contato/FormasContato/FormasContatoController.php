@@ -141,7 +141,8 @@ class FormasContatoController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $descricao = $params['descricao'];
       $codSituacao = $params['codSituacao'];
@@ -179,7 +180,8 @@ class FormasContatoController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codFormaContato = $params['codFormaContato'];
       $descricao = $params['descricao'];
@@ -221,7 +223,8 @@ class FormasContatoController extends AbstractController
     {
       try {
           $codFormaContato = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_FORM_CONT_CADA]
@@ -255,7 +258,8 @@ class FormasContatoController extends AbstractController
     {
       try {
           $codFormaContato = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_FORM_CONT_CADA]
