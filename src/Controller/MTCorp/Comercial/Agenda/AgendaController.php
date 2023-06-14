@@ -52,16 +52,16 @@ class AgendaController extends AbstractController
                     'simuladorVendas' => $simuladorVendas
                 )
             );
-
+            $FunctionsController = new FunctionsController();
             if (count($res) > 0 && !isset($res[0]['message'])) {
-                return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
+                return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(
+            return $FunctionsController->Retorno(
                 false,
                 'Erro ao retornar dados.',
                 $e->getMessage(),

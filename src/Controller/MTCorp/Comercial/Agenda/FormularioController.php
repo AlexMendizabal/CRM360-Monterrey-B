@@ -52,14 +52,14 @@ class FormularioController extends AbstractController
                 ,@ORDE_TYPE = NULL
             ")->fetchAll(); 
             
-
+            $FunctionsController = new FunctionsController();
             if (count($res) > 0) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (DBALException $e) {
-            return FunctionsController::Retorno(
+            return $FunctionsController->Retorno(
                 false, 
                 'Erro ao retornar dados.', 
                 $e->getMessage(), 
@@ -87,14 +87,14 @@ class FormularioController extends AbstractController
             ,@TT_REGI_PAGI = NULL
             ,@DS_ORDE_BY = NULL
             ")->fetchAll(); 
-
+            $FunctionsController = new FunctionsController();
             if (count($res) > 0) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (DBALException $e) {
-            return FunctionsController::Retorno(
+            return $FunctionsController->Retorno(
                 false, 
                 'Erro ao retornar dados.', 
                 $e->getMessage(), 
@@ -124,14 +124,14 @@ class FormularioController extends AbstractController
             ,@TT_REGI_PAGI = NULL
             ,@DS_ORDE_BY = NULL
             ")->fetchAll(); 
-
+            $FunctionsController = new FunctionsController();
             if (count($res) > 0) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (DBALException $e) {
-            return FunctionsController::Retorno(
+            return $FunctionsController->Retorno(
                 false, 
                 'Erro ao retornar dados.', 
                 $e->getMessage(), 
