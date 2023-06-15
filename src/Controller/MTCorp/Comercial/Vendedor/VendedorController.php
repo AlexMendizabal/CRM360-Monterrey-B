@@ -75,7 +75,8 @@ class VendedorController extends AbstractController
     public function getDetalhesCadastro(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             // $matricula = $infoUsuario->matricula;
             $matricula = 1642;
@@ -187,13 +188,15 @@ class VendedorController extends AbstractController
         
         try {
             
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $ComercialController = new ComercialController();
+            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $matricula = $acessoClientes ? 0 : $infoUsuario->matricula;
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
         
-
+            $idVendedor = '';
             if ($infoUsuario->matricula != 1) {
                 $idVendedor = $infoUsuario->idVendedor;
                 $res = $connection->query("
@@ -206,13 +209,25 @@ class VendedorController extends AbstractController
             ")->fetchAll();
             /* dd($res); */
             } else {
-                
-                $res = $connection->query("
-                    EXECUTE [PRC_CLIE_CONS]
-                        @ID_PARAM = 6                        
+                //dd($request);
+                if( $request->query->get("idVendedor") == ''){
+                    $res = $connection->query("
+                        EXECUTE [PRC_CLIE_CONS]
+                            @ID_PARAM = 6                        
+                            ,@NM_CLIE = '{$cliente}'
+                            ,@ID_SITU = '{$situacao}'
+                    ")->fetchAll();
+                }else {
+                    $idVendedor = $request->query->get("idVendedor");
+                    $res = $connection->query("
+                    EXECUTE [PCR_CLIE_CONS3]
+                        @ID_PARAM = 6
+                        ,@NR_MATR = {$idVendedor}
                         ,@NM_CLIE = '{$cliente}'
                         ,@ID_SITU = '{$situacao}'
-                ")->fetchAll();
+                        ,@ID_DEBU = 0
+                    ")->fetchAll();
+                }
             }
             /* dd($res); */
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
@@ -246,8 +261,10 @@ class VendedorController extends AbstractController
     public function getValidaClienteCarteira(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $ComercialController = new ComercialController();
+            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
                 if ($acessoClientes) {
@@ -297,7 +314,8 @@ class VendedorController extends AbstractController
     public function getVinculoOperadores(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_VINC_OPER_CONS] 

@@ -36,13 +36,14 @@ class GestaoComissionamentosController extends AbstractController
     public function getPermissoesAcesso(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
-            $analistaMarketing = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ANAL_MARK');
-            $gerenteEscritorio = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_ESCR');
-            $gerenteMarketing = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_MARK');
-            $gerenteFiscal = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_FISC');
-            $diretorComercial = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'DIRE_COME');
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $ComercialController = new ComercialController();
+            $analistaMarketing = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ANAL_MARK');
+            $gerenteEscritorio = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_ESCR');
+            $gerenteMarketing = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_MARK');
+            $gerenteFiscal = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_FISC');
+            $diretorComercial = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'DIRE_COME');
 
             $res = array(
                 array(

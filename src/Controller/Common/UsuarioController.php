@@ -43,6 +43,7 @@ class UsuarioController extends AbstractController
      */
     public function checkToken(Connection $connection, Request $request)
     {
-        return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
     }
 }

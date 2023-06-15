@@ -107,7 +107,8 @@ class TitulosAgendaController extends AbstractController
     {
       try {
           $params = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
           
           $descricaoTitulo = null;
           $codSituacao = null;
@@ -147,7 +148,8 @@ class TitulosAgendaController extends AbstractController
     {
       try {
           $params = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $codTitulo = null;
           $descricaoTitulo = null;
@@ -192,7 +194,8 @@ class TitulosAgendaController extends AbstractController
     {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
               EXECUTE [dbo].[PRC_AGEN_TITU_CADA] 
@@ -226,7 +229,8 @@ class TitulosAgendaController extends AbstractController
     {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXECUTE [dbo].[PRC_AGEN_TITU_CADA] 

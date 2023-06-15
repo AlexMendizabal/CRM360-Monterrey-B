@@ -155,7 +155,8 @@ class GruposMateriaisAssociadosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $nomeGrupo = $params['nomeGrupo'];
             $codSituacao = $params['codSituacao'];
@@ -203,7 +204,8 @@ class GruposMateriaisAssociadosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             // print_r($params);
             // exit(0);
@@ -257,7 +259,8 @@ class GruposMateriaisAssociadosController extends AbstractController
     {
         try {
             $codGrupo = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC PRC_PREC_CADA
@@ -291,7 +294,8 @@ class GruposMateriaisAssociadosController extends AbstractController
     {
         try {
             $codGrupo = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC PRC_PREC_CADA
@@ -324,7 +328,8 @@ class GruposMateriaisAssociadosController extends AbstractController
    public function deleteMaterialGrupo(Connection $connection, Request $request, $codGrupo, $codMaterial)
    {
        try {
-           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+           $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
            $res = $connection->query("
                 EXEC PRC_PREC_CADA

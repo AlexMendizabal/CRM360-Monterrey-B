@@ -31,6 +31,7 @@ class FormasContatoController extends AbstractController
    */
   public function getListaFormaContato(Connection $connection, Request $request)
   {
+    $FunctionsController = new FunctionsController();
     try {
       $params = $request->query->all();
 
@@ -54,14 +55,14 @@ class FormasContatoController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-          return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -78,6 +79,7 @@ class FormasContatoController extends AbstractController
    */
   public function getAlteracoes(Connection $connection, Request $request, $codFormaContato)
   {
+    $FunctionsController = new FunctionsController();
     try {
       $res = $connection->query("
           EXEC [PRC_FORM_CONT_LOG_CONS] 
@@ -86,15 +88,15 @@ class FormasContatoController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-          return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $msg = 'Erro ao retornar dados';
-        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -111,6 +113,7 @@ class FormasContatoController extends AbstractController
    */
   public function getDetalhes(Connection $connection, Request $request, $codFormaContato)
   {
+    $FunctionsController = new FunctionsController();
     try {
       $res = $connection->query("
         EXEC [PRC_FORM_CONT_CONS]
@@ -119,13 +122,13 @@ class FormasContatoController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0) {
-          return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
       } else {
-          return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $msg = 'Erro ao retornar dados';
-        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -139,9 +142,11 @@ class FormasContatoController extends AbstractController
    */
   public function postFormaContato(Connection $connection, Request $request)
   {
+    $FunctionsController = new FunctionsController();
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $descricao = $params['descricao'];
       $codSituacao = $params['codSituacao'];
@@ -156,14 +161,14 @@ class FormasContatoController extends AbstractController
       ")->fetchAll();
 
       if (isset($res[0]['codFormaContato'])) {
-          return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-          return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -177,9 +182,11 @@ class FormasContatoController extends AbstractController
    */
   public function putFormaContato(Connection $connection, Request $request)
   {
+    $FunctionsController = new FunctionsController();
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codFormaContato = $params['codFormaContato'];
       $descricao = $params['descricao'];
@@ -198,14 +205,14 @@ class FormasContatoController extends AbstractController
       ")->fetchAll();
 
       if (isset($res[0]['codFormaContato']) && $res[0]['codFormaContato'] == $codFormaContato) {
-          return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-          return FunctionsController::Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
+          return $FunctionsController->Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-      return FunctionsController::Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+      return $FunctionsController->Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -219,9 +226,11 @@ class FormasContatoController extends AbstractController
      */
     public function activeFormaContato(Connection $connection, Request $request)
     {
+      $FunctionsController = new FunctionsController();
       try {
           $codFormaContato = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_FORM_CONT_CADA]
@@ -232,14 +241,14 @@ class FormasContatoController extends AbstractController
           ")->fetchAll();
 
           if (isset($res[0]['codFormaContato']) && $codFormaContato == $res[0]['codFormaContato']) {
-              return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+              return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
-              return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+              return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
           } else {
-              return FunctionsController::Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
+              return $FunctionsController->Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
           }
       } catch (\Throwable $e) {
-          return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+          return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 
@@ -253,9 +262,11 @@ class FormasContatoController extends AbstractController
      */
     public function inactiveFormaContato(Connection $connection, Request $request)
     {
+      $FunctionsController = new FunctionsController();
       try {
           $codFormaContato = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_FORM_CONT_CADA]
@@ -266,14 +277,14 @@ class FormasContatoController extends AbstractController
           ")->fetchAll();
 
           if (isset($res[0]['codFormaContato']) && $codFormaContato == $res[0]['codFormaContato']) {
-              return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+              return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
-              return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+              return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
           } else {
-              return FunctionsController::Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
+              return $FunctionsController->Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
           }
       } catch (\Throwable $e) {
-          return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+          return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 
@@ -289,18 +300,19 @@ class FormasContatoController extends AbstractController
      */
     public function getListaFormasERP(Connection $connection, Request $request)
     {
+      $FunctionsController = new FunctionsController();
       try {
         $res = $connection->query("
           EXEC PRC_ERP_FORM_CONT_CONS
         ")->fetchAll();
 
         if (count($res) > 0) {
-            return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+            return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-          return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+          return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 }

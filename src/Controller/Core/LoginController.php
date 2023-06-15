@@ -24,6 +24,7 @@ class LoginController extends AbstractController
      */
     public function login(Connection $connection, Request $request): JsonResponse
     {
+        $JwtAplication = new JwtAplication();
         if ($request->isMethod('POST')) {
             try {
                 $dadosValidos = true;
@@ -55,16 +56,41 @@ class LoginController extends AbstractController
                     @NR_MATR		=	BIGINT - Número da matrícula do usuário - (obrigatório)
                 */
 
-                $sql = 
-                "
+                $sql =
+                    "
                     EXECUTE [dbo].[PRC_CORE_USUA_AUTE] 
                      @NR_MATR = ?
                 ";
+                
                 $stmt = $connection->prepare($sql);
+                
                 $stmt->bindValue(1, $nrMatrUsua);
 
                 $stmt->execute();
                 $usuario = $stmt->fetchAll();
+                $datos = [];
+                $modulo_principal = [];
+                $devolverArray = '';
+                if(count($usuario) > 0){
+                    $modulo_principal = array(
+                        "id" => $usuario[0]['ID_MODU'],
+                        "nome" => $usuario[0]['NM_MODU'],
+                        "rota" => $usuario[0]['DS_ROTA'],
+                    );
+                    $datos = array(
+                        "id" => $usuario[0]['ID'],
+                        "matricula" => $usuario[0]['ID'],
+                        "idVendedor"  => $usuario[0]['MATRICULA_VENDEDOR'],
+                        "idEscritorio" => $usuario[0]['ID_ESCAP'],
+                        "nomeCompleto"  => $usuario[0]['NM_COMP_RAZA_SOCI'],
+                        "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
+                        "moduloPrincipal" => $modulo_principal    
+                    );
+                    $devolverArray =  base64_encode(json_encode($datos));
+                    //dd($usuario);
+                
+                }
+                //dd($usuario);
             } catch (DBALException $e) {
                 return new JsonResponse([
                     'responseCode' => $e->getCode(),
@@ -77,7 +103,7 @@ class LoginController extends AbstractController
                     return new JsonResponse([
                         'responseCode' => 401,
                         'message' => 'Acesso não autorizado! Usuário inativo!'
-                    ], 401);                    
+                    ], 401);
                 } else {
                     if (password_verify($data['ds_senh_usua'], $usuario[0]['DS_SENH'])) {
                         $dadosUsuario = array(
@@ -93,7 +119,9 @@ class LoginController extends AbstractController
                             'modu_nome' => $usuario[0]['NM_MODU'],
                             'modu_rota' => $usuario[0]['DS_ROTA'],
                             'email_usua' => $usuario[0]['NM_EMAI'],
-                            'id_vendedor' => $usuario[0]['MATRICULA_VENDEDOR']
+                            'id_vendedor' => $usuario[0]['MATRICULA_VENDEDOR'],
+                            'base64'=> $devolverArray,
+                            'id_sucursal' => $usuario[0]['ID_ESCR'],
                         );
 
                         $userData = [
@@ -101,21 +129,20 @@ class LoginController extends AbstractController
                             'NR_MATR' => $usuario[0]['NR_MATR']
                         ];
 
-                        $jwt = JwtAplication::encode(['userdata' => $userData]);
-        
+                        $jwt = $JwtAplication->encode(['userdata' => $userData]);
+
                         return new JsonResponse([
                             'responseCode' => 200,
                             'login' => true,
                             'token' => $jwt,
                             'result' => $dadosUsuario
-                        ], 200);                        
-
+                        ], 200);
                     } else {
                         return new JsonResponse([
                             'responseCode' => 401,
                             'login' => false,
                             'message' => 'Acesso não autorizado! Senha inválida!'
-                        ], 401);                        
+                        ], 401);
                     }
                 }
             } else {
@@ -123,7 +150,7 @@ class LoginController extends AbstractController
                     'responseCode' => 401,
                     'login' => false,
                     'message' => 'Acesso não autorizado! Dados inválidos!'
-                ], 401);                  
+                ], 401);
             }
         }
     }

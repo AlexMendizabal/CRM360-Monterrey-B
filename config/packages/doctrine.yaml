@@ -12,6 +12,7 @@
 #        password: ""
 
 doctrine:
+<<<<<<< HEAD
   dbal:
     default_connection: default
     connections:
@@ -34,3 +35,34 @@ doctrine:
   #             dir: '%kernel.project_dir%/src/Entity'
   #             prefix: 'App\Entity'
   #             alias: App
+=======
+    dbal:
+        default_connection: MONTERREY
+        connections:
+            MONTERREY:
+                # driver: 'pdo_sqlsrv'
+                # host: 'SDMTSQL01\DMANETONI'
+                # port: 60040
+                # dbname: 'MTCORP'
+                # user: 'appMTCorp'
+                # password: 'appMTCorp'
+                # charset: 'UTF-8'
+                driver: "pdo_sqlsrv"
+                host: 'MTPIRA1350N'
+                port: 1433
+                dbname: 'CRM360'
+                user: 'diego123'
+                password: 'diego123'
+                charset: "UTF-8"
+    # orm:
+    #     auto_generate_proxy_classes: true
+    #     naming_strategy: doctrine.orm.naming_strategy.underscore
+    #     auto_mapping: true
+    #     mappings:
+    #         App:
+    #             is_bundle: false
+    #             type: annotation
+    #             dir: '%kernel.project_dir%/src/Entity'
+    #             prefix: 'App\Entity'
+    #             alias: App
+>>>>>>> 48dc5dcb056792439776f2bf6ecc8d4f1558d52c
