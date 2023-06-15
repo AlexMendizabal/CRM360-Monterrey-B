@@ -453,16 +453,16 @@ class ComercialController extends AbstractController
                     ,@COMERCIALIZA = '{$comercializa}'
                     ,@ID_EMPR = '{$codEmpresa}'
             ")->fetchAll();
-            
+            $FunctionsController = new FunctionsController();
             if (count($res) > 0 && !isset($res[0]['MSG'])) {       
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['MSG'])) {    
-                return FunctionsController::Retorno(false, $res[0]['MSG'], null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, $res[0]['MSG'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 

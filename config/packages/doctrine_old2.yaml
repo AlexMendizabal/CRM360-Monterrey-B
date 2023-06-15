@@ -10,21 +10,13 @@ doctrine:
                 # user: 'appMTCorp'
                 # password: 'appMTCorp'
                 # charset: 'UTF-8'
-                  driver: 'pdo_sqlsrv'
-<<<<<<< HEAD
-                  host: 'localhost'
-                  port: 1433
-                  dbname: 'CRM360'
-                  user: 'reflo'
-                  password: '123'
-=======
-                  host: 'MTPIRA1350N'
-                  port: 1433
-                  dbname: 'CRM360'
-                  user: 'diego'
-                  password: 'diego123'
->>>>>>> 48dc5dcb056792439776f2bf6ecc8d4f1558d52c
-                  charset: 'UTF-8'
+                driver: "pdo_sqlsrv"
+                host: '192.168.0.113\CRM360'
+                port: 51817
+                dbname: 'CRM360'
+                user: 'appCRM360'
+                password: 'p5D7*L3%4O'
+                charset: "UTF-8"
     # orm:
     #     auto_generate_proxy_classes: true
     #     naming_strategy: doctrine.orm.naming_strategy.underscore

@@ -27,12 +27,11 @@ class AcessosController
 
             $params = json_decode($request->getContent());
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $idUsuario      = $infoUsuario->id;
             $matricula      = $infoUsuario->matricula;
-            $ip             = $ComercialController->ipUsuario();
+            $ip             = UsuarioController::ipUsuario();
 
             $dsRota         = isset($params->dsRota)        ? $params->dsRota       : '';
             $queryString    = '';

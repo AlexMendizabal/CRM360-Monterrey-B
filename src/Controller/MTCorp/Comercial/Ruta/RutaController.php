@@ -38,8 +38,12 @@ class RutaController extends AbstractController
 
         try {
             $params = $request->query->all();
+<<<<<<< HEAD
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+=======
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+>>>>>>> 48dc5dcb056792439776f2bf6ecc8d4f1558d52c
             if ($infoUsuario->matricula == 1) {
                 $idSucursal = isset($params['idSucursal']) && $params['idSucursal'] !== '' ? $params['idSucursal'] : NULL;
                 $idVendedor = isset($params['idVendedor']) && $params['idVendedor'] !== '' ? $params['idVendedor'] : NULL;
@@ -57,8 +61,17 @@ class RutaController extends AbstractController
                 $stmt->bindValue(':idSucursal', (int)$idSucursal, PDO::PARAM_INT);
                 $stmt->bindValue(':fechaActual', (int)$fechaActual, PDO::PARAM_STR);
 
+<<<<<<< HEAD
+                $stmt->execute();
+              
+
+                $res = $stmt->fetchAll();
+
+
+=======
                 $stmt->execute(); 
                 $res = $stmt->fetchAll();
+>>>>>>> 48dc5dcb056792439776f2bf6ecc8d4f1558d52c
                 if (count($res) > 0) {
                     $message = array('responseCode' => 200, 'estado' => true);
                     return FunctionsController::Retorno(true, $message, $res, Response::HTTP_OK);
@@ -87,8 +100,12 @@ class RutaController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
+<<<<<<< HEAD
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+=======
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+>>>>>>> 48dc5dcb056792439776f2bf6ecc8d4f1558d52c
             $id_vendedor = 0;
             $errors = [];
 
