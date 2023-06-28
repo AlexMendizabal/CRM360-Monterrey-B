@@ -280,7 +280,7 @@ class ComercialController extends AbstractController
     {
         try {
             $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $res = $connection->query("
                 EXEC [PRC_MTCORP_MODU_COME_ESCR_COOR_CONS]
                     @MATRICULA = '{$infoUsuario->matricula}'
@@ -453,15 +453,19 @@ class ComercialController extends AbstractController
                     ,@COMERCIALIZA = '{$comercializa}'
                     ,@ID_EMPR = '{$codEmpresa}'
             ")->fetchAll();
-            $FunctionsController = new FunctionsController();
-            if (count($res) > 0 && !isset($res[0]['MSG'])) {       
+            
+            if (count($res) > 0 && !isset($res[0]['MSG'])) {      
+                $FunctionsController = new FunctionsController(); 
                 return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['MSG'])) {    
+            } else if (count($res) > 0 && isset($res[0]['MSG'])) {   
+                $FunctionsController = new FunctionsController(); 
                 return $FunctionsController->Retorno(false, $res[0]['MSG'], null, Response::HTTP_OK);
             } else {
+                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
+            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -478,7 +482,7 @@ class ComercialController extends AbstractController
     {
         try {
             $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $perfil = $this->checkPerfil($connection, $infoUsuario->matricula);
 
             $message = array(

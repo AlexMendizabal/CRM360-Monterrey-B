@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\n\n<app-header appTitle=\"Estoque Avançado\">\n</app-header>\n<div class=\"row\" id=\"application-body\">\n  <div class=\"col\">\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\n    <div class=\"row justify-content-center\">\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\n        <card-button\n          [icon]=\"atividade.iconeAtividade\"\n          [text]=\"atividade.nomeAtividade\"\n          [routerLink]=\"[atividade.rotaAtividade]\">\n        </card-button>\n      </div>\n    </div>\n  </div>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n\r\n<app-header appTitle=\"Estoque Avançado\">\r\n</app-header>\r\n<div class=\"row\" id=\"application-body\">\r\n  <div class=\"col\">\r\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\r\n    <div class=\"row justify-content-center\">\r\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\r\n        <card-button\r\n          [icon]=\"atividade.iconeAtividade\"\r\n          [text]=\"atividade.nomeAtividade\"\r\n          [routerLink]=\"[atividade.rotaAtividade]\">\r\n        </card-button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -47,7 +47,7 @@ const routes = [
             },
             {
                 path: 'estoque-por-lote',
-                loadChildren: () => Promise.all(/*! import() | estoque-por-lote-estoque-por-lote-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("estoque-por-lote-estoque-por-lote-module")]).then(__webpack_require__.bind(null, /*! ./estoque-por-lote/estoque-por-lote.module */ "v4kB")).then(m => m.SulFluminenseEstoqueAvancadoEstoquePorLoteModule)
+                loadChildren: () => Promise.all(/*! import() | estoque-por-lote-estoque-por-lote-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("estoque-por-lote-estoque-por-lote-module")]).then(__webpack_require__.bind(null, /*! ./estoque-por-lote/estoque-por-lote.module */ "v4kB")).then(m => m.SulFluminenseEstoqueAvancadoEstoquePorLoteModule)
             },
             {
                 path: 'estoque-de-faturamento',
@@ -55,15 +55,15 @@ const routes = [
             },
             {
                 path: 'materiais-em-lote',
-                loadChildren: () => Promise.all(/*! import() | materiais-em-lote-materiais-em-lote-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("materiais-em-lote-materiais-em-lote-module")]).then(__webpack_require__.bind(null, /*! ./materiais-em-lote/materiais-em-lote.module */ "7pdw")).then(m => m.SulFluminenseEstoqueAvancadoMateriaisEmLoteModule)
+                loadChildren: () => Promise.all(/*! import() | materiais-em-lote-materiais-em-lote-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("materiais-em-lote-materiais-em-lote-module")]).then(__webpack_require__.bind(null, /*! ./materiais-em-lote/materiais-em-lote.module */ "7pdw")).then(m => m.SulFluminenseEstoqueAvancadoMateriaisEmLoteModule)
             },
             {
                 path: 'lotes-conferidos',
-                loadChildren: () => Promise.all(/*! import() | lotes-conferidos-lotes-conferidos-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("lotes-conferidos-lotes-conferidos-module")]).then(__webpack_require__.bind(null, /*! ./lotes-conferidos/lotes-conferidos.module */ "l8WK")).then(m => m.SulFluminenseEstoqueAvancadoLotesConferidosModule)
+                loadChildren: () => Promise.all(/*! import() | lotes-conferidos-lotes-conferidos-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("lotes-conferidos-lotes-conferidos-module")]).then(__webpack_require__.bind(null, /*! ./lotes-conferidos/lotes-conferidos.module */ "l8WK")).then(m => m.SulFluminenseEstoqueAvancadoLotesConferidosModule)
             },
             {
                 path: 'auditoria-estoque',
-                loadChildren: () => Promise.all(/*! import() | auditoria-estoque-auditoria-estoque-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("auditoria-estoque-auditoria-estoque-module")]).then(__webpack_require__.bind(null, /*! ./auditoria-estoque/auditoria-estoque.module */ "g4Cv")).then(m => m.SulFluminenseEstoqueAvancadoAuditoriaEstoqueModule)
+                loadChildren: () => Promise.all(/*! import() | auditoria-estoque-auditoria-estoque-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("auditoria-estoque-auditoria-estoque-module")]).then(__webpack_require__.bind(null, /*! ./auditoria-estoque/auditoria-estoque.module */ "g4Cv")).then(m => m.SulFluminenseEstoqueAvancadoAuditoriaEstoqueModule)
             },
             {
                 path: '**',

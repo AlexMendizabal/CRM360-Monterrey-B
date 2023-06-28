@@ -38,7 +38,7 @@ class RepresentantesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codSituacao = 'NULL';
             $tipoPagamentoComissao = NULL;
@@ -195,7 +195,8 @@ class RepresentantesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codRepresentante = NULL;
             $codSituacao = 'NULL';
@@ -790,7 +791,8 @@ class RepresentantesController extends AbstractController
     {
         try {
             $codRepresentante = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_VEND_GRAV]
@@ -828,7 +830,8 @@ class RepresentantesController extends AbstractController
     {
         try {
             $codRepresentante = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_VEND_GRAV]
@@ -926,7 +929,7 @@ class RepresentantesController extends AbstractController
   {
     try {
 
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));  
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));  
         $codRepresentante = $request->query->get("codRepresentante");
 
 
@@ -942,7 +945,7 @@ class RepresentantesController extends AbstractController
       $urlAnexo       = $document->getFileLink();
 
 
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
       $id      = $infoUsuario->id;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -985,7 +988,7 @@ class RepresentantesController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = null;
 

@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\n\n<app-header appTitle=\"Beneficiador\">\n</app-header>\n<div class=\"row\" id=\"application-body\">\n  <div class=\"col\">\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\n    <div class=\"row justify-content-center\">\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\n        <card-button\n          [icon]=\"atividade.iconeAtividade\"\n          [text]=\"atividade.nomeAtividade\"\n          [routerLink]=\"[atividade.rotaAtividade]\">\n        </card-button>\n      </div>\n    </div>\n  </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n\r\n<app-header appTitle=\"Beneficiador\">\r\n</app-header>\r\n<div class=\"row\" id=\"application-body\">\r\n  <div class=\"col\">\r\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\r\n    <div class=\"row justify-content-center\">\r\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\r\n        <card-button\r\n          [icon]=\"atividade.iconeAtividade\"\r\n          [text]=\"atividade.nomeAtividade\"\r\n          [routerLink]=\"[atividade.rotaAtividade]\">\r\n        </card-button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
 
 /***/ }),
 
@@ -305,7 +305,7 @@ AbastecimentoBenificiadorComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loading\"></loader-spinner-navbar>\n\n<div class=\"row\" id=\"application-header\">\n  <div class=\"col-6\">\n    <div id=\"title\">\n      <back-button></back-button>\n      <h1>Painel de recebimento de bobinas</h1>\n    </div>\n  </div>\n  \n  <div class=\"col-6 d-flex justify-content-end\">\n    <div id=\"actions\"></div>\n  </div>\n</div>\n\n<div class=\"row pb-0\" id=\"application-body\">\n  <div class=\"col\">\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\n    <custom-iframe [url]=\"url\"></custom-iframe>    \n  </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loading\"></loader-spinner-navbar>\r\n\r\n<div class=\"row\" id=\"application-header\">\r\n  <div class=\"col-6\">\r\n    <div id=\"title\">\r\n      <back-button></back-button>\r\n      <h1>Painel de recebimento de bobinas</h1>\r\n    </div>\r\n  </div>\r\n  \r\n  <div class=\"col-6 d-flex justify-content-end\">\r\n    <div id=\"actions\"></div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"row pb-0\" id=\"application-body\">\r\n  <div class=\"col\">\r\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\r\n    <custom-iframe [url]=\"url\"></custom-iframe>    \r\n  </div>\r\n</div>");
 
 /***/ }),
 

@@ -144,7 +144,7 @@ let DateService = class DateService {
         this.months = [
             'Enero',
             'Febrero',
-            'Marzon',
+            'Marzo',
             'Abril',
             'Mayo',
             'Junio',

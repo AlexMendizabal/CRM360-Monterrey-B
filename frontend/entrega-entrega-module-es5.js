@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["entrega-entrega-module"], {
     /***/
@@ -22,7 +26,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"GESTIÓN DE ENTREGAS\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <card-group text=\"SELECCIONE uma atividade\" [list]=\"atividades\"></card-group>\n</app-body>";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"GESTIÓN DE ENTREGAS\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"SELECCIONE uma atividade\" [list]=\"atividades\"></card-group>\r\n</app-body>";
       /***/
     },
 
@@ -409,9 +413,9 @@
       import { LogisticaEntregaMonitorIntegracaoRavexComponent } from './monitores/ravex/ravex.component'; */
 
 
-      var LogisticaEntregaModule = function LogisticaEntregaModule() {
+      var LogisticaEntregaModule = /*#__PURE__*/_createClass(function LogisticaEntregaModule() {
         _classCallCheck(this, LogisticaEntregaModule);
-      };
+      });
 
       LogisticaEntregaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_entrega_component__WEBPACK_IMPORTED_MODULE_22__["LogisticaEntregaComponent"]
@@ -513,7 +517,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | romaneios-romaneios-module */
-          [__webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~a163d820"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null,
           /*! ./romaneios/romaneios.module */
           "ZD/H")).then(function (m) {
             return m.LogisticaEntregaRomaneiosModule;
@@ -524,7 +528,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | controle-entregas-controle-entregas-module */
-          [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~ef4b4f0e"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~cb57d398"), __webpack_require__.e("common"), __webpack_require__.e("controle-entregas-controle-entregas-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("common"), __webpack_require__.e("controle-entregas-controle-entregas-module")]).then(__webpack_require__.bind(null,
           /*! ./controle-entregas/controle-entregas.module */
           "bH31")).then(function (m) {
             return m.ComercialControleEntregasModule;
@@ -535,7 +539,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | desmembramento-desmembramento-module */
-          [__webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~a163d820"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null,
           /*! ./desmembramento/desmembramento.module */
           "9bwc")).then(function (m) {
             return m.LogisticaEntregaDesmembramentoModule;
@@ -546,7 +550,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | monitores-monitores-module */
-          [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~ef4b4f0e"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~cb57d398"), __webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~23b8dc33"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null,
           /*! ./monitores/monitores.module */
           "D14F")).then(function (m) {
             return m.LogisticaEntregaMonitoresModule;
@@ -557,9 +561,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_3__["NotFoundComponent"]
       }];
 
-      var LogisticaEntregaRoutingModule = function LogisticaEntregaRoutingModule() {
+      var LogisticaEntregaRoutingModule = /*#__PURE__*/_createClass(function LogisticaEntregaRoutingModule() {
         _classCallCheck(this, LogisticaEntregaRoutingModule);
-      };
+      });
 
       LogisticaEntregaRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

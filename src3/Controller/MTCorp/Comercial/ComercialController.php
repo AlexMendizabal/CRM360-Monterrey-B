@@ -279,7 +279,8 @@ class ComercialController extends AbstractController
     public function getEscritorios(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $res = $connection->query("
                 EXEC [PRC_MTCORP_MODU_COME_ESCR_COOR_CONS]
                     @MATRICULA = '{$infoUsuario->matricula}'
@@ -476,7 +477,8 @@ class ComercialController extends AbstractController
     public function getPerfil(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $perfil = $this->checkPerfil($connection, $infoUsuario->matricula);
 
             $message = array(

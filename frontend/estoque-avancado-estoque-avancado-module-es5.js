@@ -1,7 +1,11 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -22,7 +26,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\n\n<app-header appTitle=\"Estoque Avançado\">\n</app-header>\n<div class=\"row\" id=\"application-body\">\n  <div class=\"col\">\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\n    <div class=\"row justify-content-center\">\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\n        <card-button\n          [icon]=\"atividade.iconeAtividade\"\n          [text]=\"atividade.nomeAtividade\"\n          [routerLink]=\"[atividade.rotaAtividade]\">\n        </card-button>\n      </div>\n    </div>\n  </div>\n</div>\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n\r\n<app-header appTitle=\"Estoque Avançado\">\r\n</app-header>\r\n<div class=\"row\" id=\"application-body\">\r\n  <div class=\"col\">\r\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\r\n    <div class=\"row justify-content-center\">\r\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\r\n        <card-button\r\n          [icon]=\"atividade.iconeAtividade\"\r\n          [text]=\"atividade.nomeAtividade\"\r\n          [routerLink]=\"[atividade.rotaAtividade]\">\r\n        </card-button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n";
       /***/
     },
 
@@ -97,7 +101,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | estoque-por-lote-estoque-por-lote-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("estoque-por-lote-estoque-por-lote-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("estoque-por-lote-estoque-por-lote-module")]).then(__webpack_require__.bind(null,
             /*! ./estoque-por-lote/estoque-por-lote.module */
             "v4kB")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoEstoquePorLoteModule;
@@ -119,7 +123,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | materiais-em-lote-materiais-em-lote-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("materiais-em-lote-materiais-em-lote-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("materiais-em-lote-materiais-em-lote-module")]).then(__webpack_require__.bind(null,
             /*! ./materiais-em-lote/materiais-em-lote.module */
             "7pdw")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoMateriaisEmLoteModule;
@@ -130,7 +134,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | lotes-conferidos-lotes-conferidos-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("lotes-conferidos-lotes-conferidos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("lotes-conferidos-lotes-conferidos-module")]).then(__webpack_require__.bind(null,
             /*! ./lotes-conferidos/lotes-conferidos.module */
             "l8WK")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoLotesConferidosModule;
@@ -141,7 +145,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | auditoria-estoque-auditoria-estoque-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("common"), __webpack_require__.e("auditoria-estoque-auditoria-estoque-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("auditoria-estoque-auditoria-estoque-module")]).then(__webpack_require__.bind(null,
             /*! ./auditoria-estoque/auditoria-estoque.module */
             "g4Cv")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoAuditoriaEstoqueModule;
@@ -153,9 +157,9 @@
         }]
       }];
 
-      var SulFluminenseEstoqueAvancadoRoutingModule = function SulFluminenseEstoqueAvancadoRoutingModule() {
+      var SulFluminenseEstoqueAvancadoRoutingModule = /*#__PURE__*/_createClass(function SulFluminenseEstoqueAvancadoRoutingModule() {
         _classCallCheck(this, SulFluminenseEstoqueAvancadoRoutingModule);
-      };
+      });
 
       SulFluminenseEstoqueAvancadoRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterModule"].forChild(routes)],
@@ -289,9 +293,9 @@
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_2__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_6___default.a);
 
-      var SulFluminenseEstoqueAvancadoModule = function SulFluminenseEstoqueAvancadoModule() {
+      var SulFluminenseEstoqueAvancadoModule = /*#__PURE__*/_createClass(function SulFluminenseEstoqueAvancadoModule() {
         _classCallCheck(this, SulFluminenseEstoqueAvancadoModule);
-      };
+      });
 
       SulFluminenseEstoqueAvancadoModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_estoque_avancado_component__WEBPACK_IMPORTED_MODULE_11__["SulFluminenseEstoqueAvancadoComponent"]],

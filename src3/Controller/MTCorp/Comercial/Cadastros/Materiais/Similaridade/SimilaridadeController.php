@@ -154,7 +154,7 @@ class SimilaridadeController extends AbstractController
     {
       try {
         $params = json_decode($request->getContent(), true);
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
         
         $codMaterial = $params['codMaterial'];
         $nomeMaterial = $params['nomeMaterial'];
@@ -202,7 +202,7 @@ class SimilaridadeController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codSimilaridade = $params['codSimilaridade'];
             $codMaterial = $params['codMaterial'];
@@ -252,7 +252,7 @@ class SimilaridadeController extends AbstractController
     {
         try {
             $codSimilaridade = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_SIMI_MATE_CADA]
@@ -286,7 +286,7 @@ class SimilaridadeController extends AbstractController
     {
         try {
             $codSimilaridade = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_SIMI_MATE_CADA]

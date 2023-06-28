@@ -147,9 +147,8 @@ class MateriaisController
                     "success"   => false,
                 ], Response::HTTP_FORBIDDEN);
             }
-
-            $infoUsuario            = $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($headers);
+            $UsuarioController = new UsuarioController();
+            $infoUsuario            = $UsuarioController->infoUsuario($headers);
             $usuarioMatricula       = $infoUsuario->matricula;
             $usuarioNome            = $infoUsuario->nomeCompleto;
             $usuarioId              = $infoUsuario->id;

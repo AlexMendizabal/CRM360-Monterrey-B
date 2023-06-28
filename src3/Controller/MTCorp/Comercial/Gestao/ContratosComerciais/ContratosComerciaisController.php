@@ -35,7 +35,8 @@ class ContratosComerciaisController extends AbstractController
     {
         try {
             $params = $request->query->all();
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $codContrato = 'NULL';
             $nomeContrato = 'NULL';
@@ -319,7 +320,8 @@ class ContratosComerciaisController extends AbstractController
     {
         try {    
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codCliente =  NULL;
             $nomeContrato = NULL;
@@ -438,7 +440,8 @@ class ContratosComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 
             $codContrato = NULL;
@@ -560,7 +563,8 @@ class ContratosComerciaisController extends AbstractController
     public function deleteAssociacao(Connection $connection, Request $request, $codContrato, $codAssociacao)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC PRC_CONTR_COME_MATE_CADA 
@@ -594,7 +598,8 @@ class ContratosComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codContrato = NULL;
 
@@ -631,7 +636,8 @@ class ContratosComerciaisController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codContrato = NULL;
             $descMotivo = NULL;
@@ -724,8 +730,8 @@ class ContratosComerciaisController extends AbstractController
   public function postAnexo(Connection $connection, Request $request):JsonResponse
   {
     try {
-
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));  
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));  
         $codContrato = $request->query->get("codContrato");
       /* $codFichaCadastral = $request->query->get("codFichaCadastral"); */
 
@@ -744,7 +750,7 @@ class ContratosComerciaisController extends AbstractController
       $urlAnexo       = $document->getFileLink();
 
 
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -783,7 +789,8 @@ class ContratosComerciaisController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = null;
 

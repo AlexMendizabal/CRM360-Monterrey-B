@@ -30,8 +30,9 @@ class AtividadesController extends AbstractController
   {
     if ($request->isMethod('PUT')) {
       try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-        $ipUsuario = UsuarioController::ipUsuario();
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $ipUsuario = $UsuarioController->ipUsuario();
         $data = json_decode($request->getContent(), true);
         $routerUrl = $data['routerUrl'];
 
@@ -71,7 +72,8 @@ class AtividadesController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $query = <<<SQL
           EXECUTE PRC_CORE_ATIV
@@ -116,7 +118,8 @@ class AtividadesController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $query = <<<SQL
           EXECUTE PRC_CORE_ATIV
@@ -161,7 +164,8 @@ class AtividadesController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
         $query = <<<SQL
           EXECUTE PRC_CORE_ATIV
               @PARAMETRO = 4

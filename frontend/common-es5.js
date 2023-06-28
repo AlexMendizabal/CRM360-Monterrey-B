@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["common"], {
     /***/
@@ -708,12 +712,12 @@
 
         _createClass(FilterPipe, [{
           key: "filterByString",
-
+          value:
           /**
            * @param {?} filter
            * @return {?}
            */
-          value: function filterByString(filter) {
+          function filterByString(filter) {
             if (filter) {
               filter = filter.toLowerCase();
             }
@@ -881,13 +885,13 @@
           }
         }], [{
           key: "isFoundOnWalking",
-
+          value:
           /**
            * @param {?} value
            * @param {?} key
            * @return {?}
            */
-          value: function isFoundOnWalking(value, key) {
+          function isFoundOnWalking(value, key) {
             var
             /** @type {?} */
             walker = value;
@@ -950,9 +954,9 @@
        */
 
 
-      var FilterPipeModule = function FilterPipeModule() {
+      var FilterPipeModule = /*#__PURE__*/_createClass(function FilterPipeModule() {
         _classCallCheck(this, FilterPipeModule);
-      };
+      });
 
       FilterPipeModule.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"],
@@ -1185,7 +1189,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<div class=\"row\" id=\"application-header\">\n  <div class=\"col-6\">\n    <div id=\"title\">\n      <back-button></back-button>\n      <h1>Página não encontrada</h1>\n    </div>\n  </div>\n</div>\n<div class=\"row\" id=\"application-body\">\n  <div class=\"col\">\n    <div class=\"not-found\">\n      <img id=\"img\" src=\"../../../assets/images/system-alerts/404.png\">\n      <div>\n        <div id=\"title\">Oops! Página não encontrada</div>\n        <div id=\"message\">A página que você está tentando acessar não existe\n    </div>\n  </div>\n</div>\n\n";
+      __webpack_exports__["default"] = "<div class=\"row\" id=\"application-header\">\r\n  <div class=\"col-6\">\r\n    <div id=\"title\">\r\n      <back-button></back-button>\r\n      <h1>Página não encontrada</h1>\r\n    </div>\r\n  </div>\r\n</div>\r\n<div class=\"row\" id=\"application-body\">\r\n  <div class=\"col\">\r\n    <div class=\"not-found\">\r\n      <img id=\"img\" src=\"../../../assets/images/system-alerts/404.png\">\r\n      <div>\r\n        <div id=\"title\">Oops! Página não encontrada</div>\r\n        <div id=\"message\">A página que você está tentando acessar não existe\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n";
       /***/
     },
 
@@ -1356,6 +1360,11 @@
         }
 
         _createClass(ComercialAgendaService, [{
+          key: "getruta",
+          value: function getruta(id_agenda) {
+            return this.http.get("".concat(this.API, "/getruta/").concat(id_agenda)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getAcessos",
           value: function getAcessos() {
             return this.http.get("".concat(this.API, "/acessos")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -1379,15 +1388,30 @@
             return this.http.get("".concat(this.API, "/compromissos/detalhes/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "reporteAgenda",
+          value: function reporteAgenda(data) {
+            console.log('entro');
+            return this.http.post("".concat(this.API, "/reporte"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "estadosAgenda",
+          value: function estadosAgenda(data) {
+            var params = data ? {
+              params: data
+            } : {}; // Opcionalmente, incluye los parámetros en la solicitud
+
+            return this.http.get("".concat(this.API, "/estados"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "saveCompromisso",
           value: function saveCompromisso(record) {
             return this.http.post("".concat(this.API, "/compromisso/salvar"), record).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "saveCompromisso2",
-          value: function saveCompromisso2(record) {
-            return this.http.post("".concat(this.API, "/compromiso/actualizar"), record).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
+          } // private actualizarCompromiso(record: any) {
+          //   return this.http
+          //     .post(`${this.API}/compromiso/actualizar`, record)
+          //     .pipe(take(1), retry(2));
+          // }
+
         }, {
           key: "updateCompromisso",
           value: function updateCompromisso(record) {
@@ -1399,15 +1423,22 @@
             return this.http.post("".concat(this.API, "/compromisso/reagendar"), record).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "finalizarCompromisso",
+          value: function finalizarCompromisso(record) {
+            return this.http.post("".concat(this.API, "/compromiso/actualizar"), record).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "save",
           value: function save(action, record) {
             if (action == 'editar') {
               return this.updateCompromisso(record);
+            } else if (action == 'finalizar') {
+              return this.finalizarCompromisso(record);
             } else if (action == 'reagendar') {
               return this.rescheduleCompromisso(record);
+            } else {
+              return this.saveCompromisso(record);
             }
-
-            return this.saveCompromisso(record);
           }
         }, {
           key: "deleteCompromisso",
@@ -1416,6 +1447,29 @@
               id: id
             };
             return this.http.post("".concat(this.API, "/compromiso/eliminar"), record).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "reporte",
+          value: function reporte(params) {
+            console.log(params);
+            return this.http.post("".concat(this.API, "/reporte"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "reporte_cliente",
+          value: function reporte_cliente(params) {
+            console.log('entro432');
+            console.log(params);
+            return this.http.post("".concat(this.API, "/reportecliente"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getPosicionPromotor",
+          value: function getPosicionPromotor(id) {
+            return this.http.get("".concat(this.API, "/getruta/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getImagenes",
+          value: function getImagenes(id) {
+            return this.http.get("".concat(this.API, "/getimagenes/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }]);
 
@@ -4267,6 +4321,9 @@
         // used for separating decimals, and which for thousands.
         "_decimalSeparator": ",",
         "_thousandSeparator": ".",
+        // Position of the percent sign in numbers
+        "_percentPrefix": null,
+        "_percentSuffix": "%",
         // Default date formats for various periods.
         // 
         // This should reflect official or de facto formatting universally accepted
@@ -4378,7 +4435,7 @@
         },
         // Various chart controls.
         // Shown as a tooltip on zoom out button.
-        "Zoom Out": "Aumentar Zoom",
+        "Zoom Out": "Reduzir Zoom",
         // Timeline buttons
         "Play": "Play",
         "Stop": "Parar",
@@ -4468,9 +4525,9 @@
         "Use up and down arrows to move selection": "Use as setas para cima ou para baixo para mover a seleção",
         "Use up and down arrows to move lower selection": "Use as setas para cima ou para baixo para mover a seleção de baixo",
         "Use up and down arrows to move upper selection": "Use as setas para cima ou para baixo para mover a seleção de cima",
-        "From %1 to %2": "De %1 para %2",
+        "From %1 to %2": "De %1 até %2",
         "From %1": "De %1",
-        "To %1": "Para %1",
+        "To %1": "Até %1",
         // Data loader-related.
         "No parser available for file: %1": "Não há um interpretador para este arquivo: %1",
         "Error parsing file: %1": "Erro analizando o arquivo: %1",
@@ -5070,13 +5127,17 @@
           evt.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
           node.dispatchEvent(evt);
         }
-      }
+      } // Detect WebView inside a native macOS app by ruling out all browsers
+      // We just need to check for 'Safari' because all other browsers (besides Firefox) include that too
+      // https://www.whatismybrowser.com/guides/the-latest-user-agent/macos
 
+
+      var isMacOSWebView = _global.navigator && /Macintosh/.test(navigator.userAgent) && /AppleWebKit/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent);
       var saveAs = _global.saveAs || ( // probably in some web worker
       typeof window !== 'object' || window !== _global ? function saveAs() {
         /* noop */
-      } // Use download attribute first if possible (#193 Lumia mobile)
-      : 'download' in HTMLAnchorElement.prototype ? function saveAs(blob, name, opts) {
+      } // Use download attribute first if possible (#193 Lumia mobile) unless this is a macOS WebView
+      : 'download' in HTMLAnchorElement.prototype && !isMacOSWebView ? function saveAs(blob, name, opts) {
         var URL = _global.URL || _global.webkitURL;
         var a = document.createElement('a');
         name = name || blob.name || 'download';
@@ -5140,7 +5201,7 @@
 
         var isChromeIOS = /CriOS\/[\d]+/.test(navigator.userAgent);
 
-        if ((isChromeIOS || force && isSafari) && typeof FileReader === 'object') {
+        if ((isChromeIOS || force && isSafari || isMacOSWebView) && typeof FileReader !== 'undefined') {
           // Safari doesn't allow downloading of blob URLs
           var reader = new FileReader();
 
@@ -5188,7 +5249,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "::ng-deep not-found {\n  height: 100vh;\n}\n::ng-deep not-found .not-found {\n  -ms-flex-align: center;\n      align-items: center;\n  display: -ms-flexbox;\n  display: flex;\n  height: 100%;\n  -ms-flex-pack: center;\n      justify-content: center;\n  width: 100%;\n}\n::ng-deep not-found .not-found #img {\n  height: 70px;\n  margin-right: 15px;\n}\n::ng-deep not-found .not-found #title {\n  color: #586464;\n  font-size: 18px;\n  font-weight: 500;\n  letter-spacing: 0.25px;\n}\n::ng-deep not-found .not-found #message {\n  color: #212529;\n  font-size: 16px;\n  font-weight: 400;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29yZS9ub3QtZm91bmQvbm90LWZvdW5kLmNvbXBvbmVudC5zY3NzIiwic3JjL2Fzc2V0cy9zY3NzL3ZhcmlhYmxlcy5zY3NzIiwic3JjL2Fzc2V0cy9zY3NzL2NvbG9ycy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUlFO0VBQ0UsYUFBQTtBQUhKO0FBSUk7RUFDRSxzQkFBQTtNQUFBLG1CQUFBO0VBQ0Esb0JBQUE7RUFBQSxhQUFBO0VBQ0EsWUFBQTtFQUNBLHFCQUFBO01BQUEsdUJBQUE7RUFDQSxXQUFBO0FBRk47QUFHTTtFQUNFLFlBQUE7RUFDQSxrQkNkQztBRGFUO0FBR007RUFDRSxjRWRNO0VGZU4sZUFBQTtFQUNBLGdCQUFBO0VBQ0Esc0JBQUE7QUFEUjtBQUdNO0VBQ0UsY0VyQkk7RUZzQkosZUFBQTtFQUNBLGdCQUFBO0FBRFIiLCJmaWxlIjoic3JjL2FwcC9jb3JlL25vdC1mb3VuZC9ub3QtZm91bmQuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyI6Om5nLWRlZXAge1xuICBAaW1wb3J0ICcuLi8uLi8uLi9hc3NldHMvc2Nzcy9jb2xvcnMnO1xuICBAaW1wb3J0ICcuLi8uLi8uLi9hc3NldHMvc2Nzcy92YXJpYWJsZXMnO1xuXG4gIG5vdC1mb3VuZCB7XG4gICAgaGVpZ2h0OiAxMDB2aDtcbiAgICAubm90LWZvdW5kIHtcbiAgICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgaGVpZ2h0OiAxMDAlO1xuICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgICB3aWR0aDogMTAwJTtcbiAgICAgICNpbWcge1xuICAgICAgICBoZWlnaHQ6IDcwcHg7XG4gICAgICAgIG1hcmdpbi1yaWdodDogJGd1dHRlcjtcbiAgICAgIH1cbiAgICAgICN0aXRsZSB7XG4gICAgICAgIGNvbG9yOiAkbWVkaXVtLWdyYXk7XG4gICAgICAgIGZvbnQtc2l6ZTogMThweDtcbiAgICAgICAgZm9udC13ZWlnaHQ6IDUwMDtcbiAgICAgICAgbGV0dGVyLXNwYWNpbmc6IDAuMjVweDtcbiAgICAgIH1cbiAgICAgICNtZXNzYWdlIHtcbiAgICAgICAgY29sb3I6ICRkYXJrLWdyYXk7XG4gICAgICAgIGZvbnQtc2l6ZTogMTZweDtcbiAgICAgICAgZm9udC13ZWlnaHQ6IDQwMDtcbiAgICAgIH1cbiAgICB9XG4gIH1cbn1cbiIsIiRndXR0ZXI6IDE1cHg7XG4kc2lkZWJhci1zaXplOiA0OHB4O1xuJHNpZGViYXItb3Blbi1zaXplOiAyNTBweDtcbiRuYXZiYXItc2l6ZTogNDhweDtcbiRoZWFkZXItc2l6ZTogNDVweDtcbiIsIiRibGFjazogIzAwMDAwMDtcbiRncmF5OiAjNWE1YTVhO1xuJGRhcmstZ3JheTogIzIxMjUyOTtcbiRtZWRpdW0tZ3JheTogIzU4NjQ2NDtcbiRsaWdodC1ncmF5OiAjZTVlNWUzO1xuJGN5YW5vOiAjMDBlMGQ4O1xuJGJsdWU6ICMwMDVmZGM7XG4kbGlnaHQtYmx1ZTogIzhGQjlFRjtcbiRkYXJrLWJsdWU6ICMwNDMzNWU7XG4kcmVkOiAjYjgzNDJjO1xuJG9yYW5nZTogI2ZmNjYzMztcbiRsaWdodC1vcmFuZ2U6ICNmZjg0Mjk7XG4kYXF1YTogIzIyZmZhMTtcbiRncmVlbjogIzRkY2M3MTtcbiRsaWdodC1ncmVlbjogI2JmZmYwMDtcbiRkYXJrLWdyZWVuOiAjMDA4MDYwO1xuJHllbGxvdzogI2ZmZWEwMDtcbiRnb2xkZW46ICNjYTlmMWQ7XG4kcGluazogI2NjMDc2NjtcbiRwdXJwbGU6ICM3OTBhYTM7XG4kd2hpdGU6ICNmZmZmZmY7XG4kaWNlOiAjZjdmN2Y3O1xuJHB1cnBsZU10Q29ycDogIzNlMDc1MjtcbiRwdXJwbGVMaWdodE10Q29ycDogIzk2MjE4ZTtcbiRvcmFuZ2VNdENvcnA6ICNGQzlGM0E7XG4kb3JhbmdlRGFya010Q29ycDogIzllNTIwMTtcbiJdfQ== */";
+      __webpack_exports__["default"] = "::ng-deep not-found {\n  height: 100vh;\n}\n::ng-deep not-found .not-found {\n  -ms-flex-align: center;\n      align-items: center;\n  display: -ms-flexbox;\n  display: flex;\n  height: 100%;\n  -ms-flex-pack: center;\n      justify-content: center;\n  width: 100%;\n}\n::ng-deep not-found .not-found #img {\n  height: 70px;\n  margin-right: 15px;\n}\n::ng-deep not-found .not-found #title {\n  color: #586464;\n  font-size: 18px;\n  font-weight: 500;\n  letter-spacing: 0.25px;\n}\n::ng-deep not-found .not-found #message {\n  color: #212529;\n  font-size: 16px;\n  font-weight: 400;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29yZS9ub3QtZm91bmQvbm90LWZvdW5kLmNvbXBvbmVudC5zY3NzIiwic3JjL2Fzc2V0cy9zY3NzL3ZhcmlhYmxlcy5zY3NzIiwic3JjL2Fzc2V0cy9zY3NzL2NvbG9ycy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUlFO0VBQ0UsYUFBQTtBQUhKO0FBSUk7RUFDRSxzQkFBQTtNQUFBLG1CQUFBO0VBQ0Esb0JBQUE7RUFBQSxhQUFBO0VBQ0EsWUFBQTtFQUNBLHFCQUFBO01BQUEsdUJBQUE7RUFDQSxXQUFBO0FBRk47QUFHTTtFQUNFLFlBQUE7RUFDQSxrQkNkQztBRGFUO0FBR007RUFDRSxjRWRNO0VGZU4sZUFBQTtFQUNBLGdCQUFBO0VBQ0Esc0JBQUE7QUFEUjtBQUdNO0VBQ0UsY0VyQkk7RUZzQkosZUFBQTtFQUNBLGdCQUFBO0FBRFIiLCJmaWxlIjoic3JjL2FwcC9jb3JlL25vdC1mb3VuZC9ub3QtZm91bmQuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyI6Om5nLWRlZXAge1xyXG4gIEBpbXBvcnQgJy4uLy4uLy4uL2Fzc2V0cy9zY3NzL2NvbG9ycyc7XHJcbiAgQGltcG9ydCAnLi4vLi4vLi4vYXNzZXRzL3Njc3MvdmFyaWFibGVzJztcclxuXHJcbiAgbm90LWZvdW5kIHtcclxuICAgIGhlaWdodDogMTAwdmg7XHJcbiAgICAubm90LWZvdW5kIHtcclxuICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxuICAgICAgZGlzcGxheTogZmxleDtcclxuICAgICAgaGVpZ2h0OiAxMDAlO1xyXG4gICAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcclxuICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgICNpbWcge1xyXG4gICAgICAgIGhlaWdodDogNzBweDtcclxuICAgICAgICBtYXJnaW4tcmlnaHQ6ICRndXR0ZXI7XHJcbiAgICAgIH1cclxuICAgICAgI3RpdGxlIHtcclxuICAgICAgICBjb2xvcjogJG1lZGl1bS1ncmF5O1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMThweDtcclxuICAgICAgICBmb250LXdlaWdodDogNTAwO1xyXG4gICAgICAgIGxldHRlci1zcGFjaW5nOiAwLjI1cHg7XHJcbiAgICAgIH1cclxuICAgICAgI21lc3NhZ2Uge1xyXG4gICAgICAgIGNvbG9yOiAkZGFyay1ncmF5O1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMTZweDtcclxuICAgICAgICBmb250LXdlaWdodDogNDAwO1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcbiIsIiRndXR0ZXI6IDE1cHg7XHJcbiRzaWRlYmFyLXNpemU6IDQ4cHg7XHJcbiRzaWRlYmFyLW9wZW4tc2l6ZTogMjUwcHg7XHJcbiRuYXZiYXItc2l6ZTogNDhweDtcclxuJGhlYWRlci1zaXplOiA0NXB4O1xyXG4iLCIkYmxhY2s6ICMwMDAwMDA7XHJcbiRncmF5OiAjNWE1YTVhO1xyXG4kZGFyay1ncmF5OiAjMjEyNTI5O1xyXG4kbWVkaXVtLWdyYXk6ICM1ODY0NjQ7XHJcbiRsaWdodC1ncmF5OiAjZTVlNWUzO1xyXG4kY3lhbm86ICMwMGUwZDg7XHJcbiRibHVlOiAjMDA1ZmRjO1xyXG4kbGlnaHQtYmx1ZTogIzhGQjlFRjtcclxuJGRhcmstYmx1ZTogIzA0MzM1ZTtcclxuJHJlZDogI2I4MzQyYztcclxuJG9yYW5nZTogI2ZmNjYzMztcclxuJGxpZ2h0LW9yYW5nZTogI2ZmODQyOTtcclxuJGFxdWE6ICMyMmZmYTE7XHJcbiRncmVlbjogIzRkY2M3MTtcclxuJGxpZ2h0LWdyZWVuOiAjYmZmZjAwO1xyXG4kZGFyay1ncmVlbjogIzAwODA2MDtcclxuJHllbGxvdzogI2ZmZWEwMDtcclxuJGdvbGRlbjogI2NhOWYxZDtcclxuJHBpbms6ICNjYzA3NjY7XHJcbiRwdXJwbGU6ICM3OTBhYTM7XHJcbiR3aGl0ZTogI2ZmZmZmZjtcclxuJGljZTogI2Y3ZjdmNztcclxuJHB1cnBsZU10Q29ycDogIzNlMDc1MjtcclxuJHB1cnBsZUxpZ2h0TXRDb3JwOiAjOTYyMThlO1xyXG4kb3JhbmdlTXRDb3JwOiAjRkM5RjNBO1xyXG4kb3JhbmdlRGFya010Q29ycDogIzllNTIwMTtcclxuIl19 */";
       /***/
     },
 
@@ -5299,19 +5360,11 @@
       /* harmony import */
 
 
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "UWrc");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
       /*! @angular/core */
       "8Y7J");
 
-      var OrderPipe_1;
-
-      var OrderPipe = OrderPipe_1 = /*#__PURE__*/function () {
+      var OrderPipe = /*#__PURE__*/function () {
         function OrderPipe() {
           _classCallCheck(this, OrderPipe);
         }
@@ -5327,7 +5380,7 @@
             }
 
             if (Array.isArray(expression)) {
-              return this.multiExpressionTransform(value, expression, reverse, isCaseInsensitive, comparator);
+              return this.multiExpressionTransform(value, expression.slice(), reverse, isCaseInsensitive, comparator);
             }
 
             if (Array.isArray(value)) {
@@ -5341,23 +5394,23 @@
             return value;
           }
           /**
-           * Sort array
+           * Sort array, returns sorted array
            *
-           * @param value
+           * @param array
            * @param expression
            * @param reverse
            * @param isCaseInsensitive
            * @param comparator
-           * @returns {any[]}
+           * @returns {Type[]}
            */
 
         }, {
           key: "sortArray",
-          value: function sortArray(value, expression, reverse, isCaseInsensitive, comparator) {
+          value: function sortArray(array, expression, reverse, isCaseInsensitive, comparator) {
             var isDeepLink = expression && expression.indexOf(".") !== -1;
 
             if (isDeepLink) {
-              expression = OrderPipe_1.parseExpression(expression);
+              expression = OrderPipe.parseExpression(expression);
             }
 
             var compareFn;
@@ -5365,10 +5418,10 @@
             if (comparator && typeof comparator === "function") {
               compareFn = comparator;
             } else {
-              compareFn = isCaseInsensitive ? OrderPipe_1.caseInsensitiveSort : OrderPipe_1.defaultCompare;
+              compareFn = isCaseInsensitive ? OrderPipe.caseInsensitiveSort : OrderPipe.defaultCompare;
             }
 
-            var array = value.sort(function (a, b) {
+            var sortedArray = array.sort(function (a, b) {
               if (!expression) {
                 return compareFn(a, b);
               }
@@ -5381,14 +5434,14 @@
                 return compareFn(a, b);
               }
 
-              return compareFn(OrderPipe_1.getValue(a, expression), OrderPipe_1.getValue(b, expression));
+              return compareFn(OrderPipe.getValue(a, expression), OrderPipe.getValue(b, expression));
             });
 
             if (reverse) {
-              return array.reverse();
+              return sortedArray.reverse();
             }
 
-            return array;
+            return sortedArray;
           }
           /**
            * Transform Object
@@ -5404,21 +5457,21 @@
         }, {
           key: "transformObject",
           value: function transformObject(value, expression, reverse, isCaseInsensitive, comparator) {
-            var parsedExpression = OrderPipe_1.parseExpression(expression);
+            var parsedExpression = OrderPipe.parseExpression(expression);
             var lastPredicate = parsedExpression.pop();
-            var oldValue = OrderPipe_1.getValue(value, parsedExpression);
+            var oldValue = OrderPipe.getValue(value, parsedExpression);
 
             if (!Array.isArray(oldValue)) {
               parsedExpression.push(lastPredicate);
               lastPredicate = null;
-              oldValue = OrderPipe_1.getValue(value, parsedExpression);
+              oldValue = OrderPipe.getValue(value, parsedExpression);
             }
 
             if (!oldValue) {
               return value;
             }
 
-            OrderPipe_1.setValue(value, this.transform(oldValue, lastPredicate, reverse, isCaseInsensitive), parsedExpression);
+            OrderPipe.setValue(value, this.transform(oldValue, lastPredicate, reverse, isCaseInsensitive), parsedExpression);
             return value;
           }
           /**
@@ -5445,13 +5498,13 @@
           }
         }], [{
           key: "isString",
-
+          value:
           /**
            * Check if a value is a string
            *
            * @param value
            */
-          value: function isString(value) {
+          function isString(value) {
             return typeof value === "string" || value instanceof String;
           }
           /**
@@ -5464,11 +5517,11 @@
         }, {
           key: "caseInsensitiveSort",
           value: function caseInsensitiveSort(a, b) {
-            if (OrderPipe_1.isString(a) && OrderPipe_1.isString(b)) {
+            if (OrderPipe.isString(a) && OrderPipe.isString(b)) {
               return a.localeCompare(b);
             }
 
-            return OrderPipe_1.defaultCompare(a, b);
+            return OrderPipe.defaultCompare(a, b);
           }
           /**
            * Default compare method
@@ -5480,6 +5533,14 @@
         }, {
           key: "defaultCompare",
           value: function defaultCompare(a, b) {
+            if (a && a instanceof Date) {
+              a = a.getTime();
+            }
+
+            if (b && b instanceof Date) {
+              b = b.getTime();
+            }
+
             if (a === b) {
               return 0;
             }
@@ -5562,20 +5623,33 @@
         return OrderPipe;
       }();
 
-      OrderPipe = OrderPipe_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Pipe"])({
-        name: "orderBy",
-        pure: false
-      })], OrderPipe);
+      OrderPipe.decorators = [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Pipe"],
+        args: [{
+          name: "orderBy",
+          pure: false
+        }]
+      }];
+      /**
+       * Created by vadimdez on 20/01/2017.
+       */
 
-      var OrderModule = function OrderModule() {
+      var OrderModule = /*#__PURE__*/_createClass(function OrderModule() {
         _classCallCheck(this, OrderModule);
-      };
+      });
 
-      OrderModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-        declarations: [OrderPipe],
-        exports: [OrderPipe],
-        providers: [OrderPipe]
-      })], OrderModule); //# sourceMappingURL=ngx-order-pipe.js.map
+      OrderModule.decorators = [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"],
+        args: [{
+          declarations: [OrderPipe],
+          exports: [OrderPipe],
+          providers: [OrderPipe]
+        }]
+      }];
+      /**
+       * Generated bundle index. Do not edit.
+       */
+      //# sourceMappingURL=ngx-order-pipe.js.map
 
       /***/
     },
@@ -6530,9 +6604,9 @@
       // Components
 
 
-      var NotFoundModule = function NotFoundModule() {
+      var NotFoundModule = /*#__PURE__*/_createClass(function NotFoundModule() {
         _classCallCheck(this, NotFoundModule);
-      };
+      });
 
       NotFoundModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_not_found_component__WEBPACK_IMPORTED_MODULE_4__["NotFoundComponent"]],

@@ -51,7 +51,7 @@ const routes = [
             },
             {
                 path: 'pluser',
-                loadChildren: () => Promise.all(/*! import() | associacoes-associacoes-module */[__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~23b8dc33"), __webpack_require__.e("common"), __webpack_require__.e("associacoes-associacoes-module")]).then(__webpack_require__.bind(null, /*! ./associacoes/associacoes.module */ "GkgG")).then((m) => m.ControladoriaAssociacoesModule),
+                loadChildren: () => Promise.all(/*! import() | associacoes-associacoes-module */[__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("common"), __webpack_require__.e("associacoes-associacoes-module")]).then(__webpack_require__.bind(null, /*! ./associacoes/associacoes.module */ "GkgG")).then((m) => m.ControladoriaAssociacoesModule),
             },
             {
                 path: 'fluxo-caixa',
@@ -262,7 +262,7 @@ ControladoriaComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\r\n");
 
 /***/ }),
 
@@ -275,7 +275,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\n<app-body></app-body>");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\r\n<app-body></app-body>");
 
 /***/ })
 

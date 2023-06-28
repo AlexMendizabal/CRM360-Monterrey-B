@@ -79,7 +79,8 @@ class ClientesController extends AbstractController
     public function getPermissaoAcesso(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_CLIE_DETA_CONS]
@@ -141,7 +142,8 @@ class ClientesController extends AbstractController
     {
         try {
             $params = $request->query->all();
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_MTCORP_MODU_CLIE_CONS]
@@ -206,7 +208,8 @@ class ClientesController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $res = $this->getDetalhesCliente($connection, $infoUsuario, $codCliente);
 
             if (count($res) > 0) {
@@ -241,7 +244,8 @@ class ClientesController extends AbstractController
     public function getListaEmails(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $res = $connection->query("
                 EXEC PRC_COME_CONT_EMAI_CONS 

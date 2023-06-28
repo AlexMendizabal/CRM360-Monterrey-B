@@ -74,7 +74,7 @@ const routes = [
             },
             {
                 path: 'relatorios',
-                loadChildren: () => Promise.all(/*! import() | relatorios-relatorios-module */[__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~ef4b4f0e"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~cb57d398"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null, /*! ./relatorios/relatorios.module */ "ifog")).then(m => m.FiscalRelatoriosModule)
+                loadChildren: () => Promise.all(/*! import() | relatorios-relatorios-module */[__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null, /*! ./relatorios/relatorios.module */ "ifog")).then(m => m.FiscalRelatoriosModule)
             },
             {
                 path: '**',
@@ -105,7 +105,7 @@ FiscalRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\">\n<!--     <button\n      (click)=\"exportarExcel()\"\n      [disabled]=\"!noResult\"\n      >\n      Exportar\n    </button>\n    <button\n      (click)=\"getLista()\"\n      [disabled]=\"form.status  == 'INVALID'\"\n      >\n      Filtrar\n    </button> -->\n  </app-header>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\">\r\n<!--     <button\r\n      (click)=\"exportarExcel()\"\r\n      [disabled]=\"!noResult\"\r\n      >\r\n      Exportar\r\n    </button>\r\n    <button\r\n      (click)=\"getLista()\"\r\n      [disabled]=\"form.status  == 'INVALID'\"\r\n      >\r\n      Filtrar\r\n    </button> -->\r\n  </app-header>\r\n");
 
 /***/ }),
 
@@ -192,7 +192,7 @@ FiscalModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\r\n");
 
 /***/ }),
 

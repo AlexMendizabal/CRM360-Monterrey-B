@@ -24,7 +24,7 @@ const routes = [
     },
     {
         path: 'v1',
-        loadChildren: () => Promise.all(/*! import() | v1-v1-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~096e86ab"), __webpack_require__.e("common"), __webpack_require__.e("v1-v1-module")]).then(__webpack_require__.bind(null, /*! ./v1/v1.module */ "NQzL")).then(m => m.V1Module)
+        loadChildren: () => Promise.all(/*! import() | v1-v1-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("common"), __webpack_require__.e("v1-v1-module")]).then(__webpack_require__.bind(null, /*! ./v1/v1.module */ "NQzL")).then(m => m.V1Module)
     },
     {
         path: 'v2',

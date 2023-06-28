@@ -72,8 +72,9 @@ class AuditoriaEnderecosEntregaController extends AbstractController
 
       if (count($res) > 0) {
         for ($i=0; $i < count($res); $i++) {
-          $cep = FunctionsController::completaZeroEsquerda($res[$i]['cep'], 8);
-          $cep = FunctionsController::setMask($cep, '##.###-###');
+          $FunctionsController = new FunctionsController();
+          $cep = $FunctionsController->completaZeroEsquerda($res[$i]['cep'], 8);
+          $cep = $FunctionsController->setMask($cep, '##.###-###');
 
           $enderecos[$e] = $res[$i];
           $enderecos[$e]['id'] = isset($res[$i]['id']) ? $res[$i]['id'] : null;
@@ -169,15 +170,19 @@ class AuditoriaEnderecosEntregaController extends AbstractController
           $e++;
         }
       }
-      $FunctionsController = new FunctionsController();  
+     
       if (count($enderecos) > 0) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $enderecos, Response::HTTP_OK);
       } else if (count($enderecos) == 0) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'Nenhum dado foi encontrado', null, Response::HTTP_OK);
       } else {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
       return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -201,7 +206,7 @@ class AuditoriaEnderecosEntregaController extends AbstractController
             @ID_ENDE = {$codEndereco},
             @IN_SITU = 1
         ")->fetchAll();
-        $FunctionsController = new FunctionsController();
+
         if (count($res) > 0) {
 
             foreach ($res as $key => $value) {
@@ -210,11 +215,14 @@ class AuditoriaEnderecosEntregaController extends AbstractController
                 $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"]; 
             }
 
+            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else {
+          $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
         $msg = 'Erro ao retornar dados';
         return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
@@ -247,20 +255,23 @@ class AuditoriaEnderecosEntregaController extends AbstractController
    
     public function getExcecao(Connection $connection, Request $request)
     {
-      $FunctionsController = new FunctionsController();
         try {      
             $res = $connection->query("
               EXEC PRC_EXCE_ENDE_ENTR_CONS
             ")->fetchAll();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
+                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {
+                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
             } else {
+                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
           } catch (\Throwable $e) {
+              $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
           }
     }
@@ -277,7 +288,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   */
   public function putAprovacaoEndereco (Connection $connection, Request $request)
   {
-    $FunctionsController = new FunctionsController();
     try {
       $data = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
@@ -351,16 +361,19 @@ class AuditoriaEnderecosEntregaController extends AbstractController
             "{$emailVendedor}"
           )
         );
-
-        FunctionsController::sendSwiftMail(true, $body, $msg, $emails);
+        $FunctionsController = new FunctionsController();
+        $FunctionsController->sendSwiftMail(true, $body, $msg, $emails);
 
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['Message'])) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, $res[0]['Message'], null, Response::HTTP_OK);
       } else {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
       return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -377,8 +390,8 @@ class AuditoriaEnderecosEntregaController extends AbstractController
    * @return 
    */
   public function getDocuments(Connection $connection, Request $request, $codEndereco)
+
   {
-    $FunctionsController = new FunctionsController();
     try {
         $params = $request->query->all();
 
@@ -396,21 +409,26 @@ class AuditoriaEnderecosEntregaController extends AbstractController
                 $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"]; 
             }
 
-
+            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else {
+            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
         }
 
 
         if (count($res) > 0 && !isset($res[0]['msg'])) {
+          $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
+          $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
+          $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
 }
@@ -428,10 +446,10 @@ class AuditoriaEnderecosEntregaController extends AbstractController
    */
   public function postAnexo(Connection $connection, Request $request):JsonResponse
   {
-    $FunctionsController = new FunctionsController();
+
     try {
-      $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));  
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));  
         $codEndereco = $request->query->get("codEndereco");
 
       $document   = new ParseFileFromRequestController();
@@ -444,8 +462,9 @@ class AuditoriaEnderecosEntregaController extends AbstractController
       
       $descAnexo     = $document->getFileName();               
       $urlAnexo       = $document->getFileLink();
+
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -461,13 +480,17 @@ class AuditoriaEnderecosEntregaController extends AbstractController
 
 
       if (isset($res[0]['codAnexo'])) {
+          $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
       return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -482,11 +505,10 @@ class AuditoriaEnderecosEntregaController extends AbstractController
    */
   public function delAnexo(Connection $connection, Request $request)
   {
-    $FunctionsController = new FunctionsController();
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = null;
 
@@ -504,13 +526,17 @@ class AuditoriaEnderecosEntregaController extends AbstractController
 
 
       if (isset($res[0]['codAnexo']) && $res[0]['codAnexo'] == $codAnexo) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, 'Anexo excluido com sucesso.', null, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'O anexo não foi excluido.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, 'Erro ao excluir anexo.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -529,7 +555,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
    */
   public function getUltimaCompra(Connection $connection, Request $request, $codCliente)
   {
-    $FunctionsController = new FunctionsController();
     try {
       $res = $connection->query("
         EXEC [PRC_CLIE_GRUP_CONS]
@@ -538,11 +563,14 @@ class AuditoriaEnderecosEntregaController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0) {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else {
+        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
         $msg = 'Erro ao retornar dados';
         return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }

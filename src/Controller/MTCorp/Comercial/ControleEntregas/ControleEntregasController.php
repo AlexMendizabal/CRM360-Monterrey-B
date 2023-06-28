@@ -29,7 +29,6 @@ class ControleEntregasController extends AbstractController
     public function getLista(Connection $connection, Request $request)
     {
         try {
-
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 

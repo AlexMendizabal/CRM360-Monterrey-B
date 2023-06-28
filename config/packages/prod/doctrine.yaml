@@ -1,22 +1,14 @@
 doctrine:
     dbal:
-        default_connection: default
+        default_connection: MONTERREY
         connections:
             MONTERREY:
                  driver: 'pdo_sqlsrv'
-<<<<<<< HEAD
-                 #host: 'HWC-HWP-7397410\MSSQL_CRM'
-                 host: localhost
-                 port: 1433         
-                 dbname: 'CRM360'
-                 user: 'reflo'
-                 password: '123'
-=======
-                 host: 'MTPIRA1350N'
+                 host: 'localhost'
                  port: 1433
                  dbname: 'CRM360'
-                 user: 'diego'
-                 password: 'diego123'
+                 user: 'len340'
+                 password: 'lenovol340'
                  charset: 'UTF-8'
  
     # orm:# 

@@ -54,14 +54,18 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (count($res) > 0 && !isset($res[0]['msg'])) {
-            return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -86,15 +90,19 @@ class EquipeVendaController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+        $FunctionsController = new FunctionsController();
+          return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-          return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
+        $FunctionsController = new FunctionsController();
+          return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-          return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+        $FunctionsController = new FunctionsController();
+          return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $msg = 'Erro ao retornar dados';
-        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -118,13 +126,16 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (count($res) > 0) {
-            return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
         $msg = 'Erro ao retornar dados';
-        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -159,14 +170,18 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codEquipeVenda'])) {
-            return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -206,14 +221,18 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codEquipeVenda']) && $res[0]['codEquipeVenda'] == $codEquipeVenda) {
-            return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -241,14 +260,18 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codEquipeVenda']) && $codEquipeVenda == $res[0]['codEquipeVenda']) {
-            return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -276,14 +299,18 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codEquipeVenda']) && $codEquipeVenda == $res[0]['codEquipeVenda']) {
-            return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+        return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -305,12 +332,15 @@ class EquipeVendaController extends AbstractController
         ")->fetchAll();
 
         if (count($res) > 0) {
-            return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-          return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+          return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 }

@@ -35,7 +35,8 @@ class AgendaController extends AbstractController
     public function getAcessos(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $simuladorVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
 
@@ -73,7 +74,8 @@ class AgendaController extends AbstractController
     public function getCompromissos(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             /* dd($infoUsuario); */
             $params = $request->query->all();
             $inicio = date('d/m/Y', strtotime($params['inicio'])) . ' 00:00:00';
@@ -143,7 +145,8 @@ class AgendaController extends AbstractController
     {
         if ($request->isMethod('GET')) {
             try {
-                $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+                $UsuarioController = new UsuarioController();
+                $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
                 $res = $connection->query(
                     "
@@ -225,8 +228,8 @@ class AgendaController extends AbstractController
 
 
             $data = json_decode($request->getContent(), true);
-
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $cor = $data['color']['primary'];
             $codTitulo = $data['codTitulo'];
@@ -316,7 +319,8 @@ class AgendaController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $id = $data['id'];
             $cor = $data['color']['primary'];
@@ -374,7 +378,8 @@ class AgendaController extends AbstractController
     public function eliminarCompromiso(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $data = json_decode($request->getContent(), true);
             $id  = $data['id'];
             $delete = $connection->query("
@@ -413,7 +418,8 @@ class AgendaController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $id = $data['id'];
             $cor = $data['color']['primary'];
@@ -473,7 +479,8 @@ class AgendaController extends AbstractController
 
         try {
             $data = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $cor = $data['color']['primary'];
             $codTitulo = $data['codTitulo'];
@@ -557,7 +564,8 @@ class AgendaController extends AbstractController
     public function deleteCompromisso(Connection $connection, Request $request, $id)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $delete = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA_DELETE]

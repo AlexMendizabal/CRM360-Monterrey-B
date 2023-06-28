@@ -33,9 +33,8 @@ class VeiculoTipoController
             $observacao     = isset($data->DS_OBSE)             ? $data->DS_OBSE            : '';
             $tipoVeiculo    = isset($data->NM_VEIC_TIPO)        ? $data->NM_VEIC_TIPO       : '';
             $capacidade     = isset($data->TT_CAPA)             ? $data->TT_CAPA            : '';
-
             $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $nrMatricula    = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
             

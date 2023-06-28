@@ -24,13 +24,13 @@ class LoginController extends AbstractController
      */
     public function login(Connection $connection, Request $request): JsonResponse
     {
-        $JwtAplication = new JwtAplication();
         if ($request->isMethod('POST')) {
             try {
                 $dadosValidos = true;
                 $msgErro = '';
                 $data = json_decode($request->getContent(), true);
 
+            
                 if (!isset($data['nr_matr_usua']) || !is_numeric($data['nr_matr_usua'])) {
                     $msgErro = 'Informe a matrícula do usuário!';
                     $dadosValidos = false;
@@ -61,9 +61,7 @@ class LoginController extends AbstractController
                     EXECUTE [dbo].[PRC_CORE_USUA_AUTE] 
                      @NR_MATR = ?
                 ";
-                
                 $stmt = $connection->prepare($sql);
-                
                 $stmt->bindValue(1, $nrMatrUsua);
 
                 $stmt->execute();
@@ -129,7 +127,7 @@ class LoginController extends AbstractController
                             'NR_MATR' => $usuario[0]['NR_MATR']
                         ];
 
-                        $jwt = $JwtAplication->encode(['userdata' => $userData]);
+                        $jwt = JwtAplication::encode(['userdata' => $userData]);
 
                         return new JsonResponse([
                             'responseCode' => 200,

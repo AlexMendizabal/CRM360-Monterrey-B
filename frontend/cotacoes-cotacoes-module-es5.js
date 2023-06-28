@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["cotacoes-cotacoes-module"], {
     /***/
@@ -267,9 +271,9 @@
       // Interfaces
 
 
-      var ComercialCicloVendasCotacoesModule = function ComercialCicloVendasCotacoesModule() {
+      var ComercialCicloVendasCotacoesModule = /*#__PURE__*/_createClass(function ComercialCicloVendasCotacoesModule() {
         _classCallCheck(this, ComercialCicloVendasCotacoesModule);
-      };
+      });
 
       ComercialCicloVendasCotacoesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [],
@@ -666,9 +670,9 @@
         pathMatch: 'full'
       }];
 
-      var ComercialCicloVendasCotacoesRoutingModule = function ComercialCicloVendasCotacoesRoutingModule() {
+      var ComercialCicloVendasCotacoesRoutingModule = /*#__PURE__*/_createClass(function ComercialCicloVendasCotacoesRoutingModule() {
         _classCallCheck(this, ComercialCicloVendasCotacoesRoutingModule);
-      };
+      });
 
       ComercialCicloVendasCotacoesRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes), _lista_lista_module__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasCotacoesListaModule"], _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_11__["ComercialCicloVendasCotacoesFormularioModule"]],

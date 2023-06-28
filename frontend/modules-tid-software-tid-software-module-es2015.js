@@ -320,7 +320,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\r\n");
 
 /***/ }),
 
@@ -333,7 +333,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\r\n");
 
 /***/ }),
 

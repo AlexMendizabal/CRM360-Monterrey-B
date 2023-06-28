@@ -160,7 +160,7 @@ class TransportadorasController
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            $infoUsuario            = UsuarioController::infoUsuario($headers);
+            $infoUsuario            = $UsuarioController->infoUsuario($headers);
             $usuarioMatricula       = $infoUsuario->matricula;
             $usuarioNome            = $infoUsuario->nomeCompleto;
             $usuarioId              = $infoUsuario->id;

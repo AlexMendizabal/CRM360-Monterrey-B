@@ -55,14 +55,18 @@ class GruposMateriaisAssociadosController extends AbstractController
             ")->fetchAll();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(true, $res[0]['message'], null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -83,13 +87,16 @@ class GruposMateriaisAssociadosController extends AbstractController
             $res = $this->associacoesMateriais($connection, $codGrupo);
 
             if (count($res) > 0) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
             $msg = 'Erro ao retornar dados';
-            return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -132,14 +139,16 @@ class GruposMateriaisAssociadosController extends AbstractController
             if (count($res) > 0) {
                 $grupo = $res[0];
                 $grupo['materiais'] = $this->associacoesMateriais($connection, $codGrupo);
-
-                return FunctionsController::Retorno(true, null, $grupo, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, null, $grupo, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
             $msg = 'Erro ao retornar dados';
-            return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -181,14 +190,18 @@ class GruposMateriaisAssociadosController extends AbstractController
 
 
             if (isset($res[0]['codigo'])) {
-                return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -236,14 +249,18 @@ class GruposMateriaisAssociadosController extends AbstractController
             // exit(0);
 
             if (isset($res[0]['codigo']) && $res[0]['codigo'] == $codGrupo) {
-                return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -271,14 +288,18 @@ class GruposMateriaisAssociadosController extends AbstractController
             ")->fetchAll();
 
             if (isset($res[0]['codGrupo']) && $codGrupo == $res[0]['codGrupo']) {
-                return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -306,14 +327,18 @@ class GruposMateriaisAssociadosController extends AbstractController
             ")->fetchAll();
 
             if (isset($res[0]['codGrupo']) && $codGrupo == $res[0]['codGrupo']) {
-                return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
+                $FunctionsController = new FunctionsController();
+                return $FunctionsController->Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -328,8 +353,8 @@ class GruposMateriaisAssociadosController extends AbstractController
    public function deleteMaterialGrupo(Connection $connection, Request $request, $codGrupo, $codMaterial)
    {
        try {
-           $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+           $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
            $res = $connection->query("
                 EXEC PRC_PREC_CADA
@@ -339,14 +364,18 @@ class GruposMateriaisAssociadosController extends AbstractController
            ")->fetchAll();
 
            if (isset($res[0]['codigo']) == $codGrupo) {
-               return FunctionsController::Retorno(true, 'Grupo removido com sucesso.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+               return $FunctionsController->Retorno(true, 'Grupo removido com sucesso.', null, Response::HTTP_OK);
            } else if (count($res) > 0 && isset($res[0]['message'])) {
-               return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+               return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
            } else {
-               return FunctionsController::Retorno(false, 'O grupo não foi removido.', null, Response::HTTP_OK);
+            $FunctionsController = new FunctionsController();
+               return $FunctionsController->Retorno(false, 'O grupo não foi removido.', null, Response::HTTP_OK);
            }
        } catch (\Throwable $e) {
-           return FunctionsController::Retorno(false, 'Erro ao remover grupo.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        $FunctionsController = new FunctionsController();
+           return $FunctionsController->Retorno(false, 'Erro ao remover grupo.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
        }
    }
 }

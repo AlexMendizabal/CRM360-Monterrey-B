@@ -301,7 +301,7 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
         return this.http
             .post(`${this.API}/email-cotacao`, params)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1)
-        // , 
+        // ,
         // retry(2)
         );
     }

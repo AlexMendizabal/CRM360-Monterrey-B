@@ -279,7 +279,7 @@ SistemasHomeComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\n<app-body></app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\r\n<app-body></app-body>\r\n");
 
 /***/ }),
 
@@ -292,7 +292,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\r\n");
 
 /***/ }),
 
@@ -425,7 +425,7 @@ SistemasRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header [appTitle]=\"appName\" [show]=\"!loaderFullScreen\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <custom-iframe [url]=\"appUrl\"></custom-iframe>\n</app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appName\" [show]=\"!loaderFullScreen\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <custom-iframe [url]=\"appUrl\"></custom-iframe>\r\n</app-body>\r\n");
 
 /***/ })
 

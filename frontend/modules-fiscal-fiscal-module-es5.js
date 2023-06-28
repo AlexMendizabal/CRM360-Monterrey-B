@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["modules-fiscal-fiscal-module"], {
     /***/
@@ -146,7 +150,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | relatorios-relatorios-module */
-            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~ef4b4f0e"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~cb57d398"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null,
             /*! ./relatorios/relatorios.module */
             "ifog")).then(function (m) {
               return m.FiscalRelatoriosModule;
@@ -158,9 +162,9 @@
         }]
       }];
 
-      var FiscalRoutingModule = function FiscalRoutingModule() {
+      var FiscalRoutingModule = /*#__PURE__*/_createClass(function FiscalRoutingModule() {
         _classCallCheck(this, FiscalRoutingModule);
-      };
+      });
 
       FiscalRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -185,7 +189,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<app-header appTitle=\"Home\">\n<!--     <button\n      (click)=\"exportarExcel()\"\n      [disabled]=\"!noResult\"\n      >\n      Exportar\n    </button>\n    <button\n      (click)=\"getLista()\"\n      [disabled]=\"form.status  == 'INVALID'\"\n      >\n      Filtrar\n    </button> -->\n  </app-header>\n";
+      __webpack_exports__["default"] = "<app-header appTitle=\"Home\">\r\n<!--     <button\r\n      (click)=\"exportarExcel()\"\r\n      [disabled]=\"!noResult\"\r\n      >\r\n      Exportar\r\n    </button>\r\n    <button\r\n      (click)=\"getLista()\"\r\n      [disabled]=\"form.status  == 'INVALID'\"\r\n      >\r\n      Filtrar\r\n    </button> -->\r\n  </app-header>\r\n";
       /***/
     },
 
@@ -314,9 +318,9 @@
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_3__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_7___default.a);
       Object(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_10__["defineLocale"])('pt-br', ngx_bootstrap__WEBPACK_IMPORTED_MODULE_10__["ptBrLocale"]);
 
-      var FiscalModule = function FiscalModule() {
+      var FiscalModule = /*#__PURE__*/_createClass(function FiscalModule() {
         _classCallCheck(this, FiscalModule);
-      };
+      });
 
       FiscalModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_fiscal_component__WEBPACK_IMPORTED_MODULE_8__["FiscalComponent"], _home_home_component__WEBPACK_IMPORTED_MODULE_9__["FiscalHomeComponent"]],
@@ -345,7 +349,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<core-module-wrapper></core-module-wrapper>\n";
+      __webpack_exports__["default"] = "<core-module-wrapper></core-module-wrapper>\r\n";
       /***/
     },
 

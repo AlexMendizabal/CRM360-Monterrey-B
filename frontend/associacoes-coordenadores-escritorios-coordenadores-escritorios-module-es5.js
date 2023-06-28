@@ -1,7 +1,11 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -64,9 +68,9 @@
         canDeactivate: [src_app_guards_form_deactivate_guard__WEBPACK_IMPORTED_MODULE_3__["FormDeactivateGuard"]]
       }];
 
-      var ComercialGestaoAssociacioesCoordenadoresEscritoriosRoutingModule = function ComercialGestaoAssociacioesCoordenadoresEscritoriosRoutingModule() {
+      var ComercialGestaoAssociacioesCoordenadoresEscritoriosRoutingModule = /*#__PURE__*/_createClass(function ComercialGestaoAssociacioesCoordenadoresEscritoriosRoutingModule() {
         _classCallCheck(this, ComercialGestaoAssociacioesCoordenadoresEscritoriosRoutingModule);
-      };
+      });
 
       ComercialGestaoAssociacioesCoordenadoresEscritoriosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -91,7 +95,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Associação de coordenadores e escritórios\">\n  <button\n    type=\"button\"\n    (click)=\"onSubmit()\"\n    [disabled]=\"loaderNavbar\">\n    Salvar\n  </button>\n</app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\n  <div class=\"row justify-content-center\" *ngIf=\"!loaderFullScreen\">\n    <div class=\"col-4\">\n      <form [formGroup]=\"form\" autocomplete=\"off\">\n        <div class=\"form-row\">\n          <div class=\"form-group col\">\n            <label for=\"coordenador\">Coordenador</label>\n            <ng-select\n              [items]=\"coordenadores\"\n              labelForId=\"coordenador\"\n              bindValue=\"matricula\"\n              bindLabel=\"nome\"\n              formControlName=\"coordenador\"\n              (change)=\"onChange()\">\n            </ng-select>\n          </div>\n        </div>\n        <div class=\"form-row\">\n          <div class=\"form-group col\">\n            <label for=\"escritorios\">Escritórios</label>\n            <ng-select\n              [items]=\"escritorios\"\n              [multiple]=\"true\"\n              [closeOnSelect]=\"false\"\n              labelForId=\"escritorios\"\n              bindValue=\"id\"\n              bindLabel=\"descricao\"\n              formControlName=\"escritorios\">\n            </ng-select>\n          </div>\n        </div>\n      </form>\n    </div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Associação de coordenadores e escritórios\">\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onSubmit()\"\r\n    [disabled]=\"loaderNavbar\">\r\n    Salvar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row justify-content-center\" *ngIf=\"!loaderFullScreen\">\r\n    <div class=\"col-4\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"coordenador\">Coordenador</label>\r\n            <ng-select\r\n              [items]=\"coordenadores\"\r\n              labelForId=\"coordenador\"\r\n              bindValue=\"matricula\"\r\n              bindLabel=\"nome\"\r\n              formControlName=\"coordenador\"\r\n              (change)=\"onChange()\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"escritorios\">Escritórios</label>\r\n            <ng-select\r\n              [items]=\"escritorios\"\r\n              [multiple]=\"true\"\r\n              [closeOnSelect]=\"false\"\r\n              labelForId=\"escritorios\"\r\n              bindValue=\"id\"\r\n              bindLabel=\"descricao\"\r\n              formControlName=\"escritorios\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -245,9 +249,9 @@
       // Components
 
 
-      var ComercialGestaoAssociacioesCoordenadoresEscritoriosModule = function ComercialGestaoAssociacioesCoordenadoresEscritoriosModule() {
+      var ComercialGestaoAssociacioesCoordenadoresEscritoriosModule = /*#__PURE__*/_createClass(function ComercialGestaoAssociacioesCoordenadoresEscritoriosModule() {
         _classCallCheck(this, ComercialGestaoAssociacioesCoordenadoresEscritoriosModule);
-      };
+      });
 
       ComercialGestaoAssociacioesCoordenadoresEscritoriosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_8__["ComercialGestaoAssociacoesCoordenadoresEscritoriosFormularioComponent"]],

@@ -141,7 +141,8 @@ class EscritoriosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $nomeEscritorio = null;
             $codEmpresa = null;
@@ -184,7 +185,8 @@ class EscritoriosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $codEscritorio = null;
             $nomeEscritorio = null;
@@ -230,7 +232,8 @@ class EscritoriosController extends AbstractController
     {
         try {
             $codEscritorio = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_ESCR_CADA] 
@@ -264,7 +267,8 @@ class EscritoriosController extends AbstractController
     {
         try {
             $codEscritorio = json_decode($request->getContent(), true);
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_ESCR_CADA] 

@@ -36,8 +36,8 @@ class CotacoesController extends AbstractController
         try {
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+
+            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $historicoExclusao = true;
             $duplicataCarteira = true;
 
@@ -79,11 +79,10 @@ class CotacoesController extends AbstractController
     public function getCotacoes(Connection $connection, Request $request)
     {
         try {
-
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+
+            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             $params = $request->query->all();
 
@@ -1793,7 +1792,6 @@ class CotacoesController extends AbstractController
     public function deleteMaterialCotacao(Connection $connection, Request $request): JsonResponse
     {
         try {
-
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
@@ -2047,7 +2045,7 @@ class CotacoesController extends AbstractController
 
             $x14 = null;
 
-            /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            /* $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
             
@@ -2215,8 +2213,7 @@ class CotacoesController extends AbstractController
             $linkAnexo       = $document->getFileLink();
 
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $matricula      = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -2254,8 +2251,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codAnexo = null;
 

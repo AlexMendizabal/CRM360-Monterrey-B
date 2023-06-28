@@ -98,7 +98,7 @@ AdminModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper>\n</core-module-wrapper>");
+/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper>\r\n</core-module-wrapper>");
 
 /***/ }),
 
@@ -245,8 +245,7 @@ const routes = [
                 path: 'usuarios',
                 loadChildren: () => Promise.all(/*! import() | usuarios-usuarios-module */[__webpack_require__.e("common"), __webpack_require__.e("usuarios-usuarios-module")]).then(__webpack_require__.bind(null, /*! ./usuarios/usuarios.module */ "mIc8")).then(m => m.AdminUsuariosModule)
             },
-            /*
-            {
+            /* {
               path: 'usuarios',
               children: [
                 {
@@ -335,7 +334,7 @@ const routes = [
                   pathMatch: 'full',
                 },
               ],
-            }, */
+            },  */
             {
                 path: '',
                 redirectTo: 'home',
@@ -383,7 +382,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\n<app-body></app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\r\n<app-body></app-body>\r\n");
 
 /***/ })
 

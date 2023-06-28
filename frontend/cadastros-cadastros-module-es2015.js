@@ -174,7 +174,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\n\n<app-header appTitle=\"Cadastros\">\n</app-header>\n<div class=\"row\" id=\"application-body\">\n  <div class=\"col\">\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\n    <div class=\"row justify-content-center\">\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\n        <card-button\n          [icon]=\"atividade.iconeAtividade\"\n          [text]=\"atividade.nomeAtividade\"\n          [routerLink]=\"[atividade.rotaAtividade]\">\n        </card-button>\n      </div>\n    </div>\n  </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n\r\n<app-header appTitle=\"Cadastros\">\r\n</app-header>\r\n<div class=\"row\" id=\"application-body\">\r\n  <div class=\"col\">\r\n    <breadcrumb [tree]=\"breadCrumbTree\"></breadcrumb>\r\n    <div class=\"row justify-content-center\">\r\n      <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\r\n        <card-button\r\n          [icon]=\"atividade.iconeAtividade\"\r\n          [text]=\"atividade.nomeAtividade\"\r\n          [routerLink]=\"[atividade.rotaAtividade]\">\r\n        </card-button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
 
 /***/ }),
 
@@ -267,7 +267,7 @@ const routes = [
             },
             {
                 path: 'representantes',
-                loadChildren: () => Promise.all(/*! import() | representantes-representantes-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~096e86ab"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~23b8dc33"), __webpack_require__.e("default~contratos-comerciais-contratos-comerciais-module~contratos-contratos-module~integracao-condi~c7866944"), __webpack_require__.e("default~agenda-agenda-module~contratos-comerciais-contratos-comerciais-module~contratos-contratos-mo~727683c9"), __webpack_require__.e("common"), __webpack_require__.e("representantes-representantes-module")]).then(__webpack_require__.bind(null, /*! ./representantes/representantes.module */ "9lVW")).then((m) => m.ComercialCadastrosRepresentantesModule),
+                loadChildren: () => Promise.all(/*! import() | representantes-representantes-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("default~contratos-comerciais-contratos-comerciais-module~contratos-contratos-module~integracao-condi~c7866944"), __webpack_require__.e("default~agenda-agenda-module~contratos-comerciais-contratos-comerciais-module~contratos-contratos-mo~569e6321"), __webpack_require__.e("common"), __webpack_require__.e("representantes-representantes-module")]).then(__webpack_require__.bind(null, /*! ./representantes/representantes.module */ "9lVW")).then((m) => m.ComercialCadastrosRepresentantesModule),
             },
             {
                 path: 'contato/origem-contato',
@@ -376,43 +376,43 @@ const routes = [
             },
             {
                 path: 'vinculo-material-deposito',
-                loadChildren: () => Promise.all(/*! import() | vinculo-material-deposito-new-vinculo-material-deposito-new-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("vinculo-material-deposito-new-vinculo-material-deposito-new-module")]).then(__webpack_require__.bind(null, /*! ./vinculo-material-deposito-new/vinculo-material-deposito-new.module */ "j3AB")).then(m => m.AbastecimentoCadastrosVinculoMaterialDepositoNewModule)
+                loadChildren: () => Promise.all(/*! import() | vinculo-material-deposito-new-vinculo-material-deposito-new-module */[__webpack_require__.e("common"), __webpack_require__.e("vinculo-material-deposito-new-vinculo-material-deposito-new-module")]).then(__webpack_require__.bind(null, /*! ./vinculo-material-deposito-new/vinculo-material-deposito-new.module */ "j3AB")).then(m => m.AbastecimentoCadastrosVinculoMaterialDepositoNewModule)
             },
             {
                 path: 'media-vendas',
-                loadChildren: () => Promise.all(/*! import() | media-vendas-media-vendas-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("media-vendas-media-vendas-module")]).then(__webpack_require__.bind(null, /*! ./media-vendas/media-vendas.module */ "92u1")).then(m => m.AbastecimentoCadastroMediaVendasModule)
+                loadChildren: () => Promise.all(/*! import() | media-vendas-media-vendas-module */[__webpack_require__.e("common"), __webpack_require__.e("media-vendas-media-vendas-module")]).then(__webpack_require__.bind(null, /*! ./media-vendas/media-vendas.module */ "92u1")).then(m => m.AbastecimentoCadastroMediaVendasModule)
             },
             {
                 path: 'nivel-material-estoque',
-                loadChildren: () => Promise.all(/*! import() | nivel-estoque-deposito-new-nivel-estoque-deposito-new-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("nivel-estoque-deposito-new-nivel-estoque-deposito-new-module")]).then(__webpack_require__.bind(null, /*! ./nivel-estoque-deposito-new/nivel-estoque-deposito-new.module */ "UOSk")).then(m => m.AbastecimentoCadastrosNivelEstoqueDepositoNewModule)
+                loadChildren: () => Promise.all(/*! import() | nivel-estoque-deposito-new-nivel-estoque-deposito-new-module */[__webpack_require__.e("common"), __webpack_require__.e("nivel-estoque-deposito-new-nivel-estoque-deposito-new-module")]).then(__webpack_require__.bind(null, /*! ./nivel-estoque-deposito-new/nivel-estoque-deposito-new.module */ "UOSk")).then(m => m.AbastecimentoCadastrosNivelEstoqueDepositoNewModule)
             },
             {
                 path: 'grupo-fornecedores',
-                loadChildren: () => Promise.all(/*! import() | grupo-fornecedores-grupo-fornecedores-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("grupo-fornecedores-grupo-fornecedores-module")]).then(__webpack_require__.bind(null, /*! ./grupo-fornecedores/grupo-fornecedores.module */ "C9+i")).then(m => m.AbastecimentoCadastrosGrupoFornecedoresModule)
+                loadChildren: () => Promise.all(/*! import() | grupo-fornecedores-grupo-fornecedores-module */[__webpack_require__.e("common"), __webpack_require__.e("grupo-fornecedores-grupo-fornecedores-module")]).then(__webpack_require__.bind(null, /*! ./grupo-fornecedores/grupo-fornecedores.module */ "C9+i")).then(m => m.AbastecimentoCadastrosGrupoFornecedoresModule)
             },
             {
                 path: 'integrador-depositos',
-                loadChildren: () => Promise.all(/*! import() | integrador-depositos-integrador-depositos-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("integrador-depositos-integrador-depositos-module")]).then(__webpack_require__.bind(null, /*! ./integrador-depositos/integrador-depositos.module */ "Y3Cv")).then(m => m.AbastecimentoCadastrosIntegradorDepositosModule)
+                loadChildren: () => Promise.all(/*! import() | integrador-depositos-integrador-depositos-module */[__webpack_require__.e("common"), __webpack_require__.e("integrador-depositos-integrador-depositos-module")]).then(__webpack_require__.bind(null, /*! ./integrador-depositos/integrador-depositos.module */ "Y3Cv")).then(m => m.AbastecimentoCadastrosIntegradorDepositosModule)
             },
             {
                 path: 'parametros-gerais-estoque',
-                loadChildren: () => Promise.all(/*! import() | parametros-gerais-estoque-parametros-gerais-estoque-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("parametros-gerais-estoque-parametros-gerais-estoque-module")]).then(__webpack_require__.bind(null, /*! ./parametros-gerais-estoque/parametros-gerais-estoque.module */ "/124")).then(m => m.AbastecimentoCadastrosParametrosGeraisEstoqueModule)
+                loadChildren: () => Promise.all(/*! import() | parametros-gerais-estoque-parametros-gerais-estoque-module */[__webpack_require__.e("common"), __webpack_require__.e("parametros-gerais-estoque-parametros-gerais-estoque-module")]).then(__webpack_require__.bind(null, /*! ./parametros-gerais-estoque/parametros-gerais-estoque.module */ "/124")).then(m => m.AbastecimentoCadastrosParametrosGeraisEstoqueModule)
             },
             {
                 path: 'classes-materiais',
-                loadChildren: () => Promise.all(/*! import() | classes-materiais-classes-materiais-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("classes-materiais-classes-materiais-module")]).then(__webpack_require__.bind(null, /*! ./classes-materiais/classes-materiais.module */ "lJB2")).then(m => m.AbastecimentoCadastrosClassesMateriaisModule)
+                loadChildren: () => Promise.all(/*! import() | classes-materiais-classes-materiais-module */[__webpack_require__.e("common"), __webpack_require__.e("classes-materiais-classes-materiais-module")]).then(__webpack_require__.bind(null, /*! ./classes-materiais/classes-materiais.module */ "lJB2")).then(m => m.AbastecimentoCadastrosClassesMateriaisModule)
             },
             {
                 path: 'manutencao-classes',
-                loadChildren: () => Promise.all(/*! import() | manutencao-classes-manutencao-classes-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("manutencao-classes-manutencao-classes-module")]).then(__webpack_require__.bind(null, /*! ./manutencao-classes/manutencao-classes.module */ "f8DH")).then(m => m.AbastecimentoCadastrosManutencaoClassesModule)
+                loadChildren: () => Promise.all(/*! import() | manutencao-classes-manutencao-classes-module */[__webpack_require__.e("common"), __webpack_require__.e("manutencao-classes-manutencao-classes-module")]).then(__webpack_require__.bind(null, /*! ./manutencao-classes/manutencao-classes.module */ "f8DH")).then(m => m.AbastecimentoCadastrosManutencaoClassesModule)
             },
             {
                 path: 'manutencao-materiais',
-                loadChildren: () => Promise.all(/*! import() | manutencao-materiais-manutencao-materiais-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("manutencao-materiais-manutencao-materiais-module")]).then(__webpack_require__.bind(null, /*! ./manutencao-materiais/manutencao-materiais.module */ "gswh")).then(m => m.AbastecimentoCadastrosManutencaoMateriaisModule)
+                loadChildren: () => Promise.all(/*! import() | manutencao-materiais-manutencao-materiais-module */[__webpack_require__.e("common"), __webpack_require__.e("manutencao-materiais-manutencao-materiais-module")]).then(__webpack_require__.bind(null, /*! ./manutencao-materiais/manutencao-materiais.module */ "gswh")).then(m => m.AbastecimentoCadastrosManutencaoMateriaisModule)
             },
             {
                 path: 'amarracao-materiais',
-                loadChildren: () => Promise.all(/*! import() | amarracao-materiais-amarracao-materiais-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("amarracao-materiais-amarracao-materiais-module")]).then(__webpack_require__.bind(null, /*! ./amarracao-materiais/amarracao-materiais.module */ "fkOy")).then(m => m.AbastecimentoCadastrosAmarracaoMateriaisModule)
+                loadChildren: () => Promise.all(/*! import() | amarracao-materiais-amarracao-materiais-module */[__webpack_require__.e("common"), __webpack_require__.e("amarracao-materiais-amarracao-materiais-module")]).then(__webpack_require__.bind(null, /*! ./amarracao-materiais/amarracao-materiais.module */ "fkOy")).then(m => m.AbastecimentoCadastrosAmarracaoMateriaisModule)
             },
             {
                 path: '**',
@@ -784,7 +784,7 @@ ComercialCadastrosComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decor
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Cadastros\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <card-group text=\"Selecione um cadastro\" [list]=\"atividades\"></card-group>\n</app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Cadastros\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Selecione um cadastro\" [list]=\"atividades\"></card-group>\r\n</app-body>\r\n");
 
 /***/ }),
 
@@ -954,7 +954,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Prontuário\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <card-group text=\"Seleccionar una actividad\" [list]=\"atividades\"></card-group>\n</app-body>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Prontuário\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Seleccionar una actividad\" [list]=\"atividades\"></card-group>\r\n</app-body>");
 
 /***/ }),
 

@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Integrações Dagda\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <card-group text=\"Selecione uma atividade\" [list]=\"atividades\"></card-group>\n</app-body>\n\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Integrações Dagda\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Selecione uma atividade\" [list]=\"atividades\"></card-group>\r\n</app-body>\r\n\r\n");
 
 /***/ }),
 
@@ -282,7 +282,7 @@ const routes = [
     },
     {
         path: 'integracao-pedidos',
-        loadChildren: () => Promise.all(/*! import() | integracao-pedidos-integracao-pedidos-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("common"), __webpack_require__.e("integracao-pedidos-integracao-pedidos-module")]).then(__webpack_require__.bind(null, /*! ./integracao-pedidos/integracao-pedidos.module */ "vEh0")).then((m) => m.ComercialIntegracoesDagdaIntegracaoPedidosModule),
+        loadChildren: () => Promise.all(/*! import() | integracao-pedidos-integracao-pedidos-module */[__webpack_require__.e("common"), __webpack_require__.e("integracao-pedidos-integracao-pedidos-module")]).then(__webpack_require__.bind(null, /*! ./integracao-pedidos/integracao-pedidos.module */ "vEh0")).then((m) => m.ComercialIntegracoesDagdaIntegracaoPedidosModule),
     },
     {
         path: 'integracao-condicao-pagamento',

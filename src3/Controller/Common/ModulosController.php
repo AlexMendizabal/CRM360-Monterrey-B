@@ -34,7 +34,7 @@ class ModulosController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
         $query = <<<SQL
           EXECUTE PRC_CORE_MODU
               @PARAMETRO = 3
@@ -76,7 +76,7 @@ class ModulosController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $query = <<<SQL
           EXECUTE PRC_CORE_MODU

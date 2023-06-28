@@ -36,7 +36,8 @@ class GestaoComissionamentosController extends AbstractController
     public function getPermissoesAcesso(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $analistaMarketing = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ANAL_MARK');
             $gerenteEscritorio = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_ESCR');

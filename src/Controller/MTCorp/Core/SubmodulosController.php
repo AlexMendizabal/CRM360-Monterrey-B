@@ -134,7 +134,7 @@ class SubmodulosController
     {
         try {
 
-            $data       = json_decode($request->getContent());
+            $data               = json_decode($request->getContent());
 
             $id         = $data->id         ?? null;
             $moduloId   = $data->moduloId   ?? null;

@@ -536,7 +536,7 @@ class TabelaDePrecosController extends AbstractController
    {
        try {
            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+           $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
            $res = $connection->query("
 							EXEC PRC_PREC_CADA

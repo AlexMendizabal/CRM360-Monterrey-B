@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["dashboards-dashboards-module"], {
     /***/
@@ -22,7 +26,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Dashboards\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <card-group text=\"Seleccionar una actividad\" [list]=\"atividades\"></card-group>\n</app-body>";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Dashboards\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Seleccionar una actividad\" [list]=\"atividades\"></card-group>\r\n</app-body>";
       /***/
     },
 
@@ -353,9 +357,9 @@
       Object(ngx_bootstrap_chronos__WEBPACK_IMPORTED_MODULE_7__["defineLocale"])('pt-br', ngx_bootstrap_locale__WEBPACK_IMPORTED_MODULE_8__["ptBrLocale"]); // ng-select
       // Counto
 
-      var LogisticaDashboardsModule = function LogisticaDashboardsModule() {
+      var LogisticaDashboardsModule = /*#__PURE__*/_createClass(function LogisticaDashboardsModule() {
         _classCallCheck(this, LogisticaDashboardsModule);
-      };
+      });
 
       LogisticaDashboardsModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_dashboards_component__WEBPACK_IMPORTED_MODULE_13__["LogisticaDashboardsComponent"]],
@@ -453,7 +457,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | gestao-carteira-gestao-carteira-module */
-          [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~096e86ab"), __webpack_require__.e("common"), __webpack_require__.e("gestao-carteira-gestao-carteira-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("common"), __webpack_require__.e("gestao-carteira-gestao-carteira-module")]).then(__webpack_require__.bind(null,
           /*! ./gestao-carteira/gestao-carteira.module */
           "EDwh")).then(function (m) {
             return m.LogisticaDashboardsGestaoCarteiraModule;
@@ -464,7 +468,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | faturamento-financeiro-faturamento-financeiro-module */
-          [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~096e86ab"), __webpack_require__.e("common"), __webpack_require__.e("faturamento-financeiro-faturamento-financeiro-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("common"), __webpack_require__.e("faturamento-financeiro-faturamento-financeiro-module")]).then(__webpack_require__.bind(null,
           /*! ./faturamento-financeiro/faturamento-financeiro.module */
           "MBRL")).then(function (m) {
             return m.LogisticaDashboardsFaturamentoFinanceiroModule;
@@ -486,9 +490,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_3__["NotFoundComponent"]
       }];
 
-      var LogisticaDashboardsRoutingModule = function LogisticaDashboardsRoutingModule() {
+      var LogisticaDashboardsRoutingModule = /*#__PURE__*/_createClass(function LogisticaDashboardsRoutingModule() {
         _classCallCheck(this, LogisticaDashboardsRoutingModule);
-      };
+      });
 
       LogisticaDashboardsRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

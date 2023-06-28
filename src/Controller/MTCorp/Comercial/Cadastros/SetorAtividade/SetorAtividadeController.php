@@ -172,7 +172,7 @@ class SetorAtividadeController extends AbstractController
     try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
  
         $setorAtividade = null;
         $codParametroSetorAtividade = null;
@@ -216,7 +216,7 @@ class SetorAtividadeController extends AbstractController
     try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $codSetorAtividade = null;
         $setorAtividade = null;
@@ -263,7 +263,7 @@ class SetorAtividadeController extends AbstractController
     try {
         $codigo = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
             EXECUTE [dbo].[PRC_SETO_ATIV_CADA] 
@@ -298,7 +298,7 @@ class SetorAtividadeController extends AbstractController
       try {
           $codigo = json_decode($request->getContent(), true);
           $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
               EXECUTE [dbo].[PRC_SETO_ATIV_CADA] 

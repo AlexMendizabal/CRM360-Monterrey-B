@@ -1,16 +1,9 @@
 <?php
 try {
-<<<<<<< HEAD
     $serverName = "localhost";
     $databaseName = "CRM360";
-    $uid = "reflo";
-    $pwd = "123";
-=======
-    $serverName = "MTPIRA1350N";
-    $databaseName = "CRM360";
-    $uid = "diego";
-    $pwd = "diego123";
->>>>>>> 48dc5dcb056792439776f2bf6ecc8d4f1558d52c
+    $uid = "len340";
+    $pwd = "lenovol340";
     
     $conn = new PDO("sqlsrv:server = $serverName; Database = $databaseName;", $uid, $pwd);
 

@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["modules-power-bi-power-bi-module"], {
     /***/
@@ -321,7 +325,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header [appTitle]=\"appName\" [show]=\"!loaderFullScreen\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <div class=\"row justify-content-center\">\n    <div class=\"col-11\">\n      <div class=\"row justify-content-center\">\n        <div class=\"col-md-3 text-center\" *ngFor=\"let atividade of atividades\">\n          <card-button\n            [icon]=\"atividade.iconeAtividade\"\n            [text]=\"atividade.nomeAtividade\"\n            (click)=\"onNavigate(atividade)\"\n          >\n          </card-button>\n        </div>\n      </div>\n    </div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appName\" [show]=\"!loaderFullScreen\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-11\">\r\n      <div class=\"row justify-content-center\">\r\n        <div class=\"col-md-3 text-center\" *ngFor=\"let atividade of atividades\">\r\n          <card-button\r\n            [icon]=\"atividade.iconeAtividade\"\r\n            [text]=\"atividade.nomeAtividade\"\r\n            (click)=\"onNavigate(atividade)\"\r\n          >\r\n          </card-button>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -341,7 +345,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<app-header appTitle=\"Home\"></app-header>\n<app-body></app-body>\n";
+      __webpack_exports__["default"] = "<app-header appTitle=\"Home\"></app-header>\r\n<app-body></app-body>\r\n";
       /***/
     },
 
@@ -520,9 +524,9 @@
       // Components
 
 
-      var PowerBiModule = function PowerBiModule() {
+      var PowerBiModule = /*#__PURE__*/_createClass(function PowerBiModule() {
         _classCallCheck(this, PowerBiModule);
-      };
+      });
 
       PowerBiModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_power_bi_component__WEBPACK_IMPORTED_MODULE_9__["PowerBiComponent"], _home_home_component__WEBPACK_IMPORTED_MODULE_10__["PowerBiHomeComponent"], _renderizador_renderizador_component__WEBPACK_IMPORTED_MODULE_11__["PowerBiRenderizadorComponent"], _renderizador_submodulo_submodulo_component__WEBPACK_IMPORTED_MODULE_12__["PowerBiRenderizadorSubmoduloComponent"], _renderizador_atividade_atividade_component__WEBPACK_IMPORTED_MODULE_13__["PowerBiRenderizadorAtividadeComponent"]],
@@ -547,7 +551,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header [appTitle]=\"appName\" [show]=\"!loaderFullScreen\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <custom-iframe [url]=\"appUrl\"></custom-iframe>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appName\" [show]=\"!loaderFullScreen\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <custom-iframe [url]=\"appUrl\"></custom-iframe>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -793,7 +797,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<router-outlet></router-outlet>\n";
+      __webpack_exports__["default"] = "<router-outlet></router-outlet>\r\n";
       /***/
     },
 
@@ -813,7 +817,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<core-module-wrapper></core-module-wrapper>\n";
+      __webpack_exports__["default"] = "<core-module-wrapper></core-module-wrapper>\r\n";
       /***/
     },
 
@@ -918,9 +922,9 @@
         }]
       }];
 
-      var PowerBiRoutingModule = function PowerBiRoutingModule() {
+      var PowerBiRoutingModule = /*#__PURE__*/_createClass(function PowerBiRoutingModule() {
         _classCallCheck(this, PowerBiRoutingModule);
-      };
+      });
 
       PowerBiRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

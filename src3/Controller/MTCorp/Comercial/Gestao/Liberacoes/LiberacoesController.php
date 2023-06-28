@@ -34,8 +34,8 @@ class LiberacoesController extends AbstractController
 	public function getPermissoesAcesso(Connection $connection, Request $request)
 	{
 			try {
-					
-					$infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+                    $UsuarioController = new UsuarioController();
+					$infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 					$liberacoesPadrao = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PPDO');
 					$liberacoesAdm = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PADM');
@@ -335,7 +335,8 @@ class LiberacoesController extends AbstractController
       try {
 
           $params = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $empresa = null;
           $nrPedido = null;
@@ -381,7 +382,8 @@ class LiberacoesController extends AbstractController
       try {
 
           $params = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
 
           $empresa = null;

@@ -36,7 +36,7 @@ const routes = [
             },
             {
                 path: 'contatos',
-                loadChildren: () => Promise.all(/*! import() | servicos-contatos-contatos-module */[__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("common"), __webpack_require__.e("servicos-contatos-contatos-module")]).then(__webpack_require__.bind(null, /*! ../servicos/contatos/contatos.module */ "19/A")).then(m => m.ServicosContatosModule)
+                loadChildren: () => Promise.all(/*! import() | servicos-contatos-contatos-module */[__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("servicos-contatos-contatos-module")]).then(__webpack_require__.bind(null, /*! ../servicos/contatos/contatos.module */ "19/A")).then(m => m.ServicosContatosModule)
             },
             {
                 path: '',
@@ -140,7 +140,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header [backButton]=\"false\" [appTitle]=\"userName\"></app-header>\n<app-body></app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header [backButton]=\"false\" [appTitle]=\"userName\"></app-header>\r\n<app-body></app-body>\r\n");
 
 /***/ }),
 
@@ -252,7 +252,7 @@ CoreComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<core-module-wrapper></core-module-wrapper>\r\n");
 
 /***/ })
 

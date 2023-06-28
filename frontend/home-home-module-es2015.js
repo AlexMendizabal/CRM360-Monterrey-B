@@ -53,7 +53,7 @@ AbastecimentoHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\">\n</app-header>\n<app-body>\n  <div class=\"col\"></div>\n</app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\">\r\n</app-header>\r\n<app-body>\r\n  <div class=\"col\"></div>\r\n</app-body>\r\n");
 
 /***/ }),
 
@@ -66,7 +66,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\">\n</app-header>\n<app-body>\n  <div class=\"col\"></div>\n</app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\">\r\n</app-header>\r\n<app-body>\r\n  <div class=\"col\"></div>\r\n</app-body>\r\n");
 
 /***/ }),
 
@@ -312,7 +312,7 @@ ComercialService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Home\"></app-header>\n<app-body [show]=\"!loaderFullScreen\">\n  <div class=\"row\">\n    <div class=\"col\">\n      <div class=\"row\">\n        <div class=\"col w-100 d-flex justify-content-lg-between\">\n          <div class=\"mtc-title mb-0\">Citas del dia</div>\n          <strong class=\"my-auto\">\n            <a [routerLink]=\"['/comercial/agenda/compromissos']\">\n              <span class=\"mr-1\">Agenda</span>\n              <i class=\"fas fa-external-link-alt\"></i>\n            </a>\n          </strong>\n        </div>\n      </div>\n      <div class=\"row\" *ngIf=\"compromissosLoaded\">\n        <div class=\"col\">\n          <ul class=\"list-unstyled mb-0\" *ngIf=\"compromissos.length > 0\">\n            <li class=\"mt-2\" *ngFor=\"let item of compromissos\">\n              <a class=\"text-decoration-none text-black d-flex\" [routerLink]=\"['/comercial/agenda/detalhes', item.id]\" (click)=\"loaderNavbar = true\">\n                <span style=\"height: 15px; width: 15px;\" class=\"my-auto rounded-circle d-inline-block\" [style.background-color]=\"item.color\"></span>\n                <span class=\"font-weight-bold ml-2\">{{ handleDiaCompromisso(item.start) }}</span>\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%;\">{{ item.title }}</span>\n              </a>\n            </li>\n          </ul>\n          <div *ngIf=\"compromissos.length == 0\" class=\"mt-2\">Usted no tiene citas hoy.</div>\n        </div>\n      </div>\n      <div class=\"mt-2 d-flex w-100\" *ngIf=\"!compromissosLoaded\">\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\n        <strong>Cargando citas...</strong>\n      </div>\n    </div>\n  </div>\n  <div class=\"mt-5\" *ngIf=\"profileLoaded && !adminProfile\">\n    <div class=\"row\">\n      <div class=\"col w-100 d-flex justify-content-lg-between\">\n        <div class=\"mtc-title\">Mapa de metas</div>\n        <strong>\n          <a [routerLink]=\"['/comercial/dashboard/vendedor']\">\n            <span class=\"mr-1\">Dashboard</span>\n            <i class=\"fas fa-external-link-alt\"></i>\n          </a>\n        </strong>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col\">\n        <comercial-templates-mapa-metas\n          [idVendedor]=\"user.idVendedor\"\n          [idEscritorio]=\"user.idEscritorio\"\n          [showHeader]=\"false\"\n          loaderStyle=\"tiny\">\n        </comercial-templates-mapa-metas>\n      </div>\n    </div>\n  </div>\n</app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Home\"></app-header>\r\n<app-body [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <div class=\"row\">\r\n        <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n          <div class=\"mtc-title mb-0\">Citas del dia</div>\r\n          <strong class=\"my-auto\">\r\n            <a [routerLink]=\"['/comercial/agenda/compromissos']\">\r\n              <span class=\"mr-1\">Agenda</span>\r\n              <i class=\"fas fa-external-link-alt\"></i>\r\n            </a>\r\n          </strong>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"compromissosLoaded\">\r\n        <div class=\"col\">\r\n          <ul class=\"list-unstyled mb-0\" *ngIf=\"compromissos.length > 0\">\r\n            <li class=\"mt-2\" *ngFor=\"let item of compromissos\">\r\n              <a class=\"text-decoration-none text-black d-flex\" [routerLink]=\"['/comercial/agenda/detalhes', item.id]\" (click)=\"loaderNavbar = true\">\r\n                <span style=\"height: 15px; width: 15px;\" class=\"my-auto rounded-circle d-inline-block\" [style.background-color]=\"item.color\"></span>\r\n                <span class=\"font-weight-bold ml-2\">{{ handleDiaCompromisso(item.start) }}</span>\r\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%;\">{{ item.title }}</span>\r\n              </a>\r\n            </li>\r\n          </ul>\r\n          <div *ngIf=\"compromissos.length == 0\" class=\"mt-2\">Usted no tiene citas hoy.</div>\r\n        </div>\r\n      </div>\r\n      <div class=\"mt-2 d-flex w-100\" *ngIf=\"!compromissosLoaded\">\r\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\r\n        <strong>Cargando citas...</strong>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"mt-5\" *ngIf=\"profileLoaded && !adminProfile\">\r\n    <div class=\"row\">\r\n      <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n        <div class=\"mtc-title\">Mapa de metas</div>\r\n        <strong>\r\n          <a [routerLink]=\"['/comercial/dashboard/vendedor']\">\r\n            <span class=\"mr-1\">Dashboard</span>\r\n            <i class=\"fas fa-external-link-alt\"></i>\r\n          </a>\r\n        </strong>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <comercial-templates-mapa-metas\r\n          [idVendedor]=\"user.idVendedor\"\r\n          [idEscritorio]=\"user.idEscritorio\"\r\n          [showHeader]=\"false\"\r\n          loaderStyle=\"tiny\">\r\n        </comercial-templates-mapa-metas>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n");
 
 /***/ }),
 
@@ -325,7 +325,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\n<app-body>\n  <div class=\"row\">\n    <div class=\"col\"></div>\n  </div>\n</app-body>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header appTitle=\"Home\"></app-header>\r\n<app-body>\r\n  <div class=\"row\">\r\n    <div class=\"col\"></div>\r\n  </div>\r\n</app-body>\r\n");
 
 /***/ }),
 
@@ -489,7 +489,7 @@ AbastecimentoHomeComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decora
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("::ng-deep #gauge-chart-toneladas,\n::ng-deep #gauge-chart-clientes,\n::ng-deep #gauge-chart-extras {\n  height: 250px;\n  max-width: 400px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvaG9tZS9ob21lLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNFOzs7RUFHRSxhQUFBO0VBQ0EsZ0JBQUE7QUFBSiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2hvbWUvaG9tZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6bmctZGVlcCB7XG4gICNnYXVnZS1jaGFydC10b25lbGFkYXMsXG4gICNnYXVnZS1jaGFydC1jbGllbnRlcyxcbiAgI2dhdWdlLWNoYXJ0LWV4dHJhcyB7XG4gICAgaGVpZ2h0OiAyNTBweDtcbiAgICBtYXgtd2lkdGg6IDQwMHB4O1xuICB9XG59XG4iXX0= */");
+/* harmony default export */ __webpack_exports__["default"] = ("::ng-deep #gauge-chart-toneladas,\n::ng-deep #gauge-chart-clientes,\n::ng-deep #gauge-chart-extras {\n  height: 250px;\n  max-width: 400px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvaG9tZS9ob21lLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNFOzs7RUFHRSxhQUFBO0VBQ0EsZ0JBQUE7QUFBSiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2hvbWUvaG9tZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6bmctZGVlcCB7XHJcbiAgI2dhdWdlLWNoYXJ0LXRvbmVsYWRhcyxcclxuICAjZ2F1Z2UtY2hhcnQtY2xpZW50ZXMsXHJcbiAgI2dhdWdlLWNoYXJ0LWV4dHJhcyB7XHJcbiAgICBoZWlnaHQ6IDI1MHB4O1xyXG4gICAgbWF4LXdpZHRoOiA0MDBweDtcclxuICB9XHJcbn1cclxuIl19 */");
 
 /***/ }),
 
@@ -666,8 +666,15 @@ let ComercialHomeComponent = class ComercialHomeComponent {
     }
     ngOnInit() {
         this.user = this.authService.getCurrentUser().info;
+        if (this.user.idVendedor > 0 && this.user.idVendedor != 88) {
+            this.idVendedor = this.user.idVendedor;
+        }
+        else {
+            this.idVendedor = '';
+        }
+        // console.log(this.user.idVendedor);
         this.getPerfil();
-        this.getCompromissos();
+        this.getCompromissos(this.idVendedor);
         this.titleService.setTitle('Home');
     }
     getPerfil() {
@@ -686,12 +693,13 @@ let ComercialHomeComponent = class ComercialHomeComponent {
             }
         });
     }
-    getCompromissos() {
+    getCompromissos(idVendedor) {
         const d = new Date();
         const today = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
         const params = {
             inicio: today,
-            fim: today
+            fim: today,
+            idVendedor: idVendedor
         };
         this.agendaService
             .getCompromissos(params)
@@ -708,6 +716,7 @@ let ComercialHomeComponent = class ComercialHomeComponent {
                 this.pnotifyService.notice('Ocurrio un problema al cargar las citas.');
             }
         });
+        //console.log(this.agendaService);
     }
     handleDiaCompromisso(data) {
         const d = new Date(data);

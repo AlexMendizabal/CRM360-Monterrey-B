@@ -36,8 +36,8 @@ class ClientesController extends AbstractController
             } else {
                 $idVendedor = $infoUsuario->idVendedor;
             }
-            $ComercialController = new ComercialController();
-            $usuariosLiberados = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            
+            $usuariosLiberados = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $idVendedores = VendedorController::vinculoOperadores($connection, $infoUsuario);
             $podeAcessar = 0;
 
@@ -94,8 +94,8 @@ class ClientesController extends AbstractController
                 } else {
                     $idVendedor = $infoUsuario->idVendedor;
                 }
-                $ComercialController = new ComercialController();
-                $usuariosLiberados = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+
+                $usuariosLiberados = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
                 $vinculoOperadores = VendedorController::vinculoOperadores($connection, $infoUsuario);
                 $podeAcessar = 0;
                 

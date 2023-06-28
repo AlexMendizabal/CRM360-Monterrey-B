@@ -36,9 +36,8 @@ class PosicaoDiariaController extends AbstractController
         try {
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $acessoAdmin = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_EDIT_POSI_DIAR');
-            $acessoDBAs = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_DBAS_POSI_DIAR');
+            $acessoAdmin = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_EDIT_POSI_DIAR');
+            $acessoDBAs = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_DBAS_POSI_DIAR');
 
             $res = array(
                 'acessoAdmin' => $acessoAdmin,

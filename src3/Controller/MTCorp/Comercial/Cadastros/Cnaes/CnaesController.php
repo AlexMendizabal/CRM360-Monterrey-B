@@ -143,7 +143,8 @@ class CnaesController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $cnae = null;
       $descricao = null;
@@ -189,7 +190,8 @@ class CnaesController extends AbstractController
   {
     try {
         $params = json_decode($request->getContent(), true);
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $codigo = null;
         $cnae = null;
@@ -238,7 +240,8 @@ class CnaesController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXEC [PRC_BASE_CNAE_CADA]
@@ -272,7 +275,8 @@ class CnaesController extends AbstractController
   {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          $UsuarioController = new UsuarioController();
+          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_BASE_CNAE_CADA]

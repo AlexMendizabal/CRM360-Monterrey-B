@@ -1,7 +1,11 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -68,9 +72,9 @@
       /*! ./home.component */
       "jeu3");
 
-      var AbastecimentoHomeModule = function AbastecimentoHomeModule() {
+      var AbastecimentoHomeModule = /*#__PURE__*/_createClass(function AbastecimentoHomeModule() {
         _classCallCheck(this, AbastecimentoHomeModule);
-      };
+      });
 
       AbastecimentoHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_6__["AbastecimentoHomeComponent"]],
@@ -95,7 +99,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<app-header appTitle=\"Home\">\n</app-header>\n<app-body>\n  <div class=\"col\"></div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<app-header appTitle=\"Home\">\r\n</app-header>\r\n<app-body>\r\n  <div class=\"col\"></div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -115,7 +119,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<app-header appTitle=\"Home\">\n</app-header>\n<app-body>\n  <div class=\"col\"></div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<app-header appTitle=\"Home\">\r\n</app-header>\r\n<app-body>\r\n  <div class=\"col\"></div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -169,9 +173,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["ComercialHomeComponent"]
       }];
 
-      var ComercialHomeRoutingModule = function ComercialHomeRoutingModule() {
+      var ComercialHomeRoutingModule = /*#__PURE__*/_createClass(function ComercialHomeRoutingModule() {
         _classCallCheck(this, ComercialHomeRoutingModule);
-      };
+      });
 
       ComercialHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -249,9 +253,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["SulFluminenseHomeComponent"]
       }];
 
-      var SulFluminenseHomeRoutingModule = function SulFluminenseHomeRoutingModule() {
+      var SulFluminenseHomeRoutingModule = /*#__PURE__*/_createClass(function SulFluminenseHomeRoutingModule() {
         _classCallCheck(this, SulFluminenseHomeRoutingModule);
-      };
+      });
 
       SulFluminenseHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -329,9 +333,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["AbastecimentoHomeComponent"]
       }];
 
-      var AbastecimentoHomeRoutingModule = function AbastecimentoHomeRoutingModule() {
+      var AbastecimentoHomeRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoHomeRoutingModule() {
         _classCallCheck(this, AbastecimentoHomeRoutingModule);
-      };
+      });
 
       AbastecimentoHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -521,7 +525,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Home\"></app-header>\n<app-body [show]=\"!loaderFullScreen\">\n  <div class=\"row\">\n    <div class=\"col\">\n      <div class=\"row\">\n        <div class=\"col w-100 d-flex justify-content-lg-between\">\n          <div class=\"mtc-title mb-0\">Citas del dia</div>\n          <strong class=\"my-auto\">\n            <a [routerLink]=\"['/comercial/agenda/compromissos']\">\n              <span class=\"mr-1\">Agenda</span>\n              <i class=\"fas fa-external-link-alt\"></i>\n            </a>\n          </strong>\n        </div>\n      </div>\n      <div class=\"row\" *ngIf=\"compromissosLoaded\">\n        <div class=\"col\">\n          <ul class=\"list-unstyled mb-0\" *ngIf=\"compromissos.length > 0\">\n            <li class=\"mt-2\" *ngFor=\"let item of compromissos\">\n              <a class=\"text-decoration-none text-black d-flex\" [routerLink]=\"['/comercial/agenda/detalhes', item.id]\" (click)=\"loaderNavbar = true\">\n                <span style=\"height: 15px; width: 15px;\" class=\"my-auto rounded-circle d-inline-block\" [style.background-color]=\"item.color\"></span>\n                <span class=\"font-weight-bold ml-2\">{{ handleDiaCompromisso(item.start) }}</span>\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%;\">{{ item.title }}</span>\n              </a>\n            </li>\n          </ul>\n          <div *ngIf=\"compromissos.length == 0\" class=\"mt-2\">Usted no tiene citas hoy.</div>\n        </div>\n      </div>\n      <div class=\"mt-2 d-flex w-100\" *ngIf=\"!compromissosLoaded\">\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\n        <strong>Cargando citas...</strong>\n      </div>\n    </div>\n  </div>\n  <div class=\"mt-5\" *ngIf=\"profileLoaded && !adminProfile\">\n    <div class=\"row\">\n      <div class=\"col w-100 d-flex justify-content-lg-between\">\n        <div class=\"mtc-title\">Mapa de metas</div>\n        <strong>\n          <a [routerLink]=\"['/comercial/dashboard/vendedor']\">\n            <span class=\"mr-1\">Dashboard</span>\n            <i class=\"fas fa-external-link-alt\"></i>\n          </a>\n        </strong>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col\">\n        <comercial-templates-mapa-metas\n          [idVendedor]=\"user.idVendedor\"\n          [idEscritorio]=\"user.idEscritorio\"\n          [showHeader]=\"false\"\n          loaderStyle=\"tiny\">\n        </comercial-templates-mapa-metas>\n      </div>\n    </div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Home\"></app-header>\r\n<app-body [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <div class=\"row\">\r\n        <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n          <div class=\"mtc-title mb-0\">Citas del dia</div>\r\n          <strong class=\"my-auto\">\r\n            <a [routerLink]=\"['/comercial/agenda/compromissos']\">\r\n              <span class=\"mr-1\">Agenda</span>\r\n              <i class=\"fas fa-external-link-alt\"></i>\r\n            </a>\r\n          </strong>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"compromissosLoaded\">\r\n        <div class=\"col\">\r\n          <ul class=\"list-unstyled mb-0\" *ngIf=\"compromissos.length > 0\">\r\n            <li class=\"mt-2\" *ngFor=\"let item of compromissos\">\r\n              <a class=\"text-decoration-none text-black d-flex\" [routerLink]=\"['/comercial/agenda/detalhes', item.id]\" (click)=\"loaderNavbar = true\">\r\n                <span style=\"height: 15px; width: 15px;\" class=\"my-auto rounded-circle d-inline-block\" [style.background-color]=\"item.color\"></span>\r\n                <span class=\"font-weight-bold ml-2\">{{ handleDiaCompromisso(item.start) }}</span>\r\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%;\">{{ item.title }}</span>\r\n              </a>\r\n            </li>\r\n          </ul>\r\n          <div *ngIf=\"compromissos.length == 0\" class=\"mt-2\">Usted no tiene citas hoy.</div>\r\n        </div>\r\n      </div>\r\n      <div class=\"mt-2 d-flex w-100\" *ngIf=\"!compromissosLoaded\">\r\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\r\n        <strong>Cargando citas...</strong>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"mt-5\" *ngIf=\"profileLoaded && !adminProfile\">\r\n    <div class=\"row\">\r\n      <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n        <div class=\"mtc-title\">Mapa de metas</div>\r\n        <strong>\r\n          <a [routerLink]=\"['/comercial/dashboard/vendedor']\">\r\n            <span class=\"mr-1\">Dashboard</span>\r\n            <i class=\"fas fa-external-link-alt\"></i>\r\n          </a>\r\n        </strong>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <comercial-templates-mapa-metas\r\n          [idVendedor]=\"user.idVendedor\"\r\n          [idEscritorio]=\"user.idEscritorio\"\r\n          [showHeader]=\"false\"\r\n          loaderStyle=\"tiny\">\r\n        </comercial-templates-mapa-metas>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -541,7 +545,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<app-header appTitle=\"Home\"></app-header>\n<app-body>\n  <div class=\"row\">\n    <div class=\"col\"></div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<app-header appTitle=\"Home\"></app-header>\r\n<app-body>\r\n  <div class=\"row\">\r\n    <div class=\"col\"></div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -623,9 +627,9 @@
       // Components
 
 
-      var TecnologiaInformacaoHomeModule = function TecnologiaInformacaoHomeModule() {
+      var TecnologiaInformacaoHomeModule = /*#__PURE__*/_createClass(function TecnologiaInformacaoHomeModule() {
         _classCallCheck(this, TecnologiaInformacaoHomeModule);
-      };
+      });
 
       TecnologiaInformacaoHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_8__["TecnologiaInformacaoHomeComponent"]],
@@ -719,9 +723,9 @@
       // Components
 
 
-      var ComercialHomeModule = function ComercialHomeModule() {
+      var ComercialHomeModule = /*#__PURE__*/_createClass(function ComercialHomeModule() {
         _classCallCheck(this, ComercialHomeModule);
-      };
+      });
 
       ComercialHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_9__["ComercialHomeComponent"]],
@@ -828,7 +832,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "::ng-deep #gauge-chart-toneladas,\n::ng-deep #gauge-chart-clientes,\n::ng-deep #gauge-chart-extras {\n  height: 250px;\n  max-width: 400px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvaG9tZS9ob21lLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNFOzs7RUFHRSxhQUFBO0VBQ0EsZ0JBQUE7QUFBSiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2hvbWUvaG9tZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6bmctZGVlcCB7XG4gICNnYXVnZS1jaGFydC10b25lbGFkYXMsXG4gICNnYXVnZS1jaGFydC1jbGllbnRlcyxcbiAgI2dhdWdlLWNoYXJ0LWV4dHJhcyB7XG4gICAgaGVpZ2h0OiAyNTBweDtcbiAgICBtYXgtd2lkdGg6IDQwMHB4O1xuICB9XG59XG4iXX0= */";
+      __webpack_exports__["default"] = "::ng-deep #gauge-chart-toneladas,\n::ng-deep #gauge-chart-clientes,\n::ng-deep #gauge-chart-extras {\n  height: 250px;\n  max-width: 400px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvaG9tZS9ob21lLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNFOzs7RUFHRSxhQUFBO0VBQ0EsZ0JBQUE7QUFBSiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2hvbWUvaG9tZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6bmctZGVlcCB7XHJcbiAgI2dhdWdlLWNoYXJ0LXRvbmVsYWRhcyxcclxuICAjZ2F1Z2UtY2hhcnQtY2xpZW50ZXMsXHJcbiAgI2dhdWdlLWNoYXJ0LWV4dHJhcyB7XHJcbiAgICBoZWlnaHQ6IDI1MHB4O1xyXG4gICAgbWF4LXdpZHRoOiA0MDBweDtcclxuICB9XHJcbn1cclxuIl19 */";
       /***/
     },
 
@@ -894,9 +898,9 @@
       /*! ./home-routing.module */
       "I10j");
 
-      var SulFluminenseHomeModule = function SulFluminenseHomeModule() {
+      var SulFluminenseHomeModule = /*#__PURE__*/_createClass(function SulFluminenseHomeModule() {
         _classCallCheck(this, SulFluminenseHomeModule);
-      };
+      });
 
       SulFluminenseHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_1__["SulFluminenseHomeComponent"]],
@@ -1159,8 +1163,16 @@
           key: "ngOnInit",
           value: function ngOnInit() {
             this.user = this.authService.getCurrentUser().info;
+
+            if (this.user.idVendedor > 0 && this.user.idVendedor != 88) {
+              this.idVendedor = this.user.idVendedor;
+            } else {
+              this.idVendedor = '';
+            } // console.log(this.user.idVendedor);
+
+
             this.getPerfil();
-            this.getCompromissos();
+            this.getCompromissos(this.idVendedor);
             this.titleService.setTitle('Home');
           }
         }, {
@@ -1181,14 +1193,15 @@
           }
         }, {
           key: "getCompromissos",
-          value: function getCompromissos() {
+          value: function getCompromissos(idVendedor) {
             var _this2 = this;
 
             var d = new Date();
             var today = "".concat(d.getFullYear(), "-").concat(d.getMonth() + 1, "-").concat(d.getDate());
             var params = {
               inicio: today,
-              fim: today
+              fim: today,
+              idVendedor: idVendedor
             };
             this.agendaService.getCompromissos(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["finalize"])(function () {
               _this2.compromissosLoaded = true;
@@ -1201,7 +1214,7 @@
               error: function error(_error) {
                 _this2.pnotifyService.notice('Ocurrio un problema al cargar las citas.');
               }
-            });
+            }); //console.log(this.agendaService);
           }
         }, {
           key: "handleDiaCompromisso",
@@ -1290,9 +1303,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["TecnologiaInformacaoHomeComponent"]
       }];
 
-      var TecnologiaInformacaoHomeRoutingModule = function TecnologiaInformacaoHomeRoutingModule() {
+      var TecnologiaInformacaoHomeRoutingModule = /*#__PURE__*/_createClass(function TecnologiaInformacaoHomeRoutingModule() {
         _classCallCheck(this, TecnologiaInformacaoHomeRoutingModule);
-      };
+      });
 
       TecnologiaInformacaoHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

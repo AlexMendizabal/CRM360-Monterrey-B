@@ -20,9 +20,9 @@ doctrine:
                 driver: 'pdo_sqlsrv'
                 host: 'SDMTSQL01\DMANETONI'
                 port: 60040
-                dbname: 'CRM360'
-                user: 'CRM'
-                password: 'CRM1234'
+                dbname: 'EMPRESA2'
+                user: 'appMTCorp'
+                password: 'appMTCorp'
                 charset: 'UTF-8'
     # orm:# 
     #     auto_generate_proxy_classes: true

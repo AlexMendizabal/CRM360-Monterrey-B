@@ -348,12 +348,16 @@ class GenericController extends AbstractController
                 "descricaoLinha" => $subLinha["DS_LINH"]
             ]);
           }
-          $FunctionsController = new FunctionsController();
-          if ($response)
-              return $FunctionsController->Retorno(true, null, $response, Response::HTTP_OK);
-          else
-              return $FunctionsController->Retorno(true, 'Nenhuma sub-linha encontrada.', null, Response::HTTP_NO_CONTENT);
+
+          if ($response) {
+            $FunctionsController = new FunctionsController();  
+            return $FunctionsController->Retorno(true, null, $response, Response::HTTP_OK);
+          }else{
+            $FunctionsController = new FunctionsController();
+            return $FunctionsController->Retorno(true, 'Nenhuma sub-linha encontrada.', null, Response::HTTP_NO_CONTENT);
+          }
         } catch (\Throwable $e) {
+            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, 'Ocorreu um erro na tentativa de consulta de sub-linhas.', null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -554,8 +558,9 @@ class GenericController extends AbstractController
             tb_core_situ
         "
       )->fetchAll(); 
-      $FunctionsController = new FunctionsController();
+
       if (count($res) > 0) {
+        $FunctionsController = new FunctionsController();   
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else {
         return $FunctionsController->Retorno(true, null, null, Response::HTTP_NO_CONTENT);
@@ -594,7 +599,7 @@ class GenericController extends AbstractController
             "nome" => "Sul Fluminense"
         )
     ];
-    $FunctionsController = new FunctionsController();
+    $FunctionsController = new FunctionsController();   
     return $FunctionsController->Retorno(true, null, $materiais, Response::HTTP_OK);
   }
 
@@ -620,13 +625,16 @@ class GenericController extends AbstractController
             AND ADIC.ID_INFO_ADIC_REFE > 0
         "
       )->fetchAll(); 
-      $FunctionsController = new FunctionsController();
+
       if (count($res) > 0) {
+        $FunctionsController = new FunctionsController();   
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else {
+        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(true, null, null, Response::HTTP_NO_CONTENT);
       }
     } catch (\Throwable $e) {
+      $FunctionsController = new FunctionsController();
       return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }

@@ -183,7 +183,7 @@ class FichaCadastralController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info')); */
+      /* $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info')); */
       
       $codMaterial = null;
       $nomeMaterial = null;
@@ -247,8 +247,8 @@ class FichaCadastralController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $linkAnexo       = $document->getFileLink();
 
-
-      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $UsuarioController = new UsuarioController();
+      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -285,7 +285,7 @@ class FichaCadastralController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info')); */
+      /* $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info')); */
 
       $codFichaCadastral = null;
       $codMaterial = null;
@@ -368,7 +368,8 @@ class FichaCadastralController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
             EXECUTE [dbo].[PRC_FICH_CADA_MATE_CADA] 
@@ -401,7 +402,7 @@ class FichaCadastralController extends AbstractController
   {
       try {
           $codigo = json_decode($request->getContent(), true);
-          /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info')); */
+          /* $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info')); */
 
 
           $res = $connection->query("

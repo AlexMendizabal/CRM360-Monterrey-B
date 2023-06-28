@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Dashboards\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <card-group text=\"Seleccionar una actividad\" [list]=\"atividades\"></card-group>\n</app-body>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Dashboards\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Seleccionar una actividad\" [list]=\"atividades\"></card-group>\r\n</app-body>");
 
 /***/ }),
 
@@ -262,11 +262,11 @@ const routes = [
     },
     {
         path: 'gestao-carteira',
-        loadChildren: () => Promise.all(/*! import() | gestao-carteira-gestao-carteira-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~096e86ab"), __webpack_require__.e("common"), __webpack_require__.e("gestao-carteira-gestao-carteira-module")]).then(__webpack_require__.bind(null, /*! ./gestao-carteira/gestao-carteira.module */ "EDwh")).then((m) => m.LogisticaDashboardsGestaoCarteiraModule)
+        loadChildren: () => Promise.all(/*! import() | gestao-carteira-gestao-carteira-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("common"), __webpack_require__.e("gestao-carteira-gestao-carteira-module")]).then(__webpack_require__.bind(null, /*! ./gestao-carteira/gestao-carteira.module */ "EDwh")).then((m) => m.LogisticaDashboardsGestaoCarteiraModule)
     },
     {
         path: 'faturamento-financeiro',
-        loadChildren: () => Promise.all(/*! import() | faturamento-financeiro-faturamento-financeiro-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~classes-materiais-classe~86f90bd3"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~096e86ab"), __webpack_require__.e("common"), __webpack_require__.e("faturamento-financeiro-faturamento-financeiro-module")]).then(__webpack_require__.bind(null, /*! ./faturamento-financeiro/faturamento-financeiro.module */ "MBRL")).then((m) => m.LogisticaDashboardsFaturamentoFinanceiroModule)
+        loadChildren: () => Promise.all(/*! import() | faturamento-financeiro-faturamento-financeiro-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("common"), __webpack_require__.e("faturamento-financeiro-faturamento-financeiro-module")]).then(__webpack_require__.bind(null, /*! ./faturamento-financeiro/faturamento-financeiro.module */ "MBRL")).then((m) => m.LogisticaDashboardsFaturamentoFinanceiroModule)
     },
     {
         path: 'analise-frete',

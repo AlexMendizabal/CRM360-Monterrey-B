@@ -1,9 +1,13 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["arcelor-mittal-arcelor-mittal-module"], {
     /***/
@@ -316,7 +320,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | vendedores-vendedores-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~897453a9"), __webpack_require__.e("vendedores-vendedores-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("vendedores-vendedores-module")]).then(__webpack_require__.bind(null,
             /*! ./vendedores/vendedores.module */
             "OZMO")).then(function (m) {
               return m.ComercialIntegracoesArcelorMittalVendedoresModule;
@@ -328,9 +332,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_7__["NotFoundComponent"]
       }];
 
-      var ComercialIntegracoesArcelorMittalRoutingModule = function ComercialIntegracoesArcelorMittalRoutingModule() {
+      var ComercialIntegracoesArcelorMittalRoutingModule = /*#__PURE__*/_createClass(function ComercialIntegracoesArcelorMittalRoutingModule() {
         _classCallCheck(this, ComercialIntegracoesArcelorMittalRoutingModule);
-      };
+      });
 
       ComercialIntegracoesArcelorMittalRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -744,9 +748,9 @@
       // Components
 
 
-      var ComercialIntegracoesArcelorMittalModule = function ComercialIntegracoesArcelorMittalModule() {
+      var ComercialIntegracoesArcelorMittalModule = /*#__PURE__*/_createClass(function ComercialIntegracoesArcelorMittalModule() {
         _classCallCheck(this, ComercialIntegracoesArcelorMittalModule);
-      };
+      });
 
       ComercialIntegracoesArcelorMittalModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_arcelor_mittal_component__WEBPACK_IMPORTED_MODULE_10__["ComercialIntegracoesArcelorMittalComponent"], _classes_materiais_classes_materiais_component__WEBPACK_IMPORTED_MODULE_11__["ComercialIntegracoesArcelorMittalClassesMateriaisComponent"], _classes_materiais_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_12__["ComercialIntegracoesArcelorMittalClassesMateriaisFormularioComponent"]],
@@ -771,7 +775,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Classe de materiais\"></app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <div class=\"row\">\n    <div class=\"col\">\n      <custom-table>\n        <ng-template #thead let-thead>\n          <tr>\n            <th scope=\"col\">Classe (Arcelor Mittal)</th>\n            <th scope=\"col\">Classe (Manetoni)</th>\n            <th scope=\"col\"></th>\n          </tr>\n        </ng-template>\n        <ng-template #tbody let-tbody>\n          <tr *ngFor=\"let item of classesMateriais\">\n            <td>{{ item.nomeArcelorMittal }}</td>\n            <td>\n              <div *ngIf=\"item.associado == 0\">\n                <i class=\"far fa-square text-danger mr-2\"></i>\n                <span>Não associado</span>\n              </div>\n              <div *ngIf=\"item.associado == 1\">\n                <i class=\"far fa-check-square text-success mr-2\"></i>\n                <span>{{ item.nomeManetoni }}</span>\n              </div>\n            </td>\n            <td class=\"text-right\">\n              <a\n                class=\"btn-icon-sm mr-2\"\n                [routerLink]=\"['editar', item.idArcelorMittal]\">\n                <i class=\"fas fa-edit\"></i>\n              </a>\n            </td>\n          </tr>\n        </ng-template>\n      </custom-table>\n    </div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Classe de materiais\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <custom-table>\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th scope=\"col\">Classe (Arcelor Mittal)</th>\r\n            <th scope=\"col\">Classe (Manetoni)</th>\r\n            <th scope=\"col\"></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let item of classesMateriais\">\r\n            <td>{{ item.nomeArcelorMittal }}</td>\r\n            <td>\r\n              <div *ngIf=\"item.associado == 0\">\r\n                <i class=\"far fa-square text-danger mr-2\"></i>\r\n                <span>Não associado</span>\r\n              </div>\r\n              <div *ngIf=\"item.associado == 1\">\r\n                <i class=\"far fa-check-square text-success mr-2\"></i>\r\n                <span>{{ item.nomeManetoni }}</span>\r\n              </div>\r\n            </td>\r\n            <td class=\"text-right\">\r\n              <a\r\n                class=\"btn-icon-sm mr-2\"\r\n                [routerLink]=\"['editar', item.idArcelorMittal]\">\r\n                <i class=\"fas fa-edit\"></i>\r\n              </a>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -987,7 +991,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<loader-spinner-navbar [hidden]=\"!loadingNavBar\"></loader-spinner-navbar>\n<app-header appTitle=\"Cadastro de classes\">\n  <button \n  (click)=\"onSave()\"\n  [disabled] = \"form.status == 'INVALID'\"\n  >\n  Salvar\n  </button> \n</app-header>\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\n  <div class=\"row justify-content-center\">\n    <div class=\"col-lg-12\">\n      <form [formGroup]=\"form\" autocomplete=\"off\">\n        <div class=\"form-row justify-content-center\">\n          <div class=\"form-group col-md-4\">\n            <label for=\"dsArcelorMittal\">Classe  (Arcelor Mittal)</label>\n            <input\n              type=\"text\"\n              class=\"form-control\"\n              formControlName=\"dsArcelorMittal\">\n          </div>\n        </div>\n        <div class=\"form-row justify-content-center\">\n          <div class=\"form-group col-md-4\">\n            <label for=\"idManetoni\">Classe  (Manetoni)</label>\n            <ng-select\n              [searchable]=\"true\"\n              [clearable]=\"false\"\n              multiple = \"true\"\n              [closeOnSelect]=\"false\"\n              [items]=\"classesMateriais\"\n              [virtualScroll]=\"true\"\n              placeholder=\"SELECIONE...\"\n              labelForId=\"idManetoni\"\n              bindLabel=\"nomeClasse\"\n              bindValue=\"idClasse\"\n              id=\"idManetoni\"\n              formControlName=\"idManetoni\"\n            >\n            </ng-select>\n          </div>\n        </div>        \n      </form>\n    </div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar [hidden]=\"!loadingNavBar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Cadastro de classes\">\r\n  <button \r\n  (click)=\"onSave()\"\r\n  [disabled] = \"form.status == 'INVALID'\"\r\n  >\r\n  Salvar\r\n  </button> \r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-lg-12\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row justify-content-center\">\r\n          <div class=\"form-group col-md-4\">\r\n            <label for=\"dsArcelorMittal\">Classe  (Arcelor Mittal)</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"dsArcelorMittal\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row justify-content-center\">\r\n          <div class=\"form-group col-md-4\">\r\n            <label for=\"idManetoni\">Classe  (Manetoni)</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              multiple = \"true\"\r\n              [closeOnSelect]=\"false\"\r\n              [items]=\"classesMateriais\"\r\n              [virtualScroll]=\"true\"\r\n              placeholder=\"SELECIONE...\"\r\n              labelForId=\"idManetoni\"\r\n              bindLabel=\"nomeClasse\"\r\n              bindValue=\"idClasse\"\r\n              id=\"idManetoni\"\r\n              formControlName=\"idManetoni\"\r\n            >\r\n            </ng-select>\r\n          </div>\r\n        </div>        \r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -1096,7 +1100,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\n<app-header appTitle=\"Integração com Arcelor Mittal\"></app-header>\n<app-body [show]=\"!loaderFullScreen\" [breadCrumbTree]=\"breadCrumbTree\">\n  <div class=\"row justify-content-center\">\n    <div class=\"col-lg-10\">\n      <div class=\"row justify-content-center\">\n        <div class=\"col-md-3 text-center mb-4 mb-sm-0\" *ngFor=\"let atividade of atividades\">\n          <card-button\n            [icon]=\"atividade.iconeAtividade\"\n            [text]=\"atividade.nomeAtividade\"\n            [routerLink]=\"[atividade.rotaAtividade]\">\n          </card-button>\n        </div>\n      </div>\n    </div>\n  </div>\n</app-body>\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Integração com Arcelor Mittal\"></app-header>\r\n<app-body [show]=\"!loaderFullScreen\" [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-lg-10\">\r\n      <div class=\"row justify-content-center\">\r\n        <div class=\"col-md-3 text-center mb-4 mb-sm-0\" *ngFor=\"let atividade of atividades\">\r\n          <card-button\r\n            [icon]=\"atividade.iconeAtividade\"\r\n            [text]=\"atividade.nomeAtividade\"\r\n            [routerLink]=\"[atividade.rotaAtividade]\">\r\n          </card-button>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     }
   }]);

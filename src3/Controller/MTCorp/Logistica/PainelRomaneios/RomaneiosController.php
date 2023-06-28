@@ -128,13 +128,13 @@ class RomaneiosController
             $romaneioId             = isset($params->ID_LOGI_FUSI_ROMA) ? $params->ID_LOGI_FUSI_ROMA    : '';
             $status                 = isset($params->IN_STAT)           ? $params->IN_STAT              : '';
 
-            $infoUsuario            = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario            = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $usuarioMatricula       = $infoUsuario->matricula;
             $usuarioNome            = $infoUsuario->nomeCompleto;
             $usuarioId              = $infoUsuario->id;
             $usuarioIP              = $_SERVER["REMOTE_ADDR"];
 
-            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $query = <<<SQL
                 EXECUTE PRC_LOGI_FUSI_ROMA_FINA
@@ -189,7 +189,7 @@ class RomaneiosController
             $km             = isset($data->KM_PREV)            ? $data->KM_PREV           : "";
             $romaneioId     = isset($data->ID_LOGI_FUSI_ROMA)  ? $data->ID_LOGI_FUSI_ROMA : "";
 
-            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $query = <<<SQL
                 EXECUTE PRC_LOGI_FUSI_ROMA_FATU

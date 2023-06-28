@@ -1,7 +1,11 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+
+  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -79,7 +83,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | servicos-contatos-contatos-module */
-            [__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~f54b2fc7"), __webpack_require__.e("common"), __webpack_require__.e("servicos-contatos-contatos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("servicos-contatos-contatos-module")]).then(__webpack_require__.bind(null,
             /*! ../servicos/contatos/contatos.module */
             "19/A")).then(function (m) {
               return m.ServicosContatosModule;
@@ -92,9 +96,9 @@
         }]
       }];
 
-      var CoreRoutingModule = function CoreRoutingModule() {
+      var CoreRoutingModule = /*#__PURE__*/_createClass(function CoreRoutingModule() {
         _classCallCheck(this, CoreRoutingModule);
-      };
+      });
 
       CoreRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -193,9 +197,9 @@
       // Components
 
 
-      var CoreModule = function CoreModule() {
+      var CoreModule = /*#__PURE__*/_createClass(function CoreModule() {
         _classCallCheck(this, CoreModule);
-      };
+      });
 
       CoreModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_core_component__WEBPACK_IMPORTED_MODULE_6__["CoreComponent"], _home_home_component__WEBPACK_IMPORTED_MODULE_7__["CoreHomeComponent"]],
@@ -240,7 +244,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<app-header [backButton]=\"false\" [appTitle]=\"userName\"></app-header>\n<app-body></app-body>\n";
+      __webpack_exports__["default"] = "<app-header [backButton]=\"false\" [appTitle]=\"userName\"></app-header>\r\n<app-body></app-body>\r\n";
       /***/
     },
 
@@ -433,7 +437,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<core-module-wrapper></core-module-wrapper>\n";
+      __webpack_exports__["default"] = "<core-module-wrapper></core-module-wrapper>\r\n";
       /***/
     }
   }]);
