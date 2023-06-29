@@ -14,8 +14,8 @@ doctrine:
                 host: 'localhost'
                 port: 1433
                 dbname: 'CRM360'
-                user: 'reflo'
-                password: '123'
+                user: 'len340'
+                password: 'lenovol340'
                 charset: "UTF-8"
     # orm:
     #     auto_generate_proxy_classes: true
