@@ -18,8 +18,6 @@ use App\Controller\MTCorp\Comercial\ComercialController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PDO;
 use Doctrine\DBAL\Connection as conecion;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
 
 use App\Controller\Common\Services\ParseFileFromRequestController;
 use App\Controller\MTCorp\Logistica\Services\Traits\ResponseTrait;
@@ -54,19 +52,15 @@ class AgendaController extends AbstractController
                     'simuladorVendas' => $simuladorVendas
                 )
             );
-
+            $FunctionsController = new FunctionsController();
             if (count($res) > 0 && !isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(
                 false,
                 'Erro ao retornar dados.',
@@ -87,12 +81,13 @@ class AgendaController extends AbstractController
     public function getCompromissos(Connection $connection, Request $request)
     {
         try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             /* dd($infoUsuario); */
             $params = $request->query->all();
             //dd($params);
-            $inicio = date('Y/m/d', strtotime($params['inicio'])) . ' 00:00:00';
-            $fim = date('Y/m/d', strtotime($params['fim'])) . ' 23:59:59';
+            $inicio = date('d/m/Y', strtotime($params['inicio'])) . ' 00:00:00';
+            $fim = date('d/m/Y', strtotime($params['fim'])) . ' 23:59:59';
             $idVendedor = isset($params['idVendedor']) ? $params['idVendedor'] : $infoUsuario->matricula;
             $tipo_compromiso = isset($params['tipo_compromiso']) ? $params['tipo_compromiso'] : '';
 
@@ -113,7 +108,7 @@ class AgendaController extends AbstractController
                         'title' => $item['TITULO'],
                         'codClient' => $item['CLIENTE'],
                         'client' => $item['NOME_CLIENTE'],
-                        'promotor' => $item['NOMBRE_VENDEDOR']." ".$item['RAZON_SOCIAL_VEND'],
+                        'promotor' => $item['NOMBRE_VENDEDOR']. " ".$item['RAZON_SOCIAL_VEND'],
                         'formContactId' => $item['FORMA_CONTATO'],
                         'formContactDesc' => $item['DESC_FORMA_CONTATO'],
                         'typeContactId' => $item['MEIO_CONTATO'],
@@ -121,8 +116,8 @@ class AgendaController extends AbstractController
                         'start' => $item['DATA_INICIO'],
                         'end' => $item['DATA_FINAL'],
 
-                        'fecha_inicial' => date('Y-m-d', strtotime($item['DATA_INICIO'])),
-                        'fecha_final' => date('Y-m-d', strtotime($item['DATA_FINAL'])),
+                        'fecha_inicial' => date('d-m-Y', strtotime($item['DATA_INICIO'])),
+                        'fecha_final' => date('d-m-Y', strtotime($item['DATA_FINAL'])),
                         'hora_inicial'  => date('H:i', strtotime($item['DATA_INICIO'])),
                         'hora_final' =>  date('H:i', strtotime($item['DATA_FINAL'])),
 
@@ -181,7 +176,7 @@ class AgendaController extends AbstractController
             $inicio = date('Y/m/d', strtotime($params['inicio'])) . ' 00:00:00';
             $fim = date('Y/m/d', strtotime($params['final'])) . ' 23:59:59';
             $tipo_compromiso = isset($params['tipo_compromiso']) ? $params['tipo_compromiso'] : '';
-
+           
             $res = $connection->query("
                 EXEC PROC_AGEN_COMP_STA
                 @id_vendedor = '2',
@@ -358,6 +353,7 @@ class AgendaController extends AbstractController
 
 
             $data = json_decode($request->getContent(), true);
+
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
@@ -372,8 +368,8 @@ class AgendaController extends AbstractController
             $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
             $formaContato = $data['formContactId'];
             $meioContato = $data['typeContactId'];
-            $dataInicial = date('Y/m/d H:i:s', strtotime($data['start']));
-            $dataFinal = !empty($data['end']) ? date('Y/m/d H:i:s', strtotime($data['end'])) : '';
+            $dataInicial = date('d/m/Y H:i:s', strtotime($data['start']));
+            $dataFinal = !empty($data['end']) ? date('d/m/Y H:i:s', strtotime($data['end'])) : '';
             $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
             $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
             $direccion = !empty($data['direccion']) ? $data['direccion'] : '';
@@ -411,7 +407,7 @@ class AgendaController extends AbstractController
                         ,@OBSERVACAO = '{$observacao}'
                         ,@VENDEDOR = '{$id_vendedor}'
                 ")->fetchAll();
-            
+
             if ($save[0]['MSG'] == 'TRUE') {
                 if (!empty($latitud) && !empty($longitud) && !empty($direccion)) {
                     $statement = $connection->prepare('EXEC [dbo].[PCR_CLIE_DIRECCION] @latitud = :latitud, @longitud = :longitud, @direccion = :direccion, @idCliente = :idCliente, @codigo_cliente = :codigoCliente, @resultado = FALSE');
@@ -423,22 +419,14 @@ class AgendaController extends AbstractController
                     /*  $statement->bindParam('resultado', 'FALSE');  */
                     $statement->execute();
                 }
-                $message = array(
-                    'responseCode' => 200,
-                    'estado' => true
-                );
+                $message = array('responseCode' => 200);
             } else {
-
-                $message = array(
-                    'responseCode' => $save,
-                    'estado' => false
-                );
+                $message = array('responseCode' => 204);
             }
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
-                'message' => $e->getMessage(),
-                'estado' => false
+                'message' => $e->getMessage()
             );
         }
         $response = new JsonResponse($message);
@@ -570,7 +558,7 @@ class AgendaController extends AbstractController
     {
         try {
             $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $data = json_decode($request->getContent(), true);
             $id  = $data['id'];
             $delete = $connection->query("
@@ -753,12 +741,12 @@ class AgendaController extends AbstractController
 
                 if ($arquivar[0]['MSG'] == 'TRUE') {
                     /* dd($arquivar); */
-                    $message = array('responseCode' => 200, 'estado' => true);
+                    $message = array('responseCode' => 200);
                 } else {
-                    $message = array('responseCode' => 204, 'estado' => false);
+                    $message = array('responseCode' => 204);
                 }
             } else {
-                $message = array('responseCode' => 204, 'estado' => false);
+                $message = array('responseCode' => 204);
             }
         } catch (DBALException $e) {
             $message = array(
@@ -785,7 +773,7 @@ class AgendaController extends AbstractController
     {
         try {
             $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $delete = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA_DELETE]
@@ -964,166 +952,57 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
-    /**
-   * @Route(
-   *  "/comercial/agenda/getimagenes/{id}",
-   *  name="comercial.agenda-getimagenes",
-     *  methods={"GET"}
-     * )
-     * @param conecion $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-  public function getImagenes(Connection $connection, Request $request, $id)
-  {
-   
-    try {       
-        $resLoop = [];
-        $id_agenda = $id;
-        $res = $connection->executeQuery(
-            'EXEC [proc_imagen_agenda_get] @id_agenda = :id_agenda',
-           ['id_agenda'=> $id_agenda] 
-        )->fetchAll();   
-      
-
-
-        if(count($res) > 0)
-        {
-            
-            foreach($res as $value) { 
-                //dd($value);
-                $file = $value['url_imagen'];
-                $response = new BinaryFileResponse($file);
-               
-                $image = file_get_contents($value['url_imagen']);
-               
-                $imagedata = base64_encode($image);
-                //dd($imagedata);
-                $resLoop[] = array(
-                    'url_imagen'=> $imagedata, 
-                    'url_web' => $value['url_web'],
-                    'nom_imagen' => $value['nom_imagen'],
-                    'fecha' => $value['fecha']
-                ); }
-                $message = array(
-                    
-                    'responseCode' => 200,
-                    'result' => $resLoop
-                );
-        }
-        else
-        {
-            $message = array(
-                'responseCode' => 204,
-                'messagge' => 'Sin Imagenes'
-            );
-        }
-         
-            
-        }
-        catch (DBALException $e) 
-        {
-            $message = array(
-                         'responseCode' => $e->getCode(),
-                         'message' => $e->getMessage()
-                       );
-        }
-
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
-
     /**
      * @Route(
      *  "/comercial/agenda/compromisso/finalizar",
      *  name="comercial.agenda-compromisso-finalizar",
-     *  methods={"POST"},
+     *  methods={"POST"}
      * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
 
-    public function finalizarCompromisso(Connection $connection, Request $request)
-    {
-        try {
-            $requestContent = $request->getContent();
-            $data = json_decode($requestContent, true);
-
-            $id_agenda = $data['id_agenda'];
-            $obs_final = !empty($data['observacion_final']) ? strtoupper($data['observacion_final']) : '';
-            $fecha = date('d/m/Y H:i:s');
-            $destination = "";
-          
-            $stmt = $connection->prepare("EXEC [dbo].[PRC_AGEN_VEND_FIN]
-                   @AGENDA = :id_agenda,
-                   @OBS_FINAL = :obs_final");
+     public function finalizarCompromisso(Connection $connection, Request $request)
+     {
+         try {
+             $data = json_decode($request->getContent(), true);
+             $id_agenda = $data['id_agenda'];
+             $obs_final = !empty($data['observacion_final']) ? strtoupper($data['observacion_final']) : '';
+             $destination = "";
+     
+             // ... Código para subir el archivo adjunto (si aplica) ...
+     
+             $stmt = $connection->prepare("EXEC [dbo].[PRC_AGEN_VEND_FIN]
+                  @AGENDA = :id_agenda,
+                  @COR = '#21C710',    
+                  @STATUS = 3,
+                  @OBS_FINAL = :obs_final");
              $stmt->bindParam(':id_agenda', $id_agenda);
              $stmt->bindParam(':obs_final', $obs_final);
              $stmt->execute();
- 
+     
              // Obtener el resultado del procedimiento almacenado
              $result = $stmt->fetch();
-
-             if (!empty($data['imagen'])) 
-             {
-                $id_agenda = $data['id_agenda'];
-                $imageFiles = $data['imagen'];
-                foreach ($imageFiles as $imageBase64) {
-                    $imageData = substr($imageBase64, strpos($imageBase64, ',') + 1);
-                    $imageDecoded = base64_decode($imageData);
-                    $filename = uniqid() . '.jpeg';
-                    $destination = $this->getParameter('kernel.project_dir') . '/uploads/agenda/images';
-                    $destination = str_replace('\\', '/', $destination);
-                    file_put_contents($destination . '/' . $filename, $imageDecoded);
-
-                    /* $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $destination);
-                    $webPath = str_replace("\\", "/", $webPath);
-                    $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath; */
-
-
-                    $webPath = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\agenda\\images";
-                    $imageFile = new UploadedFile(
-                        $destination . '/' . $filename,
-                        $filename,
-                        'image/jpeg',
-                        null,
-                        true
-                    );
-                    $url_imagen = $imageFile->getRealPath();
-
-                    $stmt = $connection->prepare("EXEC proc_imagen_agenda ?,?,?,?,?");
-                    $stmt->bindParam(1, $id_agenda);
-                    $stmt->bindParam(2, $url_imagen);
-                    $stmt->bindParam(3, $webPath);
-                    $stmt->bindParam(4, $filename);
-                    $stmt->bindParam(5, $fecha);
-                    $stmt->execute();
-                    $result = $stmt->fetch(); 
-
-                    $message = array('responseCode' => $result, 'estado' => true);
-                }
-               
-            }
-
+     
              if ($result['MSG'] == 'TRUE') {
                  $message = array('responseCode' => 200, 'estado' => true);
              } else {
                  $message = array('responseCode' => 204, 'estado' => false);
              }
-        } catch (\Exception $e) {
-            $message = array(
-                'responseCode' => $e->getCode(),
-                'message' => $e->getMessage()
-            );
-        }
+         } catch (DBALException $e) {
+             $message = array(
+                 'responseCode' => $e->getCode(),
+                 'message' => $e->getMessage()
+             );
+         }
+     
+         $response = new JsonResponse($message);
+         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+         return $response;
+     }
+     
 
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
 
     /**
      * @Route(
@@ -1193,28 +1072,25 @@ class AgendaController extends AbstractController
     {
         try {
             $jsonData = $request->getContent();
-            $datos = json_decode($jsonData, true);
+            $data = json_decode($jsonData, true);
             // Extraer los datos del JSON
-            
-            foreach ($datos[0]['lista'] as $key => $data) {
-                $id_agenda = $data['id_agenda'];
-                $datetime =  date('d/m/Y H:i:s', strtotime($data['datetime']));
-                $latitud = $data['latitud'];
-                $longitud = $data['longitud'];
-                
-                $statement = $connection->prepare("EXEC  PROC_AGEN_VEN_UB ?, ?, ?, ?");
-                $statement->bindValue(1, $id_agenda);
-                $statement->bindValue(2, $datetime);
-                $statement->bindValue(3, $latitud);
-                $statement->bindValue(4, $longitud);
-                $statement->execute();
-            }
-         
+            $id_agenda = $data['id_agenda'];
+            $datetime = $data['datetime'];
+            $latitud = $data['latitud'];
+            $longitud = $data['longitud'];
+
+            $statement = $connection->prepare("EXEC  PROC_AGEN_VEN_UB ?, ?, ?, ?");
+            $statement->bindValue(1, $id_agenda);
+            $statement->bindValue(2, $datetime);
+            $statement->bindValue(3, $latitud);
+            $statement->bindValue(4, $longitud);
+            $statement->execute();
+
             return new JsonResponse(
                 [
                     'responseCode' => 200,
-                    'success' => true
-                   /*  'variable' => $datos[0]['lista'] */
+                    'success' => true,
+                    'variable' => $data
                 ]
             );
         } catch (DBALException $e) {
@@ -1224,6 +1100,7 @@ class AgendaController extends AbstractController
                 'error' => $e->getMessage(),
             );
         }
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
@@ -1275,5 +1152,4 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    
 }
