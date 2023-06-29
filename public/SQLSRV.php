@@ -2,8 +2,8 @@
 $serverName = "localhost";
 $connectionOptions = array(
     "database" => "CRM360",
-    "uid" => "len340",
-    "pwd" => "lenovol340"
+    "uid" => "reflo",
+    "pwd" => "123"
 );
 
 function exception_handler($exception) {
