@@ -108,6 +108,7 @@ class AgendaController extends AbstractController
                         'title' => $item['TITULO'],
                         'codClient' => $item['CLIENTE'],
                         'client' => $item['NOME_CLIENTE'],
+                        'promotor' => $item['NOMBRE_VENDEDOR']. " ".$item['RAZON_SOCIAL_VEND'],
                         'formContactId' => $item['FORMA_CONTATO'],
                         'formContactDesc' => $item['DESC_FORMA_CONTATO'],
                         'typeContactId' => $item['MEIO_CONTATO'],
