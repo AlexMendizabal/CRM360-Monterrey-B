@@ -6,9 +6,9 @@ doctrine:
             driver: 'pdo_sqlsrv'
             host: 'localhost'
             port: 1433
-            dbname: 'EMPRESA2'
-            user: '20091'
-            password: '20091'
+            dbname: 'CRM360'
+            user: 'sa'
+            password: '123'
             charset: 'UTF-8'
             
     # orm:

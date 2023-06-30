@@ -91,8 +91,8 @@ class AgendaController extends AbstractController
             /* dd($infoUsuario); */
             $params = $request->query->all();
             //dd($params);
-            $inicio = date('Y/m/d', strtotime($params['inicio'])) . ' 00:00:00';
-            $fim = date('Y/m/d', strtotime($params['fim'])) . ' 23:59:59';
+            $inicio = date('d/m/Y', strtotime($params['inicio'])) . ' 00:00:00';
+            $fim = date('d/m/Y', strtotime($params['fim'])) . ' 23:59:59';
             $idVendedor = isset($params['idVendedor']) ? $params['idVendedor'] : $infoUsuario->matricula;
             $tipo_compromiso = isset($params['tipo_compromiso']) ? $params['tipo_compromiso'] : '';
 
@@ -113,7 +113,6 @@ class AgendaController extends AbstractController
                         'title' => $item['TITULO'],
                         'codClient' => $item['CLIENTE'],
                         'client' => $item['NOME_CLIENTE'],
-                        'promotor' => $item['NOMBRE_VENDEDOR']." ".$item['RAZON_SOCIAL_VEND'],
                         'formContactId' => $item['FORMA_CONTATO'],
                         'formContactDesc' => $item['DESC_FORMA_CONTATO'],
                         'typeContactId' => $item['MEIO_CONTATO'],
@@ -121,8 +120,8 @@ class AgendaController extends AbstractController
                         'start' => $item['DATA_INICIO'],
                         'end' => $item['DATA_FINAL'],
 
-                        'fecha_inicial' => date('Y-m-d', strtotime($item['DATA_INICIO'])),
-                        'fecha_final' => date('Y-m-d', strtotime($item['DATA_FINAL'])),
+                        'fecha_inicial' => date('d-m-Y', strtotime($item['DATA_INICIO'])),
+                        'fecha_final' => date('d-m-Y', strtotime($item['DATA_FINAL'])),
                         'hora_inicial'  => date('H:i', strtotime($item['DATA_INICIO'])),
                         'hora_final' =>  date('H:i', strtotime($item['DATA_FINAL'])),
 

@@ -4,18 +4,18 @@ doctrine:
         connections:
             MONTERREY:
                 driver: 'pdo_sqlsrv'
-                host: 'SDMTSQL01\DMANETONI'
-                port: 60040
-                dbname: 'MTCORP'
-                user: 'appMTCorp'
-                password: 'appMTCorp'
+                host: 'localhost'
+                port: 1433
+                dbname: 'CRM360'
+                user: 'sa'
+                password: '123'
                 charset: 'UTF-8'
                 # driver: "pdo_sqlsrv"
-                # host: '10.130.10.52\DMTCORP'
-                # port: 49179
-                # dbname: "MONTERREY"
-                # user: "appIMTCorp"
-                # password: "appIMTCorpDEV"
+                # host: 'localhost'
+                # port: 1433
+                # dbname: "CRM360"
+                # user: 'sa'
+                # password: "123"
                 # charset: "UTF-8"
     # orm:
     #     auto_generate_proxy_classes: true
