@@ -75,8 +75,7 @@ class VendedorController extends AbstractController
     public function getDetalhesCadastro(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             // $matricula = $infoUsuario->matricula;
             $matricula = 1642;
@@ -188,8 +187,8 @@ class VendedorController extends AbstractController
     {
 
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $matricula = $acessoClientes ? 0 : $infoUsuario->matricula;
             $cliente   = $request->query->get("NM_CLIE");
@@ -206,7 +205,7 @@ class VendedorController extends AbstractController
                     ,@ID_SITU = '{$situacao}'
                     ,@ID_DEBU = 0
             ")->fetchAll();
-                /* dd($res); */
+                //dd($res);
             } else {
                 //dd($request);
                 if ($request->query->get("idVendedor") == '') {
@@ -228,7 +227,7 @@ class VendedorController extends AbstractController
                     ")->fetchAll();
                 }
             }
-            /* dd($res); */
+            //dd($res);
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
 
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -260,8 +259,7 @@ class VendedorController extends AbstractController
     public function getValidaClienteCarteira(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
@@ -312,8 +310,7 @@ class VendedorController extends AbstractController
     public function getVinculoOperadores(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_VINC_OPER_CONS] 

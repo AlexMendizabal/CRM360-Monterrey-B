@@ -479,9 +479,9 @@ class CadastroController extends AbstractController
         $dadosFaturamento->notaCliente = $res[0]['notaCliente'];
         $dadosFaturamento->autoUpdateNota = $res[0]['autoUpdateNota'];
         
-        if ($res[0]['TIPO'] == 'F') {
+        if ($res[0]['TIPO'] == 'S') {
           $dadosFaturamento->cpf = FunctionsController::completaZeroEsquerda($res[0]['CPF'], 11);
-          $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
+          // $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
           $dadosFaturamento->rg = $res[0]['RG'];
           $dadosFaturamento->nome = $res[0]['RAZAO_SOCIAL'];
           $dadosFaturamento->sobrenome = $res[0]['NOME_FANTASIA'];
