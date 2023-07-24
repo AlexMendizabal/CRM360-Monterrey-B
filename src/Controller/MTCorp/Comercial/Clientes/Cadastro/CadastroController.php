@@ -2639,6 +2639,7 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
+  
 
   /**
    * @Route(
@@ -2696,4 +2697,32 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
+  /**
+     * @Route("/comercial/clientes/cadastro/carregar/enderecos/{id_cliente}", 
+     * name="comercial.cliente-obtener_logradouro", 
+     * methods={"GET"})
+     * @param Connection $connection
+     * @param int $id_cliente
+     * @return JsonResponse
+     */
+    public function getLogradouro(Connection $connection, int $id_cliente): JsonResponse
+    {
+        try {
+            // Llamar al procedimiento almacenado para obtener el logradouro
+            $query = $connection->prepare('EXEC PRC_ENDE_SOLO_CONS @id_cliente = :id_cliente');
+            $query->bindValue('id_cliente', $id_cliente);
+            $query->execute();
+            $result = $query->fetch();
+
+            // Comprobar si se encontró un resultado
+            if ($result === false) {
+                return new JsonResponse(['logradouro' => '']);
+            }
+
+            return new JsonResponse(['logradouro' => $result['logradouro']]);
+        } catch (\Exception $e) {
+            // Manejar errores
+            return new JsonResponse(['error' => 'Error al obtener el logradouro'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

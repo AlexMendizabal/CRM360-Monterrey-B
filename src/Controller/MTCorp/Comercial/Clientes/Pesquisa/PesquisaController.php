@@ -397,6 +397,7 @@ class PesquisaController extends AbstractController
                 if (!empty($res[0]['CEP']) && strlen($res[0]['CEP']) < 8) {
                     $FunctionsController = new FunctionsController();
                     $res[0]['CEP'] = $FunctionsController->completaZeroEsquerda($res[0]['CEP'], 8);
+                    
                 }
 
                 $detalhes = new \stdClass;
