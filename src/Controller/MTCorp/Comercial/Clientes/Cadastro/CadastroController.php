@@ -1613,13 +1613,13 @@ class CadastroController extends AbstractController
 				TB_lista_precios.id as id_lista_precio,
 				VEND.ID as id_vendedor,
 				VEND.NM_VEND as nomrbeVendedor
-		FROM 
+		    FROM 
 				MTCORP_MODU_CLIE_BASE CLIE					
 				LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
 			    LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
-				LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
-				LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id = tb_ciudad.id_departamento
-				LEFT join TB_lista_precios on TB_lista_precios.id_departamento = TB_DEPARTAMENTO.id
+				  LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
+				  LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id = tb_ciudad.id_departamento
+				  LEFT join TB_lista_precios on TB_lista_precios.id_departamento = TB_DEPARTAMENTO.id
 		        WHERE  CLIE.id_cliente = :codCliente";
 
             $stmt = $connection->prepare($query);
