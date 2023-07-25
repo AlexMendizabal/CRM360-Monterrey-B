@@ -7,8 +7,13 @@ doctrine:
                  host: localhost
                  port: 1433         
                  dbname: 'CRM360'
+<<<<<<< HEAD
                  user: 'reflo'
                  password: '123'
+=======
+                 user: 'len340'
+                 password: 'lenovol340'
+>>>>>>> f3193a7ddc15fbfdc8cf082cc39fc38c81de1d7c
                  charset: 'UTF-8'
  
     # orm:# 

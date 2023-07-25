@@ -1588,6 +1588,76 @@ class CadastroController extends AbstractController
   }
 
   /**
+     * @Route(
+     *  "/comercial/clientes/cadastro/listarcliente/{codCliente}",
+     *  name="comercial.vendedor-cliente",
+     *  methods={"GET"},
+     * )
+     * @return JsonResponse
+     */
+    public function getlistaCliente(Connection $connection, Request $request)
+    {
+        try {
+            $arrFinal = array();
+            $params = $request->query->all();
+            if (isset($params['codCliente']))
+                $codCliente = $params['codCliente'];
+            $query =
+                "SELECT
+				DISTINCT
+				codCliente = CLIE.id_cliente,
+				codigo_cliente = CLIE.codigo_cliente,
+				codRazaoSocial = CLIE.cnpj_cpf,
+				razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.segu_nome, CHAR(29), ''''), CHAR(129),''''))),
+				nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
+				MCBE.logradouro as direccion,
+				MCBE.latitude as latitud,
+				MCBE.longitude as longitud,
+				TB_lista_precios.nombre_lista as lista,
+				TB_lista_precios.id as id_lista_precio,
+				VEND.ID as id_vendedor,
+				VEND.NM_VEND as nomrbeVendedor
+		FROM 
+				MTCORP_MODU_CLIE_BASE CLIE					
+				LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
+			    LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
+				LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
+				LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id = tb_ciudad.id_departamento
+				LEFT join TB_lista_precios on TB_lista_precios.id_departamento = TB_DEPARTAMENTO.id
+		        WHERE  CLIE.id_cliente = :codCliente";
+
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(':codCliente', $codCliente);
+            $stmt->execute();
+            $res = $stmt->fetchAll();
+            dd($res);
+            if (count($res) > 0) {
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $res,
+                    'estado' => true
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => 'No fue posible los obtener datos',
+                    'estado' => false
+
+                );
+            }
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+}
+
+  /**
    * @Route(
    *  "/comercial/clientes/cadastro/carregar/contato/{codCliente}/{idContato}",
    *  name="comercial.clientes-cadastro-carregar-contato",

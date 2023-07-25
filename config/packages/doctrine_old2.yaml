@@ -14,8 +14,13 @@ doctrine:
                 host: '192.168.0.113\CRM360'
                 port: 51817
                 dbname: 'CRM360'
+<<<<<<< HEAD
                 user: 'appCRM360'
                 password: 'p5D7*L3%4O'
+=======
+                user: 'len340'
+                password: 'lenovol340'
+>>>>>>> f3193a7ddc15fbfdc8cf082cc39fc38c81de1d7c
                 charset: "UTF-8"
     # orm:
     #     auto_generate_proxy_classes: true

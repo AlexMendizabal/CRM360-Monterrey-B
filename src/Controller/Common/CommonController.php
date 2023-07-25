@@ -718,6 +718,84 @@ class CommonController extends AbstractController
 
     /**
      * @Route(
+     * "/common/clasificacion", 
+     * name="common.unidades-medida-listar", 
+     * methods={"GET"}
+     * )
+     *
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getClasificacion(Connection $connection, Request $request): JsonResponse
+    {
+
+        /*cliente con getMateriales
+        cliente con gropu
+        cliente con linea*/
+        
+        try {
+            if ($request->isMethod('GET')) {
+                $params = $request->query->all();
+                //dd($params);
+                $cliente = (int)(isset($params['id_cliente']) && !empty($params['id_cliente'])) ? (int)$params['id_cliente'] : NULL;
+                $familia = (int)(isset($params['id_classe']) && !empty($params['id_classe'])) ? (int)$params['id_classe'] : NULL;
+                $grupo = (int)(isset($params['id_linha']) && !empty($params['id_linha'])) ? (int)$params['id_linha'] : NULL;
+                $linea = (int)(isset($params['id_sub_linha']) && !empty($params['id_sub_linha'])) ? (int)$params['id_sub_linha'] : NULL;
+
+               
+                $sql = "EXECUTE [dbo].[prc_lista_precio]
+                @id_cliente = :id_cliente,
+                @id_familia = :id_familia,
+                @id_grupo = :id_grupo,
+                @id_linea = :id_linea
+                ";
+                
+                //dd($sql);
+                $stmt = $connection->prepare($sql);
+
+                $params = array(
+                    'id_cliente' => $cliente,
+                    'id_familia' => $familia,
+                    'id_grupo' => $grupo,
+                    'id_linea' => $linea,
+                );
+                //dd($params);
+                $stmt->execute($params);
+
+                //$stmt->execute();
+                $unidadesMedida = $stmt->fetchAll();
+
+                if (count($unidadesMedida) > 0) {
+                    $result = array(
+                        'responseCode' => 200,
+                        'result' => $unidadesMedida
+                    );
+                } else {
+                    $result = array(
+                        'responseCode' => 404,
+                        'message' => 'Nenhum registro encontrado'
+                    );
+                }
+            }
+        } catch (DBALException $e) {
+            $result = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'errors' => array(
+                    array(
+                        'moreInfo' => 'http://www.mtcorp.com.br',
+                    )
+                )
+            );
+        }
+        $response = new JsonResponse($result);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+}
+
+    /**
+     * @Route(
      * "/common/v2/sub-linhas", name="common.sub-linhas-listar", methods={"GET"}
      * )
      *
