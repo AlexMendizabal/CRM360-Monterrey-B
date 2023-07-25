@@ -20,11 +20,7 @@ doctrine:
                 driver: 'pdo_sqlsrv'
                 host: 'SDMTSQL01\DMANETONI'
                 port: 60040
-<<<<<<< HEAD
                 dbname: 'EMPRESA2'
-=======
-                dbname: 'CRM360'
->>>>>>> f3193a7ddc15fbfdc8cf082cc39fc38c81de1d7c
                 user: 'appMTCorp'
                 password: 'appMTCorp'
                 charset: 'UTF-8'
