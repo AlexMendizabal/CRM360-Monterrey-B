@@ -205,7 +205,7 @@ class ClientesController extends AbstractController
      * )
      * @return JsonResponse
      */
-    public function getDetalhes(Cznection $connection, Request $request, $codCliente)
+    public function getDetalhes(Connection $connection, Request $request, $codCliente)
     {
         try {
             $UsuarioController = new UsuarioController();

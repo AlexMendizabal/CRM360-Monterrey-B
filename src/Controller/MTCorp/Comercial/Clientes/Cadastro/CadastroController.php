@@ -479,9 +479,9 @@ class CadastroController extends AbstractController
         $dadosFaturamento->notaCliente = $res[0]['notaCliente'];
         $dadosFaturamento->autoUpdateNota = $res[0]['autoUpdateNota'];
         
-        if ($res[0]['TIPO'] == 'S') {
+        if ($res[0]['TIPO'] == 'F') {
           $dadosFaturamento->cpf = FunctionsController::completaZeroEsquerda($res[0]['CPF'], 11);
-          // $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
+          $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
           $dadosFaturamento->rg = $res[0]['RG'];
           $dadosFaturamento->nome = $res[0]['RAZAO_SOCIAL'];
           $dadosFaturamento->sobrenome = $res[0]['NOME_FANTASIA'];
@@ -1584,6 +1584,76 @@ class CadastroController extends AbstractController
   }
 
   /**
+     * @Route(
+     *  "/comercial/clientes/cadastro/listarcliente/{codCliente}",
+     *  name="comercial.vendedor-cliente",
+     *  methods={"GET"},
+     * )
+     * @return JsonResponse
+     */
+    public function getlistaCliente(Connection $connection, Request $request)
+    {
+        try {
+            $arrFinal = array();
+            $params = $request->query->all();
+            if (isset($params['codCliente']))
+                $codCliente = $params['codCliente'];
+            $query =
+                "SELECT
+				DISTINCT
+				codCliente = CLIE.id_cliente,
+				codigo_cliente = CLIE.codigo_cliente,
+				codRazaoSocial = CLIE.cnpj_cpf,
+				razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.segu_nome, CHAR(29), ''''), CHAR(129),''''))),
+				nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
+				MCBE.logradouro as direccion,
+				MCBE.latitude as latitud,
+				MCBE.longitude as longitud,
+				TB_lista_precios.nombre_lista as lista,
+				TB_lista_precios.id as id_lista_precio,
+				VEND.ID as id_vendedor,
+				VEND.NM_VEND as nomrbeVendedor
+		FROM 
+				MTCORP_MODU_CLIE_BASE CLIE					
+				LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
+			    LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
+				LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
+				LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id = tb_ciudad.id_departamento
+				LEFT join TB_lista_precios on TB_lista_precios.id_departamento = TB_DEPARTAMENTO.id
+		        WHERE  CLIE.id_cliente = :codCliente";
+
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(':codCliente', $codCliente);
+            $stmt->execute();
+            $res = $stmt->fetchAll();
+            dd($res);
+            if (count($res) > 0) {
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $res,
+                    'estado' => true
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => 'No fue posible los obtener datos',
+                    'estado' => false
+
+                );
+            }
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+}
+
+  /**
    * @Route(
    *  "/comercial/clientes/cadastro/carregar/contato/{codCliente}/{idContato}",
    *  name="comercial.clientes-cadastro-carregar-contato",
@@ -2639,7 +2709,6 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
-  
 
   /**
    * @Route(
@@ -2697,32 +2766,4 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
-  /**
-     * @Route("/comercial/clientes/cadastro/carregar/enderecos/{id_cliente}", 
-     * name="comercial.cliente-obtener_logradouro", 
-     * methods={"GET"})
-     * @param Connection $connection
-     * @param int $id_cliente
-     * @return JsonResponse
-     */
-    public function getLogradouro(Connection $connection, int $id_cliente): JsonResponse
-    {
-        try {
-            // Llamar al procedimiento almacenado para obtener el logradouro
-            $query = $connection->prepare('EXEC PRC_ENDE_SOLO_CONS @id_cliente = :id_cliente');
-            $query->bindValue('id_cliente', $id_cliente);
-            $query->execute();
-            $result = $query->fetch();
-
-            // Comprobar si se encontró un resultado
-            if ($result === false) {
-                return new JsonResponse(['logradouro' => '']);
-            }
-
-            return new JsonResponse(['logradouro' => $result['logradouro']]);
-        } catch (\Exception $e) {
-            // Manejar errores
-            return new JsonResponse(['error' => 'Error al obtener el logradouro'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
 }
