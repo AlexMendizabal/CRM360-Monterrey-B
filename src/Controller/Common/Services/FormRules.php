@@ -40,17 +40,13 @@ class FormRules
             )->fetchAll();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(
                 false,
                 'Erro ao retornar dados.',

@@ -158,7 +158,7 @@ class VendedoresController extends AbstractController
 
       $data = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $idArcelorMittal = NULL;
       $vendManetoni = NULL;

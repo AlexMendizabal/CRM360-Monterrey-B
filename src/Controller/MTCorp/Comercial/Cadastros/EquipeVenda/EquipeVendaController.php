@@ -151,8 +151,7 @@ class EquipeVendaController extends AbstractController
   {
     try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         
         $dsEquipeVenda = null;
         $codSituacao = null;
@@ -197,8 +196,7 @@ class EquipeVendaController extends AbstractController
   {
     try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $codEquipeVenda = null;
         $dsEquipeVenda = null;
@@ -248,8 +246,7 @@ class EquipeVendaController extends AbstractController
   {
     try {
         $codEquipeVenda = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
             EXECUTE [dbo].[PRC_EQUI_VEND_CADA] 
@@ -287,8 +284,7 @@ class EquipeVendaController extends AbstractController
   {
     try {
         $codEquipeVenda = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
             EXECUTE [dbo].[PRC_EQUI_VEND_CADA] 

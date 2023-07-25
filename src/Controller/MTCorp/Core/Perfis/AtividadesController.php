@@ -20,14 +20,11 @@ class AtividadesController
    */
     public function store(Connection $connection, Request $request): JsonResponse
     {
-
         try {
-
             $data = json_decode($request->getContent());
-
             $atividadeId    = $data->atividadeId  ?? null;
             $perfilId       = $data->perfilId     ?? null;
-            $situacao         = $data->situacao       ?? null;
+            $situacao       = $data->status       ?? null;
 
             $query = <<<SQL
                 EXECUTE PRC_CORE_PERF
@@ -39,14 +36,12 @@ class AtividadesController
 
             $stmt = $connection->prepare($query);
 
-            $stmt->bindValue(":atividadeId",    $atividadeId);
-            $stmt->bindValue(":perfilId",       $perfilId);
-            $stmt->bindValue(":situacao",         $situacao);
-
+            $stmt->bindValue(":atividadeId", $atividadeId);
+            $stmt->bindValue(":perfilId",    $perfilId);
+            $stmt->bindValue(":situacao",    $situacao);
             $stmt->execute();
-
             $response = $stmt->fetchAssociative();
-
+         
             if(!is_array($response))
                 throw new \Exception($response);
                 

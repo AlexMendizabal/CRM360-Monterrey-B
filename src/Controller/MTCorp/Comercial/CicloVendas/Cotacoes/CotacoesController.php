@@ -36,8 +36,8 @@ class CotacoesController extends AbstractController
         try {
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
-            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $ComercialController = new ComercialController();
+            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $historicoExclusao = true;
             $duplicataCarteira = true;
 
@@ -79,10 +79,11 @@ class CotacoesController extends AbstractController
     public function getCotacoes(Connection $connection, Request $request)
     {
         try {
+
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
-            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $ComercialController = new ComercialController();
+            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             $params = $request->query->all();
 
@@ -392,8 +393,7 @@ class CotacoesController extends AbstractController
     public function postTransfereFaturamento(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $params = json_decode($request->getContent(), true);
 
@@ -448,8 +448,7 @@ class CotacoesController extends AbstractController
     public function postTrocarCliente(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $params = json_decode($request->getContent(), true);
 
@@ -497,8 +496,7 @@ class CotacoesController extends AbstractController
     public function postDuplicarProposta(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
 
             $params = json_decode($request->getContent(), true);
@@ -540,8 +538,7 @@ class CotacoesController extends AbstractController
     public function postDesdobrarProposta(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
 
 
@@ -602,8 +599,7 @@ class CotacoesController extends AbstractController
     public function postTrocarEmpresa(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
 
 
@@ -820,8 +816,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $empresa = $request->query->get("codEmpresa");
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
 
 
@@ -859,8 +854,7 @@ class CotacoesController extends AbstractController
     public function getCotacao(Connection $connection, Request $request, $codCotacao, $idEmpresa)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
@@ -908,11 +902,10 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = $request->query->all();
-            
 
             $codCliente = isset($params['codCliente']) ? $params['codCliente'] : NULL;
             $codLinha = isset($params['codLinha']) ? $params['codLinha'] : NULL;
-            //$codEndereco = isset($params['codEndereco']) ? $params['codEndereco'] : NULL;
+            $codEndereco = isset($params['codEndereco']) ? $params['codEndereco'] : NULL;
             $codClasse = isset($params['codClasse']) ? $params['codClasse'] : NULL;
             $codMaterial = isset($params['codMaterial']) ? $params['codMaterial'] : NULL;
             $codDeposito = isset($params['codDeposito']) ? $params['codDeposito'] : NULL;
@@ -930,12 +923,11 @@ class CotacoesController extends AbstractController
                     @ID_EMPR = '{$codDeposito}',
                     @ID_CLIE = {$codCliente},
                     @ID_TIPO_FRET = {$freteConta},
-                    
+                    @ID_ENDE_ENTR = {$codEndereco},
                     @IN_ESTO_DISP = '{$comEstoque}',
                     @ID_FORM_PAGA = {$codFormaPagamento},
                     @ORDER = {$orderBy}
             ")->fetchAll();
-            //@ID_ENDE_ENTR = {$codEndereco},
             
             //     print_r("
             //     EXECUTE [PRC_COME_ESTO_CONS]
@@ -951,7 +943,6 @@ class CotacoesController extends AbstractController
             //         @ID_FORM_PAGA = {$codFormaPagamento}
             // ");
             //     exit(0);
-            
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -1028,7 +1019,7 @@ class CotacoesController extends AbstractController
 
         try {
             $codCliente = $request->query->get("codCliente");
-            //$codEndereco = $request->query->get("codEndereco");
+            $codEndereco = $request->query->get("codEndereco");
             $codFormaPagamento = $request->query->get("codFormaPagamento");
             $freteConta = $request->query->get("freteConta");
 
@@ -1038,12 +1029,11 @@ class CotacoesController extends AbstractController
                     ,@ID_MATE = {$codMaterial}
                     ,@ID_EMPR = {$codEmpresa}
                     ,@ID_CLIE = {$codCliente}
-                    
+                    ,@ID_ENDE_ENTR = {$codEndereco}
                     ,@ID_FORM_PAGA = {$codFormaPagamento}
                     ,@ID_TIPO_FRET = {$freteConta}
                     ,@IN_SITU = 1
             ")->fetchAll();
-            //,@ID_ENDE_ENTR = {$codEndereco}
 
             if (isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_BAD_REQUEST);
@@ -1077,7 +1067,7 @@ class CotacoesController extends AbstractController
             $codEmpresa = $params['codEmpresa'];
             $codMaterial = $params['codMaterial'];
             $codCliente = $params['codCliente'];
-            //$codEndereco = $params['codEndereco'];
+            $codEndereco = $params['codEndereco'];
             $codFormaPagamento = $params['codFormaPagamento'];
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
 
@@ -1097,8 +1087,7 @@ class CotacoesController extends AbstractController
 
                 if (count($res) > 0) {
                     for ($i = 0; $i < count($res); $i++) {
-                        $material = $this->getMaterial($connection, $res[$i]['codMaterialComplemento'], $codEmpresa, $codCliente,  $codFormaPagamento, $freteConta);
-                        //$codEndereco,
+                        $material = $this->getMaterial($connection, $res[$i]['codMaterialComplemento'], $codEmpresa, $codCliente, $codEndereco, $codFormaPagamento, $freteConta);
 
                         // print_r($material);
                         // exit(0);
@@ -1154,7 +1143,7 @@ class CotacoesController extends AbstractController
             $codEmpresa = $params['codEmpresa'];
             $codMaterial = $params['codMaterial'];
             $codCliente = $params['codCliente'];
-           // $codEndereco = $params['codEndereco'];
+            $codEndereco = $params['codEndereco'];
             $codFormaPagamento = $params['codFormaPagamento'];
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
 
@@ -1171,8 +1160,7 @@ class CotacoesController extends AbstractController
 
                 if (count($res) > 0) {
                     for ($i = 0; $i < count($res); $i++) {
-                        $material = $this->getMaterial($connection, $res[$i]['codMaterialComplemento'], $codEmpresa, $codCliente,  $codFormaPagamento, $freteConta);
-                        //$codEndereco,
+                        $material = $this->getMaterial($connection, $res[$i]['codMaterialComplemento'], $codEmpresa, $codCliente, $codEndereco, $codFormaPagamento, $freteConta);
                         if($material){
                             $res[$i] = $res[$i] + [$material][0];
                             $res[$i]['nomeMaterialSimilaridade'] = $res[$i]['nomeMaterial'];
@@ -1222,7 +1210,7 @@ class CotacoesController extends AbstractController
             $codEmpresa = $params['codEmpresa'];
             $codMaterial = $params['codMaterial'];
             $codCliente = $params['codCliente'];
-            //$codEndereco = $params['codEndereco'];
+            $codEndereco = $params['codEndereco'];
             $codFormaPagamento = $params['codFormaPagamento'];
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
 
@@ -1236,12 +1224,11 @@ class CotacoesController extends AbstractController
                         ,@ID_MATE = {$codMaterial}
                         ,@ID_EMPR = '{$codEmpresa}'
                         ,@ID_CLIE = {$codCliente}
-                        
+                        ,@ID_ENDE_ENTR = {$codEndereco}
                         ,@ID_FORM_PAGA = {$codFormaPagamento}
                         ,@ID_TIPO_FRET = {$freteConta}
                         ,@IN_SITU = 1
                 ")->fetchAll();
-                //,@ID_ENDE_ENTR = {$codEndereco}
 
                 // print_r($res);
                 // exit(0);
@@ -1328,7 +1315,7 @@ class CotacoesController extends AbstractController
         try {
 
             $codCliente = $request->query->get("codCliente");
-            //$codEndereco = $request->query->get("codEndereco");
+            $codEndereco = $request->query->get("codEndereco");
             $codFormaPagamento = $request->query->get("codFormaPagamento");
             $freteConta = $request->query->get("freteConta");
 
@@ -1344,12 +1331,11 @@ class CotacoesController extends AbstractController
                     ,@MATE_DE = {$codMaterial}
                     ,@ID_EMPR = {$codEmpresa}
                     ,@ID_CLIE = {$codCliente}
-                    
+                    ,@ID_ENDE_ENTR = {$codEndereco}
                     ,@ID_FORM_PAGA = {$codFormaPagamento}
                     ,@ID_TIPO_FRET = {$freteConta}
                     ,@IN_SITU = 1
             ")->fetchAll();
-           // ,@ID_ENDE_ENTR = {$codEndereco}
 
             if (
                 (count($materialPrincipal) > 0 && !isset($res[0]['message'])) &&
@@ -1434,7 +1420,7 @@ class CotacoesController extends AbstractController
             $preco = $params['preco'];
             $medida = $params['codTipoLancamento'] === 3 ? $params['medida'] : 0;
             $codEmpresa = $params['codEmpresa'];
-            //$codEndereco = $params['codEndereco'];
+            $codEndereco = $params['codEndereco'];
 
             $aux = number_format($tonelada, 3);
             $tonelada = $aux;
@@ -1450,9 +1436,9 @@ class CotacoesController extends AbstractController
                     ,@VR_UNIT = {$preco}
                     ,@MEDI = {$medida}
                     ,@ID_EMPR = {$codEmpresa}
-                    
+                    ,@ID_ENDE_ENTR = {$codEndereco}
             ")->fetchAll();
-            //,@ID_ENDE_ENTR = {$codEndereco}
+
             // print_r($res);
             // exit(0);
 
@@ -1489,13 +1475,13 @@ class CotacoesController extends AbstractController
 
             $codCliente = NULL;
             $codEmpresa = NULL;
-            //$codEndereco = NULL;
+            $codEndereco = NULL;
             $codFormaPagamento = NULL;
             $freteConta = NULL;
 
             if (isset($params['codCliente'])) $codCliente = $params['codCliente'];
             if (isset($params['codEmpresa'])) $codEmpresa = $params['codEmpresa'];
-            //if (isset($params['codEndereco'])) $codEndereco = $params['codEndereco'];
+            if (isset($params['codEndereco'])) $codEndereco = $params['codEndereco'];
             if (isset($params['codEndereco'])) $codFormaPagamento = $params['codFormaPagamento'];
             if (isset($params['codEndereco'])) $freteConta = $params['freteConta'];
 
@@ -1607,13 +1593,13 @@ class CotacoesController extends AbstractController
         }
     }
 
-    private function getMaterial($connection, $codMaterial, $codEmpresa, $codCliente,  $codFormaPagamento, $freteConta)
-    //$codEndereco,
+    private function getMaterial($connection, $codMaterial, $codEmpresa, $codCliente, $codEndereco, $codFormaPagamento, $freteConta)
+
     {
 
-        // if ($codEndereco == '' || $codEndereco == null) {
-        //     $codEndereco = 'NULL';
-        // }
+        if ($codEndereco == '' || $codEndereco == null) {
+            $codEndereco = 'NULL';
+        }
 
         if ($codFormaPagamento == '' || $codFormaPagamento == null) {
             $codFormaPagamento = 'NULL';
@@ -1630,12 +1616,12 @@ class CotacoesController extends AbstractController
                 @ID_MATE = '{$codMaterial}',
                 @ID_EMPR = '{$codEmpresa}',
                 @ID_CLIE = {$codCliente},
-                
+                @ID_ENDE_ENTR = {$codEndereco},
                 @IN_ESTO_DISP = 0,
                 @ID_FORM_PAGA = {$codFormaPagamento},
                 @ID_TIPO_FRET = {$freteConta}
         ")->fetchAll();
-       //@ID_ENDE_ENTR = {$codEndereco},
+
         if (count($res) > 0) {
             return $res[0];
         } else {
@@ -1656,8 +1642,7 @@ class CotacoesController extends AbstractController
     public function postGerarDuplicatas(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = json_decode($request->getContent(), true);
 
             $codCotacao = $params['codCotacao'];
@@ -1800,6 +1785,7 @@ class CotacoesController extends AbstractController
     public function deleteMaterialCotacao(Connection $connection, Request $request): JsonResponse
     {
         try {
+
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
@@ -1892,8 +1878,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             /* Dados Cotaçao */
             $codCotacao = isset($params['codCotacao']) ? $params['codCotacao'] : null;
@@ -1902,7 +1887,7 @@ class CotacoesController extends AbstractController
             $codSituacao = isset($params['codSituacao']) ? $params['codSituacao'] : 1;
             $codCliente = isset($params['codCliente']) ? $params['codCliente'] : null;
             $codContato = isset($params['codContato']) ? $params['codContato'] : null;
-            //$codEndereco = isset($params['codEndereco']) ? $params['codEndereco'] : null;
+            $codEndereco = isset($params['codEndereco']) ? $params['codEndereco'] : null;
             $codFormaPagamento = isset($params['codFormaPagamento']) ? $params['codFormaPagamento'] : null;
             $dataEntrega = isset($params['dataEntrega']) ? $params['dataEntrega'] : null;
             $dataValidade = isset($params['dataValidade']) ? $params['dataValidade'] : null;
@@ -1933,7 +1918,7 @@ class CotacoesController extends AbstractController
                 @ID_CLIE = {$codCliente},
                 @ID_SITU = {$codSituacao},
                 @ID_CONT = {$codContato},
-                
+                @ID_ENDE_ENTR = {$codEndereco},
                 @ID_FORM_PAGA = {$codFormaPagamento},
                 @DT_VALI = '{$dataValidade}',
                 @DT_ENTR = '{$dataEntrega}',
@@ -1947,7 +1932,7 @@ class CotacoesController extends AbstractController
                 @ID_TRAN = {$codTransportadora},
                 @ID_USUA = {$matricula}
             ")->fetchAll();
-           // @ID_ENDE_ENTR = {$codEndereco},
+
             if (count($res) > 0 && !isset($res[0]['message'])) {
 
                 for ($i = 0; $i < count($carrinho); $i++) {
@@ -2221,7 +2206,8 @@ class CotacoesController extends AbstractController
             $linkAnexo       = $document->getFileLink();
 
 
-            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $matricula      = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -2259,7 +2245,8 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
             $codAnexo = null;
 

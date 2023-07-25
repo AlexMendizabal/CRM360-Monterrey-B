@@ -65,17 +65,13 @@ class OrigemContatoController extends AbstractController
 
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-      $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -101,18 +97,14 @@ class OrigemContatoController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $msg = 'Erro ao retornar dados';
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -146,15 +138,12 @@ class OrigemContatoController extends AbstractController
         }
 
       if (count($res) > 0) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $msg = 'Erro ao retornar dados';
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -171,8 +160,7 @@ class OrigemContatoController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $descricao = $params['descricao'];
       $codSituacao = $params['codSituacao'];
@@ -187,17 +175,13 @@ class OrigemContatoController extends AbstractController
       ")->fetchAll();
 
       if (isset($res[0]['codOrigemContato'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-      $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -215,7 +199,7 @@ class OrigemContatoController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codOrigemContato = $params['codOrigemContato'];
       $descricao = $params['descricao'];
@@ -233,17 +217,13 @@ class OrigemContatoController extends AbstractController
       ")->fetchAll();
 
       if (isset($res[0]['codOrigemContato']) && $res[0]['codOrigemContato'] == $codOrigemContato) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-      $FunctionsController = new FunctionsController();
       return $FunctionsController->Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -261,7 +241,7 @@ class OrigemContatoController extends AbstractController
       try {
           $codOrigemContato = json_decode($request->getContent(), true);
           $UsuarioController = new UsuarioController();
-          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_ORIG_CONT_CADA]
@@ -272,17 +252,13 @@ class OrigemContatoController extends AbstractController
           ")->fetchAll();
 
           if (isset($res[0]['codOrigemContato']) && $codOrigemContato == $res[0]['codOrigemContato']) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
           } else {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
           }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
@@ -300,7 +276,7 @@ class OrigemContatoController extends AbstractController
       try {
           $codOrigemContato = json_decode($request->getContent(), true);
           $UsuarioController = new UsuarioController();
-          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_ORIG_CONT_CADA]
@@ -311,17 +287,13 @@ class OrigemContatoController extends AbstractController
           ")->fetchAll();
 
           if (isset($res[0]['codOrigemContato']) && $codOrigemContato == $res[0]['codOrigemContato']) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
           } else {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
           }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
@@ -344,14 +316,11 @@ class OrigemContatoController extends AbstractController
         ")->fetchAll();
 
         if (count($res) > 0) {
-          $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } else {
-          $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }

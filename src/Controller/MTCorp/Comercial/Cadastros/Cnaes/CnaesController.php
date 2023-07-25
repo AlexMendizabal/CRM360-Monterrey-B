@@ -56,17 +56,13 @@ class CnaesController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -92,19 +88,16 @@ class CnaesController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $FunctionsController = new FunctionsController();
         $msg = 'Erro ao retornar dados';
-        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -129,16 +122,14 @@ class CnaesController extends AbstractController
         ")->fetchAll();
 
         if (count($res) > 0) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
         $FunctionsController = new FunctionsController();
         $msg = 'Erro ao retornar dados';
-        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -155,7 +146,7 @@ class CnaesController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $cnae = null;
       $descricao = null;
@@ -178,17 +169,13 @@ class CnaesController extends AbstractController
       ")->fetchAll();
 
       if (isset($res[0]['codigo'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -205,8 +192,7 @@ class CnaesController extends AbstractController
   {
     try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $codigo = null;
         $cnae = null;
@@ -232,17 +218,13 @@ class CnaesController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codigo']) && $res[0]['codigo'] == $codigo) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, 'Erro ao atualizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -259,8 +241,7 @@ class CnaesController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXEC [PRC_BASE_CNAE_CADA]
@@ -271,17 +252,13 @@ class CnaesController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'O Cnae não foi ativado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -299,7 +276,7 @@ class CnaesController extends AbstractController
       try {
           $codigo = json_decode($request->getContent(), true);
           $UsuarioController = new UsuarioController();
-          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_BASE_CNAE_CADA]
@@ -310,17 +287,13 @@ class CnaesController extends AbstractController
         ")->fetchAll();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
           } else {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, 'O Cnae não foi inativado.', null, Response::HTTP_OK);
           }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
   }

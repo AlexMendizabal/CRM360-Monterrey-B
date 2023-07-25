@@ -4,10 +4,10 @@ doctrine:
         connections:
             MONTERREY:
                  driver: 'pdo_sqlsrv'
-                 host: 'localhost'
-                 port: 1433
+                 host: localhost
+                 port: 1433         
                  dbname: 'CRM360'
-                 user: 'sa'
+                 user: 'reflo'
                  password: '123'
                  charset: 'UTF-8'
  

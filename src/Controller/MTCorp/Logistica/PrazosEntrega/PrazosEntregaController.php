@@ -152,8 +152,9 @@ class PrazosEntregaController
                     "success"   => false,
                 ], Response::HTTP_FORBIDDEN);
             }
-            $UsuarioController = new UsuarioController();
-            $infoUsuario            = $UsuarioController->infoUsuario($headers);
+
+            $infoUsuario            = $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($headers);
             $usuarioMatricula       = $infoUsuario->matricula;
             $usuarioNome            = $infoUsuario->nomeCompleto;
             $usuarioId              = $infoUsuario->id;

@@ -479,9 +479,9 @@ class CadastroController extends AbstractController
         $dadosFaturamento->notaCliente = $res[0]['notaCliente'];
         $dadosFaturamento->autoUpdateNota = $res[0]['autoUpdateNota'];
         
-        if ($res[0]['TIPO'] == 'S') {
+        if ($res[0]['TIPO'] == 'F') {
           $dadosFaturamento->cpf = FunctionsController::completaZeroEsquerda($res[0]['CPF'], 11);
-          // $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
+          $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
           $dadosFaturamento->rg = $res[0]['RG'];
           $dadosFaturamento->nome = $res[0]['RAZAO_SOCIAL'];
           $dadosFaturamento->sobrenome = $res[0]['NOME_FANTASIA'];
@@ -1134,9 +1134,11 @@ class CadastroController extends AbstractController
   public function getEndereco(Connection $connection, Request $request, $codCliente, $idEndereco, $idSituacao)
   {
     try {
+
       $UsuarioController = new UsuarioController();
       $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-      $hasAcessoAlterarStatus = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
+      $ComercialController = new ComercialController();
+      $hasAcessoAlterarStatus = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
 
       if ($idSituacao == 1) {
         $res = $connection->query(
@@ -1323,10 +1325,12 @@ class CadastroController extends AbstractController
     if ($request->isMethod('PUT')) {
       try {
         $data = json_decode($request->getContent(), true);
+
         $UsuarioController = new UsuarioController();
         $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-        $hasAprovacaoEndereco = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_APRO');
-        $hasGravaLatLong = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_LAT_LONG');
+        $ComercialController = new ComercialController();
+        $hasAprovacaoEndereco = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_APRO');
+        $hasGravaLatLong = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_LAT_LONG');
 
         $codCliente = $data['codCliente'];
 
@@ -2278,8 +2282,9 @@ class CadastroController extends AbstractController
        $nomeAnexo = $extension[0];
 
        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '\\app\\uploads\\comercial\\clientes\\cadastros\\' . $codCliente . '\\';
+      
        $UsuarioController = new UsuarioController();
-       $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
        $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\clientes\\cadastros\\".  $codCliente  ."\\" . $tipoAnexo ."\\" ;
       //  $webPath = '/uploads/comercial/clientes/cadastros/' . $codCliente . '/' ;
@@ -2302,7 +2307,8 @@ class CadastroController extends AbstractController
        $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath;
       //  print_r($webPath);
       //  die();
-       $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+       $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
        $matricula      = $infoUsuario->matricula;
        $nomeUsuario    = $infoUsuario->nomeCompleto;
       
@@ -2639,7 +2645,6 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
-  
 
   /**
    * @Route(
@@ -2697,32 +2702,4 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
-  /**
-     * @Route("/comercial/clientes/cadastro/carregar/enderecos/{id_cliente}", 
-     * name="comercial.cliente-obtener_logradouro", 
-     * methods={"GET"})
-     * @param Connection $connection
-     * @param int $id_cliente
-     * @return JsonResponse
-     */
-    public function getLogradouro(Connection $connection, int $id_cliente): JsonResponse
-    {
-        try {
-            // Llamar al procedimiento almacenado para obtener el logradouro
-            $query = $connection->prepare('EXEC PRC_ENDE_SOLO_CONS @id_cliente = :id_cliente');
-            $query->bindValue('id_cliente', $id_cliente);
-            $query->execute();
-            $result = $query->fetch();
-
-            // Comprobar si se encontró un resultado
-            if ($result === false) {
-                return new JsonResponse(['logradouro' => '']);
-            }
-
-            return new JsonResponse(['logradouro' => $result['logradouro']]);
-        } catch (\Exception $e) {
-            // Manejar errores
-            return new JsonResponse(['error' => 'Error al obtener el logradouro'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
 }

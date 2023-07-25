@@ -246,7 +246,7 @@ class CrossSellController extends AbstractController
       try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
         
         $codMaterial = $params['codMaterial'];
         $codSituacao = $params['codSituacao'];
@@ -298,7 +298,7 @@ class CrossSellController extends AbstractController
       try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
         
         $codCrossSell = $params['codCrossSell'];
         $codMaterial = $params['codMaterial'];
@@ -351,8 +351,7 @@ class CrossSellController extends AbstractController
     public function desassociaMaterial(Connection $connection, Request $request, $codCrossSell, $codAssociacao)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC PRC_CROS_SELL_CADA
@@ -389,8 +388,7 @@ class CrossSellController extends AbstractController
     {
         try {
             $codCrossSell = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_CROS_SELL_CADA]
@@ -428,8 +426,7 @@ class CrossSellController extends AbstractController
     {
         try {
             $codCrossSell = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_CROS_SELL_CADA]
