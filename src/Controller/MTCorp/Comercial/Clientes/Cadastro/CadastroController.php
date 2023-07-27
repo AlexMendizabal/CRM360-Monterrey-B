@@ -868,7 +868,7 @@ class CadastroController extends AbstractController
       }
 
       if (isset($result) && !empty($result)) {
-          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
+          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);  
       } else {
           return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
@@ -1600,28 +1600,20 @@ class CadastroController extends AbstractController
                 $codCliente = $params['codCliente'];
             $query =
                 "SELECT
-				DISTINCT
-				codCliente = CLIE.id_cliente,
-				codigo_cliente = CLIE.codigo_cliente,
-				codRazaoSocial = CLIE.cnpj_cpf,
-				razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.segu_nome, CHAR(29), ''''), CHAR(129),''''))),
-				nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
-				MCBE.logradouro as direccion,
-				MCBE.latitude as latitud,
-				MCBE.longitude as longitud,
-				TB_lista_precios.nombre_lista as lista,
-				TB_lista_precios.id as id_lista_precio,
-				VEND.ID as id_vendedor,
-				VEND.NM_VEND as nomrbeVendedor
-		    FROM 
-				MTCORP_MODU_CLIE_BASE CLIE					
-				LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
-			    LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
-				  LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
-				  LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id = tb_ciudad.id_departamento
-				  LEFT join TB_lista_precios on TB_lista_precios.id_departamento = TB_DEPARTAMENTO.id
+				    DISTINCT
+				    codCliente = CLIE.id_cliente,
+				    codigo_cliente = MCBE.codigo_cliente,
+				    codRazaoSocial = CONCAT(CLIE.id_cliente ,'' - '', LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),'''')))),
+				    razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),''''))),
+				    nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
+				    CONCAT(MCBE.logradouro, '' '',  MCBE.numero) AS direccion,
+		        MCBE.latitude as latitud,
+		        MCBE.longitude as longitud 
+			      FROM 
+				    MTCORP_MODU_CLIE_BASE CLIE					
+				    LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
+			      LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
 		        WHERE  CLIE.id_cliente = :codCliente";
-
             $stmt = $connection->prepare($query);
             $stmt->bindValue(':codCliente', $codCliente);
             $stmt->execute();
@@ -1672,17 +1664,10 @@ class CadastroController extends AbstractController
             @ID_CLIE = '{$codCliente}',
             @ID_SEQU_CONT = '{$idContato}' 
       ")->fetchAll();
-
+      
 
       if (count($res) > 0) {
 
-        if ($res[0]['ID_GENE'] == null) {
-         $res[0]['ID_GENE'] = null;
-        } else if ($res[0]['ID_GENE'] == 1) {
-         $res[0]['DS_GENE'] = 'FEMININO';
-        } else if ($res[0]['ID_GENE'] == 2) {
-         $res[0]['DS_GENE'] = 'MASCULINO';
-        }
         
         $contato = new \stdClass;
         $contato->id = $res[0]['ID_CONT'];

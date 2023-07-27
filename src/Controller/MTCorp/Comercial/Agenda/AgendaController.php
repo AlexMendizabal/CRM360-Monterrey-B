@@ -104,6 +104,7 @@ class AgendaController extends AbstractController
                 @DATA_FINAL = '{$fim}',
                 @TIPO_REGISTRO = '{$tipo_compromiso}'
             ")->fetchAll();
+            
             $compromissos = [];
             if (count($res) > 0 && !isset($res[0]['MSG'])) {
                 foreach ($res as $item) {
