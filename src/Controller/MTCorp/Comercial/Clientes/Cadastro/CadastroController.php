@@ -1664,14 +1664,19 @@ class CadastroController extends AbstractController
       try {
         $res = $connection->query("
           EXEC [PRC_CLIE_CONT_CONS]
-            @ID_CLIE = '{$codCliente}',
+            @ID_CLIE = ' ',
             @ID_SEQU_CONT = '{$idContato}'
       ")->fetchAll();
       
       //dd($res);
       if (count($res) > 0) {
-        
-        return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+         $respt = [
+          'id_contacto' => $res[0]["id_cont"],
+          'nombreCompleto' => $res[0]["ds_cont"],
+          'medioCont' => $res[0]["ds_cont_meio"]
+         ];
+          
+        return FunctionsController::Retorno(true, null, $respt, Response::HTTP_OK);
       } else {
         return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
