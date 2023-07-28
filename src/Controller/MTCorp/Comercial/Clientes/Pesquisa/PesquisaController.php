@@ -212,8 +212,8 @@ class PesquisaController extends AbstractController
             $usuario = new usuarioController();
             $comercial = new ComercialController();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
-            dd($infoUsuario);
-            // $vendedor = $infoUsuario->
+            //dd($infoUsuario);
+            //$vendedor = $infoUsuario->
 
             $buscarPor = '';
             $pesquisa = '';

@@ -6,4 +6,8 @@
 /public/bundles/
 /var/
 /vendor/
+/public/
+/config/
+/config_bkp/
+/frontend/
 ###< symfony/framework-bundle ###
