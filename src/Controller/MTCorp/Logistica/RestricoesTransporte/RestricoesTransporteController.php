@@ -158,16 +158,9 @@ class RestricoesTransporteController
                     "success"   => false,
                 ], Response::HTTP_FORBIDDEN);
             }
-<<<<<<< HEAD
 
-            $infoUsuario            = $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuarioioController();
-            $infoUsuario = $UsuarioController->infoUsuarioioController();
+            $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($headers);
-=======
-            $UsuarioController = new UsuarioController();                            
-            $infoUsuario            = $UsuarioController->infoUsuario($headers);
->>>>>>> f3193a7ddc15fbfdc8cf082cc39fc38c81de1d7c
             $usuarioMatricula       = $infoUsuario->matricula;
             $usuarioNome            = $infoUsuario->nomeCompleto;
             $usuarioId              = $infoUsuario->id;

@@ -127,15 +127,15 @@ class FunctionsController extends AbstractController
 
   public function Retorno ($success, $mensagem, $data, $code)
   {
-    $arrFinal = [
-      'success' => $success,
-      'mensagem' => $mensagem,
-      'data' => $data
-    ];
+      $arrFinal = [
+        'success' => $success,
+        'mensagem' => $mensagem,
+        'data' => $data
+      ];
 
-    $response = new JsonResponse($arrFinal, $code);
-    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-    return $response;
+      $response = new JsonResponse($arrFinal, $code);
+      $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+      return $response;
   }
 
   public function sendSwiftMailAttachment($isHtml, $body, $msg, $emails, $path) 

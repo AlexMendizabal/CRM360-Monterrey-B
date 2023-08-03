@@ -198,14 +198,10 @@ class PreCadastroController extends AbstractController
       try {
         $nombre ='';
         $data = json_decode($request->getContent(), true);
-        
 
         $cod_cliente = $data['codigo_cliente'];
           
         $cliente = $this->getDoctrine()->getRepository('LogisticaIntegracoesFusion:Cliente')->find($cod_cliente);
-
-
-        dd($cliente);
 
         $usuarioController = new UsuarioController();
         $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
@@ -221,6 +217,7 @@ class PreCadastroController extends AbstractController
         $longitud = isset($data['longitud']) ? $data['longitud'] : '';
         $id_ciudad = isset($data['id_ciudad']) ? $data['id_ciudad'] : '';
         
+        
         $nombre = $nombres.' '.$apellido1.' '.$apellido2;
         if(!empty($data['codigo_cliente']) and $data['codigo_cliente'] = '')
         {
@@ -228,9 +225,7 @@ class PreCadastroController extends AbstractController
           
           $cliente = $this->getDoctrine()->getRepository('LogisticaIntegracoesFusion:Cliente')->find($cod_cliente);
            */
-         
 
-          
         }
         if (!empty($infoUsuario->idVendedor) ) {
             $res = $connection->query(
