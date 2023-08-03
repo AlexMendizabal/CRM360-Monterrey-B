@@ -7,7 +7,7 @@ doctrine:
                  host: localhost
                  port: 1433         
                  dbname: 'CRM360'
-                 user: 'reflo'
+                 user: 'sa'
                  password: '123'
                  charset: 'UTF-8'
  
