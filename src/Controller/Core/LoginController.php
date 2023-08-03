@@ -24,12 +24,12 @@ class LoginController extends AbstractController
      */
     public function login(Connection $connection, Request $request): JsonResponse
     {
+        $JwtAplication = new JwtAplication();
         if ($request->isMethod('POST')) {
             try {
                 $dadosValidos = true;
                 $msgErro = '';
                 $data = json_decode($request->getContent(), true);
-
             
                 if (!isset($data['nr_matr_usua']) || !is_numeric($data['nr_matr_usua'])) {
                     $msgErro = 'Informe a matrícula do usuário!';
@@ -63,47 +63,62 @@ class LoginController extends AbstractController
                 ";
                 $stmt = $connection->prepare($sql);
                 $stmt->bindValue(1, $nrMatrUsua);
-
                 $stmt->execute();
                 $usuario = $stmt->fetchAll();
-                $datos = [];
-                $modulo_principal = [];
-                $devolverArray = '';
+
                 if(count($usuario) > 0){
+                   
+                    $datos = [];
+                    $modulo_principal = [];
+                    $devolverArray = '';
                     $modulo_principal = array(
                         "id" => $usuario[0]['ID_MODU'],
                         "nome" => $usuario[0]['NM_MODU'],
                         "rota" => $usuario[0]['DS_ROTA'],
                     );
+                    //dd($modulo_principal);
                     $datos = array(
                         "id" => $usuario[0]['ID'],
                         "matricula" => $usuario[0]['ID'],
                         "idVendedor"  => $usuario[0]['MATRICULA_VENDEDOR'],
-                        "idEscritorio" => $usuario[0]['ID_ESCAP'],
+                        "idEscritorio" => $usuario[0]['ID_ESCR'],
                         "nomeCompleto"  => $usuario[0]['NM_COMP_RAZA_SOCI'],
                         "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
                         "moduloPrincipal" => $modulo_principal    
                     );
+
+                     //dd($datos);
+                   //dd($usuario);
+
                     $devolverArray =  base64_encode(json_encode($datos));
+                    //dd($devolverArray);
                     //dd($usuario);
-                
+
                 }
-                //dd($usuario);
+               
             } catch (DBALException $e) {
+                
                 return new JsonResponse([
                     'responseCode' => $e->getCode(),
                     'message' => $e->getMessage()
                 ], 500);
             }
-
+           
             if (count($usuario) > 0) {
+
+                //dd($usuario);
                 if ($usuario[0]['IN_STAT'] == 0) {
                     return new JsonResponse([
                         'responseCode' => 401,
                         'message' => 'Acesso não autorizado! Usuário inativo!'
                     ], 401);
                 } else {
+
+
+                    //dd($usuario); 
                     if (password_verify($data['ds_senh_usua'], $usuario[0]['DS_SENH'])) {
+
+                       //dd($datos);
                         $dadosUsuario = array(
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
                             'id_usuario' => $usuario[0]['ID'],
@@ -119,15 +134,15 @@ class LoginController extends AbstractController
                             'email_usua' => $usuario[0]['NM_EMAI'],
                             'id_vendedor' => $usuario[0]['MATRICULA_VENDEDOR'],
                             'base64'=> $devolverArray,
-                            'id_sucursal' => $usuario[0]['ID_ESCR'],
+                            //'id_sucursal' => $usuario[0]['ID_ESCR'],
                         );
-
+                        //dd($dadosUsuario);
                         $userData = [
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
                             'NR_MATR' => $usuario[0]['NR_MATR']
                         ];
 
-                        $jwt = JwtAplication::encode(['userdata' => $userData]);
+                        $jwt = $JwtAplication->encode(['userdata' => $userData]);
 
                         return new JsonResponse([
                             'responseCode' => 200,
@@ -136,6 +151,7 @@ class LoginController extends AbstractController
                             'result' => $dadosUsuario
                         ], 200);
                     } else {
+                    
                         return new JsonResponse([
                             'responseCode' => 401,
                             'login' => false,
@@ -144,6 +160,8 @@ class LoginController extends AbstractController
                     }
                 }
             } else {
+                
+                 
                 return new JsonResponse([
                     'responseCode' => 401,
                     'login' => false,

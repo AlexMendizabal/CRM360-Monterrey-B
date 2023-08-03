@@ -32,8 +32,9 @@ class MotoristaTipoController
             $status                 = isset($data->IN_STAT)             ? $data->IN_STAT            : '';
             $observacao             = isset($data->DS_OBSE)             ? $data->DS_OBSE            : '';
             $motoristaTipoNome      = isset($data->NM_MOTO_TIPO)        ? $data->NM_MOTO_TIPO       : '';
+
             $UsuarioController = new UsuarioController();
-            $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $nrMatricula    = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
             

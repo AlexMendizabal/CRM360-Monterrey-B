@@ -348,16 +348,12 @@ class GenericController extends AbstractController
                 "descricaoLinha" => $subLinha["DS_LINH"]
             ]);
           }
-
-          if ($response) {
-            $FunctionsController = new FunctionsController();  
-            return $FunctionsController->Retorno(true, null, $response, Response::HTTP_OK);
-          }else{
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, 'Nenhuma sub-linha encontrada.', null, Response::HTTP_NO_CONTENT);
-          }
+          $FunctionsController = new FunctionsController();
+          if ($response)
+              return $FunctionsController->Retorno(true, null, $response, Response::HTTP_OK);
+          else
+              return $FunctionsController->Retorno(true, 'Nenhuma sub-linha encontrada.', null, Response::HTTP_NO_CONTENT);
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, 'Ocorreu um erro na tentativa de consulta de sub-linhas.', null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -472,8 +468,7 @@ class GenericController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       //GET Request
       $c = curl_init('https://topdesk.manetoni.com.br/tas/public/login/form');
@@ -560,13 +555,12 @@ class GenericController extends AbstractController
       )->fetchAll(); 
 
       if (count($res) > 0) {
-        $FunctionsController = new FunctionsController();   
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else {
-        return $FunctionsController->Retorno(true, null, null, Response::HTTP_NO_CONTENT);
+        return FunctionsController::Retorno(true, null, null, Response::HTTP_NO_CONTENT);
       }
     } catch (\Throwable $e) {
-      return $FunctionsController->Retorno(
+      return FunctionsController::Retorno(
         false,
         'Erro ao retornar dados.',
         $e->getMessage(),
@@ -599,7 +593,7 @@ class GenericController extends AbstractController
             "nome" => "Sul Fluminense"
         )
     ];
-    $FunctionsController = new FunctionsController();   
+    $FunctionsController = new FunctionsController();
     return $FunctionsController->Retorno(true, null, $materiais, Response::HTTP_OK);
   }
 
@@ -627,14 +621,11 @@ class GenericController extends AbstractController
       )->fetchAll(); 
 
       if (count($res) > 0) {
-        $FunctionsController = new FunctionsController();   
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(true, null, null, Response::HTTP_NO_CONTENT);
       }
     } catch (\Throwable $e) {
-      $FunctionsController = new FunctionsController();
       return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }

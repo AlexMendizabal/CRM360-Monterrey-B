@@ -264,8 +264,9 @@ class FichaCadastralController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $linkAnexo       = $document->getFileLink();
 
+
       $UsuarioController = new UsuarioController();
-      $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -397,8 +398,7 @@ class FichaCadastralController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
             EXECUTE [dbo].[PRC_FICH_CADA_MATE_CADA] 

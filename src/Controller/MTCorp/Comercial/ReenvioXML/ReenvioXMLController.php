@@ -108,6 +108,7 @@ class ReenvioXMLController extends AbstractController
 
         // 725394
         // 725386
+
         $UsuarioController = new UsuarioController();
         $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
         $notaFiscal = str_replace('.', '', $numNota);

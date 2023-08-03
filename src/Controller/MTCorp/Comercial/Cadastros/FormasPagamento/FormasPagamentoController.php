@@ -173,8 +173,7 @@ class FormasPagamentoController extends AbstractController
   {
     try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         // print_r($params);
         // exit(0);
@@ -262,8 +261,7 @@ class FormasPagamentoController extends AbstractController
   {
     try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         // print_r($params);
         // exit(0);
@@ -369,8 +367,7 @@ class FormasPagamentoController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXECUTE [dbo].[PRC_FORM_PAGA_CADA]
@@ -408,8 +405,7 @@ class FormasPagamentoController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXECUTE [dbo].[PRC_FORM_PAGA_CADA]

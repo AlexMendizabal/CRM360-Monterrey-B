@@ -153,7 +153,7 @@ class TransportadorasController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $id = null;
       $tipoPessoa = null;

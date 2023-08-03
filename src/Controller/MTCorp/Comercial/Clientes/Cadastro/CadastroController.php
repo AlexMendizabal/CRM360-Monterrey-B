@@ -1134,9 +1134,11 @@ class CadastroController extends AbstractController
   public function getEndereco(Connection $connection, Request $request, $codCliente, $idEndereco, $idSituacao)
   {
     try {
+
       $UsuarioController = new UsuarioController();
       $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-      $hasAcessoAlterarStatus = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
+      $ComercialController = new ComercialController();
+      $hasAcessoAlterarStatus = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
 
       if ($idSituacao == 1) {
         $res = $connection->query(
@@ -1323,10 +1325,12 @@ class CadastroController extends AbstractController
     if ($request->isMethod('PUT')) {
       try {
         $data = json_decode($request->getContent(), true);
+
         $UsuarioController = new UsuarioController();
         $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-        $hasAprovacaoEndereco = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_APRO');
-        $hasGravaLatLong = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_LAT_LONG');
+        $ComercialController = new ComercialController();
+        $hasAprovacaoEndereco = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_APRO');
+        $hasGravaLatLong = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_LAT_LONG');
 
         $codCliente = $data['codCliente'];
 
@@ -2321,8 +2325,9 @@ class CadastroController extends AbstractController
        $nomeAnexo = $extension[0];
 
        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '\\app\\uploads\\comercial\\clientes\\cadastros\\' . $codCliente . '\\';
+      
        $UsuarioController = new UsuarioController();
-       $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
        $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\clientes\\cadastros\\".  $codCliente  ."\\" . $tipoAnexo ."\\" ;
       //  $webPath = '/uploads/comercial/clientes/cadastros/' . $codCliente . '/' ;
@@ -2345,7 +2350,8 @@ class CadastroController extends AbstractController
        $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath;
       //  print_r($webPath);
       //  die();
-       $infoUsuario    = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+       $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
        $matricula      = $infoUsuario->matricula;
        $nomeUsuario    = $infoUsuario->nomeCompleto;
       

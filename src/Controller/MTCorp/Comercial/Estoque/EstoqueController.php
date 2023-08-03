@@ -19,6 +19,64 @@ use App\Controller\Common\Services\FunctionsController;
  */
 class EstoqueController extends AbstractController
 {
+    
+    /**
+     * @Route(
+     *  "/comercial/lista_precio",
+    *  name="comercial.lista-precio", 
+    *  methods={"GET"}
+    * )
+    * @return JsonResponse
+    */
+    public function getlista_precio(Connection $connection, Request $request)
+    {   
+        try {
+            $params = $request->query->all();
+
+            $id_cliente = NULL;
+            $id_lista_precio = 0;
+            $id_departamento = NULL;
+            
+
+            if (isset($params['id_cliente'])) $id_cliente = $params['id_cliente'];
+            if (isset($params['id_lista_precio'])) $id_lista_precio = $params['@id_lista_precio'];
+            if (isset($params['id_departamento'])) $id_departamento = $params['@id_departamento'];
+       
+
+            $res = $connection->query("
+                EXEC [prc_lista_precio]
+                    @id_cliente = '{$id_cliente}'
+                    ,@id_lista_precio = '{$id_lista_precio}'
+                    ,@id_departamento = '{$id_departamento}'
+                   
+            ")->fetchAll();
+
+            dd($res);
+
+            if (count($res) > 0) {
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $res
+                );
+            } else {
+                $message = array('responseCode' => 204);
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+
+
+
     /**
      * @Route(
      *  "/comercial/estoque/estoque-atual",

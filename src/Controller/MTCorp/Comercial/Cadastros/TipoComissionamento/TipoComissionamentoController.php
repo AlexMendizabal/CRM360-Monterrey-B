@@ -171,7 +171,7 @@ class TipoComissionamentoController extends AbstractController
     try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $dsTipoComissionamento = $params['dsTipoComissionamento'];
         $codSituacao = $params['codSituacao'];
@@ -235,7 +235,7 @@ class TipoComissionamentoController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $dsTipoComissionamento = $params['dsTipoComissionamento'];
       $codTipoComissionamento = $params['codTipoComissionamento'];
@@ -303,7 +303,7 @@ class TipoComissionamentoController extends AbstractController
     try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         for ($i=0; $i < count($params); $i++) {
           $codFaixa = $params[$i]['codFaixa'];     
@@ -337,8 +337,8 @@ class TipoComissionamentoController extends AbstractController
   public function getLinhas(Connection $connection, Request $request)
   {
     try {
-      $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXEC PRC_LINH_CONS
@@ -381,8 +381,8 @@ class TipoComissionamentoController extends AbstractController
   public function getClasses(Connection $connection, Request $request)
   {
     try {
-      $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXEC PRC_CLAS_CONS
@@ -432,7 +432,7 @@ class TipoComissionamentoController extends AbstractController
   {
     try {
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
         EXEC PRC_TIPO_PAGA_COMI_VEND_CONS
@@ -512,7 +512,7 @@ class TipoComissionamentoController extends AbstractController
     try {
         $codTipoComissionamento = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         // $res = $connection->query("
         //   EXECUTE [dbo].[PRC_FORM_PAGA_CADA]
@@ -547,7 +547,7 @@ class TipoComissionamentoController extends AbstractController
     try {
         $codTipoComissionamento = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         // $res = $connection->query("
         //   EXECUTE [dbo].[PRC_FORM_PAGA_CADA]

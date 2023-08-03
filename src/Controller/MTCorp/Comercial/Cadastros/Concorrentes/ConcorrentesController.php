@@ -56,17 +56,13 @@ class ConcorrentesController extends AbstractController
             ")->fetchAll();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -93,15 +89,12 @@ class ConcorrentesController extends AbstractController
             )->fetchAll();
 
             if (count($res) > 0) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
             $msg = 'Erro ao retornar dados';
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -119,7 +112,7 @@ class ConcorrentesController extends AbstractController
         try {
             $params = json_decode($request->getContent(), true);
             $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             
             $codConcorrente = null;
             $nomeConcorrente = null;
@@ -144,17 +137,13 @@ class ConcorrentesController extends AbstractController
             )->fetchAll();
 
             if (isset($res[0]['codConcorrente'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, 'Concorrente cadastrado com sucesso.', null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {    
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, 'O concorrente não foi cadastrado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'Erro ao cadastrar concorrente.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -171,8 +160,7 @@ class ConcorrentesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             
             $codConcorrente = null;
             $nomeConcorrente = null;
@@ -199,14 +187,11 @@ class ConcorrentesController extends AbstractController
 
 
             if (isset($res[0]['codConcorrente'])) {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, 'Concorrente alterado com sucesso.', null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(false, 'O concorrente não foi alterado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'Erro ao alterar concorrente.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -231,19 +216,16 @@ class ConcorrentesController extends AbstractController
       ")->fetchAll();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
       } else if (count($res) > 0 && isset($res[0]['msg'])) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
       } else {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
       }
     } catch (\Throwable $e) {
         $FunctionsController = new FunctionsController();
         $msg = 'Erro ao retornar dados';
-        return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
 
@@ -259,8 +241,7 @@ class ConcorrentesController extends AbstractController
   {
     try {
         $codigo = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
             EXECUTE [dbo].[PRC_CONC_CADA] 
@@ -271,17 +252,13 @@ class ConcorrentesController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codConcorrente']) && $codigo == $res[0]['codConcorrente']) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'O Concorrente não foi ativado.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
         return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
@@ -298,8 +275,7 @@ class ConcorrentesController extends AbstractController
   {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXECUTE [dbo].[PRC_CONC_CADA] 
@@ -311,17 +287,13 @@ class ConcorrentesController extends AbstractController
 
 
           if (isset($res[0]['codConcorrente']) && $codigo == $res[0]['codConcorrente']) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
           } else {
-            $FunctionsController = new FunctionsController();
               return $FunctionsController->Retorno(false, 'O Concorrente não foi inativado.', null, Response::HTTP_OK);
           }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
           return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
   }

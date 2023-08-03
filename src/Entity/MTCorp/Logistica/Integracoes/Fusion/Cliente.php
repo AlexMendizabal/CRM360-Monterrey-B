@@ -2,141 +2,162 @@
 
 namespace App\Entity\MTCorp\Logistica\Integracoes\Fusion;
 
+use Doctrine\ORM\Mapping as ORM;
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="MTCORP_MODU_CLIE_BASE")
+ */
+class Cliente  
+{   
+    /*
+        id_cliente	int	
+        prim_nome	nvarchar(MAX)	
+        segu_nome	nvarchar(MAX)	
+        cnpj_cpf	varchar(18)	
+        ie_rg	varchar(52)	
+        tipo_pessoa	char(1)	
+        id_vendedor	int	
+        id_cliente_erp	int	
+        id_contribuinte	int	
+        id_setor_atividade	int	
+        id_fina_material	int	
+        id_grupo_econ	int	
+        limi_cred	decimal(15, 2)	
+        cred_segu	decimal(15, 2)	
+        data_cadastro	datetime	
+        situacao	int	
+        email_nfe	varchar(256)	
+        is_carteira	smallint	
+        is_descontado	smallint	
+        is_avista	smallint	
+        is_pesagem	smallint	
+        data_prox_anali	datetime	
+        data_ult_alte	datetime	
+        id_usua_cada	int	
+        prod_rural	varchar(512)	
+        id_regi_trib	int	
+        nr_nota	tinyint	
+        in_nota_auto	bit	
+        codigo_cliente	varchar(100)	
+        tipo_persona	text	
+        id_sector_actividad2	int	
+        id_regi_trib_m	int	
+        id_tipo_cliente	int	
+        telefono	varchar(50)	
+        celular	varchar(50)	 
+    */
 
-class Cliente implements \JsonSerializable
-{
+    /**
+     * @ORM\Id_cliente
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+    */
+    /** @var int */
+    private $id_cliente;
+
+    /**
+     * @ORM\Column(type="string", length=256)
+    */
+    /** @var string */
+    private $prim_nome;
+    /**
+     * @ORM\Column(type="string", length=256)
+    */
+    /** @var string */
+    private $segu_nome;
+    /**
+     * @ORM\Column(type="string", length=256)
+    */
+    /** @var string */
+    private $cnpj_cpf;
 
     /** @var string */
-    private $campo_alt = "NEW_59";
+    private $ie_rg;
 
     /** @var string */
-    private $seq_id;
+    private $tipo_pessoa;
 
     /** @var string */
-    private $filial_padrao;
+    private $id_vendedor;
 
     /** @var string */
-    private $cliente_cod_praca_erp;
+    private $id_cliente_erp;
 
     /** @var string */
-    private $cliente_descricao_praca;
+    private $id_contribuinte;
 
     /** @var string */
-    private $cliente_cod_rota_erp;
+    private $id_setor_atividade;
 
     /** @var string */
-    private $cliente_descricao_rota;
+    private $id_fina_material;
 
     /** @var string */
-    private $cod_segmento;
-
-    /** @var string */
-    private $descr_segmento;
-
-    /** @var string */
-    private $descr_cliente;
-
-    /** @var string */
-    private $razao_cliente;
-
-    /** @var string */
-    private $cnpj_cliente;
+    private $id_grupo_econ;
 
     /** @var int */
-    private $cnpj_cpf_cliente;
+    private $limi_cred;
 
     /** @var string */
-    private $end_cliente;
+    private $cred_segu;
 
     /** @var string */
-    private $num_end_cliente;
+    private $data_cadastro;
 
     /** @var string */
-    private $bairro_cliente;
+    private $email_nfe;
 
     /** @var string */
-    private $uf_cliente;
+    private $is_carteira;
 
     /** @var string */
-    private $cidade_cliente;
+    private $is_descontado;
 
     /** @var string */
-    private $cep_cliente;
+    private $is_avista;
 
     /** @var string */
-    private $email1_cliente;
+    private $is_pesagem;
 
     /** @var string */
-    private $email2_cliente;
+    private $data_prox_anali;
 
     /** @var string */
-    private $email3_cliente;
+    private $data_ult_alte;
 
     /** @var string */
-    private $tel1_cliente;
+    private $id_usua_cada;
 
     /** @var string */
-    private $tel2_cliente;
+    private $prod_rural;
 
     /** @var string */
-    private $tel3_cliente;
+    private $id_regi_trib;
 
     /** @var string */
-    private $vlr_credito_cliente;
+    private $nr_nota;
 
     /** @var string */
-    private $data_cadastro_cliente;
+    private $in_nota_auto;
 
     /** @var string */
-    private $saldo_disp_cliente;
+    private $tipo_persona;
 
     /** @var string */
-    private $vlr_tits_vencido_cliente;
+    private $id_sector_actividad2;
 
     /** @var string */
-    private $vlr_tits_vencer_cliente;
+    private $id_regi_trib_m;
 
     /** @var string */
-    private $status_cred_cliente;
+    private $id_tipo_cliente;
 
     /** @var string */
-    private $codigo_cliente;
+    private $telefono;
 
     /** @var string */
-    private $data_ult_compra;
+    private $celular;
 
-    /** @var string */
-    private $forma_pgto_cliente;
-
-    /** @var string */
-    private $retem_icms_cliente;
-
-    /** @var string */
-    private $permite_retira_cliente;
-
-    /** @var string */
-    private $rede_loja_cliente;
-
-    /** @var string */
-    private $vlrcompra90d;
-
-    /** @var string */
-    private $ref_entrega;
-
-    /** @var string */
-    private $cliente_denegado;
-
-    /** @var string */
-    private $lista_cond_comer_validas;
-
-    /** @var string */
-    private $latitude;
-
-    /** @var string */
-    private $longitude;
-
-    /** @var string */
-    private $turnos_entrega;
 
     public function __get($atributo)
     {
@@ -158,50 +179,40 @@ class Cliente implements \JsonSerializable
     public function jsonSerialize()
     {
         return array(
-            "campo_alt"                 => $this->campo_alt,
-            "seq_id"                    => $this->seq_id,
-            "cnpj_cpf_cliente"          => $this->cnpj_cpf_cliente,
-            "turnos_entrega"            => $this->turnos_entrega,
-            "filial_padrao"             => $this->filial_padrao,
-            "cliente_cod_praca_erp"     => $this->cliente_cod_praca_erp,
-            "cliente_descricao_praca"   => $this->cliente_descricao_praca,
-            "cliente_cod_rota_erp"      => $this->cliente_cod_rota_erp,
-            "cliente_descricao_rota"    => $this->cliente_descricao_rota,
-            "cod_segmento"              => $this->cod_segmento,
-            "descr_segmento"            => $this->descr_segmento,
-            "descr_cliente"             => $this->descr_cliente,
-            "razao_cliente"             => $this->razao_cliente,
-            "cnpj_cliente"              => $this->cnpj_cliente,
-            "end_cliente"               => $this->end_cliente,
-            "num_end_cliente"           => $this->num_end_cliente,
-            "bairro_cliente"            => $this->bairro_cliente,
-            "uf_cliente"                => $this->uf_cliente,
-            "cidade_cliente"            => $this->cidade_cliente,
-            "cep_cliente"               => $this->cep_cliente,
-            "email1_cliente"            => $this->email1_cliente,
-            "email2_cliente"            => $this->email2_cliente,
-            "email3_cliente"            => $this->email3_cliente,
-            "tel1_cliente"              => $this->tel1_cliente,
-            "tel2_cliente"              => $this->tel2_cliente,
-            "tel3_cliente"              => $this->tel3_cliente,
-            "vlr_credito_cliente"       => $this->vlr_credito_cliente,
-            "data_cadastro_cliente"     => $this->data_cadastro_cliente,
-            "saldo_disp_cliente"        => $this->saldo_disp_cliente,
-            "vlr_tits_vencido_cliente"  => $this->vlr_tits_vencido_cliente,
-            "vlr_tits_vencer_cliente"   => $this->vlr_tits_vencer_cliente,
-            "status_cred_cliente"       => $this->status_cred_cliente,
+            "id_cliente"                => $this->id_cliente,
+            "prim_nome"                 => $this->prim_nome,
+            "segu_nome"                 => $this->segu_nome,
+            "cnpj_cpf"                  => $this->cnpj_cpf,
+            "ie_rg"                     => $this->ie_rg,
+            "tipo_pessoa"               => $this->tipo_pessoa,
+            "id_vendedor"               => $this->id_vendedor,
+            "id_cliente_erp"            => $this->id_cliente_erp,
+            "id_contribuinte"           => $this->id_contribuinte,
+            "id_setor_atividade"        => $this->id_setor_atividade,
+            "id_fina_material"          => $this->id_fina_material,
+            "id_grupo_econ"             => $this->id_grupo_econ,
+            "limi_cred"                 => $this->limi_cred,
+            "cred_segu"                 => $this->cred_segu,
+            "data_cadastro"             => $this->data_cadastro,
+            "email_nfe"                 => $this->email_nfe,
+            "is_carteira"               => $this->is_carteira,
+            "is_descontado"             => $this->is_descontado,
+            "is_avista"                 => $this->is_avista,
+            "is_pesagem"                => $this->is_pesagem,
+            "data_prox_anali"           => $this->data_prox_anali,
+            "id_usua_cada"              => $this->id_usua_cada,
+            "prod_rural"                => $this->prod_rural,
+            "id_regi_trib"              => $this->id_regi_trib,
+            "nr_nota"                   => $this->nr_nota,
+            "in_nota_auto"              => $this->in_nota_auto,
             "codigo_cliente"            => $this->codigo_cliente,
-            "data_ult_compra"           => $this->data_ult_compra,
-            "forma_pgto_cliente"        => $this->forma_pgto_cliente,
-            "retem_icms_cliente"        => $this->retem_icms_cliente,
-            "permite_retira_cliente"    => $this->permite_retira_cliente,
-            "rede_loja_cliente"         => $this->rede_loja_cliente,
-            "vlrcompra90d"              => $this->vlrcompra90d,
-            "ref_entrega"               => $this->ref_entrega,
-            "cliente_denegado"          => $this->cliente_denegado,
-            "lista_cond_comer_validas"  => $this->lista_cond_comer_validas,
-            "latitude"                  => $this->latitude,
-            "longitude"                 => $this->longitude
+            "tipo_persona"              => $this->tipo_persona,
+            "id_sector_actividad2"      => $this->id_sector_actividad2,
+            "id_regi_trib_m"            => $this->id_regi_trib_m,
+            "id_tipo_cliente"           => $this->id_tipo_cliente,
+            "telefono"                  => $this->telefono,
+            "celular"                    => $this->celular,
+           
         );
     }
 }

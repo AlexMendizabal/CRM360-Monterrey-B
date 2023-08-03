@@ -108,7 +108,7 @@ class TiposFreteController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codTipoFrete = null;
       $descricao = null;
@@ -153,7 +153,7 @@ class TiposFreteController extends AbstractController
     try {
         $params = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $codigo = null;
         $codTipoFrete = null;
@@ -200,7 +200,7 @@ class TiposFreteController extends AbstractController
     try {
         $codigo = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
           EXEC [PRC_TIPO_FRET_CADA]
@@ -235,7 +235,7 @@ class TiposFreteController extends AbstractController
       try {
           $codigo = json_decode($request->getContent(), true);
           $UsuarioController = new UsuarioController();
-          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_TIPO_FRET_CADA]

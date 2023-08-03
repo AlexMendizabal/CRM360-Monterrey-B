@@ -298,8 +298,7 @@ class TabelaDePrecosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $codPreco = NULL;
             $nomePreco = NULL;
@@ -421,8 +420,7 @@ class TabelaDePrecosController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $codPreco = NULL;
             $nomePreco = NULL;
@@ -536,7 +534,7 @@ class TabelaDePrecosController extends AbstractController
    {
        try {
            $UsuarioController = new UsuarioController();
-           $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
            $res = $connection->query("
 							EXEC PRC_PREC_CADA
@@ -570,8 +568,7 @@ class TabelaDePrecosController extends AbstractController
     public function deleteAssociacaoPreco(Connection $connection, Request $request, $codAssociacao, $codTabela, $codGrupo)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
 						if (isset($params['codAssociacao'])) $codAssociacao = $params['codAssociacao'];
 
@@ -608,8 +605,7 @@ class TabelaDePrecosController extends AbstractController
     {
         try {
             $codPreco = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC PRC_PREC_CADA
@@ -643,8 +639,7 @@ class TabelaDePrecosController extends AbstractController
     {
         try {
             $codPreco = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC PRC_PREC_CADA

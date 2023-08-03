@@ -40,10 +40,8 @@ class CepController extends AbstractController
         $jsonData = json_decode($output, true);
        
         if (!isset($jsonData['erro'])) {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(true, null, $jsonData, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
             return $FunctionsController->Retorno(false, 'CEP não encontrado ou Consulta fora do ar. Favor inserir os dados manualmente.', null, Response::HTTP_OK);
         }
     } catch (\Throwable $th) {

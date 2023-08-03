@@ -92,8 +92,9 @@ class PedidosController
 
             $romaneioId         = isset($data->ID_LOGI_ROMA)    ? $data->ID_LOGI_ROMA   : '';
             $pedidos            = isset($data->PEDI)            ? $data->PEDI           : '';
-            $UsuarioController = new UsuarioController();
-            $usuarioInfo        = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            
+            $usuarioInfo        = $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $usuarioMatricula   = $usuarioInfo->matricula;
             $usuarioNome        = $usuarioInfo->nomeCompleto;
             $usuarioId          = $usuarioInfo->id;

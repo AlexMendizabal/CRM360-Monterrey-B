@@ -18,11 +18,11 @@ doctrine:
                 # password: "appIMTCorpDEV"
                 # charset: "UTF-8"
                   driver: 'pdo_sqlsrv'
-                  host: 'localhost'
-                  port: 1433
+                  host: 127.0.0.1
+                  port: 1433       
                   dbname: 'CRM360'
-                  user: 'len340'
-                  password: 'lenovol340'
+                  user: 'reflo'
+                  password: '123'
                   charset: 'UTF-8'
     # orm:# 
     #     auto_generate_proxy_classes: true

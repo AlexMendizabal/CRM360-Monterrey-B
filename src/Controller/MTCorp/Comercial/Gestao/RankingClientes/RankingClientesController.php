@@ -137,7 +137,7 @@ class RankingClientesController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $nomeClassificacao = null;
       $peso = null;
@@ -222,7 +222,7 @@ class RankingClientesController extends AbstractController
     try {
       $params = json_decode($request->getContent(), true);
       $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
       $codClassificacao = null;
       $nomeClassificacao = null;
@@ -310,7 +310,7 @@ class RankingClientesController extends AbstractController
     try {
         $codigo = json_decode($request->getContent(), true);
         $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
         $res = $connection->query("
         EXEC [PRC_CONF_CLAS_CLIE_CADA]
@@ -347,7 +347,7 @@ class RankingClientesController extends AbstractController
       try {
           $codigo = json_decode($request->getContent(), true);
           $UsuarioController = new UsuarioController();
-          $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
             EXEC [PRC_CONF_CLAS_CLIE_CADA]
