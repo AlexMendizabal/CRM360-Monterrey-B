@@ -1662,39 +1662,25 @@ class CadastroController extends AbstractController
    */
   public function getContato(Connection $connection, Request $request, $codCliente, $idContato)
   {
-    try {
-      $res = $connection->query("
+  
+      //dd($codCliente, $idContato);
+      //dd($idContato);         
+      try {
+        $res = $connection->query("
           EXEC [PRC_CLIE_CONT_CONS]
-            @ID_CLIE = '{$codCliente}',
-            @ID_SEQU_CONT = '{$idContato}' 
+            @ID_CLIE = ' ',
+            @ID_SEQU_CONT = '{$idContato}'
       ")->fetchAll();
       
-
+      //dd($res);
       if (count($res) > 0) {
-
-        
-        $contato = new \stdClass;
-        $contato->id = $res[0]['ID_CONT'];
-        $contato->idSeqTid = $res[0]['ID_SEQ_ERP'];
-        $contato->nomeCompleto = $res[0]['DS_CONT'];
-        $contato->idSetor = $res[0]['ID_SETR'];
-        $contato->descSetor = $res[0]['DS_SETR'];
-        $contato->idFuncao = $res[0]['ID_CARG'];
-        $contato->descFuncao = $res[0]['DS_CARG'];
-        $contato->idGenero = $res[0]['ID_GENE'];
-        $contato->descGenero = $res[0]['DS_GENE'];
-        $contato->dataAniversario = $res[0]['DT_ANIV'];
-        $contato->idTimeFutebol = $res[0]['ID_TIME'];
-        $contato->idEstadoCivil = $res[0]['ID_ESTA_CIVI'];
-        $contato->linkedin = $res[0]['DS_LINK'];
-        $contato->facebook = $res[0]['DS_FACE'];
-        $contato->instagram = $res[0]['DS_INST'];
-        $contato->hobbies = $res[0]['DS_HOBB'];
-        $contato->filhos = $this->filhos($connection, $res[0]['ID_CONT']);
-        $contato->observacoes = $res[0]['DS_OBSE'];
-        $contato->contatos = $this->meiosContato($connection, $codCliente, $res[0]['ID_CONT'], $res[0]['ID_SEQ_ERP']);
-
-        return FunctionsController::Retorno(true, null, $contato, Response::HTTP_OK);
+         $respt = [
+          'id_contacto' => $res[0]["id_cont"],
+          'nombreCompleto' => $res[0]["ds_cont"],
+          'medioCont' => $res[0]["ds_cont_meio"]
+         ];
+          
+        return FunctionsController::Retorno(true, null, $respt, Response::HTTP_OK);
       } else {
         return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
@@ -1706,7 +1692,9 @@ class CadastroController extends AbstractController
         Response::HTTP_BAD_REQUEST
       );
     }
-  }
+
+  }  
+
 
   /**
    * @Route(
