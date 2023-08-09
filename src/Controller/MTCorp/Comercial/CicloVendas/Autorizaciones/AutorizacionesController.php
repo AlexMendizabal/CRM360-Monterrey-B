@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\MTCorp\Comercial\CicloVendas\Autorisaciones;
+namespace App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,22 +17,22 @@ use App\Controller\Common\UsuarioController;
 
 /**
  * Class AutorizacionesController
- * @package App\Controller\MTCorp\Comercial\CicloVendas\Autorisaciones
+ * @package App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones
  */
 
 class AutorizacionesController extends AbstractController
 {
     /**
      * @Route(
-     * "/comercial/autorisaciones", 
-     * name="autorisaciones"
+     * "/comercial/CicloVendas/autorizaciones", 
+     * name="Autorizaciones"
      *  methods={"GET"}
      * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
-    public function autorisaciones(Connection $connection, Request $request)
+    public function Autorizaciones(Connection $connection, Request $request)
     {
         try {
             $UsuarioController = new UsuarioController();
@@ -82,8 +82,8 @@ class AutorizacionesController extends AbstractController
 
     /**
      * @Route(
-     * "/autorisaciones/registrar", 
-     * name="autorisaciones-registrar"
+     * "/comercial/CicloVendas/autorizaciones/registrar", 
+     * name="Autorizaciones-registrar"
      * methods={"GET"}
      * )
      * @param Connection $connection
@@ -146,8 +146,8 @@ class AutorizacionesController extends AbstractController
 
     /**
      * @Route(
-     * "/autorisaciones/estado", 
-     * name="autorisaciones-registrar"
+     * "/comercial/CicloVendas/autorizaciones/estado", 
+     * name="Autorizaciones-registrar"
      * methods={"post"}
      * )
      * @param Connection $connection
@@ -197,6 +197,5 @@ class AutorizacionesController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
 
 }

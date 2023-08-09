@@ -76,7 +76,7 @@ class LoginController extends AbstractController
                         "nome" => $usuario[0]['NM_MODU'],
                         "rota" => $usuario[0]['DS_ROTA'],
                     );
-                    //dd($modulo_principal);
+                  
                     $datos = array(
                         "id" => $usuario[0]['ID'],
                         "matricula" => $usuario[0]['ID'],
@@ -86,14 +86,9 @@ class LoginController extends AbstractController
                         "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
                         "moduloPrincipal" => $modulo_principal    
                     );
-
-                     //dd($datos);
-                   //dd($usuario);
-
+                
                     $devolverArray =  base64_encode(json_encode($datos));
-                    //dd($devolverArray);
-                    //dd($usuario);
-
+                    
                 }
                
             } catch (DBALException $e) {
@@ -106,7 +101,6 @@ class LoginController extends AbstractController
            
             if (count($usuario) > 0) {
 
-                //dd($usuario);
                 if ($usuario[0]['IN_STAT'] == 0) {
                     return new JsonResponse([
                         'responseCode' => 401,
@@ -114,11 +108,9 @@ class LoginController extends AbstractController
                     ], 401);
                 } else {
 
-
-                    //dd($usuario); 
                     if (password_verify($data['ds_senh_usua'], $usuario[0]['DS_SENH'])) {
 
-                       //dd($datos);
+                      
                         $dadosUsuario = array(
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
                             'id_usuario' => $usuario[0]['ID'],
@@ -136,7 +128,7 @@ class LoginController extends AbstractController
                             'base64'=> $devolverArray,
                             //'id_sucursal' => $usuario[0]['ID_ESCR'],
                         );
-                        //dd($dadosUsuario);
+                     
                         $userData = [
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
                             'NR_MATR' => $usuario[0]['NR_MATR']
