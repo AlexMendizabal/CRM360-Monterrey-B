@@ -9,10 +9,14 @@
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "1.11.99.1",
         "doctrine/annotations": "^1.6",
+        "doctrine/common": "^2",
+        "doctrine/doctrine-bundle": "^2",
+        "doctrine/doctrine-migrations-bundle": "^2",
+        "doctrine/orm": "^2",
         "firebase/php-jwt": "^5.0",
         "phpdocumentor/reflection-docblock": "^5.2",
-        "ramsey/uuid": "^3.8",
         "phpoffice/phpspreadsheet": "*",
+        "ramsey/uuid": "^3.8",
         "sensio/framework-extra-bundle": "^5.6",
         "symfony/console": "5.2.*",
         "symfony/css-selector": "5.2.*",
@@ -24,13 +28,12 @@
         "symfony/http-client": "5.2.*",
         "symfony/ldap": "5.2.*",
         "symfony/monolog-bundle": "^3.6",
-        "symfony/orm-pack": "^1.0",
         "symfony/property-access": "5.2.*",
         "symfony/property-info": "5.2.*",
         "symfony/requirements-checker": "^1.1",
         "symfony/security-bundle": "5.2.*",
         "symfony/serializer": "5.2.*",
-        "symfony/serializer-pack": "^1.0",
+        "symfony/stopwatch": "^5.2",
         "symfony/swiftmailer-bundle": "^3.5",
         "symfony/validator": "5.2.*",
         "symfony/yaml": "5.2.*"
@@ -87,7 +90,7 @@
         }
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.25",
-        "symfony/profiler-pack": "^1.0"
+        "symfony/maker-bundle": "^1.39",
+        "symfony/web-profiler-bundle": "5.2.*"
     }
 }

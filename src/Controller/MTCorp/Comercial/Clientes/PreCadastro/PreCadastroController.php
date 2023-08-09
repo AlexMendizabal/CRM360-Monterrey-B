@@ -182,6 +182,20 @@ class PreCadastroController extends AbstractController
     }
   }
 
+  /**
+   * @Route(
+   *  "/comercial/clientes/registrar",
+   *  name="comercial.clientes-registrar",
+   *  methods={"POST"}
+   * )
+   * @param Connection $connection
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function registrarcliente(Connection $connection, Request $request)
+   {
+    
+   }
 
   /**
    * @Route(
