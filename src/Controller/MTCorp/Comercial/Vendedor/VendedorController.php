@@ -208,33 +208,12 @@ class VendedorController extends AbstractController
                     ,@ID_DEBU = 0
             ")->fetchAll();
             } else {
-                $query =
-                    "SELECT
-                    DISTINCT
-                    codCliente = CLIE.id_cliente,
-                    codigo_cliente = CLIE.codigo_cliente,
-                    codRazaoSocial = CLIE.cnpj_cpf,
-                    razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.segu_nome, CHAR(29), ''''), CHAR(129),''''))),
-                    nomeCliente = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),''''))),
-                    MCBE.logradouro as direccion,
-                    MCBE.latitude as latitud,
-                    MCBE.longitude as longitud,
-                    TB_LISTA_PRECIO.nombre_lista as lista,
-                    TB_LISTA_PRECIO.id as id_lista_precio,
-                    VEND.ID as id_vendedor,
-                    concat(VEND.NM_VEND+' ',VEND.NM_RAZA_SOCI) as nombreVendedor
-                    FROM 
-                    MTCORP_MODU_CLIE_BASE CLIE					
-                    LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
-                    LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
-                    LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
-                    LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id_departamento = tb_ciudad.id_departamento
-                    LEFT join TB_LISTA_PRECIO on TB_LISTA_PRECIO.id_departamento = TB_DEPARTAMENTO.id_departamento
-                   ";
-
-                $stmt = $connection->prepare($query);
-                $stmt->execute();
-                $res = $stmt->fetchAll();
+                $res = $connection->query("
+                EXECUTE [PRC_CLIE_CONS]
+                    @ID_PARAM = 6
+                    ,@NM_CLIE = '{$cliente}'
+                    ,@ID_SITU = '{$situacao}'
+            ")->fetchAll();
             }
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
 

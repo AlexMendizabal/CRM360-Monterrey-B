@@ -401,4 +401,6 @@ class EstoqueController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
+
 }

@@ -27,7 +27,7 @@ class SucursalController extends AbstractController
     {
         try {
             $params = $request->query->all();
-            
+
             $nomeEscritorio = null;
             $id_escritorio = null;
             $nombre_departamento = null;
@@ -36,44 +36,45 @@ class SucursalController extends AbstractController
             $id_ciudad = null;
             $deposito = null;
             $id_deposito = null;
-            
+
             if (isset($params['nomeEscritorio'])) {
                 $nomeEscritorio = $params['nomeEscritorio'];
             }
             if (isset($params['id_escritorio'])) {
-                $id_escritorio = (int) $params['id_escritorio'];
+                $id_escritorio = (int)$params['id_escritorio'];
             }
             if (isset($params['nombre_departamento'])) {
                 $nombre_departamento = $params['nombre_departamento'];
             }
             if (isset($params['id_departamento'])) {
-                $id_departamento = (int) $params['id_departamento'];
+                $id_departamento = (int)$params['id_departamento'];
             }
             if (isset($params['nombre_ciudad'])) {
                 $nombre_ciudad = $params['nombre_ciudad'];
             }
             if (isset($params['id_ciudad'])) {
-                $id_ciudad = (int) $params['id_ciudad'];
+                $id_ciudad = (int)$params['id_ciudad'];
             }
-            if (isset($params['deposito'])) {
-                $deposito = $params['deposito'];
+            if (isset($params['nombre_deposito'])) {
+                $deposito = $params['nombre_deposito'];
             }
             if (isset($params['id_deposito'])) {
-                $id_deposito = (int) $params['id_deposito'];
+                $id_deposito = (int)$params['id_deposito'];
             }
+
 
             $query = "
                 EXEC [dbo].[PRC_SUC_COTI]
                     @nomeEscritorio = :nomeEscritorio,
                     @id_escritorio = :id_escritorio,
-                    @nombre_departamento = :nombre_departamento,
+                    @nombre_departamento = :nombreDepartamento,
                     @id_departamento = :id_departamento,
-                    @nombre_ciudad = :nombre_ciudad,
+                    @nombre_ciudad = : nombre_ciudad,
                     @id_ciudad = :id_ciudad,
-                    @deposito = :deposito,
-                    @id_deposito = :id_deposito
+                    @nombre_deposito = :nombre_deposito,
+                    @id_deposito = :id_deposito 
             ";
-            
+
             $stmt = $connection->prepare($query);
             $stmt->bindValue(':nomeEscritorio', $nomeEscritorio);
             $stmt->bindValue(':id_escritorio', $id_escritorio);
@@ -87,7 +88,7 @@ class SucursalController extends AbstractController
             $res = $stmt->fetchAll();
 
             $functionsController = $this->get(FunctionsController::class);
-            
+
             if (count($res) > 0) {
                 return $functionsController->Retorno(true, null, $res, JsonResponse::HTTP_OK);
             } else {
