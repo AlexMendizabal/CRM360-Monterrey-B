@@ -280,7 +280,7 @@ class VendedorController extends AbstractController
             ")->fetchAll();
             } else {
                 $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
+                EXECUTE [PRC_CLIE_CONS]
                     @ID_PARAM = 6
                     ,@NM_CLIE = '{$cliente}'
                     ,@ID_SITU = '{$situacao}'

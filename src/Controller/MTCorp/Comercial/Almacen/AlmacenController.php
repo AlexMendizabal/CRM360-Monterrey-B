@@ -181,7 +181,7 @@ class AlmacenController extends AbstractController{
     {
         try {
 
-            $res = $connection->query("select * from TB_DEPO_FISI_ESTO where id_tipo = 2")->fetchAll();
+            $res = $connection->query("select * from tb_almacen where id_tipo = 2")->fetchAll();
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
@@ -194,8 +194,10 @@ class AlmacenController extends AbstractController{
             }
         } catch (\Throwable $e) {
             $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, 'Erro al retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
 }
+
+
