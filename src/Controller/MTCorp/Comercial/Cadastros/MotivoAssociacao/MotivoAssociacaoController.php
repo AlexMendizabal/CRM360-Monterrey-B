@@ -55,7 +55,6 @@ class MotivoAssociacaoController extends AbstractController
           ")->fetchAll();
 
           if (count($res) > 0 && !isset($res[0]['msg'])) {
-            
               return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
           } else if (count($res) > 0 && isset($res[0]['msg'])) {
               return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
@@ -142,8 +141,7 @@ class MotivoAssociacaoController extends AbstractController
     {
       try {
           $params = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
           
           $motivoAssociacao = null;
           $codSituacao = null;
@@ -183,8 +181,7 @@ class MotivoAssociacaoController extends AbstractController
     {
       try {
           $params = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
           $codMotivoAssociacao = null;
           $motivoAssociacao = null;
@@ -229,8 +226,7 @@ class MotivoAssociacaoController extends AbstractController
     {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CADA] 
@@ -264,8 +260,7 @@ class MotivoAssociacaoController extends AbstractController
     {
       try {
           $codigo = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
           $res = $connection->query("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CADA] 

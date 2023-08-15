@@ -1140,8 +1140,7 @@ class FormularioController extends AbstractController
         
       $codEndereco = $request->query->get("codEndereco");
       $codCliente = $request->query->get("codCliente");
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $document   = new ParseFileFromRequestController();
       $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\comercial\\clientes\\" . $codCliente . "\\cadastros\\enderecos\\" . $codEndereco . "\\";
@@ -1155,8 +1154,7 @@ class FormularioController extends AbstractController
       $linkAnexo       = $document->getFileLink();
 
 
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -1194,8 +1192,7 @@ class FormularioController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = null;
 

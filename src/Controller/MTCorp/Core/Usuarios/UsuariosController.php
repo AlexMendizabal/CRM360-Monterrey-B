@@ -6,8 +6,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
-
 use Doctrine\DBAL\Connection;
 
 class UsuariosController
@@ -23,7 +21,7 @@ class UsuariosController
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Connection $connection, Request $request): JsonResponse
+    public function index(Connection $connection, Request $request):JsonResponse
     {
         try {
 
@@ -37,7 +35,7 @@ class UsuariosController
             $orderBy                = $request->query->get("orderBy");
             $orderType              = $request->query->get("orderType");
             $inPagina               = $request->query->get("inPagina");
-
+            
             $query = <<<SQL
                 EXECUTE PRC_CORE_USUA
                      @PARAMETRO             = 2
@@ -79,10 +77,10 @@ class UsuariosController
 
             $total = $stmt->fetchOne();
 
-            if (!is_array($response))
+            if(!is_array($response))
                 throw new \Exception($response);
-
-            if (empty($response))
+               
+            if(empty($response))
                 return new JsonResponse(null, Response::HTTP_NO_CONTENT);
 
             $jr = new JsonResponse([
@@ -93,7 +91,8 @@ class UsuariosController
                 "total"     => $total
             ], Response::HTTP_OK);
 
-            return $jr->setEncodingOptions(JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES);
+            return $jr->setEncodingOptions(JSON_NUMERIC_CHECK|JSON_UNESCAPED_SLASHES);
+            
         } catch (\Throwable $th) {
             return new JsonResponse([
                 "data"      => null,
@@ -139,7 +138,7 @@ class UsuariosController
             $moduloId                   = $data->moduloId           ?? null;
             $situacao                   = $data->situacao           ?? null;
 
-            if (!empty($senha)) {
+            if(!empty($senha)){
                 $senha = password_hash($senha, PASSWORD_ARGON2I);
             }
 
@@ -165,7 +164,7 @@ class UsuariosController
                     ,@ID_MODU           = :moduloId
                     ,@IN_STAT           = :situacao
             SQL;
-
+            
             $stmt = $connection->prepare($query);
 
             $stmt->bindValue(":id",                 $id);
@@ -191,14 +190,14 @@ class UsuariosController
 
             $response = $stmt->fetchAssociative();
 
-            if (!is_array($response))
+            if(!is_array($response))
                 throw new \Exception($response);
-
-            if (!isset($response["success"]))
+                
+            if(!isset($response["success"]))
                 throw new \Exception(json_encode($response));
-
-            if (!filter_var($response['success'], FILTER_VALIDATE_BOOLEAN)) {
-
+                
+            if(!filter_var($response['success'], FILTER_VALIDATE_BOOLEAN)){
+                
                 return new JsonResponse([
                     "data"      => null,
                     "error"     => $response['message'],
@@ -213,117 +212,13 @@ class UsuariosController
                 "message"   => $response["message"],
                 "success"    => true,
             ], Response::HTTP_OK);
+
         } catch (\Throwable $th) {
             return new jsonResponse([
                 "data"      => null,
                 "error"     => $th->getMessage(),
                 "message"   => "Ocorreu um erro ao processar a requisição",
                 "success"   => false
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * @Route(
-     *  "/core/usuarios/storePromotor",
-     *  name="core.usuarios.store.promotor",
-     *  methods={"POST"})
-     *
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function storePromotor(Connection $connection, Request $request)
-    {
-        try {
-            $data = json_decode($request->getContent(), true);
-           //dd($data);
-            $usuarioId = isset($data['usuarioId']) ? $data['usuarioId'] : '';
-
-            $carnet = isset($data['carnet']) ? $data['carnet'] : '';
-            $nombre = isset($data['nombre']) ? $data['nombre'] : '';
-            $sucursal = isset($data['sucursal']) ? $data['sucursal'] : '';
-            $id_tipo_vend = isset($data['id_tipo_vend']) ? $data['id_tipo_vend'] : '';
-            $in_stat = isset($data['in_stat']) ? $data['in_stat'] : '';
-            $id_usua = isset($data['id_usua']) ? $data['id_usua'] : '';
-            //dd($data);
-
-            $res = "INSERT INTO TB_VEND (ID_ESCR, NM_VEND, NR_CPF_CNPJ,ID_TIPO_VEND,IN_STAT,ID_USUA)
-            VALUES(:sucursal,:nombre,:carnet,:id_tipo_vend,:in_stat,:id_usua)";
-            // Preparar la consulta
-            $stmt1 = $connection->prepare($res);
-            $stmt1->bindParam(':sucursal', $sucursal);
-            $stmt1->bindParam(':nombre', $nombre);
-            $stmt1->bindParam(':carnet', $carnet);
-            $stmt1->bindParam(':id_tipo_vend', $id_tipo_vend);
-            $stmt1->bindParam(':in_stat', $in_stat);
-            $stmt1->bindParam(':id_usua', $id_usua);
-
-            //dd($stmt1);
-            //dd($id_tipo_vend);
-            if ($stmt1->execute()) {
-                $message = array(
-                    'responseCode' => 200,
-                    'message' => 'Se registro correctamente',
-                    'data' => $usuarioId
-                );
-            } else {
-                $message = array(
-                    'responseCode' => 204,
-                    'message' => ''
-                );
-            }
-        } catch (\Throwable $th) {
-            $message = array(
-                'responseCode' => $th->getCode(),
-                'message' => $th->getMessage()
-            );
-        }
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
-    /**
-     * @Route(
-     *  "/core/usuarios/validateMatricula",
-     *  name="core.usuarios.validateMatricula",
-     *  methods={"POST"})
-     *
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function validate_matricula(Connection $connection, Request $request)
-    {
-        try {
-            $data = json_decode($request->getContent());
-            $matricula  = $data->matricula   ?? null;
-
-            $query = "SELECT 1 FROM TB_CORE_USUA WHERE NR_MATR = :matricula";
-            $stmt = $connection->prepare($query);
-            $stmt->bindValue(':matricula', $matricula);
-            $stmt->execute();
-            $res = $stmt->fetchAll();
-
-            if ($res[0][''] !== $matricula) {
-                return new JsonResponse([
-                    "data"      => $matricula,
-                    "message"   => "Existe",
-                    "success"   => true,
-                ]);
-            } else {
-                return new JsonResponse([
-                    "data"      => $matricula,
-                    "message"   => "No existe matricula",
-                    "success"   => false,
-                ]);
-            }
-        } catch (\Throwable $th) {
-            return new JsonResponse([
-                "data"      => null,
-                "error"     => $th->getMessage(),
-                "message"   => "Ocurrió un error ",
-                "success"   => false,
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

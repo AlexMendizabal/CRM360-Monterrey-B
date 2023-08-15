@@ -142,8 +142,7 @@ class AssociacaoCoordenadoresController extends AbstractController
     if ($request->isMethod('PUT')) {
       try {
         $data = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         $coordenador = $data['coordenador'];
         $escritorios = implode(',', $data['escritorios']);

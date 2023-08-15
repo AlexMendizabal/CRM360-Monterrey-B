@@ -109,8 +109,7 @@ class ReenvioXMLController extends AbstractController
         // 725394
         // 725386
 
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $notaFiscal = str_replace('.', '', $numNota);
 
         $usuariosLiberados = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');

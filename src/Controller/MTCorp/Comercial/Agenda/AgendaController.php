@@ -44,10 +44,9 @@ class AgendaController extends AbstractController
     public function getAcessos(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $simuladorVendas = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            $simuladorVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
 
             $res = array(
                 array(
@@ -56,18 +55,14 @@ class AgendaController extends AbstractController
             );
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(
+            return FunctionsController::Retorno(
                 false,
                 'Erro ao retornar dados.',
                 $e->getMessage(),
@@ -104,7 +99,6 @@ class AgendaController extends AbstractController
                 @DATA_FINAL = '{$fim}',
                 @TIPO_REGISTRO = '{$tipo_compromiso}'
             ")->fetchAll();
-            
             $compromissos = [];
             if (count($res) > 0 && !isset($res[0]['MSG'])) {
                 foreach ($res as $item) {
@@ -114,7 +108,6 @@ class AgendaController extends AbstractController
                         'title' => $item['TITULO'],
                         'codClient' => $item['CLIENTE'],
                         'client' => $item['NOME_CLIENTE'],
-                        'promotor' => $item['NOMBRE_VENDEDOR']." ".$item['RAZON_SOCIAL_VEND'],
                         'formContactId' => $item['FORMA_CONTATO'],
                         'formContactDesc' => $item['DESC_FORMA_CONTATO'],
                         'typeContactId' => $item['MEIO_CONTATO'],
@@ -122,8 +115,8 @@ class AgendaController extends AbstractController
                         'start' => $item['DATA_INICIO'],
                         'end' => $item['DATA_FINAL'],
 
-                        'fecha_inicial' => date('Y/m/d', strtotime($item['DATA_INICIO'])),
-                        'fecha_final' => date('Y/m/d', strtotime($item['DATA_FINAL'])),
+                        'fecha_inicial' => date('d-m-Y', strtotime($item['DATA_INICIO'])),
+                        'fecha_final' => date('d-m-Y', strtotime($item['DATA_FINAL'])),
                         'hora_inicial'  => date('H:i', strtotime($item['DATA_INICIO'])),
                         'hora_final' =>  date('H:i', strtotime($item['DATA_FINAL'])),
 
@@ -190,7 +183,7 @@ class AgendaController extends AbstractController
                 @DATA_FINAL = '{$fim}',
                 @TIPO_REGISTRO = '{$tipo_compromiso}'
             ")->fetchAll();
-            dd($res);
+            /* dd($res); */
             $compromissos = [];
             if (count($res) > 0 && !isset($res[0]['MSG'])) {
                 foreach ($res as $item) {
@@ -245,8 +238,7 @@ class AgendaController extends AbstractController
     {
         if ($request->isMethod('GET')) {
             try {
-                $UsuarioController = new UsuarioController();
-                $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+                $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
                 $res = $connection->query(
                     "
@@ -359,8 +351,8 @@ class AgendaController extends AbstractController
 
 
             $data = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $cor = "";
             if ($infoUsuario->matricula == 1) {
@@ -570,8 +562,7 @@ class AgendaController extends AbstractController
     public function eliminarCompromiso(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $data = json_decode($request->getContent(), true);
             $id  = $data['id'];
             $delete = $connection->query("
@@ -706,11 +697,11 @@ class AgendaController extends AbstractController
             $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
             $formaContato = $data['formContactId'];
             $meioContato = $data['typeContactId'];
-            $dataInicial = date('Y/m/d H:i:s', strtotime($data['start']));
-            $dataFinal = !empty($data['end']) ? date('Y/m/d H:i:s', strtotime($data['end'])) : '';
+            $dataInicial = date('d/m/Y H:i:s', strtotime($data['start']));
+            $dataFinal = !empty($data['end']) ? date('d/m/Y H:i:s', strtotime($data['end'])) : '';
             $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
             $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
-            $id = $data['id_agenda'];
+            $id = $data['id'];
             $idVendedor = $data['idVendedor'];
             $status = $data['status'];
 
@@ -729,10 +720,9 @@ class AgendaController extends AbstractController
                     ,@OBSERVACAO = '{$observacao}'
                     ,@VENDEDOR = '{$idVendedor}'
             ")->fetchAll();
-            //dd($res);
 
             if ($res[0]['MSG'] == 'TRUE' && isset($res[0]['ID_AGENDA'])) {
-                $idCompromissoAntigo = $data['id_agenda'];
+                $idCompromissoAntigo = $data['id'];
                 $idCompromissoReagendado = $res[0]['ID_AGENDA'];
                 $motivoReagendamento = $data['rescheduleId'];
 
@@ -786,8 +776,7 @@ class AgendaController extends AbstractController
     public function deleteCompromisso(Connection $connection, Request $request, $id)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $delete = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA_DELETE]
@@ -1056,7 +1045,7 @@ class AgendaController extends AbstractController
 
             $id_agenda = $data['id_agenda'];
             $obs_final = !empty($data['observacion_final']) ? strtoupper($data['observacion_final']) : '';
-            $fecha = date('Y/m/d H:i:s');
+            $fecha = date('d/m/Y H:i:s');
             $destination = "";
           
             $stmt = $connection->prepare("EXEC [dbo].[PRC_AGEN_VEND_FIN]
@@ -1068,7 +1057,6 @@ class AgendaController extends AbstractController
  
              // Obtener el resultado del procedimiento almacenado
              $result = $stmt->fetch();
-             //dd($result);
 
              if (!empty($data['imagen'])) 
              {

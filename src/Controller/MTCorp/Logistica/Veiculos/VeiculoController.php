@@ -36,8 +36,7 @@ class VeiculoController
             $motoristaId        = $data->ID_LOGI_MOTO           ?? null;
             $descricao          = $data->DS_VEIC                ?? null;
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $nrMatricula    = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 

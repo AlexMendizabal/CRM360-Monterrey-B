@@ -868,7 +868,7 @@ class CadastroController extends AbstractController
       }
 
       if (isset($result) && !empty($result)) {
-          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);  
+          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
       } else {
           return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
@@ -1135,10 +1135,8 @@ class CadastroController extends AbstractController
   {
     try {
 
-      $UsuarioController = new UsuarioController();
-      $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-      $ComercialController = new ComercialController();
-      $hasAcessoAlterarStatus = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $hasAcessoAlterarStatus = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
 
       if ($idSituacao == 1) {
         $res = $connection->query(
@@ -1326,11 +1324,9 @@ class CadastroController extends AbstractController
       try {
         $data = json_decode($request->getContent(), true);
 
-        $UsuarioController = new UsuarioController();
-        $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-        $ComercialController = new ComercialController();
-        $hasAprovacaoEndereco = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_APRO');
-        $hasGravaLatLong = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_LAT_LONG');
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $hasAprovacaoEndereco = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_APRO');
+        $hasGravaLatLong = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_ENDE_LAT_LONG');
 
         $codCliente = $data['codCliente'];
 
@@ -1588,68 +1584,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-     * @Route(
-     *  "/comercial/clientes/cadastro/listarcliente/{codCliente}",
-     *  name="comercial.vendedor-cliente",
-     *  methods={"GET"},
-     * )
-     * @return JsonResponse
-     */
-    public function getlistaCliente(Connection $connection, Request $request)
-    {
-        try {
-            $arrFinal = array();
-            $params = $request->query->all();
-            if (isset($params['codCliente']))
-                $codCliente = $params['codCliente'];
-            $query =
-                "SELECT
-				    DISTINCT
-				    codCliente = CLIE.id_cliente,
-				    codigo_cliente = MCBE.codigo_cliente,
-				    codRazaoSocial = CONCAT(CLIE.id_cliente ,'' - '', LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),'''')))),
-				    razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),''''))),
-				    nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
-				    CONCAT(MCBE.logradouro, '' '',  MCBE.numero) AS direccion,
-		        MCBE.latitude as latitud,
-		        MCBE.longitude as longitud 
-			      FROM 
-				    MTCORP_MODU_CLIE_BASE CLIE					
-				    LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
-			      LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
-		        WHERE  CLIE.id_cliente = :codCliente";
-            $stmt = $connection->prepare($query);
-            $stmt->bindValue(':codCliente', $codCliente);
-            $stmt->execute();
-            $res = $stmt->fetchAll();
-            dd($res);
-            if (count($res) > 0) {
-                $message = array(
-                    'responseCode' => 200,
-                    'result' => $res,
-                    'estado' => true
-                );
-            } else {
-                $message = array(
-                    'responseCode' => 204,
-                    'result' => 'No fue posible los obtener datos',
-                    'estado' => false
-
-                );
-            }
-        } catch (\Throwable $e) {
-            $message = array(
-                'responseCode' => $e->getCode(),
-                'message' => $e->getMessage(),
-                'estado' => false
-            );
-        }
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-}
-
-  /**
    * @Route(
    *  "/comercial/clientes/cadastro/carregar/contato/{codCliente}/{idContato}",
    *  name="comercial.clientes-cadastro-carregar-contato",
@@ -1662,25 +1596,46 @@ class CadastroController extends AbstractController
    */
   public function getContato(Connection $connection, Request $request, $codCliente, $idContato)
   {
-  
-      //dd($codCliente, $idContato);
-      //dd($idContato);         
-      try {
-        $res = $connection->query("
+    try {
+      $res = $connection->query("
           EXEC [PRC_CLIE_CONT_CONS]
-            @ID_CLIE = ' ',
-            @ID_SEQU_CONT = '{$idContato}'
+            @ID_CLIE = '{$codCliente}',
+            @ID_SEQU_CONT = '{$idContato}' 
       ")->fetchAll();
-      
-      //dd($res);
+
+
       if (count($res) > 0) {
-         $respt = [
-          'id_contacto' => $res[0]["id_cont"],
-          'nombreCompleto' => $res[0]["ds_cont"],
-          'medioCont' => $res[0]["ds_cont_meio"]
-         ];
-          
-        return FunctionsController::Retorno(true, null, $respt, Response::HTTP_OK);
+
+        if ($res[0]['ID_GENE'] == null) {
+         $res[0]['ID_GENE'] = null;
+        } else if ($res[0]['ID_GENE'] == 1) {
+         $res[0]['DS_GENE'] = 'FEMININO';
+        } else if ($res[0]['ID_GENE'] == 2) {
+         $res[0]['DS_GENE'] = 'MASCULINO';
+        }
+        
+        $contato = new \stdClass;
+        $contato->id = $res[0]['ID_CONT'];
+        $contato->idSeqTid = $res[0]['ID_SEQ_ERP'];
+        $contato->nomeCompleto = $res[0]['DS_CONT'];
+        $contato->idSetor = $res[0]['ID_SETR'];
+        $contato->descSetor = $res[0]['DS_SETR'];
+        $contato->idFuncao = $res[0]['ID_CARG'];
+        $contato->descFuncao = $res[0]['DS_CARG'];
+        $contato->idGenero = $res[0]['ID_GENE'];
+        $contato->descGenero = $res[0]['DS_GENE'];
+        $contato->dataAniversario = $res[0]['DT_ANIV'];
+        $contato->idTimeFutebol = $res[0]['ID_TIME'];
+        $contato->idEstadoCivil = $res[0]['ID_ESTA_CIVI'];
+        $contato->linkedin = $res[0]['DS_LINK'];
+        $contato->facebook = $res[0]['DS_FACE'];
+        $contato->instagram = $res[0]['DS_INST'];
+        $contato->hobbies = $res[0]['DS_HOBB'];
+        $contato->filhos = $this->filhos($connection, $res[0]['ID_CONT']);
+        $contato->observacoes = $res[0]['DS_OBSE'];
+        $contato->contatos = $this->meiosContato($connection, $codCliente, $res[0]['ID_CONT'], $res[0]['ID_SEQ_ERP']);
+
+        return FunctionsController::Retorno(true, null, $contato, Response::HTTP_OK);
       } else {
         return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
@@ -1692,9 +1647,7 @@ class CadastroController extends AbstractController
         Response::HTTP_BAD_REQUEST
       );
     }
-
-  }  
-
+  }
 
   /**
    * @Route(
@@ -2326,8 +2279,7 @@ class CadastroController extends AbstractController
 
        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '\\app\\uploads\\comercial\\clientes\\cadastros\\' . $codCliente . '\\';
       
-       $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
        $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\clientes\\cadastros\\".  $codCliente  ."\\" . $tipoAnexo ."\\" ;
       //  $webPath = '/uploads/comercial/clientes/cadastros/' . $codCliente . '/' ;
@@ -2350,8 +2302,7 @@ class CadastroController extends AbstractController
        $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath;
       //  print_r($webPath);
       //  die();
-       $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+       $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
        $matricula      = $infoUsuario->matricula;
        $nomeUsuario    = $infoUsuario->nomeCompleto;
       
@@ -2403,7 +2354,7 @@ class CadastroController extends AbstractController
   //       $codCliente = $request->request->get('codCliente');
   //       $idAnexo = $request->request->get('idAnexo');
   //       $tipoAnexo = $request->request->get('tipoAnexo');
-  //       $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+  //       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
   //       if (empty($infoUsuario->idVendedor)) {
   //         $idVendedor = VendedorController::idVendedor($connection, $infoUsuario);

@@ -933,14 +933,13 @@ class GestaoComissionamentosController extends AbstractController
     public function getPermissoesAcesso(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $analistaMarketing = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ANAL_MARK');
-            $gerenteEscritorio = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_ESCR');
-            $gerenteMarketing = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_MARK');
-            $gerenteFiscal = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_FISC');
-            $diretorComercial = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'DIRE_COME');
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            $analistaMarketing = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ANAL_MARK');
+            $gerenteEscritorio = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_ESCR');
+            $gerenteMarketing = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_MARK');
+            $gerenteFiscal = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'GERE_FISC');
+            $diretorComercial = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'DIRE_COME');
 
             $matricula = $infoUsuario->matricula;
 
@@ -1227,8 +1226,7 @@ class GestaoComissionamentosController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $linkAnexo       = $document->getFileLink();
 
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $id      = $infoUsuario->id;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -1277,8 +1275,7 @@ class GestaoComissionamentosController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = $params['codAnexo'];
 

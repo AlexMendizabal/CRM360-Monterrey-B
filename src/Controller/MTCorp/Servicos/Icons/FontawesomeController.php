@@ -41,7 +41,7 @@ class FontawesomeController
           ,@pagina            = '$pagina'
           ,@qtItensPorPagina  = '$qtItensPorPagina'
           ,@class             = '$class'
-        SQL;
+      SQL;
 
             $icons = $connection->query($query)->fetchall();
 

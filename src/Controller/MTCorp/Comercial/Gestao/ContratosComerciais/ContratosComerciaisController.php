@@ -725,8 +725,7 @@ class ContratosComerciaisController extends AbstractController
   {
     try {
 
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));  
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));  
         $codContrato = $request->query->get("codContrato");
       /* $codFichaCadastral = $request->query->get("codFichaCadastral"); */
 
@@ -745,8 +744,7 @@ class ContratosComerciaisController extends AbstractController
       $urlAnexo       = $document->getFileLink();
 
 
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -785,8 +783,7 @@ class ContratosComerciaisController extends AbstractController
   {
     try {
       $params = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $codAnexo = null;
 

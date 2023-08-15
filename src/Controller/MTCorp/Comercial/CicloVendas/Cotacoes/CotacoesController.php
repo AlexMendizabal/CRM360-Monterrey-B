@@ -14,6 +14,7 @@ use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
+use App\Services\Helper;
 
 /**
  * Class CotacoesController
@@ -34,10 +35,9 @@ class CotacoesController extends AbstractController
     public function getPermissoesAcesso(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $historicoExclusao = true;
             $duplicataCarteira = true;
 
@@ -80,10 +80,9 @@ class CotacoesController extends AbstractController
     {
         try {
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $ComercialController = new ComercialController();
-            $acessoClientes = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             $params = $request->query->all();
 
@@ -121,10 +120,10 @@ class CotacoesController extends AbstractController
                 return FunctionsController::Retorno(false, "Favor selecionar o vendedor", null, Response::HTTP_OK);
                 exit(0);
             }
-           
+
             if ($codDeposito == null) {
-               
-               
+
+
                 $res = $connection->query("
                 EXEC [PRC_PEDI_CONS]
                      @ID_PARA = 1
@@ -141,9 +140,8 @@ class CotacoesController extends AbstractController
                     ,@ID_PAGI = '{$pagina}'
                     ,@QT_REGI = '{$registros}'
             ")->fetchAll();
-          
             } else {
-                
+
                 $res = $connection->query("
                 EXEC [PRC_PEDI_CONS]
                      @ID_PARA = 1
@@ -204,6 +202,156 @@ class CotacoesController extends AbstractController
         }
     }
 
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/lista_cotizacion",
+     *  name="comercial.ciclo-vendas-cotizaciones-lista",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCotizaciones(Connection $connection, Request $request)
+    {
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $params = $request->query->all();
+
+            $tipoData = 1;
+            $dataInicial = NULL;
+            $dataFinal = NULL;
+            $codSituacao = 0;
+            $nrPedido = NULL;
+            $codEmpresa = NULL;
+            $codDeposito = NULL;
+            $cliente = NULL;
+            $codVendedor = NULL;
+            $orderBy = 'nrPedido';
+            $orderType = 'DESC';
+            $pagina = NULL;
+            $registros = NULL;
+
+            if (isset($params['tipoData'])) $tipoData = $params['tipoData'];
+            if (isset($params['dataInicial'])) $dataInicial = $params['dataInicial'];
+            if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
+            if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
+            if (isset($params['nrPedido'])) $nrPedido = $params['nrPedido'];
+            /* if (isset($params['cliente'])) $cliente = $params['cliente']; */
+            if (isset($params['codVendedor'])) $codVendedor = $params['codVendedor'];
+            if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
+            if (isset($params['orderType'])) $orderType = $params['orderType'];
+            if (isset($params['pagina'])) $pagina = $params['pagina'];
+            if (isset($params['registros'])) $registros = $params['registros'];
+
+            /* Fecha inicial */
+            $order = $orderBy . ' ' . $orderType;
+            /* Fecha Inicial */
+            if (!empty($dataInicial) && $dataInicial !== 'null') {
+                $dataInicialTimestamp = strtotime($dataInicial);
+                if ($dataInicialTimestamp !== false) {
+                    $conditions[] = "OFE.fecha_inicial >= :fecha_inicial";
+                    $bindings['fecha_inicial'] = date('Y-m-d', $dataInicialTimestamp);
+                }
+            }
+
+            /* Fecha Final */
+            if (!empty($dataFinal) && $dataFinal !== 'null') {
+                $dataFinalTimestamp = strtotime($dataFinal);
+                if ($dataFinalTimestamp !== false) {
+                    $conditions[] = "OFE.fecha_final  <= :fecha_final";
+                    $bindings['fecha_final'] = date('Y-m-d', $dataFinalTimestamp);
+                }
+            }
+
+            /* Situacion pedido */
+            if (!empty($codSituacao) && $codSituacao !== 'null' && $codSituacao > 0) {
+                $conditions[] = "OFE.estado_oferta = :estado_oferta";
+                $bindings['estado_oferta'] = $codSituacao;
+            }
+
+            /* Número de pedido */
+            if (!empty($nrPedido) && $nrPedido !== 'null') {
+                $conditions[] = "OFE.codigo_oferta LIKE :nro_pedido";
+                $bindings['nro_pedido'] = '%' . $nrPedido . '%';
+            }
+
+            /* Cliente */
+            /*   if (!empty($cliente) && $cliente !== 'null') {
+                $conditions[] = "MATE.CODIGOMATERIAL LIKE :codigo_material";
+                $bindings['codigo_material'] = '%' . $cliente . '%';
+            } */
+
+            /* Vendedor */
+            if (!empty($codVendedor) && $codVendedor !== 'null') {
+                $conditions[] = "OFE.id_vendedor = :id_vendedor";
+                $bindings['id_vendedor'] = $codVendedor;
+            }
+
+            $query = "SELECT OFE.id AS id_oferta, OFE.codigo_oferta as codigo_oferta, OFE.fecha_creacion as fecha_oferta, OFE.fecha_inicial AS fecha_inicial, OFE.fecha_final AS fecha_final,
+            CLIE.prim_nome as cliente, CONCAT( VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS vendedor,
+            OFE.monto_total as monto_total, OFE.monto_total_bruto as monto_total_bruto, LP.id as id_lista, LP.nombre_lista as lista_precio,
+            OFE.descuento_total as descuento, OFE.cantidad_total as cantidad, UNI.NOMBRE_UNI as unidad, OFE.peso_total as peso_total, ME.id AS id_entrega,
+            ME.nombre_modo_entrega as modo_entrega, OFE.estado_oferta as id_estado_oferta,
+            CASE
+                    WHEN OFE.estado_oferta = 0 THEN 'BORRADOR'
+                    WHEN OFE.estado_oferta = 1 THEN 'VENTA' 
+            ELSE 'RECHAZADO'
+            END AS estado_oferta
+             
+            FROM TB_OFERTA OFE INNER JOIN MTCORP_MODU_CLIE_BASE CLIE on OFE.id_cliente = CLIE.id_cliente 
+            INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID INNER JOIN TB_MONEDA MONEDA ON OFE.id_moneda = MONEDA.id
+            INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id INNER JOIN UNIDADES UNI ON OFE.id_unidad = UNI.ID
+            INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id";
+
+
+
+            if (!empty($conditions)) {
+                $conditionString = implode(' AND ', $conditions);
+                $query .= " WHERE $conditionString";
+            }
+
+            if (count($params) > 0) {
+                $query .= " ORDER BY OFE.id
+                OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
+            } else {
+                $query .= " ORDER BY OFE.id
+                OFFSET 0 ROWS FETCH NEXT 1000 ROWS ONLY";
+            }
+
+            $stmt = $connection->prepare($query);
+            $stmt->execute($bindings);
+            $res = $stmt->fetchAll();
+
+            if (count($res) > 0) {
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $res,
+                    'estado' => true
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => [],
+                    'estado' => false
+                );
+            }
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => 204,
+                'result' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+
+
+
     private function contatosProposta($connection, $codEmpresa, $nrPedido)
     {
         $res = $connection->query("
@@ -241,7 +389,6 @@ class CotacoesController extends AbstractController
             return [];
         }
     }
-
     /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/detalhes/{codEmpresa}/{nrPedido}",
@@ -256,7 +403,7 @@ class CotacoesController extends AbstractController
     public function getDetalhesCotacoes(Connection $connection, Request $request, $codEmpresa, $nrPedido)
     {
         try {
-            
+
             $contatos = $this->contatosProposta($connection, $codEmpresa, $nrPedido);
             $materiais = $this->materiaisProposta($connection, $codEmpresa, $nrPedido);
 
@@ -292,6 +439,70 @@ class CotacoesController extends AbstractController
             $msg = 'Erro ao retornar dados.';
             return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/oferta_detalle",
+     *  name="comercial.ciclo-vendas-oferta_detalle",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDetalleOferta(Connection $connection, Request $request)
+    {
+        try {
+            $arrFinal = array();
+            $params = $request->query->all();
+            if (isset($params['id_oferta'])) $tipoData = $params['id_oferta'];
+            $query =
+                "SELECT MATE.ID_CODIGOMATERIAL as id_material,  OFE.id as id_oferta, MATE.CODIGOMATERIAL as codigo_material, MATE.DESCRICAO as nombre_material,
+                OD.cantidad as cantidad, UNI.SIGLAS_UNI as unidad, PM.precio as precio, OD.cantidad * PM.precio AS total_bruto, PM.precio as precio_descuento, 
+                DEPO.CODIGO_ALMACEN as nombre_almacen, MONE.nombre_moneda as nombre_moneda
+            FROM TB_MATE MATE INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_material = MATE.ID_CODIGOMATERIAL INNER JOIN TB_OFERTA OFE ON OFE.id = OD.id_oferta
+                INNER JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad INNER JOIN TB_LISTA_PRECIO LP ON LP.id = OFE.id_lista_precio INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_lista = LP.id
+                INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OD.id_almacen
+                INNER JOIN TB_MONEDA MONE ON MONE.id = OFE.id_moneda 
+            WHERE MATE.ID_CODIGOMATERIAL = PM.id_material AND OFE.id = :id_oferta";
+
+
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(':id_oferta', $tipoData);
+            $stmt->execute();
+            $res = $stmt->fetchAll();
+
+            if (count($res) > 0) {
+                $arrFinal['analitico'] = $res;
+                $arrFinal['total'] = array(
+                    'quantidade' => 0
+                );
+                for ($i = 0; $i < count($res); $i++) {
+                    $arrFinal['total']['cantidad'] += $res[$i]['total_bruto'];
+                }
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $arrFinal,
+                    'estado' => true
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => 'No fue posible los obtener datos',
+                    'estado' => false
+
+                );
+            }
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 
     /**
@@ -503,7 +714,7 @@ class CotacoesController extends AbstractController
 
             $nrPedido = $params['nrPedido'];
             $codEmpresa = $params['codEmpresa'];
-            
+
 
             $res = $connection->query("
                 EXEC [PRC_PEDI_CADA]
@@ -557,13 +768,13 @@ class CotacoesController extends AbstractController
                 $materiais = substr($materiais, 0, -1);
             }
 
-        //     print_r("EXEC [PRC_PEDI_CADA]
-        //     @ID_PARA = 6
-        //    ,@ID_DEPO = {$codDeposito}
-        //    ,@NR_PEDI = {$nrPedido}
-        //    ,@ID_MATE = '{$materiais}'
-        //    ,@ID_USUA = {$infoUsuario->matricula}");
-        //    die();
+            //     print_r("EXEC [PRC_PEDI_CADA]
+            //     @ID_PARA = 6
+            //    ,@ID_DEPO = {$codDeposito}
+            //    ,@NR_PEDI = {$nrPedido}
+            //    ,@ID_MATE = '{$materiais}'
+            //    ,@ID_USUA = {$infoUsuario->matricula}");
+            //    die();
             $res = $connection->query("
                 EXEC [PRC_PEDI_CADA]
                      @ID_PARA = 6
@@ -913,7 +1124,7 @@ class CotacoesController extends AbstractController
             $codFormaPagamento = isset($params['codFormaPagamento']) ? $params['codFormaPagamento'] : NULL;
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
             $orderBy = isset($params['orderBy']) && $params['orderBy'] == 'nrPedido' ?  1 : 2;
-            
+
             $res = $connection->query("
                 EXECUTE [PRC_COME_ESTO_CONS]
                     @ID_PARAM = 8,
@@ -928,7 +1139,7 @@ class CotacoesController extends AbstractController
                     @ID_FORM_PAGA = {$codFormaPagamento},
                     @ORDER = {$orderBy}
             ")->fetchAll();
-            
+
             //     print_r("
             //     EXECUTE [PRC_COME_ESTO_CONS]
             //         @ID_PARAM = 8,
@@ -1062,7 +1273,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            
+
 
             $codEmpresa = $params['codEmpresa'];
             $codMaterial = $params['codMaterial'];
@@ -1161,7 +1372,7 @@ class CotacoesController extends AbstractController
                 if (count($res) > 0) {
                     for ($i = 0; $i < count($res); $i++) {
                         $material = $this->getMaterial($connection, $res[$i]['codMaterialComplemento'], $codEmpresa, $codCliente, $codEndereco, $codFormaPagamento, $freteConta);
-                        if($material){
+                        if ($material) {
                             $res[$i] = $res[$i] + [$material][0];
                             $res[$i]['nomeMaterialSimilaridade'] = $res[$i]['nomeMaterial'];
                             $codLink = $res[$i]['codMaterialComplemento'];
@@ -1236,7 +1447,7 @@ class CotacoesController extends AbstractController
                 if (count($res) > 0) {
                     for ($i = 0; $i < count($res); $i++) {
                         $material = $this->getMaterial($connection, $codMaterial, $codEmpresa, $codCliente, $codEndereco, $codFormaPagamento, $freteConta);
-                        if(count($material) > 0){
+                        if (count($material) > 0) {
                             $res[$i]['nomeMaterialComplemento'] = $res[$i]['nomeMaterial'];
                             $res[$i]['codMaterialComplemento'] = $res[$i]['codMaterial'];
                             $codLink = $res[$i]['codMaterial'];
@@ -1383,7 +1594,7 @@ class CotacoesController extends AbstractController
                     @ID_MATE = {$codMaterial},
                     @ID_FORM_PAGA = {$codFormaPagamento}
             ")->fetchAll();
-            
+
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
@@ -1424,7 +1635,7 @@ class CotacoesController extends AbstractController
 
             $aux = number_format($tonelada, 3);
             $tonelada = $aux;
-            
+
             $res = $connection->query("
                 EXECUTE [PRC_TIPO_CALC_MATE_CONS]
                     @ID_MATE = {$codMaterial}
@@ -1609,7 +1820,7 @@ class CotacoesController extends AbstractController
             $freteConta = 'NULL';
         }
 
-        
+
         $res = $connection->query("
             EXECUTE [PRC_COME_ESTO_CONS]
                 @ID_PARAM = 8,
@@ -1786,8 +1997,7 @@ class CotacoesController extends AbstractController
     {
         try {
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
 
             $codDeposito = $params['codDeposito'];
@@ -1802,7 +2012,7 @@ class CotacoesController extends AbstractController
                 @ID_MATE = {$codMaterial},
                 @ID_USUA = {$infoUsuario->matricula}");
             exit(0); */
-            
+
             $res = $connection->query("
             EXEC PRC_PEDI_MATE_CADA
                 @ID_PARA = 2,
@@ -1908,7 +2118,7 @@ class CotacoesController extends AbstractController
             $quantidade = isset($carrinho['quantidade']) ? $carrinho['quantidade'] : null;
             $valor = isset($carrinho['valor']) ? $carrinho['valor'] : null;
 
-            
+
             $res = $connection->query("
               EXEC PRC_PEDI_CADA
                 @ID_PARA = 2,                
@@ -1990,25 +2200,25 @@ class CotacoesController extends AbstractController
                 ")->fetchAll();
                 }
 
-                  // @ID_EMPR --ID EMPRESA
-            // ,@NR_PEDI -- NR DO PEDIDO
-            // ,@ID_ITEM_PEDI --ID DO MATERIAL NO PEDIDO
-            // ,@ID_MATE -- ID DO MATERIAL
-            // ,@ID_LOTE -- ID DO LOTE
-            // ,@ALIQ_ICMS -- ALIQUOTA ICMS
-            // ,@ALIQ_IPI -- ALIQUOTA DO IPI
-            // ,@ALIQ_REDU_ICMS --
-            // ,@QT_ITEM --QUANTIDADE DO ITEM NO PEDIDO
-            // ,@QT_QUIL --QUANTIDADE DE QUILOS DO ITEM NO PESO
-            // ,@VR_BASE_ICMS_ST -- VALOR BASE ICMS SUBSTITUIÇÃO TRIBUTÁRIA
-            // ,@VR_ICMS -- VALOR DO ICMS
-            // ,@VR_ICMS_ST -- VALOR DO ICMS SUBSTITUIÇÃO TRIBUTÁRIA
-            // ,@VR_IPI -- VALOR DO IPI
-            // ,@VR_ITEM -- VALOR DO ITEM
-            // ,@VR_UNIT -- VALOR UNITÁRIO
-            // ,@QT_LANC -- QUANTIDADE LANÇADA
-            // ,@MEDI_LANC -- MEDIA LANÇADA
-            // ,@QT_PECA -- QUANTIDADE DE PEÇAS
+                // @ID_EMPR --ID EMPRESA
+                // ,@NR_PEDI -- NR DO PEDIDO
+                // ,@ID_ITEM_PEDI --ID DO MATERIAL NO PEDIDO
+                // ,@ID_MATE -- ID DO MATERIAL
+                // ,@ID_LOTE -- ID DO LOTE
+                // ,@ALIQ_ICMS -- ALIQUOTA ICMS
+                // ,@ALIQ_IPI -- ALIQUOTA DO IPI
+                // ,@ALIQ_REDU_ICMS --
+                // ,@QT_ITEM --QUANTIDADE DO ITEM NO PEDIDO
+                // ,@QT_QUIL --QUANTIDADE DE QUILOS DO ITEM NO PESO
+                // ,@VR_BASE_ICMS_ST -- VALOR BASE ICMS SUBSTITUIÇÃO TRIBUTÁRIA
+                // ,@VR_ICMS -- VALOR DO ICMS
+                // ,@VR_ICMS_ST -- VALOR DO ICMS SUBSTITUIÇÃO TRIBUTÁRIA
+                // ,@VR_IPI -- VALOR DO IPI
+                // ,@VR_ITEM -- VALOR DO ITEM
+                // ,@VR_UNIT -- VALOR UNITÁRIO
+                // ,@QT_LANC -- QUANTIDADE LANÇADA
+                // ,@MEDI_LANC -- MEDIA LANÇADA
+                // ,@QT_PECA -- QUANTIDADE DE PEÇAS
 
                 return FunctionsController::Retorno(true, null, $carrinho, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
@@ -2019,6 +2229,206 @@ class CotacoesController extends AbstractController
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+
+
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/guardar",
+     *  name="comercial.ciclo-vendas-cotacoes-guardar",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function saveCotizacion(Connection $connection, Request $request)
+    {
+        $borrador = 0;
+        $dolar = 1;
+        $boliviano = 2;
+        $id_iva = 1;
+        $kilogramo = 9;
+
+        try {
+            $params = json_decode($request->getContent(), true);
+
+            /* Dados de cotizacion */
+            /*  $nombre_oferta = isset($params['nombre_oferta']) ? $params['nombre_oferta'] : null; */
+            $monto_total = isset($params['monto_total']) ? $params['monto_total'] : null;
+            $monto_total_bruto = isset($params['monto_total_bruto']) ? $params['monto_total_bruto'] : null;
+            $peso_total = isset($params['peso_total']) ? $params['peso_total'] : null;
+            $descuento_total = isset($params['descuento_total']) ? $params['descuento_total'] : null;
+            $cantidad_total = isset($params['cantidad_total']) ? $params['cantidad_total'] : null;
+            $fecha_creacion = date('Y-m-d H:i:s');
+            $id_forma_pago = isset($params['id_forma_pago']) ? $params['id_forma_pago'] : null;
+            $id_lista_precio = isset($params['id_lista_precio']) ? $params['id_lista_precio'] : null;
+            $id_modo_entrega = isset($params['id_modo_entrega']) ? $params['id_modo_entrega'] : null;
+            $id_moneda = $dolar;
+            $id_cliente = isset($params['id_cliente']) ? $params['id_cliente'] : null;
+            $id_vendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : null;
+            /*  $id_unidad = isset($params['id_unidad']) ? $params['id_unidad'] : null; */
+            $id_almacen = isset($params['id_almacen']) ? $params['id_almacen'] : null;
+            $codigo_oferta = isset($params['codigo_oferta']) ? $params['codigo_oferta'] : null;
+            $fecha_final = isset($params['fecha_final']) ? $params['fecha_final'] : null;
+            $fecha_inicial = isset($params['fecha_inicial']) ? $params['fecha_inicial'] : null;
+            $latitud = isset($params['latitud']) ? $params['latitud'] : null;
+            $longitud = isset($params['longitud']) ? $params['longitud'] : null;
+            $id_persona_contacto = isset($params['id_persona_contacto']) ? $params['id_persona_contacto'] : null;
+            $autorizacion = isset($params['autorizacion']) ? $params['autorizacion'] : null;
+            $observacion = isset($params['observacion']) ? $params['observacion'] : null;
+
+
+            $estado_oferta = $borrador;
+
+            $queryCabecera = "INSERT INTO TB_OFERTA (
+                monto_total,
+                monto_total_bruto,
+                peso_total,
+                descuento_total,
+                cantidad_total,
+                fecha_creacion,
+                id_forma_pago,
+                id_lista_precio,
+                id_modo_entrega,
+                id_moneda,
+                id_iva,
+                id_cliente,
+                id_vendedor,
+                id_almacen,
+                codigo_oferta,
+                fecha_final,
+                fecha_inicial,
+                latitud,
+                longitud,
+                estado_oferta,
+                id_persona_contacto, 
+                id_unidad,
+                observacion
+            )
+            VALUES (
+                :monto_total,
+                :monto_total_bruto,
+                :peso_total,
+                :descuento_total,
+                :cantidad_total,
+                :fecha_creacion, 
+                :id_forma_pago,
+                :id_lista_precio,
+                :id_modo_entrega,
+                :id_moneda,
+                :id_iva,
+                :id_cliente,
+                :id_vendedor,
+                :id_almacen,
+                :codigo_de_oferta,
+                :fecha_inicial, 
+                :fecha_final, 
+                :latitud,
+                :longitud,
+                :estado_oferta,
+                :id_persona_contacto,
+                :id_unidad,
+                :observacion
+            );";
+
+            // Preparar y ejecutar la consulta
+            $id_persona_contacto_value = $id_persona_contacto ?? null;
+            $codigo_oferta_value = $codigo_oferta ?? null;
+            $autorizacion_value = $autorizacion ?? null;
+            $observacion_value = $observacion ?? null;
+
+            $stmt = $connection->prepare($queryCabecera);
+            $stmt->execute([
+                'monto_total' => $monto_total,
+                'monto_total_bruto' => $monto_total_bruto,
+                'peso_total' => $peso_total,
+                'descuento_total' => $descuento_total,
+                'cantidad_total' => $cantidad_total,
+                'fecha_creacion' =>  $fecha_creacion,
+                'id_forma_pago' => (int)$id_forma_pago,
+                'id_lista_precio' => (int) $id_lista_precio,
+                'id_modo_entrega' => $id_modo_entrega,
+                'id_moneda' => (int)$id_moneda,
+                'id_iva' => (int)$id_iva,
+                'id_cliente' => (int)$id_cliente,
+                'id_vendedor' => (int)$id_vendedor,
+                'id_almacen' => (int)$id_almacen,
+                'codigo_de_oferta' => $codigo_oferta_value,
+                'fecha_inicial'  => $fecha_inicial,
+                'fecha_final' => $fecha_final,
+                'latitud' => $latitud,
+                'longitud' => $longitud,
+                'estado_oferta' => $estado_oferta,
+                'id_persona_contacto' => (int)$id_persona_contacto_value,
+                'id_unidad' => $kilogramo,
+                'observacion' => $observacion_value
+            ]);
+
+            /* dd($observacion_value);  */
+            $carrinho = $params['carrinho'];
+            $id_oferta = $connection->lastInsertId();
+            if ($id_oferta > 0) {
+                 foreach ($carrinho as $item) {
+                    $id_material = $item['codMaterial'];
+                    $id_presentacion = $item['id_presentacion'];
+                    $id_unidad = $item['id_unidad'];
+                    $cantidad = $item['qtdeItem'];
+                    $descuento = $item['valorDesc'];
+                    $subtotal_bruto = $item['valorTotalBruto'];
+                    $subtotal = $item['valorTotal'];
+                    $id_almacen_carrito = $item['id_almacen_carrito'];
+
+                    $query_detalle = "INSERT INTO TB_OFERTA_DETALLE (
+                    id_oferta, id_material, id_almacen, id_presentacion, id_unidad,cantidad,descuento,subtotal_bruto, subtotal)
+                    VALUES (
+                        :id_oferta, 
+                        :id_material, 
+                        :id_almacen_carrito, 
+                        :id_presentacion, 
+                        :id_unidad, 
+                        :cantidad, 
+                        :descuento, 
+                        :subtotal_bruto, 
+                        :subtotal )";
+                    $stmt = $connection->prepare($query_detalle);
+                    $stmt->execute([
+                        'id_oferta' => $id_oferta,
+                        'id_material' => $id_material,
+                        'id_almacen_carrito' => $id_almacen_carrito,
+                        'id_presentacion' => $id_presentacion,
+                        'id_unidad' => $id_unidad,
+                        'cantidad' => $cantidad,
+                        'descuento' => $descuento,
+                        'subtotal_bruto' => $subtotal_bruto,
+                        'subtotal' => $subtotal,
+                    ]);
+                } 
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => 'Oferta agregada exitosamente',
+                    'id_oferta' => $id_oferta,
+                    'estado' => true
+                );
+            }else{
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => 'Error al insertar la oferta',
+                    'id_oferta' => null,
+                    'estado' => false
+                );
+            }
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => 204,
+                'result' => $e,
+                'id_oferta' => null,
+                'estado' => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 
     /**
@@ -2038,7 +2448,7 @@ class CotacoesController extends AbstractController
 
             $x14 = null;
 
-            /* $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
             
@@ -2206,8 +2616,7 @@ class CotacoesController extends AbstractController
             $linkAnexo       = $document->getFileLink();
 
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $matricula      = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 
@@ -2245,8 +2654,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = json_decode($request->getContent(), true);
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $codAnexo = null;
 
@@ -2334,5 +2742,64 @@ class CotacoesController extends AbstractController
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+
+
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/descuento_cliente",
+     *  name="comercial.ciclo-vendas-cotacoes-descuento-cliente",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDescuentoCliente(Connection $connection, Request $request, Helper $helper)
+    {
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            if ($infoUsuario) {
+                $params = $request->query->all();
+                $id_tipo_cliente = $params['id_tipo_cliente'] ?? null;
+                $cantidad = $params['cantidad'] ?? null;
+                $id_material = $params['id_material'] ?? null;
+                $id_departamento = $params['id_departamento'] ?? null;
+
+                if ($id_tipo_cliente !== null || $cantidad !== null || $id_material !== null || $id_departamento !== null) {
+                    $calcularDescuento = $helper->calcularDesc(
+                        $connection,
+                        (int)$id_tipo_cliente,
+                        (float)$cantidad,
+                        (int)$id_material,
+                        (int)$id_departamento
+                    );
+                    $message = $calcularDescuento;
+                } else {
+                    $message = [
+                        'responseCode' => 400, // Bad Request
+                        'message' => 'No se proporcionaron parámetros válidos.',
+                        'estado' => false
+                    ];
+                }
+            } else {
+                $message = [
+                    'responseCode' => 204, // No Content
+                    'result' => [],
+                    'estado' => false
+                ];
+            }
+        } catch (DBALException  $e) {
+            $message = [
+                'responseCode' => 500, // Internal Server Error
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'estado' => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 }

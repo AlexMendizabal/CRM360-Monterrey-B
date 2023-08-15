@@ -42,8 +42,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -283,8 +282,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -454,8 +452,7 @@ class DashboardVendedorController extends AbstractController
   public function getConcentracaoVendas(Connection $connection, Request $request, $idVendedor)
   {
     try {
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       
       if ($idVendedor == null || $idVendedor == 'null') {
         $idVendedor = VendedorController::idVendedor($connection, $infoUsuario);
@@ -563,8 +560,7 @@ class DashboardVendedorController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
         $podeAcessar = false;
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -779,8 +775,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -1136,8 +1131,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -1381,8 +1375,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -1487,8 +1480,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         
        
 
@@ -1591,8 +1583,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -1697,8 +1688,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';
@@ -1797,8 +1787,7 @@ class DashboardVendedorController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         if ($idEscritorio == null || $idEscritorio == 'null') {
           $idEscritorio = '';

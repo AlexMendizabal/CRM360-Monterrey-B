@@ -605,7 +605,8 @@ class MaterialAssociadoDepositoController extends AbstractController
                      @ID_ASSO_DEPO_MATE = ?
                     ,@ID_USUA = ?
                     ,@NR_IP_USUA = ?
-                ");
+                "
+                );
                 $stmt = $connection->prepare($sql);
                 $stmt->bindValue(1, $idAssoDepoMate);
                 $stmt->bindValue(2, $idUsua);

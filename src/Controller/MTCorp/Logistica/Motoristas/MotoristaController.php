@@ -35,8 +35,7 @@ class MotoristaController
             $inStat             = isset($data->IN_STAT)             ? $data->IN_STAT            : '';
             $observacao         = isset($data->DS_OBSE)             ? $data->DS_OBSE            : '';
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $nrMatricula    = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 

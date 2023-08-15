@@ -269,8 +269,7 @@ class TidSoftwareController extends AbstractController
 
   private function verificaPermissao($acao, $empresas, $request, $connection)
   {
-    $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+    $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
     $unidades = array();
 
     switch ($acao) {
@@ -633,8 +632,7 @@ class TidSoftwareController extends AbstractController
     if ($request->isMethod('POST')) {
       try {
         $data = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         // $infoUsuario->matriculaTid = 1642;
 

@@ -34,8 +34,7 @@ class DisponibilidadeMaterialController extends AbstractController
   {
     try {
       $params = $request->query->all();
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $tipoData = 1;
       $dataInicial = null;
@@ -149,8 +148,7 @@ class DisponibilidadeMaterialController extends AbstractController
   {
     try {
       $data = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       if (!empty($infoUsuario->matricula)) {
         $res = $connection->query(
@@ -209,8 +207,7 @@ class DisponibilidadeMaterialController extends AbstractController
   {
     try {
       $data = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       if (!empty($infoUsuario->matriculaTid)) {
         $res = $connection->query(

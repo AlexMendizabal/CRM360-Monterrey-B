@@ -154,8 +154,7 @@ class ClasseMateriaisController extends AbstractController
     if ($request->isMethod('PUT')) {
       
       $data = json_decode($request->getContent(), true);
-      $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       if (count($data['idManetoni']) == 0) {
         $data['idManetoni'][0] = "NULL"; 

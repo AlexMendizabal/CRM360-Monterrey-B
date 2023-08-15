@@ -14,7 +14,6 @@ use Doctrine\DBAL\DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\ComercialController;
-use Symfony\Component\Validator\Constraints\Count;
 
 /**
  * Class VendedorController
@@ -76,8 +75,7 @@ class VendedorController extends AbstractController
     public function getDetalhesCadastro(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             // $matricula = $infoUsuario->matricula;
             $matricula = 1642;
@@ -187,6 +185,79 @@ class VendedorController extends AbstractController
      */
     public function getClientesCarteira(Connection $connection, Request $request)
     {
+
+        try {
+
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+            $matricula = $acessoClientes ? 0 : $infoUsuario->matricula;
+            $cliente   = $request->query->get("NM_CLIE");
+            $situacao = $request->query->get("situacao");
+
+            $idVendedor = '';
+            if ($infoUsuario->matricula != 1) {
+                $idVendedor = $infoUsuario->idVendedor;
+                $res = $connection->query("
+                EXECUTE [PCR_CLIE_CONS3]
+                    @ID_PARAM = 6
+                    ,@NR_MATR = {$idVendedor}
+                    ,@NM_CLIE = '{$cliente}'
+                    ,@ID_SITU = '{$situacao}'
+                    ,@ID_DEBU = 0
+            ")->fetchAll();
+                /* dd($res); */
+            } else {
+                //dd($request);
+                if ($request->query->get("idVendedor") == '') {
+                    $res = $connection->query("
+                        EXECUTE [PRC_CLIE_CONS]
+                            @ID_PARAM = 6                        
+                            ,@NM_CLIE = '{$cliente}'
+                            ,@ID_SITU = '{$situacao}'
+                    ")->fetchAll();
+                } else {
+                    $idVendedor = $request->query->get("idVendedor");
+                    $res = $connection->query("
+                    EXECUTE [PCR_CLIE_CONS3]
+                        @ID_PARAM = 6
+                        ,@NR_MATR = {$idVendedor}
+                        ,@NM_CLIE = '{$cliente}'
+                        ,@ID_SITU = '{$situacao}'
+                        ,@ID_DEBU = 0
+                    ")->fetchAll();
+                }
+            }
+            /* dd($res); */
+            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+            } else {
+
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+            }
+            if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
+            }
+        } catch (DBALException $e) {
+            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    /**
+     * @Route(
+     *  "/comercial/vendedor/carteira-clientes-cotizacion",
+     *  name="comercial.vendedor-carteira-clientes-cotizacion",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getClientesCarteiraCotizacion(Connection $connection, Request $request)
+    {
         try {
 
             $UsuarioController = new UsuarioController();
@@ -200,7 +271,7 @@ class VendedorController extends AbstractController
                 $idVendedor = $infoUsuario->idVendedor;
 
                 $res = $connection->query("
-                EXECUTE [PCR_CLIE_CONS3]
+                EXECUTE [PCR_CLIE_CONS4]
                     @ID_PARAM = 6
                     ,@NR_MATR = {$idVendedor}
                     ,@NM_CLIE = '{$cliente}'
@@ -208,34 +279,54 @@ class VendedorController extends AbstractController
                     ,@ID_DEBU = 0
             ")->fetchAll();
             } else {
-                $query =
-                    "SELECT
-                    DISTINCT
-                    codCliente = CLIE.id_cliente,
-                    codigo_cliente = CLIE.codigo_cliente,
-                    codRazaoSocial = CLIE.cnpj_cpf,
-                    razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.segu_nome, CHAR(29), ''''), CHAR(129),''''))),
-                    nomeCliente = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),''''))),
-                    MCBE.logradouro as direccion,
-                    MCBE.latitude as latitud,
-                    MCBE.longitude as longitud,
-                    TB_LISTA_PRECIO.nombre_lista as lista,
-                    TB_LISTA_PRECIO.id as id_lista_precio,
-                    VEND.ID as id_vendedor,
-                    concat(VEND.NM_VEND+' ',VEND.NM_RAZA_SOCI) as nombreVendedor
-                    FROM 
-                    MTCORP_MODU_CLIE_BASE CLIE					
-                    LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
-                    LEFT OUTER JOIN MTCORP_MODU_CLIE_BASE_ENDE MCBE on (MCBE.id_cliente = CLIE.id_cliente)
-                    LEFT join tb_ciudad on tb_ciudad.id = MCBE.id_ciudad
-                    LEFT join TB_DEPARTAMENTO on TB_DEPARTAMENTO.id_departamento = tb_ciudad.id_departamento
-                    LEFT join TB_LISTA_PRECIO on TB_LISTA_PRECIO.id_departamento = TB_DEPARTAMENTO.id_departamento
-                   ";
-
-                $stmt = $connection->prepare($query);
-                $stmt->execute();
-                $res = $stmt->fetchAll();
+                $res = $connection->query("
+                EXECUTE [PRC_CLIE_CONS5]
+                    @ID_PARAM = 6
+                    ,@NM_CLIE = '{$cliente}'
+                    ,@ID_SITU = '{$situacao}'
+            ")->fetchAll();
             }
+            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+            } else {
+
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+            }
+        } catch (DBALException $e) {
+            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    /**
+     * @Route(
+     *  "/comercial/vendedor/lista_precio",
+     *  name="comercial.vendedor-lista-precio",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getlistaprecio(Connection $connection, Request $request)
+    {
+       
+        try {
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+
+            $idVendedor = $infoUsuario->idVendedor;
+
+            $res = $connection->query("SELECT 
+                lista.id,
+                lista.nombre_lista
+                FROM TB_LISTA_PRECIO as lista
+            ")->fetchAll();
+
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
 
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -268,17 +359,17 @@ class VendedorController extends AbstractController
             if ($infoUsuario->idVendedor != 64 && $infoUsuario->idVendedor != 88) {
                 $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
                         from TB_VEND where id = :id_vendedor";
-                        $statement = $connection->prepare($query);
-                        $statement->bindValue('id_vendedor', $infoUsuario->idVendedor);
-                        $statement->execute();
-                        //dd($statement);
+                $statement = $connection->prepare($query);
+                $statement->bindValue('id_vendedor', $infoUsuario->idVendedor);
+                $statement->execute();
+                //dd($statement);
 
                 $res = $statement->fetchAll();
-                
+
                 if (isset($res)) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 }
-            }else{
+            } else {
                 //dd('ingreso');
                 $res = $this->todosVendedores($connection);
                 if (count($res) > 0 && !isset($res[0]['ERROR'])) {
@@ -289,50 +380,11 @@ class VendedorController extends AbstractController
                     return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
                 }
             }
- 
         } catch (DBALException $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
-    /**
-     * @Route(
-     *  "/comercial/vendedor/lista_precio",
-     *  name="comercial.vendedor-lista-precio",
-     *  methods={"GET"}
-     * )
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getlistaprecio(Connection $connection, Request $request)
-    {
-        try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
-            $idVendedor = $infoUsuario->idVendedor;
-
-            $res = $connection->query("SELECT 
-                lista.id,
-                lista.nombre_lista
-             FROM TB_LISTA_PRECIO as lista
-            ")->fetchAll();
-
-            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
-
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
-
-                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
-            } else {
-
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
-            }
-        } catch (DBALException $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-        }
-    }
 
     /**
      * @Route(
@@ -348,8 +400,7 @@ class VendedorController extends AbstractController
     public function getValidaClienteCarteira(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
 
             if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
@@ -400,8 +451,7 @@ class VendedorController extends AbstractController
     public function getVinculoOperadores(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_VINC_OPER_CONS] 
@@ -471,8 +521,7 @@ class VendedorController extends AbstractController
     public function FiltrarSucursalVendedor(Connection $connection, Request $request, $id)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             //dd($infoUsuario->idVendedor);
             if ($infoUsuario->idVendedor != 88) {
             } else {

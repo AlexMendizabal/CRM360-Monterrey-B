@@ -36,8 +36,7 @@ class RomaneiosController
             $romaneioId     = isset($data->ID_LOGI_ROMA)        ? $data->ID_LOGI_ROMA           : '';
             $observacao     = isset($data->DS_OBSE)             ? $data->DS_OBSE                : '';
             
-            $usuarioInfo        = $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $usuarioInfo        = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $usuarioMatricula   = $usuarioInfo->matricula;
             $usuarioNome        = $usuarioInfo->nomeCompleto;
             $usuarioId          = $usuarioInfo->id;

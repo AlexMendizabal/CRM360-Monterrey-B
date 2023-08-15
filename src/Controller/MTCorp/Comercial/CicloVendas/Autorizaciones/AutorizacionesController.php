@@ -25,7 +25,7 @@ class AutorizacionesController extends AbstractController
     /**
      * @Route(
      * "/comercial/CicloVendas/autorizaciones", 
-     * name="Autorizaciones"
+     * name="Autorizaciones",
      *  methods={"GET"}
      * )
      * @param Connection $connection
@@ -83,7 +83,7 @@ class AutorizacionesController extends AbstractController
     /**
      * @Route(
      * "/comercial/CicloVendas/autorizaciones/registrar", 
-     * name="Autorizaciones-registrar"
+     * name="Autorizaciones-registrar",
      * methods={"GET"}
      * )
      * @param Connection $connection
@@ -147,7 +147,7 @@ class AutorizacionesController extends AbstractController
     /**
      * @Route(
      * "/comercial/CicloVendas/autorizaciones/estado", 
-     * name="Autorizaciones-registrar"
+     * name="Autorizaciones-registrar",
      * methods={"post"}
      * )
      * @param Connection $connection

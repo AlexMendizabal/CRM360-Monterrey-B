@@ -59,18 +59,14 @@ class CrossSellController extends AbstractController
         ")->fetchAll();
 
         if (count($res) > 0 && !isset($res[0]['message'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['message'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, $res[0]['message'], null, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, $res[0]['message'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
-        return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 
@@ -111,18 +107,14 @@ class CrossSellController extends AbstractController
         }
 
         if (count($arrFinal) > 0 && !isset($res[0]['message'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, null, $arrFinal, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, null, $arrFinal, Response::HTTP_OK);
         } else if (count($arrFinal) > 0 && isset($res[0]['message'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, $res[0]['message'], null, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, $res[0]['message'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
-        return $FunctionsController->Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 
@@ -143,16 +135,13 @@ class CrossSellController extends AbstractController
             $res = $this->associacoesMateriais($connection, $codCrossSell);
 
             if (count($res) > 0) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
             $msg = 'Erro ao retornar dados';
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -194,11 +183,10 @@ class CrossSellController extends AbstractController
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $detalhes = $res[0];
                 $detalhes['materiais'] = $this->associacoesMateriais($connection, $codCrossSell);
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, $detalhes, Response::HTTP_OK);
+
+                return FunctionsController::Retorno(true, null, $detalhes, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
 
             /* $res = $connection->query("
@@ -222,14 +210,13 @@ class CrossSellController extends AbstractController
                     $arrFinal['materiais'][$key]['nomeMaterial'] = $value['nomeMaterialAssociado'];
                 }
 
-                return $FunctionsController->Retorno(true, null, $arrFinal, Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, $arrFinal, Response::HTTP_OK);
             } else {
-                return $FunctionsController->Retorno(false, null, $res, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
             } */
         } catch (\Throwable $e) {
             $msg = 'Erro ao retornar dados';
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return FunctionsController::Retorno(false, $msg, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -245,8 +232,7 @@ class CrossSellController extends AbstractController
     {
       try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         
         $codMaterial = $params['codMaterial'];
         $codSituacao = $params['codSituacao'];
@@ -270,18 +256,14 @@ class CrossSellController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codCrossSell'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['message'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
-        return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 
@@ -297,8 +279,7 @@ class CrossSellController extends AbstractController
     {
       try {
         $params = json_decode($request->getContent(), true);
-        $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         
         $codCrossSell = $params['codCrossSell'];
         $codMaterial = $params['codMaterial'];
@@ -324,18 +305,14 @@ class CrossSellController extends AbstractController
         ")->fetchAll();
 
         if (isset($res[0]['codCrossSell']) && $res[0]['codCrossSell'] == $codCrossSell) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['message'])) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
         } else {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, 'O cadastro não foi atualizado.', null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-        $FunctionsController = new FunctionsController();
-        return $FunctionsController->Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
     }
 
@@ -361,18 +338,14 @@ class CrossSellController extends AbstractController
             ")->fetchAll();
 
             if (isset($res[0]['codCrossSell']) && $res[0]['codCrossSell'] == $codCrossSell) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -399,18 +372,14 @@ class CrossSellController extends AbstractController
             ")->fetchAll();
 
             if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, 'O cadastro não foi ativado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -437,18 +406,14 @@ class CrossSellController extends AbstractController
             ")->fetchAll();
 
             if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, 'O cadastro não foi inativado.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return FunctionsController::Retorno(false, null, $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }

@@ -35,12 +35,11 @@ class LiberacoesController extends AbstractController
 	{
 			try {
 					
-					$UsuarioController = new UsuarioController();
-                    $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-                    $ComercialController = new ComercialController();
-					$liberacoesPadrao = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PPDO');
-					$liberacoesAdm = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PADM');
-					$liberacoesView = $ComercialController->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PVIW');
+					$infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+					$liberacoesPadrao = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PPDO');
+					$liberacoesAdm = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PADM');
+					$liberacoesView = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_LIBE_COME_PVIW');
 					
 
 					$res = array(
@@ -336,8 +335,7 @@ class LiberacoesController extends AbstractController
       try {
 
           $params = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
           $empresa = null;
           $nrPedido = null;
@@ -383,8 +381,7 @@ class LiberacoesController extends AbstractController
       try {
 
           $params = json_decode($request->getContent(), true);
-          $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+          $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
 
           $empresa = null;
