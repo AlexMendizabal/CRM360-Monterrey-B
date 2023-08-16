@@ -456,41 +456,79 @@ class CotacoesController extends AbstractController
             $arrFinal = array();
             $params = $request->query->all();
             if (isset($params['id_oferta'])) $tipoData = $params['id_oferta'];
-            $query =
-                "SELECT MATE.ID_CODIGOMATERIAL as id_material,  OFE.id as id_oferta, MATE.CODIGOMATERIAL as codigo_material, MATE.DESCRICAO as nombre_material,
-                OD.cantidad as cantidad, UNI.SIGLAS_UNI as unidad, PM.precio as precio, OD.cantidad * PM.precio AS total_bruto, PM.precio as precio_descuento, 
-                DEPO.CODIGO_ALMACEN as nombre_almacen, MONE.nombre_moneda as nombre_moneda
-            FROM TB_MATE MATE INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_material = MATE.ID_CODIGOMATERIAL INNER JOIN TB_OFERTA OFE ON OFE.id = OD.id_oferta
-                INNER JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad INNER JOIN TB_LISTA_PRECIO LP ON LP.id = OFE.id_lista_precio INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_lista = LP.id
-                INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OD.id_almacen
-                INNER JOIN TB_MONEDA MONE ON MONE.id = OFE.id_moneda 
-            WHERE MATE.ID_CODIGOMATERIAL = PM.id_material AND OFE.id = :id_oferta";
+
+            $query_oferta =
+                "SELECT OFE.id AS id_oferta, OFE.nombre_oferta AS nombre_oferta, FORMAT(OFE.fecha_inicial, 'dd-MM-yyyy') AS fecha_inicial, FORMAT(OFE.fecha_final, 'dd-MM-yyyy') AS fecha_final, 
+            FORMAT(OFE.fecha_creacion, 'dd-MM-yyyy') AS fecha_creacion, OFE.cantidad_total as cantidad_total, OFE.monto_total_bruto AS monto_total_bruto, OFE.monto_total as monto_total,
+            OFE.descuento_total AS descuento_total, OFE.observacion AS observacion, OFE.latitud AS latitud, OFE.longitud AS longitud, OFE.autorizacion AS auth,
+            OFE.codigo_oferta AS codigo_oferta, OFE.peso_total AS peso_total, 
+                CASE
+                    WHEN  OFE.estado_oferta = 0 THEN 'Borrador'
+                    WHEN  OFE.estado_oferta = 1 THEN 'Venta'
+                    WHEN  OFE.estado_oferta = 2 THEN 'Rechazado'
+                END AS estado_oferta,
+            
+            CLIE.prim_nome AS nombre_cliente, CLIE.id_cliente AS id_cliente, CLIE.codigo_cliente AS codigo_cliente, ME.id AS id_modo_entrega,
+            ME.nombre_modo_entrega AS nombre_modo_entrega, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS nombre_vendedor,
+            DEPO.NOMBRE_DEPOSITO as ubicacion_almacen, DEPO.CODIGO_ALMACEN AS codigo_almacen,  LP.nombre_lista AS nombre_lista
+            
+            FROM TB_OFERTA OFE 
+                INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
+                INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
+                INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+                INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
+                LEFT JOIN TB_DEPO_FISI_ESTO AS DEPO ON OFE.id_almacen = DEPO.id
+            WHERE  OFE.id = :id_oferta";
+            $stmt1 = $connection->prepare($query_oferta);
+            $stmt1->bindValue(':id_oferta', $tipoData);
+            $stmt1->execute();
+            $res1 = $stmt1->fetchAll();
+
+            if (count($res1) > 0) {
+                $arrFinal['oferta'] = $res1;
+                $query =
+                    "SELECT OD.id, MATE.ID_CODIGOMATERIAL as id_material,  OFE.id as id_oferta, MATE.CODIGOMATERIAL as codigo_material, MATE.DESCRICAO as nombre_material,
+                    UNI.SIGLAS_UNI as unidad, PM.precio as precio,  OD.cantidad as cantidad,  OD.subtotal_bruto AS total_bruto, od.descuento as precio_descuento,
+                    od.subtotal as subtotal,
+                    DEPO.CODIGO_ALMACEN as nombre_almacen, MONE.nombre_moneda as nombre_moneda
+                FROM TB_MATE MATE INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_material = MATE.ID_CODIGOMATERIAL INNER JOIN TB_OFERTA OFE ON OFE.id = OD.id_oferta
+                    INNER JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad INNER JOIN TB_LISTA_PRECIO LP ON LP.id = OFE.id_lista_precio INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_lista = LP.id
+                    INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OD.id_almacen
+                    INNER JOIN TB_MONEDA MONE ON MONE.id = OFE.id_moneda 
+                WHERE MATE.ID_CODIGOMATERIAL = PM.id_material AND OFE.id = :id_oferta";
 
 
-            $stmt = $connection->prepare($query);
-            $stmt->bindValue(':id_oferta', $tipoData);
-            $stmt->execute();
-            $res = $stmt->fetchAll();
+                $stmt = $connection->prepare($query);
+                $stmt->bindValue(':id_oferta', $tipoData);
+                $stmt->execute();
+                $res = $stmt->fetchAll();
+                /* dd($res); */
 
-            if (count($res) > 0) {
-                $arrFinal['analitico'] = $res;
-                $arrFinal['total'] = array(
-                    'quantidade' => 0
-                );
-                for ($i = 0; $i < count($res); $i++) {
-                    $arrFinal['total']['cantidad'] += $res[$i]['total_bruto'];
+                if (count($res) > 0) {
+                    $arrFinal['analitico'] = $res;
+                    $arrFinal['total'] = array(
+                        'quantidade' => 0
+                    );
+                    for ($i = 0; $i < count($res); $i++) {
+                        $arrFinal['total']['cantidad'] += $res[$i]['total_bruto'];
+                    }
+                    $message = array(
+                        'responseCode' => 200,
+                        'result' => $arrFinal,
+                        'estado' => true
+                    );
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'result' => 'No fue posible los obtener datos del detalle',
+                        'estado' => false
+                    );
                 }
-                $message = array(
-                    'responseCode' => 200,
-                    'result' => $arrFinal,
-                    'estado' => true
-                );
             } else {
                 $message = array(
                     'responseCode' => 204,
-                    'result' => 'No fue posible los obtener datos',
+                    'result' => 'No fue posible los obtener datos de la oferta',
                     'estado' => false
-
                 );
             }
         } catch (\Throwable $e) {
@@ -2260,7 +2298,7 @@ class CotacoesController extends AbstractController
             $peso_total = isset($params['peso_total']) ? $params['peso_total'] : null;
             $descuento_total = isset($params['descuento_total']) ? $params['descuento_total'] : null;
             $cantidad_total = isset($params['cantidad_total']) ? $params['cantidad_total'] : null;
-            $fecha_creacion = date('Y-m-d H:i:s');
+            $fecha_creacion = date('d-m-y H:i:s');
             $id_forma_pago = isset($params['id_forma_pago']) ? $params['id_forma_pago'] : null;
             $id_lista_precio = isset($params['id_lista_precio']) ? $params['id_lista_precio'] : null;
             $id_modo_entrega = isset($params['id_modo_entrega']) ? $params['id_modo_entrega'] : null;
@@ -2277,7 +2315,7 @@ class CotacoesController extends AbstractController
             $id_persona_contacto = isset($params['id_persona_contacto']) ? $params['id_persona_contacto'] : null;
             $autorizacion = isset($params['autorizacion']) ? $params['autorizacion'] : null;
             $observacion = isset($params['observacion']) ? $params['observacion'] : null;
-
+            /* dd($latitud); */
 
             $estado_oferta = $borrador;
 
@@ -2322,8 +2360,8 @@ class CotacoesController extends AbstractController
                 :id_vendedor,
                 :id_almacen,
                 :codigo_de_oferta,
-                :fecha_inicial, 
-                :fecha_final, 
+                :fecha_final,
+                :fecha_inicial,  
                 :latitud,
                 :longitud,
                 :estado_oferta,
@@ -2369,7 +2407,7 @@ class CotacoesController extends AbstractController
             $carrinho = $params['carrinho'];
             $id_oferta = $connection->lastInsertId();
             if ($id_oferta > 0) {
-                 foreach ($carrinho as $item) {
+                foreach ($carrinho as $item) {
                     $id_material = $item['codMaterial'];
                     $id_presentacion = $item['id_presentacion'];
                     $id_unidad = $item['id_unidad'];
@@ -2403,14 +2441,14 @@ class CotacoesController extends AbstractController
                         'subtotal_bruto' => $subtotal_bruto,
                         'subtotal' => $subtotal,
                     ]);
-                } 
+                }
                 $message = array(
                     'responseCode' => 200,
                     'result' => 'Oferta agregada exitosamente',
                     'id_oferta' => $id_oferta,
                     'estado' => true
                 );
-            }else{
+            } else {
                 $message = array(
                     'responseCode' => 204,
                     'result' => 'Error al insertar la oferta',
@@ -2419,6 +2457,7 @@ class CotacoesController extends AbstractController
                 );
             }
         } catch (\Throwable $e) {
+            dd($e);
             $message = array(
                 'responseCode' => 204,
                 'result' => $e,

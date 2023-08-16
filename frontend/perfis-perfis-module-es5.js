@@ -38,7 +38,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar [hidden]=\"!loadingNavBar\"></loader-spinner-navbar>\r\n<app-header [appTitle]=\"appTitle\">\r\n  <button \r\n    (click)=\"onSave()\"\r\n    [disabled] = \"form.status == 'INVALID'\"\r\n    >\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row\">\r\n    <div class=\"col-lg-6\">\r\n      <form\r\n        [formGroup]=\"form\"\r\n        class=\"d-flex flex-column\"\r\n        autocomplete=\"off\"\r\n        [hidden]=\"loading\"\r\n      >\r\n        <div class=\"mtc-title\">Dados do perfil</div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"nome\">Nome</label>\r\n            <input\r\n              id=\"nome\"\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"nome\"\r\n              placeholder=\"Digite...\"\r\n              [ngClass]=\"onFieldRequired('nome')\"\r\n            >\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome')\" message=\"Nome é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-6\">\r\n            <label for=\"sigla\">Sigla</label>\r\n            <input \r\n              id=\"sigla\"\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"sigla\"\r\n              placeholder=\"Digite...\"\r\n              [ngClass]=\"onFieldRequired('sigla')\"\r\n            >\r\n            <invalid-form-control [show]=\"onFieldInvalid('sigla')\" message=\"Sigla é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"situacao\">Situação</label>\r\n            <select\r\n              name=\"situacao\"\r\n              id=\"situacao\"\r\n              class=\"form-control\"\r\n              formControlName=\"situacao\"\r\n            >\r\n              <option value=\"1\">Ativo</option>\r\n              <option value=\"0\">Inativo</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n      <div class=\"row mb-4\">\r\n        <div class=\"col mb-3\">\r\n          <hr>\r\n        </div>\r\n      </div>\r\n      <message\r\n        *ngIf=\"atividadesAssociadasLoading\"\r\n        icon=\"fas fa-cog fa-spin\"\r\n        text=\"Estamos buscando informações do perfil selecionado...\">\r\n      </message>\r\n      <div [hidden]=\"atividadesAssociadasLoading\">\r\n        <div class=\"row mb-2 mt-4\">\r\n          <div class=\"col mt-auto\">\r\n            <div class=\"mtc-title mb-0\">Atividades associados ao perfil</div>\r\n          </div>\r\n          <div class=\"col\">\r\n            <div class=\"d-flex justify-content-end\">\r\n              <button\r\n                type=\"button\"\r\n                class=\"btn btn-sm btn-outline-danger\"\r\n                (click)=\"onRemoverAssociacao()\">\r\n                <i class=\"fas fa-trash\"></i>\r\n                <span>Limpar</span>\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\" *ngIf=\"!atividadesAssociadasLoading && atividadesAssociadas.length > 0\">\r\n          <div class=\"col\">\r\n            <custom-table [config]=\"tableConfigAtividadesAssociadas\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th\r\n                    scope=\"col\"\r\n                    class=\"text-center\"\r\n                    style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"toggle?.atividadesAssociadas ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"onToggleAll('atividadesAssociadas')\">\r\n                    </btn-icon>\r\n                  </th>\r\n                  <th scope=\"col\" width=\"20%\">Código</th>\r\n                  <th scope=\"col\" width=\"70%\">Descrição</th>\r\n                  <th scope=\"col\" width=\"5%\"></th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of atividadesAssociadas\" >\r\n                  <td class=\"text-center\" style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"item.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"item.checked = !item.checked\">\r\n                    </btn-icon>\r\n                  </td>\r\n                  <td width=\"20%\">{{ item.id }}</td>\r\n                  <td width=\"70%\">\r\n                   {{ item.nome | uppercase }}\r\n                  </td>\r\n                  <td class=\"text-center\" width=\"5%\">\r\n                    <btn-icon\r\n                      icon=\"fas fa-trash\"\r\n                      size=\"small\"\r\n                      (click)=\"onRemoverAssociacao(item)\"\r\n                      *ngIf=\"!item.loading\"  \r\n                    >\r\n                    </btn-icon>\r\n                    <div class=\"text-primary small\" *ngIf=\"item.loading\">\r\n                      <i class=\"fas fa-spinner fa-spin\"></i>\r\n                    </div>\r\n                  </td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\" *ngIf=\"!atividadesLoading && atividadesAssociadas.length === 0\">\r\n          <div class=\"col\">\r\n            <message\r\n              icon=\"fas fa-exchange-alt\"\r\n              text=\"Nenhuma associação encontrada\">\r\n            </message>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-lg-6 border-left\">\r\n      <div class=\"row mb-2\">\r\n        <div class=\"col mt-auto\">\r\n          <div class=\"mtc-title mb-0\">Pesquisa de Atividades</div>\r\n        </div>\r\n        <div class=\"col\">\r\n          <div class=\"d-flex justify-content-end\">\r\n            <button\r\n              type=\"button\"\r\n              class=\"btn btn-sm btn-outline-secondary\"\r\n              (click)=\"getAtividades()\">\r\n              <i class=\"fas fa-search\"></i>\r\n            </button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <advanced-filter>\r\n        <form [formGroup]=\"formAtividades\" autocomplete=\"off\">\r\n          <div class=\"form-row\">\r\n            <div class=\"form-group col-4\">\r\n              <label for=\"buscarPor\">BUSCAR POR</label>\r\n              <select\r\n                class=\"form-control custom-select\"\r\n                formControlName=\"buscarPor\"\r\n              >\r\n                <option value=\"id\">Id</option>\r\n                <option value=\"nome\" selected>Nome</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"form-group col-8\">\r\n              <label>TERMO DE PESQUISA</label>\r\n              <div class=\"input-group\">\r\n                <input\r\n                  type=\"text\"\r\n                  class=\"form-control\"\r\n                  formControlName=\"pesquisa\"\r\n                  (keyup.enter)=\"getAtividades()\"\r\n                >\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </advanced-filter>\r\n      <div *ngIf=\"atividades.length > 0 && !atividadesLoading\">\r\n        <div class=\"row mb-2\">\r\n          <div class=\"col mt-auto\">\r\n            <div class=\"mtc-title mb-0\">Seleção de Atividades</div>\r\n          </div>\r\n          <div class=\"col\">\r\n            <div class=\"d-flex justify-content-end\">\r\n              <button\r\n                type=\"button\"\r\n                class=\"btn btn-sm btn-outline-primary\"\r\n                (click)=\"onAssociarAtividades()\"\r\n                [disabled]=\"!form.get('id')?.value\">\r\n                <i class=\"fas fa-exchange-alt\"></i>\r\n                <span\r\n                  [tooltip]=\"!form.get('id')?.value ? 'Selecione um perfil':''\"\r\n                  container=\"body\"\r\n                  placement =\"left\">Associar\r\n                </span>\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"col\">\r\n            <custom-table [config]=\"tableConfigAtividades\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th\r\n                    scope=\"col\"\r\n                    class=\"text-center\"\r\n                    style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"toggle?.atividades ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"onToggleAll('atividades')\">\r\n                    </btn-icon>\r\n                  </th>\r\n                  <th scope=\"col\" style=\"width: 90%\">Atividades</th>\r\n                  <th style=\"width: 5%\"></th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of atividades\">\r\n                  <td class=\"text-center\" style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"item.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"item.checked = !item.checked\">\r\n                    </btn-icon>\r\n                  </td>\r\n                  <td\r\n                    class=\"hover\"\r\n                    style=\"width: 90%\"\r\n                    (click)=\"item.checked = !item.checked\">\r\n                    ({{ item.moduloNome }}) ({{ item.id }}) {{ item.nome | uppercase }}\r\n                  </td>\r\n                  <td style=\"width: 5%\">\r\n                    <div class=\"text-primary small\" *ngIf=\"item.loading\">\r\n                      <i class=\"fas fa-spinner fa-spin\"></i>\r\n                    </div>\r\n                  </td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"atividadesLoading\">\r\n        <div class=\"col\">\r\n          <message\r\n            icon=\"fas fa-cog fa-spin\"\r\n            text=\"Estamos pesquisando os atividades para você...\">\r\n          </message>\r\n        </div>\r\n      </div>\r\n      <div>\r\n        <div class=\"row\" *ngIf=\"(atividades.length == 0) && !atividadesLoading\">\r\n          <div class=\"col\">\r\n            <message\r\n              icon=\"fas fa-box-open\"\r\n              text=\"Nenhuma informação encontrada\">\r\n            </message>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar [hidden]=\"!loadingNavBar\"></loader-spinner-navbar>\r\n<app-header [appTitle]=\"appTitle\">\r\n  <button \r\n    (click)=\"onSave()\"\r\n    [disabled] = \"form.status == 'INVALID'\"\r\n    >\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row\">\r\n    <div class=\"col-lg-6\">\r\n      <form\r\n        [formGroup]=\"form\"\r\n        class=\"d-flex flex-column\"\r\n        autocomplete=\"off\"\r\n        [hidden]=\"loading\"\r\n      >\r\n        <div class=\"mtc-title\">Datos de perfil</div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"nome\">Nombre</label>\r\n            <input\r\n              id=\"nome\"\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"nome\"\r\n              placeholder=\"Digite...\"\r\n              [ngClass]=\"onFieldRequired('nome')\"\r\n            >\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome')\" message=\"El nombre es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-6\">\r\n            <label for=\"sigla\">Sigla</label>\r\n            <input \r\n              id=\"sigla\"\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"sigla\"\r\n              placeholder=\"Digite...\"\r\n              [ngClass]=\"onFieldRequired('sigla')\"\r\n            >\r\n            <invalid-form-control [show]=\"onFieldInvalid('sigla')\" message=\"La sigla es obligatoria.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"situacao\">Situación</label>\r\n            <select\r\n              name=\"situacao\"\r\n              id=\"situacao\"\r\n              class=\"form-control\"\r\n              formControlName=\"situacao\"\r\n            >\r\n              <option value=\"1\">Activo</option>\r\n              <option value=\"0\">Inactivo</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n      <div class=\"row mb-4\">\r\n        <div class=\"col mb-3\">\r\n          <hr>\r\n        </div>\r\n      </div>\r\n      <message\r\n        *ngIf=\"atividadesAssociadasLoading\"\r\n        icon=\"fas fa-cog fa-spin\"\r\n        text=\"Estamos buscando la información del perfil seleccionado...\">\r\n      </message>\r\n      <div [hidden]=\"atividadesAssociadasLoading\">\r\n        <div class=\"row mb-2 mt-4\">\r\n          <div class=\"col mt-auto\">\r\n            <div class=\"mtc-title mb-0\">Actividades asociados al perfil</div>\r\n          </div>\r\n          <div class=\"col\">\r\n            <div class=\"d-flex justify-content-end\">\r\n              <button\r\n                type=\"button\"\r\n                class=\"btn btn-sm btn-outline-danger\"\r\n                (click)=\"onRemoverAssociacao()\">\r\n                <i class=\"fas fa-trash\"></i>\r\n                <span>Limpiar</span>\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\" *ngIf=\"!atividadesAssociadasLoading && atividadesAssociadas.length > 0\">\r\n          <div class=\"col\">\r\n            <custom-table [config]=\"tableConfigAtividadesAssociadas\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th\r\n                    scope=\"col\"\r\n                    class=\"text-center\"\r\n                    style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"toggle?.atividadesAssociadas ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"onToggleAll('atividadesAssociadas')\">\r\n                    </btn-icon>\r\n                  </th>\r\n                  <th scope=\"col\" width=\"20%\">Código</th>\r\n                  <th scope=\"col\" width=\"70%\">Descripción</th>\r\n                  <th scope=\"col\" width=\"5%\"></th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of atividadesAssociadas\" >\r\n                  <td class=\"text-center\" style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"item.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"item.checked = !item.checked\">\r\n                    </btn-icon>\r\n                  </td>\r\n                  <td width=\"20%\">{{ item.id }}</td>\r\n                  <td width=\"70%\">\r\n                   {{ item.nome | uppercase }}\r\n                  </td>\r\n                  <td class=\"text-center\" width=\"5%\">\r\n                    <btn-icon\r\n                      icon=\"fas fa-trash\"\r\n                      size=\"small\"\r\n                      (click)=\"onRemoverAssociacao(item)\"\r\n                      *ngIf=\"!item.loading\"  \r\n                    >\r\n                    </btn-icon>\r\n                    <div class=\"text-primary small\" *ngIf=\"item.loading\">\r\n                      <i class=\"fas fa-spinner fa-spin\"></i>\r\n                    </div>\r\n                  </td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\" *ngIf=\"!atividadesLoading && atividadesAssociadas.length === 0\">\r\n          <div class=\"col\">\r\n            <message\r\n              icon=\"fas fa-exchange-alt\"\r\n              text=\"Ninguna información encontrada\">\r\n            </message>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-lg-6 border-left\">\r\n      <div class=\"row mb-2\">\r\n        <div class=\"col mt-auto\">\r\n          <div class=\"mtc-title mb-0\">Búsqueda de Actividades</div>\r\n        </div>\r\n        <div class=\"col\">\r\n          <div class=\"d-flex justify-content-end\">\r\n            <button\r\n              type=\"button\"\r\n              class=\"btn btn-sm btn-outline-secondary\"\r\n              (click)=\"getAtividades()\">\r\n              <i class=\"fas fa-search\"></i>\r\n            </button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <advanced-filter>\r\n        <form [formGroup]=\"formAtividades\" autocomplete=\"off\">\r\n          <div class=\"form-row\">\r\n            <div class=\"form-group col-4\">\r\n              <label for=\"buscarPor\">BUSCAR POR</label>\r\n              <select\r\n                class=\"form-control custom-select\"\r\n                formControlName=\"buscarPor\"\r\n              >\r\n                <option value=\"id\">Id</option>\r\n                <option value=\"nome\" selected>Nombre</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"form-group col-8\">\r\n              <label>TÉRMINO DE BÚSQUEDA</label>\r\n              <div class=\"input-group\">\r\n                <input\r\n                  type=\"text\"\r\n                  class=\"form-control\"\r\n                  formControlName=\"pesquisa\"\r\n                  (keyup.enter)=\"getAtividades()\"\r\n                >\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </advanced-filter>\r\n      <div *ngIf=\"atividades.length > 0 && !atividadesLoading\">\r\n        <div class=\"row mb-2\">\r\n          <div class=\"col mt-auto\">\r\n            <div class=\"mtc-title mb-0\">Selección de Actividades</div>\r\n          </div>\r\n          <div class=\"col\">\r\n            <div class=\"d-flex justify-content-end\">\r\n              <button\r\n                type=\"button\"\r\n                class=\"btn btn-sm btn-outline-primary\"\r\n                (click)=\"onAssociarAtividades()\"\r\n                [disabled]=\"!form.get('id')?.value\">\r\n                <i class=\"fas fa-exchange-alt\"></i>\r\n                <span\r\n                  [tooltip]=\"!form.get('id')?.value ? 'Selecione un perfil':''\"\r\n                  container=\"body\"\r\n                  placement =\"left\">Asociar\r\n                </span>\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"col\">\r\n            <custom-table [config]=\"tableConfigAtividades\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th\r\n                    scope=\"col\"\r\n                    class=\"text-center\"\r\n                    style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"toggle?.atividades ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"onToggleAll('atividades')\">\r\n                    </btn-icon>\r\n                  </th>\r\n                  <th scope=\"col\" style=\"width: 90%\">Atividades</th>\r\n                  <th style=\"width: 5%\"></th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of atividades\">\r\n                  <td class=\"text-center\" style=\"width: 5%\">\r\n                    <btn-icon\r\n                      [icon]=\"item.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\"\r\n                      size=\"small\"\r\n                      (click)=\"item.checked = !item.checked\">\r\n                    </btn-icon>\r\n                  </td>\r\n                  <td\r\n                    class=\"hover\"\r\n                    style=\"width: 90%\"\r\n                    (click)=\"item.checked = !item.checked\">\r\n                    ({{ item.moduloNome }}) ({{ item.id }}) {{ item.nome | uppercase }}\r\n                  </td>\r\n                  <td style=\"width: 5%\">\r\n                    <div class=\"text-primary small\" *ngIf=\"item.loading\">\r\n                      <i class=\"fas fa-spinner fa-spin\"></i>\r\n                    </div>\r\n                  </td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"atividadesLoading\">\r\n        <div class=\"col\">\r\n          <message\r\n            icon=\"fas fa-cog fa-spin\"\r\n            text=\"Estamos buscando las atividades para usted...\">\r\n          </message>\r\n        </div>\r\n      </div>\r\n      <div>\r\n        <div class=\"row\" *ngIf=\"(atividades.length == 0) && !atividadesLoading\">\r\n          <div class=\"col\">\r\n            <message\r\n              icon=\"fas fa-box-open\"\r\n              text=\"Ninguna información encontrada\">\r\n            </message>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>";
       /***/
     },
 
@@ -227,7 +227,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -359,7 +359,7 @@
           this.activatedRoute = activatedRoute;
           this.router = router;
           this.confirmModalService = confirmModalService;
-          this.appTitle = "Cadastros";
+          this.appTitle = "Registros";
           this.loading = true;
           this.loadingNavBar = false;
           /* Pagination */
@@ -411,7 +411,7 @@
               descricao: 'Home',
               routerLink: "/admin/home"
             }, {
-              descricao: 'Lista de perfis',
+              descricao: 'Lista de perfiles',
               routerLink: "/admin/perfis"
             }, {
               descricao: this.appTitle
@@ -509,15 +509,16 @@
             var _this2 = this;
 
             this.loadingNavBar = true;
-            var params = this.form.value;
+            var params = this.form.value; //console.log(params);
+
             this.service.postPerfil(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["finalize"])(function () {
               _this2.loadingNavBar = false;
             })).subscribe(function (response) {
               _this2.pnotify.success();
+              /*this.router.navigate(["./../"], {
+                 relativeTo: this.activatedRoute
+               });*/
 
-              _this2.router.navigate(["./../"], {
-                relativeTo: _this2.activatedRoute
-              });
             }, function (error) {
               var _a;
 
@@ -526,9 +527,32 @@
             });
           }
         }, {
+          key: "onEliminar",
+          value: function onEliminar() {
+            var _this3 = this;
+
+            this.loadingNavBar = true;
+            var params = this.form.value; //console.log(params);
+
+            this.service.postPerfil(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["finalize"])(function () {
+              _this3.loadingNavBar = false;
+            })).subscribe(function (response) {
+              _this3.pnotify["delete"]();
+              /*this.router.navigate(["./../"], {
+                 relativeTo: this.activatedRoute
+               });*/
+
+            }, function (error) {
+              var _a;
+
+              var message = (_a = error.error) === null || _a === void 0 ? void 0 : _a.message;
+              message ? _this3.pnotify.error(message) : _this3.pnotify.error();
+            });
+          }
+        }, {
           key: "getAtividades",
           value: function getAtividades() {
-            var _this3 = this;
+            var _this4 = this;
 
             var _a, _b;
 
@@ -543,29 +567,29 @@
             this.toggle.atividades = false;
             this.atividadesLoading = true;
             this.atividadesService.getAtividades(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["finalize"])(function () {
-              _this3.atividadesLoading = false;
+              _this4.atividadesLoading = false;
             })).subscribe(function (response) {
               if (response.status != 200) {
-                _this3.atividades = [];
+                _this4.atividades = [];
                 return;
               }
 
               var data = response.body['data'];
-              _this3.atividades = data.filter(function (atividade) {
-                return !_this3.atividadesAssociadas.some(function (item) {
+              _this4.atividades = data.filter(function (atividade) {
+                return !_this4.atividadesAssociadas.some(function (item) {
                   return item.id == atividade.id;
                 });
               });
-              _this3.tableConfigAtividades.fixedHeader = _this3.atividades.length > 9 ? true : false;
+              _this4.tableConfigAtividades.fixedHeader = _this4.atividades.length > 9 ? true : false;
             }, function (error) {
-              _this3.atividades = [];
+              _this4.atividades = [];
               console.log(error);
             });
           }
         }, {
           key: "getAtividadesAssociadas",
           value: function getAtividadesAssociadas(params) {
-            var _this4 = this;
+            var _this5 = this;
 
             params.IN_STAT = '1';
             params.IN_PAGI = '0';
@@ -573,20 +597,21 @@
 
             this.atividadesAssociadasLoading = true;
             this.atividadesService.getAtividades(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["finalize"])(function () {
-              _this4.atividadesAssociadasLoading = false;
+              _this5.atividadesAssociadasLoading = false;
             })).subscribe(function (response) {
               if (response.status !== 200) {
                 return;
               }
 
-              _this4.atividadesAssociadas = response.body['data'];
-              _this4.tableConfigAtividadesAssociadas.fixedHeader = _this4.atividadesAssociadas.length > 9 ? true : false;
+              console.log(response);
+              _this5.atividadesAssociadas = response.body['data'];
+              _this5.tableConfigAtividadesAssociadas.fixedHeader = _this5.atividadesAssociadas.length > 9 ? true : false;
             });
           }
         }, {
           key: "onAssociarAtividades",
           value: function onAssociarAtividades() {
-            var _this5 = this;
+            var _this6 = this;
 
             var atividades = this.atividades.filter(function (material) {
               return material.checked;
@@ -597,7 +622,7 @@
 
               item.loading = true;
 
-              if (_this5.atividadesAssociadas.some(function (atividade) {
+              if (_this6.atividadesAssociadas.some(function (atividade) {
                 return (atividade === null || atividade === void 0 ? void 0 : atividade.id) === item.id;
               })) {
                 return;
@@ -605,22 +630,22 @@
 
               var params = {
                 "atividadeId": (_a = item === null || item === void 0 ? void 0 : item.id) !== null && _a !== void 0 ? _a : "",
-                "perfilId": (_b = _this5.form.get("id").value) !== null && _b !== void 0 ? _b : "",
+                "perfilId": (_b = _this6.form.get("id").value) !== null && _b !== void 0 ? _b : "",
                 "status": "1"
               };
 
-              _this5.service.postAtividadesAssociadas(params).subscribe(function (response) {
+              _this6.service.postAtividadesAssociadas(params).subscribe(function (response) {
                 if (response.status === 200) {
-                  _this5.atividadesAssociadas = [].concat(_toConsumableArray(_this5.atividadesAssociadas), [Object.assign(Object.assign({}, item), {
+                  _this6.atividadesAssociadas = [].concat(_toConsumableArray(_this6.atividadesAssociadas), [Object.assign(Object.assign({}, item), {
                     checked: false,
                     loading: false,
                     attividadeId: item.id,
-                    perfilId: _this5.form.get("id").value
+                    perfilId: _this6.form.get("id").value
                   })]);
-                  _this5.atividades = _this5.atividades.filter(function (material) {
+                  _this6.atividades = _this6.atividades.filter(function (material) {
                     return !material.checked;
                   });
-                  _this5.tableConfigAtividadesAssociadas.fixedHeader = _this5.atividadesAssociadas.length > 9 ? true : false;
+                  _this6.tableConfigAtividadesAssociadas.fixedHeader = _this6.atividadesAssociadas.length > 9 ? true : false;
                 }
               }, function (error) {
                 item.loading = false;
@@ -635,7 +660,7 @@
         }, {
           key: "onRemoverAssociacao",
           value: function onRemoverAssociacao(atividade) {
-            var _this6 = this;
+            var _this7 = this;
 
             var _atividades = atividade ? [atividade] : this.atividadesAssociadas.filter(function (atividade) {
               return atividade.checked;
@@ -644,7 +669,7 @@
             var atividades = _atividades.map(function (item) {
               return {
                 atividadeId: item.id,
-                perfilId: _this6.form.get('id').value
+                perfilId: _this7.form.get('id').value
               };
             });
 
@@ -657,7 +682,7 @@
 
             this.confirmDelete().subscribe(function (response) {
               if (!response) {
-                _this6.atividadesAssociadas.map(function (item) {
+                _this7.atividadesAssociadas.map(function (item) {
                   return item.checked = false;
                 });
 
@@ -668,17 +693,17 @@
                 item["status"] = '0';
                 item["loading"] = true;
 
-                _this6.service.postAtividadesAssociadas(item).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["finalize"])(function () {
+                _this7.service.postAtividadesAssociadas(item).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["finalize"])(function () {
                   item["loading"] = false;
                 })).subscribe(function (response) {
                   if (response.status !== 200) {
                     return;
                   }
 
-                  _this6.atividadesAssociadas = _this6.atividadesAssociadas.filter(function (atividade) {
+                  _this7.atividadesAssociadas = _this7.atividadesAssociadas.filter(function (atividade) {
                     return atividade.id != item.atividadeId;
                   });
-                  _this6.tableConfigAtividadesAssociadas.fixedHeader = _this6.atividadesAssociadas.length > 9 ? true : false;
+                  _this7.tableConfigAtividadesAssociadas.fixedHeader = _this7.atividadesAssociadas.length > 9 ? true : false;
                 });
               });
             });
@@ -686,11 +711,11 @@
         }, {
           key: "onToggleAll",
           value: function onToggleAll(item) {
-            var _this7 = this;
+            var _this8 = this;
 
             this.toggle[item] = !this.toggle[item];
             this[item].map(function (material) {
-              return material.checked = _this7.toggle[item];
+              return material.checked = _this8.toggle[item];
             });
           }
         }]);
@@ -1036,7 +1061,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar [hidden]=\"!loadingNavBar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Lista de Perfis\">\r\n  <button type=\"button\" (click)=\"onReset()\">Limpar</button>\r\n  <button type=\"button\" (click)=\"onFilter()\">Filtrar</button>\r\n  <button type=\"button\" [routerLink]=\"['../novo']\">Adicionar</button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <advanced-filter>\r\n    <form autocomplete=\"off\" [formGroup]=\"form\">\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-3\">\r\n          <label for=\"nome\">Nome</label>\r\n          <input id=\"nome\" type=\"text\" class=\"form-control\" placeholder=\"DIGITE...\" formControlName=\"nome\" (keyup.enter)=\"onFilter()\">\r\n        </div>\r\n        <div class=\"form-group col-3\">\r\n          <label for=\"matricula\">Sigla</label>\r\n          <input id=\"matricula\" type=\"text\" class=\"form-control\" placeholder=\"DIGITE...\" formControlName=\"sigla\" (keyup.enter)=\"onFilter()\">\r\n        </div>\r\n        <div class=\"form-group col-3\">\r\n          <label for=\"situacao\">Situação</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            formControlName=\"situacao\"  \r\n            (change)=\"onFilter()\"\r\n          >\r\n            <option value=\"1\">Ativo</option>\r\n            <option value=\"0\">Inativo</option>\r\n            <option value=\"''\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-1\">\r\n          <label for=\"registrosPorPagina\">Registros</label>\r\n          <select\r\n            class=\"custom-select form-control\"\r\n            (change)=\"onFilter()\"\r\n            formControlName=\"registrosPorPagina\"\r\n          >\r\n            <option value=\"10\">10</option>\r\n            <option value=\"25\">25</option>\r\n            <option value=\"50\">50</option>\r\n            <option value=\"100\">100</option>\r\n            <option value=\"250\">250</option>\r\n            <option value=\"500\">500</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </advanced-filter>\r\n  <div class=\"col-12 p-0\" [hidden]=\"loading || noResult\">\r\n    <div>\r\n      <custom-table [config]=\"tableConfig\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th style=\"width:100px\">Id</th>\r\n            <th>Nome</th>\r\n            <th>Sigla</th>\r\n            <th class=\"align-middle\" style=\"width:70px\"></th>\r\n            <!-- <th class=\"align-middle\" style=\"width:70px\"></th> -->\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let item of data; let i = index\">\r\n            <td class=\"text-truncate\" [ngClass]=\"item.situacao == 1 ? 'border-success' : 'border-danger'\">\r\n              {{ item.id | number:'6.0-0' }}\r\n            </td>\r\n            <td>\r\n              {{ item.nome }}\r\n            </td>\r\n            <td> {{ item.sigla }} </td>\r\n            <td class=\"align-middle\">\r\n              <button\r\n                class=\"btn-icon-sm\"\r\n                tooltip=\"Editar\"\r\n                container=\"body\"\r\n              >\r\n                <a [routerLink]=\"['./', item.id]\">\r\n                  <i class=\"fas fa-edit\"></i>\r\n                </a>\r\n              </button>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n    </div>\r\n    <div>\r\n        Exibindo {{ itemsPerPage*(currentPage - 1) + 1 }} a {{ currentPage*(itemsPerPage) > totalItems ? totalItems : currentPage*(itemsPerPage) }} de {{ totalItems }}\r\n      <pagination\r\n        [maxSize]=\"10\"\r\n        [totalItems]=\"totalItems\"\r\n        (pageChanged)=\"onPageChanged($event)\"\r\n        [(itemsPerPage)]=\"itemsPerPage\"\r\n        [boundaryLinks]=\"true\"\r\n        [(ngModel)]=\"currentPage\"\r\n        previousText=\"&lsaquo;\"\r\n        nextText=\"&rsaquo;\"\r\n        firstText=\"&laquo;\"\r\n        lastText=\"&raquo;\">\r\n      </pagination>\r\n    </div>\r\n  </div>\r\n  <div [hidden]=\"loading || !noResult\" class=\"text-center d-flex justify-content-center align-items-center\" style=\"height: 80%\">\r\n    <empty-result message=\"Nenhuma informação encontrada\"></empty-result>\r\n  </div>\r\n</app-body>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loading\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar [hidden]=\"!loadingNavBar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Lista de Perfiles\">\r\n  <button type=\"button\" (click)=\"onReset()\">Limpiar</button>\r\n  <button type=\"button\" (click)=\"onFilter()\">Filtrar</button>\r\n  <button type=\"button\" [routerLink]=\"['../novo']\">Adicionar</button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <advanced-filter>\r\n    <form autocomplete=\"off\" [formGroup]=\"form\">\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-3\">\r\n          <label for=\"nome\">Nombre</label>\r\n          <input id=\"nome\" type=\"text\" class=\"form-control\" placeholder=\"DIGITE...\" formControlName=\"nome\" (keyup.enter)=\"onFilter()\">\r\n        </div>\r\n        <div class=\"form-group col-3\">\r\n          <label for=\"matricula\">Sigla</label>\r\n          <input id=\"matricula\" type=\"text\" class=\"form-control\" placeholder=\"DIGITE...\" formControlName=\"sigla\" (keyup.enter)=\"onFilter()\">\r\n        </div>\r\n        <div class=\"form-group col-3\">\r\n          <label for=\"situacao\">Situación</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            formControlName=\"situacao\"  \r\n            (change)=\"onFilter()\"\r\n          >\r\n            <option value=\"1\">Activo</option>\r\n            <option value=\"0\">Inactivo</option>\r\n            <option value=\"''\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-1\">\r\n          <label for=\"registrosPorPagina\">Registros</label>\r\n          <select\r\n            class=\"custom-select form-control\"\r\n            (change)=\"onFilter()\"\r\n            formControlName=\"registrosPorPagina\"\r\n          >\r\n            <option value=\"10\">10</option>\r\n            <option value=\"25\">25</option>\r\n            <option value=\"50\">50</option>\r\n            <option value=\"100\">100</option>\r\n            <option value=\"250\">250</option>\r\n            <option value=\"500\">500</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </advanced-filter>\r\n  <div class=\"col-12 p-0\" [hidden]=\"loading || noResult\">\r\n    <div>\r\n      <custom-table [config]=\"tableConfig\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th style=\"width:100px\">Id</th>\r\n            <th>Nombre</th>\r\n            <th>Sigla</th>\r\n            <th class=\"align-middle\" style=\"width:70px\"></th>\r\n            <!-- <th class=\"align-middle\" style=\"width:70px\"></th> -->\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let item of data; let i = index\">\r\n            <td class=\"text-truncate\" [ngClass]=\"item.situacao == 1 ? 'border-success' : 'border-danger'\">\r\n              {{ item.id | number:'6.0-0' }}\r\n            </td>\r\n            <td>\r\n              {{ item.nome }}\r\n            </td>\r\n            <td> {{ item.sigla }} </td>\r\n            <td class=\"align-middle\">\r\n              <button\r\n                class=\"btn-icon-sm\"\r\n                tooltip=\"Editar\"\r\n                container=\"body\"\r\n              >\r\n                <a [routerLink]=\"['./', item.id]\">\r\n                  <i class=\"fas fa-edit\"></i>\r\n                </a>\r\n              </button>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n    </div>\r\n    <div>\r\n        Exibindo {{ itemsPerPage*(currentPage - 1) + 1 }} a {{ currentPage*(itemsPerPage) > totalItems ? totalItems : currentPage*(itemsPerPage) }} de {{ totalItems }}\r\n      <pagination\r\n        [maxSize]=\"10\"\r\n        [totalItems]=\"totalItems\"\r\n        (pageChanged)=\"onPageChanged($event)\"\r\n        [(itemsPerPage)]=\"itemsPerPage\"\r\n        [boundaryLinks]=\"true\"\r\n        [(ngModel)]=\"currentPage\"\r\n        previousText=\"&lsaquo;\"\r\n        nextText=\"&rsaquo;\"\r\n        firstText=\"&laquo;\"\r\n        lastText=\"&raquo;\">\r\n      </pagination>\r\n    </div>\r\n  </div>\r\n  <div [hidden]=\"loading || !noResult\" class=\"text-center d-flex justify-content-center align-items-center\" style=\"height: 80%\">\r\n    <empty-result message=\"Ninguna información encontrada\"></empty-result>\r\n  </div>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -1193,7 +1218,7 @@
             descricao: 'Home',
             routerLink: '/admin/home'
           }, {
-            descricao: 'Lista de perfis'
+            descricao: 'Lista de perfiles'
           }];
           /* Pagination */
 
@@ -1234,24 +1259,24 @@
         }, {
           key: "onActivatedRoute",
           value: function onActivatedRoute() {
-            var _this8 = this;
+            var _this9 = this;
 
             this.$activatedRouteSubscription = this.activatedRoute.queryParams.subscribe(function (response) {
-              var _response = _this8.routerService.getBase64UrlParams(response);
+              var _response = _this9.routerService.getBase64UrlParams(response);
 
               if (_response === null || _response === void 0 ? void 0 : _response.registrosPorPagina) {
-                _this8.itemsPerPage = _response === null || _response === void 0 ? void 0 : _response.registrosPorPagina;
+                _this9.itemsPerPage = _response === null || _response === void 0 ? void 0 : _response.registrosPorPagina;
               }
 
-              _this8.form.patchValue(_response);
+              _this9.form.patchValue(_response);
 
-              _this8.getPerfis(_this8.getParams());
+              _this9.getPerfis(_this9.getParams());
             });
           }
         }, {
           key: "getPerfis",
           value: function getPerfis(params) {
-            var _this9 = this;
+            var _this10 = this;
 
             this.itemsPerPage = this.form.get("registrosPorPagina").value;
 
@@ -1260,26 +1285,26 @@
             }
 
             this.service.getPerfis(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
-              _this9.loading = false;
-              _this9.loadingNavBar = false;
+              _this10.loading = false;
+              _this10.loadingNavBar = false;
             })).subscribe(function (response) {
               if (response.status !== 200) {
-                _this9.data = [];
-                _this9.noResult = true;
+                _this10.data = [];
+                _this10.noResult = true;
 
-                _this9.pnotify.notice('Não houve retorno para sua consulta');
+                _this10.pnotify.notice('Não houve retorno para sua consulta');
 
                 return;
               }
 
-              _this9.noResult = false;
-              _this9.data = response.body['data'];
-              _this9.totalItems = response.body['total'];
+              _this10.noResult = false;
+              _this10.data = response.body['data'];
+              _this10.totalItems = response.body['total'];
             }, function (error) {
-              _this9.data = [];
-              _this9.noResult = true;
+              _this10.data = [];
+              _this10.noResult = true;
 
-              _this9.pnotify.error();
+              _this10.pnotify.error();
             });
           }
         }, {

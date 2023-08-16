@@ -157,6 +157,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _estoque_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./../estoque.service */ "nkG6");
 /* harmony import */ var src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/app/shared/services/requests/atividades.service */ "0PD5");
 /* harmony import */ var src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! src/app/shared/services/core/title.service */ "dNnS");
+/* harmony import */ var _comercial_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../comercial.service */ "VgqD");
 
 
 
@@ -171,8 +172,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
-    constructor(modalService, router, location, formBuilder, pnotifyService, activatedRoute, atividadesService, estoqueService, titleService) {
+    constructor(modalService, router, location, formBuilder, pnotifyService, activatedRoute, atividadesService, estoqueService, titleService, comercialService) {
         this.modalService = modalService;
         this.router = router;
         this.location = location;
@@ -182,6 +184,7 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.atividadesService = atividadesService;
         this.estoqueService = estoqueService;
         this.titleService = titleService;
+        this.comercialService = comercialService;
         this.loaderNavbar = false;
         this.loaderFullScreen = true;
         this.breadCrumbTree = [
@@ -202,7 +205,7 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.tableConfig = {
             subtitleBorder: true,
         };
-        this.itemsPerPage = 50;
+        this.itemsPerPage = 10;
         this.currentPage = 1;
         this.maxSize = 10;
         this.clientesPagination = [];
@@ -210,9 +213,10 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.idMaterial = 0;
         this.totalItems = 10;
         this.showAdvancedFilter = true;
-        this.empresas = [];
+        this.almacenes = [];
         this.depositos = [];
         this.filteredDepositos = [];
+        this.grupos = [];
         this.linhas = [];
         this.classes = [];
         this.filteredClasses = [];
@@ -220,6 +224,7 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.dadosReturned = [];
         this.dadosLoaded = false;
         this.dadosEmpty = false;
+        this.datos = [];
         this.estoqueUnidades = [];
         this.pedidosCompra = [];
         this.pedidos = [];
@@ -229,6 +234,9 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.detalhesLote = [];
         this.totaisLote = [];
         this.detalhesSuspenso = [];
+        this.orderBy = ''; // Variable para almacenar el nombre de la columna seleccionada para ordenar
+        this.orderType = 'asc'; // Variable para almacenar el tipo de orden (ascendente o descendente)  
+        this.totalSuspenso = [];
         this.pnotifyService.getPNotify();
     }
     ngOnInit() {
@@ -249,8 +257,12 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
             .subscribe({
             next: (response) => {
                 if (response[0].responseCode == 200) {
-                    this.empresas = response[0].result;
+                    this.almacenes = response[0].result;
                 }
+                this.almacenes.unshift({
+                    ID: 0,
+                    ALMACEN: 'TODOS',
+                });
                 if (response[1].responseCode == 200) {
                     this.depositos = response[1].result;
                     this.filteredDepositos = this.depositos;
@@ -266,13 +278,13 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
                         descricao: 'EXIBIR TODOS',
                     });
                 }
-                if (response[3].responseCode == 200) {
-                    this.classes = response[3].result;
+                if (response[1].responseCode == 200) {
+                    this.classes = response[1].result;
                     this.filteredClasses = this.classes;
                     this.filteredClasses.unshift({
                         idClasse: 0,
                         idLinha: 0,
-                        nomeClasse: 'EXIBIR TODOS',
+                        nomeClasse: 'TODOS',
                     });
                 }
             },
@@ -281,35 +293,21 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
             }
         });
     }
-    setFormFilter() {
-        const formValue = this.checkRouterParams();
-        this.form = this.formBuilder.group({
-            empresa: [formValue.empresa, _angular_forms__WEBPACK_IMPORTED_MODULE_6__["Validators"].required],
-            deposito: [formValue.deposito, _angular_forms__WEBPACK_IMPORTED_MODULE_6__["Validators"].required],
-            linha: [formValue.linha],
-            classeMaterial: [formValue.classeMaterial],
-            estoqueDisponivel: [formValue.estoqueDisponivel],
-            codMaterial: [formValue.codMaterial],
-            descMaterial: [formValue.descMaterial],
-            registros: [formValue.registros],
-        });
-    }
     checkRouterParams() {
         let formValue = {
-            empresa: null,
-            deposito: null,
-            linha: 0,
-            classeMaterial: 0,
-            estoqueDisponivel: 0,
-            codMaterial: null,
-            descMaterial: null,
+            id_almacen: 0,
+            id_familia: 0,
+            id_grupo: 0,
+            id_linea: 0,
+            codigo_material: null,
+            nombre_material: null,
             registros: 300,
         };
         this.activatedRouteSubscription = this.activatedRoute.queryParams.subscribe((queryParams) => {
             if (Object.keys(queryParams).length > 0) {
                 let params = atob(queryParams['q']);
                 params = JSON.parse(params);
-                this.search(params);
+                /* this.search(params); */
                 Object.keys(formValue).forEach((formKey) => {
                     Object.keys(params).forEach((paramKey) => {
                         if (formKey == paramKey &&
@@ -328,12 +326,70 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.activatedRouteSubscription.unsubscribe();
         return formValue;
     }
+    setFormFilter() {
+        const formValue = this.checkRouterParams();
+        this.form = this.formBuilder.group({
+            grupo: [formValue.grupo],
+            empresa: [formValue.empresa],
+            deposito: [formValue.deposito],
+            linha: [formValue.linha],
+            classeMaterial: [formValue.classeMaterial],
+            registros: [formValue.registros],
+            codMaterial: [formValue.codMaterial],
+            descMaterial: [formValue.descMaterial],
+            estoqueDisponivel: [formValue.estoqueDisponivel]
+        });
+    }
     onFilter() {
-        this.setRouterParams(this.verificaParams());
-        this.currentPage = 1;
-        this.itemsPerPage = this.form.value.registros;
-        this.scrollToFilter.nativeElement.scrollIntoView({
-            behavior: 'instant',
+        /*  this.setRouterParams(this.verificaParams());
+         this.currentPage = 1;
+         this.itemsPerPage = this.form.value.registros;
+     
+         this.scrollToFilter.nativeElement.scrollIntoView({
+           behavior: 'instant',
+         }); */
+        this.totalItems = 0;
+        this.dados = [];
+        this.dadosReturned = [];
+        const formValue = this.form.value;
+        this.loaderNavbar = true;
+        let params = {
+            id_almacen: formValue.empresa,
+            id_familia: formValue.classeMaterial,
+            id_grupo: formValue.grupo,
+            id_linea: formValue.linha,
+            codigo_material: formValue.codMaterial,
+            nombre_material: formValue.descMaterial,
+            registros: formValue.registros,
+        };
+        this.comercialService.getMateriales(params).subscribe({
+            next: (response) => {
+                if (response.responseCode === 200) {
+                    this.loaderNavbar = false;
+                    this.dados = [];
+                    this.datos = response.result;
+                    this.dadosReturned = this.datos.slice(0, this.itemsPerPage);
+                    this.totalItems = this.datos.length;
+                    /* console.log(this.datos); */
+                    this.dadosEmpty = false;
+                }
+                else {
+                    this.loaderNavbar = false;
+                    this.dadosEmpty = true;
+                }
+            }
+        });
+    }
+    sincronizar() {
+        this.comercialService.sincronizarMateriales().subscribe({
+            next: (response) => {
+                if (response.responseCode === 200) {
+                }
+                else {
+                }
+            }, error: (error) => {
+                this.handleSearchError('Ocorreu um erro ao carregar filtros.');
+            }
         });
     }
     onResetForm() {
@@ -343,84 +399,103 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.showAdvancedFilter = true;
     }
     setRouterParams(params) {
+        console.log(params);
         this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: { q: btoa(JSON.stringify(params)) },
         });
-        this.search(params);
+        /* this.search(params); */
     }
     onAdvancedFilter() {
         this.showAdvancedFilter = !this.showAdvancedFilter;
     }
-    search(params) {
-        this.loaderNavbar = true;
-        this.idEmpresa = params.deposito;
-        this.dadosLoaded = false;
-        this.dadosEmpty = false;
-        this.dados = [];
-        this.dadosReturned = [];
-        this.totalItems = 0;
-        this.estoqueService
-            .getEstoqueAtual(params)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(() => {
+    /* search(params: any) {
+      this.loaderNavbar = true;
+      this.idEmpresa = params.deposito;
+      this.dadosLoaded = false;
+      this.dadosEmpty = false;
+      this.dados = [];
+      this.dadosReturned = [];
+      this.totalItems = 0;
+  
+      this.estoqueService
+        .getEstoqueAtual(params)
+        .pipe(
+          finalize(() => {
             this.loaderNavbar = false;
-        }))
-            .subscribe({
-            next: (response) => {
-                if (response.success === true) {
-                    this.dados = response.data;
-                    this.dadosReturned = this.dados.slice(0, this.itemsPerPage);
-                    this.totalItems = this.dados.length;
-                    this.dadosLoaded = true;
-                }
-                else {
-                    this.dadosEmpty = true;
-                }
-            },
-            error: (error) => {
-                this.handleSearchError('Erro ao carregar lista de materiais.');
+          })
+        )
+        .subscribe({
+          next: (response: JsonResponse) => {
+            if (response.success === true) {
+              this.dados = response.data;
+              this.dadosReturned = this.dados.slice(0, this.itemsPerPage);
+              this.totalItems = this.dados.length;
+              this.dadosLoaded = true;
+            } else {
+              this.dadosEmpty = true;
             }
+          },
+          error: (error: any) => {
+            this.handleSearchError('Erro ao carregar lista de materiais.');
+          }
         });
-    }
-    verificaParams() {
-        let params = {};
-        if (this.form.value.empresa) {
-            params.empresa = parseInt(this.form.value.empresa);
-        }
-        if (this.form.value.deposito) {
-            params.deposito = parseInt(this.form.value.deposito);
-        }
-        if (this.form.value.linha) {
-            params.linha = parseInt(this.form.value.linha);
-        }
-        if (this.form.value.classeMaterial) {
-            params['classe'] = parseInt(this.form.value.classeMaterial);
-        }
-        if (this.form.value.estoqueDisponivel) {
-            params.estoqueDisponivel = this.form.value.estoqueDisponivel;
-        }
-        if (this.form.value.codMaterial) {
-            params.codMaterial = parseInt(this.form.value.codMaterial);
-        }
-        if (this.form.value.descMaterial) {
-            params.descMaterial = btoa(this.form.value.descMaterial);
-        }
-        if (this.form.value.registros) {
-            params.registros = this.form.value.registros;
-        }
-        return params;
-    }
+    } */
+    /* verificaParams() {
+      let params: any = {};
+  
+      if (this.form.value.empresa) {
+        params.empresa = parseInt(this.form.value.empresa);
+      }
+  
+      if (this.form.value.deposito) {
+        params.deposito = parseInt(this.form.value.deposito);
+      }
+  
+      if (this.form.value.linha) {
+        params.linha = parseInt(this.form.value.linha);
+      }
+  
+      if (this.form.value.classeMaterial) {
+        params['classe'] = parseInt(this.form.value.classeMaterial);
+      }
+  
+      if (this.form.value.estoqueDisponivel) {
+        params.estoqueDisponivel = this.form.value.estoqueDisponivel;
+      }
+  
+      if (this.form.value.codMaterial) {
+        params.codMaterial = parseInt(this.form.value.codMaterial);
+      }
+  
+      if (this.form.value.descMaterial) {
+        params.descMaterial = btoa(this.form.value.descMaterial);
+      }
+  
+      if (this.form.value.registros) {
+        params.registros = this.form.value.registros;
+      }
+  
+      return params;
+    } */
     onPageChanged(event) {
-        const startItem = (event.page - 1) * event.itemsPerPage;
-        const endItem = event.page * event.itemsPerPage;
-        this.dadosReturned = this.dados.slice(startItem, endItem);
+        this.currentPage = event.page;
+        this.getPaginateData();
     }
-    onChangeEmpresa(idEmpresa) {
-        this.form.controls.deposito.reset();
-        this.filteredDepositos = this.depositos.filter((value) => value.idEmpresa == idEmpresa);
-        if (this.filteredDepositos.length == 1) {
-            this.form.controls.deposito.setValue(this.filteredDepositos[0].idEmpresa);
-        }
+    getPaginateData() {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        return this.datos.slice(startIndex, endIndex);
+    }
+    onChangeAlmacen(id) {
+        /* this.form.controls.deposito.reset(); */
+        /*  console.log(this.filteredDepositos);
+         this.filteredDepositos = this.depositos.filter(
+           (value: any) => value.idEmpresa == id
+         );
+         if(this.filteredDepositos.length == 1){
+           this.form.controls.deposito.setValue(this.filteredDepositos[0].idEmpresa);
+         } */
     }
     onChangeDeposito(deposito) {
         this.form.controls.empresa.setValue(deposito.idEmpresa);
@@ -432,25 +507,57 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
             this.filteredClasses.unshift({
                 idClasse: 0,
                 idLinha: 0,
-                nomeClasse: 'EXIBIR TODOS',
+                nomeClasse: 'TODOS',
             });
         }
         else {
             this.filteredClasses = this.classes;
         }
     }
-    onChangeClasse(classe) {
-        this.form.controls.linha.setValue(classe.idLinha);
+    onChangeClasse(clase) {
+        this.form.controls.grupo.reset();
+        var idClasse = clase.idClasse;
+        this.comercialService.getLinhasId(idClasse).subscribe({
+            next: (response) => {
+                if (response.responseCode == 200) {
+                    this.grupos = response.result;
+                }
+                this.grupos.unshift({
+                    id: 0,
+                    descricao: 'TODOS',
+                });
+            },
+            error: (error) => {
+                this.handleSearchError('Ocurrió un error al cargar los datos.');
+            }
+        });
     }
-    openModal(modalRef, titulo, idMaterial, estoqueSuspenso) {
+    onChangegrupo(clase) {
+        /*      console.log(clase);
+         */
+        this.form.controls.linha.reset();
+        var idClase = clase.id_linha;
+        this.comercialService.getSublineasId(idClase).subscribe({
+            next: (response) => {
+                if (response.responseCode == 200) {
+                    this.linhas = response.result;
+                }
+            },
+            error: (error) => {
+                this.handleSearchError('Ocurrió un error al cargar los datos.');
+            }
+        });
+    }
+    openModal(modalRef, titulo, idMaterial, codigoMaterial, estoqueSuspenso) {
         this.loaderNavbar = true;
         this.possuiLote = false;
-        this.nomeMaterial = `(${idMaterial}) ${titulo}`;
+        this.nomeMaterial = `(${codigoMaterial}) ${titulo}`;
         this.codMaterial = idMaterial;
         if (estoqueSuspenso > 0) {
             this.possuiLote = true;
         }
-        this.onGetOutrasUnidades(idMaterial);
+        this.onSelectComprometidos();
+        /*     this.onGetOutrasUnidades(idMaterial); */
         setTimeout(() => {
             this.loaderNavbar = false;
             this.modalRef = this.modalService.show(modalRef, {
@@ -466,31 +573,31 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
         this.onGetPedidosCompra(this.idEmpresa, this.codMaterial);
     }
     onSelectComprometidos() {
-        this.onGetEstoqueComprometido(this.idEmpresa, this.codMaterial);
+        this.onGetEstoqueComprometido(this.codMaterial);
     }
     onSelectLote() {
         this.onGetLote(this.idEmpresa, this.codMaterial);
     }
     onSelectEstoqueSuspenso() {
-        this.onGetEstoqueSuspenso(this.idEmpresa, this.codMaterial);
+        this.onGetEstoqueSuspenso(this.codMaterial);
     }
-    onGetOutrasUnidades(idMaterial) {
-        this.unidadesLoaded = false;
-        this.estoqueService.getOutrasUnidades(idMaterial).subscribe({
-            next: (response) => {
-                if (response.responseCode === 200) {
-                    this.estoqueUnidades = response.result;
-                    this.unidadesLoaded = true;
-                }
-                else {
-                    this.pnotifyService.notice('Dados não encontrados.');
-                }
-            },
-            error: (error) => {
-                this.handleSearchError('Erro ao carregar estoque de outras unidades.');
-            }
-        });
-    }
+    /* onGetOutrasUnidades(idMaterial: number) {
+      this.unidadesLoaded = false;
+  
+      this.estoqueService.getOutrasUnidades(idMaterial).subscribe({
+        next: (response: any) => {
+          if (response.responseCode === 200) {
+            this.estoqueUnidades = response.result;
+            this.unidadesLoaded = true;
+          } else {
+            this.pnotifyService.notice('Datos no encontrados.');
+          }
+        },
+        error: (error: any) => {
+          this.handleSearchError('Erro ao carregar estoque de outras unidades.');
+        }
+      });
+    } */
     onGetPedidosCompra(idEmpresa, idMaterial) {
         this.pedidosCompraLoaded = false;
         this.pedidosCompraEmpty = false;
@@ -506,7 +613,7 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
                     this.pedidosCompraLoaded = true;
                 }
                 else {
-                    this.pnotifyService.notice('Dados não encontrados.');
+                    this.pnotifyService.notice('Datos no encontrados.');
                     this.pedidosCompraEmpty = true;
                 }
             },
@@ -515,21 +622,20 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
             }
         });
     }
-    onGetEstoqueComprometido(idEmpresa, idMaterial) {
+    onGetEstoqueComprometido(idMaterial) {
         this.comprometidoLoaded = false;
         this.comprometidoEmpty = false;
         let params = {
-            idEmpresa: idEmpresa,
             idMaterial: idMaterial,
         };
-        this.estoqueService.getComprometido(params).subscribe((response) => {
+        this.estoqueService.getStockComprometido(params).subscribe((response) => {
             if (response.responseCode === 200) {
                 this.estoqueComprometido = response.result.analitico;
                 this.totaisComprometido = response.result.total;
                 this.comprometidoLoaded = true;
             }
             else {
-                this.pnotifyService.notice('Dados não encontrados.');
+                this.pnotifyService.notice('Datos no encontrados.');
                 this.comprometidoEmpty = true;
             }
         }, (error) => {
@@ -550,27 +656,50 @@ let ComercialEstoqueListaComponent = class ComercialEstoqueListaComponent {
                 this.loteLoaded = true;
             }
             else {
-                this.pnotifyService.notice('Dados não encontrados.');
+                this.pnotifyService.notice('Datos no encontrados.');
                 this.loteEmpty = true;
             }
         }, (error) => {
             this.handleSearchError('Erro ao carregar dados de lote.');
         });
     }
-    onGetEstoqueSuspenso(idEmpresa, idMaterial) {
+    setOrderBy(column) {
+        if (this.orderBy === column) {
+            this.orderType = this.orderType === 'asc' ? 'desc' : 'asc'; // Cambiar el tipo de orden si se hace clic nuevamente en la misma columna
+        }
+        else {
+            this.orderBy = column;
+            this.orderType = 'asc'; // Establecer el orden ascendente por defecto al hacer clic en una nueva columna
+        }
+        // Ordenar la matriz resultcliente en función del orden seleccionado
+        this.datos.sort((a, b) => {
+            const valueA = a[column] /* .toUpperCase(); */;
+            const valueB = b[column] /* .toUpperCase() */;
+            /*       console.log(this.datos);
+                  console.log(column); */
+            if (valueA < valueB) {
+                return this.orderType === 'asc' ? -1 : 1;
+            }
+            if (valueA > valueB) {
+                return this.orderType === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+    }
+    onGetEstoqueSuspenso(idMaterial) {
         this.suspensoLoaded = false;
         this.suspensoEmpty = false;
         let params = {
-            idEmpresa: idEmpresa,
             idMaterial: idMaterial,
         };
-        this.estoqueService.getEstoqueSuspenso(params).subscribe((response) => {
+        this.estoqueService.getStockSuspeso(params).subscribe((response) => {
             if (response.responseCode === 200) {
-                this.detalhesSuspenso = response.result;
+                this.detalhesSuspenso = response.result.analitico;
+                this.totalSuspenso = response.result.total;
                 this.suspensoLoaded = true;
             }
             else {
-                this.pnotifyService.notice('Dados não encontrados.');
+                this.pnotifyService.notice('Datos no encontrados.');
                 this.suspensoEmpty = true;
             }
         }, (error) => {
@@ -643,7 +772,8 @@ ComercialEstoqueListaComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
     { type: src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_11__["AtividadesService"] },
     { type: _estoque_service__WEBPACK_IMPORTED_MODULE_10__["ComercialEstoqueService"] },
-    { type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"] }
+    { type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"] },
+    { type: _comercial_service__WEBPACK_IMPORTED_MODULE_13__["ComercialService"] }
 ];
 ComercialEstoqueListaComponent.propDecorators = {
     scrollToFilter: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"], args: ['scrollToFilter', {},] }]
@@ -662,7 +792,8 @@ ComercialEstoqueListaComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__de
         _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
         src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_11__["AtividadesService"],
         _estoque_service__WEBPACK_IMPORTED_MODULE_10__["ComercialEstoqueService"],
-        src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"]])
+        src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"],
+        _comercial_service__WEBPACK_IMPORTED_MODULE_13__["ComercialService"]])
 ], ComercialEstoqueListaComponent);
 
 
@@ -691,7 +822,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Estoque\">\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onResetForm()\">\r\n    Limpar\r\n  </button>\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onFilter()\"\r\n    [disabled]=\"!form.valid\">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"empresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              formControlName=\"empresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"empresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('empresa') + ' ' + onFieldRequired('empresa')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('empresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"deposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              formControlName=\"deposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"deposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event)\"\r\n              [ngClass]=\"onFieldError('deposito') + ' ' + onFieldRequired('deposito')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('deposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"linha\">Linha</label>\r\n            <select\r\n              class=\"form-control\"\r\n              id=\"linha\"\r\n              formControlName=\"linha\"\r\n              (change)=\"onChangeLinha(form.value['linha'])\">\r\n              <option *ngFor=\"let item of linhas\" [value]=\"item.id\">{{ item.descricao }}</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"classeMaterial\">Classe</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredClasses\"\r\n              formControlName=\"classeMaterial\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"classeMaterial\"\r\n              bindLabel=\"nomeClasse\"\r\n              bindValue=\"idClasse\"\r\n              (change)=\"onChangeClasse($event)\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"estoqueDisponivel\">Somente estoque disponível</label>\r\n            <select\r\n              class=\"form-control\"\r\n              id=\"estoqueDisponivel\"\r\n              formControlName=\"estoqueDisponivel\">\r\n              <option value=\"0\">Exhibir todos</option>\r\n              <option value=\"1\">Sim</option>\r\n              <option value=\"2\">Não</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"codMaterial\">Código material</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"codMaterial\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-4 mb-0\">\r\n            <label for=\"descMaterial\">Descrição material</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"descMaterial\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2 mb-0\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select\r\n              class=\"form-control\"\r\n              id=\"registros\"\r\n              formControlName=\"registros\">\r\n              <option>25</option>\r\n              <option>50</option>\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles\r\n    [data]=\"subtitles\"\r\n    [show]=\"dados.length > 0 && !dadosEmpty\">\r\n  </subtitles>\r\n  <div class=\"row\">\r\n    <div class=\"col-12\">\r\n      <custom-table [config]=\"tableConfig\" *ngIf=\"dadosReturned.length > 0 && !dadosEmpty\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th class=\"text-truncate\" width=\"9%\">Código</th>\r\n            <th class=\"text-truncate text-left\" width=\"35%\">Descrição</th>\r\n            <th class=\"text-truncate\" width=\"4%\">Un</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Compra</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Atual</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Comprometido</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Pedido</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Disponível</th>\r\n            <th></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let dado of dadosReturned\" [class.table-active]=\"dado.id == codMaterial\">\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              [ngClass]=\"estoqueSuspensoClassStatusBorder(dado.estoqueSuspenso)\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.id }}\r\n            </td>\r\n            <td\r\n              class=\"text-left text-truncate hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.descricao }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.medida }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.pedCompra | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.estoqueAtual | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.estoqueComprometido | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.pedido | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.estoqueDisponivel | number:'1.3-3' }}\r\n            </td>\r\n            <td class=\"text-center\">\r\n              <a\r\n                class=\"btn-icon-sm\"\r\n                tooltip=\"Avise-me quando disponível\"\r\n                container=\"body\"\r\n                [routerLink]=\"['/comercial/disponibilidade-material/novo/', dado.id]\"\r\n                target=\"_blank\">\r\n                <i class=\"fas fa-bell\"></i>\r\n              </a>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n      <empty-result message=\"Nenhuma informação encontrada\" *ngIf=\"dadosEmpty && !dadosLoaded\"></empty-result>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"totalItems > itemsPerPage && !loaderNavbar\">\r\n        <pagination\r\n          [maxSize]=\"maxSize\"\r\n          [(totalItems)]=\"totalItems\"\r\n          (pageChanged)=\"onPageChanged($event)\"\r\n          [(itemsPerPage)]=\"itemsPerPage\"\r\n          [boundaryLinks]=\"true\"\r\n          [(ngModel)]=\"currentPage\"\r\n          previousText=\"&lsaquo;\"\r\n          nextText=\"&rsaquo;\"\r\n          firstText=\"&laquo;\"\r\n          lastText=\"&raquo;\">\r\n        </pagination>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n<ng-template #modalDetalhes>\r\n  <div class=\"modal-header\">\r\n    <h4 id=\"dialog-sizes-name1\" class=\"modal-title pull-left\">\r\n      {{ nomeMaterial }}\r\n    </h4>\r\n    <button type=\"button\" class=\"close pull-right\" (click)=\"closeModal(modalDetalhes)\" aria-label=\"Close\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <tabset>\r\n      <tab heading=\"Estoque outras unidades\" class=\"border-right border-left border-bottom\">\r\n        <div class=\"px-3 pt-3\">\r\n          <div class=\"form-row\" *ngIf=\"unidadesLoaded\">\r\n            <div class=\"form-group col-lg-3\" *ngFor=\"let estoque of estoqueUnidades\">\r\n              <label>{{ estoque.descEmpresa }}</label>\r\n              <div>{{ estoque.estoque | number:'1.3-3' }} {{ estoque.unidade }}</div>\r\n            </div>\r\n          </div>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!unidadesLoaded\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Pedidos de compra\"  class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectPedidos()\">\r\n        <div class=\"p-3\">\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!pedidosCompraLoaded && !pedidosCompraEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n          <custom-table [config]=\"tableConfig\" *ngIf=\"pedidosCompra.length > 0 && !pedidosCompraEmpty && pedidosCompraLoaded\" class=\"text-center\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th>Data prevista</th>\r\n                <th>Em aberto</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody >\r\n              <tr *ngFor=\"let item of pedidosCompra\">\r\n                <td>{{ item.dataPrevistaEntrega }}</td>\r\n                <td>{{ item.qtdAberto | number:'1.3-3' }}</td>\r\n              </tr>\r\n              <tr class=\"bg-dark text-dark\">\r\n                <td><strong>Total</strong></td>\r\n                <td class=\"text-center\"><strong>{{ totaisPedCompra.totalAberto | number:'1.3-3' }}</strong></td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"pedidosCompraEmpty && !pedidosCompraLoaded\"></empty-result>\r\n\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Estoque comprometido\" class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectComprometidos()\">\r\n        <div class=\"p-3\">\r\n          <div *ngIf=\"comprometidoLoaded\">\r\n            <div class=\"d-flex\">\r\n              <div class=\"legend blue\">\r\n                <div class=\"square\"></div>\r\n                <div class=\"text\">ESTOQUE COMPROMETIDO</div>\r\n              </div>\r\n            </div>\r\n            <custom-table [config]=\"tableConfig\" *ngIf=\"estoqueComprometido.length > 0 && !comprometidoEmpty\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th>Pedido</th>\r\n                  <th>Data</th>\r\n                  <th>Lote</th>\r\n                  <th>Empresa</th>\r\n                  <th>Cliente</th>\r\n                  <th>Vendedor</th>\r\n                  <th>Qtde.</th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of estoqueComprometido\">\r\n                  <td [ngClass]=\"estoqueComprometidoClassStatusBorder(item.idComprometido)\">{{ item.numeroPedido }}</td>\r\n                  <td>{{ item.dataEmissao }}</td>\r\n                  <td></td>\r\n                  <td>{{ item.empresa }}</td>\r\n                  <td>{{ item.fantasiaCliente }}</td>\r\n                  <td>{{ item.nomeVendedor }}</td>\r\n                  <td>{{ item.quantidade | number:'1.3-3' }}</td>\r\n                </tr>\r\n                <tr class=\"bg-dark text-center text-dark\">\r\n                  <td colspan=\"5\" class=\"border-dark\"></td>\r\n                  <td><strong>Total</strong></td>\r\n                  <td class=\"text-center\"><strong>{{ totaisComprometido.quantidade | number:'1.3-3' }}</strong></td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"comprometidoEmpty && !comprometidoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!comprometidoLoaded && !comprometidoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Detalhamento por lote\" class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectLote()\">\r\n        <div class=\"p-3\">\r\n          <custom-table *ngIf=\"detalhesLote.length > 0 && !loteEmpty\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Seq.</th>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Lote fabricação</th>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Localização</th>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Estoque</th>\r\n                <th colspan=\"2\" class=\"text-center\">Relatório de Recebimento</th>\r\n              </tr>\r\n              <tr>\r\n                <th scope=\"col\" class=\"text-center\">Número</th>\r\n                <th scope=\"col\" class=\"text-center\">Item</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody>\r\n              <tr *ngFor=\"let item of detalhesLote\">\r\n                <td>{{ item.sequencia }}</td>\r\n                <td>{{ item.lote }}</td>\r\n                <td>{{ item.localizacao }}</td>\r\n                <td>{{ item.qtdEstoque | number:'1.3-3' }}</td>\r\n                <td>{{ item.relatorio }}</td>\r\n                <td>{{ item.itemRelatorio }}</td>\r\n              </tr>\r\n              <tr class=\"bg-dark text-center text-dark\">\r\n                <td colspan=\"5\"><strong>Total</strong></td>\r\n                <td class=\"text-center\"><strong>{{ totaisLote.quantidade | number:'1.3-3' }}</strong></td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"loteEmpty && !loteLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!loteLoaded && !loteEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Estoque suspenso\" class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectEstoqueSuspenso()\" *ngIf=\"possuiLote\">\r\n        <div class=\"p-3\">\r\n          <custom-table *ngIf=\"detalhesSuspenso.length > 0 && suspensoLoaded\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th scope=\"col\">Quantidade</th>\r\n                <th scope=\"col\">Data</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody>\r\n              <tr *ngFor=\"let item of detalhesSuspenso\">\r\n                <td class=\"text-center\">{{ item.estoqueSuspenso | number:'1.3-3' }}</td>\r\n                <td class=\"text-center\">{{ item.data }}</td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"suspensoEmpty && !suspensoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!suspensoLoaded && !suspensoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n    </tabset>\r\n  </div>\r\n</ng-template>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Estoque\">\r\n  <button type=\"button\" (click)=\"onResetForm()\">\r\n    Limpiar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\" [disabled]=\"!form.valid\">\r\n    Filtrar\r\n  </button>\r\n  <button type=\"button\" (click)=\"sincronizar()\" [disabled]=\"!form.valid\">\r\n    <i class=\"fas fa-sync\"></i> Sincronizar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"empresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              formControlName=\"empresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"empresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('empresa') + ' ' + onFieldRequired('empresa')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('empresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"empresa\"> Almacén </label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"almacenes\" formControlName=\"empresa\"\r\n              [virtualScroll]=\"true\" labelForId=\"empresa\" bindLabel=\"ALMACEN\" bindValue=\"ID\"\r\n              (change)=\"onChangeAlmacen($event.id)\"\r\n              [ngClass]=\"onFieldError('empresa') + ' ' + onFieldRequired('empresa')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('empresa')\"\r\n              message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"deposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              formControlName=\"deposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"deposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event)\"\r\n              [ngClass]=\"onFieldError('deposito') + ' ' + onFieldRequired('deposito')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('deposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"linha\">Familia</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"classes\" formControlName=\"classeMaterial\"\r\n              [virtualScroll]=\"true\" labelForId=\"classeMaterial\" bindLabel=\"nomeClasse\" bindValue=\"idClasse\"\r\n              (change)=\"onChangeClasse($event)\">\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"linha\">Grupo</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"grupos\" formControlName=\"grupo\"\r\n              [virtualScroll]=\"true\" labelForId=\"classeMaterial\" bindLabel=\"descricao\" bindValue=\"id_linha\"\r\n              (change)=\"onChangegrupo($event)\">\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"classeMaterial\">Linea</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"linhas\" formControlName=\"linha\"\r\n              [virtualScroll]=\"true\" labelForId=\"classeMaterial\" bindLabel=\"NM_SUB_LINH\" bindValue=\"ID\">\r\n            </ng-select>\r\n          </div>\r\n\r\n        </div>\r\n        <div class=\"form-row\">\r\n\r\n          <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"codMaterial\">Código material</label>\r\n            <input type=\"text\" class=\"form-control\" formControlName=\"codMaterial\" (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-4 mb-0\">\r\n            <label for=\"descMaterial\">Nombre material</label>\r\n            <input type=\"text\" class=\"form-control\" formControlName=\"descMaterial\" (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <!-- <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"estoqueDisponivel\">Solo stock disponible</label>\r\n            <select class=\"form-control\" id=\"estoqueDisponivel\" formControlName=\"estoqueDisponivel\">\r\n              <option value=\"0\">Mostrar todo\r\n              </option>\r\n              <option value=\"1\">Disponible</option>\r\n              <option value=\"2\">No disponible</option>\r\n            </select>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-2 mb-0\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select class=\"form-control\" id=\"registros\" formControlName=\"registros\">\r\n              <option>25</option>\r\n              <option>50</option>\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles [data]=\"subtitles\" [show]=\"dados.length > 0 && !dadosEmpty\">\r\n  </subtitles>\r\n  <div class=\"row\">\r\n    <div class=\"col-12\">\r\n      <custom-table [config]=\"tableConfig\" *ngIf=\"datos.length > 0 && !dadosEmpty\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('codigo_material')\">              \r\n              <thead-sorter value=\"codigo\" [active]=\"orderBy == 'codigo'\" [sort]=\"orderType\"> Código </thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-left\"\r\n            (click)=\"setOrderBy('nombre')\">\r\n              <thead-sorter value=\"Nombre Material\"  [active]=\"orderBy == 'Nombre Material'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('cantidad')\">\r\n              <thead-sorter value=\"Cantidad Disp.\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('sigla')\">\r\n              <thead-sorter value=\"Un.\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('codigo_almacen')\">\r\n              <thead-sorter value=\"Almacén\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('nombre_almacen')\">\r\n              <thead-sorter value=\"Nombre almacén\"></thead-sorter>\r\n            </th>\r\n            <th></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <ng-container>\r\n            <tr *ngFor=\"let dato of getPaginateData()\">\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dado.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.codigo_material}}</td>\r\n              <td class=\"font-weight-bold hover text-left\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.nombre}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.cantidad}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.sigla}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.codigo_almacen}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dado.nombre, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.nombre_almacen}}</td>\r\n            </tr>\r\n          </ng-container>\r\n        </ng-template>\r\n      </custom-table>\r\n\r\n      <empty-result message=\"Ningún registro encontrado.\" *ngIf=\"dadosEmpty\"></empty-result>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"totalItems > itemsPerPage && !loaderNavbar\">\r\n        <pagination\r\n            [maxSize]=\"maxSize\"\r\n            [(totalItems)]=\"totalItems\"\r\n            (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\"\r\n            [boundaryLinks]=\"true\"\r\n            [(ngModel)]=\"currentPage\"\r\n            previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\"\r\n            firstText=\"&laquo;\"\r\n            lastText=\"&raquo;\">\r\n          </pagination>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n</app-body>\r\n<ng-template #modalDetalhes>\r\n  <div class=\"modal-header\">\r\n    <h4 id=\"dialog-sizes-name1\" class=\"modal-title pull-left\">\r\n      {{ nomeMaterial }}\r\n    </h4>\r\n    <button type=\"button\" class=\"close pull-right\" (click)=\"closeModal(modalDetalhes)\" aria-label=\"Close\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <tabset>\r\n      <!-- <tab heading=\"Estoque outras unidades\" class=\"border-right border-left border-bottom\">\r\n        <div class=\"px-3 pt-3\">\r\n          <div class=\"form-row\" *ngIf=\"unidadesLoaded\">\r\n            <div class=\"form-group col-lg-3\" *ngFor=\"let estoque of estoqueUnidades\">\r\n              <label>{{ estoque.descEmpresa }}</label>\r\n              <div>{{ estoque.estoque | number:'1.3-3' }} {{ estoque.unidade }}</div>\r\n            </div>\r\n          </div>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!unidadesLoaded\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab> -->\r\n\r\n      <tab heading=\"Stock comprometido\" class=\"border-right border-left border-bottom\"\r\n        (selectTab)=\"onSelectComprometidos()\">\r\n        <div class=\"p-3\">\r\n          <div *ngIf=\"comprometidoLoaded\">\r\n            <div class=\"d-flex\">\r\n              <div class=\"legend blue\">\r\n                <div class=\"square\"></div>\r\n                <div class=\"text\">STOCK COMPROMETIDO</div>\r\n              </div>\r\n            </div>\r\n            <custom-table [config]=\"tableConfig\" *ngIf=\"estoqueComprometido.length > 0 && !comprometidoEmpty\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th class=\"text-center\">Código</th>\r\n                  <th class=\"text-center\">Oferta</th>\r\n                  <th class=\"text-center\">Fecha</th>\r\n                  <th class=\"text-center\">Cliente</th>\r\n                  <th class=\"text-center\">Vendedor</th>\r\n                  <th class=\"text-center\">Cantidad</th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of estoqueComprometido\">\r\n                  <td [ngClass]=\"estoqueComprometidoClassStatusBorder(item.id_oferta)\" class=\"text-center\">{{\r\n                    item.codigo_oferta }}</td>\r\n                  <td class=\"text-center\">{{ item.nombre_oferta }}</td>\r\n                  <td class=\"text-center\">{{ item.fecha_oferta }}</td>\r\n                  <td class=\"text-center\">{{ item.cliente }}</td>\r\n                  <td class=\"text-center\">{{ item.vendedor }}</td>\r\n                  <td class=\"text-center\">{{ item.cantidad | number:'1.4-4' }} {{ item.unidad }}</td>\r\n                </tr>\r\n                <tr class=\"bg-dark text-center text-dark\">\r\n                  <td colspan=\"4\" class=\"border-dark\"></td>\r\n                  <td><strong>Total</strong></td>\r\n                  <td class=\"text-center\"><strong>{{ totaisComprometido.cantidad | number:'1.4-4' }}</strong></td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n          <empty-result message=\"Ninguna información encontrada\" class=\"my-4\"\r\n            *ngIf=\"comprometidoEmpty && !comprometidoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!comprometidoLoaded && !comprometidoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Stock en suspenso\" class=\"border-right border-left border-bottom\"\r\n        (selectTab)=\"onSelectEstoqueSuspenso()\" *ngIf=\"possuiLote\">\r\n        <div class=\"p-3\" >\r\n          <div class=\"d-flex\" *ngIf=\"suspensoLoaded\">\r\n            <div class=\"legend red\">\r\n              <div class=\"square\"></div>\r\n              <div class=\"text\">STOCK EN SUSPENSO</div>\r\n            </div>\r\n          </div>\r\n          <custom-table [config]=\"tableConfig\" *ngIf=\"detalhesSuspenso.length > 0 && suspensoLoaded\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th scope=\"col\" class=\"text-center\">Fecha</th>\r\n                <th scope=\"col\" class=\"text-center\">Descripción</th>\r\n                <th scope=\"col\" class=\"text-center\">Cantidad</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody>\r\n              <tr *ngFor=\"let item of detalhesSuspenso\">\r\n                <td [ngClass]=\"estoqueSuspensoClassStatusBorder(item.id)\" class=\"text-center\">{{ item.fecha }}</td>\r\n                <td class=\"text-center\" [ngClass]=\"border-danger\" class=\"text-center\">{{ item.descripcion }}</td>\r\n                <td class=\"text-center\" [ngClass]=\"border-danger\">{{ item.cantidad | number:'1.3-3' }} {{ item.unidad }}\r\n                </td>\r\n              </tr>\r\n              <tr class=\"bg-dark text-center text-dark\">\r\n                <td class=\"border-dark\"></td> \r\n                <td><strong>Total</strong></td>\r\n                <td class=\"text-center\"><strong>{{ totalSuspenso.cantidad | number:'1.4-4' }}</strong></td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Ninguna información encontrada\" class=\"my-4\"\r\n            *ngIf=\"suspensoEmpty && !suspensoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!suspensoLoaded && !suspensoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n    </tabset>\r\n  </div>\r\n</ng-template>");
 
 /***/ }),
 
@@ -785,7 +916,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialService = class ComercialService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial`;
+        this.API = `http://23.254.204.187/api/comercial`;
     }
     getEmpresas(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -806,6 +937,34 @@ let ComercialService = class ComercialService {
         return this.http
             .get(`${this.API}/depositos`, {
             params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getAlmacen(params) {
+        return this.http
+            .get(`${this.API}/almacen`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getLinhasId(id) {
+        return this.http.get(`${this.API}/linhas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getSublineasId(id) {
+        return this.http.get(`${this.API}/sublineas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    sincronizarMateriales() {
+        return this.http.get(`${this.API}/sincronizar`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMateriales(params) {
+        return this.http
+            .get(`${this.API}/materiales`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesOferta(params) {
+        return this.http
+            .get(`${this.API}/materiales_lista_precio`, {
+            params: params,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
@@ -845,6 +1004,25 @@ let ComercialService = class ComercialService {
     }
     getEscritorios() {
         return this.http.get(`${this.API}/escritorios`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getPresentacionMaterial() {
+        return this.http
+            .get(`${this.API}/presentacion_materiales`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCliente(codCliente) {
+        return this.http.get(`${this.API}/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
+    getListarPrecios() {
+        return this.http.get(`${this.API}/vendedor/lista_precio`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getTodosVendedores() {
+        return this.http.get(`${this.API}/vendedor/allvendedor`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCentrosLogisticos() {
+        return this.http.get(`${this.API}/almacen/centros_logisticos`);
     }
 };
 ComercialService.ctorParameters = () => [
@@ -1057,14 +1235,18 @@ let ComercialEstoqueService = class ComercialEstoqueService {
         this.http = http;
         this.comercialService = comercialService;
         this.tidSoftwareService = tidSoftwareService;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/estoque`;
+        this.API = `http://23.254.204.187/api/comercial/estoque`;
     }
     getFiltros() {
-        let empresas = this.tidSoftwareService.getEmpresas('estoques');
-        let depositos = this.comercialService.getDepositos({ grupoManetoni: 1 });
-        let linhas = this.tidSoftwareService.getLinhas();
+        /* Almacen */
+        let almacenes = this.comercialService.getAlmacen();
+        /* Familia */
         let classes = this.comercialService.getClasses(null);
-        return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([empresas, depositos, linhas, classes]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+        let depositos = this.comercialService.getDepositos({ grupoManetoni: 1 });
+        let sucursales = this.comercialService.getEscritorios();
+        let empresas = this.tidSoftwareService.getEmpresas('estoques');
+        let linhas = this.tidSoftwareService.getLinhas();
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([almacenes, classes, depositos, sucursales, empresas, linhas]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
     }
     getEstoqueAtual(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -1098,6 +1280,16 @@ let ComercialEstoqueService = class ComercialEstoqueService {
     getEstoqueSuspenso(params) {
         return this.http
             .get(`${this.API}/estoque-suspenso/${params.idMaterial}/${params.idEmpresa}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+    }
+    getStockComprometido(params) {
+        return this.http
+            .get(`${this.API}/estoquecomprometido/${params.idMaterial}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+    }
+    getStockSuspeso(params) {
+        return this.http
+            .get(`${this.API}/estoquesuspenso/${params.idMaterial}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
     }
 };
@@ -1155,7 +1347,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialTidSoftwareService = class ComercialTidSoftwareService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/tid-software`;
+        this.API = `http://23.254.204.187/api/comercial/tid-software`;
     }
     loadDependencies() {
         let empresas = this.getEmpresas('vendas');

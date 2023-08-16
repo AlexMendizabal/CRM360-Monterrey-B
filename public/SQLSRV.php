@@ -2,8 +2,8 @@
 $serverName = "localhost";
 $connectionOptions = array(
     "database" => "CRM360",
-    "uid" => "reflo",
-    "pwd" => "123"
+    "uid" => "user2023",
+    "pwd" => "RIC0rp#2023"
 
 );
 

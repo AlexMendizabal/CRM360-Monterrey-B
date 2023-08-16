@@ -110,7 +110,7 @@ let ComercialKanbanPedidosService = class ComercialKanbanPedidosService {
     constructor(http, comercialService) {
         this.http = http;
         this.comercialService = comercialService;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/kanban/pedidos`;
+        this.API = `http://23.254.204.187/api/comercial/kanban/pedidos`;
     }
     getListaKanban(params = []) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -851,7 +851,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialTidSoftwareService = class ComercialTidSoftwareService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/tid-software`;
+        this.API = `http://23.254.204.187/api/comercial/tid-software`;
     }
     loadDependencies() {
         let empresas = this.getEmpresas('vendas');

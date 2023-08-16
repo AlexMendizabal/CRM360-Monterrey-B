@@ -59,8 +59,8 @@
           _classCallCheck(this, ComercialVendedoresService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/vendedor";
-          this.API_CADASTROS = "https://crm360.monterrey.com.bo/api/comercial/cadastros";
+          this.API = "http://23.254.204.187/api/comercial/vendedor";
+          this.API_CADASTROS = "http://23.254.204.187/api/comercial/cadastros";
         }
 
         _createClass(ComercialVendedoresService, [{
@@ -87,6 +87,13 @@
           key: "getCarteiraClientes",
           value: function getCarteiraClientes(params) {
             return this.http.get("".concat(this.API, "/carteira-clientes"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCarteiraClientesCotizacion",
+          value: function getCarteiraClientesCotizacion(params) {
+            return this.http.get("".concat(this.API, "/carteira-clientes-cotizacion"), {
               params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
@@ -187,7 +194,7 @@
           this.http = http;
           this.escritoriosService = escritoriosService;
           this.vendedoresService = vendedoresService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial";
+          this.API = "http://23.254.204.187/api/comercial";
         }
 
         _createClass(ComercialRelatoriosFaturamentoDetalhadoService, [{

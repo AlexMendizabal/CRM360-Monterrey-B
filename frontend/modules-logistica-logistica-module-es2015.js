@@ -424,7 +424,7 @@ __webpack_require__.r(__webpack_exports__);
 let ContatosService = class ContatosService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/core/mtcorp/usuarios`;
+        this.API = `http://23.254.204.187/api/core/mtcorp/usuarios`;
     }
     getContatos(params) {
         //let httpParams = new HttpParams();

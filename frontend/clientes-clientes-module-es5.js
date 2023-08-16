@@ -1391,7 +1391,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -2593,7 +2593,7 @@
           _classCallCheck(this, ComercialClientesUltimosPrecosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/ultimos-precos";
+          this.API = "http://23.254.204.187/api/comercial/clientes/ultimos-precos";
         }
 
         _createClass(ComercialClientesUltimosPrecosService, [{
@@ -2675,7 +2675,7 @@
           _classCallCheck(this, ComercialClientesHistoricoFinanceiroService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/historico-financeiro";
+          this.API = "http://23.254.204.187/api/comercial/clientes/historico-financeiro";
         }
 
         _createClass(ComercialClientesHistoricoFinanceiroService, [{
@@ -3044,7 +3044,7 @@
           _classCallCheck(this, ComercialService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial";
+          this.API = "http://23.254.204.187/api/comercial";
         }
 
         _createClass(ComercialService, [{
@@ -3071,6 +3071,40 @@
 
             return this.http.get("".concat(this.API, "/depositos"), {
               params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getAlmacen",
+          value: function getAlmacen(params) {
+            return this.http.get("".concat(this.API, "/almacen")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getLinhasId",
+          value: function getLinhasId(id) {
+            return this.http.get("".concat(this.API, "/linhas/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getSublineasId",
+          value: function getSublineasId(id) {
+            return this.http.get("".concat(this.API, "/sublineas/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "sincronizarMateriales",
+          value: function sincronizarMateriales() {
+            return this.http.get("".concat(this.API, "/sincronizar")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMateriales",
+          value: function getMateriales(params) {
+            return this.http.get("".concat(this.API, "/materiales"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesOferta",
+          value: function getMaterialesOferta(params) {
+            return this.http.get("".concat(this.API, "/materiales_lista_precio"), {
+              params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
@@ -3122,6 +3156,31 @@
           key: "getEscritorios",
           value: function getEscritorios() {
             return this.http.get("".concat(this.API, "/escritorios")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getPresentacionMaterial",
+          value: function getPresentacionMaterial() {
+            return this.http.get("".concat(this.API, "/presentacion_materiales")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCliente",
+          value: function getCliente(codCliente) {
+            return this.http.get("".concat(this.API, "/clientes/detalhes/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+          }
+        }, {
+          key: "getListarPrecios",
+          value: function getListarPrecios() {
+            return this.http.get("".concat(this.API, "/vendedor/lista_precio")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getTodosVendedores",
+          value: function getTodosVendedores() {
+            return this.http.get("".concat(this.API, "/vendedor/allvendedor")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCentrosLogisticos",
+          value: function getCentrosLogisticos() {
+            return this.http.get("".concat(this.API, "/almacen/centros_logisticos"));
           }
         }]);
 
@@ -3189,7 +3248,7 @@
           _classCallCheck(this, FormRulesService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/common/services";
+          this.API = "http://23.254.204.187/api/common/services";
         }
 
         _createClass(FormRulesService, [{
@@ -5867,7 +5926,7 @@
           _classCallCheck(this, CnpjService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/common/services/cnpj";
+          this.API = "http://23.254.204.187/api/common/services/cnpj";
         }
 
         _createClass(CnpjService, [{

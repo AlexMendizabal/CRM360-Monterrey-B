@@ -9,6 +9,8 @@ imports:
 parameters:
 
 services:
+    App\Services\Helper: ~
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

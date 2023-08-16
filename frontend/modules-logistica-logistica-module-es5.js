@@ -685,7 +685,7 @@
           _classCallCheck(this, ContatosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/core/mtcorp/usuarios";
+          this.API = "http://23.254.204.187/api/core/mtcorp/usuarios";
         }
 
         _createClass(ContatosService, [{

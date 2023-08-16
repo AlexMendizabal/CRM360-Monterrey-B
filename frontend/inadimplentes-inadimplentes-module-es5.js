@@ -213,7 +213,7 @@
           _classCallCheck(this, FinanceiroRelatoriosInadimplentesService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/financeiro/relatorios/inadimplentes";
+          this.API = "http://23.254.204.187/api/financeiro/relatorios/inadimplentes";
         }
 
         _createClass(FinanceiroRelatoriosInadimplentesService, [{

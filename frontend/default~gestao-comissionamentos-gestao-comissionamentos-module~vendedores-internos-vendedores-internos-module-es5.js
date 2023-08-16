@@ -256,7 +256,7 @@
           _classCallCheck(this, ComercialComissoesVendedoresInternosGestaoComissionamentosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/comissoes/vendedores-internos/gestao-comissionamentos";
+          this.API = "http://23.254.204.187/api/comercial/comissoes/vendedores-internos/gestao-comissionamentos";
         }
         /* getComissionamentos(params: any = []): Observable<any> {
               let httpParams = new HttpParams();

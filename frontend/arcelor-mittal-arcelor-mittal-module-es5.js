@@ -1044,7 +1044,7 @@
           _classCallCheck(this, ComercialIntegracoesArcelorMittalClassesMateriaisService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/integracoes/arcelor-mittal/classes-materiais";
+          this.API = "http://23.254.204.187/api/comercial/integracoes/arcelor-mittal/classes-materiais";
         }
 
         _createClass(ComercialIntegracoesArcelorMittalClassesMateriaisService, [{

@@ -227,7 +227,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialService = class ComercialService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial`;
+        this.API = `http://23.254.204.187/api/comercial`;
     }
     getEmpresas(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -248,6 +248,34 @@ let ComercialService = class ComercialService {
         return this.http
             .get(`${this.API}/depositos`, {
             params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getAlmacen(params) {
+        return this.http
+            .get(`${this.API}/almacen`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getLinhasId(id) {
+        return this.http.get(`${this.API}/linhas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getSublineasId(id) {
+        return this.http.get(`${this.API}/sublineas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    sincronizarMateriales() {
+        return this.http.get(`${this.API}/sincronizar`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMateriales(params) {
+        return this.http
+            .get(`${this.API}/materiales`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesOferta(params) {
+        return this.http
+            .get(`${this.API}/materiales_lista_precio`, {
+            params: params,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
@@ -288,6 +316,25 @@ let ComercialService = class ComercialService {
     getEscritorios() {
         return this.http.get(`${this.API}/escritorios`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getPresentacionMaterial() {
+        return this.http
+            .get(`${this.API}/presentacion_materiales`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCliente(codCliente) {
+        return this.http.get(`${this.API}/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
+    getListarPrecios() {
+        return this.http.get(`${this.API}/vendedor/lista_precio`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getTodosVendedores() {
+        return this.http.get(`${this.API}/vendedor/allvendedor`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCentrosLogisticos() {
+        return this.http.get(`${this.API}/almacen/centros_logisticos`);
+    }
 };
 ComercialService.ctorParameters = () => [
     { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
@@ -312,7 +359,7 @@ ComercialService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Home\"></app-header>\r\n<app-body [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <div class=\"row\">\r\n        <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n          <div class=\"mtc-title mb-0\">Citas del dia</div>\r\n          <strong class=\"my-auto\">\r\n            <a [routerLink]=\"['/comercial/agenda/compromissos']\">\r\n              <span class=\"mr-1\">Agenda</span>\r\n              <i class=\"fas fa-external-link-alt\"></i>\r\n            </a>\r\n          </strong>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"compromissosLoaded\">\r\n        <div class=\"col\">\r\n          <ul class=\"list-unstyled mb-0\" *ngIf=\"compromissos.length > 0\">\r\n            <li class=\"mt-2\" *ngFor=\"let item of compromissos\">\r\n              <a class=\"text-decoration-none text-black d-flex\" [routerLink]=\"['/comercial/agenda/detalhes', item.id]\" (click)=\"loaderNavbar = true\">\r\n                <span style=\"height: 15px; width: 15px;\" class=\"my-auto rounded-circle d-inline-block\" [style.background-color]=\"item.color\"></span>\r\n                <span class=\"font-weight-bold ml-2\">{{ handleDiaCompromisso(item.start) }}</span>\r\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%;\">{{ item.title }}</span>\r\n              </a>\r\n            </li>\r\n          </ul>\r\n          <div *ngIf=\"compromissos.length == 0\" class=\"mt-2\">Usted no tiene citas hoy.</div>\r\n        </div>\r\n      </div>\r\n      <div class=\"mt-2 d-flex w-100\" *ngIf=\"!compromissosLoaded\">\r\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\r\n        <strong>Cargando citas...</strong>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"mt-5\" *ngIf=\"profileLoaded && !adminProfile\">\r\n    <div class=\"row\">\r\n      <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n        <div class=\"mtc-title\">Mapa de metas</div>\r\n        <strong>\r\n          <a [routerLink]=\"['/comercial/dashboard/vendedor']\">\r\n            <span class=\"mr-1\">Dashboard</span>\r\n            <i class=\"fas fa-external-link-alt\"></i>\r\n          </a>\r\n        </strong>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <comercial-templates-mapa-metas\r\n          [idVendedor]=\"user.idVendedor\"\r\n          [idEscritorio]=\"user.idEscritorio\"\r\n          [showHeader]=\"false\"\r\n          loaderStyle=\"tiny\">\r\n        </comercial-templates-mapa-metas>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Home\"></app-header>\r\n<app-body [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <div class=\"row\">\r\n        <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n          <div class=\"mtc-title mb-0\">Citas del dia</div>\r\n          <strong class=\"my-auto\">\r\n            <a [routerLink]=\"['/comercial/agenda/compromissos']\">\r\n              <span class=\"mr-1\">Agenda</span>\r\n              <i class=\"fas fa-external-link-alt\"></i>\r\n            </a>\r\n          </strong>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"compromissosLoaded\">\r\n        <div class=\"col\">\r\n          <ul class=\"list-unstyled mb-0\" *ngIf=\"compromissos.length > 0\">\r\n            <li class=\"mt-2\" *ngFor=\"let item of compromissos\">\r\n              <a class=\"text-decoration-none text-black d-flex\" [routerLink]=\"['/comercial/agenda/detalhes', item.id]\" (click)=\"loaderNavbar = true\">\r\n                <span style=\"height: 15px; width: 15px;\" class=\"my-auto rounded-circle d-inline-block\" [style.background-color]=\"item.color\"></span>\r\n                <span class=\"font-weight-bold ml-2\">{{ handleDiaCompromisso(item.start) }}</span>\r\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%;\">{{ item.title }}</span>\r\n                <span class=\"ml-1 d-inline-block text-truncate\" style=\"max-width: 80%; text-transform: uppercase;\">--{{ item.promotor }}</span>\r\n              </a>\r\n            </li>\r\n          </ul>\r\n          <div *ngIf=\"compromissos.length == 0\" class=\"mt-2\">Usted no tiene citas hoy.</div>\r\n        </div>\r\n      </div>\r\n      <div class=\"mt-2 d-flex w-100\" *ngIf=\"!compromissosLoaded\">\r\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\r\n        <strong>Cargando citas...</strong>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"mt-5\" *ngIf=\"profileLoaded && !adminProfile\">\r\n    <div class=\"row\">\r\n      <div class=\"col w-100 d-flex justify-content-lg-between\">\r\n        <div class=\"mtc-title\">Mapa de metas</div>\r\n        <strong>\r\n          <a [routerLink]=\"['/comercial/dashboard/vendedor']\">\r\n            <span class=\"mr-1\">Dashboard</span>\r\n            <i class=\"fas fa-external-link-alt\"></i>\r\n          </a>\r\n        </strong>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <comercial-templates-mapa-metas\r\n          [idVendedor]=\"user.idVendedor\"\r\n          [idEscritorio]=\"user.idEscritorio\"\r\n          [showHeader]=\"false\"\r\n          loaderStyle=\"tiny\">\r\n        </comercial-templates-mapa-metas>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n\r\n<!-- aqui escribi-->\r\n");
 
 /***/ }),
 

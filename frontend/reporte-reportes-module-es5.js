@@ -51380,12 +51380,10 @@
           this.showAdvancedFilter = true;
           this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
           this.matricula = this.currentUser['info']['matricula'];
-          this.orderBy = 'codCliente';
-          this.orderType = 'desc';
-          this.maxSize = 10;
-          this.itemsPerPage = 15;
-          this.currentPage = 1;
-          this.totalItems = 0;
+          this.orderBy = ''; // Variable para almacenar el nombre de la columna seleccionada para ordenar
+
+          this.orderType = 'asc'; // Variable para almacenar el tipo de orden (ascendente o descendente)  
+
           this.clientes = [];
           this.clientesPagination = [];
           this.dadosCadastrais = {};
@@ -51400,6 +51398,14 @@
           this.result = []; // Declarar la variable 'result' en la clase
 
           this.resultcliente = [];
+          this.currentPage = 1; // Página actual
+
+          this.totalItems = 0; // Total de elementos
+
+          this.itemsPerPage = 10; // Elementos por página
+
+          this.maxSize = 5; // Máximo número de páginas a mostrar en la paginación
+
           this.pnotifyService.getPNotify();
         }
 
@@ -51420,7 +51426,9 @@
               nombreVendedor: [''],
               listaSucursales: [''],
               titulo: [''],
-              estado: ['']
+              estado: [''] // Valor inicial del campo estado
+              // Agrega más campos de filtrado avanzado si es necesario
+
             });
             this.reporteAgenda();
             this.resuldata = [];
@@ -51511,8 +51519,9 @@
 
             this.agendaService.reporteAgenda(data).subscribe(function (response) {
               _this6.resuldata = response.result;
-              console.log('respuesta');
-              console.log(_this6.resuldata); // Realizar las acciones necesarias con la respuesta
+              _this6.totalItems = response.result.length;
+              console.log('respuesta|132123');
+              console.log(_this6.totalItems); // Realizar las acciones necesarias con la respuesta
             }, function (error) {
               console.error(error);
             });
@@ -51753,6 +51762,7 @@
                     data = this.resuldata.map(function (cliente) {
                       return ['', cliente.vendedor, cliente.sucursal, cliente.cliente, cliente.motivo, cliente.Estado, cliente.fecha, cliente.obs_final];
                     });
+                    console.log(this.resuldata);
                     workbook = new exceljs_dist_exceljs_min_js__WEBPACK_IMPORTED_MODULE_8__["Workbook"]();
                     worksheet = workbook.addWorksheet('data'); // Agregar encabezados en la fila 1
 
@@ -51763,7 +51773,8 @@
                       row[6] = formattedDate; // Reemplazar el valor original con la fecha formateada
 
                       worksheet.addRow(row);
-                    }); // Agregar estilos a las celdas
+                    }); // 
+                    // Agregar estilos a las celdas
 
                     worksheet.eachRow(function (row, rowNumber) {
                       row.eachCell(function (cell) {
@@ -51792,10 +51803,10 @@
 
                     fileName = "".concat(currentDate, "_reporte.xlsx"); // Crear el nombre del archivo con la fecha actual
 
-                    _context.next = 14;
+                    _context.next = 15;
                     return workbook.xlsx.writeBuffer();
 
-                  case 14:
+                  case 15:
                     buffer = _context.sent;
                     excelBlob = new Blob([buffer], {
                       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -51803,22 +51814,12 @@
 
                     Object(file_saver__WEBPACK_IMPORTED_MODULE_7__["saveAs"])(excelBlob, fileName);
 
-                  case 17:
+                  case 18:
                   case "end":
                     return _context.stop();
                 }
               }, _callee, this);
             }));
-          }
-        }, {
-          key: "onPageChanged",
-          value: function onPageChanged(event) {
-            if (this.formFilter.value['pagina'] != event.page) {
-              this.detailPanelService.hide();
-              this.resetClienteSelecionado();
-              this.formFilter.value['pagina'] = event.page;
-              this.onFilter();
-            }
           }
         }, {
           key: "handleCounter",
@@ -51829,6 +51830,78 @@
           key: "resetClienteSelecionado",
           value: function resetClienteSelecionado() {
             this.clienteSelecionado = null;
+          } // Dentro del componente
+          // Variables existentes...
+
+        }, {
+          key: "setOrderBy",
+          value: function setOrderBy(column) {
+            var _this13 = this;
+
+            if (this.orderBy === column) {
+              this.orderType = this.orderType === 'asc' ? 'desc' : 'asc'; // Cambiar el tipo de orden si se hace clic nuevamente en la misma columna
+            } else {
+              this.orderBy = column;
+              this.orderType = 'asc'; // Establecer el orden ascendente por defecto al hacer clic en una nueva columna
+            } // Ordenar la matriz resultcliente en función del orden seleccionado
+
+
+            this.resuldata.sort(function (a, b) {
+              var valueA = a[column].toUpperCase();
+              var valueB = b[column].toUpperCase();
+
+              if (valueA < valueB) {
+                return _this13.orderType === 'asc' ? -1 : 1;
+              }
+
+              if (valueA > valueB) {
+                return _this13.orderType === 'asc' ? 1 : -1;
+              }
+
+              return 0;
+            });
+          }
+        }, {
+          key: "setOrderByclinte",
+          value: function setOrderByclinte(column) {
+            var _this14 = this;
+
+            if (this.orderBy === column) {
+              this.orderType = this.orderType === 'asc' ? 'desc' : 'asc'; // Cambiar el tipo de orden si se hace clic nuevamente en la misma columna
+            } else {
+              this.orderBy = column;
+              this.orderType = 'asc'; // Establecer el orden ascendente por defecto al hacer clic en una nueva columna
+            } // Ordenar la matriz resultcliente en función del orden seleccionado
+
+
+            this.resultcliente.sort(function (a, b) {
+              var valueA = a[column].toUpperCase();
+              var valueB = b[column].toUpperCase();
+
+              if (valueA < valueB) {
+                return _this14.orderType === 'asc' ? -1 : 1;
+              }
+
+              if (valueA > valueB) {
+                return _this14.orderType === 'asc' ? 1 : -1;
+              }
+
+              return 0;
+            });
+          }
+        }, {
+          key: "onPageChanged",
+          value: function onPageChanged(event) {
+            this.currentPage = event.page;
+            this.getPaginateData();
+          }
+        }, {
+          key: "getPaginateData",
+          value: function getPaginateData() {
+            var startIndex = (this.currentPage - 1) * this.itemsPerPage;
+            var endIndex = startIndex + this.itemsPerPage; //this.getPaginatedData = this.resuldata.slice(startIndex, endIndex);
+
+            return this.resuldata.slice(startIndex, endIndex);
           }
         }]);
 
@@ -51989,60 +52062,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "  <loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n  <app-header appTitle=\"reporte\">\r\n    <button (click)=\"exportToExcel()\" class=\"btn btn-primary\">\r\n      Exportar a Excel\r\n    </button>\r\n    \r\n\r\n    <button type=\"button\" (click)=\"reporteAgenda()\" class=\"btn btn-primary\">Reporte Agenda</button>\r\n  \r\n  </app-header>\r\n  <app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n    \r\n    <advanced-filter>\r\n      <form [formGroup]=\"formFilter\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"fechaInicial\">Fecha inicial</label>\r\n            <input\r\n              type=\"date\"\r\n              class=\"form-control\"\r\n              id=\"fechaInicial\"\r\n              formControlName=\"fechaInicial\"\r\n            />\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"fechaFinal\">Fecha final</label>\r\n            <input\r\n              type=\"date\"\r\n              class=\"form-control\"\r\n              id=\"fechaFinal\"\r\n              formControlName=\"fechaFinal\"\r\n            />\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"nombreVendedor\">Nombre del vendedor</label>\r\n            <select class=\"form-control custom-select\" id=\"nombreVendedor\" formControlName=\"nombreVendedor\">\r\n              <option value=\"\">Seleccione un vendedor</option>\r\n              <option *ngFor=\"let vendedor of vendedores\" [value]=\"vendedor.id\">{{ vendedor.nome }}</option>\r\n            </select>\r\n          </div>\r\n          \r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"listaSucursales\">Lista de sucursales</label>\r\n            <select class=\"form-control custom-select\" id=\"listaSucursales\" formControlName=\"listaSucursales\">\r\n              <option value=\"\">Seleccionar escritorio</option>\r\n              <ng-container *ngFor=\"let escritorio of escritorios\">\r\n                <option [value]=\"escritorio.codEscritorio\" *ngIf=\"escritorio.nomeEscritorio !== ''\">{{ escritorio.nomeEscritorio }}</option>\r\n              </ng-container>\r\n            </select>\r\n          </div>\r\n          \r\n          \r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"titulo\">Título</label>\r\n            <select class=\"form-control custom-select\" id=\"titulo\" formControlName=\"titulo\">\r\n              <option value=\"\">Seleccionar título</option>\r\n              <option *ngFor=\"let titulo of titulos\" [value]=\"titulo.codTitulo\">{{ titulo.descricaoTitulo }}</option>\r\n            </select>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"estado\">Estado</label>\r\n            <select class=\"form-control custom-select\" id=\"estado\" formControlName=\"estado\">\r\n              <option value=\"\">Seleccionar estado</option>\r\n              <option *ngFor=\"let estado of estados\" [value]=\"estado.id\">{{ estado.nombre }}</option>\r\n            </select>\r\n          </div>\r\n\r\n\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- Agrega aquí más campos de filtrado avanzado si es necesario -->\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n\r\n    <div class=\"row mt-6\">\r\n      <div [ngClass]=\"{'col-12': !showDetailPanel, 'col-7 pr-0': showDetailPanel}\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <th></th>\r\n              <th class=\"text-center hover\">\r\n                <thead-sorter value=\"Cliente\"></thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"hover\">\r\n                <thead-sorter value=\"Sucursal\"></thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"hover\">\r\n                <thead-sorter value=\"Vendedor\"></thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"hover\">\r\n                <thead-sorter value=\"Titulo\"></thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"hover\">\r\n                <thead-sorter value=\"Estado\"></thead-sorter>\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <ng-container >\r\n              <tr *ngFor=\"let cliente of resuldata\">\r\n                <td [ngClass]=\"classStatusBorder(cliente.Estado)\" class=\"text-center hover\"></td>\r\n                <td class=\"text-center hover\">{{ cliente.cliente }}</td>\r\n                <td class=\"hover\">{{ cliente.sucursal }}</td>\r\n                <td class=\"hover\">{{ cliente.vendedor }}</td>\r\n                <td class=\"hover\">{{ cliente.motivo }}</td>\r\n                <td class=\"hover\">{{ cliente.Estado }}</td>\r\n                <td>\r\n                  <span tooltip=\"Datos de Cliente\" placement=\"left\" container=\"body\">\r\n                    <button type=\"button\" class=\"btn-icon-sm\" (click)=\"viewDetails(cliente.id_cliente)\">\r\n                      <i class=\"fas fa-user\"></i>\r\n                    </button>\r\n                  </span>\r\n                </td>\r\n              </tr>\r\n              <tr *ngIf=\"resuldata.length === 0\">\r\n                <td colspan=\"6\" class=\"text-center\">Sin datos registrados </td>\r\n              </tr>\r\n            </ng-container>\r\n          </ng-template>\r\n        </custom-table>\r\n        <div class=\"d-flex justify-content-center mt-3\" >\r\n          <pagination\r\n            [maxSize]=\"maxSize\"\r\n            [(totalItems)]=\"totalItems\"\r\n            (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\"\r\n            [boundaryLinks]=\"true\"\r\n            [(ngModel)]=\"currentPage\"\r\n            previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\"\r\n            firstText=\"&laquo;\"\r\n            lastText=\"&raquo;\">\r\n          </pagination>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-md-5\" [hidden]=\"!showDetailPanel\">\r\n        <div class=\"sticky-top\" style=\"max-height: 400px; overflow-y: auto;\">\r\n          <detail-panel>\r\n            <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n              <div *ngIf=\"dadosCadastraisLoaded && !dadosCadastraisEmpty\">\r\n                <custom-table [config]=\"tableConfig\">\r\n                  <ng-template #thead let-thead>\r\n                    <tr>\r\n                      <th></th>\r\n                      <th class=\"text-center hover\">\r\n                        <thead-sorter value=\"Cliente\"></thead-sorter>\r\n                      </th>\r\n                      <th scope=\"col\" class=\"hover\">\r\n                        <thead-sorter value=\"Sucursal\"></thead-sorter>\r\n                      </th>\r\n                      <th scope=\"col\" class=\"hover\">\r\n                        <thead-sorter value=\"Vendedor\"></thead-sorter>\r\n                      </th>\r\n                      <th scope=\"col\" class=\"hover\">\r\n                        <thead-sorter value=\"Titulo\"></thead-sorter>\r\n                      </th>\r\n                      <th scope=\"col\" class=\"hover\">\r\n                        <thead-sorter value=\"Estado\"></thead-sorter>\r\n                      </th>\r\n                    </tr>\r\n                  </ng-template>\r\n                  <ng-template #tbody let-tbody>\r\n                    <ng-container>\r\n                      <tr *ngFor=\"let cliente of resultcliente\">\r\n                        <td [ngClass]=\"classStatusBorder(cliente.Estado)\" class=\"text-center hover\"></td>\r\n                        <td class=\"text-center hover\">{{ cliente.cliente }}</td>\r\n                        <td class=\"hover\">{{ cliente.sucursal }}</td>\r\n                        <td class=\"hover\">{{ cliente.vendedor }}</td>\r\n                        <td class=\"hover\">{{ cliente.motivo }}</td>\r\n                        <td class=\"hover\">{{ cliente.estado }}</td>\r\n                      </tr>\r\n                      <tr *ngIf=\"resuldata.length === 0\">\r\n                        <td colspan=\"6\" class=\"text-center\">Sin datos registrados</td>\r\n                      </tr>\r\n                    </ng-container>\r\n                  </ng-template>\r\n                </custom-table>\r\n              </div>\r\n            </div>\r\n          </detail-panel>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </app-body>\r\n";
-      /***/
-    },
-
-    /***/
-    "iMgG":
-    /*!*************************************************!*\
-      !*** ./src/app/guards/form-deactivate.guard.ts ***!
-      \*************************************************/
-
-    /*! exports provided: FormDeactivateGuard */
-
-    /***/
-    function iMgG(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "FormDeactivateGuard", function () {
-        return FormDeactivateGuard;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "mrSG");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-
-      var FormDeactivateGuard = /*#__PURE__*/function () {
-        function FormDeactivateGuard() {
-          _classCallCheck(this, FormDeactivateGuard);
-        }
-
-        _createClass(FormDeactivateGuard, [{
-          key: "canDeactivate",
-          value: function canDeactivate(component, route, state) {
-            return component.formCanDeactivate();
-          }
-        }]);
-
-        return FormDeactivateGuard;
-      }();
-
-      FormDeactivateGuard = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-      })], FormDeactivateGuard);
+      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n  <app-header appTitle=\"reporte\">\r\n    <button (click)=\"exportToExcel()\" class=\"btn btn-primary\">\r\n      Exportar a Excel\r\n    </button>\r\n\r\n\r\n    <button type=\"button\" (click)=\"reporteAgenda()\" class=\"btn btn-primary\">Reporte Agenda</button>\r\n\r\n  </app-header>\r\n  <app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n\r\n    <advanced-filter>\r\n      <form [formGroup]=\"formFilter\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"fechaInicial\">Fecha inicial</label>\r\n            <input\r\n              type=\"date\"\r\n              class=\"form-control\"\r\n              id=\"fechaInicial\"\r\n              formControlName=\"fechaInicial\"\r\n            />\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"fechaFinal\">Fecha final</label>\r\n            <input\r\n              type=\"date\"\r\n              class=\"form-control\"\r\n              id=\"fechaFinal\"\r\n              formControlName=\"fechaFinal\"\r\n            />\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"nombreVendedor\">Nombre del vendedor</label>\r\n            <select class=\"form-control custom-select\" id=\"nombreVendedor\" formControlName=\"nombreVendedor\">\r\n              <option value=\"\">Seleccione un vendedor</option>\r\n              <option *ngFor=\"let vendedor of vendedores\" [value]=\"vendedor.id\">{{ vendedor.nome }}</option>\r\n            </select>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"listaSucursales\">Lista de sucursales</label>\r\n            <select class=\"form-control custom-select\" id=\"listaSucursales\" formControlName=\"listaSucursales\">\r\n              <option value=\"\">Seleccionar escritorio</option>\r\n              <ng-container *ngFor=\"let escritorio of escritorios\">\r\n                <option [value]=\"escritorio.codEscritorio\" *ngIf=\"escritorio.nomeEscritorio !== ''\">{{ escritorio.nomeEscritorio }}</option>\r\n              </ng-container>\r\n            </select>\r\n          </div>\r\n\r\n\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"titulo\">Título</label>\r\n            <select class=\"form-control custom-select\" id=\"titulo\" formControlName=\"titulo\">\r\n              <option value=\"\">Seleccionar título</option>\r\n              <option *ngFor=\"let titulo of titulos\" [value]=\"titulo.codTitulo\">{{ titulo.descricaoTitulo }}</option>\r\n            </select>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"estado\">Estado</label>\r\n            <select class=\"form-control custom-select\" id=\"estado\" formControlName=\"estado\">\r\n              <option value=\"\">Seleccionar estado</option>\r\n              <option *ngFor=\"let estado of estados\" [value]=\"estado.id\">{{ estado.nombre }}</option>\r\n            </select>\r\n          </div>\r\n\r\n\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- Agrega aquí más campos de filtrado avanzado si es necesario -->\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n\r\n    <div class=\"row mt-6\">\r\n      <div [ngClass]=\"{'col-12': !showDetailPanel, 'col-7 pr-0': showDetailPanel}\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <th scope=\"col\"></th>\r\n              <th\r\n                scope=\"col\"\r\n                class=\"text-center hover\"\r\n                (click)=\"setOrderBy('cliente')\">\r\n                <thead-sorter value=\"Cliente\" [active]=\"orderBy == 'cliente'\" [sort]=\"orderType\"></thead-sorter>\r\n              </th>\r\n              <th\r\n                scope=\"col\"\r\n                class=\"text-center hover\"\r\n                (click)=\"setOrderBy('sucursal')\">\r\n                <thead-sorter value=\"Sucursal\" [active]=\"orderBy == 'sucursal'\" [sort]=\"orderType\"></thead-sorter>\r\n              </th>\r\n              <th\r\n                scope=\"col\"\r\n                class=\"hover\"\r\n                (click)=\"setOrderBy('vendedor')\">\r\n                <thead-sorter value=\"Nombre del Promotor\" [active]=\"orderBy == 'vendedor'\" [sort]=\"orderType\"></thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"hover\">\r\n                <thead-sorter value=\"Titulo\"></thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"hover\">\r\n                <thead-sorter value=\"Estado\"></thead-sorter>\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <ng-container >\r\n              <tr *ngFor=\"let cliente of getPaginateData()\">\r\n                <td [ngClass]=\"classStatusBorder(cliente.Estado)\" class=\"text-center hover\"></td>\r\n                <td class=\"text-center hover\">{{ cliente.cliente }}</td>\r\n                <td class=\"hover\">{{ cliente.sucursal }}</td>\r\n                <td class=\"hover\">{{ cliente.vendedor }}</td>\r\n                <td class=\"hover\">{{ cliente.motivo }}</td>\r\n                <td class=\"hover\">{{ cliente.Estado }}</td>\r\n                <td>\r\n                  <span tooltip=\"Datos de Cliente\" placement=\"left\" container=\"body\">\r\n                    <button type=\"button\" class=\"btn-icon-sm\" (click)=\"viewDetails(cliente.id_cliente)\">\r\n                      <i class=\"fas fa-user\"></i>\r\n                    </button>\r\n                  </span>\r\n                </td>\r\n              </tr>\r\n              <tr *ngIf=\"resuldata.length === 0\">\r\n                <td colspan=\"6\" class=\"text-center\">Sin datos registrados </td>\r\n              </tr>\r\n            </ng-container>\r\n          </ng-template>\r\n        </custom-table>\r\n        <div class=\"d-flex justify-content-center mt-3\" >\r\n          <pagination\r\n            [maxSize]=\"maxSize\"\r\n            [(totalItems)]=\"totalItems\"\r\n            (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\"\r\n            [boundaryLinks]=\"true\"\r\n            [(ngModel)]=\"currentPage\"\r\n            previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\"\r\n            firstText=\"&laquo;\"\r\n            lastText=\"&raquo;\">\r\n          </pagination>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-md-5\" [hidden]=\"!showDetailPanel\">\r\n        <div class=\"sticky-top\" style=\"max-height: 400px; overflow-y: auto;\">\r\n          <detail-panel>\r\n            <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n              <div *ngIf=\"dadosCadastraisLoaded && !dadosCadastraisEmpty\">\r\n                <div class=\"table-responsive\">\r\n                  <custom-table [config]=\"tableConfig\">\r\n                    <ng-template #thead let-thead>\r\n                      <tr>\r\n                        <th scope=\"col\"></th>\r\n                        <th scope=\"col\" class=\"hover\">\r\n                          <thead-sorter value=\"fecha inicial\"></thead-sorter>\r\n                        </th>\r\n                        <th scope=\"col\" class=\"hover\">\r\n                          <thead-sorter value=\"fecha final\"></thead-sorter>\r\n                        </th>\r\n                        <th\r\n                          scope=\"col\"\r\n                          class=\"text-center hover\"\r\n                          (click)=\"setOrderByclinte('cliente')\">\r\n                          <thead-sorter value=\"Cliente\" [active]=\"orderBy == 'cliente'\" [sort]=\"orderType\"></thead-sorter>\r\n                        </th>\r\n                        <th\r\n                          scope=\"col\"\r\n                          class=\"text-center hover\"\r\n                          (click)=\"setOrderByclinte('sucursal')\">\r\n                          <thead-sorter value=\"Sucursal\" [active]=\"orderBy == 'sucursal'\" [sort]=\"orderType\"></thead-sorter>\r\n                        </th>\r\n                        <th scope=\"col\" class=\"hover\">\r\n                          <thead-sorter value=\"Promotor\"></thead-sorter>\r\n                        </th>\r\n                        <th scope=\"col\" class=\"hover\">\r\n                          <thead-sorter value=\"Titulo\"></thead-sorter>\r\n                        </th>\r\n                        <th scope=\"col\" class=\"hover\">\r\n                          <thead-sorter value=\"Estado\"></thead-sorter>\r\n                        </th>\r\n                      </tr>\r\n                    </ng-template>\r\n                    <ng-template #tbody let-tbody>\r\n                      <ng-container>\r\n                        <tr *ngFor=\"let cliente of resultcliente\">\r\n                          <td [ngClass]=\"classStatusBorder(cliente.Estado)\" class=\"text-center hover\"></td>\r\n                          <td class=\"hover\">{{ cliente.fecha_inicio }}</td>\r\n                          <td class=\"hover\">{{ cliente.fecha_fin }}</td>\r\n                          <td class=\"text-center hover\">{{ cliente.cliente }}</td>\r\n                          <td class=\"hover\">{{ cliente.sucursal }}</td>\r\n                          <td class=\"hover\">{{ cliente.vendedor }}</td>\r\n                          <td class=\"hover\">{{ cliente.motivo }}</td>\r\n                          <td class=\"hover\">{{ cliente.estado }}</td>\r\n                        </tr>\r\n                        <tr *ngIf=\"resuldata.length === 0\">\r\n                          <td colspan=\"6\" class=\"text-center\">Sin datos registrados</td>\r\n                        </tr>\r\n                      </ng-container>\r\n                    </ng-template>\r\n                  </custom-table>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </detail-panel>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </app-body>\r\n";
       /***/
     },
 
@@ -52403,7 +52423,7 @@
           _classCallCheck(this, ComercialCadastrosTitulosAgendaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/titulos-agenda";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/titulos-agenda";
         }
 
         _createClass(ComercialCadastrosTitulosAgendaService, [{

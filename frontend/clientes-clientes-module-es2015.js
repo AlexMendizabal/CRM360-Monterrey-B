@@ -910,7 +910,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {
@@ -1691,7 +1691,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesUltimosPrecosService = class ComercialClientesUltimosPrecosService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes/ultimos-precos`;
+        this.API = `http://23.254.204.187/api/comercial/clientes/ultimos-precos`;
     }
     getListaUltimosPrecos(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -1738,7 +1738,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesHistoricoFinanceiroService = class ComercialClientesHistoricoFinanceiroService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes/historico-financeiro`;
+        this.API = `http://23.254.204.187/api/comercial/clientes/historico-financeiro`;
     }
     getPermissaoAcesso(id) {
         return this.http.get(`${this.API}/permissao-acesso/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
@@ -1961,7 +1961,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialService = class ComercialService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial`;
+        this.API = `http://23.254.204.187/api/comercial`;
     }
     getEmpresas(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -1982,6 +1982,34 @@ let ComercialService = class ComercialService {
         return this.http
             .get(`${this.API}/depositos`, {
             params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getAlmacen(params) {
+        return this.http
+            .get(`${this.API}/almacen`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getLinhasId(id) {
+        return this.http.get(`${this.API}/linhas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getSublineasId(id) {
+        return this.http.get(`${this.API}/sublineas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    sincronizarMateriales() {
+        return this.http.get(`${this.API}/sincronizar`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMateriales(params) {
+        return this.http
+            .get(`${this.API}/materiales`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesOferta(params) {
+        return this.http
+            .get(`${this.API}/materiales_lista_precio`, {
+            params: params,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
@@ -2022,6 +2050,25 @@ let ComercialService = class ComercialService {
     getEscritorios() {
         return this.http.get(`${this.API}/escritorios`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getPresentacionMaterial() {
+        return this.http
+            .get(`${this.API}/presentacion_materiales`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCliente(codCliente) {
+        return this.http.get(`${this.API}/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
+    getListarPrecios() {
+        return this.http.get(`${this.API}/vendedor/lista_precio`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getTodosVendedores() {
+        return this.http.get(`${this.API}/vendedor/allvendedor`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCentrosLogisticos() {
+        return this.http.get(`${this.API}/almacen/centros_logisticos`);
+    }
 };
 ComercialService.ctorParameters = () => [
     { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
@@ -2058,7 +2105,7 @@ __webpack_require__.r(__webpack_exports__);
 let FormRulesService = class FormRulesService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/common/services`;
+        this.API = `http://23.254.204.187/api/common/services`;
     }
     getRules(formRef) {
         return this.http.get(`${this.API}/form-rules/${formRef}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
@@ -4011,7 +4058,7 @@ __webpack_require__.r(__webpack_exports__);
 let CnpjService = class CnpjService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/common/services/cnpj`;
+        this.API = `http://23.254.204.187/api/common/services/cnpj`;
     }
     getData(cnpj) {
         cnpj = cnpj.replace(/\D/g, '');

@@ -80,7 +80,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {
@@ -1122,7 +1122,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosFormasPagamentoService = class ComercialCadastrosFormasPagamentoService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/formas-pagamento`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/formas-pagamento`;
     }
     getListaFormasPagamento(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();

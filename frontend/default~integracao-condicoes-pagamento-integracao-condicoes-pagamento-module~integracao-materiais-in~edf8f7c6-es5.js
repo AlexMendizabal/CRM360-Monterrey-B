@@ -704,8 +704,8 @@
           this.http = http;
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
-          this.BASE_URL = "https://crm360.monterrey.com.bo/api";
-          this.API = "https://crm360.monterrey.com.bo/api/comercial";
+          this.BASE_URL = "https://crm360.monterrey.com.bo";
+          this.API = "http://23.254.204.187/api/comercial/";
         }
 
         _createClass(ComercialIntegracoesServicosIntegracaoMateriaisComponent, [{
@@ -892,7 +892,7 @@
           _classCallCheck(this, ComercialTidSoftwareService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/tid-software";
+          this.API = "http://23.254.204.187/api/comercial/tid-software";
         }
 
         _createClass(ComercialTidSoftwareService, [{

@@ -610,7 +610,7 @@ let TecnologiaInformacaoControleLinhaService = class TecnologiaInformacaoControl
     constructor(http, genericService) {
         this.http = http;
         this.genericService = genericService;
-        this.API = `https://crm360.monterrey.com.bo/api/tecnologia-informacao/controle-linhas`;
+        this.API = `http://23.254.204.187/api/tecnologia-informacao/controle-linhas`;
     }
     getFormFields() {
         const empresas = this.genericService.getEmpresas();
@@ -728,7 +728,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {

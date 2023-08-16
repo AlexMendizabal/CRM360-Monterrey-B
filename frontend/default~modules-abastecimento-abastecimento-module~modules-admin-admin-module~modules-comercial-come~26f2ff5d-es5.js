@@ -66,13 +66,13 @@
 
           this.http = http;
           this.router = router;
-          this.API = "https://crm360.monterrey.com.bo/api/common/atividades";
+          this.API = "http://23.254.204.187/api/common/atividades";
         }
 
         _createClass(AtividadesService, [{
           key: "registrarAcesso",
           value: function registrarAcesso(idAtividade) {
-            return this.http.post("https://crm360.monterrey.com.bo/api/core/registrar-acesso", {
+            return this.http.post("http://23.254.204.187/api/core/registrar-acesso", {
               idAtividade: idAtividade,
               dsRota: this.router.url
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
@@ -335,26 +335,17 @@
               _this3.atividadesError = false;
               var data = response.body['data']; //console.log({ ...response.body["data"] })
 
-              var idx1 = data.findIndex(function (val) {
-                return val['id'] === 89;
-              });
+              /*let idx1 = data.findIndex((val) => val['id'] === 89);
               data.splice(idx1, 1);
-              var idx2 = data.findIndex(function (val) {
-                return val['id'] === 28;
-              });
+              let idx2 = data.findIndex((val) => val['id'] === 28);
               data.splice(idx1, 1);
-              var idx3 = data.findIndex(function (val) {
-                return val['id'] === 30;
-              });
+              let idx3 = data.findIndex((val) => val['id'] === 30);
               data.splice(idx3, 1);
-              var idx4 = data.findIndex(function (val) {
-                return val['id'] === 25;
-              });
+              let idx4 = data.findIndex((val) => val['id'] === 25);
               data.splice(idx4, 1);
-              var idx5 = data.findIndex(function (val) {
-                return val['id'] === 29;
-              });
-              data[idx5]['nome'] = 'BÚSQUEDA DE CLIENTES';
+                  let idx5 = data.findIndex((val) => val['id'] === 29);
+              data[idx5]['nome'] = 'BÚSQUEDA DE CLIENTES';*/
+
               _this3.atividades = data;
               _this3.routerLinkHome = data[0]['moduloRota']; //console.log(response)
             }, function (error) {
@@ -937,7 +928,7 @@
         }, {
           key: "registrarAcesso",
           value: function registrarAcesso(idAtividade) {
-            return this.http.post("https://crm360.monterrey.com.bo/api/core/registrar-acesso", {
+            return this.http.post("http://23.254.204.187/api/core/registrar-acesso", {
               idAtividade: idAtividade,
               dsRota: this.router.url
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));

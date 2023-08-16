@@ -59,7 +59,7 @@
           _classCallCheck(this, ComercialCadastrosTipoOperadorService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/tipo-operador";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/tipo-operador";
         }
 
         _createClass(ComercialCadastrosTipoOperadorService, [{
@@ -267,7 +267,7 @@
           _classCallCheck(this, ComercialCadastrosEquipeVendaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/equipe-venda";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/equipe-venda";
         }
 
         _createClass(ComercialCadastrosEquipeVendaService, [{
@@ -407,7 +407,7 @@
 
           this.http = http;
           this.clientesService = clientesService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/formulario/enderecos";
+          this.API = "http://23.254.204.187/api/comercial/clientes/cadastro/formulario/enderecos";
         }
 
         _createClass(ComercialClientesCadastroEnderecosFormularioService, [{
@@ -481,7 +481,7 @@
         }, {
           key: "getCliente",
           value: function getCliente(codCliente) {
-            return this.http.get("https://crm360.monterrey.com.bo/api/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+            return this.http.get("http://23.254.204.187/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
           }
         }, {
           key: "postAnexos",
@@ -585,7 +585,7 @@
           this.http = http;
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/materiais/grupos";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/materiais/grupos";
         }
 
         _createClass(ComercialCadastrosMateriaisGrupoService, [{
@@ -1356,7 +1356,7 @@
           _classCallCheck(this, ComercialAgendaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/agenda";
+          this.API = "http://23.254.204.187/api/comercial/agenda";
         }
 
         _createClass(ComercialAgendaService, [{
@@ -1537,7 +1537,7 @@
           _classCallCheck(this, CepService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/common/services/cep";
+          this.API = "http://23.254.204.187/api/common/services/cep";
         }
 
         _createClass(CepService, [{
@@ -1868,7 +1868,7 @@
           this.comercialService = comercialService;
           this.vendedoresService = vendedoresService;
           this.situacoesService = situacoesService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/ciclo-vendas/pedidos-producao-telas";
+          this.API = "http://23.254.204.187/api/comercial/ciclo-vendas/pedidos-producao-telas";
           this.notifySubmit = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
           this.notifySubmitObservable$ = this.notifySubmit.asObservable();
           this.materiaisSubject = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
@@ -2510,7 +2510,7 @@
           _classCallCheck(this, ComercialCadastrosEscritorioService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/escritorio";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/escritorio";
         }
 
         _createClass(ComercialCadastrosEscritorioService, [{
@@ -2652,7 +2652,7 @@
           this.http = http;
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/materiais/combos";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/materiais/combos";
         }
 
         _createClass(ComercialCadastrosMateriaisComboService, [{
@@ -3108,7 +3108,7 @@
           _classCallCheck(this, GenericService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/common";
+          this.API = "http://23.254.204.187/api/common";
         }
 
         _createClass(GenericService, [{
@@ -3406,7 +3406,7 @@
           _classCallCheck(this, SubModulosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/core/submodulo";
+          this.API = "http://23.254.204.187/api/core/submodulo";
         }
 
         _createClass(SubModulosService, [{
@@ -3430,163 +3430,6 @@
       SubModulosService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
         providedIn: 'root'
       }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])], SubModulosService);
-      /***/
-    },
-
-    /***/
-    "LreX":
-    /*!********************************************************************************************!*\
-      !*** ./src/app/modules/comercial/cadastros/associacao-linhas/associacao-linhas.service.ts ***!
-      \********************************************************************************************/
-
-    /*! exports provided: ComercialCadastrosAssociacaoLinhasService */
-
-    /***/
-    function LreX(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "ComercialCadastrosAssociacaoLinhasService", function () {
-        return ComercialCadastrosAssociacaoLinhasService;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "mrSG");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-      /* harmony import */
-
-
-      var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! @angular/common/http */
-      "IheW");
-      /* harmony import */
-
-
-      var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! rxjs/operators */
-      "kU1M");
-      /* harmony import */
-
-
-      var _comercial_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
-      /*! ../../comercial.service */
-      "VgqD");
-      /* harmony import */
-
-
-      var _tid_software_tid_software_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
-      /*! ../../tid-software/tid-software.service */
-      "zN97"); // Services
-
-
-      var ComercialCadastrosAssociacaoLinhasService = /*#__PURE__*/function () {
-        function ComercialCadastrosAssociacaoLinhasService(http, comercialService, tidSoftwareService) {
-          _classCallCheck(this, ComercialCadastrosAssociacaoLinhasService);
-
-          this.http = http;
-          this.comercialService = comercialService;
-          this.tidSoftwareService = tidSoftwareService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/emailMarketing/associacao";
-        }
-
-        _createClass(ComercialCadastrosAssociacaoLinhasService, [{
-          key: "getListaLinhas",
-          value: function getListaLinhas(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/linhas"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getAssociacoesSetores",
-          value: function getAssociacoesSetores(params) {
-            return this.http.get("".concat(this.API, "/lista-associacoes"), {
-              params: params,
-              observe: 'response'
-            });
-          }
-        }, {
-          key: "getLinhas",
-          value: function getLinhas(params) {
-            return this.http.get("".concat(this.API, "/linhas"), {
-              params: params,
-              observe: 'response'
-            });
-          }
-        }, {
-          key: "getSetoresFilter",
-          value: function getSetoresFilter(params) {
-            return this.http.get("".concat(this.API, "/setor-atividade"), {
-              params: params,
-              observe: 'response'
-            });
-          }
-        }, {
-          key: "getDetalhes",
-          value: function getDetalhes(params) {
-            return this.http.get("".concat(this.API, "/lista-associacoes"), {
-              params: params,
-              observe: 'response'
-            });
-          }
-        }, {
-          key: "saveLinha",
-          value: function saveLinha(record) {
-            return this.http.post("".concat(this.API, "/lista-associacoes"), record).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "save",
-          value: function save(record) {
-            return this.saveLinha(record);
-          }
-        }, {
-          key: "getSetores",
-          value: function getSetores() {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/setor-atividade"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }]);
-
-        return ComercialCadastrosAssociacaoLinhasService;
-      }();
-
-      ComercialCadastrosAssociacaoLinhasService.ctorParameters = function () {
-        return [{
-          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
-        }, {
-          type: _comercial_service__WEBPACK_IMPORTED_MODULE_4__["ComercialService"]
-        }, {
-          type: _tid_software_tid_software_service__WEBPACK_IMPORTED_MODULE_5__["ComercialTidSoftwareService"]
-        }];
-      };
-
-      ComercialCadastrosAssociacaoLinhasService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], _comercial_service__WEBPACK_IMPORTED_MODULE_4__["ComercialService"], _tid_software_tid_software_service__WEBPACK_IMPORTED_MODULE_5__["ComercialTidSoftwareService"]])], ComercialCadastrosAssociacaoLinhasService);
       /***/
     },
 
@@ -3639,7 +3482,7 @@
           _classCallCheck(this, EscritoriosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/common/escritorios";
+          this.API = "http://23.254.204.187/api/common/escritorios";
         }
 
         _createClass(EscritoriosService, [{
@@ -3938,7 +3781,7 @@
           _classCallCheck(this, ComercialCadastrosRepresentantesService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/representantes";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/representantes";
         }
 
         _createClass(ComercialCadastrosRepresentantesService, [{
@@ -4845,7 +4688,7 @@
           _classCallCheck(this, ComercialComissoesGestaoComissionamentosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/comissoes/representantes/gestao-comissionamentos";
+          this.API = "http://23.254.204.187/api/comercial/comissoes/representantes/gestao-comissionamentos";
         }
 
         _createClass(ComercialComissoesGestaoComissionamentosService, [{
@@ -5302,7 +5145,7 @@
           _classCallCheck(this, ComercialGestaoAssociacoesCoordenadoresEscritoriosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/gestao/associacao-coordenadores";
+          this.API = "http://23.254.204.187/api/comercial/gestao/associacao-coordenadores";
         }
 
         _createClass(ComercialGestaoAssociacoesCoordenadoresEscritoriosService, [{
@@ -6125,7 +5968,7 @@
           _classCallCheck(this, ComercialCadastrosMotivoAssociacaoService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/motivo-associacao";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/motivo-associacao";
         }
 
         _createClass(ComercialCadastrosMotivoAssociacaoService, [{
@@ -6409,7 +6252,7 @@
           _classCallCheck(this, ComercialGestaoContratosComerciaisService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/gestao/contratos-comerciais";
+          this.API = "http://23.254.204.187/api/comercial/gestao/contratos-comerciais";
         }
 
         _createClass(ComercialGestaoContratosComerciaisService, [{
@@ -6920,7 +6763,7 @@
           _classCallCheck(this, ComercialCadastrosTipoComissionamentoService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/tipo-comissionamento";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/tipo-comissionamento";
         }
 
         _createClass(ComercialCadastrosTipoComissionamentoService, [{

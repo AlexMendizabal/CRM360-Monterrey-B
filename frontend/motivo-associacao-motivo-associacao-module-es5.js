@@ -100,7 +100,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {

@@ -672,7 +672,7 @@
           _classCallCheck(this, ComercialCadastrosContratosComerciaisSituacoesContratosComerciaisService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/contratos-comerciais/situacoes-contratos-comerciais";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/contratos-comerciais/situacoes-contratos-comerciais";
         }
 
         _createClass(ComercialCadastrosContratosComerciaisSituacoesContratosComerciaisService, [{
@@ -814,7 +814,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {

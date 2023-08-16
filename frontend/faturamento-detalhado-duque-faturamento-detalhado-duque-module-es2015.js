@@ -336,7 +336,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialRelatoriosFaturamentoDetalhadoDuqueService = class ComercialRelatoriosFaturamentoDetalhadoDuqueService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/relatorios/faturamento-detalhado-duque`;
+        this.API = `http://23.254.204.187/api/comercial/relatorios/faturamento-detalhado-duque`;
     }
     getFaturamentoDuque(data) {
         return this.http.get(`${this.API}/lista/${data}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["take"])(1));

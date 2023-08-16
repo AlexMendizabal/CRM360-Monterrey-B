@@ -836,7 +836,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -1887,7 +1887,7 @@
           _classCallCheck(this, ComercialTidSoftwareService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/tid-software";
+          this.API = "http://23.254.204.187/api/comercial/tid-software";
         }
 
         _createClass(ComercialTidSoftwareService, [{

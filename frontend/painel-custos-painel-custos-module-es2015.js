@@ -614,7 +614,7 @@ let ComercialCadastroPainelCustosService = class ComercialCadastroPainelCustosSe
     /*private readonly API = `https://crm360.monterrey.com.bo`;*/
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/painel-custos`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/painel-custos`;
     }
     listar() {
         return this.http.get(`${this.API}/lista`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));

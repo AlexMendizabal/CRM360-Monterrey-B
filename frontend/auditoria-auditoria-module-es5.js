@@ -59,8 +59,8 @@
           _classCallCheck(this, ComercialVendedoresService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/vendedor";
-          this.API_CADASTROS = "https://crm360.monterrey.com.bo/api/comercial/cadastros";
+          this.API = "http://23.254.204.187/api/comercial/vendedor";
+          this.API_CADASTROS = "http://23.254.204.187/api/comercial/cadastros";
         }
 
         _createClass(ComercialVendedoresService, [{
@@ -87,6 +87,13 @@
           key: "getCarteiraClientes",
           value: function getCarteiraClientes(params) {
             return this.http.get("".concat(this.API, "/carteira-clientes"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCarteiraClientesCotizacion",
+          value: function getCarteiraClientesCotizacion(params) {
+            return this.http.get("".concat(this.API, "/carteira-clientes-cotizacion"), {
               params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
@@ -187,7 +194,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -2025,7 +2032,7 @@
           _classCallCheck(this, ComercialAuditoriaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/auditoria/enderecos-entrega";
+          this.API = "http://23.254.204.187/api/comercial/auditoria/enderecos-entrega";
         }
 
         _createClass(ComercialAuditoriaService, [{
@@ -2082,7 +2089,7 @@
         }, {
           key: "getCliente",
           value: function getCliente(codCliente) {
-            return this.http.get("https://crm360.monterrey.com.bo/api/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+            return this.http.get("http://23.254.204.187/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
           }
         }]);
 

@@ -24,11 +24,11 @@ let AtividadesService = class AtividadesService {
     constructor(http, router) {
         this.http = http;
         this.router = router;
-        this.API = `https://crm360.monterrey.com.bo/api/common/atividades`;
+        this.API = `http://23.254.204.187/api/common/atividades`;
     }
     registrarAcesso(idAtividade) {
         return this.http
-            .post(`https://crm360.monterrey.com.bo/api/core/registrar-acesso`, {
+            .post(`http://23.254.204.187/api/core/registrar-acesso`, {
             idAtividade: idAtividade,
             dsRota: this.router.url,
         })
@@ -210,7 +210,7 @@ let SidebarComponent = class SidebarComponent {
             this.atividadesError = false;
             let data = response.body['data'];
             //console.log({ ...response.body["data"] })
-            let idx1 = data.findIndex((val) => val['id'] === 89);
+            /*let idx1 = data.findIndex((val) => val['id'] === 89);
             data.splice(idx1, 1);
             let idx2 = data.findIndex((val) => val['id'] === 28);
             data.splice(idx1, 1);
@@ -218,8 +218,9 @@ let SidebarComponent = class SidebarComponent {
             data.splice(idx3, 1);
             let idx4 = data.findIndex((val) => val['id'] === 25);
             data.splice(idx4, 1);
+  
             let idx5 = data.findIndex((val) => val['id'] === 29);
-            data[idx5]['nome'] = 'BÚSQUEDA DE CLIENTES';
+            data[idx5]['nome'] = 'BÚSQUEDA DE CLIENTES';*/
             this.atividades = data;
             this.routerLinkHome = data[0]['moduloRota'];
             //console.log(response)
@@ -597,7 +598,7 @@ let AdminAtividadesService = class AdminAtividadesService {
     }
     registrarAcesso(idAtividade) {
         return this.http
-            .post(`https://crm360.monterrey.com.bo/api/core/registrar-acesso`, {
+            .post(`http://23.254.204.187/api/core/registrar-acesso`, {
             idAtividade: idAtividade,
             dsRota: this.router.url,
         })

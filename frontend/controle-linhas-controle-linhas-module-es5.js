@@ -869,7 +869,7 @@
 
           this.http = http;
           this.genericService = genericService;
-          this.API = "https://crm360.monterrey.com.bo/api/tecnologia-informacao/controle-linhas";
+          this.API = "http://23.254.204.187/api/tecnologia-informacao/controle-linhas";
         }
 
         _createClass(TecnologiaInformacaoControleLinhaService, [{
@@ -1050,7 +1050,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {

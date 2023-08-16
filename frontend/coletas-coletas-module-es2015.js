@@ -68,7 +68,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesService = class ComercialClientesService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes`;
+        this.API = `http://23.254.204.187/api/comercial/clientes`;
     }
     getStatus() {
         return this.http.get(`${this.API}/pesquisa/status`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -448,7 +448,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {

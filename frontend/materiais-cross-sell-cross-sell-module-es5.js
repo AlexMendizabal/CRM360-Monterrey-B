@@ -732,7 +732,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -1597,7 +1597,7 @@
           this.http = http;
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/materiais/cross-sell";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/materiais/cross-sell";
         }
 
         _createClass(ComercialCadastrosMateriaisCrossSellService, [{
@@ -1995,7 +1995,7 @@
           _classCallCheck(this, ComercialTidSoftwareService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/tid-software";
+          this.API = "http://23.254.204.187/api/comercial/tid-software";
         }
 
         _createClass(ComercialTidSoftwareService, [{

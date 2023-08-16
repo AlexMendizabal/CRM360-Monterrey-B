@@ -11,151 +11,6 @@
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~agenda-agenda-module~cotacoes-cotacoes-module~liberacoes-liberacoes-module~pedidos-producao-~1dbf20ef"], {
     /***/
-    "VgqD":
-    /*!********************************************************!*\
-      !*** ./src/app/modules/comercial/comercial.service.ts ***!
-      \********************************************************/
-
-    /*! exports provided: ComercialService */
-
-    /***/
-    function VgqD(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "ComercialService", function () {
-        return ComercialService;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "mrSG");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-      /* harmony import */
-
-
-      var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! @angular/common/http */
-      "IheW");
-      /* harmony import */
-
-
-      var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! rxjs/operators */
-      "kU1M");
-
-      var ComercialService = /*#__PURE__*/function () {
-        function ComercialService(http) {
-          _classCallCheck(this, ComercialService);
-
-          this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial";
-        }
-
-        _createClass(ComercialService, [{
-          key: "getEmpresas",
-          value: function getEmpresas(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/empresas"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getDepositos",
-          value: function getDepositos(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/depositos"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getLinhas",
-          value: function getLinhas(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/linhas"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getClasses",
-          value: function getClasses(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/classes"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getMateriais",
-          value: function getMateriais() {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/materiais"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getPerfil",
-          value: function getPerfil() {
-            return this.http.get("".concat(this.API, "/perfil")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getEscritorios",
-          value: function getEscritorios() {
-            return this.http.get("".concat(this.API, "/escritorios")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }]);
-
-        return ComercialService;
-      }();
-
-      ComercialService.ctorParameters = function () {
-        return [{
-          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
-        }];
-      };
-
-      ComercialService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])], ComercialService);
-      /***/
-    },
-
-    /***/
     "nkG6":
     /*!**************************************************************!*\
       !*** ./src/app/modules/comercial/estoque/estoque.service.ts ***!
@@ -225,19 +80,24 @@
           this.http = http;
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/estoque";
+          this.API = "http://23.254.204.187/api/comercial/estoque";
         }
 
         _createClass(ComercialEstoqueService, [{
           key: "getFiltros",
           value: function getFiltros() {
-            var empresas = this.tidSoftwareService.getEmpresas('estoques');
+            /* Almacen */
+            var almacenes = this.comercialService.getAlmacen();
+            /* Familia */
+
+            var classes = this.comercialService.getClasses(null);
             var depositos = this.comercialService.getDepositos({
               grupoManetoni: 1
             });
+            var sucursales = this.comercialService.getEscritorios();
+            var empresas = this.tidSoftwareService.getEmpresas('estoques');
             var linhas = this.tidSoftwareService.getLinhas();
-            var classes = this.comercialService.getClasses(null);
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([empresas, depositos, linhas, classes]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([almacenes, classes, depositos, sucursales, empresas, linhas]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
           }
         }, {
           key: "getEstoqueAtual",
@@ -276,6 +136,16 @@
           key: "getEstoqueSuspenso",
           value: function getEstoqueSuspenso(params) {
             return this.http.get("".concat(this.API, "/estoque-suspenso/").concat(params.idMaterial, "/").concat(params.idEmpresa)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+          }
+        }, {
+          key: "getStockComprometido",
+          value: function getStockComprometido(params) {
+            return this.http.get("".concat(this.API, "/estoquecomprometido/").concat(params.idMaterial)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+          }
+        }, {
+          key: "getStockSuspeso",
+          value: function getStockSuspeso(params) {
+            return this.http.get("".concat(this.API, "/estoquesuspenso/").concat(params.idMaterial)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
           }
         }]);
 
@@ -375,7 +245,7 @@
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
           this.estoqueService = estoqueService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/ciclo-vendas/cotacoes";
+          this.API = "http://23.254.204.187/api/comercial/ciclo-vendas/cotacoes";
         }
 
         _createClass(ComercialCicloVendasCotacoesService, [{
@@ -394,6 +264,22 @@
 
             return this.http.get("".concat(this.API, "/lista"), {
               params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getOfertas",
+          value: function getOfertas(params) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+            return this.http.get("".concat(this.API, "/lista_cotizacion"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getDetalleOferta",
+          value: function getDetalleOferta(params) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+            return this.http.get("".concat(this.API, "/oferta_detalle"), {
+              params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
@@ -507,6 +393,13 @@
           key: "getEstoqueDepositos",
           value: function getEstoqueDepositos(codDeposito, codMaterial) {
             return this.http.get("".concat(this.API, "/materiais/estoque-depositos/").concat(codMaterial, "/").concat(codDeposito)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "descuentoCliente",
+          value: function descuentoCliente(params) {
+            return this.http.get("".concat(this.API, "/descuento_cliente"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
           key: "getMateriaisCombo",
@@ -632,6 +525,11 @@
           key: "postCotacao",
           value: function postCotacao(params) {
             return this.http.post("".concat(this.API, "/salvar"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "postCotizacion",
+          value: function postCotizacion(params) {
+            return this.http.post("".concat(this.API, "/guardar"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
           key: "putCotacao",

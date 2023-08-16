@@ -1421,7 +1421,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {
@@ -2072,7 +2072,7 @@ let ComercialGestaoTabelaPrecosService = class ComercialGestaoTabelaPrecosServic
     constructor(http, comercialService) {
         this.http = http;
         this.comercialService = comercialService;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/gestao/tabela-precos`;
+        this.API = `http://23.254.204.187/api/comercial/gestao/tabela-precos`;
     }
     getListaPrecos(params = []) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -3008,7 +3008,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialTidSoftwareService = class ComercialTidSoftwareService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/tid-software`;
+        this.API = `http://23.254.204.187/api/comercial/tid-software`;
     }
     loadDependencies() {
         let empresas = this.getEmpresas('vendas');

@@ -322,11 +322,17 @@
 
       var src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
       /*! src/app/shared/services/core/title.service */
-      "dNnS"); // Services
+      "dNnS");
+      /* harmony import */
+
+
+      var _comercial_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      /*! ../../comercial.service */
+      "VgqD"); // Services
 
 
       var ComercialEstoqueListaComponent = /*#__PURE__*/function () {
-        function ComercialEstoqueListaComponent(modalService, router, location, formBuilder, pnotifyService, activatedRoute, atividadesService, estoqueService, titleService) {
+        function ComercialEstoqueListaComponent(modalService, router, location, formBuilder, pnotifyService, activatedRoute, atividadesService, estoqueService, titleService, comercialService) {
           _classCallCheck(this, ComercialEstoqueListaComponent);
 
           this.modalService = modalService;
@@ -338,6 +344,7 @@
           this.atividadesService = atividadesService;
           this.estoqueService = estoqueService;
           this.titleService = titleService;
+          this.comercialService = comercialService;
           this.loaderNavbar = false;
           this.loaderFullScreen = true;
           this.breadCrumbTree = [{
@@ -353,7 +360,7 @@
           this.tableConfig = {
             subtitleBorder: true
           };
-          this.itemsPerPage = 50;
+          this.itemsPerPage = 10;
           this.currentPage = 1;
           this.maxSize = 10;
           this.clientesPagination = [];
@@ -361,9 +368,10 @@
           this.idMaterial = 0;
           this.totalItems = 10;
           this.showAdvancedFilter = true;
-          this.empresas = [];
+          this.almacenes = [];
           this.depositos = [];
           this.filteredDepositos = [];
+          this.grupos = [];
           this.linhas = [];
           this.classes = [];
           this.filteredClasses = [];
@@ -371,6 +379,7 @@
           this.dadosReturned = [];
           this.dadosLoaded = false;
           this.dadosEmpty = false;
+          this.datos = [];
           this.estoqueUnidades = [];
           this.pedidosCompra = [];
           this.pedidos = [];
@@ -380,6 +389,11 @@
           this.detalhesLote = [];
           this.totaisLote = [];
           this.detalhesSuspenso = [];
+          this.orderBy = ''; // Variable para almacenar el nombre de la columna seleccionada para ordenar
+
+          this.orderType = 'asc'; // Variable para almacenar el tipo de orden (ascendente o descendente)  
+
+          this.totalSuspenso = [];
           this.pnotifyService.getPNotify();
         }
 
@@ -406,8 +420,13 @@
             })).subscribe({
               next: function next(response) {
                 if (response[0].responseCode == 200) {
-                  _this3.empresas = response[0].result;
+                  _this3.almacenes = response[0].result;
                 }
+
+                _this3.almacenes.unshift({
+                  ID: 0,
+                  ALMACEN: 'TODOS'
+                });
 
                 if (response[1].responseCode == 200) {
                   _this3.depositos = response[1].result;
@@ -427,14 +446,14 @@
                   });
                 }
 
-                if (response[3].responseCode == 200) {
-                  _this3.classes = response[3].result;
+                if (response[1].responseCode == 200) {
+                  _this3.classes = response[1].result;
                   _this3.filteredClasses = _this3.classes;
 
                   _this3.filteredClasses.unshift({
                     idClasse: 0,
                     idLinha: 0,
-                    nomeClasse: 'EXIBIR TODOS'
+                    nomeClasse: 'TODOS'
                   });
                 }
               },
@@ -444,41 +463,22 @@
             });
           }
         }, {
-          key: "setFormFilter",
-          value: function setFormFilter() {
-            var formValue = this.checkRouterParams();
-            this.form = this.formBuilder.group({
-              empresa: [formValue.empresa, _angular_forms__WEBPACK_IMPORTED_MODULE_6__["Validators"].required],
-              deposito: [formValue.deposito, _angular_forms__WEBPACK_IMPORTED_MODULE_6__["Validators"].required],
-              linha: [formValue.linha],
-              classeMaterial: [formValue.classeMaterial],
-              estoqueDisponivel: [formValue.estoqueDisponivel],
-              codMaterial: [formValue.codMaterial],
-              descMaterial: [formValue.descMaterial],
-              registros: [formValue.registros]
-            });
-          }
-        }, {
           key: "checkRouterParams",
           value: function checkRouterParams() {
-            var _this4 = this;
-
             var formValue = {
-              empresa: null,
-              deposito: null,
-              linha: 0,
-              classeMaterial: 0,
-              estoqueDisponivel: 0,
-              codMaterial: null,
-              descMaterial: null,
+              id_almacen: 0,
+              id_familia: 0,
+              id_grupo: 0,
+              id_linea: 0,
+              codigo_material: null,
+              nombre_material: null,
               registros: 300
             };
             this.activatedRouteSubscription = this.activatedRoute.queryParams.subscribe(function (queryParams) {
               if (Object.keys(queryParams).length > 0) {
                 var params = atob(queryParams['q']);
                 params = JSON.parse(params);
-
-                _this4.search(params);
+                /* this.search(params); */
 
                 Object.keys(formValue).forEach(function (formKey) {
                   Object.keys(params).forEach(function (paramKey) {
@@ -497,13 +497,76 @@
             return formValue;
           }
         }, {
+          key: "setFormFilter",
+          value: function setFormFilter() {
+            var formValue = this.checkRouterParams();
+            this.form = this.formBuilder.group({
+              grupo: [formValue.grupo],
+              empresa: [formValue.empresa],
+              deposito: [formValue.deposito],
+              linha: [formValue.linha],
+              classeMaterial: [formValue.classeMaterial],
+              registros: [formValue.registros],
+              codMaterial: [formValue.codMaterial],
+              descMaterial: [formValue.descMaterial],
+              estoqueDisponivel: [formValue.estoqueDisponivel]
+            });
+          }
+        }, {
           key: "onFilter",
           value: function onFilter() {
-            this.setRouterParams(this.verificaParams());
-            this.currentPage = 1;
-            this.itemsPerPage = this.form.value.registros;
-            this.scrollToFilter.nativeElement.scrollIntoView({
-              behavior: 'instant'
+            var _this4 = this;
+
+            /*  this.setRouterParams(this.verificaParams());
+             this.currentPage = 1;
+             this.itemsPerPage = this.form.value.registros;
+                    this.scrollToFilter.nativeElement.scrollIntoView({
+               behavior: 'instant',
+             }); */
+            this.totalItems = 0;
+            this.dados = [];
+            this.dadosReturned = [];
+            var formValue = this.form.value;
+            this.loaderNavbar = true;
+            var params = {
+              id_almacen: formValue.empresa,
+              id_familia: formValue.classeMaterial,
+              id_grupo: formValue.grupo,
+              id_linea: formValue.linha,
+              codigo_material: formValue.codMaterial,
+              nombre_material: formValue.descMaterial,
+              registros: formValue.registros
+            };
+            this.comercialService.getMateriales(params).subscribe({
+              next: function next(response) {
+                if (response.responseCode === 200) {
+                  _this4.loaderNavbar = false;
+                  _this4.dados = [];
+                  _this4.datos = response.result;
+                  _this4.dadosReturned = _this4.datos.slice(0, _this4.itemsPerPage);
+                  _this4.totalItems = _this4.datos.length;
+                  /* console.log(this.datos); */
+
+                  _this4.dadosEmpty = false;
+                } else {
+                  _this4.loaderNavbar = false;
+                  _this4.dadosEmpty = true;
+                }
+              }
+            });
+          }
+        }, {
+          key: "sincronizar",
+          value: function sincronizar() {
+            var _this5 = this;
+
+            this.comercialService.sincronizarMateriales().subscribe({
+              next: function next(response) {
+                if (response.responseCode === 200) {} else {}
+              },
+              error: function error(_error2) {
+                _this5.handleSearchError('Ocorreu um erro ao carregar filtros.');
+              }
             });
           }
         }, {
@@ -517,24 +580,21 @@
         }, {
           key: "setRouterParams",
           value: function setRouterParams(params) {
+            console.log(params);
             this.router.navigate([], {
               relativeTo: this.activatedRoute,
               queryParams: {
                 q: btoa(JSON.stringify(params))
               }
             });
-            this.search(params);
+            /* this.search(params); */
           }
         }, {
           key: "onAdvancedFilter",
           value: function onAdvancedFilter() {
             this.showAdvancedFilter = !this.showAdvancedFilter;
           }
-        }, {
-          key: "search",
-          value: function search(params) {
-            var _this5 = this;
-
+          /* search(params: any) {
             this.loaderNavbar = true;
             this.idEmpresa = params.deposito;
             this.dadosLoaded = false;
@@ -542,81 +602,84 @@
             this.dados = [];
             this.dadosReturned = [];
             this.totalItems = 0;
-            this.estoqueService.getEstoqueAtual(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(function () {
-              _this5.loaderNavbar = false;
-            })).subscribe({
-              next: function next(response) {
-                if (response.success === true) {
-                  _this5.dados = response.data;
-                  _this5.dadosReturned = _this5.dados.slice(0, _this5.itemsPerPage);
-                  _this5.totalItems = _this5.dados.length;
-                  _this5.dadosLoaded = true;
-                } else {
-                  _this5.dadosEmpty = true;
+                this.estoqueService
+              .getEstoqueAtual(params)
+              .pipe(
+                finalize(() => {
+                  this.loaderNavbar = false;
+                })
+              )
+              .subscribe({
+                next: (response: JsonResponse) => {
+                  if (response.success === true) {
+                    this.dados = response.data;
+                    this.dadosReturned = this.dados.slice(0, this.itemsPerPage);
+                    this.totalItems = this.dados.length;
+                    this.dadosLoaded = true;
+                  } else {
+                    this.dadosEmpty = true;
+                  }
+                },
+                error: (error: any) => {
+                  this.handleSearchError('Erro ao carregar lista de materiais.');
                 }
-              },
-              error: function error(_error2) {
-                _this5.handleSearchError('Erro ao carregar lista de materiais.');
-              }
-            });
-          }
-        }, {
-          key: "verificaParams",
-          value: function verificaParams() {
-            var params = {};
+              });
+          } */
 
-            if (this.form.value.empresa) {
+          /* verificaParams() {
+            let params: any = {};
+                if (this.form.value.empresa) {
               params.empresa = parseInt(this.form.value.empresa);
             }
-
-            if (this.form.value.deposito) {
+                if (this.form.value.deposito) {
               params.deposito = parseInt(this.form.value.deposito);
             }
-
-            if (this.form.value.linha) {
+                if (this.form.value.linha) {
               params.linha = parseInt(this.form.value.linha);
             }
-
-            if (this.form.value.classeMaterial) {
+                if (this.form.value.classeMaterial) {
               params['classe'] = parseInt(this.form.value.classeMaterial);
             }
-
-            if (this.form.value.estoqueDisponivel) {
+                if (this.form.value.estoqueDisponivel) {
               params.estoqueDisponivel = this.form.value.estoqueDisponivel;
             }
-
-            if (this.form.value.codMaterial) {
+                if (this.form.value.codMaterial) {
               params.codMaterial = parseInt(this.form.value.codMaterial);
             }
-
-            if (this.form.value.descMaterial) {
+                if (this.form.value.descMaterial) {
               params.descMaterial = btoa(this.form.value.descMaterial);
             }
-
-            if (this.form.value.registros) {
+                if (this.form.value.registros) {
               params.registros = this.form.value.registros;
             }
+                return params;
+          } */
 
-            return params;
-          }
         }, {
           key: "onPageChanged",
           value: function onPageChanged(event) {
-            var startItem = (event.page - 1) * event.itemsPerPage;
-            var endItem = event.page * event.itemsPerPage;
-            this.dadosReturned = this.dados.slice(startItem, endItem);
+            this.currentPage = event.page;
+            this.getPaginateData();
           }
         }, {
-          key: "onChangeEmpresa",
-          value: function onChangeEmpresa(idEmpresa) {
-            this.form.controls.deposito.reset();
-            this.filteredDepositos = this.depositos.filter(function (value) {
-              return value.idEmpresa == idEmpresa;
-            });
+          key: "getPaginateData",
+          value: function getPaginateData() {
+            var startIndex = (this.currentPage - 1) * this.itemsPerPage;
+            var endIndex = startIndex + this.itemsPerPage;
+            return this.datos.slice(startIndex, endIndex);
+          }
+        }, {
+          key: "onChangeAlmacen",
+          value: function onChangeAlmacen(id) {
+            /* this.form.controls.deposito.reset(); */
 
-            if (this.filteredDepositos.length == 1) {
-              this.form.controls.deposito.setValue(this.filteredDepositos[0].idEmpresa);
-            }
+            /*  console.log(this.filteredDepositos);
+             this.filteredDepositos = this.depositos.filter(
+               (value: any) => value.idEmpresa == id
+             );
+             if(this.filteredDepositos.length == 1){
+               this.form.controls.deposito.setValue(this.filteredDepositos[0].idEmpresa);
+             } */
           }
         }, {
           key: "onChangeDeposito",
@@ -635,7 +698,7 @@
               this.filteredClasses.unshift({
                 idClasse: 0,
                 idLinha: 0,
-                nomeClasse: 'EXIBIR TODOS'
+                nomeClasse: 'TODOS'
               });
             } else {
               this.filteredClasses = this.classes;
@@ -643,27 +706,67 @@
           }
         }, {
           key: "onChangeClasse",
-          value: function onChangeClasse(classe) {
-            this.form.controls.linha.setValue(classe.idLinha);
+          value: function onChangeClasse(clase) {
+            var _this6 = this;
+
+            this.form.controls.grupo.reset();
+            var idClasse = clase.idClasse;
+            this.comercialService.getLinhasId(idClasse).subscribe({
+              next: function next(response) {
+                if (response.responseCode == 200) {
+                  _this6.grupos = response.result;
+                }
+
+                _this6.grupos.unshift({
+                  id: 0,
+                  descricao: 'TODOS'
+                });
+              },
+              error: function error(_error3) {
+                _this6.handleSearchError('Ocurrió un error al cargar los datos.');
+              }
+            });
+          }
+        }, {
+          key: "onChangegrupo",
+          value: function onChangegrupo(clase) {
+            var _this7 = this;
+
+            /*      console.log(clase);
+             */
+            this.form.controls.linha.reset();
+            var idClase = clase.id_linha;
+            this.comercialService.getSublineasId(idClase).subscribe({
+              next: function next(response) {
+                if (response.responseCode == 200) {
+                  _this7.linhas = response.result;
+                }
+              },
+              error: function error(_error4) {
+                _this7.handleSearchError('Ocurrió un error al cargar los datos.');
+              }
+            });
           }
         }, {
           key: "openModal",
-          value: function openModal(modalRef, titulo, idMaterial, estoqueSuspenso) {
-            var _this6 = this;
+          value: function openModal(modalRef, titulo, idMaterial, codigoMaterial, estoqueSuspenso) {
+            var _this8 = this;
 
             this.loaderNavbar = true;
             this.possuiLote = false;
-            this.nomeMaterial = "(".concat(idMaterial, ") ").concat(titulo);
+            this.nomeMaterial = "(".concat(codigoMaterial, ") ").concat(titulo);
             this.codMaterial = idMaterial;
 
             if (estoqueSuspenso > 0) {
               this.possuiLote = true;
             }
 
-            this.onGetOutrasUnidades(idMaterial);
+            this.onSelectComprometidos();
+            /*     this.onGetOutrasUnidades(idMaterial); */
+
             setTimeout(function () {
-              _this6.loaderNavbar = false;
-              _this6.modalRef = _this6.modalService.show(modalRef, {
+              _this8.loaderNavbar = false;
+              _this8.modalRef = _this8.modalService.show(modalRef, {
                 "class": 'modal-xl'
               });
             }, 600);
@@ -682,7 +785,7 @@
         }, {
           key: "onSelectComprometidos",
           value: function onSelectComprometidos() {
-            this.onGetEstoqueComprometido(this.idEmpresa, this.codMaterial);
+            this.onGetEstoqueComprometido(this.codMaterial);
           }
         }, {
           key: "onSelectLote",
@@ -692,32 +795,29 @@
         }, {
           key: "onSelectEstoqueSuspenso",
           value: function onSelectEstoqueSuspenso() {
-            this.onGetEstoqueSuspenso(this.idEmpresa, this.codMaterial);
+            this.onGetEstoqueSuspenso(this.codMaterial);
           }
-        }, {
-          key: "onGetOutrasUnidades",
-          value: function onGetOutrasUnidades(idMaterial) {
-            var _this7 = this;
-
+          /* onGetOutrasUnidades(idMaterial: number) {
             this.unidadesLoaded = false;
-            this.estoqueService.getOutrasUnidades(idMaterial).subscribe({
-              next: function next(response) {
+                this.estoqueService.getOutrasUnidades(idMaterial).subscribe({
+              next: (response: any) => {
                 if (response.responseCode === 200) {
-                  _this7.estoqueUnidades = response.result;
-                  _this7.unidadesLoaded = true;
+                  this.estoqueUnidades = response.result;
+                  this.unidadesLoaded = true;
                 } else {
-                  _this7.pnotifyService.notice('Dados não encontrados.');
+                  this.pnotifyService.notice('Datos no encontrados.');
                 }
               },
-              error: function error(_error3) {
-                _this7.handleSearchError('Erro ao carregar estoque de outras unidades.');
+              error: (error: any) => {
+                this.handleSearchError('Erro ao carregar estoque de outras unidades.');
               }
             });
-          }
+          } */
+
         }, {
           key: "onGetPedidosCompra",
           value: function onGetPedidosCompra(idEmpresa, idMaterial) {
-            var _this8 = this;
+            var _this9 = this;
 
             this.pedidosCompraLoaded = false;
             this.pedidosCompraEmpty = false;
@@ -728,49 +828,48 @@
             this.estoqueService.getPedidosCompra(params).subscribe({
               next: function next(response) {
                 if (response.responseCode === 200) {
-                  _this8.pedidosCompra = response.result.analitico;
-                  _this8.totaisPedCompra = response.result.total;
-                  _this8.pedidosCompraLoaded = true;
+                  _this9.pedidosCompra = response.result.analitico;
+                  _this9.totaisPedCompra = response.result.total;
+                  _this9.pedidosCompraLoaded = true;
                 } else {
-                  _this8.pnotifyService.notice('Dados não encontrados.');
+                  _this9.pnotifyService.notice('Datos no encontrados.');
 
-                  _this8.pedidosCompraEmpty = true;
+                  _this9.pedidosCompraEmpty = true;
                 }
               },
-              error: function error(_error4) {
-                _this8.handleSearchError('Erro ao carregar pedidos de compra.');
+              error: function error(_error5) {
+                _this9.handleSearchError('Erro ao carregar pedidos de compra.');
               }
             });
           }
         }, {
           key: "onGetEstoqueComprometido",
-          value: function onGetEstoqueComprometido(idEmpresa, idMaterial) {
-            var _this9 = this;
+          value: function onGetEstoqueComprometido(idMaterial) {
+            var _this10 = this;
 
             this.comprometidoLoaded = false;
             this.comprometidoEmpty = false;
             var params = {
-              idEmpresa: idEmpresa,
               idMaterial: idMaterial
             };
-            this.estoqueService.getComprometido(params).subscribe(function (response) {
+            this.estoqueService.getStockComprometido(params).subscribe(function (response) {
               if (response.responseCode === 200) {
-                _this9.estoqueComprometido = response.result.analitico;
-                _this9.totaisComprometido = response.result.total;
-                _this9.comprometidoLoaded = true;
+                _this10.estoqueComprometido = response.result.analitico;
+                _this10.totaisComprometido = response.result.total;
+                _this10.comprometidoLoaded = true;
               } else {
-                _this9.pnotifyService.notice('Dados não encontrados.');
+                _this10.pnotifyService.notice('Datos no encontrados.');
 
-                _this9.comprometidoEmpty = true;
+                _this10.comprometidoEmpty = true;
               }
             }, function (error) {
-              _this9.handleSearchError('Erro ao carregar estoque comprometido.');
+              _this10.handleSearchError('Erro ao carregar estoque comprometido.');
             });
           }
         }, {
           key: "onGetLote",
           value: function onGetLote(idEmpresa, idMaterial) {
-            var _this10 = this;
+            var _this11 = this;
 
             this.loteLoaded = false;
             this.loteEmpty = false;
@@ -780,40 +879,74 @@
             };
             this.estoqueService.getLote(params).subscribe(function (response) {
               if (response.responseCode === 200) {
-                _this10.detalhesLote = response.result.analitico;
-                _this10.totaisLote = response.result.total;
-                _this10.loteLoaded = true;
+                _this11.detalhesLote = response.result.analitico;
+                _this11.totaisLote = response.result.total;
+                _this11.loteLoaded = true;
               } else {
-                _this10.pnotifyService.notice('Dados não encontrados.');
+                _this11.pnotifyService.notice('Datos no encontrados.');
 
-                _this10.loteEmpty = true;
+                _this11.loteEmpty = true;
               }
             }, function (error) {
-              _this10.handleSearchError('Erro ao carregar dados de lote.');
+              _this11.handleSearchError('Erro ao carregar dados de lote.');
+            });
+          }
+        }, {
+          key: "setOrderBy",
+          value: function setOrderBy(column) {
+            var _this12 = this;
+
+            if (this.orderBy === column) {
+              this.orderType = this.orderType === 'asc' ? 'desc' : 'asc'; // Cambiar el tipo de orden si se hace clic nuevamente en la misma columna
+            } else {
+              this.orderBy = column;
+              this.orderType = 'asc'; // Establecer el orden ascendente por defecto al hacer clic en una nueva columna
+            } // Ordenar la matriz resultcliente en función del orden seleccionado
+
+
+            this.datos.sort(function (a, b) {
+              var valueA = a[column]
+              /* .toUpperCase(); */
+              ;
+              var valueB = b[column]
+              /* .toUpperCase() */
+              ;
+              /*       console.log(this.datos);
+                    console.log(column); */
+
+              if (valueA < valueB) {
+                return _this12.orderType === 'asc' ? -1 : 1;
+              }
+
+              if (valueA > valueB) {
+                return _this12.orderType === 'asc' ? 1 : -1;
+              }
+
+              return 0;
             });
           }
         }, {
           key: "onGetEstoqueSuspenso",
-          value: function onGetEstoqueSuspenso(idEmpresa, idMaterial) {
-            var _this11 = this;
+          value: function onGetEstoqueSuspenso(idMaterial) {
+            var _this13 = this;
 
             this.suspensoLoaded = false;
             this.suspensoEmpty = false;
             var params = {
-              idEmpresa: idEmpresa,
               idMaterial: idMaterial
             };
-            this.estoqueService.getEstoqueSuspenso(params).subscribe(function (response) {
+            this.estoqueService.getStockSuspeso(params).subscribe(function (response) {
               if (response.responseCode === 200) {
-                _this11.detalhesSuspenso = response.result;
-                _this11.suspensoLoaded = true;
+                _this13.detalhesSuspenso = response.result.analitico;
+                _this13.totalSuspenso = response.result.total;
+                _this13.suspensoLoaded = true;
               } else {
-                _this11.pnotifyService.notice('Dados não encontrados.');
+                _this13.pnotifyService.notice('Datos no encontrados.');
 
-                _this11.suspensoEmpty = true;
+                _this13.suspensoEmpty = true;
               }
             }, function (error) {
-              _this11.handleSearchError('Erro ao carregar dados de estoque suspenso.');
+              _this13.handleSearchError('Erro ao carregar dados de estoque suspenso.');
             });
           }
         }, {
@@ -916,6 +1049,8 @@
           type: _estoque_service__WEBPACK_IMPORTED_MODULE_10__["ComercialEstoqueService"]
         }, {
           type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"]
+        }, {
+          type: _comercial_service__WEBPACK_IMPORTED_MODULE_13__["ComercialService"]
         }];
       };
 
@@ -929,7 +1064,7 @@
         selector: 'comercial-estoque-lista',
         template: _raw_loader_lista_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
         styles: [_lista_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalService"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["Location"], _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormBuilder"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_9__["PNotifyService"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"], src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_11__["AtividadesService"], _estoque_service__WEBPACK_IMPORTED_MODULE_10__["ComercialEstoqueService"], src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"]])], ComercialEstoqueListaComponent);
+      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalService"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["Location"], _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormBuilder"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_9__["PNotifyService"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"], src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_11__["AtividadesService"], _estoque_service__WEBPACK_IMPORTED_MODULE_10__["ComercialEstoqueService"], src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_12__["TitleService"], _comercial_service__WEBPACK_IMPORTED_MODULE_13__["ComercialService"]])], ComercialEstoqueListaComponent);
       /***/
     },
 
@@ -969,7 +1104,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Estoque\">\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onResetForm()\">\r\n    Limpar\r\n  </button>\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onFilter()\"\r\n    [disabled]=\"!form.valid\">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"empresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              formControlName=\"empresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"empresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('empresa') + ' ' + onFieldRequired('empresa')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('empresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"deposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              formControlName=\"deposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"deposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event)\"\r\n              [ngClass]=\"onFieldError('deposito') + ' ' + onFieldRequired('deposito')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('deposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"linha\">Linha</label>\r\n            <select\r\n              class=\"form-control\"\r\n              id=\"linha\"\r\n              formControlName=\"linha\"\r\n              (change)=\"onChangeLinha(form.value['linha'])\">\r\n              <option *ngFor=\"let item of linhas\" [value]=\"item.id\">{{ item.descricao }}</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"classeMaterial\">Classe</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredClasses\"\r\n              formControlName=\"classeMaterial\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"classeMaterial\"\r\n              bindLabel=\"nomeClasse\"\r\n              bindValue=\"idClasse\"\r\n              (change)=\"onChangeClasse($event)\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"estoqueDisponivel\">Somente estoque disponível</label>\r\n            <select\r\n              class=\"form-control\"\r\n              id=\"estoqueDisponivel\"\r\n              formControlName=\"estoqueDisponivel\">\r\n              <option value=\"0\">Exhibir todos</option>\r\n              <option value=\"1\">Sim</option>\r\n              <option value=\"2\">Não</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"codMaterial\">Código material</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"codMaterial\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-4 mb-0\">\r\n            <label for=\"descMaterial\">Descrição material</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"descMaterial\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2 mb-0\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select\r\n              class=\"form-control\"\r\n              id=\"registros\"\r\n              formControlName=\"registros\">\r\n              <option>25</option>\r\n              <option>50</option>\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles\r\n    [data]=\"subtitles\"\r\n    [show]=\"dados.length > 0 && !dadosEmpty\">\r\n  </subtitles>\r\n  <div class=\"row\">\r\n    <div class=\"col-12\">\r\n      <custom-table [config]=\"tableConfig\" *ngIf=\"dadosReturned.length > 0 && !dadosEmpty\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th class=\"text-truncate\" width=\"9%\">Código</th>\r\n            <th class=\"text-truncate text-left\" width=\"35%\">Descrição</th>\r\n            <th class=\"text-truncate\" width=\"4%\">Un</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Compra</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Atual</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Comprometido</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Pedido</th>\r\n            <th class=\"text-truncate\" width=\"10%\">Disponível</th>\r\n            <th></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let dado of dadosReturned\" [class.table-active]=\"dado.id == codMaterial\">\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              [ngClass]=\"estoqueSuspensoClassStatusBorder(dado.estoqueSuspenso)\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.id }}\r\n            </td>\r\n            <td\r\n              class=\"text-left text-truncate hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.descricao }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.medida }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.pedCompra | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.estoqueAtual | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.estoqueComprometido | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.pedido | number:'1.3-3' }}\r\n            </td>\r\n            <td\r\n              class=\"font-weight-bold hover\"\r\n              (click)=\"openModal(modalDetalhes, dado.descricao, dado.id, dado.estoqueSuspenso)\">\r\n              {{ dado.estoqueDisponivel | number:'1.3-3' }}\r\n            </td>\r\n            <td class=\"text-center\">\r\n              <a\r\n                class=\"btn-icon-sm\"\r\n                tooltip=\"Avise-me quando disponível\"\r\n                container=\"body\"\r\n                [routerLink]=\"['/comercial/disponibilidade-material/novo/', dado.id]\"\r\n                target=\"_blank\">\r\n                <i class=\"fas fa-bell\"></i>\r\n              </a>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n      <empty-result message=\"Nenhuma informação encontrada\" *ngIf=\"dadosEmpty && !dadosLoaded\"></empty-result>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"totalItems > itemsPerPage && !loaderNavbar\">\r\n        <pagination\r\n          [maxSize]=\"maxSize\"\r\n          [(totalItems)]=\"totalItems\"\r\n          (pageChanged)=\"onPageChanged($event)\"\r\n          [(itemsPerPage)]=\"itemsPerPage\"\r\n          [boundaryLinks]=\"true\"\r\n          [(ngModel)]=\"currentPage\"\r\n          previousText=\"&lsaquo;\"\r\n          nextText=\"&rsaquo;\"\r\n          firstText=\"&laquo;\"\r\n          lastText=\"&raquo;\">\r\n        </pagination>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n<ng-template #modalDetalhes>\r\n  <div class=\"modal-header\">\r\n    <h4 id=\"dialog-sizes-name1\" class=\"modal-title pull-left\">\r\n      {{ nomeMaterial }}\r\n    </h4>\r\n    <button type=\"button\" class=\"close pull-right\" (click)=\"closeModal(modalDetalhes)\" aria-label=\"Close\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <tabset>\r\n      <tab heading=\"Estoque outras unidades\" class=\"border-right border-left border-bottom\">\r\n        <div class=\"px-3 pt-3\">\r\n          <div class=\"form-row\" *ngIf=\"unidadesLoaded\">\r\n            <div class=\"form-group col-lg-3\" *ngFor=\"let estoque of estoqueUnidades\">\r\n              <label>{{ estoque.descEmpresa }}</label>\r\n              <div>{{ estoque.estoque | number:'1.3-3' }} {{ estoque.unidade }}</div>\r\n            </div>\r\n          </div>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!unidadesLoaded\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Pedidos de compra\"  class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectPedidos()\">\r\n        <div class=\"p-3\">\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!pedidosCompraLoaded && !pedidosCompraEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n          <custom-table [config]=\"tableConfig\" *ngIf=\"pedidosCompra.length > 0 && !pedidosCompraEmpty && pedidosCompraLoaded\" class=\"text-center\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th>Data prevista</th>\r\n                <th>Em aberto</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody >\r\n              <tr *ngFor=\"let item of pedidosCompra\">\r\n                <td>{{ item.dataPrevistaEntrega }}</td>\r\n                <td>{{ item.qtdAberto | number:'1.3-3' }}</td>\r\n              </tr>\r\n              <tr class=\"bg-dark text-dark\">\r\n                <td><strong>Total</strong></td>\r\n                <td class=\"text-center\"><strong>{{ totaisPedCompra.totalAberto | number:'1.3-3' }}</strong></td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"pedidosCompraEmpty && !pedidosCompraLoaded\"></empty-result>\r\n\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Estoque comprometido\" class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectComprometidos()\">\r\n        <div class=\"p-3\">\r\n          <div *ngIf=\"comprometidoLoaded\">\r\n            <div class=\"d-flex\">\r\n              <div class=\"legend blue\">\r\n                <div class=\"square\"></div>\r\n                <div class=\"text\">ESTOQUE COMPROMETIDO</div>\r\n              </div>\r\n            </div>\r\n            <custom-table [config]=\"tableConfig\" *ngIf=\"estoqueComprometido.length > 0 && !comprometidoEmpty\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th>Pedido</th>\r\n                  <th>Data</th>\r\n                  <th>Lote</th>\r\n                  <th>Empresa</th>\r\n                  <th>Cliente</th>\r\n                  <th>Vendedor</th>\r\n                  <th>Qtde.</th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of estoqueComprometido\">\r\n                  <td [ngClass]=\"estoqueComprometidoClassStatusBorder(item.idComprometido)\">{{ item.numeroPedido }}</td>\r\n                  <td>{{ item.dataEmissao }}</td>\r\n                  <td></td>\r\n                  <td>{{ item.empresa }}</td>\r\n                  <td>{{ item.fantasiaCliente }}</td>\r\n                  <td>{{ item.nomeVendedor }}</td>\r\n                  <td>{{ item.quantidade | number:'1.3-3' }}</td>\r\n                </tr>\r\n                <tr class=\"bg-dark text-center text-dark\">\r\n                  <td colspan=\"5\" class=\"border-dark\"></td>\r\n                  <td><strong>Total</strong></td>\r\n                  <td class=\"text-center\"><strong>{{ totaisComprometido.quantidade | number:'1.3-3' }}</strong></td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"comprometidoEmpty && !comprometidoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!comprometidoLoaded && !comprometidoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Detalhamento por lote\" class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectLote()\">\r\n        <div class=\"p-3\">\r\n          <custom-table *ngIf=\"detalhesLote.length > 0 && !loteEmpty\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Seq.</th>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Lote fabricação</th>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Localização</th>\r\n                <th rowspan=\"2\" class=\"align-middle text-center\">Estoque</th>\r\n                <th colspan=\"2\" class=\"text-center\">Relatório de Recebimento</th>\r\n              </tr>\r\n              <tr>\r\n                <th scope=\"col\" class=\"text-center\">Número</th>\r\n                <th scope=\"col\" class=\"text-center\">Item</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody>\r\n              <tr *ngFor=\"let item of detalhesLote\">\r\n                <td>{{ item.sequencia }}</td>\r\n                <td>{{ item.lote }}</td>\r\n                <td>{{ item.localizacao }}</td>\r\n                <td>{{ item.qtdEstoque | number:'1.3-3' }}</td>\r\n                <td>{{ item.relatorio }}</td>\r\n                <td>{{ item.itemRelatorio }}</td>\r\n              </tr>\r\n              <tr class=\"bg-dark text-center text-dark\">\r\n                <td colspan=\"5\"><strong>Total</strong></td>\r\n                <td class=\"text-center\"><strong>{{ totaisLote.quantidade | number:'1.3-3' }}</strong></td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"loteEmpty && !loteLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!loteLoaded && !loteEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Estoque suspenso\" class=\"border-right border-left border-bottom\" (selectTab)=\"onSelectEstoqueSuspenso()\" *ngIf=\"possuiLote\">\r\n        <div class=\"p-3\">\r\n          <custom-table *ngIf=\"detalhesSuspenso.length > 0 && suspensoLoaded\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th scope=\"col\">Quantidade</th>\r\n                <th scope=\"col\">Data</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody>\r\n              <tr *ngFor=\"let item of detalhesSuspenso\">\r\n                <td class=\"text-center\">{{ item.estoqueSuspenso | number:'1.3-3' }}</td>\r\n                <td class=\"text-center\">{{ item.data }}</td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Nenhuma informação encontrada\" class=\"my-4\" *ngIf=\"suspensoEmpty && !suspensoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!suspensoLoaded && !suspensoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n    </tabset>\r\n  </div>\r\n</ng-template>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Estoque\">\r\n  <button type=\"button\" (click)=\"onResetForm()\">\r\n    Limpiar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\" [disabled]=\"!form.valid\">\r\n    Filtrar\r\n  </button>\r\n  <button type=\"button\" (click)=\"sincronizar()\" [disabled]=\"!form.valid\">\r\n    <i class=\"fas fa-sync\"></i> Sincronizar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"empresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              formControlName=\"empresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"empresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('empresa') + ' ' + onFieldRequired('empresa')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('empresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"empresa\"> Almacén </label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"almacenes\" formControlName=\"empresa\"\r\n              [virtualScroll]=\"true\" labelForId=\"empresa\" bindLabel=\"ALMACEN\" bindValue=\"ID\"\r\n              (change)=\"onChangeAlmacen($event.id)\"\r\n              [ngClass]=\"onFieldError('empresa') + ' ' + onFieldRequired('empresa')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('empresa')\"\r\n              message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"deposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              formControlName=\"deposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"deposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event)\"\r\n              [ngClass]=\"onFieldError('deposito') + ' ' + onFieldRequired('deposito')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('deposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"linha\">Familia</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"classes\" formControlName=\"classeMaterial\"\r\n              [virtualScroll]=\"true\" labelForId=\"classeMaterial\" bindLabel=\"nomeClasse\" bindValue=\"idClasse\"\r\n              (change)=\"onChangeClasse($event)\">\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"linha\">Grupo</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"grupos\" formControlName=\"grupo\"\r\n              [virtualScroll]=\"true\" labelForId=\"classeMaterial\" bindLabel=\"descricao\" bindValue=\"id_linha\"\r\n              (change)=\"onChangegrupo($event)\">\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"classeMaterial\">Linea</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"linhas\" formControlName=\"linha\"\r\n              [virtualScroll]=\"true\" labelForId=\"classeMaterial\" bindLabel=\"NM_SUB_LINH\" bindValue=\"ID\">\r\n            </ng-select>\r\n          </div>\r\n\r\n        </div>\r\n        <div class=\"form-row\">\r\n\r\n          <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"codMaterial\">Código material</label>\r\n            <input type=\"text\" class=\"form-control\" formControlName=\"codMaterial\" (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-4 mb-0\">\r\n            <label for=\"descMaterial\">Nombre material</label>\r\n            <input type=\"text\" class=\"form-control\" formControlName=\"descMaterial\" (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <!-- <div class=\"form-group col-lg-3 mb-0\">\r\n            <label for=\"estoqueDisponivel\">Solo stock disponible</label>\r\n            <select class=\"form-control\" id=\"estoqueDisponivel\" formControlName=\"estoqueDisponivel\">\r\n              <option value=\"0\">Mostrar todo\r\n              </option>\r\n              <option value=\"1\">Disponible</option>\r\n              <option value=\"2\">No disponible</option>\r\n            </select>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-2 mb-0\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select class=\"form-control\" id=\"registros\" formControlName=\"registros\">\r\n              <option>25</option>\r\n              <option>50</option>\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles [data]=\"subtitles\" [show]=\"dados.length > 0 && !dadosEmpty\">\r\n  </subtitles>\r\n  <div class=\"row\">\r\n    <div class=\"col-12\">\r\n      <custom-table [config]=\"tableConfig\" *ngIf=\"datos.length > 0 && !dadosEmpty\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('codigo_material')\">              \r\n              <thead-sorter value=\"codigo\" [active]=\"orderBy == 'codigo'\" [sort]=\"orderType\"> Código </thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-left\"\r\n            (click)=\"setOrderBy('nombre')\">\r\n              <thead-sorter value=\"Nombre Material\"  [active]=\"orderBy == 'Nombre Material'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('cantidad')\">\r\n              <thead-sorter value=\"Cantidad Disp.\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('sigla')\">\r\n              <thead-sorter value=\"Un.\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('codigo_almacen')\">\r\n              <thead-sorter value=\"Almacén\"></thead-sorter>\r\n            </th>\r\n            <th class=\"text-truncate text-center\"\r\n            (click)=\"setOrderBy('nombre_almacen')\">\r\n              <thead-sorter value=\"Nombre almacén\"></thead-sorter>\r\n            </th>\r\n            <th></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <ng-container>\r\n            <tr *ngFor=\"let dato of getPaginateData()\">\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dado.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.codigo_material}}</td>\r\n              <td class=\"font-weight-bold hover text-left\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.nombre}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.cantidad}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.sigla}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dato.nombre, dato.id_material, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.codigo_almacen}}</td>\r\n              <td class=\"font-weight-bold hover text-center\"\r\n                (click)=\"openModal(modalDetalhes, dado.nombre, dato.codigo_material, dato.cantidad)\">\r\n                {{dato.nombre_almacen}}</td>\r\n            </tr>\r\n          </ng-container>\r\n        </ng-template>\r\n      </custom-table>\r\n\r\n      <empty-result message=\"Ningún registro encontrado.\" *ngIf=\"dadosEmpty\"></empty-result>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"totalItems > itemsPerPage && !loaderNavbar\">\r\n        <pagination\r\n            [maxSize]=\"maxSize\"\r\n            [(totalItems)]=\"totalItems\"\r\n            (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\"\r\n            [boundaryLinks]=\"true\"\r\n            [(ngModel)]=\"currentPage\"\r\n            previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\"\r\n            firstText=\"&laquo;\"\r\n            lastText=\"&raquo;\">\r\n          </pagination>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n</app-body>\r\n<ng-template #modalDetalhes>\r\n  <div class=\"modal-header\">\r\n    <h4 id=\"dialog-sizes-name1\" class=\"modal-title pull-left\">\r\n      {{ nomeMaterial }}\r\n    </h4>\r\n    <button type=\"button\" class=\"close pull-right\" (click)=\"closeModal(modalDetalhes)\" aria-label=\"Close\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <tabset>\r\n      <!-- <tab heading=\"Estoque outras unidades\" class=\"border-right border-left border-bottom\">\r\n        <div class=\"px-3 pt-3\">\r\n          <div class=\"form-row\" *ngIf=\"unidadesLoaded\">\r\n            <div class=\"form-group col-lg-3\" *ngFor=\"let estoque of estoqueUnidades\">\r\n              <label>{{ estoque.descEmpresa }}</label>\r\n              <div>{{ estoque.estoque | number:'1.3-3' }} {{ estoque.unidade }}</div>\r\n            </div>\r\n          </div>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!unidadesLoaded\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab> -->\r\n\r\n      <tab heading=\"Stock comprometido\" class=\"border-right border-left border-bottom\"\r\n        (selectTab)=\"onSelectComprometidos()\">\r\n        <div class=\"p-3\">\r\n          <div *ngIf=\"comprometidoLoaded\">\r\n            <div class=\"d-flex\">\r\n              <div class=\"legend blue\">\r\n                <div class=\"square\"></div>\r\n                <div class=\"text\">STOCK COMPROMETIDO</div>\r\n              </div>\r\n            </div>\r\n            <custom-table [config]=\"tableConfig\" *ngIf=\"estoqueComprometido.length > 0 && !comprometidoEmpty\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th class=\"text-center\">Código</th>\r\n                  <th class=\"text-center\">Oferta</th>\r\n                  <th class=\"text-center\">Fecha</th>\r\n                  <th class=\"text-center\">Cliente</th>\r\n                  <th class=\"text-center\">Vendedor</th>\r\n                  <th class=\"text-center\">Cantidad</th>\r\n                </tr>\r\n              </ng-template>\r\n              <ng-template #tbody let-tbody>\r\n                <tr *ngFor=\"let item of estoqueComprometido\">\r\n                  <td [ngClass]=\"estoqueComprometidoClassStatusBorder(item.id_oferta)\" class=\"text-center\">{{\r\n                    item.codigo_oferta }}</td>\r\n                  <td class=\"text-center\">{{ item.nombre_oferta }}</td>\r\n                  <td class=\"text-center\">{{ item.fecha_oferta }}</td>\r\n                  <td class=\"text-center\">{{ item.cliente }}</td>\r\n                  <td class=\"text-center\">{{ item.vendedor }}</td>\r\n                  <td class=\"text-center\">{{ item.cantidad | number:'1.4-4' }} {{ item.unidad }}</td>\r\n                </tr>\r\n                <tr class=\"bg-dark text-center text-dark\">\r\n                  <td colspan=\"4\" class=\"border-dark\"></td>\r\n                  <td><strong>Total</strong></td>\r\n                  <td class=\"text-center\"><strong>{{ totaisComprometido.cantidad | number:'1.4-4' }}</strong></td>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n          </div>\r\n          <empty-result message=\"Ninguna información encontrada\" class=\"my-4\"\r\n            *ngIf=\"comprometidoEmpty && !comprometidoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!comprometidoLoaded && !comprometidoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n      <tab heading=\"Stock en suspenso\" class=\"border-right border-left border-bottom\"\r\n        (selectTab)=\"onSelectEstoqueSuspenso()\" *ngIf=\"possuiLote\">\r\n        <div class=\"p-3\" >\r\n          <div class=\"d-flex\" *ngIf=\"suspensoLoaded\">\r\n            <div class=\"legend red\">\r\n              <div class=\"square\"></div>\r\n              <div class=\"text\">STOCK EN SUSPENSO</div>\r\n            </div>\r\n          </div>\r\n          <custom-table [config]=\"tableConfig\" *ngIf=\"detalhesSuspenso.length > 0 && suspensoLoaded\">\r\n            <ng-template #thead let-thead>\r\n              <tr>\r\n                <th scope=\"col\" class=\"text-center\">Fecha</th>\r\n                <th scope=\"col\" class=\"text-center\">Descripción</th>\r\n                <th scope=\"col\" class=\"text-center\">Cantidad</th>\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template #tbody let-tbody>\r\n              <tr *ngFor=\"let item of detalhesSuspenso\">\r\n                <td [ngClass]=\"estoqueSuspensoClassStatusBorder(item.id)\" class=\"text-center\">{{ item.fecha }}</td>\r\n                <td class=\"text-center\" [ngClass]=\"border-danger\" class=\"text-center\">{{ item.descripcion }}</td>\r\n                <td class=\"text-center\" [ngClass]=\"border-danger\">{{ item.cantidad | number:'1.3-3' }} {{ item.unidad }}\r\n                </td>\r\n              </tr>\r\n              <tr class=\"bg-dark text-center text-dark\">\r\n                <td class=\"border-dark\"></td> \r\n                <td><strong>Total</strong></td>\r\n                <td class=\"text-center\"><strong>{{ totalSuspenso.cantidad | number:'1.4-4' }}</strong></td>\r\n              </tr>\r\n            </ng-template>\r\n          </custom-table>\r\n          <empty-result message=\"Ninguna información encontrada\" class=\"my-4\"\r\n            *ngIf=\"suspensoEmpty && !suspensoLoaded\"></empty-result>\r\n          <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!suspensoLoaded && !suspensoEmpty\">\r\n            <div class=\"spinner-border text-dark\"></div>\r\n          </div>\r\n        </div>\r\n      </tab>\r\n    </tabset>\r\n  </div>\r\n</ng-template>";
       /***/
     },
 
@@ -1143,7 +1278,7 @@
           _classCallCheck(this, ComercialService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial";
+          this.API = "http://23.254.204.187/api/comercial";
         }
 
         _createClass(ComercialService, [{
@@ -1170,6 +1305,40 @@
 
             return this.http.get("".concat(this.API, "/depositos"), {
               params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getAlmacen",
+          value: function getAlmacen(params) {
+            return this.http.get("".concat(this.API, "/almacen")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getLinhasId",
+          value: function getLinhasId(id) {
+            return this.http.get("".concat(this.API, "/linhas/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getSublineasId",
+          value: function getSublineasId(id) {
+            return this.http.get("".concat(this.API, "/sublineas/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "sincronizarMateriales",
+          value: function sincronizarMateriales() {
+            return this.http.get("".concat(this.API, "/sincronizar")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMateriales",
+          value: function getMateriales(params) {
+            return this.http.get("".concat(this.API, "/materiales"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesOferta",
+          value: function getMaterialesOferta(params) {
+            return this.http.get("".concat(this.API, "/materiales_lista_precio"), {
+              params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
@@ -1221,6 +1390,31 @@
           key: "getEscritorios",
           value: function getEscritorios() {
             return this.http.get("".concat(this.API, "/escritorios")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getPresentacionMaterial",
+          value: function getPresentacionMaterial() {
+            return this.http.get("".concat(this.API, "/presentacion_materiales")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCliente",
+          value: function getCliente(codCliente) {
+            return this.http.get("".concat(this.API, "/clientes/detalhes/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+          }
+        }, {
+          key: "getListarPrecios",
+          value: function getListarPrecios() {
+            return this.http.get("".concat(this.API, "/vendedor/lista_precio")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getTodosVendedores",
+          value: function getTodosVendedores() {
+            return this.http.get("".concat(this.API, "/vendedor/allvendedor")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCentrosLogisticos",
+          value: function getCentrosLogisticos() {
+            return this.http.get("".concat(this.API, "/almacen/centros_logisticos"));
           }
         }]);
 
@@ -1618,19 +1812,24 @@
           this.http = http;
           this.comercialService = comercialService;
           this.tidSoftwareService = tidSoftwareService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/estoque";
+          this.API = "http://23.254.204.187/api/comercial/estoque";
         }
 
         _createClass(ComercialEstoqueService, [{
           key: "getFiltros",
           value: function getFiltros() {
-            var empresas = this.tidSoftwareService.getEmpresas('estoques');
+            /* Almacen */
+            var almacenes = this.comercialService.getAlmacen();
+            /* Familia */
+
+            var classes = this.comercialService.getClasses(null);
             var depositos = this.comercialService.getDepositos({
               grupoManetoni: 1
             });
+            var sucursales = this.comercialService.getEscritorios();
+            var empresas = this.tidSoftwareService.getEmpresas('estoques');
             var linhas = this.tidSoftwareService.getLinhas();
-            var classes = this.comercialService.getClasses(null);
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([empresas, depositos, linhas, classes]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([almacenes, classes, depositos, sucursales, empresas, linhas]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
           }
         }, {
           key: "getEstoqueAtual",
@@ -1669,6 +1868,16 @@
           key: "getEstoqueSuspenso",
           value: function getEstoqueSuspenso(params) {
             return this.http.get("".concat(this.API, "/estoque-suspenso/").concat(params.idMaterial, "/").concat(params.idEmpresa)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+          }
+        }, {
+          key: "getStockComprometido",
+          value: function getStockComprometido(params) {
+            return this.http.get("".concat(this.API, "/estoquecomprometido/").concat(params.idMaterial)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+          }
+        }, {
+          key: "getStockSuspeso",
+          value: function getStockSuspeso(params) {
+            return this.http.get("".concat(this.API, "/estoquesuspenso/").concat(params.idMaterial)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
           }
         }]);
 
@@ -1766,7 +1975,7 @@
           _classCallCheck(this, ComercialTidSoftwareService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/tid-software";
+          this.API = "http://23.254.204.187/api/comercial/tid-software";
         }
 
         _createClass(ComercialTidSoftwareService, [{

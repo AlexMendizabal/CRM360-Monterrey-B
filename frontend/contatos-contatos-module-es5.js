@@ -101,8 +101,8 @@
           _classCallCheck(this, ComercialVendedoresService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/vendedor";
-          this.API_CADASTROS = "https://crm360.monterrey.com.bo/api/comercial/cadastros";
+          this.API = "http://23.254.204.187/api/comercial/vendedor";
+          this.API_CADASTROS = "http://23.254.204.187/api/comercial/cadastros";
         }
 
         _createClass(ComercialVendedoresService, [{
@@ -129,6 +129,13 @@
           key: "getCarteiraClientes",
           value: function getCarteiraClientes(params) {
             return this.http.get("".concat(this.API, "/carteira-clientes"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCarteiraClientesCotizacion",
+          value: function getCarteiraClientesCotizacion(params) {
+            return this.http.get("".concat(this.API, "/carteira-clientes-cotizacion"), {
               params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
@@ -891,7 +898,7 @@
           _classCallCheck(this, ComercialClientesService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes";
+          this.API = "http://23.254.204.187/api/comercial/clientes";
         }
 
         _createClass(ComercialClientesService, [{
@@ -1244,108 +1251,6 @@
     },
 
     /***/
-    "FOez":
-    /*!***********************************************************************!*\
-      !*** ./src/app/shared/modules/confirm-modal/confirm-modal.service.ts ***!
-      \***********************************************************************/
-
-    /*! exports provided: ConfirmModalService */
-
-    /***/
-    function FOez(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "ConfirmModalService", function () {
-        return ConfirmModalService;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "mrSG");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-      /* harmony import */
-
-
-      var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! ngx-bootstrap/modal */
-      "LqlI");
-      /* harmony import */
-
-
-      var _confirm_modal_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! ./confirm-modal.component */
-      "SMoX"); // Components
-
-
-      var ConfirmModalService = /*#__PURE__*/function () {
-        function ConfirmModalService(modalService) {
-          _classCallCheck(this, ConfirmModalService);
-
-          this.modalService = modalService;
-        }
-
-        _createClass(ConfirmModalService, [{
-          key: "showConfirm",
-          value: function showConfirm(type, title, message, cancelTxt, okTxt) {
-            var modalRef = this.modalService.show(_confirm_modal_component__WEBPACK_IMPORTED_MODULE_3__["ConfirmModalComponent"], {
-              animated: false,
-              ignoreBackdropClick: true,
-              keyboard: false,
-              "class": 'confirm'
-            });
-            modalRef.content.type = type;
-            modalRef.content.title = title;
-            modalRef.content.message = message;
-
-            if (type === 'delete') {
-              modalRef.content.messageAlerts = ["Se eliminará toda la información relacionada.", "Esta acción no se puede deshacer."];
-            }
-
-            if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
-            }
-
-            if (cancelTxt) {
-              modalRef.content.cancelTxt = cancelTxt;
-            }
-
-            if (okTxt) {
-              modalRef.content.okTxt = okTxt;
-            } // É uma boa prática tipar o retorno.
-            // Obs.: ao tipar o retorno é possível acessar o intellisense do serviço.
-
-
-            return modalRef.content.confirmResult;
-          }
-        }]);
-
-        return ConfirmModalService;
-      }();
-
-      ConfirmModalService.ctorParameters = function () {
-        return [{
-          type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__["BsModalService"]
-        }];
-      };
-
-      ConfirmModalService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__["BsModalService"]])], ConfirmModalService);
-      /***/
-    },
-
-    /***/
     "Rk3r":
     /*!******************************************************!*\
       !*** ./src/app/shared/services/core/date.service.ts ***!
@@ -1566,151 +1471,6 @@
       DateService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
         providedIn: 'root'
       })], DateService);
-      /***/
-    },
-
-    /***/
-    "VgqD":
-    /*!********************************************************!*\
-      !*** ./src/app/modules/comercial/comercial.service.ts ***!
-      \********************************************************/
-
-    /*! exports provided: ComercialService */
-
-    /***/
-    function VgqD(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "ComercialService", function () {
-        return ComercialService;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "mrSG");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-      /* harmony import */
-
-
-      var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! @angular/common/http */
-      "IheW");
-      /* harmony import */
-
-
-      var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! rxjs/operators */
-      "kU1M");
-
-      var ComercialService = /*#__PURE__*/function () {
-        function ComercialService(http) {
-          _classCallCheck(this, ComercialService);
-
-          this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial";
-        }
-
-        _createClass(ComercialService, [{
-          key: "getEmpresas",
-          value: function getEmpresas(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/empresas"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getDepositos",
-          value: function getDepositos(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/depositos"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getLinhas",
-          value: function getLinhas(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/linhas"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getClasses",
-          value: function getClasses(params) {
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/classes"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getMateriais",
-          value: function getMateriais() {
-            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
-
-            for (var param in params) {
-              httpParams = httpParams.append(param, params[param]);
-            }
-
-            return this.http.get("".concat(this.API, "/materiais"), {
-              params: httpParams
-            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getPerfil",
-          value: function getPerfil() {
-            return this.http.get("".concat(this.API, "/perfil")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getEscritorios",
-          value: function getEscritorios() {
-            return this.http.get("".concat(this.API, "/escritorios")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }]);
-
-        return ComercialService;
-      }();
-
-      ComercialService.ctorParameters = function () {
-        return [{
-          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
-        }];
-      };
-
-      ComercialService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])], ComercialService);
       /***/
     },
 
@@ -2606,115 +2366,6 @@
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
         exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]]
       })], ComercialAknaContatosRoutingModule);
-      /***/
-    },
-
-    /***/
-    "zN97":
-    /*!************************************************************************!*\
-      !*** ./src/app/modules/comercial/tid-software/tid-software.service.ts ***!
-      \************************************************************************/
-
-    /*! exports provided: ComercialTidSoftwareService */
-
-    /***/
-    function zN97(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "ComercialTidSoftwareService", function () {
-        return ComercialTidSoftwareService;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "mrSG");
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-      /* harmony import */
-
-
-      var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! @angular/common/http */
-      "IheW");
-      /* harmony import */
-
-
-      var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! rxjs/operators */
-      "kU1M");
-      /* harmony import */
-
-
-      var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
-      /*! rxjs */
-      "qCKp");
-
-      var ComercialTidSoftwareService = /*#__PURE__*/function () {
-        function ComercialTidSoftwareService(http) {
-          _classCallCheck(this, ComercialTidSoftwareService);
-
-          this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/tid-software";
-        }
-
-        _createClass(ComercialTidSoftwareService, [{
-          key: "loadDependencies",
-          value: function loadDependencies() {
-            var empresas = this.getEmpresas('vendas');
-            var linhas = this.getLinhas();
-            var modulosVendas = this.getModulosVendas();
-            var modulosProducaoTela = this.getModulosProducaoTela();
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["forkJoin"])([empresas, linhas, modulosVendas, modulosProducaoTela]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getEmpresas",
-          value: function getEmpresas(acao) {
-            return this.http.get("".concat(this.API, "/empresas/").concat(acao)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getLinhas",
-          value: function getLinhas() {
-            return this.http.get("".concat(this.API, "/linhas")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getModulosVendas",
-          value: function getModulosVendas() {
-            return this.http.get("".concat(this.API, "/modulos/vendas")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "getModulosProducaoTela",
-          value: function getModulosProducaoTela() {
-            return this.http.get("".concat(this.API, "/modulos/producao-tela")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }, {
-          key: "postGerarAcesso",
-          value: function postGerarAcesso(data) {
-            return this.http.post("".concat(this.API, "/gerar-acesso"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
-          }
-        }]);
-
-        return ComercialTidSoftwareService;
-      }();
-
-      ComercialTidSoftwareService.ctorParameters = function () {
-        return [{
-          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
-        }];
-      };
-
-      ComercialTidSoftwareService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])], ComercialTidSoftwareService);
       /***/
     }
   }]);

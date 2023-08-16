@@ -480,7 +480,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesDashboardService = class ComercialClientesDashboardService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes/dashboard`;
+        this.API = `http://23.254.204.187/api/comercial/clientes/dashboard`;
     }
     getPermissaoAcesso(id) {
         return this.http.get(`${this.API}/permissao-acesso/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
@@ -1187,35 +1187,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "iMgG":
-/*!*************************************************!*\
-  !*** ./src/app/guards/form-deactivate.guard.ts ***!
-  \*************************************************/
-/*! exports provided: FormDeactivateGuard */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormDeactivateGuard", function() { return FormDeactivateGuard; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "8Y7J");
-
-
-let FormDeactivateGuard = class FormDeactivateGuard {
-    canDeactivate(component, route, state) {
-        return component.formCanDeactivate();
-    }
-};
-FormDeactivateGuard = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-    })
-], FormDeactivateGuard);
-
-
-
-/***/ }),
-
 /***/ "k2l4":
 /*!*************************************************************************!*\
   !*** ./src/app/modules/comercial/clientes/detalhes/detalhes.service.ts ***!
@@ -1237,7 +1208,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesDetalheService = class ComercialClientesDetalheService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes`;
+        this.API = `http://23.254.204.187/api/comercial/clientes`;
     }
     getDetalhes(id) {
         return this.http.get(`${this.API}/detalhes/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));

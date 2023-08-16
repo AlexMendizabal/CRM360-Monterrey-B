@@ -2,8 +2,8 @@
 try {
     $serverName = "localhost";
     $databaseName = "CRM360";
-    $uid = "reflo";
-    $pwd = "123";
+    $uid = "user2023";
+    $pwd = "RIC0rp#2023";
 
     
     $conn = new PDO("sqlsrv:server = $serverName; Database = $databaseName;", $uid, $pwd);

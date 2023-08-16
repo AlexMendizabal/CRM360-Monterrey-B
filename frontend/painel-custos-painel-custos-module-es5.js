@@ -914,7 +914,7 @@
           _classCallCheck(this, ComercialCadastroPainelCustosService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/painel-custos";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/painel-custos";
         }
 
         _createClass(ComercialCadastroPainelCustosService, [{

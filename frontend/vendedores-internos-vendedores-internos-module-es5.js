@@ -800,7 +800,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -1337,7 +1337,7 @@
 
           this.http = http;
           this.comercialService = comercialService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/kanban";
+          this.API = "http://23.254.204.187/api/comercial/kanban";
         }
 
         _createClass(ComercialComissoesService, [{

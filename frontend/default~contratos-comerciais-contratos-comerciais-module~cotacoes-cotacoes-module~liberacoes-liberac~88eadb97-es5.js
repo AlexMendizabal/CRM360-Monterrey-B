@@ -136,7 +136,7 @@
           this.formasPagamentoService = formasPagamentoService;
           this.formasContatoService = formasContatoService;
           this.origensContatoService = origensContatoService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/ciclo-vendas/cotacoes";
+          this.API = "http://23.254.204.187/api/comercial/ciclo-vendas/cotacoes";
           this.notifySubmit = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
           this.notifySubmitObservable$ = this.notifySubmit.asObservable();
           this.materiaisSubject = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
@@ -238,7 +238,7 @@
         }, {
           key: "getCliente",
           value: function getCliente(codCliente) {
-            return this.http.get("https://crm360.monterrey.com.bo/api/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1));
+            return this.http.get("http://23.254.204.187/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1));
           }
         }]);
 
@@ -326,7 +326,7 @@
           _classCallCheck(this, ComercialCadastrosSituacaoPropostaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/situacao-proposta";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/situacao-proposta";
         }
 
         _createClass(ComercialCadastrosSituacaoPropostaService, [{
@@ -452,7 +452,7 @@
           _classCallCheck(this, ComercialClientesService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes";
+          this.API = "http://23.254.204.187/api/comercial/clientes";
         }
 
         _createClass(ComercialClientesService, [{
@@ -730,7 +730,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -832,7 +832,7 @@
           this.http = http;
           this.vendedoresService = vendedoresService;
           this.titulosAgendaService = titulosAgendaService;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/agenda/formulario";
+          this.API = "http://23.254.204.187/api/comercial/agenda/formulario";
         }
 
         _createClass(ComercialAgendaFormularioService, [{
@@ -933,7 +933,7 @@
           _classCallCheck(this, ComercialCadastrosContatoOrigemContatoService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/contato/origem-contato";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/contato/origem-contato";
         }
 
         _createClass(ComercialCadastrosContatoOrigemContatoService, [{
@@ -1064,7 +1064,7 @@
           _classCallCheck(this, ComercialCadastrosContatoFormasContatoService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/contato/forma-contato";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/contato/forma-contato";
         }
 
         _createClass(ComercialCadastrosContatoFormasContatoService, [{
@@ -1195,7 +1195,7 @@
           _classCallCheck(this, ComercialCadastrosTransportadoraService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/transportadora";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/transportadora";
         }
 
         _createClass(ComercialCadastrosTransportadoraService, [{
@@ -1297,7 +1297,7 @@
           _classCallCheck(this, ComercialCadastrosFormasPagamentoService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/formas-pagamento";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/formas-pagamento";
         }
 
         _createClass(ComercialCadastrosFormasPagamentoService, [{
@@ -1423,7 +1423,7 @@
           _classCallCheck(this, ComercialCadastrosTitulosAgendaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/titulos-agenda";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/titulos-agenda";
         }
 
         _createClass(ComercialCadastrosTitulosAgendaService, [{
@@ -1545,7 +1545,7 @@
           _classCallCheck(this, ComercialTidSoftwareService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/tid-software";
+          this.API = "http://23.254.204.187/api/comercial/tid-software";
         }
 
         _createClass(ComercialTidSoftwareService, [{

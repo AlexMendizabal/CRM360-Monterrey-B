@@ -669,7 +669,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialIntegracoesArcelorMittalClassesMateriaisService = class ComercialIntegracoesArcelorMittalClassesMateriaisService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/integracoes/arcelor-mittal/classes-materiais`;
+        this.API = `http://23.254.204.187/api/comercial/integracoes/arcelor-mittal/classes-materiais`;
     }
     getLista() {
         return this.http.get(`${this.API}/lista`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));

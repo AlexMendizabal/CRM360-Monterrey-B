@@ -100,7 +100,7 @@
             }
 
             if (type === 'inactivate') {
-              modalRef.content.messageAlerts = ['Las informacion serán inactivadas.'];
+              modalRef.content.messageAlerts = ['Las informaciones serán inactivadas.'];
             }
 
             if (cancelTxt) {
@@ -886,7 +886,7 @@
           _classCallCheck(this, ComercialCadastrosSetorAtividadeService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/cadastros/setor-atividade";
+          this.API = "http://23.254.204.187/api/comercial/cadastros/setor-atividade";
         }
 
         _createClass(ComercialCadastrosSetorAtividadeService, [{

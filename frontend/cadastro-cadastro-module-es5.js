@@ -294,7 +294,7 @@
           this.clientesService = clientesService;
           this.pnotifyService = pnotifyService;
           this.location = location;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/upload/anexo";
+          this.API = "http://23.254.204.187/comercial/clientes/cadastro/upload/anexo";
           this.user = this.authService.getCurrentUser();
           this.urlAnexo = []; // public uploader: FileUploader = new FileUploader({ url: this.API });
 
@@ -4656,7 +4656,7 @@
           _classCallCheck(this, ComercialClientesCadastroContatosFormularioService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/formulario/contatos";
+          this.API = "http://23.254.204.187/api/comercial/clientes/cadastro/formulario/contatos";
         }
 
         _createClass(ComercialClientesCadastroContatosFormularioService, [{
@@ -5429,7 +5429,7 @@
           _classCallCheck(this, ComercialClientesCadastroDadosRelacionamentoFormularioService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/formulario/dados-relacionamento";
+          this.API = "http://23.254.204.187/api/comercial/clientes/cadastro/formulario/dados-relacionamento";
         }
 
         _createClass(ComercialClientesCadastroDadosRelacionamentoFormularioService, [{

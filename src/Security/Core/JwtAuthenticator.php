@@ -16,7 +16,10 @@ class JwtAuthenticator implements EventSubscriberInterface
      */
     public function onKernelController(ControllerEvent $event)
     {
-        if ($event->getRequest()->get('_route') != 'api.usuario.login') {
+        $currentRoute = $event->getRequest()->get('_route');
+
+        // Verificar si la ruta actual es diferente de 'api.core.sap.login' y 'api.usuario.login'
+        if ($currentRoute !== 'api.core.sap.login' && $currentRoute !== 'api.usuario.login'){
             $authorization = $event->getRequest()->headers->get('Authorization');
             list($jwt) = sscanf($authorization, 'Bearer %s');
             if ($jwt) {

@@ -79,7 +79,7 @@
           _classCallCheck(this, ComercialRelatoriosPosicaoDiariaService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/relatorios/posicao-diaria";
+          this.API = "http://23.254.204.187/api/comercial/relatorios/posicao-diaria";
         }
 
         _createClass(ComercialRelatoriosPosicaoDiariaService, [{

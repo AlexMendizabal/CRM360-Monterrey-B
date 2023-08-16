@@ -489,7 +489,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosContratosComerciaisSituacoesContratosComerciaisService = class ComercialCadastrosContratosComerciaisSituacoesContratosComerciaisService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/contratos-comerciais/situacoes-contratos-comerciais`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/contratos-comerciais/situacoes-contratos-comerciais`;
     }
     getListaSituacoesContratosComerciais(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -586,7 +586,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {

@@ -87,14 +87,14 @@ module.exports = content.locals || {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\bootstrap\dist\css\bootstrap.min.css */"q4sD");
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\@fortawesome\fontawesome-free\css\all.min.css */"vs8Z");
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\roboto-fontface\css\roboto\roboto-fontface.css */"1eg4");
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\perfect-scrollbar\css\perfect-scrollbar.css */"faiq");
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\angular-calendar\css\angular-calendar.css */"KEkg");
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\ngx-bootstrap\datepicker\bs-datepicker.css */"xlFp");
-__webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\node_modules\@ng-select\ng-select\themes\default.theme.css */"9uGI");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\src\styles.scss */"+EN/");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\bootstrap\dist\css\bootstrap.min.css */"q4sD");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\@fortawesome\fontawesome-free\css\all.min.css */"vs8Z");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\roboto-fontface\css\roboto\roboto-fontface.css */"1eg4");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\perfect-scrollbar\css\perfect-scrollbar.css */"faiq");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\angular-calendar\css\angular-calendar.css */"KEkg");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\ngx-bootstrap\datepicker\bs-datepicker.css */"xlFp");
+__webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\node_modules\@ng-select\ng-select\themes\default.theme.css */"9uGI");
+module.exports = __webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\src\styles.scss */"+EN/");
 
 
 /***/ }),

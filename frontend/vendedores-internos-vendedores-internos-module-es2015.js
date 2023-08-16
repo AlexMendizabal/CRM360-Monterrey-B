@@ -571,7 +571,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {
@@ -895,7 +895,7 @@ let ComercialComissoesService = class ComercialComissoesService {
     constructor(http, comercialService) {
         this.http = http;
         this.comercialService = comercialService;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/kanban`;
+        this.API = `http://23.254.204.187/api/comercial/kanban`;
     }
     getCards(params) {
         let emAberto = this.getAberto(params);

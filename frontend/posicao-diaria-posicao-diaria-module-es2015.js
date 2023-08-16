@@ -34,7 +34,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialRelatoriosPosicaoDiariaService = class ComercialRelatoriosPosicaoDiariaService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/relatorios/posicao-diaria`;
+        this.API = `http://23.254.204.187/api/comercial/relatorios/posicao-diaria`;
     }
     getPerfis() {
         return this.http.get(`${this.API}/perfis`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["retry"])(2));

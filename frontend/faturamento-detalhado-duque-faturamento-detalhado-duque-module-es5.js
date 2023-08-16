@@ -493,7 +493,7 @@
           _classCallCheck(this, ComercialRelatoriosFaturamentoDetalhadoDuqueService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/relatorios/faturamento-detalhado-duque";
+          this.API = "http://23.254.204.187/api/comercial/relatorios/faturamento-detalhado-duque";
         }
 
         _createClass(ComercialRelatoriosFaturamentoDetalhadoDuqueService, [{

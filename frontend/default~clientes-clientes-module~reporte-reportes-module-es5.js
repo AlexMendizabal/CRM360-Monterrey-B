@@ -59,8 +59,8 @@
           _classCallCheck(this, ComercialVendedoresService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/vendedor";
-          this.API_CADASTROS = "https://crm360.monterrey.com.bo/api/comercial/cadastros";
+          this.API = "http://23.254.204.187/api/comercial/vendedor";
+          this.API_CADASTROS = "http://23.254.204.187/api/comercial/cadastros";
         }
 
         _createClass(ComercialVendedoresService, [{
@@ -87,6 +87,13 @@
           key: "getCarteiraClientes",
           value: function getCarteiraClientes(params) {
             return this.http.get("".concat(this.API, "/carteira-clientes"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCarteiraClientesCotizacion",
+          value: function getCarteiraClientesCotizacion(params) {
+            return this.http.get("".concat(this.API, "/carteira-clientes-cotizacion"), {
               params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
@@ -166,7 +173,7 @@
           _classCallCheck(this, ComercialClientesService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes";
+          this.API = "http://23.254.204.187/api/comercial/clientes";
         }
 
         _createClass(ComercialClientesService, [{
@@ -375,6 +382,59 @@
     },
 
     /***/
+    "iMgG":
+    /*!*************************************************!*\
+      !*** ./src/app/guards/form-deactivate.guard.ts ***!
+      \*************************************************/
+
+    /*! exports provided: FormDeactivateGuard */
+
+    /***/
+    function iMgG(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "FormDeactivateGuard", function () {
+        return FormDeactivateGuard;
+      });
+      /* harmony import */
+
+
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "mrSG");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! @angular/core */
+      "8Y7J");
+
+      var FormDeactivateGuard = /*#__PURE__*/function () {
+        function FormDeactivateGuard() {
+          _classCallCheck(this, FormDeactivateGuard);
+        }
+
+        _createClass(FormDeactivateGuard, [{
+          key: "canDeactivate",
+          value: function canDeactivate(component, route, state) {
+            return component.formCanDeactivate();
+          }
+        }]);
+
+        return FormDeactivateGuard;
+      }();
+
+      FormDeactivateGuard = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+      })], FormDeactivateGuard);
+      /***/
+    },
+
+    /***/
     "qdc5":
     /*!********************************************************************************************************!*\
       !*** ./src/app/modules/comercial/clientes/cadastro/dados-faturamento/formulario/formulario.service.ts ***!
@@ -429,7 +489,7 @@
           _classCallCheck(this, ComercialClientesCadastroDadosFaturamentoFormularioService);
 
           this.http = http;
-          this.API = "https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/formulario/dados-faturamento";
+          this.API = "http://23.254.204.187/api/comercial/clientes/cadastro/formulario/dados-faturamento";
         }
 
         _createClass(ComercialClientesCadastroDadosFaturamentoFormularioService, [{

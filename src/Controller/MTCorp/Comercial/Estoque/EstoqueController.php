@@ -695,5 +695,164 @@ class EstoqueController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+    /**
+     * @Route(
+     *  "/comercial/estoque/estoquecomprometido/{codMaterial}",
+     *  name="comercial.estoque.estoqueComprometido",
+     *  methods={"GET"},
+     *  requirements={"codMaterial"="\d+"}
+     * )
+     * @return JsonResponse
+     */
+    public function getStockComprometido(Connection $connection, Request $request, $codMaterial)
+    {
+        try {
+            $arrFinal = array();
+            if (($codMaterial != '' && $codMaterial != 0)) {
+                $query = "
+                SELECT OFE.id as id_oferta, OFE.codigo_oferta as codigo_oferta, OFE.fecha_creacion AS fecha_oferta, OFE.nombre_oferta, concat (CLIE.prim_nome + ' ', 
+                    CLIE.segu_nome) as cliente,concat(VEND.NM_VEND + ' ',  VEND.NM_RAZA_SOCI) AS vendedor,  OD.cantidad as cantidad, 
+                    MATE.ID_CODIGOMATERIAL as id_material, uni.SIGLAS_UNI as unidad, 
+                    OFE.id_almacen as id_almacen,DEPO.CODIGO_ALMACEN AS nombre_almacen
+                FROM TB_OFERTA OFE 
+				INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_oferta = OFE.id inner join TB_MATE MATE on MATE.ID_CODIGOMATERIAL = OD.id_material
+                INNER JOIN UNIDADES uni on uni.ID = od.id_unidad inner join MTCORP_MODU_CLIE_BASE CLIE on OFE.id_cliente = CLIE.id_cliente
+                INNER JOIN TB_VEND VEND on VEND.ID = OFE.id_vendedor
+                INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OFE.id_almacen
+                WHERE OD.id_material = :codMaterial";
+
+                $statement = $connection->prepare($query);
+                $statement->bindValue('codMaterial', $codMaterial);
+                $statement->execute();
+                $estoqueComprometido = $statement->fetchAll();
+                foreach ($estoqueComprometido as &$row) {
+                    $row['fecha_oferta'] = date('d-m-Y H:i:s', strtotime($row['fecha_oferta']));
+                }
+
+                if (count($estoqueComprometido) > 0) {
+                    $arrFinal['analitico'] = $estoqueComprometido;
+                    $arrFinal['total'] = array(
+                        'quantidade' => 0
+                    );
+
+                    for ($i = 0; $i < count($estoqueComprometido); $i++) {
+                        $arrFinal['total']['cantidad'] += $estoqueComprometido[$i]['cantidad'];
+                    }
+                    /* dd($arrFinal); */
+                    $message = array(
+                        'responseCode' => 200,
+                        'result' => $arrFinal,
+                        'estado' => true
+                    );
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'result' => 'No fue posible los obtener datos',
+                        'estado' => false
+
+                    );
+                }
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => 'No se pueden obtener los registros',
+                    'estado' => false
+
+                );
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false
+
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+    
+    /**
+     * @Route(
+     *  "/comercial/estoque/estoquesuspenso/{codMaterial}",
+     *  name="comercial.estoque-estoque.Suspenso",
+     *  methods={"GET"},
+     *   requirements={"codMaterial"="\d+"}
+     * )
+     * @return JsonResponse
+     */
+    public function getEstockSuspenso(Connection $connection, Request $request, $codMaterial)
+    {
+        try {
+            $arrFinal = array();
+            if (!empty($codMaterial) && $codMaterial != 0) {
+                $query = "
+                SELECT
+                    EST_SUSP.ID as id,
+                    EST_SUSP.DATALANCTO AS fecha,
+                    EST_SUSP.DESCRIPCION AS descripcion,
+                    EST_SUSP.QTDESUSPENSO AS cantidad,
+                    UN.SIGLAS_UNI AS unidad
+                FROM
+                    TB_MATE_ESTO_SUSP EST_SUSP
+                INNER JOIN
+                    UNIDADES UN ON EST_SUSP.ID_UNIDAD = UN.ID
+                WHERE
+                    EST_SUSP.CODIGOMATERIAL = :codMaterial AND EST_SUSP.estado = :estado";
+
+                $statement = $connection->prepare($query);
+                $statement->bindValue('codMaterial', $codMaterial);
+                $statement->bindValue('estado', 1);
+
+                $statement->execute();
+
+                $estoqueSuspenso = $statement->fetchAll();
+                foreach ($estoqueSuspenso as &$row) {
+                    $row['fecha'] = date('d-m-Y H:i:s', strtotime($row['fecha']));
+                }
+
+
+                if (count($estoqueSuspenso) > 0) {
+                    $arrFinal['analitico'] = $estoqueSuspenso;
+                    $arrFinal['total'] = array(
+                        'quantidade' => 0
+                    );
+
+                    for ($i = 0; $i < count($estoqueSuspenso); $i++) {
+                        $arrFinal['total']['cantidad'] += $estoqueSuspenso[$i]['cantidad'];
+                    }
+                    $message = [
+                        'responseCode' => 200,
+                        'result' => $arrFinal,
+                        'estado' => true
+                    ];
+                } else {
+                    $message = [
+                        'responseCode' => 204,
+                        'result' => 'No fue posible localizar los datos',
+                        'estado' => false
+                    ];
+                }
+            } else {
+                $message = [
+                    'responseCode' => 204,
+                    'result' => 'No se pueden obtener los registros',
+                    'estado' => false
+                ];
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
 
 }

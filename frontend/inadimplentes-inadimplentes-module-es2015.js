@@ -109,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 let FinanceiroRelatoriosInadimplentesService = class FinanceiroRelatoriosInadimplentesService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/financeiro/relatorios/inadimplentes`;
+        this.API = `http://23.254.204.187/api/financeiro/relatorios/inadimplentes`;
     }
     getLista() {
         return this.http.get(`${this.API}/lista`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["retry"])(2));

@@ -65,7 +65,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | contatos-contatos-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("contatos-contatos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~associacao-linhas-associacao-linhas-module~contatos-contatos-module"), __webpack_require__.e("contatos-contatos-module")]).then(__webpack_require__.bind(null,
             /*! ./contatos/contatos.module */
             "nwB5")).then(function (m) {
               return m.ComercialAknaContatosModule;

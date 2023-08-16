@@ -779,7 +779,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {
@@ -1056,7 +1056,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosTitulosAgendaService = class ComercialCadastrosTitulosAgendaService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/titulos-agenda`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/titulos-agenda`;
     }
     getListaTitulosAgenda(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();

@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\CRM360-Monterrey-v\src\main.ts */"zUnb");
+module.exports = __webpack_require__(/*! C:\CRM360-Monterrey-cambiosmend\src\main.ts */"zUnb");
 
 
 /***/ }),
@@ -670,7 +670,7 @@ __webpack_require__.r(__webpack_exports__);
 const environment = {
     production: false,
     API: '/api',
-    URL_MTCORP: 'https://crm360.monterrey.com.bo/api/'
+    URL_MTCORP: 'http://23.254.204.187/'
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -2167,11 +2167,32 @@ let LoginComponent = class LoginComponent {
             }))
                 .subscribe((response) => {
                 if (response.responseCode === 200) {
-                    if (response.token) {
-                        this.setUserLogin(response);
-                    }
-                    else {
-                        this.pnotifyService.error('Se ha producido un error al generar su acceso.');
+                    this.setUserLogin(response);
+                    /*  console.log(response); */
+                    if (response.token) { /*
+                      var params = {
+                        Usuario: 'crm360',
+                        Password: 'M1ddlewareCRM360$/',
+                      }
+                      this.authService.loginSAP(params).subscribe(
+                        (respuesta: any) => {
+                          if (respuesta.CodigoRespuesta === 0) {
+                            if (respuesta.Mensaje) {
+                              response['tokenSAP'] = response.Mensaje;
+                              this.setUserLogin(response);
+                            }
+                          } else {
+                            this.pnotifyService.error(
+                              'Se ha producido un error al generar su acceso.'
+                            );
+                          }
+                        }
+                      );
+                    } else {
+                      this.pnotifyService.error(
+                        'Se ha producido un error al generar su acceso.'
+                      );
+                    } */
                     }
                 }
                 else {
@@ -2597,7 +2618,7 @@ __webpack_require__.r(__webpack_exports__);
 let ModulosService = class ModulosService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/common`;
+        this.API = `http://23.254.204.187/api/common`;
         if (typeof localStorage.getItem('currentModule') == 'undefined' ||
             localStorage.getItem('currentModule') == 'undefined') {
             localStorage.removeItem('currentModule');
@@ -2612,7 +2633,7 @@ let ModulosService = class ModulosService {
     }
     _getModulo(rota) {
         return this.http
-            .get(`https://crm360.monterrey.com.bo/api/core/modulos`, {
+            .get(`http://23.254.204.187/api/core/modulos`, {
             "params": { "rota": rota },
             "observe": "response"
         }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
@@ -2782,6 +2803,9 @@ let PNotifyService = class PNotifyService {
     }
     notice(message) {
         this.showMessage('notice', 'Advertencia', message);
+    }
+    delete(message = 'Operación eliminada con éxito.') {
+        this.showMessage('error', 'Algo salió mal.', message);
     }
     showMessage(type, title, message) {
         pnotify_dist_es_PNotify__WEBPACK_IMPORTED_MODULE_2__["default"].alert({
@@ -3837,7 +3861,7 @@ let AuthService = class AuthService {
         this.pnotifyService = pnotifyService;
         this.routerService = routerService;
         this.modulosService = modulosService;
-        this.API = `https://crm360.monterrey.com.bo/api/usuario`;
+        this.API = `http://23.254.204.187/api/usuario`;
         this.showMenuEmitter = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.hasSession = true;
         this.currentUserSubject = new rxjs__WEBPACK_IMPORTED_MODULE_4__["BehaviorSubject"](JSON.parse(localStorage.getItem('currentUser')));
@@ -3848,6 +3872,10 @@ let AuthService = class AuthService {
         this.hasSession = true;
         return this.http.post(`${this.API}/login`, data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["retry"])(2));
     }
+    loginSAP(data) {
+        this.hasSession = true;
+        return this.http.post(`http://23.254.204.187/api/Login`, data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["retry"])(2));
+    }
     logout() {
         this.resetCurrentUser();
         this.showMenuEmitter.emit(false);
@@ -3855,7 +3883,7 @@ let AuthService = class AuthService {
         return false;
     }
     changePassword(data) {
-        return this.http.post(`https://crm360.monterrey.com.bo/api/core/contra-senha`, data, { observe: 'response' }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["take"])(1));
+        return this.http.post(`http://23.254.204.187/core/contra-senha`, data, { observe: 'response' }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["take"])(1));
     }
     sessionExpired() {
         setTimeout(() => {

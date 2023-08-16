@@ -54,7 +54,7 @@ let ComercialCicloVendasCotacoesFormularioService = class ComercialCicloVendasCo
         this.formasPagamentoService = formasPagamentoService;
         this.formasContatoService = formasContatoService;
         this.origensContatoService = origensContatoService;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/ciclo-vendas/cotacoes`;
+        this.API = `http://23.254.204.187/api/comercial/ciclo-vendas/cotacoes`;
         this.notifySubmit = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.notifySubmitObservable$ = this.notifySubmit.asObservable();
         this.materiaisSubject = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
@@ -136,7 +136,7 @@ let ComercialCicloVendasCotacoesFormularioService = class ComercialCicloVendasCo
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1));
     }
     getCliente(codCliente) {
-        return this.http.get(`https://crm360.monterrey.com.bo/api/comercial/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1));
+        return this.http.get(`http://23.254.204.187/comercial/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1));
     }
 };
 ComercialCicloVendasCotacoesFormularioService.ctorParameters = () => [
@@ -194,7 +194,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosSituacaoPropostaService = class ComercialCadastrosSituacaoPropostaService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/situacao-proposta`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/situacao-proposta`;
     }
     getListaSituacaoProposta(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -274,7 +274,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesService = class ComercialClientesService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes`;
+        this.API = `http://23.254.204.187/api/comercial/clientes`;
     }
     getStatus() {
         return this.http.get(`${this.API}/pesquisa/status`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -514,7 +514,7 @@ let ConfirmModalService = class ConfirmModalService {
         }
         if (type === 'inactivate') {
             modalRef.content.messageAlerts = [
-                'Las informacion serán inactivadas.'
+                'Las informaciones serán inactivadas.'
             ];
         }
         if (cancelTxt) {
@@ -572,7 +572,7 @@ let ComercialAgendaFormularioService = class ComercialAgendaFormularioService {
         this.http = http;
         this.vendedoresService = vendedoresService;
         this.titulosAgendaService = titulosAgendaService;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/agenda/formulario`;
+        this.API = `http://23.254.204.187/api/comercial/agenda/formulario`;
     }
     loadDependencies() {
         let clientes = this.vendedoresService.getCarteiraClientes();
@@ -643,7 +643,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosContatoOrigemContatoService = class ComercialCadastrosContatoOrigemContatoService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/contato/origem-contato`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/contato/origem-contato`;
     }
     getListaOrigemContato(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -728,7 +728,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosContatoFormasContatoService = class ComercialCadastrosContatoFormasContatoService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/contato/forma-contato`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/contato/forma-contato`;
     }
     getListaFormasContato(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -813,7 +813,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosTransportadoraService = class ComercialCadastrosTransportadoraService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/transportadora`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/transportadora`;
     }
     getListaTransportadoras(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -876,7 +876,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosFormasPagamentoService = class ComercialCadastrosFormasPagamentoService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/formas-pagamento`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/formas-pagamento`;
     }
     getListaFormasPagamento(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -954,7 +954,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialCadastrosTitulosAgendaService = class ComercialCadastrosTitulosAgendaService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/cadastros/titulos-agenda`;
+        this.API = `http://23.254.204.187/api/comercial/cadastros/titulos-agenda`;
     }
     getListaTitulosAgenda(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
@@ -1026,7 +1026,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialTidSoftwareService = class ComercialTidSoftwareService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/tid-software`;
+        this.API = `http://23.254.204.187/api/comercial/tid-software`;
     }
     loadDependencies() {
         let empresas = this.getEmpresas('vendas');

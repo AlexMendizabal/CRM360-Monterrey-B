@@ -475,7 +475,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | associacao-linhas-associacao-linhas-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("associacao-linhas-associacao-linhas-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~associacao-linhas-associacao-linhas-module~contatos-contatos-module"), __webpack_require__.e("associacao-linhas-associacao-linhas-module")]).then(__webpack_require__.bind(null,
             /*! ./associacao-linhas/associacao-linhas.module */
             "wwCg")).then(function (m) {
               return m.ComercialCadastrosAssociacaoLinhasModule;
@@ -1483,7 +1483,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Cadastros\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Selecione um cadastro\" [list]=\"atividades\"></card-group>\r\n</app-body>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Registros\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <card-group text=\"Selecione un registro\" [list]=\"atividades\"></card-group>\r\n</app-body>\r\n";
       /***/
     },
 

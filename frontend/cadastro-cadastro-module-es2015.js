@@ -157,7 +157,7 @@ let ComercialClientesCadastroAnexosFormularioComponent = class ComercialClientes
         this.clientesService = clientesService;
         this.pnotifyService = pnotifyService;
         this.location = location;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/upload/anexo`;
+        this.API = `http://23.254.204.187/comercial/clientes/cadastro/upload/anexo`;
         this.user = this.authService.getCurrentUser();
         this.urlAnexo = [];
         // public uploader: FileUploader = new FileUploader({ url: this.API });
@@ -3327,7 +3327,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesCadastroContatosFormularioService = class ComercialClientesCadastroContatosFormularioService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/formulario/contatos`;
+        this.API = `http://23.254.204.187/api/comercial/clientes/cadastro/formulario/contatos`;
     }
     loadDepencies() {
         let funcoes = this.getFuncoes();
@@ -3853,7 +3853,7 @@ __webpack_require__.r(__webpack_exports__);
 let ComercialClientesCadastroDadosRelacionamentoFormularioService = class ComercialClientesCadastroDadosRelacionamentoFormularioService {
     constructor(http) {
         this.http = http;
-        this.API = `https://crm360.monterrey.com.bo/api/comercial/clientes/cadastro/formulario/dados-relacionamento`;
+        this.API = `http://23.254.204.187/api/comercial/clientes/cadastro/formulario/dados-relacionamento`;
     }
     loadDepencies() {
         let tiposAtendimento = this.getTiposAtendimento();
