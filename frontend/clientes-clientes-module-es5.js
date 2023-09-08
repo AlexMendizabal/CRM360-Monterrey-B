@@ -66,7 +66,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Pre-Registro\">\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onCancel()\"\r\n    [disabled]=\"submittingForm\">\r\n    Cancelar\r\n  </button>\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onSubmit()\"\r\n    [disabled]=\"!form.valid || submittingForm\">\r\n    Salvar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-6\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <div class=\"btn-group btn-group-sm\">\r\n              <button\r\n                type=\"button\"\r\n                class=\"btn btn-light active\"\r\n                [ngClass]=\"{'active': tipoPessoa == 'F'}\"\r\n                (click)=\"setType('F')\">\r\n                <strong>Persona fisica</strong>\r\n              </button>\r\n              \r\n              <button\r\n              type=\"button\"\r\n              class=\"btn btn-light active\"\r\n              [ngClass]=\"{'active': tipoPessoa == 'J'}\"\r\n              (click)=\"setType('J')\">\r\n              <strong>persona Juridica</strong>\r\n            </button>\r\n\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\" *ngIf=\"tipoPessoa == 'F'\">\r\n            <label for=\"cpf\"> CARNET DE IDENTIDAD </label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"cpf\"\r\n              formControlName=\"cpf\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('cpf') + ' ' + onFieldRequired('cpf')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('cpf') == 'required'\" message=\"Carnet inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\" *ngIf=\"tipoPessoa == 'J'\">\r\n            <label for=\"cnpj\">NIT</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"cnpj\"\r\n              formControlName=\"cnpj\"\r\n              (input)=\"onInput()\"\r\n              (blur)=\"validateCNPJ()\"\r\n              [ngClass]=\"onFieldError('cnpj') + ' ' + onFieldRequired('cnpj')\"\r\n            >\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnpj') == 'required'\" message=\"NIT inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"vendedor\">Atribuir vendedor</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"vendedores\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"vendedor\"\r\n              bindLabel=\"nome\"\r\n              bindValue=\"id\"\r\n              formControlName=\"vendedor\"\r\n              (change)=\"onInput()\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\" *ngIf=\"tipoPessoa == 'F'\">\r\n            <label for=\"nome\">Nombre</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"nome\"\r\n              formControlName=\"nome\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nome') + ' ' + onFieldRequired('nome')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'required'\" message=\"Nombre es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'maxlength'\" [message]=\"maxLengthMessages.nome\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\" *ngIf=\"tipoPessoa == 'F'\">\r\n            <label for=\"sobrenome\">Apellido</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"sobrenome\"\r\n              formControlName=\"sobrenome\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('sobrenome') + ' ' + onFieldRequired('sobrenome')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('sobrenome') == 'required'\" message=\"Apellido es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('sobrenome') == 'maxlength'\" [message]=\"maxLengthMessages.sobrenome\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\" *ngIf=\"tipoPessoa == 'J'\">\r\n            <label for=\"razaoSocial\">Razon social</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"razaoSocial\"\r\n              formControlName=\"razaoSocial\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('razaoSocial') + ' ' + onFieldRequired('razaoSocial')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'required'\" message=\"Razon social es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'maxlength'\" [message]=\"maxLengthMessages.razaoSocial\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\" *ngIf=\"tipoPessoa == 'J'\">\r\n            <label for=\"nomeFantasia\">Nombre</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"nomeFantasia\"\r\n              formControlName=\"nomeFantasia\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nomeFantasia') + ' ' + onFieldRequired('nomeFantasia')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nomeFantasia') == 'required'\" message=\"Nombre es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('nomeFantasia') == 'maxlength'\" [message]=\"maxLengthMessages.nomeFantasia\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\" *ngIf=\"tipoPessoa == 'J'\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"cnae\">CNAE (Actividad Economica)</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"cnaes\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"cnae\"\r\n              bindLabel=\"descricao\"\r\n              bindValue=\"id\"\r\n              formControlName=\"cnae\"\r\n              (change)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('cnae') + ' ' + onFieldRequired('cnae')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnae') == 'required'\" message=\"CNAE es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"emailNfe\">E-mail NFE</label>\r\n            <input\r\n              type=\"email\"\r\n              class=\"form-control\"\r\n              id=\"emailNfe\"\r\n              formControlName=\"emailNfe\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('emailNfe') + ' ' + onFieldRequired('emailNfe')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('emailNfe') == 'required'\" message=\"E-mail NFE es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('emailNfe') == 'maxlength'\" [message]=\"maxLengthMessages.emailNfe\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"telefone\">Telefono</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"telefone\"\r\n              formControlName=\"telefone\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('telefone') + ' ' + onFieldRequired('telefone')\"\r\n            >\r\n            <invalid-form-control [show]=\"onFieldInvalid('telefone') == 'required'\" message=\"Telefono es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <!-- <label for=\"tipopessoa\">Tipo de persona</label> -->\r\n            <!-- <select class=\"form-control\" id=\"tipopessoa\" formControlName=\"tipopessoa\" (change)=\"onInput()\">\r\n              <option value=\"F\">Persona 1 </option>\r\n              <option value=\"J\">Persona 2 </option>\r\n              <option value=\"J\">Persona 3 </option>\r\n            </select> -->\r\n          </div>\r\n        </div>\r\n        \r\n        <!-- <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"emailMarketing\">E-mail Marketing</label>\r\n            <input\r\n              type=\"email\"\r\n              class=\"form-control\"\r\n              id=\"emailMarketing\"\r\n              formControlName=\"emailMarketing\"\r\n              (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('emailMarketing') + ' ' + onFieldRequired('emailMarketing')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('emailMarketing') == 'maxlength'\" [message]=\"maxLengthMessages.emailMarketing\"></invalid-form-control>\r\n          </div>\r\n        </div> -->\r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n\r\n<ng-template #modalDetalhesCliente>\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"modal-title\">Oops! Ese cliente ya esta registrado</h4>\r\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"onCloseDetails()\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"form-row\">\r\n      <div class=\"col\">\r\n        <div class=\"mtc-title\">Datos de registro</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Código</label>\r\n        <div *ngIf=\"dadosCliente.codCliente == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.codCliente != null\">{{ dadosCliente.codCliente }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\" *ngIf=\"dadosCliente.tipo == 'F'\">\r\n        <label>CPF</label>\r\n        <div *ngIf=\"dadosCliente.cpf == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cpf != null\">{{ dadosCliente.cpf }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\" *ngIf=\"dadosCliente.tipo == 'J'\">\r\n        <label>NIT</label>\r\n        <div *ngIf=\"dadosCliente.cnpj == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cnpj != null\">{{ dadosCliente.cnpj }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Nombre fantasia</label>\r\n        <div *ngIf=\"dadosCliente.nomeFantasia == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.nomeFantasia != null\">{{ dadosCliente.nomeFantasia }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Razon social</label>\r\n        <div *ngIf=\"dadosCliente.razaoSocial == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.razaoSocial != null\">{{ dadosCliente.razaoSocial }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Endereço</label>\r\n        <div *ngIf=\"dadosCliente.endereco == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.endereco != null\">{{ dadosCliente.endereco }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Bairro</label>\r\n        <div *ngIf=\"dadosCliente.bairro == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.bairro != null\">{{ dadosCliente.bairro }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>CEP</label>\r\n        <div *ngIf=\"dadosCliente.cep == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cep != null\">{{ dadosCliente.cep }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Cidade</label>\r\n        <div *ngIf=\"dadosCliente.cidade == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cidade != null\">{{ dadosCliente.cidade }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Estado</label>\r\n        <div *ngIf=\"dadosCliente.uf == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.uf != null\">{{ dadosCliente.uf }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Segurado</label>\r\n        <div *ngIf=\"dadosCliente.segurado != ''\">SI</div>\r\n        <div *ngIf=\"dadosCliente.segurado == ''\">NO</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Vendedor</label>\r\n        <div *ngIf=\"dadosCliente.vendedor == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.vendedor != null\">{{ dadosCliente.vendedor }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Escritório</label>\r\n        <div *ngIf=\"dadosCliente.escritorio == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.escritorio != null\">{{ dadosCliente.escritorio }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-4\" *ngIf=\"dadosCliente.codSAP != '' && dadosCliente.codSAP != null\">\r\n        <label>Código DBA</label>\r\n        <div>{{ dadosCliente.codSAP }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-4\" *ngIf=\"dadosCliente.escritorioDba != '' && dadosCliente.escritorioDba != null\">\r\n        <label>Sucursal</label>\r\n        <div>{{ dadosCliente.escritorioDba }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-4\" *ngIf=\"dadosCliente.ultimaCompraDba != '' && dadosCliente.ultimaCompraDba != null\">\r\n        <label>Última compra</label>\r\n        <div>{{ dadosCliente.ultimaCompraDba }}</div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n    <button type=\"button\" class=\"btn btn-light\" (click)=\"onCloseDetails()\">Fechar</button>\r\n    <button\r\n      type=\"button\"\r\n      class=\"btn btn-primary\"\r\n      (click)=\"onNavigateDetail()\">\r\n      Detalles\r\n    </button>\r\n  </div>\r\n</ng-template>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Pre-Registro\">\r\n  <button type=\"button\" (click)=\"onCancel()\" [disabled]=\"submittingForm\">\r\n    Cancelar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onSubmit()\" [disabled]=\"!form.valid || submittingForm\">\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-6\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"cnpj_cpf\"> CEDULA DE IDENTIDAD </label>\r\n            <input type=\"text\" class=\"form-control\" id=\"cnpj_cpf\" formControlName=\"cnpj_cpf\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('cnpj_cpf') + ' ' + onFieldRequired('cnpj_cpf')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnpj_cpf') == 'cnpj_cpf'\"\r\n                                  message=\"CEDULA es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"tipopessoa\">Tipo de persona</label>\r\n            <select class=\"form-control\" id=\"tipopessoa\" formControlName=\"tipopessoa\" (change)=\"onInput()\">\r\n              <option value=\"S\">Sociedades</option>\r\n              <option value=\"P\">Privado</option>\r\n              <option value=\"G\">Gobierno</option>\r\n              <option value=\"E\">Empleado</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nit\">NIT</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nit\" formControlName=\"nit\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('nit') + ' ' + onFieldRequired('nit')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nit') == 'required'\"\r\n                                  message=\"NIT inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"vendedor\"> Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"vendedores\" [virtualScroll]=\"true\"\r\n                       labelForId=\"vendedor\" bindLabel=\"nome\" bindValue=\"id\" formControlName=\"vendedor\"\r\n                       (change)=\"onInput()\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nome\">Nombre</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nome\" formControlName=\"nome\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('nome') + ' ' + onFieldRequired('nome')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'required'\"\r\n                                  message=\"Nombre es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'maxlength'\"\r\n                                  [message]=\"maxLengthMessages.nome\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"apellido1\">Apellido Paterno</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"apellido1\" formControlName=\"apellido1\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('apellido1') + ' ' + onFieldRequired('apellido1')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('apellido1') == 'required'\"\r\n                                  message=\"Apellido es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('apellido1') == 'maxlength'\"\r\n                                  [message]=\"maxLengthMessages.apellido1\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"apellido2\">Apellido Materno</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"apellido2\" formControlName=\"apellido2\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('apellido2') + ' ' + onFieldRequired('apellido2')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('apellido2') == 'required'\"\r\n                                  message=\"Apellido es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('apellido2') == 'maxlength'\"\r\n                                  [message]=\"maxLengthMessages.apellido2\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"razaoSocial\">Razon social</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"razaoSocial\" formControlName=\"razaoSocial\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('razaoSocial') + ' ' + onFieldRequired('razaoSocial')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'required'\"\r\n                                  message=\"Razon social es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'maxlength'\"\r\n                                  [message]=\"maxLengthMessages.razaoSocial\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nomeFantasia\">Nombre de Fantasia</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nomeFantasia\" formControlName=\"nomeFantasia\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('nomeFantasia') + ' ' + onFieldRequired('nomeFantasia')\">\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"direccion\">Direccion</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"direccion\" formControlName=\"direccion\" (input)=\"onInput()\">\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"celular\">Celular</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"celular\" formControlName=\"celular\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('celular') + ' ' + onFieldRequired('celular')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('celular') == 'required'\"\r\n                                  message=\"celular es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"email\">E-mail</label>\r\n            <input type=\"email\" class=\"form-control\" id=\"email\" formControlName=\"email\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('email') + ' ' + onFieldRequired('email')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('email') == 'required'\"\r\n                                  message=\"E-mail es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('email') == 'maxlength'\"\r\n                                  [message]=\"maxLengthMessages.email\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"telefone\">Telefono</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"telefone\" formControlName=\"telefone\" (input)=\"onInput()\"\r\n                   [ngClass]=\"onFieldError('telefone') + ' ' + onFieldRequired('telefone')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('telefone') == 'required'\"\r\n                                  message=\"Telefono es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"cnae\">Rubro (Actividad Economica)</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"cnaes\" [virtualScroll]=\"true\" labelForId=\"cnae\"\r\n                       bindLabel=\"descricao\" bindValue=\"id\" formControlName=\"cnae\" (change)=\"onInput()\"\r\n                       [ngClass]=\"onFieldError('cnae') + ' ' + onFieldRequired('cnae')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnae') == 'required'\"\r\n                                  message=\"CNAE es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <button data-toggle=\"collapse\" data-target=\"#CollapseContacto\" class=\"btn btn-secondary\">Agregar Contacto</button>\r\n\r\n         <div id=\"CollapseContacto\" class=\"collapse\">\r\n          <div class=\"col\">\r\n            <hr class=\"mt-2\">\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label>CONTACTOS</label>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <div class=\"form-row\">\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"contacto\">TITULO DE CONTACTO</label>\r\n                <input type=\"contacto\" class=\"form-control\" id=\"contacto\" formControlName=\"contacto\" (input)=\"onInput()\"\r\n                       [ngClass]=\"onFieldError('contacto') + ' ' + onFieldRequired('contacto')\">\r\n              </div>\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"nombrecontacto\">NOMBRE</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"nombrecontacto\" formControlName=\"nombrecontacto\"\r\n                       (input)=\"onInput()\">\r\n              </div>\r\n            </div>\r\n            <div class=\"form-row\">\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"apellido_contacto\">APELLIDO PATERNO</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"apellido_contacto\" formControlName=\"apellido_contacto\"\r\n                       (input)=\"onInput()\">\r\n              </div>\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"apellido2_contacto\">APELLIDO MATERNO</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"apellido2_contacto\" formControlName=\"apellido2_contacto\"\r\n                       (input)=\"onInput()\">\r\n              </div>\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"telefonocontacto\">TELEFONO CONTACTO</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"telefonocontacto\" formControlName=\"telefonocontacto\"\r\n                       (input)=\"onInput()\">\r\n              </div>\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"celularcontacto\">CELULAR DE CONTACTO</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"celularcontacto\" formControlName=\"celularcontacto\"\r\n                       (input)=\"onInput()\">\r\n              </div>\r\n              <div class=\"form-group col-md-6\">\r\n                <label for=\"direccion_contacto\">DIRECCION DE CONTACTO</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"direccion_contacto\" formControlName=\"direccion_contacto\"\r\n                       (input)=\"onInput()\">\r\n              </div>\r\n            </div>\r\n\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n\r\n<ng-template #modalDetalhesCliente>\r\n  <!-- <div class=\"modal-header\">\r\n    <h4 class=\"modal-title\">Oops! Ese cliente ya esta registrado</h4>\r\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"onCloseDetails()\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"form-row\">\r\n      <div class=\"col\">\r\n        <div class=\"mtc-title\">Datos de registro</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Código</label>\r\n        <div *ngIf=\"dadosCliente.codCliente == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.codCliente != null\">{{ dadosCliente.codCliente }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\" *ngIf=\"dadosCliente.tipo == 'F'\">\r\n        <label>CPF</label>\r\n        <div *ngIf=\"dadosCliente.cpf == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cpf != null\">{{ dadosCliente.cpf }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\" *ngIf=\"dadosCliente.tipo == 'J'\">\r\n        <label>NIT</label>\r\n        <div *ngIf=\"dadosCliente.cnpj == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cnpj != null\">{{ dadosCliente.cnpj }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Nombre fantasia</label>\r\n        <div *ngIf=\"dadosCliente.nomeFantasia == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.nomeFantasia != null\">{{ dadosCliente.nomeFantasia }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Razon social</label>\r\n        <div *ngIf=\"dadosCliente.razaoSocial == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.razaoSocial != null\">{{ dadosCliente.razaoSocial }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Endereço</label>\r\n        <div *ngIf=\"dadosCliente.endereco == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.endereco != null\">{{ dadosCliente.endereco }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Bairro</label>\r\n        <div *ngIf=\"dadosCliente.bairro == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.bairro != null\">{{ dadosCliente.bairro }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>CEP</label>\r\n        <div *ngIf=\"dadosCliente.cep == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cep != null\">{{ dadosCliente.cep }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Cidade</label>\r\n        <div *ngIf=\"dadosCliente.cidade == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.cidade != null\">{{ dadosCliente.cidade }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Estado</label>\r\n        <div *ngIf=\"dadosCliente.uf == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.uf != null\">{{ dadosCliente.uf }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col\">\r\n        <label>Segurado</label>\r\n        <div *ngIf=\"dadosCliente.segurado != ''\">SI</div>\r\n        <div *ngIf=\"dadosCliente.segurado == ''\">NO</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Vendedor</label>\r\n        <div *ngIf=\"dadosCliente.vendedor == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.vendedor != null\">{{ dadosCliente.vendedor }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-6\">\r\n        <label>Escritório</label>\r\n        <div *ngIf=\"dadosCliente.escritorio == null\">Sin informacion</div>\r\n        <div *ngIf=\"dadosCliente.escritorio != null\">{{ dadosCliente.escritorio }}</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-row\">\r\n      <div class=\"form-group col-lg-4\" *ngIf=\"dadosCliente.codSAP != '' && dadosCliente.codSAP != null\">\r\n        <label>Código DBA</label>\r\n        <div>{{ dadosCliente.codSAP }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-4\" *ngIf=\"dadosCliente.escritorioDba != '' && dadosCliente.escritorioDba != null\">\r\n        <label>Sucursal</label>\r\n        <div>{{ dadosCliente.escritorioDba }}</div>\r\n      </div>\r\n      <div class=\"form-group col-lg-4\" *ngIf=\"dadosCliente.ultimaCompraDba != '' && dadosCliente.ultimaCompraDba != null\">\r\n        <label>Última compra</label>\r\n        <div>{{ dadosCliente.ultimaCompraDba }}</div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n    <button type=\"button\" class=\"btn btn-light\" (click)=\"onCloseDetails()\">Fechar</button>\r\n    <button\r\n      type=\"button\"\r\n      class=\"btn btn-primary\"\r\n      (click)=\"onNavigateDetail()\">\r\n      Detalles\r\n    </button>\r\n  </div> -->\r\n</ng-template>\r\n";
       /***/
     },
 
@@ -668,7 +668,7 @@
           this.vendedoresService = vendedoresService;
           this.dadosFaturamentoService = dadosFaturamentoService;
           this.http = http;
-          this.BASE_URL = "https://crm360.monterrey.com.bo/api";
+          this.BASE_URL = "https://127.0.0.1:8000/api";
         }
 
         _createClass(ComercialClientesPreCadastroService, [{
@@ -3101,9 +3101,23 @@
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "getMaterialesLista",
+          value: function getMaterialesLista(params) {
+            return this.http.get("".concat(this.API, "/materiales/lista"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getMaterialesOferta",
           value: function getMaterialesOferta(params) {
             return this.http.get("".concat(this.API, "/materiales_lista_precio"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesOfertaVendedor",
+          value: function getMaterialesOfertaVendedor(params) {
+            return this.http.get("".concat(this.API, "/materiales_lista_precio_vendedor"), {
               params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
@@ -3289,7 +3303,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = ".modal {\n  display: none;\n  position: fixed;\n  z-index: 1;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  background-color: rgba(0, 0, 0, 0.4);\n}\n\n.modal-content {\n  background-color: #fefefe;\n  margin: 15% auto;\n  padding: 20px;\n  border: 1px solid #888;\n  width: 80%;\n}\n\n.close {\n  color: #aaa;\n  float: right;\n  font-size: 28px;\n  font-weight: bold;\n}\n\n.close:hover,\n.close:focus {\n  color: black;\n  text-decoration: none;\n  cursor: pointer;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2xpZW50ZXMvbGlzdGEvbGlzdGEuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxhQUFBO0VBQ0EsZUFBQTtFQUNBLFVBQUE7RUFDQSxPQUFBO0VBQ0EsTUFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsY0FBQTtFQUNBLG9DQUFBO0FBQ0o7O0FBRUU7RUFDRSx5QkFBQTtFQUNBLGdCQUFBO0VBQ0EsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsVUFBQTtBQUNKOztBQUVFO0VBQ0UsV0FBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBQ0EsaUJBQUE7QUFDSjs7QUFFRTs7RUFFRSxZQUFBO0VBQ0EscUJBQUE7RUFDQSxlQUFBO0FBQ0oiLCJmaWxlIjoic3JjL2FwcC9tb2R1bGVzL2NvbWVyY2lhbC9jbGllbnRlcy9saXN0YS9saXN0YS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5tb2RhbCB7XHJcbiAgICBkaXNwbGF5OiBub25lO1xyXG4gICAgcG9zaXRpb246IGZpeGVkO1xyXG4gICAgei1pbmRleDogMTtcclxuICAgIGxlZnQ6IDA7XHJcbiAgICB0b3A6IDA7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuICAgIG92ZXJmbG93OiBhdXRvO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSgwLCAwLCAwLCAwLjQpO1xyXG4gIH1cclxuICBcclxuICAubW9kYWwtY29udGVudCB7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZmVmZWZlO1xyXG4gICAgbWFyZ2luOiAxNSUgYXV0bztcclxuICAgIHBhZGRpbmc6IDIwcHg7XHJcbiAgICBib3JkZXI6IDFweCBzb2xpZCAjODg4O1xyXG4gICAgd2lkdGg6IDgwJTtcclxuICB9XHJcbiAgXHJcbiAgLmNsb3NlIHtcclxuICAgIGNvbG9yOiAjYWFhO1xyXG4gICAgZmxvYXQ6IHJpZ2h0O1xyXG4gICAgZm9udC1zaXplOiAyOHB4O1xyXG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiAgfVxyXG4gIFxyXG4gIC5jbG9zZTpob3ZlcixcclxuICAuY2xvc2U6Zm9jdXMge1xyXG4gICAgY29sb3I6IGJsYWNrO1xyXG4gICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xyXG4gICAgY3Vyc29yOiBwb2ludGVyO1xyXG4gIH1cclxuICBcclxuICAiXX0= */";
+      __webpack_exports__["default"] = ".modal {\n  display: none;\n  position: fixed;\n  z-index: 1;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  background-color: rgba(0, 0, 0, 0.4);\n}\n\n.modal-content {\n  background-color: #fefefe;\n  margin: 15% auto;\n  padding: 20px;\n  border: 1px solid #888;\n  width: 80%;\n}\n\n.contacto {\n  text-transform: uppercase;\n  font-weight: bold;\n}\n\n.close {\n  color: #aaa;\n  float: right;\n  font-size: 28px;\n  font-weight: bold;\n}\n\n.close:hover,\n.close:focus {\n  color: black;\n  text-decoration: none;\n  cursor: pointer;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2xpZW50ZXMvbGlzdGEvbGlzdGEuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxhQUFBO0VBQ0EsZUFBQTtFQUNBLFVBQUE7RUFDQSxPQUFBO0VBQ0EsTUFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsY0FBQTtFQUNBLG9DQUFBO0FBQ0Y7O0FBRUE7RUFDRSx5QkFBQTtFQUNBLGdCQUFBO0VBQ0EsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsVUFBQTtBQUNGOztBQUNBO0VBQ0UseUJBQUE7RUFDQSxpQkFBQTtBQUVGOztBQUNBO0VBQ0UsV0FBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBQ0EsaUJBQUE7QUFFRjs7QUFDQTs7RUFFRSxZQUFBO0VBQ0EscUJBQUE7RUFDQSxlQUFBO0FBRUYiLCJmaWxlIjoic3JjL2FwcC9tb2R1bGVzL2NvbWVyY2lhbC9jbGllbnRlcy9saXN0YS9saXN0YS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5tb2RhbCB7XHJcbiAgZGlzcGxheTogbm9uZTtcclxuICBwb3NpdGlvbjogZml4ZWQ7XHJcbiAgei1pbmRleDogMTtcclxuICBsZWZ0OiAwO1xyXG4gIHRvcDogMDtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcbiAgb3ZlcmZsb3c6IGF1dG87XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSgwLCAwLCAwLCAwLjQpO1xyXG59XHJcblxyXG4ubW9kYWwtY29udGVudCB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogI2ZlZmVmZTtcclxuICBtYXJnaW46IDE1JSBhdXRvO1xyXG4gIHBhZGRpbmc6IDIwcHg7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgIzg4ODtcclxuICB3aWR0aDogODAlO1xyXG59XHJcbi5jb250YWN0byB7XHJcbiAgdGV4dC10cmFuc2Zvcm06IHVwcGVyY2FzZTtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxufVxyXG5cclxuLmNsb3NlIHtcclxuICBjb2xvcjogI2FhYTtcclxuICBmbG9hdDogcmlnaHQ7XHJcbiAgZm9udC1zaXplOiAyOHB4O1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG4uY2xvc2U6aG92ZXIsXHJcbi5jbG9zZTpmb2N1cyB7XHJcbiAgY29sb3I6IGJsYWNrO1xyXG4gIHRleHQtZGVjb3JhdGlvbjogbm9uZTtcclxuICBjdXJzb3I6IHBvaW50ZXI7XHJcbn1cclxuIl19 */";
       /***/
     },
 
@@ -3472,7 +3486,7 @@
           this.vendedores = [];
           this.cnaes = [];
           this.formChanged = false;
-          this.tipoPessoa = 'F';
+          this.tipoPessoa = {};
           this.submittingForm = false;
           this.maxLengthRules = {};
           this.maxLengthMessages = {};
@@ -3485,20 +3499,18 @@
           value: function ngOnInit() {
             var _this15 = this;
 
-            this.titleService.setTitle('Pré-cadastro');
+            this.titleService.setTitle('Pre-Registro');
             this.getFormFields();
             this.activatedRoute.queryParams.subscribe(function (queryParams) {
-              var documento = null;
-
-              if (Object.keys(queryParams).length > 0) {
-                if (queryParams['cpf']) {
-                  _this15.tipoPessoa = 'F';
-                  documento = queryParams['cpf'];
-                } else if (queryParams['cnpj']) {
-                  _this15.tipoPessoa = 'J';
-                  documento = queryParams['cnpj'];
-                }
-              }
+              var documento = null; // if (Object.keys(queryParams).length > 0) {
+              //   if (queryParams['cpf']) {
+              //     this.tipoPessoa = 'F';
+              //     documento = queryParams['cpf'];
+              //   } else if (queryParams['cnpj']) {
+              //     this.tipoPessoa = 'J';
+              //     documento = queryParams['cnpj'];
+              //   }
+              // }
 
               _this15.registrarAcesso();
 
@@ -3527,7 +3539,15 @@
               }
 
               if (response[1].responseCode === 200) {
-                _this16.cnaes = response[1].result;
+                console.log(response);
+                _this16.cnaes = response[1].result.map(function (cnae) {
+                  return {
+                    id: cnae.id,
+                    descricao: cnae.descricao,
+                    codigo: cnae.codigo
+                  };
+                });
+                console.log(_this16.cnaes);
               } else {
                 _this16.handleFormFieldsError();
               }
@@ -3546,139 +3566,154 @@
           value: function setMaxLengthRules() {
             this.maxLengthRules = this.activatedRoute.snapshot.data.rules.data;
             this.maxLengthMessages = {
-              nome: "Nome deve conter at\xE9 ".concat(this.maxLengthRules.nome, " caracteres."),
-              sobrenome: "Sobrenome deve conter at\xE9 ".concat(this.maxLengthRules.sobrenome, " caracteres."),
-              razaoSocial: "Raz\xE3o social deve conter at\xE9 ".concat(this.maxLengthRules.razaoSocial, " caracteres."),
-              nomeFantasia: "Nome fantasia deve conter at\xE9 ".concat(this.maxLengthRules.nomeFantasia, " caracteres."),
-              emailNfe: "E-mail NF-e deve conter at\xE9 ".concat(this.maxLengthRules.emailNfe, " caracteres.")
+              nome: "El nombre debe contener ".concat(this.maxLengthRules.nome, " caracteres."),
+              apellido1: "Apellido debe contener ".concat(this.maxLengthRules.apellido1, " caracteres."),
+              apellido2: "Apellido debe contener ".concat(this.maxLengthRules.apellido1, " caracteres."),
+              razaoSocial: "El nombre de la empresa debe contener ".concat(this.maxLengthRules.razaoSocial, " caracteres."),
+              nomeFantasia: "El nombre comercial debe contener hasta ".concat(this.maxLengthRules.nomeFantasia, " caracteres."),
+              email: "El correo electr\xF3nico debe llegar a ".concat(this.maxLengthRules.email, " caracteres.")
             };
           }
         }, {
           key: "setFormBuilder",
           value: function setFormBuilder(documento) {
-            var cpf = null;
-            var cnpj = null;
+            var _this17 = this;
 
-            if (documento != null) {
-              if (this.tipoPessoa == 'F') {
-                cpf = documento;
-              } else if (this.tipoPessoa == 'J') {
-                cnpj = documento;
-              }
-            }
-
+            // if (documento != null) {
+            //   if (this.tipoPessoa == 'F') {
+            //     cpf = documento;
+            //   } else if (this.tipoPessoa == 'J') {
+            //     cnpj = documento;
+            //   }
+            // }
             this.form = this.formBuilder.group({
-              cpf: [cpf, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].nullValidator]],
+              cnpj_cpf: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
               nome: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.nome)]],
-              sobrenome: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.sobrenome)]],
-              cnpj: [cnpj, [ng_brazil__WEBPACK_IMPORTED_MODULE_9__["NgBrazilValidators"].cnpj]],
+              apellido1: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.apellido1)]],
+              apellido2: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.apellido2)]],
+              nit: [null],
+              contacto: [null],
               razaoSocial: [null],
               nomeFantasia: [null],
               vendedor: [null],
               cnae: [null],
-              emailNfe: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].email, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.emailNfe)]],
-              // emailMarketing: [
-              //   null,
-              //   [Validators.email, Validators.maxLength(this.maxLengthRules.emailNfe)],
-              // ],
-              telefone: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]],
-              atividadePrincipal: this.formBuilder.array([]),
-              atividadeSecundaria: this.formBuilder.array([])
+              email: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].email, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.email)]],
+              telefone: [null],
+              celular: [null],
+              direccion: [null],
+              tipopessoa: [null],
+              // atividadePrincipal: this.formBuilder.array([]),
+              // atividadeSecundaria: this.formBuilder.array([]),
+              //CAMPOS DE CONTACTO 
+              nombrecontacto: [null],
+              apellido_contacto: [null],
+              apellido2_contacto: [null],
+              telefonocontacto: [null],
+              celularcontacto: [null],
+              direccion_contacto: [null]
             });
-            this.setType(this.tipoPessoa);
+            this.form.get('tipopessoa').valueChanges.subscribe(function (value) {
+              if (value === 'P' || value === 'G' || value === 'E') {
+                _this17.form.get('nit').setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]);
 
-            if (documento != null) {
-              if (this.tipoPessoa == 'F') {
-                this.validateCPF();
-              } else if (this.tipoPessoa == 'J') {
-                this.validateCNPJ();
+                _this17.form.get('razaoSocial').setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]);
+              } else {
+                _this17.form.get('nit').clearValidators();
+
+                _this17.form.get('razaoSocial').clearValidators();
               }
-            }
+
+              _this17.form.get('nit').updateValueAndValidity();
+
+              _this17.form.get('razaoSocial').updateValueAndValidity();
+            });
           }
         }, {
           key: "setType",
           value: function setType(type) {
-            this.tipoPessoa = type;
-            this.form.reset();
+            // this.tipoPessoa = type;
+            this.form.reset(); // if (this.tipoPessoa == 'F') {
+            //   this.form.controls.cpf.setValidators([Validators.required]);
+            //   this.form.controls.cpf.updateValueAndValidity();
+            //   this.form.controls.nome.setValidators([
+            //     Validators.required,
+            //     Validators.maxLength(this.maxLengthRules.nome),
+            //   ]);
+            //   this.form.controls.nome.updateValueAndValidity();
+            //   this.form.controls.sobrenome.setValidators([
+            //     Validators.required,
+            //     Validators.maxLength(this.maxLengthRules.sobrenome),
+            //   ]);
+            //   this.form.controls.sobrenome.updateValueAndValidity();
+            //   this.form.controls.cnpj.clearValidators();
+            //   this.form.controls.cnpj.updateValueAndValidity();
+            //   this.form.controls.razaoSocial.clearValidators();
+            //   this.form.controls.razaoSocial.updateValueAndValidity();
+            //   this.form.controls.nomeFantasia.clearValidators();
+            //   this.form.controls.nomeFantasia.updateValueAndValidity();
+            //   this.form.controls.cnae.clearValidators();
+            //   this.form.controls.cnae.updateValueAndValidity();
+            // } else if (this.tipoPessoa == 'J') {
+            //   this.form.controls.cnpj.setValidators([Validators.required]);
+            //   this.form.controls.cnpj.updateValueAndValidity();
+            //   this.form.controls.razaoSocial.setValidators([
+            //     Validators.required,
+            //     Validators.maxLength(this.maxLengthRules.razaoSocial),
+            //   ]);
+            //   this.form.controls.razaoSocial.updateValueAndValidity();
+            //   this.form.controls.nomeFantasia.setValidators([
+            //     Validators.required,
+            //     Validators.maxLength(this.maxLengthRules.nomeFantasia),
+            //   ]);
+            //   this.form.controls.nomeFantasia.updateValueAndValidity();
+            //   this.form.controls.cnae.setValidators([Validators.required]);
+            //   this.form.controls.cnae.updateValueAndValidity();
+            //   this.form.controls.cpf.clearValidators();
+            //   this.form.controls.cpf.updateValueAndValidity();
+            //   this.form.controls.nome.clearValidators();
+            //   this.form.controls.nome.updateValueAndValidity();
+            //   this.form.controls.sobrenome.clearValidators();
+            //   this.form.controls.sobrenome.updateValueAndValidity();
+            // }
+          } // get atividadePrincipal() {
+          //   return this.form.get('atividadePrincipal') as FormArray;
+          // }
+          // get atividadeSecundaria() {
+          //   return this.form.get('atividadeSecundaria') as FormArray;
+          // }
+          // pushAtividadePrincipal(atividade: any) {
+          //   while (this.atividadePrincipal.length !== 0) {
+          //     this.atividadePrincipal.removeAt(0);
+          //   }
+          //   atividade.code = atividade.code.replace(/\D/g, '');
+          //   if (atividade.code != '0000000') {
+          //     this.atividadePrincipal.push(
+          //       this.formBuilder.group({
+          //         cnae: [atividade.code],
+          //         descricao: [atividade.text],
+          //       })
+          //     );
+          //   }
+          // }
+          // pushAtividadeSecundaria(atividades: any) {
+          //   while (this.atividadeSecundaria.length !== 0) {
+          //     this.atividadeSecundaria.removeAt(0);
+          //   }
+          //   if (atividades.length > 0) {
+          //     for (let i = 0; i < atividades.length; i++) {
+          //       atividades[i].code = atividades[i].code.replace(/\D/g, '');
+          //       if (atividades[i].code != '0000000') {
+          //         this.atividadeSecundaria.push(
+          //           this.formBuilder.group({
+          //             cnae: [atividades[i].code],
+          //             descricao: [atividades[i].text],
+          //           })
+          //         );
+          //       }
+          //     }
+          //   }
+          // }
 
-            if (this.tipoPessoa == 'F') {
-              this.form.controls.cpf.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]);
-              this.form.controls.cpf.updateValueAndValidity();
-              this.form.controls.nome.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.nome)]);
-              this.form.controls.nome.updateValueAndValidity();
-              this.form.controls.sobrenome.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.sobrenome)]);
-              this.form.controls.sobrenome.updateValueAndValidity();
-              this.form.controls.cnpj.clearValidators();
-              this.form.controls.cnpj.updateValueAndValidity();
-              this.form.controls.razaoSocial.clearValidators();
-              this.form.controls.razaoSocial.updateValueAndValidity();
-              this.form.controls.nomeFantasia.clearValidators();
-              this.form.controls.nomeFantasia.updateValueAndValidity();
-              this.form.controls.cnae.clearValidators();
-              this.form.controls.cnae.updateValueAndValidity();
-            } else if (this.tipoPessoa == 'J') {
-              this.form.controls.cnpj.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]);
-              this.form.controls.cnpj.updateValueAndValidity();
-              this.form.controls.razaoSocial.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.razaoSocial)]);
-              this.form.controls.razaoSocial.updateValueAndValidity();
-              this.form.controls.nomeFantasia.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].maxLength(this.maxLengthRules.nomeFantasia)]);
-              this.form.controls.nomeFantasia.updateValueAndValidity();
-              this.form.controls.cnae.setValidators([_angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]);
-              this.form.controls.cnae.updateValueAndValidity();
-              this.form.controls.cpf.clearValidators();
-              this.form.controls.cpf.updateValueAndValidity();
-              this.form.controls.nome.clearValidators();
-              this.form.controls.nome.updateValueAndValidity();
-              this.form.controls.sobrenome.clearValidators();
-              this.form.controls.sobrenome.updateValueAndValidity();
-            }
-          }
-        }, {
-          key: "atividadePrincipal",
-          get: function get() {
-            return this.form.get('atividadePrincipal');
-          }
-        }, {
-          key: "atividadeSecundaria",
-          get: function get() {
-            return this.form.get('atividadeSecundaria');
-          }
-        }, {
-          key: "pushAtividadePrincipal",
-          value: function pushAtividadePrincipal(atividade) {
-            while (this.atividadePrincipal.length !== 0) {
-              this.atividadePrincipal.removeAt(0);
-            }
-
-            atividade.code = atividade.code.replace(/\D/g, '');
-
-            if (atividade.code != '0000000') {
-              this.atividadePrincipal.push(this.formBuilder.group({
-                cnae: [atividade.code],
-                descricao: [atividade.text]
-              }));
-            }
-          }
-        }, {
-          key: "pushAtividadeSecundaria",
-          value: function pushAtividadeSecundaria(atividades) {
-            while (this.atividadeSecundaria.length !== 0) {
-              this.atividadeSecundaria.removeAt(0);
-            }
-
-            if (atividades.length > 0) {
-              for (var i = 0; i < atividades.length; i++) {
-                atividades[i].code = atividades[i].code.replace(/\D/g, '');
-
-                if (atividades[i].code != '0000000') {
-                  this.atividadeSecundaria.push(this.formBuilder.group({
-                    cnae: [atividades[i].code],
-                    descricao: [atividades[i].text]
-                  }));
-                }
-              }
-            }
-          }
         }, {
           key: "onFieldError",
           value: function onFieldError(field) {
@@ -3721,84 +3756,6 @@
             }
           }
         }, {
-          key: "validateCPF",
-          value: function validateCPF() {
-            var _this17 = this;
-
-            if (this.form.controls.cpf.valid) {
-              this.loaderNavbar = true;
-              this.dadosCliente = {};
-              this.clientesService.getExisteCpfCnpj(this.form.value.cpf.replace(/\D/g, ''), true).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(function () {
-                _this17.loaderNavbar = false;
-              })).subscribe(function (response) {
-                if (response.responseCode === 200) {
-                  if (response.result.verificacao == 1) {
-                    _this17.form.controls.cpf.setErrors({
-                      incorrect: true
-                    });
-
-                    _this17.pnotifyService.notice('O CPF informado já está cadastrado.');
-
-                    if (Object.keys(response.result.dadosCliente).length > 0) {
-                      _this17.formChanged = false;
-                      _this17.dadosCliente = response.result.dadosCliente;
-
-                      _this17.showDetails();
-                    }
-                  }
-                }
-              });
-            }
-          }
-        }, {
-          key: "validateCNPJ",
-          value: function validateCNPJ() {
-            var _this18 = this;
-
-            if (this.form.controls.cnpj.valid) {
-              this.loaderNavbar = true;
-              this.dadosCliente = {};
-              this.clientesService.getExisteCpfCnpj(this.form.value.cnpj.replace(/\D/g, ''), true).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(function () {
-                _this18.loaderNavbar = false;
-              })).subscribe(function (response) {
-                if (response.responseCode === 200) {
-                  if (response.result.verificacao == 1) {
-                    _this18.form.controls.cnpj.setErrors({
-                      incorrect: true
-                    });
-
-                    _this18.pnotifyService.notice('O CNPJ informado já está cadastrado.');
-
-                    if (Object.keys(response.result.dadosCliente).length > 0) {
-                      _this18.formChanged = false;
-                      _this18.dadosCliente = response.result.dadosCliente;
-
-                      _this18.showDetails();
-                    }
-                  } else {
-                    _this18.loaderNavbar = true;
-
-                    _this18.getCnpjData(_this18.form.value.cnpj).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(function () {
-                      _this18.loaderNavbar = false;
-                    })).subscribe(function (response) {
-                      _this18.form.controls.razaoSocial.setValue(response.nome);
-
-                      _this18.form.controls.nomeFantasia.setValue(response.fantasia);
-
-                      if (response.atividade_principal[0].code) {
-                        _this18.checkCnae(response.atividade_principal[0]);
-                      }
-
-                      _this18.pushAtividadePrincipal(response.atividade_principal[0]);
-
-                      _this18.pushAtividadeSecundaria(response.atividades_secundarias);
-                    });
-                  }
-                }
-              });
-            }
-          }
-        }, {
           key: "showDetails",
           value: function showDetails() {
             this.modalRef = this.modalService.show(this.modalDetalhesCliente, this.modalConfig);
@@ -3821,90 +3778,84 @@
             }
           }
         }, {
-          key: "checkCnae",
-          value: function checkCnae(data) {
-            var cnae = {
-              id: parseInt(data.code.replace(/\D/g, '')),
-              descricao: data.text
-            };
-            var exists = false;
-
-            for (var i = 0; i < this.cnaes.length; i++) {
-              if (this.cnaes[i].id == cnae.id) {
-                exists = true;
-              }
-            }
-
-            if (!exists) {
-              this.cnaes.push(cnae);
-            }
-
-            this.form.controls.cnae.setValue(cnae.id);
-          }
-        }, {
-          key: "getCnpjData",
-          value: function getCnpjData(cnpj) {
-            return this.cnpjService.getData(cnpj);
-          }
-        }, {
           key: "onSubmit",
           value: function onSubmit() {
-            var _this19 = this;
+            var _this18 = this;
 
             /* this.postAkna(20081);
             return; */
+            var tipoPessoaOptions = {
+              S: 'Sociedades',
+              P: 'Privado',
+              G: 'Gobierno',
+              E: 'Empleado'
+            };
+            var tipopessoa = this.form.value.tipopessoa;
+            var tipopersona = tipoPessoaOptions[tipopessoa];
+
             if (this.form.valid) {
               this.loaderNavbar = true;
               this.submittingForm = true;
               var formObj = {};
-
-              if (this.tipoPessoa == 'F') {
-                formObj = {
-                  tipoPessoa: this.tipoPessoa,
-                  cpf: this.form.value.cpf,
-                  vendedor: this.form.value.vendedor,
-                  nome: this.form.value.nome,
-                  sobrenome: this.form.value.sobrenome,
-                  emailNfe: this.form.value.emailNfe,
-                  // emailMarketing: this.form.value.emailMarketing,
-                  telefone: this.form.value.telefone
-                };
-              } else if (this.tipoPessoa == 'J') {
-                formObj = {
-                  tipoPessoa: this.tipoPessoa,
-                  cnpj: this.form.value.cnpj,
-                  vendedor: this.form.value.vendedor,
-                  razaoSocial: this.form.value.razaoSocial,
-                  nomeFantasia: this.form.value.nomeFantasia,
-                  cnae: this.functionsService.completaZeroEsquerda(this.form.value.cnae, 7),
-                  emailNfe: this.form.value.emailNfe,
-                  // emailMarketing: this.form.value.emailMarketing,
-                  telefone: this.form.value.telefone,
-                  atividadePrincipal: this.form.value.atividadePrincipal,
-                  atividadeSecundaria: this.form.value.atividadeSecundaria
-                };
-              }
-
-              this.clientesService.postCliente(formObj).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(function () {
-                _this19.loaderNavbar = false;
-                _this19.submittingForm = false;
+              console.log(this.cnaes);
+              formObj = {
+                tipo_pessoa: tipopessoa,
+                tipo_persona: tipopersona,
+                carnet: this.form.value.cnpj_cpf,
+                id_vendedor: this.form.value.vendedor,
+                nombre: this.form.value.nome,
+                apellido1: this.form.value.apellido1,
+                apellido2: this.form.value.apellido2,
+                razonSocial: this.form.value.razaoSocial,
+                nomeFantasia: this.form.value.nomeFantasia,
+                nit: this.form.value.nit,
+                id_rubro: this.form.value.cnae,
+                email: this.form.value.email,
+                // emailMarketing: this.form.value.emailMarketing,
+                telefono: this.form.value.telefone,
+                celular: this.form.value.celular,
+                // atividadePrincipal: this.form.value.atividadePrincipal,
+                // atividadeSecundaria: this.form.value.atividadeSecundaria,
+                Ubicacion: [{
+                  direccion: this.form.value.direccion,
+                  id_ciudad: ''
+                }],
+                nombre_factura: '',
+                contactos: [{
+                  contacto: this.form.value.contacto,
+                  nombres_contacto: this.form.value.nombrecontacto,
+                  apellido_contacto: this.form.value.apellido_contacto,
+                  apellido2_contacto: this.form.value.apellido2_contacto,
+                  telefono_contacto: this.form.value.telefonocontacto,
+                  celular_contacto: this.form.value.celularcontacto,
+                  direccion_contacto: this.form.value.direccion_contacto,
+                  latitude_contacto: 0,
+                  longitude_contacto: 0,
+                  codigo_cliente: ''
+                }]
+              };
+              console.log(formObj);
+              this.clientesService.sapPostClient(formObj).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(function () {
+                _this18.loaderNavbar = false;
+                _this18.submittingForm = false;
               })).subscribe(function (response) {
-                if (response.responseCode === 200) {
-                  _this19.pnotifyService.success('O cliente foi cadastrado.');
+                console.log("test", response);
 
-                  _this19.formChanged = false;
-                  /* this.postAkna(response.result); */
+                if (response.responseCode === 200 && response.detalle === "Se creo registro") {
+                  _this18.pnotifyService.success('Cliente registrado.');
 
-                  _this19.router.navigate(['../cadastro', response.result], {
-                    relativeTo: _this19.activatedRoute
+                  _this18.formChanged = false;
+
+                  _this18.router.navigate(['../cadastro', response.result], {
+                    relativeTo: _this18.activatedRoute
                   });
                 } else if (response.responseCode === 403) {
-                  _this19.pnotifyService.notice('Falha ao atribuir vendedor ao cadastro.');
+                  _this18.pnotifyService.notice('Falha ao atribuir vendedor ao cadastro.');
                 } else {
-                  _this19.pnotifyService.error('Ocorreu um erro ao cadastrar o cliente.');
+                  _this18.pnotifyService.notice(" ".concat(response.detalle));
                 }
               }, function (error) {
-                _this19.pnotifyService.error('Ocorreu um erro ao cadastrar o cliente.');
+                _this18.pnotifyService.notice('Ocorreu um erro ao cadastrar o cliente.');
               });
             }
           }
@@ -4128,23 +4079,23 @@
         _createClass(ComercialClientesPropostaAnaliseCreditoComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this20 = this;
+            var _this19 = this;
 
             this.activatedRoute.params.subscribe(function (params) {
-              _this20.codCliente = params['id'];
+              _this19.codCliente = params['id'];
 
-              _this20.registrarAcesso();
+              _this19.registrarAcesso();
 
-              _this20.setBreadCrumb(_this20.codCliente);
+              _this19.setBreadCrumb(_this19.codCliente);
 
-              _this20.titleService.setTitle('Proposta para análise de crédito');
+              _this19.titleService.setTitle('Proposta para análise de crédito');
 
-              if (_this20.activatedRoute.snapshot.data['data']['responseCode'] === 200) {
-                _this20.setFormBuilder(_this20.activatedRoute.snapshot.data['data']['result']);
+              if (_this19.activatedRoute.snapshot.data['data']['responseCode'] === 200) {
+                _this19.setFormBuilder(_this19.activatedRoute.snapshot.data['data']['result']);
               } else {
-                _this20.pnotifyService.error();
+                _this19.pnotifyService.error();
 
-                _this20.location.back();
+                _this19.location.back();
               }
             });
           }
@@ -4372,12 +4323,12 @@
         }, {
           key: "onSubmit",
           value: function onSubmit() {
-            var _this21 = this;
+            var _this20 = this;
 
             if (this.form.valid) {
               this.loaderNavbar = true;
               setTimeout(function () {
-                var formData = _this21.form.getRawValue();
+                var formData = _this20.form.getRawValue();
 
                 var dataSolicitacao = "".concat(formData['dataSolicitacao'].getDate(), "/").concat(formData['dataSolicitacao'].getMonth() + 1, "/").concat(formData['dataSolicitacao'].getFullYear());
                 var dataUltimaVisita;
@@ -4386,8 +4337,8 @@
                   dataUltimaVisita = "".concat(formData['dataUltimaVisita'].getDate(), "/").concat(formData['dataUltimaVisita'].getMonth() + 1, "/").concat(formData['dataUltimaVisita'].getFullYear());
                 }
 
-                _this21.tipoVisao = 'ficha';
-                _this21.dataFicha = {
+                _this20.tipoVisao = 'ficha';
+                _this20.dataFicha = {
                   razaoSocial: formData['razaoSocial'],
                   dataSolicitacao: dataSolicitacao,
                   codCliente: formData['codCliente'],
@@ -4412,31 +4363,31 @@
                   faturamentoMedio: formData['faturamentoMedio'],
                   parecerVendedor: formData['parecerVendedor']
                 };
-                _this21.formChanged = false;
-                _this21.loaderNavbar = false;
+                _this20.formChanged = false;
+                _this20.loaderNavbar = false;
               }, 1000);
             }
           }
         }, {
           key: "onCancel",
           value: function onCancel() {
-            var _this22 = this;
+            var _this21 = this;
 
             this.loaderNavbar = true;
             setTimeout(function () {
-              _this22.tipoVisao = 'formulario';
-              _this22.loaderNavbar = false;
+              _this21.tipoVisao = 'formulario';
+              _this21.loaderNavbar = false;
             }, 1000);
           }
         }, {
           key: "onDownload",
           value: function onDownload() {
-            var _this23 = this;
+            var _this22 = this;
 
             this.loaderNavbar = true;
             this.pdfService.download('impressao-ficha-pac', "".concat(this.codCliente, "_PropostaAnaliseCredito"));
             setTimeout(function () {
-              _this23.loaderNavbar = false;
+              _this22.loaderNavbar = false;
             }, 500);
           }
         }]);
@@ -4590,27 +4541,27 @@
         _createClass(ComercialClientesHistoricoFinanceiroResumoComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this24 = this;
+            var _this23 = this;
 
             this.activatedRoute.queryParams.subscribe(function (queryParams) {
-              _this24.activatedRoute.parent.params.subscribe(function (params) {
+              _this23.activatedRoute.parent.params.subscribe(function (params) {
                 var grupoEconomico = false;
 
                 if (queryParams['grupoEconomico'] && queryParams['grupoEconomico'] == 'true') {
                   grupoEconomico = true;
-                  _this24.visaoGrupoEconomico = true;
-                  _this24.queryParams = {
-                    grupoEconomico: _this24.visaoGrupoEconomico
+                  _this23.visaoGrupoEconomico = true;
+                  _this23.queryParams = {
+                    grupoEconomico: _this23.visaoGrupoEconomico
                   };
                 }
 
-                _this24.codCliente = params['id'];
+                _this23.codCliente = params['id'];
 
-                _this24.getResumoSintetico(_this24.codCliente, grupoEconomico);
+                _this23.getResumoSintetico(_this23.codCliente, grupoEconomico);
 
-                _this24.getGrupoEconomico(_this24.codCliente);
+                _this23.getGrupoEconomico(_this23.codCliente);
 
-                _this24.getPedidos(_this24.codCliente, grupoEconomico);
+                _this23.getPedidos(_this23.codCliente, grupoEconomico);
               });
             });
           }
@@ -4635,43 +4586,43 @@
         }, {
           key: "getResumoSintetico",
           value: function getResumoSintetico(id, grupoEconomico) {
-            var _this25 = this;
+            var _this24 = this;
 
             this.historicoFinanceiroService.getResumoSintetico(id, grupoEconomico).subscribe(function (response) {
               if (response['responseCode'] === 200) {
-                _this25.sintetico = response['result']['sintetico'];
-                _this25.pendencias = response['result']['pendencias'];
+                _this24.sintetico = response['result']['sintetico'];
+                _this24.pendencias = response['result']['pendencias'];
               }
 
-              _this25.sinteticoPendenciasLoaded = true;
+              _this24.sinteticoPendenciasLoaded = true;
             });
           }
         }, {
           key: "getGrupoEconomico",
           value: function getGrupoEconomico(id) {
-            var _this26 = this;
+            var _this25 = this;
 
             this.historicoFinanceiroService.getGrupoEconomico(id).subscribe(function (response) {
               if (response['responseCode'] === 200) {
-                _this26.grupoEconomico = response['result'];
+                _this25.grupoEconomico = response['result'];
               }
 
-              _this26.grupoEconomicoLoaded = true;
+              _this25.grupoEconomicoLoaded = true;
             });
           }
         }, {
           key: "getPedidos",
           value: function getPedidos(id, grupoEconomico) {
-            var _this27 = this;
+            var _this26 = this;
 
             this.historicoFinanceiroService.getResumoPedidos(id, grupoEconomico).subscribe(function (response) {
               if (response['responseCode'] === 200) {
-                _this27.pedidos = response['result'];
-                _this27.pedidosFiltered = response['result'];
-                _this27.pedidosPagination = _this27.pedidosFiltered.slice(0, _this27.itemsPerPage);
+                _this26.pedidos = response['result'];
+                _this26.pedidosFiltered = response['result'];
+                _this26.pedidosPagination = _this26.pedidosFiltered.slice(0, _this26.itemsPerPage);
               }
 
-              _this27.pedidosLoaded = true;
+              _this26.pedidosLoaded = true;
             });
           }
         }, {
@@ -5140,7 +5091,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Busqueda de clientes\">\r\n  <!-- <button\r\n    type=\"button\"\r\n    [routerLink]=\"['../pre-cadastro']\">\r\n    Adicionar\r\n  </button> -->\r\n  <button type=\"button\" (click)=\"onFilter()\">Filtrar</button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row justify-content-center mb-2\">\r\n    <div class=\"col-lg-6\">\r\n      <ul class=\"list-unstyled mb-0 d-flex justify-content-around\">\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Ativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Activos</h6>\r\n          <div class=\"text-success\">\r\n            <h4>\r\n              <strong\r\n                counto\r\n                [step]=\"30\"\r\n                [countTo]=\"ativos\"\r\n                [countFrom]=\"0\"\r\n                [duration]=\"3\"\r\n                (countoChange)=\"countoAtivos = $event\"\r\n              >\r\n                {{ handleCounter(countoAtivos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Inativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Inactivos</h6>\r\n          <div class=\"text-danger\">\r\n            <h4>\r\n              <strong\r\n                counto\r\n                [step]=\"30\"\r\n                [countTo]=\"inativos\"\r\n                [countFrom]=\"0\"\r\n                [duration]=\"3\"\r\n                (countoChange)=\"countoInativos = $event\"\r\n              >\r\n                {{ handleCounter(countoInativos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Potenci')\">\r\n          <h6 class=\"text-muted font-weight-light\">Potencial</h6>\r\n          <div class=\"text-primary\">\r\n            <h4>\r\n              <strong\r\n                counto\r\n                [step]=\"30\"\r\n                [countTo]=\"potencial\"\r\n                [countFrom]=\"0\"\r\n                [duration]=\"3\"\r\n                (countoChange)=\"countoPotencial = $event\"\r\n              >\r\n                {{ handleCounter(countoPotencial) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Arquivo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Archivados</h6>\r\n          <div class=\"text-secondary\">\r\n            <h4>\r\n              <strong\r\n                counto\r\n                [step]=\"30\"\r\n                [countTo]=\"arquivados\"\r\n                [countFrom]=\"0\"\r\n                [duration]=\"3\"\r\n                (countoChange)=\"countoArquivados = $event\"\r\n              >\r\n                {{ handleCounter(countoArquivados) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n  <advanced-filter>\r\n    <form [formGroup]=\"formFilter\">\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"buscarPor\">Buscar por</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"buscarPor\"\r\n            formControlName=\"buscarPor\"\r\n          >\r\n            <option value=\"1\">Código, nombre o razon social</option>\r\n            <option value=\"2\">C.I. o NIT</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"pesquisa\">Termino de busqueda</label>\r\n          <input\r\n            type=\"text\"\r\n            class=\"form-control\"\r\n            formControlName=\"pesquisa\"\r\n            (keydown.enter)=\"onFilter()\"\r\n          />\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"situacao\">Situacion</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"situacao\"\r\n            formControlName=\"situacao\"\r\n          >\r\n            <option value=\"Ativo\">Activos</option>\r\n            <option value=\"Inativo\">Inactivos</option>\r\n            <option value=\"Potenci\">Potenciales</option>\r\n            <option value=\"Arquivo\">Archivados</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"setorAtividade\">Sector empresarial</label>\r\n          <ng-select\r\n            [searchable]=\"true\"\r\n            [clearable]=\"false\"\r\n            [items]=\"setorAtividades\"\r\n            [virtualScroll]=\"true\"\r\n            labelForId=\"setorAtividade\"\r\n            bindLabel=\"descricao\"\r\n            bindValue=\"id\"\r\n            formControlName=\"setorAtividade\"\r\n          >\r\n          </ng-select>\r\n        </div>\r\n      </div>\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"tipoPessoa\">Tipo de persona</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"tipoPessoa\"\r\n            formControlName=\"tipoPessoa\"\r\n          >\r\n            <option value=\"F\">Persona física</option>\r\n            <option value=\"J\">Persona jurídica</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <!-- <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"grupoEconomico\">Esta en grupo economico</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"grupoEconomico\"\r\n            formControlName=\"grupoEconomico\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"segurado\">Asegurado</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"segurado\"\r\n            formControlName=\"segurado\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <!-- <div class=\"form-group col-lg-2 mb-lg-0\">\r\n          <label for=\"carteira\">Cartera</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"carteira\"\r\n            formControlName=\"carteira\">\r\n            <option value=\"S\" selected>Mi cartera</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <div class=\"form-group col-lg-1 mb-lg-0\">\r\n          <label for=\"registros\">Registros</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"registros\"\r\n            formControlName=\"registros\"\r\n          >\r\n            <option>10</option>\r\n            <option>25</option>\r\n            <option>50</option>\r\n            <option>100</option>\r\n            <option>200</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </advanced-filter>\r\n  <div\r\n    class=\"row mt-3\"\r\n    *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor != 2\r\n    \"\r\n  >\r\n    <div class=\"col-12\">\r\n      <empty-result\r\n        message=\"No se encontraron clientes para esta búsqueda.\"\r\n        class=\"py-4\"\r\n      ></empty-result>\r\n    </div>\r\n  </div>\r\n  <div\r\n    class=\"row mt-3\"\r\n    *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor == 2\r\n    \"\r\n  >\r\n    <div class=\"col-7 d-flex justify-content-end w-100 pr-0\">\r\n      <empty-result\r\n        message=\"No se encontraron clientes para esta búsqueda.\"\r\n        class=\"py-4\"\r\n      ></empty-result>\r\n    </div>\r\n    <div class=\"col-5 d-flex w-100 pl-1\">\r\n      <a\r\n        [routerLink]=\"['../pre-cadastro']\"\r\n        [queryParams]=\"onPreCadastroCpfCnpj()\"\r\n        class=\"my-auto\"\r\n      >\r\n        <strong>Pulse aquí para registrarse..</strong>\r\n      </a>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-4\" *ngIf=\"dataLoaded && clientes.length > 0\">\r\n    <div\r\n      [ngClass]=\"{ 'col-12': !showDetailPanel, 'col-7 pr-0': showDetailPanel }\"\r\n    >\r\n      <custom-table [config]=\"tableConfig\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th scope=\"col\"></th>\r\n            <th\r\n              scope=\"col\"\r\n              class=\"text-center hover\"\r\n              (click)=\"setOrderBy('codigo_cliente')\"\r\n            >\r\n              <thead-sorter\r\n                value=\"Código Cliente\"\r\n                [active]=\"orderBy == 'codigo_cliente'\"\r\n                [sort]=\"orderType\"\r\n              ></thead-sorter>\r\n            </th>\r\n            <th\r\n              scope=\"col\"\r\n              class=\"text-center hover\"\r\n              (click)=\"setOrderBy('cpf')\"\r\n            >\r\n              <thead-sorter\r\n                value=\"CI/NIT\"\r\n                [active]=\"orderBy == 'cpf'\"\r\n                [sort]=\"orderType\"\r\n              ></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('nomeFantasia')\">\r\n              <thead-sorter\r\n                value=\"Nombre y apelllido\"\r\n                [active]=\"orderBy == 'nomeFantasia'\"\r\n                [sort]=\"orderType\"\r\n              ></thead-sorter>\r\n            </th>\r\n            <th\r\n              scope=\"col\"\r\n              class=\"hover\"\r\n              (click)=\"setOrderBy('razaoSocial')\"\r\n              *ngIf=\"!showDetailPanel\"\r\n            >\r\n              <thead-sorter\r\n                value=\"Razon Social\"\r\n                [active]=\"orderBy == 'razaoSocial'\"\r\n                [sort]=\"orderType\"\r\n              ></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\"></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr\r\n            *ngFor=\"let cliente of clientes\"\r\n            [class.table-active]=\"cliente.codigo_cliente == clienteSelecionado\"\r\n          >\r\n            <td\r\n              class=\"text-center hover\"\r\n              [ngClass]=\"classStatusBorder(cliente.situacao)\"\r\n              (click)=\"viewRegister(cliente)\"\r\n            >\r\n              <i\r\n                class=\"text-black-50 far fa-check-square mr-3\"\r\n                *ngIf=\"cliente.segurado == 0\"\r\n                tooltip=\"Cliente no asegurado\"\r\n                placement=\"right\"\r\n              ></i>\r\n              <i\r\n                class=\"text-warning fas fa-check-square mr-3\"\r\n                *ngIf=\"cliente.segurado > 0\"\r\n                tooltip=\"Cliente asegurado\"\r\n                placement=\"right\"\r\n              ></i>\r\n              <i\r\n                class=\"text-black-50 far fa-folder-open\"\r\n                *ngIf=\"cliente.grupoEconomico == 0\"\r\n                tooltip=\"No hace parte de grupo economico\"\r\n                placement=\"right\"\r\n              ></i>\r\n              <i\r\n                class=\"text-warning fas fa-folder-open\"\r\n                *ngIf=\"cliente.grupoEconomico > 0\"\r\n                tooltip=\"Pertenece a un grupo economico\"\r\n                placement=\"right\"\r\n              ></i>\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.codigo_cliente }}\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cpf)\">\r\n              {{ cliente.cpf }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.nomeFantasia | uppercase }}\r\n            </td>\r\n            <td\r\n              class=\"hover\"\r\n              (click)=\"viewRegister(cliente)\"\r\n              *ngIf=\"!showDetailPanel\"\r\n            >\r\n              {{ cliente.razaoSocial | uppercase }}\r\n            </td>\r\n            <td>\r\n              <span\r\n                tooltip=\"Datos registrados\"\r\n                placement=\"left\"\r\n                container=\"body\"\r\n              >\r\n                <button\r\n                  type=\"button\"\r\n                  class=\"btn-icon-sm\"\r\n                  (click)=\"viewDetails(cliente)\"\r\n                >\r\n                  <i class=\"fas fa-user\"></i>\r\n                </button>\r\n              </span>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n      <div\r\n        class=\"d-flex justify-content-center mt-3\"\r\n        *ngIf=\"clientes[0]['total'] > itemsPerPage\"\r\n      >\r\n        <pagination\r\n          [maxSize]=\"maxSize\"\r\n          [(totalItems)]=\"totalItems\"\r\n          (pageChanged)=\"onPageChanged($event)\"\r\n          [(itemsPerPage)]=\"itemsPerPage\"\r\n          [boundaryLinks]=\"true\"\r\n          [(ngModel)]=\"currentPage\"\r\n          previousText=\"&lsaquo;\"\r\n          nextText=\"&rsaquo;\"\r\n          firstText=\"&laquo;\"\r\n          lastText=\"&raquo;\"\r\n        >\r\n        </pagination>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-5\" [hidden]=\"!showDetailPanel\">\r\n      <div class=\"sticky-top\">\r\n        <detail-panel>\r\n          <tabset>\r\n            <tab heading=\"Datos registrados\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"dadosCadastraisLoaded && !dadosCadastraisEmpty\">\r\n                  <div class=\"form-row\">\r\n                    <div\r\n                      class=\"form-group col-lg-6\"\r\n                      *ngIf=\"dadosCadastrais.tipoPessoa == 'F'\"\r\n                    >\r\n                      <label>C.I. o NIT</label>\r\n                      <div *ngIf=\"dadosCadastrais.cpf == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.cpf != null\">\r\n                        {{ dadosCadastrais.cpf }}\r\n                      </div>\r\n                    </div>\r\n                    <div\r\n                      class=\"form-group col-lg-6\"\r\n                      *ngIf=\"dadosCadastrais.tipoPessoa == 'J'\"\r\n                    >\r\n                      <label>CNPJ</label>\r\n                      <div *ngIf=\"dadosCadastrais.cnpj == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.cnpj != null\">\r\n                        {{ dadosCadastrais.cnpj }}\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-group col-lg-6\">\r\n                      <label>Nombre</label>\r\n                      <div *ngIf=\"dadosCadastrais.nomeFantasia == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.nomeFantasia != null\">\r\n                        {{ dadosCadastrais.nomeFantasia }}\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label>Razon social</label>\r\n                      <div *ngIf=\"dadosCadastrais.razaoSocial == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.razaoSocial != null\">\r\n                        {{ dadosCadastrais.razaoSocial }}\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label>Direccion</label>\r\n                      <div *ngIf=\"dadosCadastrais.endereco == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.endereco != null\">\r\n                        {{ dadosCadastrais.endereco }}\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col-lg-6\">\r\n                      <label>Barrio</label>\r\n                      <div *ngIf=\"dadosCadastrais.bairro == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.bairro != null\">\r\n                        {{ dadosCadastrais.bairro }}\r\n                      </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group col-lg-6\">\r\n                      <label>CEP</label>\r\n                      <div *ngIf=\"dadosCadastrais.cep == null\">NO INFORMADO</div>\r\n                      <div *ngIf=\"dadosCadastrais.cep != null\">{{ dadosCadastrais.cep }}</div>\r\n                    </div> -->\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col-lg-6\">\r\n                      <label>Ciudad</label>\r\n                      <div *ngIf=\"dadosCadastrais.cidade == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.cidade != null\">\r\n                        {{ dadosCadastrais.cidade }}\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-group col-lg-6\">\r\n                      <label>Departamento</label>\r\n                      <div *ngIf=\"dadosCadastrais.uf == null\">NO INFORMADO</div>\r\n                      <div *ngIf=\"dadosCadastrais.uf != null\">\r\n                        {{ dadosCadastrais.uf }}\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label>Asegurado</label>\r\n                      <div *ngIf=\"dadosCadastrais.segurado != ''\">Si</div>\r\n                      <div *ngIf=\"dadosCadastrais.segurado == ''\">NO</div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col-lg-6\">\r\n                      <label>Vendedor</label>\r\n                      <div *ngIf=\"dadosCadastrais.vendedor == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.vendedor != null\">\r\n                        {{ dadosCadastrais.vendedor }}\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-group col-lg-6\">\r\n                      <label>Sucursal</label>\r\n                      <div *ngIf=\"dadosCadastrais.escritorio == null\">\r\n                        NO INFORMADO\r\n                      </div>\r\n                      <div *ngIf=\"dadosCadastrais.escritorio != null\">\r\n                        {{ dadosCadastrais.escritorio }}\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div\r\n                      class=\"form-group col-lg-4\"\r\n                      *ngIf=\"\r\n                        dadosCadastrais.codSAP != '' &&\r\n                        dadosCadastrais.codSAP != null\r\n                      \"\r\n                    >\r\n                      <label>Código DBA</label>\r\n                      <div>{{ dadosCadastrais.codSAP }}</div>\r\n                    </div>\r\n                    <div\r\n                      class=\"form-group col-lg-4\"\r\n                      *ngIf=\"\r\n                        dadosCadastrais.escritorioDba != '' &&\r\n                        dadosCadastrais.escritorioDba != null\r\n                      \"\r\n                    >\r\n                      <label>Sucursal</label>\r\n                      <div>{{ dadosCadastrais.escritorioDba }}</div>\r\n                    </div>\r\n                    <div\r\n                      class=\"form-group col-lg-4\"\r\n                      *ngIf=\"\r\n                        dadosCadastrais.ultimaCompraDba != '' &&\r\n                        dadosCadastrais.ultimaCompraDba != null\r\n                      \"\r\n                    >\r\n                      <label>Última compra</label>\r\n                      <div>{{ dadosCadastrais.ultimaCompraDba }}</div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div\r\n                  class=\"mb-3\"\r\n                  *ngIf=\"dadosCadastraisLoaded && dadosCadastraisEmpty\"\r\n                >\r\n                  <empty-result\r\n                    message=\"Nenhuma informação encontrada\"\r\n                  ></empty-result>\r\n                </div>\r\n                <div\r\n                  class=\"d-flex justify-content-center mb-3\"\r\n                  *ngIf=\"!dadosCadastraisLoaded\"\r\n                >\r\n                  <div class=\"spinner-border text-dark\"></div>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n            <tab heading=\"Contactos\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"contatosLoaded && !contatosEmpty\">\r\n                  <div class=\"form-row\" *ngFor=\"let contato of contatos\">\r\n                    <div class=\"form-group col\">\r\n                      <label>{{ contato.tipoContato }}</label>\r\n                      <div>\r\n                        <span\r\n                          *ngIf=\"contato.nomeContato.length > 1\"\r\n                          class=\"mr-1\"\r\n                          >{{ contato.nomeContato }} :</span\r\n                        >\r\n                        <span\r\n                          *ngIf=\"\r\n                            contato.tipoContato != 'Email NFe' &&\r\n                            contato.tipoContato != 'E-mail NFe' &&\r\n                            contato.tipoContato != 'MalaDireta' &&\r\n                            contato.tipoContato != 'E-Mail'\r\n                          \"\r\n                        >\r\n                          {{ contato.contato }}\r\n                        </span>\r\n                        <span\r\n                          *ngIf=\"\r\n                            contato.tipoContato == 'Email NFe' ||\r\n                            contato.tipoContato == 'E-mail NFe' ||\r\n                            contato.tipoContato == 'MalaDireta' ||\r\n                            contato.tipoContato == 'E-Mail'\r\n                          \"\r\n                        >\r\n                          <a [href]=\"'mailto:' + contato.contato\">{{\r\n                            contato.contato | lowercase\r\n                          }}</a>\r\n                        </span>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div class=\"mb-3\" *ngIf=\"contatosLoaded && contatosEmpty\">\r\n                  <empty-result\r\n                    message=\"Ningun contacto encontrado\"\r\n                  ></empty-result>\r\n                </div>\r\n                <div\r\n                  class=\"d-flex justify-content-center mb-3\"\r\n                  *ngIf=\"!contatosLoaded\"\r\n                >\r\n                  <div class=\"spinner-border text-dark\"></div>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n          </tabset>\r\n        </detail-panel>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Busqueda de clientes\">\r\n  <button type=\"button\" [routerLink]=\"['../pre-cadastro']\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\">Filtrar</button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row justify-content-center mb-2\">\r\n    <div class=\"col-lg-6\">\r\n      <ul class=\"list-unstyled mb-0 d-flex justify-content-around\">\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Ativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Activos</h6>\r\n          <div class=\"text-success\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"ativos\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoAtivos = $event\">\r\n                {{ handleCounter(countoAtivos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Inativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Inactivos</h6>\r\n          <div class=\"text-danger\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"inativos\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoInativos = $event\">\r\n                {{ handleCounter(countoInativos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Potenci')\">\r\n          <h6 class=\"text-muted font-weight-light\">Potencial</h6>\r\n          <div class=\"text-primary\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"potencial\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoPotencial = $event\">\r\n                {{ handleCounter(countoPotencial) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Arquivo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Archivados</h6>\r\n          <div class=\"text-secondary\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"arquivados\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoArquivados = $event\">\r\n                {{ handleCounter(countoArquivados) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n  <advanced-filter>\r\n    <form [formGroup]=\"formFilter\">\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"buscarPor\">Buscar por</label>\r\n          <select class=\"form-control custom-select\" id=\"buscarPor\" formControlName=\"buscarPor\">\r\n            <option value=\"1\">Código, nombre o razon social</option>\r\n            <option value=\"2\">C.I. o NIT</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"pesquisa\">Termino de busqueda</label>\r\n          <input type=\"text\" class=\"form-control\" formControlName=\"pesquisa\" (keydown.enter)=\"onFilter()\" />\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"situacao\">Situacion</label>\r\n          <select class=\"form-control custom-select\" id=\"situacao\" formControlName=\"situacao\">\r\n            <option value=\"Ativo\">Activos</option>\r\n            <option value=\"Inativo\">Inactivos</option>\r\n            <option value=\"Potenci\">Potenciales</option>\r\n            <option value=\"Arquivo\">Archivados</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"setorAtividade\">Sector empresarial</label>\r\n          <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"setorAtividades\" [virtualScroll]=\"true\"\r\n            labelForId=\"setorAtividade\" bindLabel=\"descricao\" bindValue=\"id\" formControlName=\"setorAtividade\">\r\n          </ng-select>\r\n        </div>\r\n      </div>\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"tipoPessoa\">Tipo de persona</label>\r\n          <select class=\"form-control custom-select\" id=\"tipoPessoa\" formControlName=\"tipoPessoa\">\r\n            <option value=\"F\">Persona física</option>\r\n            <option value=\"J\">Persona jurídica</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <!-- <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"grupoEconomico\">Esta en grupo economico</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"grupoEconomico\"\r\n            formControlName=\"grupoEconomico\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"segurado\">Asegurado</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"segurado\"\r\n            formControlName=\"segurado\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <!-- <div class=\"form-group col-lg-2 mb-lg-0\">\r\n          <label for=\"carteira\">Cartera</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"carteira\"\r\n            formControlName=\"carteira\">\r\n            <option value=\"S\" selected>Mi cartera</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <div class=\"form-group col-lg-1 mb-lg-0\">\r\n          <label for=\"registros\">Registros</label>\r\n          <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n            <option>10</option>\r\n            <option>25</option>\r\n            <option>50</option>\r\n            <option>100</option>\r\n            <option>200</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </advanced-filter>\r\n  <div class=\"row mt-3\" *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor != 2\r\n    \">\r\n    <div class=\"col-12\">\r\n      <empty-result message=\"No se encontraron clientes para esta búsqueda.\" class=\"py-4\"></empty-result>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-3\" *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor == 2\r\n    \">\r\n    <div class=\"col-7 d-flex justify-content-end w-100 pr-0\">\r\n      <empty-result message=\"No se encontraron clientes para esta búsqueda.\" class=\"py-4\"></empty-result>\r\n    </div>\r\n    <div class=\"col-5 d-flex w-100 pl-1\">\r\n      <a [routerLink]=\"['../pre-cadastro']\" [queryParams]=\"onPreCadastroCpfCnpj()\" class=\"my-auto\">\r\n        <strong>Pulse aquí para registrarse..</strong>\r\n      </a>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-4\" *ngIf=\"dataLoaded && clientes.length > 0\">\r\n    <div [ngClass]=\"{ 'col-12': !showDetailPanel, 'col-7 pr-0': showDetailPanel }\">\r\n      <custom-table [config]=\"tableConfig\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th scope=\"col\"></th>\r\n            <th scope=\"col\" class=\"text-center hover\" (click)=\"setOrderBy('codigo_cliente')\">\r\n              <thead-sorter value=\"Código Cliente\" [active]=\"orderBy == 'codigo_cliente'\"\r\n                [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"text-center hover\" (click)=\"setOrderBy('cpf')\">\r\n              <thead-sorter value=\"CI/NIT\" [active]=\"orderBy == 'cpf'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('nomeFantasia')\">\r\n              <thead-sorter value=\"Nombre y apelllido\" [active]=\"orderBy == 'nomeFantasia'\"\r\n                [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('razaoSocial')\" *ngIf=\"!showDetailPanel\">\r\n              <thead-sorter value=\"Razon Social\" [active]=\"orderBy == 'razaoSocial'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\"></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let cliente of clientes\" [class.table-active]=\"cliente.codigo_cliente == clienteSelecionado\">\r\n            <td class=\"text-center hover\" [ngClass]=\"classStatusBorder(cliente.situacao)\"\r\n              (click)=\"viewRegister(cliente)\">\r\n              <i class=\"text-black-50 far fa-check-square mr-3\" *ngIf=\"cliente.segurado == 0\"\r\n                tooltip=\"Cliente no asegurado\" placement=\"right\"></i>\r\n              <i class=\"text-warning fas fa-check-square mr-3\" *ngIf=\"cliente.segurado > 0\" tooltip=\"Cliente asegurado\"\r\n                placement=\"right\"></i>\r\n              <i class=\"text-black-50 far fa-folder-open\" *ngIf=\"cliente.grupoEconomico == 0\"\r\n                tooltip=\"No hace parte de grupo economico\" placement=\"right\"></i>\r\n              <i class=\"text-warning fas fa-folder-open\" *ngIf=\"cliente.grupoEconomico > 0\"\r\n                tooltip=\"Pertenece a un grupo economico\" placement=\"right\"></i>\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.codigo_cliente }}\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cpf)\">\r\n              {{ cliente.cpf }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.nomeFantasia | uppercase }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\" *ngIf=\"!showDetailPanel\">\r\n              {{ cliente.razaoSocial | uppercase }}\r\n            </td>\r\n            <td>\r\n              <span tooltip=\"Datos registrados\" placement=\"left\" container=\"body\">\r\n                <button type=\"button\" class=\"btn-icon-sm\" (click)=\"viewDetails(cliente)\">\r\n                  <i class=\"fas fa-user\"></i>\r\n                </button>\r\n              </span>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"clientes[0]['total'] > itemsPerPage\">\r\n        <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n          [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n          nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n        </pagination>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-5\" [hidden]=\"!showDetailPanel\">\r\n      <div class=\"sticky-top\">\r\n        <detail-panel>\r\n          <tabset>\r\n            <tab heading=\"Datos registrados\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"dadosCadastraisLoaded && !dadosCadastraisEmpty\">\r\n                  <div class=\"container\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Codigo Cliente CRM360</label>\r\n                        <div *ngIf=\"!editingMode\">\r\n                          {{ dadosCadastrais.id_cliente == null ? 'NO INFORMADO' : dadosCadastrais.id_cliente }}\r\n                        </div>\r\n                        <div *ngIf=\"editingMode\">\r\n                          <input [(ngModel)]=\"editedFields.id_cliente\" type=\"hidden\">\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>C.I.</label>\r\n                        <div>\r\n                          <div>\r\n                            <div *ngIf=\"!editingMode\">{{ dadosCadastrais.cnpj_cpf == null ? 'NO INFORMADO' :\r\n                              dadosCadastrais.cnpj_cpf }}</div>\r\n                            <div *ngIf=\"editingMode\"><input [(ngModel)]=\"editedFields.carnet\"></div>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Nombre</label>\r\n                        <div>\r\n                          <div>\r\n                            <div *ngIf=\"!editingMode\">{{ dadosCadastrais.nombres == null ? 'NO INFORMADO' :\r\n                              dadosCadastrais.nombres }}</div>\r\n                            <div *ngIf=\"editingMode\"><input [(ngModel)]=\"editedFields.nombres\"></div>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col\">\r\n                        <label>Razon social</label>\r\n                        <div>\r\n                          <div>\r\n                            <div *ngIf=\"!editingMode\">{{ dadosCadastrais.razaoSocial == null ? 'NO INFORMADO' :\r\n                              dadosCadastrais.razaoSocial }}</div>\r\n                            <div *ngIf=\"editingMode\"><input [(ngModel)]=\"editedFields.razonSocial\"></div>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col\">\r\n                        <label>Tipo Persona</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ getTipoPersonaLabel(dadosCadastrais.tipo_pessoa) }}</div>\r\n                          <div *ngIf=\"editingMode\">\r\n                            <select [(ngModel)]=\"editedFields.tipo_pessoa\">\r\n                              <option *ngFor=\"let option of tipoPersonaOptions\" [value]=\"option.value\">{{ option.label\r\n                                }}</option>\r\n                            </select>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>NIT.</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ dadosCadastrais.nit == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.nit }}</div>\r\n                          <div\r\n                            *ngIf=\"editingMode && (dadosCadastrais.tipo_pessoa === 'P' || dadosCadastrais.tipo_pessoa === 'G' || dadosCadastrais.tipo_pessoa === 'E')\">\r\n                            <input [(ngModel)]=\"editedFields.nit\">\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col\">\r\n                        <label>Celular</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ dadosCadastrais.celular == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.celular }}</div>\r\n                          <div *ngIf=\"editingMode\"><input [(ngModel)]=\"editedFields.celular\"></div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col\">\r\n                        <label>Telefono</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ dadosCadastrais.telefono == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.telefono }}</div>\r\n                          <div *ngIf=\"editingMode\"><input [(ngModel)]=\"editedFields.telefono\"></div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Sucursal</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ dadosCadastrais.sucursal == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.sucursal }}</div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Direccion</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ dadosCadastrais.direccion == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.direccion}}</div>\r\n                            <div *ngIf=\"editingMode\"><input [(ngModel)]=\"editedFields.direccion\"></div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Ciudad</label>\r\n                        <div>\r\n                          <div *ngIf=\"!editingMode\">{{ dadosCadastrais.ciudad == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.ciudad }}</div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Vendedor</label>\r\n                        <div>\r\n                          <ng-container *ngIf=\"!editingMode; else editingVendedor\">\r\n                            {{ dadosCadastrais.NombreVendedor || 'NO INFORMADO' }}\r\n                          </ng-container>\r\n                          <ng-template #editingVendedor>\r\n                            <select [(ngModel)]=\"editedFields.id_vendedor\">\r\n                              <option [value]=\"originalVendedorId\">{{ dadosCadastrais.NombreVendedor }}</option>\r\n                              <option *ngFor=\"let vendedor of vendedoresList\" [value]=\"vendedor.id\">{{ vendedor.nome }}</option>\r\n                            </select>\r\n                          </ng-template>                                                    \r\n                        </div>\r\n                      </div>\r\n\r\n\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"mb-3\" *ngIf=\"dadosCadastraisLoaded && dadosCadastraisEmpty\">\r\n                    <empty-result message=\"Nenhuma informação encontrada\"></empty-result>\r\n                    <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!dadosCadastraisLoaded\">\r\n                      <div class=\"spinner-border text-dark\"></div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"editingMode\">\r\n                  <div class=\"text-right mt-3\">\r\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"cancelEditing()\">Cancelar</button>\r\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveChanges()\">Guardar Cambios</button>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"!editingMode\">\r\n                  <div class=\"text-right mt-3\">\r\n                    <button type=\"button\" class=\"btn btn-light\" (click)=\"enableEditing()\">Editar Cliente</button>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n            <tab heading=\"Contactos\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"contatosLoaded && !contatosEmpty\">\r\n                  <div class=\"form-row\" *ngFor=\"let contato of contatos\">\r\n                    <!-- <div class=\"form-group col\" [ngClass]=\"{'hidden': contato.editing}\">\r\n                      <label>ID Contacto</label>\r\n                      <div>\r\n                        {{ contato.id_cont }}\r\n                      </div>\r\n                    </div> -->\r\n                    <div class=\"form-group col\">\r\n                      <label>Contacto</label>\r\n                      <div>\r\n                        <div *ngIf=\"!editingContacto\">{{ contato.contacto }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedContacto\"></div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-group col\">\r\n                      <label>Tipo de Contacto</label>\r\n                      <div>\r\n                        <div *ngIf=\"!editingContacto\">{{ contato.ds_tipo_cont }} {{ contato.ds_cont_meio }}</div>\r\n                        <div *ngIf=\"contato.editing\">\r\n                          <input [(ngModel)]=\"contato.editedds_cont_meio\">\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n\r\n                    <div class=\"form-group col\">\r\n                      <label>Dirección</label>\r\n                      <div>\r\n                        <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-group col\">\r\n                      <label>Nombre</label>\r\n                      <div>\r\n                        <ng-container *ngIf=\"!editingContacto\">\r\n                          <div *ngIf=\"contato.ds_cont && contato.ds_cont.length > 1\" class=\"mr-1\">{{ contato.ds_cont }}\r\n                          </div>\r\n                        </ng-container>\r\n                        <ng-container *ngIf=\"contato.editing\">\r\n                          <input [(ngModel)]=\"contato.editedDsCont\">\r\n                        </ng-container>\r\n                      </div>\r\n                    </div>\r\n                    <button type=\"button\" class=\"btn btn-light\" (click)=\"editarContacto(contato)\"\r\n                      *ngIf=\"!contato.editing\">Editar Contacto</button>\r\n                    <div *ngIf=\"contato.editing\">\r\n                      <button type=\"button\" class=\"btn btn-secondary\"\r\n                        (click)=\"cancelEditingContact(contato)\">Cancelar</button>\r\n                      <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveEditedContact(contato)\">Guardar Cambios</button>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <!-- <button type=\"button\" class=\"btn btn-primary\" (click)=\"openAgregarContactoModal()\">\r\n                Abrir Modal\r\n            </button> -->\r\n                            \r\n            </tab>  \r\n            <!-- <ng-template #modalDetalhes>\r\n              <div class=\"modal-header\">\r\n                  <h4 class=\"modal-title pull-left\">Agregar Contacto</h4>\r\n                  <div class=\"d-flex justify-content-center align-items-center\">\r\n                      <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"closeModal()\">\r\n                          <span aria-hidden=\"true\">&times;</span>\r\n                      </button>\r\n                  </div>\r\n              </div>\r\n              <div class=\"modal-body\">\r\n\r\n                  <form [formGroup]=\"agregarContactoForm\">\r\n                      <div class=\"form-group\">\r\n                          <label>Contacto</label>\r\n                          <input type=\"text\" class=\"form-control\" formControlName=\"contacto\">\r\n                      </div>\r\n\r\n                      <div class=\"text-center\">\r\n                          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"closeModal()\">Cancelar</button>\r\n                          <button type=\"button\" class=\"btn btn-primary\" (click)=\"guardarContacto()\">Guardar Contacto</button>\r\n                      </div>\r\n                  </form>\r\n              </div>\r\n          </ng-template> -->\r\n            \r\n            \r\n\r\n          </tabset>\r\n        </detail-panel>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>";
       /***/
     },
 
@@ -5240,11 +5191,23 @@
 
       var src_app_shared_templates_detail_panel_detal_panel_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
       /*! src/app/shared/templates/detail-panel/detal-panel.service */
-      "gIxL"); // Services
+      "gIxL");
+      /* harmony import */
+
+
+      var src_app_modules_comercial_services_vendedores_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      /*! src/app/modules/comercial/services/vendedores.service */
+      "4xRd");
+      /* harmony import */
+
+
+      var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
+      /*! ngx-bootstrap/modal */
+      "LqlI"); // Services
 
 
       var ComercialClientesListaComponent = /*#__PURE__*/function () {
-        function ComercialClientesListaComponent(activatedRoute, router, clientesService, formBuilder, pnotifyService, atividadesService, dadosFaturamentoService, titleService, detailPanelService) {
+        function ComercialClientesListaComponent(activatedRoute, router, clientesService, formBuilder, pnotifyService, atividadesService, dadosFaturamentoService, titleService, detailPanelService, vendedoresService, modalService) {
           _classCallCheck(this, ComercialClientesListaComponent);
 
           this.activatedRoute = activatedRoute;
@@ -5256,6 +5219,8 @@
           this.dadosFaturamentoService = dadosFaturamentoService;
           this.titleService = titleService;
           this.detailPanelService = detailPanelService;
+          this.vendedoresService = vendedoresService;
+          this.modalService = modalService;
           this.loaderNavbar = false;
           this.breadCrumbTree = [{
             descricao: 'Home',
@@ -5293,18 +5258,43 @@
           this.clientes = [];
           this.clientesPagination = [];
           this.dadosCadastrais = {};
+          this.contato = [];
           this.contatos = [];
+          this.editingMode = false;
+          this.editedFields = {};
+          this.vendedoresList = [];
+          this.editingContacto = false;
+          this.tipoPersonaOptions = [{
+            label: 'Sociedades',
+            value: 'S'
+          }, {
+            label: 'Privado',
+            value: 'P'
+          }, {
+            label: 'Gobierno',
+            value: 'G'
+          }, {
+            label: 'Empleado',
+            value: 'E'
+          }];
           this.pnotifyService.getPNotify();
         }
 
         _createClass(ComercialClientesListaComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
+            var _this27 = this;
+
             this.registrarAcesso();
             this.getFormFilters();
             this.setFormFilter();
             this.titleService.setTitle('Busqueda de clientes');
             this.onDetailPanelEmitter();
+            this.vendedoresService.getVendedores().subscribe(function (response) {
+              _this27.vendedoresList = response.result;
+            }, function (error) {
+              console.error('Error al obtener la lista de vendedores:', error);
+            });
           }
         }, {
           key: "ngOnDestroy",
@@ -5418,20 +5408,187 @@
             });
             this.activatedRouteSubscription.unsubscribe();
             return formValue;
+          } // openAgregarContactoModal() {
+          //   console.log("openAgregarContactoModal() se ha ejecutado.");
+          //   // Resto del código para abrir el modal
+          //   this.modalRef = this.modalService.show(this.modalDetalhes, {
+          //     class: 'modal-x1',
+          //   });
+          // }
+          // closeModal() {
+          //   // Cierra el modal
+          //   this.modalRef.hide();
+          // }
+          // guardarContacto() {
+          //   if (this.agregarContactoForm.valid) {
+          //     const nuevoContacto = this.agregarContactoForm.value;
+          //     // Realiza aquí la lógica para guardar el nuevo contacto en el backend
+          //     // Luego, cierra el modal
+          //     this.closeModal();
+          //   } else {
+          //     // Marcar los campos inválidos en el formulario
+          //     this.agregarContactoForm.markAllAsTouched();
+          //   }
+          // }
+
+        }, {
+          key: "editarContacto",
+          value: function editarContacto(contato) {
+            contato.editedIdCont = contato.id_cont;
+            contato.editedContacto = contato.contacto;
+            contato.editedds_cont_meio = contato.ds_cont_meio;
+            contato.editedDireccion = contato.direccion;
+            contato.editedDsCont = contato.ds_cont;
+            contato.originalDsTipoCont = contato.ds_tipo_cont;
+            contato.editing = true; // Indicar que este contacto está en modo de edición
+
+            this.editingContacto = true;
+          }
+        }, {
+          key: "cancelEditingContact",
+          value: function cancelEditingContact(contato) {
+            contato.editing = false; // Salir del modo de edición
+
+            this.editingContacto = false;
+          }
+        }, {
+          key: "saveEditedContact",
+          value: function saveEditedContact(contato) {
+            var _this31 = this;
+
+            var codigoCliente = contato.id_cliente;
+            var editedData = {
+              id_cont: contato.editedIdCont !== undefined ? contato.editedIdCont : contato.id_cont,
+              contacto: contato.editedContacto !== undefined ? contato.editedContacto : contato.contacto,
+              ds_tipo_cont: contato.originalDsTipoCont,
+              direccion: contato.editedDireccion !== undefined ? contato.editedDireccion : contato.direccion,
+              ds_cont: contato.editedDsCont !== undefined ? contato.editedDsCont : contato.ds_cont
+            };
+            var tipo_medio = contato.originalDsTipoCont === 'TELEFONO' ? 5 : 2;
+
+            if (contato.originalDsTipoCont === 'TELEFONO') {
+              editedData['telefono_contacto'] = contato.editedds_cont_meio !== undefined ? contato.editedds_cont_meio : contato.ds_cont_meio;
+            } else {
+              editedData['celular_contacto'] = contato.editedds_cont_meio !== undefined ? contato.editedds_cont_meio : contato.ds_cont_meio;
+            }
+
+            editedData['tipo_medio'] = tipo_medio;
+            editedData['id_cont_meio'] = contato.id_cont_meio;
+            editedData['id_cont'] = contato.id_cont;
+            this.clientesService.sapUpdateContacto(codigoCliente, editedData).subscribe(function (response) {
+              console.log('Cambios en el contacto guardados exitosamente:', response);
+              contato.editing = false; // Salir del modo de edición
+
+              _this31.editingContacto = false; // Actualizar los valores del contacto en el objeto local
+
+              contato.contacto = editedData.contacto;
+              contato.ds_tipo_cont = editedData.ds_tipo_cont;
+              contato.ds_cont_meio = editedData['telefono_contacto'] || editedData['celular_contacto'];
+              contato.direccion = editedData.direccion;
+              contato.ds_cont = editedData.ds_cont;
+
+              _this31.clientesService.getDetalhes(codigoCliente);
+            }, function (error) {
+              console.error('Error al guardar cambios en el contacto:', error);
+            });
+          }
+        }, {
+          key: "mapTipoPessoaToTipoPersona",
+          value: function mapTipoPessoaToTipoPersona(tipoPessoa) {
+            var map = {
+              'S': 'Sociedades',
+              'P': 'Privado',
+              'G': 'Gobierno',
+              'E': 'Empleado' // Agrega más mapeos si es necesario...
+
+            };
+            return map[tipoPessoa] || '';
+          }
+        }, {
+          key: "getTipoPersonaLabel",
+          value: function getTipoPersonaLabel(value) {
+            var option = this.tipoPersonaOptions.find(function (opt) {
+              return opt.value === value;
+            });
+            return option ? option.label : 'NO INFORMADO';
+          }
+        }, {
+          key: "getVendedorNome",
+          value: function getVendedorNome(id_vendedor) {
+            if (isNaN(id_vendedor)) {
+              return 'NO INFORMADO';
+            }
+
+            var vendedor = this.vendedoresList.find(function (v) {
+              return v.id_vendedor === id_vendedor;
+            });
+            return vendedor ? vendedor.nome : 'NO INFORMADO';
+          }
+        }, {
+          key: "enableEditing",
+          value: function enableEditing() {
+            this.editingMode = true; // Guardar los valores actuales de los campos editables
+
+            this.editedFields.carnet = this.dadosCadastrais.cnpj_cpf;
+            this.editedFields.nombres = this.dadosCadastrais.nombres;
+            this.editedFields.razonSocial = this.dadosCadastrais.razaoSocial;
+            this.editedFields.ciudad = this.dadosCadastrais.ciudad;
+            this.editedFields.NombreVendedor = this.dadosCadastrais.NombreVendedor;
+            this.editedFields.sucursal = this.dadosCadastrais.sucursal;
+            this.editedFields.direccion = this.dadosCadastrais.direccion;
+            this.editedFields.id_cliente = this.dadosCadastrais.id_cliente;
+            this.editedFields.tipo_persona = this.dadosCadastrais.tipo_persona;
+            this.editedFields.tipo_pessoa = this.dadosCadastrais.tipo_pessoa;
+            this.editedFields.telefono = this.dadosCadastrais.telefono;
+            this.editedFields.celular = this.dadosCadastrais.celular;
+            this.editedFields.nit = this.dadosCadastrais.nit;
+            this.editedFields.id_vendedor = this.dadosCadastrais.id_vendedor; // Repite para otros campos editables...
+          }
+        }, {
+          key: "cancelEditing",
+          value: function cancelEditing() {
+            // Reinicia los campos editados a sus valores originales
+            this.editedFields = {};
+            this.originalVendedorId = null; // Desactiva el modo de edición
+
+            this.editingMode = false;
+          }
+        }, {
+          key: "saveChanges",
+          value: function saveChanges() {
+            var _this32 = this;
+
+            var codigoCliente = this.dadosCadastrais.id_cliente;
+            var editedData = Object.assign(Object.assign({}, this.editedFields), {
+              ubicacion: [{
+                direccion: this.editedFields.direccion
+              }]
+            });
+            this.editedFields.tipo_persona = this.mapTipoPessoaToTipoPersona(this.editedFields.tipo_pessoa); // Llamar a la función para guardar los cambios
+
+            this.clientesService.sapUpdateClient(codigoCliente, editedData).subscribe(function (response) {
+              // Limpiar los campos editados y desactivar el modo de edición
+              _this32.editedFields = {};
+              _this32.editingMode = false; // Llamar a la función para obtener los detalles actualizados
+
+              _this32.clientesService.getDetalhes(codigoCliente);
+            }, function (error) {
+              console.error('Error al guardar cambios:', error);
+            });
           }
         }, {
           key: "listStatus",
           value: function listStatus() {
-            var _this31 = this;
+            var _this33 = this;
 
             this.clientesService.getStatus().subscribe({
               next: function next(response) {
                 if (response['responseCode'] === 200) {
-                  _this31.setStatus(response['result']);
+                  _this33.setStatus(response['result']);
                 }
               },
               error: function error(_error3) {
-                _this31.pnotifyService.error();
+                _this33.pnotifyService.error();
               }
             });
           }
@@ -5508,7 +5665,7 @@
         }, {
           key: "search",
           value: function search(params) {
-            var _this32 = this;
+            var _this34 = this;
 
             if (this.searchSubmitted) {
               this.loaderNavbar = true;
@@ -5518,22 +5675,22 @@
               this.buscandoPor = params['buscarPor'];
               this.pesquisa = params['pesquisa'];
               this.clientesService.getClientes(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
-                _this32.loaderNavbar = false;
-                _this32.dataLoaded = true;
+                _this34.loaderNavbar = false;
+                _this34.dataLoaded = true;
               })).subscribe(function (response) {
                 if (response['responseCode'] === 200) {
-                  _this32.clientes = response['result']['analitico'].slice(0, _this32.itemsPerPage);
-                  _this32.totalItems = _this32.clientes[0]['total'];
+                  _this34.clientes = response['result']['analitico'].slice(0, _this34.itemsPerPage);
+                  _this34.totalItems = _this34.clientes[0]['total'];
 
-                  _this32.setStatus(response['result']['sintetico']);
+                  _this34.setStatus(response['result']['sintetico']);
                 } else if (response['responseCode'] === 204) {
-                  _this32.ativos = 0;
-                  _this32.inativos = 0;
-                  _this32.potencial = 0;
-                  _this32.arquivados = 0;
+                  _this34.ativos = 0;
+                  _this34.inativos = 0;
+                  _this34.potencial = 0;
+                  _this34.arquivados = 0;
                 }
               }, function (error) {
-                _this32.pnotifyService.error();
+                _this34.pnotifyService.error();
               });
             }
           }
@@ -5558,7 +5715,7 @@
           key: "viewRegister",
           value: function viewRegister(cliente) {
             if (cliente['podeAcessar'] == 1 || cliente['podeAcessar'] == 0) {
-              this.router.navigate(['../detalhes', cliente.codCliente], {
+              this.router.navigate(['../Detalles', cliente.codCliente], {
                 relativeTo: this.activatedRoute
               });
             } else {
@@ -5568,7 +5725,7 @@
         }, {
           key: "viewDetails",
           value: function viewDetails(cliente) {
-            var _this33 = this;
+            var _this35 = this;
 
             this.detailPanelService.loadedFinished(false);
             this.clienteSelecionado = cliente.codCliente;
@@ -5577,41 +5734,41 @@
             this.contatosLoaded = false;
             this.contatosEmpty = false;
             this.clientesService.getDetalhes(cliente.codCliente).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
-              _this33.dadosCadastraisLoaded = true;
+              _this35.dadosCadastraisLoaded = true;
             })).subscribe(function (response) {
-              if (response.success === true) {
-                _this33.dadosCadastrais = response.data;
+              if (response.data) {
+                _this35.dadosCadastrais = response.data;
               } else {
-                _this33.dadosCadastraisEmpty = true;
+                _this35.dadosCadastraisEmpty = true;
               }
             });
             this.clientesService.getContatosResumido(cliente.codCliente).subscribe(function (response) {
-              _this33.contatosLoaded = true;
+              _this35.contatosLoaded = true;
 
               if (response['responseCode'] === 200) {
-                if (Object.keys(response['result']).length > 0) {
-                  _this33.contatos = response['result'];
+                if (Object.keys(response['data']).length > 0) {
+                  _this35.contatos = response['data'];
                 } else {
-                  _this33.contatosEmpty = true;
+                  _this35.contatosEmpty = true;
                 }
               } else {
-                _this33.contatosEmpty = true;
+                _this35.contatosEmpty = true;
               }
             });
           }
         }, {
           key: "onCloseDetailPanel",
           value: function onCloseDetailPanel() {
-            var _this34 = this;
+            var _this36 = this;
 
             this.resetClienteSelecionado();
             setTimeout(function () {
-              _this34.dadosCadastraisLoaded = false;
-              _this34.dadosCadastraisEmpty = false;
-              _this34.dadosCadastrais = {};
-              _this34.contatosEmpty = false;
-              _this34.contatosLoaded = false;
-              _this34.contatos = [];
+              _this36.dadosCadastraisLoaded = false;
+              _this36.dadosCadastraisEmpty = false;
+              _this36.dadosCadastrais = {};
+              _this36.contatosEmpty = false;
+              _this36.contatosLoaded = false;
+              _this36.contatos = [];
             }, 500);
           }
         }, {
@@ -5675,6 +5832,10 @@
           type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_11__["TitleService"]
         }, {
           type: src_app_shared_templates_detail_panel_detal_panel_service__WEBPACK_IMPORTED_MODULE_12__["DetailPanelService"]
+        }, {
+          type: src_app_modules_comercial_services_vendedores_service__WEBPACK_IMPORTED_MODULE_13__["ComercialVendedoresService"]
+        }, {
+          type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_14__["BsModalService"]
         }];
       };
 
@@ -5682,7 +5843,7 @@
         selector: 'comercial-clientes-lista',
         template: _raw_loader_lista_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
         styles: [_lista_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], src_app_modules_comercial_services_clientes_service__WEBPACK_IMPORTED_MODULE_7__["ComercialClientesService"], _angular_forms__WEBPACK_IMPORTED_MODULE_5__["FormBuilder"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_8__["PNotifyService"], src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_9__["AtividadesService"], _cadastro_dados_faturamento_formulario_formulario_service__WEBPACK_IMPORTED_MODULE_10__["ComercialClientesCadastroDadosFaturamentoFormularioService"], src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_11__["TitleService"], src_app_shared_templates_detail_panel_detal_panel_service__WEBPACK_IMPORTED_MODULE_12__["DetailPanelService"]])], ComercialClientesListaComponent);
+      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], src_app_modules_comercial_services_clientes_service__WEBPACK_IMPORTED_MODULE_7__["ComercialClientesService"], _angular_forms__WEBPACK_IMPORTED_MODULE_5__["FormBuilder"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_8__["PNotifyService"], src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_9__["AtividadesService"], _cadastro_dados_faturamento_formulario_formulario_service__WEBPACK_IMPORTED_MODULE_10__["ComercialClientesCadastroDadosFaturamentoFormularioService"], src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_11__["TitleService"], src_app_shared_templates_detail_panel_detal_panel_service__WEBPACK_IMPORTED_MODULE_12__["DetailPanelService"], src_app_modules_comercial_services_vendedores_service__WEBPACK_IMPORTED_MODULE_13__["ComercialVendedoresService"], ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_14__["BsModalService"]])], ComercialClientesListaComponent);
       /***/
     },
 
@@ -6047,23 +6208,23 @@
         _createClass(ComercialClientesHistoricoFinanceiroNotasPromissoriasComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this35 = this;
+            var _this37 = this;
 
             this.activatedRoute.parent.params.subscribe(function (params) {
-              _this35.getNotasPromissorias(params['id']);
+              _this37.getNotasPromissorias(params['id']);
             });
           }
         }, {
           key: "getNotasPromissorias",
           value: function getNotasPromissorias(id) {
-            var _this36 = this;
+            var _this38 = this;
 
             this.historicoFinanceiroService.getNotasPromissorias(id).subscribe(function (response) {
               if (response['responseCode'] === 200) {
-                _this36.notasPromissorias = response['result'];
+                _this38.notasPromissorias = response['result'];
               }
 
-              _this36.notasPromissoriasLoaded = true;
+              _this38.notasPromissoriasLoaded = true;
             });
           }
         }, {

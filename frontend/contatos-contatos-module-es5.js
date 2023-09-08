@@ -149,6 +149,18 @@
           value: function getVinculoOperadores() {
             return this.http.get("".concat(this.API, "/vinculo-operadores")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
+        }, {
+          key: "getDetalleVendedor",
+          value: function getDetalleVendedor(params) {
+            return this.http.get("".concat(this.API, "/detalles_vendedor"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getRubros",
+          value: function getRubros() {
+            return this.http.get("".concat(this.API, "/rubros")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
         }]);
 
         return ComercialVendedoresService;
@@ -935,9 +947,21 @@
             return this.http.get("".concat(this.API, "/pesquisa/detalhes/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "sapUpdateClient",
+          value: function sapUpdateClient(codigo_cliente, data) {
+            console.log("update Cliente:", data);
+            return this.http.post("".concat(this.API, "/pesquisa/updatesap"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "sapUpdateContacto",
+          value: function sapUpdateContacto(codigo_cliente, data) {
+            console.log("update Contacto:", data);
+            return this.http.post("".concat(this.API, "/pesquisa/updatesapcontacto"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getContatosResumido",
           value: function getContatosResumido(codCliente) {
-            return this.http.get("".concat(this.API, "/pesquisa/contatos/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+            return this.http.get("".concat(this.API, "/pesquisa/contactodetalle/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
           key: "getExisteCpfCnpj",
@@ -948,6 +972,11 @@
           key: "postCliente",
           value: function postCliente(data) {
             return this.http.post("".concat(this.API, "/pre-cadastro"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "sapPostClient",
+          value: function sapPostClient(data) {
+            return this.http.post("".concat(this.API, "/postsap"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
           key: "getPropostaAnaliseCredito",

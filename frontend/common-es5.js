@@ -481,7 +481,7 @@
         }, {
           key: "getCliente",
           value: function getCliente(codCliente) {
-            return this.http.get("http://23.254.204.187/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+            return this.http.get("http://23.254.204.187/api/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
           }
         }, {
           key: "postAnexos",

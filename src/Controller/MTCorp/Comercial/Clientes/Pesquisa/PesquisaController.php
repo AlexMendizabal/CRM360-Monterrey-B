@@ -15,6 +15,7 @@ use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 use App\Controller\MTCorp\Comercial\ComercialController;
+use App\Services\Helper;
 
 /**
  * Class PesquisaController
@@ -212,7 +213,7 @@ class PesquisaController extends AbstractController
             $usuario = new usuarioController();
             $comercial = new ComercialController();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
-            dd($infoUsuario);
+            //dd($infoUsuario);
             // $vendedor = $infoUsuario->
 
             $buscarPor = '';
@@ -384,74 +385,96 @@ class PesquisaController extends AbstractController
      * @return JsonResponse
      */
     public function getDetalhes(Connection $connection, Request $request, $codCliente)
-    {
+    { 
         try {
-            $res = $connection->query("
-                EXEC [PRC_MTCORP_MODU_COME_CADA_CLIE_CONS]
-                    @PARAM = 2,
-                    @IDCLIENTE = '{$codCliente}'
-            ")->fetchAll();
+            $query = "SELECT 
+            c.id_cliente,
+            c.prim_nome as nombres,
+            c.segu_nome as razaoSocial,
+            c.tipo_pessoa,
+            c.cnpj_cpf,
+            CONCAT(v.nm_vend, ' ', v.nm_raza_soci) as NombreVendedor,
+            c.id_vendedor,
+            escr.nm_escr as sucursal,
+            c.id_setor_atividade,
+            c.tipo_persona,
+            c.telefono,
+            c.celular,
+            c.nit,
+            c.id_rubro,
+            e.logradouro as direccion,
+            ciudad.nombre_ciudad as ciudad
+        FROM MTCORP_MODU_CLIE_BASE c
+        LEFT JOIN MTCORP_MODU_CLIE_BASE_ENDE e ON c.id_cliente = e.id_cliente
+        LEFT JOIN TB_VEND v ON c.id_vendedor = v.ID
+        LEFT JOIN TB_ESCR escr ON v.id_escr = escr.id
+        LEFT JOIN tb_ciudad ciudad ON escr.id_ciudad = ciudad.id
+        WHERE c.id_cliente = :codCliente";
 
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(":codCliente", $codCliente);
+            $stmt->execute();
+            $res = $stmt->fetch(); // Use fetch() instead of fetchAll() since you expect a single row
+            
 
-            if (count($res) > 0) {
-                if (!empty($res[0]['CEP']) && strlen($res[0]['CEP']) < 8) {
-                    $FunctionsController = new FunctionsController();
-                    $res[0]['CEP'] = $FunctionsController->completaZeroEsquerda($res[0]['CEP'], 8);
-                }
+            if ($res) {
 
                 $detalhes = new \stdClass;
-                $detalhes->codCliente = (int)$res[0]['CODIGO'];
-                $detalhes->tipoPessoa = $res[0]['TIPO'];
-                $detalhes->nomeFantasia = $res[0]['FANTASIA'];
-                $detalhes->razaoSocial = $res[0]['RAZAOSOCIAL'];
-                $detalhes->endereco = $res[0]['ENDERECO'];
-                $detalhes->bairro = $res[0]['BAIRRO'];
-                $FunctionsController = new FunctionsController();
-                $detalhes->cep = !empty($res[0]['CEP']) ? $FunctionsController->setMask($res[0]['CEP'], '#####-###') : null;
-                $detalhes->cidade = $res[0]['CIDADE'];
-                $detalhes->uf = $res[0]['UF'];
-                $detalhes->uf = $res[0]['UF'];
-                $detalhes->segurado = $res[0]['SEGURADO'];
-                $detalhes->vendedor = $res[0]['NOME_VENDEDOR'];
-                $detalhes->escritorio = $res[0]['ESCRITORIO'];
-                $detalhes->codSAP = $res[0]['CODIGO_SAP'];
-                $detalhes->escritorioDba = $res[0]['NOME_DBA'];
-                $detalhes->ultimaCompraDba = $res[0]['DBA_ULTIMA_COMPRA'];
 
-                if ($res[0]['TIPO'] == 'F') {
-                    if (strlen($res[0]['CPF']) < 11) {
-                        $FunctionsController = new FunctionsController();
-                        $res[0]['CPF'] = $FunctionsController->completaZeroEsquerda($res[0]['CPF'], 11);
-                    }
-                    $FunctionsController = new FunctionsController();
-                    $detalhes->cpf = $FunctionsController->setMask($res[0]['CPF'], '###.###.###-##');
+                // Populate $detalhes with the data from $res
+                $detalhes->id_cliente = $res['id_cliente'];
+                $detalhes->nombres = $res['nombres'];
+                $detalhes->razaoSocial = $res['razaoSocial'];
+                $detalhes->tipo_pessoa = $res['tipo_pessoa'];
+                $detalhes->cnpj_cpf = $res['cnpj_cpf'];
+                $detalhes->NombreVendedor = $res['NombreVendedor'];
+                $detalhes->sucursal = $res['sucursal'];
+                $detalhes->id_setor_atividade = $res['id_setor_atividade'];
+                $detalhes->tipo_persona = $res['tipo_persona'];
+                $detalhes->telefono = $res['telefono'];
+                $detalhes->celular = $res['celular'];
+                $detalhes->nit = $res['nit'];
+                $detalhes->direccion = $res['direccion'];
+                $detalhes->ciudad = $res['ciudad'];
+                $detalhes->id_rubro = $res['id_rubro'];
+                // ... Populate other properties similarly
+                $ubicaciones = array(); // Crear un array para almacenar las ubicaciones
+
+                if (!empty($res['direccion'])) {
+                    $ubicacion = array(
+                        'ubicacion' => array(
+                            'direccion' => $res['direccion'],
+                            'ciudad' => $res['ciudad'],
+                            // Otros atributos de ubicación aquí
+                        )
+                    );
+
+                    $ubicaciones[] = $ubicacion; // Agregar la ubicación al array de ubicaciones
                 }
 
-                if ($res[0]['TIPO'] == 'J') {
-                    if (strlen($res[0]['CNPJ']) < 14) {
-                        $FunctionsController = new FunctionsController();
-                        $res[0]['CNPJ'] = $FunctionsController->completaZeroEsquerda($res[0]['CNPJ'], 14);
-                    }
-                    $FunctionsController = new FunctionsController();
-                    $detalhes->cnpj = $FunctionsController->setMask($res[0]['CNPJ'], '##.###.###/####-##');
-                }
+                // ... Otros datos ya asignados
 
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, $detalhes, Response::HTTP_OK);
+                $detalhes->ubicacion = $ubicaciones; // Asignar el array de ubicaciones al objeto $detalhes
+                        
+                $message = array(
+                    'responseCode' => 200,
+                    'data' => $detalhes  // Use 'data' key to match your response structure
+                );
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
+                $message = array('responseCode' => 204);
             }
         } catch (DBALException $e) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(
-                false,
-                'Erro ao retornar dados.',
-                $e->getMessage(),
-                Response::HTTP_BAD_REQUEST
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
             );
         }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
+
 
     /**
      * @Route(
@@ -553,6 +576,122 @@ class PesquisaController extends AbstractController
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/clientes/pesquisa/contactodetalle/{codCliente}",
+     *  name="comercial.clientes-pesquisa-contactodetalle",
+     *  methods={"GET"},
+     *  requirements={"codCliente"="\d+"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getContatosResumido(Connection $connection, Request $request, $codCliente)
+    {
+        try {
+            $query = "SELECT 
+            cliente.id_cliente,
+            cont.contacto,
+            cont.ds_cont,
+            cont.direccion,
+            meio.id_cont,
+            meio.id_cont_meio,
+            meio.ds_cont_meio,
+            tipo_cont.ds_tipo_cont
+            FROM MTCORP_MODU_CLIE_BASE cliente
+            LEFT JOIN TB_CLIE_CONT cont ON cliente.id_cliente = cont.id_clie
+            LEFT JOIN TB_CLIE_CONT_MEIO meio ON cont.id_cont = meio.id_cont
+            LEFT JOIN tb_core_clie_tipo_cont tipo_cont ON meio.id_tipo_cont = tipo_cont.id_tipo_cont
+            WHERE cliente.id_cliente = :codCliente";
+
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(":codCliente", $codCliente);
+            $stmt->execute();
+            $res = $stmt->fetchAll(); // Fetch all rows
+
+            if ($res) {
+                $contactos = array();
+
+                foreach ($res as $row) {
+                    $contacto = new \stdClass;
+                    $contacto->contacto = $row['contacto'];
+                    $contacto->ds_cont = $row['ds_cont'];
+                    $contacto->direccion = $row['direccion'];
+                    $contacto->id_cont = $row['id_cont'];
+                    $contacto->ds_cont_meio = $row['ds_cont_meio'];
+                    $contacto->id_cont_meio = $row['id_cont_meio'];
+                    $contacto->ds_tipo_cont = $row['ds_tipo_cont'];
+                    // ... Populate other properties similarly
+
+                    $contactos[] = $contacto; // Add to the array
+
+                }
+
+                $message = array(
+                    'responseCode' => 200,
+                    'data' => $contactos // Use 'data' key to send the array of contacts
+                );
+            } else {
+                $message = array('responseCode' => 204);
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+    /**
+     * @Route(
+     *  "/comercial/clientes/pesquisa/updatesap",
+     *  name="comercial.clientes-updatesap",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sapUpdateClient(Connection $connection, Request $request)
+    { 
+        
+        $requestData = $request->getContent();
+        $data = json_decode($request->getContent(), true);
+        $helper = new Helper();
+        $respuesta = $helper->updateClient($connection, $data);
+        $response = new JsonResponse($respuesta);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/clientes/pesquisa/updatesapcontacto",
+     *  name="comercial.clientes-updatesapcontacto",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sapUpdateContacto(Connection $connection, Request $request)
+    {
+        $requestData = $request->getContent();
+        $data = json_decode($request->getContent(), true);
+        
+        // Obtener $id_cliente y $codigo_cliente desde la solicitud o alguna otra fuente
+        $id_cliente = $data['id_cliente']; // Supongamos que el ID del cliente está en los datos
+        $codigo_cliente = $data['codigo_cliente']; // Supongamos que el código del cliente está en los datos
+
+        $helper = new Helper();
+        $respuesta = $helper->updateContacto($connection, $data, $id_cliente, $codigo_cliente);
+        $response = new JsonResponse($respuesta);
         return $response;
     }
 

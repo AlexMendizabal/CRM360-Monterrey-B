@@ -290,7 +290,7 @@ let ComercialClientesCadastroEnderecosFormularioService = class ComercialCliente
         return this.http.get(`${this.API}/anexos/${codEndereco}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
     }
     getCliente(codCliente) {
-        return this.http.get(`http://23.254.204.187/comercial/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+        return this.http.get(`http://23.254.204.187/api/comercial/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
     }
     postAnexos(params, codEndereco, codCliente) {
         return this.http.post(`${this.API}/anexos/salvar?codEndereco=${codEndereco}&codCliente=${codCliente}`, params);

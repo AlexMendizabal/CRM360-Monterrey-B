@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\PreCadastro;
 
+use App\Services\Helper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -179,4 +180,26 @@ class PreCadastroController extends AbstractController
       return $response;
     }
   }
+   /**
+   * @Route(
+   *  "/comercial/clientes/postsap",
+   *  name="comercial.clientes-postsap",
+   *  methods={"POST"}
+   * )
+   * @param Connection $connection
+   * @param Request $request
+   * @return JsonResponse
+   */ 
+  public function sapPostClient(Connection $connection, Request $request)
+{    
+    $helper = new Helper();
+    $data = json_decode($request->getContent(), true);
+    $respuesta = $helper->insertClient($connection, $data);
+    
+    // Crear un JsonResponse directamente con la respuesta
+    $response = new JsonResponse($respuesta);
+    
+    return $response; // Devuelve el objeto JsonResponse
+}
+
 }

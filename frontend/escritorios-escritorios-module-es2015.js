@@ -237,9 +237,23 @@ let ComercialService = class ComercialService {
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getMaterialesLista(params) {
+        return this.http
+            .get(`${this.API}/materiales/lista`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getMaterialesOferta(params) {
         return this.http
             .get(`${this.API}/materiales_lista_precio`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesOfertaVendedor(params) {
+        return this.http
+            .get(`${this.API}/materiales_lista_precio_vendedor`, {
             params: params,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));

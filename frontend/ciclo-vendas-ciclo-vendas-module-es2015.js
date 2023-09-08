@@ -56,7 +56,7 @@ ComercialCicloVendasModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decora
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Ciclo de vendas\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <h5 class=\"pt-2 mb-4 text-center\">Seleccione una actividad </h5>\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-lg-10\">\r\n      <div class=\"row justify-content-center\">\r\n        <div class=\"col-md-3\" >\r\n          <card-button\r\n            [icon]=\"atividades.icone\"\r\n            [text]=\"atividades.nome\"\r\n            [routerLink]=\"[atividades.rota]\">\r\n          </card-button>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Ciclo de ventas\"></app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <h5 class=\"pt-2 mb-4 text-center\">Selecione uma atividade</h5>\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-lg-10\">\r\n      <div class=\"row justify-content-center\">\r\n        <div class=\"col-md-3\" *ngFor=\"let atividade of atividades\">\r\n          <card-button\r\n            [icon]=\"atividade.icone\"\r\n            [text]=\"atividade.nome\"\r\n            [routerLink]=\"[atividade.rota]\">\r\n          </card-button>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</app-body>");
 
 /***/ }),
 
@@ -184,14 +184,14 @@ let ComercialCicloVendasComponent = class ComercialCicloVendasComponent {
                 routerLink: '/comercial/home'
             },
             {
-                descricao: 'Ciclo de vendas'
+                descricao: 'Ciclo de ventas'
             }
         ];
         this.atividades = [];
         this.pnotifyService.getPNotify();
     }
     ngOnInit() {
-        this.titleService.setTitle('Ciclo de vendas');
+        this.titleService.setTitle('Ciclo de ventas');
         this.activatedRoute.params.subscribe((params) => {
             this.registrarAcesso();
             this.getAtividadesInternas(params.idSubModulo);
@@ -215,8 +215,8 @@ let ComercialCicloVendasComponent = class ComercialCicloVendasComponent {
                 this.handleAtividadesInternasError();
                 return;
             }
-            console.log(response.body["data"][1]);
-            this.atividades = response.body["data"][1];
+            console.log(response.body["data"]);
+            this.atividades = response.body["data"];
             this.loaderFullScreen = false;
         }, (error) => {
             this.handleAtividadesInternasError();

@@ -15,6 +15,8 @@ use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 use App\Services\Helper;
+use Doctrine\DBAL\DBALException;
+
 
 /**
  * Class CotacoesController
@@ -292,12 +294,12 @@ class CotacoesController extends AbstractController
             CLIE.prim_nome as cliente, CONCAT( VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS vendedor,
             OFE.monto_total as monto_total, OFE.monto_total_bruto as monto_total_bruto, LP.id as id_lista, LP.nombre_lista as lista_precio,
             OFE.descuento_total as descuento, OFE.cantidad_total as cantidad, UNI.NOMBRE_UNI as unidad, OFE.peso_total as peso_total, ME.id AS id_entrega,
-            ME.nombre_modo_entrega as modo_entrega, OFE.estado_oferta as id_estado_oferta,
+            ME.nombre_modo_entrega as modo_entrega, OFE.estado_oferta as id_estado_oferta, 
             CASE
                     WHEN OFE.estado_oferta = 0 THEN 'BORRADOR'
                     WHEN OFE.estado_oferta = 1 THEN 'VENTA' 
             ELSE 'RECHAZADO'
-            END AS estado_oferta
+            END AS estado_oferta, LP.nombre_lista AS nombre_lista
              
             FROM TB_OFERTA OFE INNER JOIN MTCORP_MODU_CLIE_BASE CLIE on OFE.id_cliente = CLIE.id_cliente 
             INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID INNER JOIN TB_MONEDA MONEDA ON OFE.id_moneda = MONEDA.id
@@ -312,10 +314,10 @@ class CotacoesController extends AbstractController
             }
 
             if (count($params) > 0) {
-                $query .= " ORDER BY OFE.id
+                $query .= " ORDER BY OFE.id DESC
                 OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
             } else {
-                $query .= " ORDER BY OFE.id
+                $query .= " ORDER BY OFE.id DESC
                 OFFSET 0 ROWS FETCH NEXT 1000 ROWS ONLY";
             }
 
@@ -1299,6 +1301,47 @@ class CotacoesController extends AbstractController
 
     /**
      * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/oferta_id",
+     *  name="comercial.ciclo-vendas-cotacoes-oferta-id",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getIdOferta(Connection $connection, Request $request)
+    {
+
+        try {
+            $helper = new Helper();
+            $obtenerID = $helper->idOferta($connection);
+            if ($obtenerID != false) {
+                $message = [
+                    'responseCode' => 200, // Internal Server Error
+                    'result' => $obtenerID,
+                    'estado' => false
+                ];
+            } else {
+                $message = [
+                    'responseCode' => 204, // Internal Server Error
+                    'result' => null,
+                    'estado' => false
+                ];
+            }
+        } catch (\Throwable $e) {
+            $message = [
+                'responseCode' => 401, // Internal Server Error
+                'result' => 'Error en la base de datos: ' . $e->getMessage(),
+                'estado' => false
+            ];
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/materiais/relacionados/vendas",
      *  name="comercial.ciclo-vendas-cotacoes-materiais-relacionados-vendas",
      *  methods={"POST"}
@@ -1509,6 +1552,85 @@ class CotacoesController extends AbstractController
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/materiales/relacionados",
+     *  name="comercial.ciclo-vendas-cotacoes-materiales-relacionados",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function postMaterialesRelacionados(Connection $connection, Request $request)
+    {
+        //dd($request);
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $helper = new Helper();
+            $params = json_decode($request->getContent(), true);
+            $estado_material = 1;
+            $codEmpresa = $params['codEmpresa'];
+            $codMaterial = $params['codMaterial'];
+            $codCliente = $params['codCliente'];
+            $codEndereco = $params['codEndereco'];
+            $codFormaPagamento = $params['codFormaPagamento'];
+            $id_vendedor = $infoUsuario->idVendedor;
+            $result = [];
+            //dd($infoUsuario);
+
+            if (isset($codMaterial)) {
+                $query1 =  "SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material 
+                FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = :id_material";
+                $buscar_material_filtro = $connection->prepare($query1);
+                $buscar_material_filtro->bindValue('id_material', $codMaterial);
+                $buscar_material_filtro->execute();
+                $res1 = $buscar_material_filtro->fetchAll();
+                if (count($res1) > 0) {
+                    $material_filtro = $res1;
+                    $filtrar_material =  $helper->filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor);
+                    if ($filtrar_material != false) {
+                        $result['materiales'] = $filtrar_material;
+                        $result['filtro'] =  $res1;
+                        $message = array(
+                            'responseCode' => 200,
+                            'result' => $result,
+                            'estado' => true
+                        );
+                    } else {
+                        $message = array(
+                            'responseCode' => 204,
+                            'result' => null,
+                            'estado' => false
+                        );
+                    }
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'result' => null,
+                        'estado' => false
+                    );
+                }
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => null,
+                    'estado' => false
+                );
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => 401,
+                'result' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 
     /**
@@ -2298,7 +2420,7 @@ class CotacoesController extends AbstractController
             $peso_total = isset($params['peso_total']) ? $params['peso_total'] : null;
             $descuento_total = isset($params['descuento_total']) ? $params['descuento_total'] : null;
             $cantidad_total = isset($params['cantidad_total']) ? $params['cantidad_total'] : null;
-            $fecha_creacion = date('d-m-y H:i:s');
+            $fecha_creacion = date('d-m-Y H:i:s');
             $id_forma_pago = isset($params['id_forma_pago']) ? $params['id_forma_pago'] : null;
             $id_lista_precio = isset($params['id_lista_precio']) ? $params['id_lista_precio'] : null;
             $id_modo_entrega = isset($params['id_modo_entrega']) ? $params['id_modo_entrega'] : null;
@@ -2315,10 +2437,11 @@ class CotacoesController extends AbstractController
             $id_persona_contacto = isset($params['id_persona_contacto']) ? $params['id_persona_contacto'] : null;
             $autorizacion = isset($params['autorizacion']) ? $params['autorizacion'] : null;
             $observacion = isset($params['observacion']) ? $params['observacion'] : null;
+            $percentualDesc = isset($params['percentualDesc']) ? $params['percentualDesc'] : null;
             /* dd($latitud); */
 
             $estado_oferta = $borrador;
-
+            
             $queryCabecera = "INSERT INTO TB_OFERTA (
                 monto_total,
                 monto_total_bruto,
@@ -2416,9 +2539,10 @@ class CotacoesController extends AbstractController
                     $subtotal_bruto = $item['valorTotalBruto'];
                     $subtotal = $item['valorTotal'];
                     $id_almacen_carrito = $item['id_almacen_carrito'];
+                    $percentualDesc = $item['percentualDesc'];
 
                     $query_detalle = "INSERT INTO TB_OFERTA_DETALLE (
-                    id_oferta, id_material, id_almacen, id_presentacion, id_unidad,cantidad,descuento,subtotal_bruto, subtotal)
+                    id_oferta, id_material, id_almacen, id_presentacion, id_unidad,cantidad,descuento,subtotal_bruto, subtotal,percentualDesc)
                     VALUES (
                         :id_oferta, 
                         :id_material, 
@@ -2428,7 +2552,8 @@ class CotacoesController extends AbstractController
                         :cantidad, 
                         :descuento, 
                         :subtotal_bruto, 
-                        :subtotal )";
+                        :subtotal,
+                        :percentualDesc )";
                     $stmt = $connection->prepare($query_detalle);
                     $stmt->execute([
                         'id_oferta' => $id_oferta,
@@ -2440,6 +2565,7 @@ class CotacoesController extends AbstractController
                         'descuento' => $descuento,
                         'subtotal_bruto' => $subtotal_bruto,
                         'subtotal' => $subtotal,
+                        'percentualDesc' => $percentualDesc
                     ]);
                 }
                 $message = array(
@@ -2457,10 +2583,9 @@ class CotacoesController extends AbstractController
                 );
             }
         } catch (\Throwable $e) {
-            dd($e);
             $message = array(
                 'responseCode' => 204,
-                'result' => $e,
+                'result' => $e->getMessage(),
                 'id_oferta' => null,
                 'estado' => false
             );

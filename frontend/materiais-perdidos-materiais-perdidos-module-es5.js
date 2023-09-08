@@ -890,9 +890,23 @@
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "getMaterialesLista",
+          value: function getMaterialesLista(params) {
+            return this.http.get("".concat(this.API, "/materiales/lista"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getMaterialesOferta",
           value: function getMaterialesOferta(params) {
             return this.http.get("".concat(this.API, "/materiales_lista_precio"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesOfertaVendedor",
+          value: function getMaterialesOfertaVendedor(params) {
+            return this.http.get("".concat(this.API, "/materiales_lista_precio_vendedor"), {
               params: params
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }

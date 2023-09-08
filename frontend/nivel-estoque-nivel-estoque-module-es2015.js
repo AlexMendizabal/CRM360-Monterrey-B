@@ -325,7 +325,7 @@ let TecnologiaInformacaoEstoqueNivelEstoqueListaComponent = class TecnologiaInfo
                 routerLink: `/tecnologia-informacao/home`,
             },
             {
-                descricao: 'Estoque',
+                descricao: 'Inventario',
                 routerLink: `/tecnologia-informacao/estoque/${id}`,
             },
             {
@@ -524,7 +524,7 @@ let TecnologiaInformacaoEstoqueNivelEstoqueCadastroComponent = class TecnologiaI
                 routerLink: '/tecnologia-informacao/home',
             },
             {
-                descricao: 'Estoque',
+                descricao: 'Inventario',
                 routerLink: `/tecnologia-informacao/estoque/${id}`,
             },
             {

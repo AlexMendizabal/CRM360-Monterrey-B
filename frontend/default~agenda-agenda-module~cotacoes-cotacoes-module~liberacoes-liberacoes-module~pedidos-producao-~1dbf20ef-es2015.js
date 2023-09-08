@@ -141,6 +141,11 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
         this.estoqueService = estoqueService;
         this.API = `http://23.254.204.187/api/comercial/ciclo-vendas/cotacoes`;
     }
+    getIdOferta() {
+        return this.http
+            .get(`${this.API}/oferta_id`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getPermissoesAcesso() {
         return this.http
             .get(`${this.API}/permissoes-acesso`)
@@ -302,6 +307,11 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
     postMateriaisRelacionados(params) {
         return this.http
             .post(`${this.API}/materiais/relacionados`, params)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    postMaterialesRelacionados(params) {
+        return this.http
+            .post(`${this.API}/materiales/relacionados`, params)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
     getFichaCadastralMaterial(codMaterial) {

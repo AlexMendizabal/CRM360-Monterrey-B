@@ -508,8 +508,8 @@ let ComercialIntegracoesServicosIntegracaoMateriaisComponent = class ComercialIn
         this.http = http;
         this.comercialService = comercialService;
         this.tidSoftwareService = tidSoftwareService;
-        this.BASE_URL = `https://crm360.monterrey.com.bo`;
-        this.API = `http://23.254.204.187/api/comercial/`;
+        this.BASE_URL = `https://crm360.monterrey.com.bo/api`;
+        this.API = `http://23.254.204.187/api/comercial`;
     }
     getAssociacao(param) {
         return this.http.get(`${this.BASE_URL}/comercial/integracoes/dagda/associacao`, {

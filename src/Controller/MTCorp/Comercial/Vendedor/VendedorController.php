@@ -280,11 +280,12 @@ class VendedorController extends AbstractController
             ")->fetchAll();
             } else {
                 $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS]
+                EXECUTE [PRC_CLIE_CONS5]
                     @ID_PARAM = 6
                     ,@NM_CLIE = '{$cliente}'
                     ,@ID_SITU = '{$situacao}'
             ")->fetchAll();
+            //dd($res);
             }
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
 
@@ -314,7 +315,7 @@ class VendedorController extends AbstractController
      */
     public function getlistaprecio(Connection $connection, Request $request)
     {
-       
+
         try {
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
@@ -383,6 +384,64 @@ class VendedorController extends AbstractController
         } catch (DBALException $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/vendedor/detalles_vendedor",
+     *  name="comercial.vendedor-detalles_vendedor",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getDetalleVendedor(Connection $connection, Request $request)
+    {
+        try {
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $params = $request->query->all();
+            $id_vendedor = $params['id_vendedor'] ?? null;
+
+            $query = "SELECT VEND.ID AS id_vendedor, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) as vendedor, ESCR.id as nombre_sucursal, 
+            ESCR.nm_escr AS nombre_sucursal, DEP.id as id_departamento, DEP.nombre_dep as nombre_departamento, LP.id as id_lista, lp.nombre_lista as nombre_lista
+            from TB_VEND VEND 
+            INNER JOIN TB_ESCR ESCR ON VEND.ID_ESCR = ESCR.id
+            INNER JOIN TB_CIUDAD CIU ON ESCR.id_ciudad = CIU.id
+            INNER JOIN TB_DEPARTAMENTO DEP ON DEP.id = CIU.id_departamento
+            INNER JOIN TB_LISTA_PRECIO LP ON LP.id_departamento = DEP.id
+            WHERE VEND.ID = :id_vendedor
+            
+            ";
+            $statement = $connection->prepare($query);
+            $statement->bindValue('id_vendedor', $id_vendedor);
+            $statement->execute();
+            
+
+            $res = $statement->fetchAll();
+            
+            if (count($res) > 0) {
+                $message = [
+                    'responseCode' => 200,
+                    'estado' => true,
+                    'detalle' => $res,
+                ];
+            } else {
+                $message = [
+                    'responseCode' => 204,                                                                                                                                                                                                                                                                                                                                                                                                                          
+                    'estado' => false,
+                    'detalle' => null
+                ];
+            }
+        } catch (DBALException $e) {
+            $message = [
+                'responseCode' => 401,
+                'estado' => false,
+                'detalle' => null
+            ];
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 
 
@@ -485,6 +544,7 @@ class VendedorController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+    
 
     public function todosVendedores($connection)
     {
@@ -548,5 +608,50 @@ class VendedorController extends AbstractController
         } catch (\PDOException $e) {
             return FunctionsController::Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+    /**
+     * @Route(
+     *  "/comercial/vendedor/rubros",
+     *  name="comercial.vendedor-rubros",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getRubros(Connection $connection, Request $request)
+    { 
+        try {
+            $rubro_activo = 1;
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $query = "SELECT * from  MTCORP_BASE_CNAE WHERE id_situ = :rubro_activo";
+            
+            $statement = $connection->prepare($query);
+            $statement->bindValue('rubro_activo', $rubro_activo);
+            $statement->execute();
+            $res = $statement->fetchAll();
+            if (count($res) > 0) {
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $res,
+                    'estado' => true
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => null,
+                    'estado' => false
+                );
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => 204,
+                'result' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 }

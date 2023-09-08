@@ -364,7 +364,7 @@
               descricao: 'Home',
               routerLink: "/tecnologia-informacao/home"
             }, {
-              descricao: 'Estoque',
+              descricao: 'Inventario',
               routerLink: "/tecnologia-informacao/estoque/".concat(id)
             }, {
               descricao: 'Marcas'
@@ -1237,7 +1237,7 @@
               descricao: 'Home',
               routerLink: '/tecnologia-informacao/home'
             }, {
-              descricao: 'Estoque',
+              descricao: 'Inventario',
               routerLink: "/tecnologia-informacao/estoque/".concat(id)
             }, {
               descricao: 'Marcas',

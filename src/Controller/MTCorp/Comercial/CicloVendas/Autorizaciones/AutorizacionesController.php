@@ -24,8 +24,8 @@ class AutorizacionesController extends AbstractController
 {
     /**
      * @Route(
-     * "/comercial/CicloVendas/autorizaciones", 
-     * name="Autorizaciones",
+     * "/comercial/ciclovendas/autorizaciones", 
+     * name="autorizaciones",
      *  methods={"GET"}
      * )
      * @param Connection $connection
@@ -80,48 +80,46 @@ class AutorizacionesController extends AbstractController
     }
 
 
-    /**
+     /**
      * @Route(
-     * "/comercial/CicloVendas/autorizaciones/registrar", 
-     * name="Autorizaciones-registrar",
-     * methods={"GET"}
+     * "/comercial/ciclovendas/autorizaciones/registrar", 
+     * name="autorizaciones-registrar",
+     * methods={"POST"}
      * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
-
     public function autorizacionRegistrar(Connection $connection, Request $request)
     {
         try {
-            $params = $request->query->all();
+            $data = json_decode($request->getContent(), true);
+           
+            $id_oferta = isset($data['id_oferta']) ? $data['id_oferta'] : '';
+            $id_usuario =  isset($data['id_usuario']) ? $data['id_usuario'] : '';
+            $fecha_solicitud = isset($data['fecha_solicitud']) ? $data['fecha_solicitud'] : '';
+            $fecha_gestion =  isset($data['fecha_gestion']) ? $data['fecha_gestion'] : '';
+            $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : '';
+            $descripcion_usua = isset($data['descripcion_usua']) ? $data['descripcion_usua'] : '';
+            $estado = 1;
 
-            $id_usuario =  isset($params['id_usuario']) ? $params['id_usuario'] : '';
-            $id_oferta = isset($params['id_oferta']) ? $params['id_oferta'] : '';
-            $fecha_solicitud = isset($params['fecha_solicitud']) ? $params['fecha_solicitud'] : '';
-            $fecha_gestion =  isset($params['fecha_gestion']) ? $params['fecha_gestion'] : '';
-            $descripcion_vendedor = isset($params['descripcion_vendedor']) ? $params['descripcion_vendedor'] : '';
-            $descuento_permitido = isset($params['descuento_permitido']) ? $params['descuento_permitido'] : '';
-            $descuento_solicitado = isset($params['descuento_solicitado']) ? $params['descuento_solicitado'] : '';
-            $estado_oferta = 1;
-
-            $query = "INSERT INTO tb_autorizaciones (id_oferta,id_usuario,fecha_solicitud,fecha_gestion,descripcion_vendedor,descuento_permitido,descuento_solicitado,estado_oferta)
-                                    VALUES (:id_oferta, $id_usuario, :fecha_solicitud,:fecha_gestion,:descripcion_vendedor,:descuento_permitido:descuento_solicitado,:estado_oferta)";
+            $query = "INSERT INTO tb_autorizaciones (id_oferta,id_usuario,fecha_solicitud,fecha_gestion,descripcion_vend,descripcion_usua,estado)
+                                    VALUES (:id_oferta,:id_usuario,:fecha_solicitud,:fecha_gestion,:descripcion_vend,:descripcion_usua,:estado)";
 
             $statement = $connection->prepare($query);
             $statement->bindValue(':id_oferta', $id_oferta);
+            $statement->bindValue(':id_usuario', $id_usuario);
             $statement->bindValue(':fecha_solicitud', $fecha_solicitud);
             $statement->bindValue(':fecha_gestion', $fecha_gestion);
-            $statement->bindValue(':descripcion_vendedor', $descripcion_vendedor);
-            $statement->bindValue(':descuento_permitido', $descuento_permitido);
-            $statement->bindValue(':descuento_solicitado', $descuento_solicitado);
-            $statement->bindValue(':estado_oferta', $estado_oferta);
+            $statement->bindValue(':descripcion_vend', $descripcion_vend);
+            $statement->bindValue(':descripcion_usua', $descripcion_usua);
+            $statement->bindValue(':estado', $estado);
             $statement->execute();
-
+            
             // Obtener el ID del último registro insertado
             $id_autorizacion = $connection->lastInsertId();
-
-            $url_anexos[] = $params['url_anexo'];
+            dd($id_autorizacion);
+            $url_anexos[] = $data['url_anexo'];
 
             if ($url_anexos == '' && empty($params['url_anexo'])) {
                 foreach ($url_anexos as $key => $url_anexo) {

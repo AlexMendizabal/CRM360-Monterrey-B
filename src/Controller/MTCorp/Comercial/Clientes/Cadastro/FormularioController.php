@@ -78,6 +78,44 @@ class FormularioController extends AbstractController
 
   /**
    * @Route(
+   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/ciudades",
+   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-ciudades",
+   *  methods={"GET"}
+   * )
+   * @return JsonResponse
+   */
+  public function getCiudades(Connection $connection, Request $request)
+{
+    if ($request->isMethod('GET')) {
+        try {
+            $res = $connection->query(
+                "SELECT id, nombre_ciudad FROM tb_ciudad"
+            )->fetchAll();
+
+            if (count($res) > 0) {
+                // Aquí puedes realizar cualquier otra manipulación de los datos si es necesario
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $res
+                );
+            } else {
+                $message = array('responseCode' => 204);
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+  }
+}
+
+  /**
+   * @Route(
    *  "/comercial/clientes/cadastro/formulario/dados-faturamento/regimes-tributacao",
    *  name="comercial.clientes-cadastro-formulario-dados-faturamento-regimes-tributacao",
    *  methods={"GET"}

@@ -28,9 +28,12 @@ class FormRules
         try {
             /**
              * $formRef
-             * 1 - Dados de faturamento
-             * 2 - Endereço
-             */           
+             * 1 - Datos de Facturamiento
+             * 2 - Direccion
+             */
+            
+            // Instancia FunctionsController aquí o utiliza el objeto existente si está disponible
+            $FunctionsController = new FunctionsController(); 
             
             $res = $connection->query(
                 "

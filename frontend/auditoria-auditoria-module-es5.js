@@ -107,6 +107,18 @@
           value: function getVinculoOperadores() {
             return this.http.get("".concat(this.API, "/vinculo-operadores")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
+        }, {
+          key: "getDetalleVendedor",
+          value: function getDetalleVendedor(params) {
+            return this.http.get("".concat(this.API, "/detalles_vendedor"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getRubros",
+          value: function getRubros() {
+            return this.http.get("".concat(this.API, "/rubros")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
         }]);
 
         return ComercialVendedoresService;
@@ -2089,7 +2101,7 @@
         }, {
           key: "getCliente",
           value: function getCliente(codCliente) {
-            return this.http.get("http://23.254.204.187/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+            return this.http.get("http://23.254.204.187/api/comercial/clientes/detalhes/".concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
           }
         }]);
 

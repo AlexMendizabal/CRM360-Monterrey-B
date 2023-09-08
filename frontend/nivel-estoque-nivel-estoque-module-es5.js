@@ -527,7 +527,7 @@
               descricao: 'Home',
               routerLink: "/tecnologia-informacao/home"
             }, {
-              descricao: 'Estoque',
+              descricao: 'Inventario',
               routerLink: "/tecnologia-informacao/estoque/".concat(id)
             }, {
               descricao: 'Nivel de Estoque'
@@ -819,7 +819,7 @@
               descricao: 'Home',
               routerLink: '/tecnologia-informacao/home'
             }, {
-              descricao: 'Estoque',
+              descricao: 'Inventario',
               routerLink: "/tecnologia-informacao/estoque/".concat(id)
             }, {
               descricao: 'Nivel Estoque',

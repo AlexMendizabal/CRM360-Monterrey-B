@@ -249,6 +249,11 @@
         }
 
         _createClass(ComercialCicloVendasCotacoesService, [{
+          key: "getIdOferta",
+          value: function getIdOferta() {
+            return this.http.get("".concat(this.API, "/oferta_id")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getPermissoesAcesso",
           value: function getPermissoesAcesso() {
             return this.http.get("".concat(this.API, "/permissoes-acesso")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -427,6 +432,11 @@
           key: "postMateriaisRelacionados",
           value: function postMateriaisRelacionados(params) {
             return this.http.post("".concat(this.API, "/materiais/relacionados"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "postMaterialesRelacionados",
+          value: function postMaterialesRelacionados(params) {
+            return this.http.post("".concat(this.API, "/materiales/relacionados"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
           key: "getFichaCadastralMaterial",

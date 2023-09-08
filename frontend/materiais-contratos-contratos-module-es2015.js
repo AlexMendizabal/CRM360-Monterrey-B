@@ -499,9 +499,21 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/detalhes/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    sapUpdateClient(codigo_cliente, data) {
+        console.log("update Cliente:", data);
+        return this.http
+            .post(`${this.API}/pesquisa/updatesap`, data)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    sapUpdateContacto(codigo_cliente, data) {
+        console.log("update Contacto:", data);
+        return this.http
+            .post(`${this.API}/pesquisa/updatesapcontacto`, data)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getContatosResumido(codCliente) {
         return this.http
-            .get(`${this.API}/pesquisa/contatos/${codCliente}`)
+            .get(`${this.API}/pesquisa/contactodetalle/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
     getExisteCpfCnpj(documento, getDadosCliente) {
@@ -512,6 +524,11 @@ let ComercialClientesService = class ComercialClientesService {
     postCliente(data) {
         return this.http
             .post(`${this.API}/pre-cadastro`, data)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    sapPostClient(data) {
+        return this.http
+            .post(`${this.API}/postsap`, data)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
     getPropostaAnaliseCredito(codCliente) {

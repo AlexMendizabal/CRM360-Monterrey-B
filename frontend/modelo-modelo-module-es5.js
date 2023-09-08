@@ -1209,7 +1209,7 @@
               descricao: 'Home',
               routerLink: "/tecnologia-informacao/home"
             }, {
-              descricao: 'Estoque',
+              descricao: 'Inventario',
               routerLink: "/tecnologia-informacao/estoque/".concat(id)
             }, {
               descricao: 'Modelos'
@@ -1519,7 +1519,7 @@
               descricao: 'Home',
               routerLink: '/tecnologia-informacao/home'
             }, {
-              descricao: 'Estoque',
+              descricao: 'Inventario',
               routerLink: "/tecnologia-informacao/estoque/".concat(id)
             }, {
               descricao: 'Modelos',

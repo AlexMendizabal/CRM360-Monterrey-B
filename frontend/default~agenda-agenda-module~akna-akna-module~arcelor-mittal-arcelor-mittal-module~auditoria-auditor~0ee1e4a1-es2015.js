@@ -732,7 +732,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div #scroll></div>\r\n<div class=\"shadow-sm\" *ngIf=\"config.showing\">\r\n  <div id=\"panel-header\" class=\"bg-light border w-100 d-flex justify-content-between\">\r\n    <div class=\"mtc-title mb-0\">{{ title }}</div>\r\n    <button\r\n      type=\"button\"\r\n      class=\"btn-icon-sm my-auto\"\r\n      (click)=\"onClose()\">\r\n      <i class=\"fas fa-times\"></i>\r\n    </button>\r\n  </div>\r\n  <div id=\"panel-body\" class=\"border-left border-right border-bottom\">\r\n    <div>\r\n      <div *ngIf=\"config.loaded && !config.empty\">\r\n        <ng-content></ng-content>\r\n      </div>\r\n      <div class=\"d-flex w-100\" *ngIf=\"config.loading\">\r\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\r\n        <strong>Carregando...</strong>\r\n      </div>\r\n      <empty-result\r\n        message=\"Nenhuma informação encontrada\"\r\n        class=\"my-3\"\r\n        *ngIf=\"!config.loading && config.empty\">\r\n      </empty-result>\r\n    </div>\r\n  </div>\r\n</div>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div #scroll></div>\r\n<div class=\"shadow-sm\" *ngIf=\"config.showing\">\r\n  <div id=\"panel-header\" class=\"bg-light border w-100 d-flex justify-content-between\">\r\n    <div class=\"mtc-title mb-0\">{{ title }}</div>\r\n    <button\r\n      type=\"button\"\r\n      class=\"btn-icon-sm my-auto\"\r\n      (click)=\"onClose()\">\r\n      <i class=\"fas fa-times\"></i>\r\n    </button>\r\n  </div>\r\n  <div id=\"panel-body\" class=\"border-left border-right border-bottom\">\r\n    <div>\r\n      <div *ngIf=\"config.loaded && !config.empty\">\r\n        <ng-content></ng-content>\r\n      </div>\r\n      <div class=\"d-flex w-100\" *ngIf=\"config.loading\">\r\n        <div class=\"spinner-border spinner-border-sm text-dark my-auto mr-2\"></div>\r\n        <strong>Cargando...</strong>\r\n      </div>\r\n      <empty-result\r\n        message=\"Nenhuma informação encontrada\"\r\n        class=\"my-3\"\r\n        *ngIf=\"!config.loading && config.empty\">\r\n      </empty-result>\r\n    </div>\r\n  </div>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -1059,7 +1059,7 @@ let DetailPanelComponent = class DetailPanelComponent {
         this.title =
             typeof this.title != 'undefined' && this.title.length > 0
                 ? this.title
-                : 'Detalhes';
+                : 'Detalles';
     }
     onClose() {
         this.detailPanelService.hide();

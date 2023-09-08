@@ -598,7 +598,7 @@ let AdminAtividadesService = class AdminAtividadesService {
     }
     registrarAcesso(idAtividade) {
         return this.http
-            .post(`http://23.254.204.187/api/core/registrar-acesso`, {
+            .post(`http://23.254.204.187/core/registrar-acesso`, {
             idAtividade: idAtividade,
             dsRota: this.router.url,
         })
