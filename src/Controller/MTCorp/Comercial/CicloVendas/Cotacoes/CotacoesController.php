@@ -3165,4 +3165,20 @@ class CotacoesController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
+
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/cierre",
+     *  name="comercial.ciclo-vendas-cotacoes-cierre",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+    */
+    public function getCierreOferta()
+    {
+        
+    }
 }
