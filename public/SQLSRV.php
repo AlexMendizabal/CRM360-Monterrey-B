@@ -4,7 +4,6 @@ $connectionOptions = array(
     "database" => "CRM360",
     "uid" => "user2023",
     "pwd" => "RIC0rp#2023"
-
 );
 
 function exception_handler($exception) {

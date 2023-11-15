@@ -17,6 +17,7 @@ use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Services\Helper;
 
+
 /**
  * Class PesquisaController
  * @package App\Controller\MTCorp\Comercial\Clientes\Pesquisa
@@ -75,7 +76,9 @@ class PesquisaController extends AbstractController
             $usuario = new usuarioController();
             $vendedor =  new VendedorController();
             $comercial = new ComercialController();
+            $helper = new Helper();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
+            $resLista = array();
             
 
             $buscarPor = '';
@@ -90,6 +93,8 @@ class PesquisaController extends AbstractController
             $registros = 50;
             $orderBy = 'codCliente';
             $orderType = 'desc';
+
+            //dd('aqui');
 
             if (isset($params['pesquisa']) && $params['pesquisa'] != 'null' && $params['pesquisa'] != null) {
                 $pesquisa = $params['pesquisa'];
@@ -120,7 +125,7 @@ class PesquisaController extends AbstractController
             }
 
            /*   dd('aqui'); */ 
-            $resLista = $connection->query(
+            $resListaSr = $connection->query(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 1, 
@@ -137,6 +142,13 @@ class PesquisaController extends AbstractController
                     @DS_ORDE = '{$order}'
                 " . $carteiraParam
             )->fetchAll();
+
+            if(count($resListaSr) > 0){
+                $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
+            }
+
+            
+            //dd($resLista);
 
             $resStatus = $connection->query(
                 "
@@ -373,7 +385,7 @@ class PesquisaController extends AbstractController
         }
     }
 
-    /**
+    /* *
      * @Route(
      *  "/comercial/clientes/pesquisa/detalhes/{codCliente}",
      *  name="comercial.clientes-pesquisa-detalhes",
@@ -384,8 +396,8 @@ class PesquisaController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getDetalhes(Connection $connection, Request $request, $codCliente)
-    { 
+    /* public function getDetalhes(Connection $connection, Request $request, $codCliente)
+    {
         try {
             $query = "SELECT 
             c.id_cliente,
@@ -400,21 +412,23 @@ class PesquisaController extends AbstractController
             c.tipo_persona,
             c.telefono,
             c.celular,
-            c.nit,
+            c.codigo_cliente,
             c.id_rubro,
+            r.descricao as rubro,
             e.logradouro as direccion,
             ciudad.nombre_ciudad as ciudad
         FROM MTCORP_MODU_CLIE_BASE c
         LEFT JOIN MTCORP_MODU_CLIE_BASE_ENDE e ON c.id_cliente = e.id_cliente
         LEFT JOIN TB_VEND v ON c.id_vendedor = v.ID
+        LEFT JOIN MTCORP_BASE_CNAE r ON r.id_cnae = c.id_rubro
         LEFT JOIN TB_ESCR escr ON v.id_escr = escr.id
         LEFT JOIN tb_ciudad ciudad ON escr.id_ciudad = ciudad.id
         WHERE c.id_cliente = :codCliente";
-
+        
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":codCliente", $codCliente);
             $stmt->execute();
-            $res = $stmt->fetch(); // Use fetch() instead of fetchAll() since you expect a single row
+            $res = $stmt->fetch(); 
             
 
             if ($res) {
@@ -433,10 +447,11 @@ class PesquisaController extends AbstractController
                 $detalhes->tipo_persona = $res['tipo_persona'];
                 $detalhes->telefono = $res['telefono'];
                 $detalhes->celular = $res['celular'];
-                $detalhes->nit = $res['nit'];
                 $detalhes->direccion = $res['direccion'];
                 $detalhes->ciudad = $res['ciudad'];
                 $detalhes->id_rubro = $res['id_rubro'];
+                $detalhes->rubro = $res['rubro'];
+                $detalhes->codigo_cliente = $res['codigo_cliente'];
                 // ... Populate other properties similarly
                 $ubicaciones = array(); // Crear un array para almacenar las ubicaciones
 
@@ -467,6 +482,52 @@ class PesquisaController extends AbstractController
             $message = array(
                 'responseCode' => $e->getCode(),
                 'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    } */
+
+    /**
+     * @Route(
+     *  "/comercial/clientes/pesquisa/detalhes/{codCliente}",
+     *  name="comercial.clientes-pesquisa-detalhes",
+     *  methods={"GET"},
+     *  requirements={"codCliente"="\d+"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDetalhes(Connection $connection, Request $request, $codCliente)
+    {
+        try {
+            $id_cliente = isset($codCliente) ? $codCliente : null;
+            $helper = new Helper();
+            if ($id_cliente !== 0) {
+                $datos_cliente = $helper->obtenerCliente($connection, $id_cliente);
+                if ($datos_cliente !== false) {
+                    $message = array(
+                        'responseCode' => 200,
+                        'result' => $datos_cliente,
+                        'estado' => true
+                    );
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'result' => null,
+                        'estado' => false
+                    );
+                }
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => 204,
+                'result' => 'Error al insertar la oferta',
+                'message' => $e->getMessage(),
+                'estado' => false
             );
         }
 

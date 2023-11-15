@@ -615,6 +615,26 @@
           value: function getToday() {
             var date = new Date();
             return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          } // Función para obtener la fecha de inicio de la semana actual (lunes)
+
+        }, {
+          key: "getStartOfWeek",
+          value: function getStartOfWeek() {
+            var currentDate = new Date();
+            var startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            startOfWeek.setHours(0, 0, 0, 0);
+            return startOfWeek;
+          } // Función para obtener la fecha de fin de la semana actual (domingo)
+
+        }, {
+          key: "getEndOfWeek",
+          value: function getEndOfWeek() {
+            var currentDate = new Date();
+            var endOfWeek = new Date(currentDate);
+            endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+            endOfWeek.setHours(23, 59, 59, 999);
+            return endOfWeek;
           }
         }, {
           key: "convert2PhpDate",

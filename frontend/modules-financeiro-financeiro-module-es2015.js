@@ -291,7 +291,7 @@ const routes = [
             },
             {
                 path: 'relatorios/:idSubModulo',
-                loadChildren: () => Promise.all(/*! import() | relatorios-relatorios-module */[__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null, /*! ./relatorios/relatorios.module */ "H422")).then((m) => m.FinanceiroRelatoriosModule),
+                loadChildren: () => Promise.all(/*! import() | relatorios-relatorios-module */[__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null, /*! ./relatorios/relatorios.module */ "H422")).then((m) => m.FinanceiroRelatoriosModule),
             },
         ],
     },

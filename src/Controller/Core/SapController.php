@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DBALException;
 use App\Security\Core\JwtAplication;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 
 /**
@@ -29,8 +30,7 @@ class SapController extends AbstractController
      */
     public function loginSap(Connection $connection, Request $request): JsonResponse
     {
-        if ($request->isMethod('POST'))
-         {
+        if ($request->isMethod('POST')) {
             try {
                 $dadosValidos = true;
                 $msgErro = '';
@@ -51,7 +51,7 @@ class SapController extends AbstractController
 
                 if (!$dadosValidos) {
                     $result = array(
-                        'codigoRespuesta ' => 400,
+                        'response ' => 400,
                         'estado' => false,
                         'token' => null,
                         'infoUsuario' => null,
@@ -95,7 +95,7 @@ class SapController extends AbstractController
                 }
             } catch (DBALException $e) {
                 return new JsonResponse([
-                    'codigoRespuesta ' => 401,
+                    'response ' => 401,
                     'estado' => false,
                     'token' => null,
                     'infoUsuario' => null,
@@ -104,7 +104,7 @@ class SapController extends AbstractController
                 ], 500);
             } catch (DBALException $e) {
                 return new JsonResponse([
-                    'codigoRespuesta ' => 401,
+                    'response ' => 401,
                     'estado' => false,
                     'token' => null,
                     'infoUsuario' => null,
@@ -116,7 +116,7 @@ class SapController extends AbstractController
             if (count($usuario) > 0) {
                 if ($usuario[0]['IN_STAT'] == 0) {
                     return new JsonResponse([
-                        'codigoRespuesta ' => 401,
+                        'response ' => 401,
                         'estado' => false,
                         'token' => null,
                         'infoUsuario' => null,
@@ -151,7 +151,7 @@ class SapController extends AbstractController
                         $jwt = $JwtAplication->encode(['userdata' => $userData]);
 
                         return new JsonResponse([
-                            'codigoRespuesta ' => 200,
+                            'response ' => 200,
                             'estado' => true,
                             'token' => $jwt,
                             'infoUsuario' => $dadosUsuario['base64'],
@@ -160,7 +160,7 @@ class SapController extends AbstractController
                         ], 200);
                     } else {
                         return new JsonResponse([
-                            'codigoRespuesta ' => 401,
+                            'response ' => 401,
                             'estado' => false,
                             'token' => null,
                             'infoUsuario' => null,
@@ -171,7 +171,7 @@ class SapController extends AbstractController
                 }
             } else {
                 return new JsonResponse([
-                    'codigoRespuesta ' => 401,
+                    'response ' => 401,
                     'estado' => false,
                     'token' => null,
                     'infoUsuario' => null,
@@ -181,8 +181,8 @@ class SapController extends AbstractController
             }
         }
     }
-   
-     /**
+
+    /**
      * @Route(
      *  "/sap/verificar_conexion",
      *  name="sap.verificar_conexion",
@@ -212,7 +212,7 @@ class SapController extends AbstractController
                 }
                 if (!$dadosValidos) {
                     $result = array(
-                        'codigoRespuesta ' => 400,
+                        'response ' => 400,
                         'estado' => false,
                         'mensaje' => 'Error verfique las credenciales enviadas.'
                     );
@@ -246,14 +246,14 @@ class SapController extends AbstractController
                         /* $jwt = JwtAplication::encode(['userdata' => $userData]); */
 
                         return new JsonResponse([
-                            'codigoRespuesta ' => 200,
+                            'response ' => 200,
                             'estado' => true,
                             'mensaje' => 'conexion exitosa!'
 
                         ], 200);
                     } else {
                         return new JsonResponse([
-                            'codigoRespuesta ' => 401,
+                            'response ' => 401,
                             'estado' => false,
                             'mensaje' => 'conexión erronea!'
 
@@ -261,7 +261,7 @@ class SapController extends AbstractController
                     }
                 } else {
                     return new JsonResponse([
-                        'codigoRespuesta ' => 401,
+                        'response ' => 401,
                         'estado' => false,
                         'mensaje' => 'no se reconocen los credenciales de usuario!'
 
@@ -270,7 +270,7 @@ class SapController extends AbstractController
                 /* dd($params['password']); */
             } catch (\Throwable $e) {
                 return new JsonResponse([
-                    'codigoRespuesta ' => 401,
+                    'response ' => 401,
                     'estado' => false,
                     'mensaje' => $e
                 ], 401);
@@ -290,7 +290,6 @@ class SapController extends AbstractController
     {
         try {
             $helper = new Helper();
-
             $jsonData = $request->getContent();
             $data = json_decode($jsonData, true);
             $item_code = $data['itemCode'];
@@ -304,7 +303,7 @@ class SapController extends AbstractController
             $id_unidad = null;
             $id_linea = null;
             $arrayMaterial = array();
-           
+
             if (
                 isset($item_code) && $item_code != null  &&  isset($item_name)  && $item_name != null && isset($linea) && $linea != null
                 && isset($unidad)  && $unidad != null && isset($peso) && $peso != null && isset($estado) && $estado != null
@@ -318,48 +317,38 @@ class SapController extends AbstractController
 
                 //Helper para buscar familia
                 $buscar_familia = $helper->buscarFamilia($connection, $familia);
-                if(!empty($buscar_familia) and  $buscar_familia != false)
-                {     
+                if (!empty($buscar_familia) and  $buscar_familia != false) {
                     $id_familia = $buscar_familia['0']['id_classe'];
-                }
-                else
-                {
+                } else {
                     $id_familia = $helper->insertFamilia($connection, $familia);
                 }
 
                 //Helper para buscar Grupo
                 $buscar_grupo = $helper->buscarGrupLinea($connection, $grupo);
-                if($buscar_grupo != false)
-                {   
+                if ($buscar_grupo != false) {
                     foreach ($buscar_grupo as $key => $value) {
                         $value["id_classe"];
                         if ($id_familia == $value["id_classe"]) {
                             $id_grupo = $value["id_linha"];
                             $id_familia = $value["id_classe"];
-                        }
-                        else{
+                        } else {
                             $meessage = "No se encuentra el el grupo y la familia";
                         }
                     }
-                   
-                }
-                else
-                {
+                } else {
                     $id_grupo = $helper->insertGrupo($connection,  $grupo, $id_familia);
                 }
-             
+
                 //Helper buscar sublinea de acuerdo a la abreviatura
                 $buscar_clase = $helper->buscarLinea($connection, $linea);
                 if ($buscar_clase != false and !empty($buscar_clase)) {
                     foreach ($buscar_clase as $key => $value) {
                         $id_linea = $value['ID'];
                     }
-                }
-                else
-                {
+                } else {
                     $id_linea = $helper->insertClasse($connection,  $linea, $id_grupo);
                 }
-              
+
                 if ($estado == 'A') {
                     $estado = 1;
                 } else if ($estado == 'I') {
@@ -370,7 +359,7 @@ class SapController extends AbstractController
 
                 $buscar_item =  $helper->buscarItem($connection,  $item_code);
 
-               
+
                 if ($buscar_item !== false) {
                     $arrayMaterial = ([
                         'id_material' => $buscar_item['ID_CODIGOMATERIAL'],
@@ -387,14 +376,14 @@ class SapController extends AbstractController
 
                     if ($actualizar_material !== false) {
                         $message = array(
-                            'codigoRespuesta' => 200,
+                            'response' => 200,
                             'estado' => true,
                             'detalle' => 'Se actualizo el registro',
                             'data' => $arrayMaterial
                         );
                     } else {
                         $message = array(
-                            'codigoRespuesta' => 204,
+                            'response' => 204,
                             'estado' => false,
                             'detalle' => 'Error al actualizar el registro',
                         );
@@ -415,14 +404,14 @@ class SapController extends AbstractController
                     $insertarMaterial = $helper->insertarItem($connection, $arrayMaterial);
                     if ($insertarMaterial !== false) {
                         $message = array(
-                            'codigoRespuesta' => 200,
+                            'response' => 200,
                             'estado' => true,
                             'detalle' => 'Registro ingresado exitosamente!',
                             /* 'estado' => true */
                         );
                     } else {
                         $message = array(
-                            'codigoRespuesta' => 204,
+                            'response' => 204,
                             'estado' => false,
                             'detalle' => 'Error No se ingreso el registro',
                             /* 'estado' => false */
@@ -431,7 +420,7 @@ class SapController extends AbstractController
                 }
             } else {
                 $message = array(
-                    'codigoRespuesta' => 204,
+                    'response' => 204,
                     'estado' => false,
                     'detalle' => 'Se deben enviar los parámetros requeridos.',
                     /* 'estado' => false */
@@ -439,7 +428,7 @@ class SapController extends AbstractController
             }
         } catch (DBALException $e) {
             $message = array(
-                'CodigoRespuesta' => false,
+                'response' => false,
                 'message' => $e->getMessage(),
                 /* 'estado' => false */
             );
@@ -455,7 +444,7 @@ class SapController extends AbstractController
      *  name="sap.actualizar_item",
      *  methods={"POST"}
      * )
-    * @param Connection $connection
+     * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
@@ -500,7 +489,7 @@ class SapController extends AbstractController
             if ($buscar_item !== false) {
                 $arrayMaterial = ([
                     'id_material' => $buscar_item['ID_CODIGOMATERIAL'],
-                    'itemCode' => $item_code,   
+                    'itemCode' => $item_code,
                     'itemName' => $item_name,
                     'clase' => $codigo_linea,
                     'id_linea' => $id_linea,
@@ -514,7 +503,7 @@ class SapController extends AbstractController
                 $actualizar_material = $helper->actualizarItem($connection, $arrayMaterial);
                 if ($actualizar_material !== false) {
                     $message = array(
-                        'codigoRespuesta' => 200,
+                        'response' => 200,
                         'estado' => true,
                         'detalle' => 'Registro actualizado exitosamente!',
                         'data' => $arrayMaterial
@@ -522,7 +511,7 @@ class SapController extends AbstractController
                     );
                 } else {
                     $message = array(
-                        'codigoRespuesta' => 204,
+                        'response' => 204,
                         'estado' => false,
                         'detalle' => 'No se actualizo el registro!',
                         /* 'estado' => true */
@@ -530,14 +519,14 @@ class SapController extends AbstractController
                 }
             } else {
                 $message = array(
-                    'codigoRespuesta' => 204,
+                    'response' => 204,
                     'estado' => false,
                     'detalle' => 'No se encuentra el item!',
                 );
             }
         } catch (DBALException $e) {
             $message = array(
-                'codigoRespuesta' => 204,
+                'response' => 204,
                 'estado' => false,
                 'detalle' => $e->getMessage(),
             );
@@ -561,10 +550,96 @@ class SapController extends AbstractController
     {
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        $respuesta = $helper->insertClient($connection, $data);
-        $response = new JsonResponse($respuesta);
+
+        // Insertar el cliente
+        $insertCliente = $helper->insertClient($connection, $data);
+        //dd($insertCliente);
+
+        if ($insertCliente['estado'] == true) {
+            $id_cliente = $insertCliente['data']['cliente'];
+            $codigo_cliente = $insertCliente['data']['codigo_cliente'];
+
+            $ubClie = [];
+            $contacto = [];
+
+            // Insertar ubicaciones
+            foreach ($data['ubicacion'] as $value) {
+                $ubClie[] = $helper->insertUbClient($connection, $value, $id_cliente, $codigo_cliente);
+            }
+
+            // Insertar contactos
+            foreach ($data['contactos'] as $value) {
+                $contacto[] = $helper->insertContacto($connection, $value, $id_cliente);
+            }
+
+            $data = [
+                "codigo_cliente" => $codigo_cliente,
+                "nombres" => $insertCliente['data']['nombres'],
+                "carnet" => $insertCliente['data']['nit'],
+                "telefono" => $insertCliente['data']['telefono'],
+                "celular" => $insertCliente['data']['celular'],
+                "nit" => $insertCliente['data']['nit'],
+                "razon_social" => $insertCliente['data']['razonSocial'],
+                "rubro" => $insertCliente['data']['rubro'],
+                "id_vendedor" => $insertCliente['data']['sap_vendedor'],
+                "tipo_cliente" => $insertCliente['data']['tipo_cliente'],
+                "tipo_persona" => $insertCliente['data']['tipo_persona'],
+                "ciudad" =>$ubClie[0]['ciudad_sigla'],
+                "condicion_pago"=> "Contado",
+                "nombre_factura"=> $insertCliente['data']['nombre_factura'],
+                "ubicacion" => $ubClie,
+                "contactos" => $contacto
+            ];
+
+            //dd($data);
+
+            // Verificar si se debe realizar la conexión a SAP
+            if (empty($codigo_cliente) || $codigo_cliente == '' || $codigo_cliente == null) {
+                $ruta = '/crearCliente';
+                $respuesta = $helper->conexionSap($ruta, $data);
+                dd($respuesta);                
+                if ($respuesta == true) {
+                    $resp = [
+                        "response" => 200,
+                        "estado" => true,
+                        "detalle" => "Se registró correctamente",
+                        "data" => $data
+                    ];
+                } else {
+                    $resp = [
+                        "response" => 204,
+                        "estado" => false,
+                        "detalle" => "No se registró"
+                    ];
+                }
+            } else {
+                $resp = [
+                    "response" => 200,
+                    "estado" => true,
+                    "detalle" => "El cliente ya existe",
+                    "data" => $data
+                ];
+            }
+
+            $message = [
+                "response" => 200,
+                "estado" => true,
+                "detalle" => "Se registró correctamente",
+                "data" => $data,
+                "sap" => $resp
+            ];
+        } else {
+            $message = [
+                "response" => 204,
+                "estado" => false,
+                "detalle" => "No se registró"
+            ];
+        }
+
+        $response = new JsonResponse($message);
         return $response;
     }
+
 
 
     /**
@@ -579,7 +654,7 @@ class SapController extends AbstractController
      */
     public function sapUpdateCliente(Connection $connection, Request $request)
     {
-         /* 
+        /* 
         $SapController = new SapController();
         $resl = $SapController->loginSap($connection, $data);
         dd($resl); */
@@ -588,8 +663,9 @@ class SapController extends AbstractController
         $respuesta = $helper->updateClient($connection, $data);
         $response = new JsonResponse($respuesta);
         return $response;
-    } 
-     /**
+    }
+
+    /**
      * @Route(
      *  "/sap/almacen_insert",
      *  name="sap.almacen_insert",
@@ -604,16 +680,47 @@ class SapController extends AbstractController
 
             $data = json_decode($request->getContent(), true);
 
-            $codigo_almacen = isset($data['codigo_almacen']) ?  $message = $helper->insertAlmacen($connection, $data):  $message = [
-                "codigoRespuesta" => 500,
+            $codigo_almacen = isset($data['codigo_almacen']) ?  $message = $helper->insertAlmacen($connection, $data) :  $message = [
+                "response" => 500,
                 "estado" => false,
-                "detalle" =>'Es nesesario el codigo de almacen',
+                "detalle" => 'Es nesesario el codigo de almacen',
             ];
         } catch (\Throwable $e) {
             $message = [
-                "codigoRespuesta" => 401,
+                "response" => 401,
                 "estado" => false,
                 "detalle" => $e->getMessage()
+            ];
+        }
+        
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/sap/almacen_update",
+     *  name="sap.almacen_update",
+     *  methods={"POST"}
+     * )
+     * @return JsonResponse
+     */
+    public function sapAlmacenUpdate(Connection $connection, Request $request)
+    {
+        $helper = new Helper();
+        try {
+            $data = json_decode($request->getContent(), true);
+            $codigo_almacen = isset($data['codigo_almacen']) ?  $message = $helper->actualizaAlmacen($connection, $data) :  $message = [
+                "response" => 500,
+                "estado" => false,
+                "detalle" => 'Es nesesario el codigo de almacen',
+            ];
+        } catch (\Throwable $e) {
+            $message = [
+                "response" => 401,
+                "estado" => false,
+                "detalle" => $e->getMessage(),
             ];
         }
         $response = new JsonResponse($message);
@@ -624,27 +731,29 @@ class SapController extends AbstractController
 
     /**
      * @Route(
-     *  "/sap/almacen_update",
-     *  name="sap.almacen_update",
+     *  "/sap/precios_insert",
+     *  name="sap.precios_insert",
      *  methods={"POST"}
      * )
      * @return JsonResponse
      */
-    public function sapAlmacenUpdate(Connection $connection, Request $request )
+    function insertPrecios(Connection $connection, Request $request)
     {
-        $helper = new Helper();
-        try{
+        try {
+            $helper = new Helper();
             $data = json_decode($request->getContent(), true);
-            $codigo_almacen = isset($data['codigo_almacen']) ?  $message = $helper->actualizaAlmacen($connection, $data):  $message = [
-                "codigoRespuesta" => 500,
+            $cod_mate = isset($data['cod_mate']) ? $data['cod_mate'] :  $message = [
+                "response" => 500,
                 "estado" => false,
-                "detalle" =>'Es nesesario el codigo de almacen',
+                "detalle" => "Es necesario el codigo de material"
             ];
-        }catch(\Throwable $e){
+
+            $message = $helper->insertPrecios($connection, $data);
+        } catch (\Throwable $e) {
             $message = [
-                "codigoRespuesta" => 401,
+                "response" => 401,
                 "estado" => false,
-                "detalle" => $e->getMessage(),
+                "detalle" => $e->getMessage()
             ];
         }
         $response = new JsonResponse($message);
@@ -666,7 +775,7 @@ class SapController extends AbstractController
             $helper = new Helper();
             $data = json_decode($request->getContent(), true);
             $cod_mate = isset($data['cod_mate']) ? $data['cod_mate'] :  $message = [
-                "codigoRespuesta" => 500,
+                "response" => 500,
                 "estado" => false,
                 "detalle" => "Es  necesario el codigo de material"
             ];
@@ -674,7 +783,7 @@ class SapController extends AbstractController
             $message = $helper->actualizarPrecios($connection, $data);
         } catch (\Throwable $e) {
             $message = [
-                "codigoRespuesta" => 401,
+                "response" => 401,
                 "estado" => false,
                 "detalle" => $e->getMessage()
             ];
@@ -682,11 +791,10 @@ class SapController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
-
     }
 
 
-     /**
+    /**
      * @Route(
      *  "/sap/asignar_permisos",
      *  name="sap.asignar_permisos",
@@ -700,13 +808,13 @@ class SapController extends AbstractController
     {
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        $id_usuario= json_decode($request->getContent(), true);
-        $respuesta = $helper->asignarPermisos($connection,$data,$id_usuario);
+        $id_usuario = json_decode($request->getContent(), true);
+        $respuesta = $helper->asignarPermisos($connection, $data, $id_usuario);
         $response = new JsonResponse($respuesta);
         return $response;
         //dd($response);
     }
-    
+
     /**
      * @Route(
      *  "/sap/actualizar_vendedor",
@@ -718,7 +826,7 @@ class SapController extends AbstractController
      * @return JsonResponse
      */
     public function updateVendedor(Connection $connection, Request $request)
-    {    
+    {
         $helper = new Helper();
         try {
             $data = json_decode($request->getContent(), true);
@@ -730,16 +838,15 @@ class SapController extends AbstractController
 
             if (!empty($sucursal) &&  $sucursal != NULL) {
                 $id_sucursal = $helper->buscarSucuarsal($connection, $sucursal);
-            } else{
+            } else {
                 $id_sucursal = isset($data['id_sucursal']) ? $data['id_sucursal'] : null;
-            } 
-                
+            }
+
             if (!empty($nombre_tipo_vend) &&  $nombre_tipo_vend != NULL) {
                 $id_tipo_vend = $helper->buscarTipoVendedor($connection, $nombre_tipo_vend);
-                
-            } else{
+            } else {
                 $id_tipo_vend = isset($data['id_tipo_vend']) ? $data['id_tipo_vend'] : null;
-            } 
+            }
 
             $estado = isset($data['estado']) ? $data['estado'] : 1;
             $id_usuario = isset($data['id_usuario']) ? $data['id_usuario'] : null;
@@ -752,19 +859,19 @@ class SapController extends AbstractController
 
             if (!empty($id_usuario) && $id_usuario != NULL) {
 
-            $queryUser = $connection->prepare('UPDATE TB_CORE_USUA
+                $queryUser = $connection->prepare('UPDATE TB_CORE_USUA
                                                 SET NM_COMP_RAZA_SOCI = :nombreUsuario,
                                                 NM_APEL_FANT = :siglaUsuario,
                                                 DS_SENH = :ds_senha
                                                 WHERE ID = :id_usuario');
-            $queryUser->bindValue(':id_usuario', $id_usuario);       
-            $queryUser->bindValue(':nombreUsuario', $nombreUsuario);
-            $queryUser->bindValue(':siglaUsuario', $siglaUsuario);
-            $queryUser->bindValue(':ds_senha', $ds_senha);
-            $queryUser->execute();
-            
+                $queryUser->bindValue(':id_usuario', $id_usuario);
+                $queryUser->bindValue(':nombreUsuario', $nombreUsuario);
+                $queryUser->bindValue(':siglaUsuario', $siglaUsuario);
+                $queryUser->bindValue(':ds_senha', $ds_senha);
+                $queryUser->execute();
 
-            $query = $connection->prepare('UPDATE TB_VEND 
+
+                $query = $connection->prepare('UPDATE TB_VEND 
                                                 SET ID_ESCR = :sucursal, 
                                                 NM_VEND = :nombreUsuario,
                                                 NM_RAZA_SOCI = :siglaUsuario,
@@ -773,7 +880,7 @@ class SapController extends AbstractController
                                                 IN_STAT = :estado,
                                                 codigo_sap = :codigo_vendedor
                                                 WHERE ID_USUA = :id_usuario');
-            
+
                 $query->bindValue(':sucursal', $id_sucursal);
                 $query->bindValue(':nombreUsuario', $nombreUsuario);
                 $query->bindValue(':siglaUsuario', $siglaUsuario);
@@ -783,14 +890,14 @@ class SapController extends AbstractController
                 $query->bindValue(':id_usuario', $id_usuario);
                 $query->bindValue(':codigo_vendedor', $codigo_vendedor);
                 $query->execute();
-                
+
                 $id_vendedor = $connection->query("SELECT top 1 ID from tb_vend where ID_USUA = '{$id_usuario}'")->fetch();
 
                 if (!empty($id_vendedor)) {
-                        $helper->buscarIdAlmacen($connection,'',$data['almacenes'],$id_vendedor);
+                    $helper->buscarIdAlmacen($connection, '', $data['almacenes'], $id_vendedor);
                 }
                 $message = array(
-                    'codigoRespuesta' => 200,
+                    'response' => 200,
                     'estado' => true,
                     'detalle' => 'Se actualizó los datos del usuario y del vendedor',
                     "data" => [
@@ -798,20 +905,20 @@ class SapController extends AbstractController
                         "nombreUsuario" => $nombreUsuario,
                         "siglaUsuario" => $siglaUsuario,
                         "carnet" => $carnet,
-                        "id_usuario"  => $id_usuario, 
+                        "id_usuario"  => $id_usuario,
                         "codigo_almacenes" => $codigo_almacenes
                     ]
                 );
             } else {
                 $message = array(
-                    'codigoRespuesta' => 204,
+                    'response' => 204,
                     'estado' => false,
                     'detalle' => 'No se puede actualizar los datos del vendedor si el ID es nulo o inválido',
                 );
             }
         } catch (\Throwable $th) {
             $message = array(
-                'codigoRespuesta' => 401,
+                'response' => 401,
                 'estado' => false,
                 'detalle' => $th->getMessage(),
             );
@@ -820,6 +927,7 @@ class SapController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
     /**
      * @Route(
      *  "/core/sap/consulta/vendedor",
@@ -831,31 +939,28 @@ class SapController extends AbstractController
      * @return JsonResponse
      */
     public function consultaUsuario(Connection $connection, Request $request)
-    {   
+    {
         try {
             $data = json_decode($request->getContent(), true);
             $usuario = isset($data['sap_vendedor']) ? $data['sap_vendedor'] : $message = 'no existe vendedor';
             $exite = $connection->query("SELECT TOP 1 ID from  tb_ven where codigo_sap = '{$usuario}'")->fetch();
             if ($exite > 0) {
                 $this->updateVendedor($connection, $request);
-            }
-            else
-            {
+            } else {
                 $this->insertUsuario($connection, $request);
             }
-
         } catch (\Throwable $th) {
             $message = [
-                "codigoRespuesta" => 401,
+                "response" => 401,
                 "estado" => false,
                 "detalle" => $th->getMessage()
             ];
         }
         return $message;
     }
-    
 
-/**
+
+    /**
      * @Route(
      *  "/core/sap/insertar/usuario",
      *  name="core.sap.insertar.usuario",
@@ -924,7 +1029,7 @@ class SapController extends AbstractController
                 }
 
                 $message = array(
-                    'codigoRespuesta' => 200,
+                    'response' => 200,
                     'estado' => true,
                     'detalle' => 'Se insertó correctamente los datos del usuario',
                     'datos' => [
@@ -944,20 +1049,287 @@ class SapController extends AbstractController
             } else {
                 //prosesos de eliminar datos 
                 $message = array(
-                    'codigoRespuesta' => 204,
+                    'response' => 204,
                     'estado' => true,
                     'detalle' => 'No se insertó los datos de usuario',
                 );
             }
         } catch (\Throwable $th) {
             $message = array(
-                'codigoRespuesta' => 401,
+                'response' => 401,
                 'estado' => false,
                 'detalle' => $th->getMessage(),
             );
         }
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;}
-    
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/sap/actualizar_stock",
+     *  name="core.sap.actualizar_stock",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function actualizarStock(Connection $connection, Request $request)
+    {
+        try {
+            $helper = new Helper();
+            $jsonData = $request->getContent();
+            $data = json_decode($jsonData, true);
+            $item_code = $data['item'];
+            $codigo_almacen = $data['almacen'];
+            $cantidad = $data['cantidad'];
+            $unidad = $data['unidad'];
+            $id_material = 0;
+            $id_almacen = 0;
+            $id_unidad = 0;
+
+
+            $buscar_material = $helper->buscarItem($connection, $item_code);
+            if ($buscar_material !== false) {
+                $id_material = $buscar_material['ID_CODIGOMATERIAL'];
+            }
+            $buscar_almacen = $helper->buscarAlmacen($connection, $codigo_almacen);
+            if ($buscar_almacen !== false) {
+                $id_almacen = $buscar_almacen['id'];
+            }
+            $buscar_unidad = $helper->buscarUnidad($connection, $unidad);
+            if ($buscar_unidad !== false) {
+                $id_unidad = $buscar_unidad['ID'];
+            }
+
+            $arrayStock = array();
+            $arrayStock = ([
+                'codigo_item' => $id_material,
+                'codigo_almacen' => $id_almacen
+            ]);
+
+            $verificar_stock = $helper->verificarStock($connection, $arrayStock);
+            if ($verificar_stock !== false) {
+                $arrayStockActualizar = array();
+                $id_verificarStock = $verificar_stock['id'];
+                $arrayStockActualizar = ([
+                    'id_item' => $id_material,
+                    'id_almacen' => $id_almacen,
+                    'cantidad' => $cantidad,
+                    'id_unidad' => $id_unidad,
+                    'id' => $id_verificarStock
+                ]);
+                $actualizar_stock = $helper->actualizarStock($connection, $arrayStockActualizar);
+                if ($actualizar_stock !== false) {
+                    $message = array(
+                        'response' => 200,
+                        "estado" => true,
+                        "detalle" => "Se actualizo el registro exitosamente!."
+                    );
+                } else {
+                    $message = array(
+                        'response' => 400,
+                        "estado" => false,
+                        "detalle" => "No se puedo actualizar el registro"
+                    );
+                }
+            } else {
+                $arrayStockInsertar = ([
+                    'id_item' => $id_material,
+                    'id_almacen' => $id_almacen,
+                    'cantidad' => $cantidad,
+                    'id_unidad' => $id_unidad
+                ]);
+                $agregar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
+                if ($agregar_stock !== false) {
+                    $message = array(
+                        'response' => 200,
+                        "estado" => true,
+                        "detalle" => "registro insertado exitosamente."
+                    );
+                } else {
+                    $message = array(
+                        'response' => 400,
+                        "estado" => false,
+                        "detalle" => "No se puedo insertar el registro"
+                    );
+                }
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'response' => 400,
+                "estado" => false,
+                "detalle" => $e->getMessage()
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/sap/actualizar_descuentos",
+     *  name="sap.actualizar_descuentos",
+     *  methods={"POST"}
+     * )
+     * @return JsonResponse
+     */
+    public function actualizarDescuentos(Connection $connection, Request $request)
+    {
+        try {
+            $helper = new Helper();
+            $jsonData = $request->getContent();
+            $data = json_decode($jsonData, true);
+            $codigo_ciudad = $data['CodigoCiudad'];
+            $ciudad = $data['Ciudad'];
+            $codigoCategoria = $data['CodigoCategoria'];
+            $item = $data['Item'];
+            $rango_inicial = $data['Rango1'];
+            $rango_final = $data['Rango2'];
+            $descuento = $data['Descuento'];
+            $fecha = $data['Fecha'];
+            $hora = $data['Hora'];
+
+            $arrayBuscarDescuento = array();
+            $arrayActualizarDescuento = array();
+            $arrayCrearDescuento = array();
+
+            $id_material = 0;
+            $id_tipo_cliente = 0;
+            $id_descuento = 0;
+
+
+            $buscarMaterial = $helper->buscarItem($connection, $item);
+            if ($buscarMaterial !== false) {
+                $id_material = $buscarMaterial['ID_CODIGOMATERIAL'];
+            }
+
+            $buscarCliente = $helper->buscarTipoCliente($connection, $codigoCategoria);
+            if ($buscarMaterial !== false) {
+                $id_tipo_cliente = $buscarCliente['id'];
+            }
+
+            $buscarCiudad =  $helper->buscarCiudad($connection, $ciudad);
+            if ($buscarCiudad !== false) {
+                $id_ciudad = $buscarCiudad['id'];
+            }
+
+            $arrayBuscarDescuento = ([
+                'id_material' => $id_material,
+                'codigo_material' => $item,
+                'id_tipo_cliente' => $id_tipo_cliente,
+                'rango_inicial' => $rango_inicial,
+                'rango_final' => $rango_final,
+                'id_ciudad' => $id_ciudad,
+            ]);
+
+            $buscarDescuento =  $helper->buscarDescuento($connection, $arrayBuscarDescuento);
+            if ($buscarDescuento !== false) {
+                $id_descuento = $buscarDescuento['id'];
+                $hora_formateada = date('H:i:s', strtotime($hora));
+                $fecha_formateada = $fecha . " " . $hora_formateada;
+                $fecha_actualizacion = date('Y-m-d H:i:s', strtotime($fecha_formateada));
+                $arrayActualizarDescuento = ([
+                    'id' => $id_descuento,
+                    'descuento' => $descuento,
+                    'fecha' => $fecha_actualizacion
+                ]);
+                $actualizar_descuento = $helper->actualizarDescuento($connection, $arrayActualizarDescuento);
+                if ($actualizar_descuento !== false) {
+                    $message = array(
+                        'response' => 200,
+                        "estado" => true,
+                        "detalle" =>  'Registro actualizado exitosamente'
+                    );
+                } else {
+                    $message = array(
+                        'response' => 400,
+                        "estado" => false,
+                        "detalle" => 'Error al actualizar el registro'
+                    );
+                }
+            } else {
+                $fecha_actual = date('Y-m-d H:i:s');
+                $arrayCrearDescuento = ([
+                    'codigo_material' => $item,
+                    'id_material' => $id_material,
+                    'id_ciudad' => $id_ciudad,
+                    'id_tipo_cliente' => $id_tipo_cliente,
+                    'rango_inicial' => $rango_inicial,
+                    'rango_final' => $rango_final,
+                    'descuento' => $descuento,
+                    'fecha' => $fecha_actual,
+                    'estado' => 1
+                ]);
+                $actualizar_descuento = $helper->guardarDescuento($connection, $arrayCrearDescuento);
+                if ($actualizar_descuento !== false) {
+                    $message = array(
+                        'response' => 200,
+                        "estado" => true,
+                        "detalle" =>  'Registro guardado exitosamente'
+                    );
+                } else {
+                    $message = array(
+                        'response' => 400,
+                        "estado" => false,
+                        "detalle" => 'Error al guardar el registro'
+                    );
+                }
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'response' => 400,
+                "estado" => false,
+                "detalle" => $e->getMessage()
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+    public function filtrarMaterialContratipo($connection, $codMaterial, $estado_material, $id_vendedor)
+    {
+
+        $query = "SELECT MATE.ID_CODIGOMATERIAL as id_material, PM.id as id_precio_material, MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
+        DEPO.ID AS id_almacen, PM.peso AS peso, UNI.id as id_unidad,
+        UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
+        SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
+        BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
+        
+        FROM TB_MATE MATE 
+
+        INNER JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
+        INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
+        INNER JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
+        INNER JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
+        INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
+        INNER JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
+        INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
+        INNER JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
+        INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
+        INNER JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
+        INNER JOIN TB_ALMACEN_VENDEDOR AV ON DEPO.id = AV.id_almacen
+
+        WHERE ID_CODIGOMATERIAL IN (SELECT MATCONT.id_material FROM TB_MATERIALES_CONTRATIPOS MATCONT 
+        WHERE MATCONT.id_filtro_material = :id_material AND MATCONT.estado = :estado_material)
+        AND AV.id_vendedor = :id_vendedor";
+
+        $buscar_material = $connection->prepare($query);
+        $buscar_material->bindValue('id_material', $codMaterial);
+        $buscar_material->bindValue('estado_material', $estado_material);
+        $buscar_material->bindValue('id_vendedor', $id_vendedor);
+
+        $buscar_material->execute();
+        $res = $buscar_material->fetchAll();
+        if (count($res) > 0) {
+            return $res;
+        } else {
+            return false;
+        }
+    }
 }

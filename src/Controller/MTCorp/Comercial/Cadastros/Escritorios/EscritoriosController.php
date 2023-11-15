@@ -67,6 +67,34 @@ class EscritoriosController extends AbstractController
         }
     }
 
+     /**
+     * @Route(
+     *  "/comercial/cadastros/datossucursal/{id_sucursal}",
+     *  name="comercial.cadastros-datossucursal",
+     *  methods={"GET"},
+     * )
+     * @return JsonResponse
+     */
+    public function getSucursalVend(Connection $connection, $id_sucursal)
+    {   
+
+        $FunctionsController = new FunctionsController();
+        try {
+            $query = "SELECT * FROM tb_escr WHERE ID = :id";
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(':id', (int)$id_sucursal); 
+            $stmt->execute();
+            $res = $stmt->fetch();
+            
+            return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
+        }
+        catch (\PDOException $e) 
+        {
+        return $FunctionsController->Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }   
+
+
     /**
      * @Route(
      *  "/comercial/cadastros/escritorio/alteracoes/{codEscritorio}",

@@ -114,6 +114,7 @@ class AgendaController extends AbstractController
                         'typeContactDesc' => $item['DESC_MEIO_CONTATO'],
                         'start' => $item['DATA_INICIO'],
                         'end' => $item['DATA_FINAL'],
+                        'promotor' => $item['NOMBRE_VENDEDOR'].' '.$item['RAZON_SOCIAL_VEND'],
 
                         'fecha_inicial' => date('d-m-Y', strtotime($item['DATA_INICIO'])),
                         'fecha_final' => date('d-m-Y', strtotime($item['DATA_FINAL'])),

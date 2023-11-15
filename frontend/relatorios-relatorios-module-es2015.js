@@ -718,6 +718,22 @@ let DateService = class DateService {
         let date = new Date();
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
+    // Función para obtener la fecha de inicio de la semana actual (lunes)
+    getStartOfWeek() {
+        const currentDate = new Date();
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+        startOfWeek.setHours(0, 0, 0, 0);
+        return startOfWeek;
+    }
+    // Función para obtener la fecha de fin de la semana actual (domingo)
+    getEndOfWeek() {
+        const currentDate = new Date();
+        const endOfWeek = new Date(currentDate);
+        endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+        endOfWeek.setHours(23, 59, 59, 999);
+        return endOfWeek;
+    }
     convert2PhpDate(date) {
         const y = date.getFullYear();
         let m = date.getMonth() + 1;
@@ -1469,14 +1485,14 @@ const routes = [
             },
             {
                 path: 'posicao-diaria',
-                loadChildren: () => Promise.all(/*! import() | posicao-diaria-posicao-diaria-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("posicao-diaria-posicao-diaria-module")]).then(__webpack_require__.bind(null, /*! ./posicao-diaria/posicao-diaria.module */ "qRfM")).then(m => m.ComercialRelatoriosPosicaoDiariaModule)
+                loadChildren: () => Promise.all(/*! import() | posicao-diaria-posicao-diaria-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("posicao-diaria-posicao-diaria-module")]).then(__webpack_require__.bind(null, /*! ./posicao-diaria/posicao-diaria.module */ "qRfM")).then(m => m.ComercialRelatoriosPosicaoDiariaModule)
             },
             {
                 path: 'comissoes-representantes',
                 children: [
                     {
                         path: '',
-                        loadChildren: () => Promise.all(/*! import() | comissoes-representantes-comissoes-representantes-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("comissoes-representantes-comissoes-representantes-module")]).then(__webpack_require__.bind(null, /*! ./comissoes-representantes/comissoes-representantes.module */ "rT92")).then((m) => m.ComercialRelatoriosComissoesRepresentantesModule),
+                        loadChildren: () => Promise.all(/*! import() | comissoes-representantes-comissoes-representantes-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("comissoes-representantes-comissoes-representantes-module")]).then(__webpack_require__.bind(null, /*! ./comissoes-representantes/comissoes-representantes.module */ "rT92")).then((m) => m.ComercialRelatoriosComissoesRepresentantesModule),
                     },
                 ],
             },

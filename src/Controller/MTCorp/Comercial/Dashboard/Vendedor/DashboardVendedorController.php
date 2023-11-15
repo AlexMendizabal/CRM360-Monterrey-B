@@ -603,17 +603,22 @@ class DashboardVendedorController extends AbstractController
   
           $firstDate = DateController::getPrimeiroDiaMes($curMonth, $currYear);
           $lastDate = DateController::getUltimoDiaMes($curMonth, $currYear);
+       
+          /* 
+          $inicio = date('Y/m/d', strtotime($firstDate)) . ' 00:00:00';
+          $fim = date('Y/m/d', strtotime($lastDate)) . ' 23:59:59';
+          */
 
           $metasCorrente = $connection->query(
-            "
-              EXEC [PRC_MTCORP_MODU_COME_VEND_META_CONS]
+            "EXEC [PRC_MTCORP_MODU_COME_VEND_META_CONS]
               @DTINI = '{$firstDate}',
               @DTFIM = '{$lastDate}',
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
           )->fetchAll();
-         
+               dd($metasCorrente);
+        
           if (count($metasCorrente) > 0) {
             $arrMetasCorrente = array(
               'toneladas' => array(),

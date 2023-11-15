@@ -928,7 +928,7 @@
         }, {
           key: "registrarAcesso",
           value: function registrarAcesso(idAtividade) {
-            return this.http.post("http://23.254.204.187/core/registrar-acesso", {
+            return this.http.post("http://23.254.204.187/api/core/registrar-acesso", {
               idAtividade: idAtividade,
               dsRota: this.router.url
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));

@@ -101,7 +101,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | estoque-por-lote-estoque-por-lote-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("estoque-por-lote-estoque-por-lote-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("estoque-por-lote-estoque-por-lote-module")]).then(__webpack_require__.bind(null,
             /*! ./estoque-por-lote/estoque-por-lote.module */
             "v4kB")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoEstoquePorLoteModule;
@@ -123,7 +123,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | materiais-em-lote-materiais-em-lote-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("materiais-em-lote-materiais-em-lote-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("materiais-em-lote-materiais-em-lote-module")]).then(__webpack_require__.bind(null,
             /*! ./materiais-em-lote/materiais-em-lote.module */
             "7pdw")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoMateriaisEmLoteModule;
@@ -134,7 +134,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | lotes-conferidos-lotes-conferidos-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("lotes-conferidos-lotes-conferidos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("lotes-conferidos-lotes-conferidos-module")]).then(__webpack_require__.bind(null,
             /*! ./lotes-conferidos/lotes-conferidos.module */
             "l8WK")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoLotesConferidosModule;
@@ -145,7 +145,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | auditoria-estoque-auditoria-estoque-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("auditoria-estoque-auditoria-estoque-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("auditoria-estoque-auditoria-estoque-module")]).then(__webpack_require__.bind(null,
             /*! ./auditoria-estoque/auditoria-estoque.module */
             "g4Cv")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoAuditoriaEstoqueModule;

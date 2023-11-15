@@ -14,6 +14,7 @@ use Doctrine\DBAL\DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
+use App\Controller\Core\SapController;
 use mysqli;
 
 /**
@@ -60,9 +61,9 @@ class PreCadastroController extends AbstractController
 
             $emailNfe = strtoupper($data['emailNfe']);
             $telefone = $data['telefone'];
-            if(isset($data['tipo_persona'])){
+            if (isset($data['tipo_persona'])) {
               $tipo_persona = $data['tipo_persona'];
-            }else{
+            } else {
               $tipo_persona = "Privado";
             }
             $cnae = '';
@@ -180,7 +181,7 @@ class PreCadastroController extends AbstractController
       return $response;
     }
   }
-   /**
+  /**
    * @Route(
    *  "/comercial/clientes/postsap",
    *  name="comercial.clientes-postsap",
@@ -189,17 +190,56 @@ class PreCadastroController extends AbstractController
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
-   */ 
+   */
   public function sapPostClient(Connection $connection, Request $request)
-{    
-    $helper = new Helper();
-    $data = json_decode($request->getContent(), true);
-    $respuesta = $helper->insertClient($connection, $data);
-    
-    // Crear un JsonResponse directamente con la respuesta
-    $response = new JsonResponse($respuesta);
-    
-    return $response; // Devuelve el objeto JsonResponse
-}
+  {
+    $sapController = new SapController();
+    return $sapController->sapInsertCliente($connection, $request);
+  }
 
+  /**
+   * @Route(
+   *  "/comercial/clientes/tipo_cliente",
+   *  name="comercial.clientes-tipo-cliente",
+   *  methods={"GET"}
+   * )
+   * @param Connection $connection
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function obtenerTiposClientes(Connection $connection, Request $request)
+  {
+    $helper =  new Helper();
+    try {
+      //dd($helper);
+      $tipos_clientes = $helper->buscarTipoClienteAll($connection);
+      if ($tipos_clientes !== false) {
+        $message = array(
+          'responseCode' => 200,
+          'estado' => true,
+          'detalle' => 'Datos obtenidos exitosamente',
+          'result' => $tipos_clientes
+          /* 'estado' => true */
+        );
+      } else {
+        $message = array(
+          'responseCode' => 204,
+          'estado' => false,
+          'detalle' => 'Error al obtener los datos',
+          'result' => null
+          /* 'estado' => true */
+        );
+      }
+    } catch (DBALException $e) {
+      $message = array(
+        'responseCode' => 204,
+        'estado' => false,
+        'detalle' => $e->getMessage(),
+        'result' => null
+      );
+    }
+    $response = new JsonResponse($message);
+    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+    return $response;
+  }
 }

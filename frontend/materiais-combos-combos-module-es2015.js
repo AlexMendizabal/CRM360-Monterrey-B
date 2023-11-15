@@ -670,6 +670,171 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "VgqD":
+/*!********************************************************!*\
+  !*** ./src/app/modules/comercial/comercial.service.ts ***!
+  \********************************************************/
+/*! exports provided: ComercialService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComercialService", function() { return ComercialService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "IheW");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+
+
+
+
+let ComercialService = class ComercialService {
+    constructor(http) {
+        this.http = http;
+        this.API = `http://23.254.204.187/api/comercial`;
+    }
+    getEmpresas(params) {
+        let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+        for (let param in params) {
+            httpParams = httpParams.append(param, params[param]);
+        }
+        return this.http
+            .get(`${this.API}/empresas`, {
+            params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getDepositos(params) {
+        let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+        for (let param in params) {
+            httpParams = httpParams.append(param, params[param]);
+        }
+        return this.http
+            .get(`${this.API}/depositos`, {
+            params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getAlmacen(params) {
+        return this.http
+            .get(`${this.API}/almacen`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getLinhasId(id) {
+        return this.http.get(`${this.API}/linhas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getSublineasId(id) {
+        return this.http.get(`${this.API}/sublineas/${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    sincronizarMateriales() {
+        return this.http.get(`${this.API}/sincronizar`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMateriales(params) {
+        return this.http
+            .get(`${this.API}/materiales`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesLista(params) {
+        return this.http
+            .get(`${this.API}/materiales/lista`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesOferta(params) {
+        return this.http
+            .get(`${this.API}/materiales_lista_precio`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMaterialesOfertaVendedor(params) {
+        return this.http
+            .get(`${this.API}/materiales_lista_precio_vendedor`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getUpSellService(params) {
+        return this.http
+            .get(`${this.API}/materiales_suplementarios`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getLinhas(params) {
+        let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+        for (let param in params) {
+            httpParams = httpParams.append(param, params[param]);
+        }
+        return this.http
+            .get(`${this.API}/linhas`, {
+            params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getClasses(params) {
+        let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+        for (let param in params) {
+            httpParams = httpParams.append(param, params[param]);
+        }
+        return this.http
+            .get(`${this.API}/classes`, {
+            params: httpParams,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getMateriais(params = []) {
+        let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+        for (let param in params) {
+            httpParams = httpParams.append(param, params[param]);
+        }
+        return this.http
+            .get(`${this.API}/materiais`, { params: httpParams })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getPerfil() {
+        return this.http.get(`${this.API}/perfil`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getEscritorios() {
+        return this.http.get(`${this.API}/escritorios`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getPresentacionMaterial() {
+        return this.http
+            .get(`${this.API}/presentacion_materiales`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCliente(codCliente) {
+        return this.http.get(`${this.API}/clientes/detalhes/${codCliente}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
+    getListarPrecios() {
+        return this.http.get(`${this.API}/vendedor/lista_precio`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getTodosVendedores() {
+        return this.http.get(`${this.API}/vendedor/allvendedor`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCentrosLogisticos() {
+        return this.http.get(`${this.API}/almacen/centros_logisticos`);
+    }
+};
+ComercialService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+];
+ComercialService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root',
+    }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
+], ComercialService);
+
+
+
+/***/ }),
+
 /***/ "hEpI":
 /*!*******************************************************************************!*\
   !*** ./src/app/modules/comercial/cadastros/materiais/combos/combos.module.ts ***!

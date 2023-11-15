@@ -280,7 +280,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | home-home-module */
-            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("default~agenda-agenda-module~contratos-comerciais-contratos-comerciais-module~contratos-contratos-mo~569e6321"), __webpack_require__.e("common"), __webpack_require__.e("home-home-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("default~agenda-agenda-module~autorizaciones-autorizaciones-module~contratos-comerciais-contratos-com~c20bfe7f"), __webpack_require__.e("common"), __webpack_require__.e("home-home-module")]).then(__webpack_require__.bind(null,
             /*! ./home/home.module */
             "jjQO")).then(function (m) {
               return m.SulFluminenseHomeModule;
@@ -297,7 +297,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | distribuicao-distribuicao-module */
-            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("distribuicao-distribuicao-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("distribuicao-distribuicao-module")]).then(__webpack_require__.bind(null,
             /*! ./distribuicao/distribuicao.module */
             "um/L")).then(function (m) {
               return m.SulFluminenseDistribuicaoModule;
@@ -308,7 +308,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | estoque-avancado-estoque-avancado-module */
-            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("common"), __webpack_require__.e("estoque-avancado-estoque-avancado-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("common"), __webpack_require__.e("estoque-avancado-estoque-avancado-module")]).then(__webpack_require__.bind(null,
             /*! ./estoque-avancado/estoque-avancado.module */
             "Euq/")).then(function (m) {
               return m.SulFluminenseEstoqueAvancadoModule;
@@ -319,7 +319,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | entrada-materiais-entrada-materiais-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("default~agendamentos-agendamentos-module~associacao-etapas-associacao-etapas-module~checklist-checkl~6711bf61"), __webpack_require__.e("common"), __webpack_require__.e("entrada-materiais-entrada-materiais-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("default~agendamentos-agendamentos-module~associacao-etapas-associacao-etapas-module~checklist-checkl~6711bf61"), __webpack_require__.e("common"), __webpack_require__.e("entrada-materiais-entrada-materiais-module")]).then(__webpack_require__.bind(null,
             /*! ./entrada-materiais/entrada-materiais.module */
             "cTkk")).then(function (m) {
               return m.SulFluminenseEntradaMateriaisModule;

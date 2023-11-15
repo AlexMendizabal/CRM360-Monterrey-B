@@ -293,6 +293,12 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/grupo-economico/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getVendedorCiudad(id_vendedor) {
+        const httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]().set('id_vendedor', id_vendedor);
+        return this.http
+            .get(`${this.API}/vendedor/ciudad`, { params: httpParams })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getPermissaoAcesso(id) {
         return this.http
             .get(`${this.API}/permissao-acesso/${id}`)
@@ -320,6 +326,9 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/contactodetalle/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getTipoClientes() {
+        return this.http.get(`${this.API}/tipo_cliente`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
     getExisteCpfCnpj(documento, getDadosCliente) {
         return this.http
             .get(`${this.API}/verificar-cpf-cnpj/${documento}?getDadosCliente=${getDadosCliente === true ? 1 : 0}`)
@@ -333,7 +342,7 @@ let ComercialClientesService = class ComercialClientesService {
     sapPostClient(data) {
         return this.http
             .post(`${this.API}/postsap`, data)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(0));
     }
     getPropostaAnaliseCredito(codCliente) {
         return this.http

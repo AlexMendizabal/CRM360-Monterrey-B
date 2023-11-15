@@ -3267,14 +3267,12 @@
                   _this39.pnotifyService.error('Não foi encontrado nenhum item no arquivo CSV para exportação ou o modelo está incorreto.');
 
                   _this39.content = [];
-                  return "break";
+                  return 1; // break
                 }
               };
 
               for (var i = 0; i < this.content.length; i++) {
-                var _ret = _loop(i);
-
-                if (_ret === "break") break;
+                if (_loop(i)) break;
               }
             } else {
               this.loaderNavbar = false;

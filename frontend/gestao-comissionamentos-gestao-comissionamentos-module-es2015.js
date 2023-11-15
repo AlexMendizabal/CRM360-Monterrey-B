@@ -878,18 +878,18 @@ let ComercialComissoesGestaoComissionamentosFormularioComponent = class Comercia
         this.totalItems = 0;
         this.data = [];
         this.meses = [
-            'Janeiro',
-            'Fevereiro',
-            'Março',
+            'Enero',
+            'Febrero',
+            'Marzo',
             'Abril',
-            'Maio',
-            'Junho',
-            'Julho',
+            'Mayo',
+            'Junio',
+            'Julio',
             'Agosto',
-            'Setembro',
-            'Outubro',
-            'Novembro',
-            'Dezembro',
+            'Setiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre',
         ];
         this.localeService.use('pt-br');
     }

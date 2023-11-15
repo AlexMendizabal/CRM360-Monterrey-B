@@ -1273,6 +1273,22 @@ let DateService = class DateService {
         let date = new Date();
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
+    // Función para obtener la fecha de inicio de la semana actual (lunes)
+    getStartOfWeek() {
+        const currentDate = new Date();
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+        startOfWeek.setHours(0, 0, 0, 0);
+        return startOfWeek;
+    }
+    // Función para obtener la fecha de fin de la semana actual (domingo)
+    getEndOfWeek() {
+        const currentDate = new Date();
+        const endOfWeek = new Date(currentDate);
+        endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+        endOfWeek.setHours(23, 59, 59, 999);
+        return endOfWeek;
+    }
     convert2PhpDate(date) {
         const y = date.getFullYear();
         let m = date.getMonth() + 1;
@@ -1655,7 +1671,7 @@ const routes = [
             },
             {
                 path: 'analise-compras-multi-visoes',
-                loadChildren: () => Promise.all(/*! import() | analise-compras-multi-visoes-analise-compras-multi-visoes-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("analise-compras-multi-visoes-analise-compras-multi-visoes-module")]).then(__webpack_require__.bind(null, /*! ./analise-compras-multi-visoes/analise-compras-multi-visoes.module */ "7cRG")).then(m => m.AbastecimentoMonitoresAnaliseComprasMultiVisoesModule)
+                loadChildren: () => Promise.all(/*! import() | analise-compras-multi-visoes-analise-compras-multi-visoes-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("analise-compras-multi-visoes-analise-compras-multi-visoes-module")]).then(__webpack_require__.bind(null, /*! ./analise-compras-multi-visoes/analise-compras-multi-visoes.module */ "7cRG")).then(m => m.AbastecimentoMonitoresAnaliseComprasMultiVisoesModule)
             },
             {
                 path: 'integracao-pedidos',
@@ -1663,7 +1679,7 @@ const routes = [
             },
             {
                 path: 'nfe-sem-pedido-pai',
-                loadChildren: () => Promise.all(/*! import() | nfe-sem-pedido-pai-nfe-sem-pedido-pai-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("nfe-sem-pedido-pai-nfe-sem-pedido-pai-module")]).then(__webpack_require__.bind(null, /*! ./nfe-sem-pedido-pai/nfe-sem-pedido-pai.module */ "FSzN")).then(m => m.AbastecimentoMonitoresNfeSemPedidoPaiModule)
+                loadChildren: () => Promise.all(/*! import() | nfe-sem-pedido-pai-nfe-sem-pedido-pai-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("nfe-sem-pedido-pai-nfe-sem-pedido-pai-module")]).then(__webpack_require__.bind(null, /*! ./nfe-sem-pedido-pai/nfe-sem-pedido-pai.module */ "FSzN")).then(m => m.AbastecimentoMonitoresNfeSemPedidoPaiModule)
             },
             {
                 path: '**',

@@ -1493,6 +1493,26 @@
           value: function getToday() {
             var date = new Date();
             return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          } // Función para obtener la fecha de inicio de la semana actual (lunes)
+
+        }, {
+          key: "getStartOfWeek",
+          value: function getStartOfWeek() {
+            var currentDate = new Date();
+            var startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            startOfWeek.setHours(0, 0, 0, 0);
+            return startOfWeek;
+          } // Función para obtener la fecha de fin de la semana actual (domingo)
+
+        }, {
+          key: "getEndOfWeek",
+          value: function getEndOfWeek() {
+            var currentDate = new Date();
+            var endOfWeek = new Date(currentDate);
+            endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+            endOfWeek.setHours(23, 59, 59, 999);
+            return endOfWeek;
           }
         }, {
           key: "convert2PhpDate",
@@ -1749,7 +1769,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | relatorios-relatorios-module */
-            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("common"), __webpack_require__.e("relatorios-relatorios-module")]).then(__webpack_require__.bind(null,
             /*! ./relatorios/relatorios.module */
             "VT94")).then(function (m) {
               return m.LogisticaRelatoriosModule;
@@ -1792,7 +1812,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | cadastros-cadastros-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("common"), __webpack_require__.e("cadastros-cadastros-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("cadastros-cadastros-module")]).then(__webpack_require__.bind(null,
             /*! ./cadastros/cadastros.module */
             "CrqY")).then(function (m) {
               return m.CadastrosModule;
@@ -1803,7 +1823,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | entrada-materiais-entrada-materiais-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("default~agendamentos-agendamentos-module~associacao-etapas-associacao-etapas-module~checklist-checkl~6711bf61"), __webpack_require__.e("common"), __webpack_require__.e("entrada-materiais-entrada-materiais-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("default~agendamentos-agendamentos-module~associacao-etapas-associacao-etapas-module~checklist-checkl~6711bf61"), __webpack_require__.e("common"), __webpack_require__.e("entrada-materiais-entrada-materiais-module")]).then(__webpack_require__.bind(null,
             /*! ./entrada-materiais/entrada-materiais.module */
             "zSPA")).then(function (m) {
               return m.LogisticaEntradaMateriaisModule;
@@ -1814,7 +1834,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | yms-yms-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("yms-yms-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("yms-yms-module")]).then(__webpack_require__.bind(null,
             /*! ./yms/yms.module */
             "A5BG")).then(function (m) {
               return m.LogisticaYmsModule;
@@ -1825,7 +1845,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | estoque-inventario-inventario-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("estoque-inventario-inventario-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("estoque-inventario-inventario-module")]).then(__webpack_require__.bind(null,
             /*! ./estoque/inventario/inventario.module */
             "0B+E")).then(function (m) {
               return m.LogisticaEstoqueInventarioModule;
@@ -1836,7 +1856,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | estoque-painel-inventario-painel-inventario-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("estoque-painel-inventario-painel-inventario-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("estoque-painel-inventario-painel-inventario-module")]).then(__webpack_require__.bind(null,
             /*! ./estoque/painel-inventario/painel-inventario.module */
             "+vhV")).then(function (m) {
               return m.LogisticaEstoquePainelInventarioModule;
@@ -1847,7 +1867,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | entrega-entrega-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("entrega-entrega-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("entrega-entrega-module")]).then(__webpack_require__.bind(null,
             /*! ./entrega/entrega.module */
             "93OK")).then(function (m) {
               return m.LogisticaEntregaModule;
@@ -1869,7 +1889,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | peacao-peacao-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("peacao-peacao-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("peacao-peacao-module")]).then(__webpack_require__.bind(null,
             /*! ./peacao/peacao.module */
             "fsvQ")).then(function (m) {
               return m.LogisticaPeacaoModule;
@@ -1880,7 +1900,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | pedagio-pedagio-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("common"), __webpack_require__.e("pedagio-pedagio-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("common"), __webpack_require__.e("pedagio-pedagio-module")]).then(__webpack_require__.bind(null,
             /*! ./pedagio/pedagio.module */
             "/koB")).then(function (m) {
               return m.PedadioModule;

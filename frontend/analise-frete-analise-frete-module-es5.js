@@ -57,7 +57,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | v1-v1-module */
-          [__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("common"), __webpack_require__.e("v1-v1-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("common"), __webpack_require__.e("v1-v1-module")]).then(__webpack_require__.bind(null,
           /*! ./v1/v1.module */
           "NQzL")).then(function (m) {
             return m.V1Module;

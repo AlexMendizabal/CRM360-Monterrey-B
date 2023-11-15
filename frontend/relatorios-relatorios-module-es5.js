@@ -1079,6 +1079,26 @@
           value: function getToday() {
             var date = new Date();
             return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          } // Función para obtener la fecha de inicio de la semana actual (lunes)
+
+        }, {
+          key: "getStartOfWeek",
+          value: function getStartOfWeek() {
+            var currentDate = new Date();
+            var startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            startOfWeek.setHours(0, 0, 0, 0);
+            return startOfWeek;
+          } // Función para obtener la fecha de fin de la semana actual (domingo)
+
+        }, {
+          key: "getEndOfWeek",
+          value: function getEndOfWeek() {
+            var currentDate = new Date();
+            var endOfWeek = new Date(currentDate);
+            endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+            endOfWeek.setHours(23, 59, 59, 999);
+            return endOfWeek;
           }
         }, {
           key: "convert2PhpDate",
@@ -2216,7 +2236,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | posicao-diaria-posicao-diaria-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("posicao-diaria-posicao-diaria-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("posicao-diaria-posicao-diaria-module")]).then(__webpack_require__.bind(null,
             /*! ./posicao-diaria/posicao-diaria.module */
             "qRfM")).then(function (m) {
               return m.ComercialRelatoriosPosicaoDiariaModule;
@@ -2229,7 +2249,7 @@
             loadChildren: function loadChildren() {
               return Promise.all(
               /*! import() | comissoes-representantes-comissoes-representantes-module */
-              [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("comissoes-representantes-comissoes-representantes-module")]).then(__webpack_require__.bind(null,
+              [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("comissoes-representantes-comissoes-representantes-module")]).then(__webpack_require__.bind(null,
               /*! ./comissoes-representantes/comissoes-representantes.module */
               "rT92")).then(function (m) {
                 return m.ComercialRelatoriosComissoesRepresentantesModule;

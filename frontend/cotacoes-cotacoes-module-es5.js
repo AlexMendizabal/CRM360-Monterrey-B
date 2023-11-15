@@ -586,47 +586,59 @@
       /* harmony import */
 
 
-      var _lista_lista_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
+      var _lista_pdf_pdf_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
+      /*! ./lista/pdf/pdf.component */
+      "yCb5");
+      /* harmony import */
+
+
+      var _lista_lista_module__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
       /*! ./lista/lista.module */
       "JEP3");
       /* harmony import */
 
 
-      var _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      var _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
       /*! ./formulario/formulario.module */
       "1Ydl");
       /* harmony import */
 
 
-      var _lista_lista_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+      var _lista_lista_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
       /*! ./lista/lista.component */
       "2MMy");
       /* harmony import */
 
 
-      var _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      var _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
       /*! ./formulario/formulario.component */
-      "TgPE"); // Guards
+      "TgPE");
+      /* harmony import */
+
+
+      var _lista_vista_vista_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
+      /*! ./lista/vista/vista.component */
+      "JBmo"); // Guards
       // Modules
       // Components
 
 
       var routes = [{
         path: 'lista',
-        component: _lista_lista_component__WEBPACK_IMPORTED_MODULE_12__["ComercialCicloVendasCotacoesListaComponent"],
+        component: _lista_lista_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasCotacoesListaComponent"],
         resolve: {
           profile: _lista_guards_profile_resolver_guard__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaProfilesResolverGuard"]
         }
       }, {
         path: 'lista/:codCotacao/:codEmpresa',
-        component: _lista_lista_component__WEBPACK_IMPORTED_MODULE_12__["ComercialCicloVendasCotacoesListaComponent"],
+        component: _lista_lista_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasCotacoesListaComponent"],
         resolve: {
           data: _lista_guards_finalizacao_resolver_guard__WEBPACK_IMPORTED_MODULE_9__["ComercialCicloVendasCotacoesListaFinalizacaoResolverGuard"],
           profile: _lista_guards_profile_resolver_guard__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaProfilesResolverGuard"]
         }
       }, {
         path: 'novo/:idReservado/:codEmpresa',
-        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasCotacoesFormularioComponent"],
+        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_14__["ComercialCicloVendasCotacoesFormularioComponent"],
         resolve: {
           cliente: _formulario_guards_cliente_resolver_guard__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesFormularioClienteResolverGuard"],
           data: _formulario_guards_data_resolver_guard__WEBPACK_IMPORTED_MODULE_6__["ComercialCicloVendasCotacoesFormularioDataResolverGuard"],
@@ -636,7 +648,7 @@
         canDeactivate: [src_app_guards_form_deactivate_guard__WEBPACK_IMPORTED_MODULE_3__["FormDeactivateGuard"]]
       }, {
         path: 'novo/:idReservado',
-        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasCotacoesFormularioComponent"],
+        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_14__["ComercialCicloVendasCotacoesFormularioComponent"],
         resolve: {
           cliente: _formulario_guards_cliente_resolver_guard__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesFormularioClienteResolverGuard"],
           data: _formulario_guards_data_resolver_guard__WEBPACK_IMPORTED_MODULE_6__["ComercialCicloVendasCotacoesFormularioDataResolverGuard"],
@@ -646,7 +658,7 @@
         canDeactivate: [src_app_guards_form_deactivate_guard__WEBPACK_IMPORTED_MODULE_3__["FormDeactivateGuard"]]
       }, {
         path: 'editar/:codCotacao/:idEmpresa',
-        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasCotacoesFormularioComponent"],
+        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_14__["ComercialCicloVendasCotacoesFormularioComponent"],
         resolve: {
           cliente: _formulario_guards_cliente_resolver_guard__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesFormularioClienteResolverGuard"],
           data: _formulario_guards_data_resolver_guard__WEBPACK_IMPORTED_MODULE_6__["ComercialCicloVendasCotacoesFormularioDataResolverGuard"],
@@ -656,7 +668,7 @@
         canDeactivate: [src_app_guards_form_deactivate_guard__WEBPACK_IMPORTED_MODULE_3__["FormDeactivateGuard"]]
       }, {
         path: 'visualizar/:codCotacao/:idEmpresa',
-        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasCotacoesFormularioComponent"],
+        component: _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_14__["ComercialCicloVendasCotacoesFormularioComponent"],
         resolve: {
           cliente: _formulario_guards_cliente_resolver_guard__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesFormularioClienteResolverGuard"],
           data: _formulario_guards_data_resolver_guard__WEBPACK_IMPORTED_MODULE_6__["ComercialCicloVendasCotacoesFormularioDataResolverGuard"],
@@ -667,7 +679,15 @@
       }, {
         path: '',
         redirectTo: 'lista',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        children: [{
+          path: 'pdf',
+          component: _lista_pdf_pdf_component__WEBPACK_IMPORTED_MODULE_10__["PdfComponent"],
+          pathMatch: 'full'
+        }, {
+          path: 'vista/:id_oferta',
+          component: _lista_vista_vista_component__WEBPACK_IMPORTED_MODULE_15__["VistaComponent"]
+        }]
       }];
 
       var ComercialCicloVendasCotacoesRoutingModule = /*#__PURE__*/_createClass(function ComercialCicloVendasCotacoesRoutingModule() {
@@ -675,7 +695,7 @@
       });
 
       ComercialCicloVendasCotacoesRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-        imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes), _lista_lista_module__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasCotacoesListaModule"], _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_11__["ComercialCicloVendasCotacoesFormularioModule"]],
+        imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes), _lista_lista_module__WEBPACK_IMPORTED_MODULE_11__["ComercialCicloVendasCotacoesListaModule"], _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_12__["ComercialCicloVendasCotacoesFormularioModule"]],
         exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]]
       })], ComercialCicloVendasCotacoesRoutingModule);
       /***/

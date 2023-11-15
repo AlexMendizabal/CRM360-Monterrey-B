@@ -101,7 +101,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | associacoes-associacoes-module */
-            [__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("common"), __webpack_require__.e("associacoes-associacoes-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("associacoes-associacoes-module")]).then(__webpack_require__.bind(null,
             /*! ./associacoes/associacoes.module */
             "GkgG")).then(function (m) {
               return m.ControladoriaAssociacoesModule;

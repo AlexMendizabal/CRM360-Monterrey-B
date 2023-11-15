@@ -13,6 +13,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
+use App\Services\Helper;
 
 /**
  * Class ComercialController
@@ -49,7 +50,8 @@ class ComercialController extends AbstractController
                 @PARAMETRO = 4,
                 @NR_MATR = '{$matricula}'
         ")->fetchAll();
-        if (count($res) > 0) {
+
+    if (count($res) > 0) {
             for ($i = 0; $i < count($res); $i++) {
                 if ($res[$i]['sigla_perfil'] == 'COME_VEND') {
                     $perfil->vendedor = true;
@@ -646,6 +648,138 @@ class ComercialController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    
-    
+    /**
+     * @Route(
+     *  "/comercial/materiales_suplementarios",
+     *  name="comercial.materiales_suplementarios",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function materialesContratipos(Connection $connection, Request $request)
+    {
+
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $helper = new Helper();
+            $params = $request->query->all();
+            $id_material = $params['id_material'] ?? '';
+            $id_lista_precio = $params['id_lista'] ?? '';
+            $registros = $params['registros'] ?? '';
+            $estado_material = 1;
+            $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
+            $result = [];
+             
+
+            if (isset($id_material)) {
+                $query1 =  "SELECT TOP 1 MATE.ID_CODIGOMATERIAL AS id_codigo_material, MATE.CODIGOMATERIAL AS codigo_material, 
+                MATE.DESCRICAO AS nombre_material 
+                FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = :id_material";
+                $buscar_material_filtro = $connection->prepare($query1);
+                $buscar_material_filtro->bindValue('id_material', $id_material);
+                $buscar_material_filtro->execute();
+                $res1 = $buscar_material_filtro->fetchAll();
+
+                if (count($res1) > 0) {
+                    $material_filtro = $res1[0]['codigo_material'];
+
+                    $filtrar_material =  $this->filtrarMaterialContratipo($connection, $id_material, $estado_material, $id_lista_precio, $id_vendedor);
+
+                    if ($filtrar_material != false) {
+                        $result = $filtrar_material;
+                        /*     $result['filtro'] =  $res1; */
+                        $message = array(
+                            'responseCode' => 200,
+                            'result' => $result,
+                            'estado' => true
+                        );
+                    } else {
+                        $message = array(
+                            'responseCode' => 204,
+                            'result' => null,
+                            'estado' => false
+                        );
+                    }
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'result' => null,
+                        'estado' => false
+                    );
+                }
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => null,
+                    'estado' => false
+                );
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => 401,
+                'result' => $e->getMessage(),
+                'estado' => false
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    public function filtrarMaterialContratipo($connection, $codMaterial, $estado_material,  $id_lista_precio, $id_vendedor)
+    {
+        $query = "SELECT
+        distinct 
+        MATE.ID_CODIGOMATERIAL as id_material, 
+        PM.id as id_precio_material,
+        MATE.CODIGOMATERIAL AS codigo_material, 
+        MATE.DESCRICAO AS nombre_material, 
+        DEPO.CODIGO_ALMACEN AS nombre_almacen,
+        DEPO.ID AS id_almacen, 
+        PM.peso AS peso,
+        UNI.id as id_unidad,
+        UNI.NOMBRE_UNI AS unidad,
+        MATDEP.cantidad AS cantidad, 
+        PM.precio as precio, 
+        0.00 as descuento, 
+        PM.precio AS precio_neto, (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
+        MONE.nombre_moneda,
+        'A' AS codigo_situacion,
+        BASE.id_classe AS id_linea,
+        BASE.descricao as nombre_linea,
+        MATE.largo_material as largo_material
+        from 
+        TB_ALMACEN_VENDEDOR as AV
+        inner join TB_DEPO_FISI_ESTO as DEPO ON DEPO.ID = AV.id_almacen
+        inner JOIN TB_MATERIAL_DEPOSITO as MATDEP ON MATDEP.id_deposito = DEPO.ID
+        inner join TB_MATE as MATE ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
+        INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
+        INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
+        INNER JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
+        INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
+        INNER JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
+        inner join TB_LISTA_PRECIO LP On LP.id = PM.id_lista
+                    where AV.id_vendedor = :id_vendedor 
+                    AND LP.id = :id_lista_precio
+                    and MATE.ID_CODIGOMATERIAL IN (SELECT TOP 1 TB_MATERIALES_CONTRATIPOS.id_material 
+                    FROM TB_MATERIALES_CONTRATIPOS 
+                    WHERE TB_MATERIALES_CONTRATIPOS.id_filtro_material = :CODIGOMATERIAL 
+                    AND TB_MATERIALES_CONTRATIPOS.estado = :estado_material)
+                    order by DEPO.ID asc";
+
+        $buscar_material = $connection->prepare($query);
+        $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
+        $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
+        $buscar_material->bindValue('CODIGOMATERIAL',  (int)$codMaterial);
+        $buscar_material->bindValue('estado_material', (int)$estado_material);
+        $buscar_material->execute();
+        $res = $buscar_material->fetchAll();
+        
+        if (count($res) > 0) {
+            return $res;
+        } else {
+            return false;
+        }
+    }
 }

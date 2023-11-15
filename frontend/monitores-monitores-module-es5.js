@@ -1820,6 +1820,26 @@
           value: function getToday() {
             var date = new Date();
             return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          } // Función para obtener la fecha de inicio de la semana actual (lunes)
+
+        }, {
+          key: "getStartOfWeek",
+          value: function getStartOfWeek() {
+            var currentDate = new Date();
+            var startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            startOfWeek.setHours(0, 0, 0, 0);
+            return startOfWeek;
+          } // Función para obtener la fecha de fin de la semana actual (domingo)
+
+        }, {
+          key: "getEndOfWeek",
+          value: function getEndOfWeek() {
+            var currentDate = new Date();
+            var endOfWeek = new Date(currentDate);
+            endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+            endOfWeek.setHours(23, 59, 59, 999);
+            return endOfWeek;
           }
         }, {
           key: "convert2PhpDate",
@@ -2403,7 +2423,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | analise-compras-multi-visoes-analise-compras-multi-visoes-module */
-            [__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~client~9b50b625"), __webpack_require__.e("analise-compras-multi-visoes-analise-compras-multi-visoes-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("analise-compras-multi-visoes-analise-compras-multi-visoes-module")]).then(__webpack_require__.bind(null,
             /*! ./analise-compras-multi-visoes/analise-compras-multi-visoes.module */
             "7cRG")).then(function (m) {
               return m.AbastecimentoMonitoresAnaliseComprasMultiVisoesModule;
@@ -2425,7 +2445,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | nfe-sem-pedido-pai-nfe-sem-pedido-pai-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("nfe-sem-pedido-pai-nfe-sem-pedido-pai-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("nfe-sem-pedido-pai-nfe-sem-pedido-pai-module")]).then(__webpack_require__.bind(null,
             /*! ./nfe-sem-pedido-pai/nfe-sem-pedido-pai.module */
             "FSzN")).then(function (m) {
               return m.AbastecimentoMonitoresNfeSemPedidoPaiModule;

@@ -83,7 +83,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | servicos-contatos-contatos-module */
-            [__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("common"), __webpack_require__.e("servicos-contatos-contatos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("common"), __webpack_require__.e("servicos-contatos-contatos-module")]).then(__webpack_require__.bind(null,
             /*! ../servicos/contatos/contatos.module */
             "19/A")).then(function (m) {
               return m.ServicosContatosModule;

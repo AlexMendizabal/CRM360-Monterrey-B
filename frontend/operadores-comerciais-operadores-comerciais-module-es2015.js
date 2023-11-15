@@ -1396,6 +1396,22 @@ let DateService = class DateService {
         let date = new Date();
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
+    // Función para obtener la fecha de inicio de la semana actual (lunes)
+    getStartOfWeek() {
+        const currentDate = new Date();
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+        startOfWeek.setHours(0, 0, 0, 0);
+        return startOfWeek;
+    }
+    // Función para obtener la fecha de fin de la semana actual (domingo)
+    getEndOfWeek() {
+        const currentDate = new Date();
+        const endOfWeek = new Date(currentDate);
+        endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+        endOfWeek.setHours(23, 59, 59, 999);
+        return endOfWeek;
+    }
     convert2PhpDate(date) {
         const y = date.getFullYear();
         let m = date.getMonth() + 1;
@@ -1583,6 +1599,13 @@ let ComercialService = class ComercialService {
     getMaterialesOfertaVendedor(params) {
         return this.http
             .get(`${this.API}/materiales_lista_precio_vendedor`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getUpSellService(params) {
+        return this.http
+            .get(`${this.API}/materiales_suplementarios`, {
             params: params,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));

@@ -14,6 +14,7 @@ use Doctrine\DBAL\DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\ComercialController;
+use App\Services\Helper;
 
 /**
  * Class VendedorController
@@ -58,7 +59,6 @@ class VendedorController extends AbstractController
                 $idVendedores[] = $value["codVendedor"];
             }
         }
-
         return $idVendedores;
     }
 
@@ -115,16 +115,16 @@ class VendedorController extends AbstractController
      * )
      * @return JsonResponse
      */
-    public function getVendedores(Connection $connection, Request $request)
+    ///////////////////////////MÉTODO ORIGINAL DE getVendedores////////////////////////////
+   /*  public function getVendedores(Connection $connection, Request $request)
     {
-
-        /* dd('vendedor');  */
+        // dd('vendedor'); 
         try {
             $usuarioController = new UsuarioController();
             $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            /* dd($infoUsuario); */
+            // dd($infoUsuario); 
             $id_usuario = $infoUsuario->id;
-            /* dd($id_usuario); */
+            // dd($id_usuario);
             if ($id_usuario  == 1) {
                 $res = $connection->query("
                     EXEC [PRC_COME_VEND_ESCR_CONS]
@@ -140,8 +140,8 @@ class VendedorController extends AbstractController
             ")->fetchAll();
             }
 
-            /*             dd($res);
- */
+                     //dd($res);
+ 
             if (count($res) > 0) {
                 for ($i = 0; $i < count($res); $i++) {
                     $vendedores[] = array(
@@ -150,8 +150,8 @@ class VendedorController extends AbstractController
                         'nome' => trim($res[$i]['nome'])
                     );
                 }
-                /*                 dd($vendedores);
- */
+                //                dd($vendedores);
+ 
                 array_multisort(array_column($vendedores, 'nome'), SORT_ASC, $vendedores);
 
                 $message = array(
@@ -171,7 +171,41 @@ class VendedorController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
-    }
+    } */
+ 
+    public function getVendedores(Connection $connection, Request $request){
+        try {
+              $query = "SELECT ID, CONCAT(NM_VEND,' ', NM_RAZA_SOCI) AS nombre 
+                        FROM TB_VEND";
+  
+              $stmt = $connection->prepare($query);
+              $stmt->execute();
+              $res = $stmt->fetchAll();
+               // dd($res);
+              if (count($res) > 0) {
+                  $message = array(
+                      "responseCode" => 200,
+                      "data" => $res,
+                      "success" => true
+                  );
+              } else {
+                  $message = array(
+                      "responseCode" => 204,
+                      "message" => "No existe el vendedor",
+                      "success" => false
+                  );  
+              }
+        } catch (\Throwable $th) {
+          $message = array(
+              "responseCode" => 400,
+              "message" => $th->getMessage(),
+              "success" => false
+          );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;  
+      }
 
     /**
      * @Route(
@@ -185,7 +219,6 @@ class VendedorController extends AbstractController
      */
     public function getClientesCarteira(Connection $connection, Request $request)
     {
-
         try {
 
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -570,6 +603,33 @@ class VendedorController extends AbstractController
         return $arrayVendedores;
     }
 
+    
+    /**
+     * @Route(
+     *  "/comercial/vendedor/datosvendedor/{id}",
+     *  name="comercial.vendedor-datosvendedor",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getVend(Connection $connection, $id)
+    {   
+        $FunctionsController = new FunctionsController();
+        try {
+            $query = "SELECT * FROM TB_VEND WHERE ID = :id";
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(':id', $id); 
+            $stmt->execute();
+            $res = $stmt->fetch();
+            
+            return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
+        }
+        catch (\PDOException $e) 
+        {
+        return $FunctionsController->Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }   
+
     /**
      * @Route(
      *  "/comercial/vendedor/sucursal-vendedor/{id}",
@@ -593,7 +653,6 @@ class VendedorController extends AbstractController
                     @ID_ESCR = '{$id}'")->fetchAll();
                 }
 
-
                 //dd($res);
                 if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -609,6 +668,7 @@ class VendedorController extends AbstractController
             return FunctionsController::Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
+
     /**
      * @Route(
      *  "/comercial/vendedor/rubros",
@@ -647,6 +707,102 @@ class VendedorController extends AbstractController
                 'responseCode' => 204,
                 'result' => $e->getMessage(),
                 'estado' => false
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+    /**
+     * @Route(
+     *  "/comercial/clientes/vendedor/ciudad",
+     *  name="comercial.vendedor-ciudad",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getVendedorCiudad(Connection $connection, Request $request)
+    {
+        try {
+            $usuarioController = new UsuarioController();
+            $helper = new Helper();
+            $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $params = $request->query->all();
+            $id_vendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor ;
+            $array_vendedor = array();
+
+            $latitud = 0;
+            $longitud = 0;
+
+
+            $vendedor = $helper->buscarCiudadVendedor($connection, $id_vendedor);
+            if ($vendedor != false) {
+
+                switch ($vendedor['id_ciudad']) {
+                    case 1:
+                        //Santa Cruz
+                        $latitud = -17.78629;
+                        $longitud = -63.18117;
+                        break;
+                    case 2:
+                        //La paz
+                        $latitud = -16.504691;
+                        $longitud = -68.126613;
+                        break;
+                    case 3:
+                        //Chuquisaca
+                        $latitud = -19.042450;
+                        $longitud = -65.253178;
+                        break;
+                    case 4:
+                        //Beni
+                        $latitud = -14.834296;
+                        $longitud = -64.902406;
+                        break;
+                    case 5:
+                        //Potosi
+                        $latitud = -19.573114;
+                        $longitud = -65.754816;
+                        break;
+                    case 6:
+                        //Tarija
+                        $latitud = -21.531525;
+                        $longitud = -64.739782;
+                        break;
+                    default:
+                        break;
+                }
+                $array_vendedor = ([
+                    'id_vendedor' => $vendedor['id_vendedor'],
+                    'id_ciudad' => $vendedor['id_ciudad'],
+                    'nombre_ciudad' => $vendedor['nombre_ciudad'],
+                    'id_escritorio' => $vendedor['id_escritorio'],
+                    'nombre_escritorio' => $vendedor['nombre_escritorio'],
+                    'latitud' => $latitud,
+                    'longitud' => $longitud,
+                ]
+                );
+                $message = array(
+                    'responseCode' => 200,
+                    'message' => 'Datos encontrados exitosamente',
+                    'estado' => true,
+                    'result' => $array_vendedor
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'message' => 'Error no se encuentran los registros',
+                    'estado' => false,
+                    'result' => null
+                );
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false,
+                'result' => null
             );
         }
 

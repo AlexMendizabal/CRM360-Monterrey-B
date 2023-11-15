@@ -7,7 +7,7 @@
 
   function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 
-  function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+  function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 
   function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -2921,10 +2921,10 @@
                   });
                 }
 
-                for (var _i2 = 0; _i2 < _enderecosAguardando.length; _i2++) {
+                for (var _i = 0; _i < _enderecosAguardando.length; _i++) {
                   enderecosAguardando.push({
-                    codEndereco: _enderecosAguardando[_i2].id,
-                    descricao: _this12.formatLocalEntrega(_enderecosAguardando[_i2]),
+                    codEndereco: _enderecosAguardando[_i].id,
+                    descricao: _this12.formatLocalEntrega(_enderecosAguardando[_i]),
                     tipo: 'Aguardando aprovação'
                   });
                 }
@@ -4290,37 +4290,37 @@
                 var _hasError = false,
                     _qtdeAdicionados = 0;
 
-                for (var _i3 = 0; _i3 < materiais[0].length; _i3++) {
-                  if (this.checkMaterialExists(materiais[_i3]) === false) {
+                for (var _i2 = 0; _i2 < materiais[0].length; _i2++) {
+                  if (this.checkMaterialExists(materiais[_i2]) === false) {
                     this.materiais.push(this.formBuilder.group({
                       nrItem: [this.nrItem],
-                      idReservado: [materiais[0][_i3].idReservado],
-                      codCotacao: [materiais[0][_i3].codCotacao],
-                      codMaterial: [materiais[0][_i3].codMaterial],
-                      nomeMaterial: [materiais[0][_i3].nomeMaterial],
-                      quantidade: [materiais[0][_i3].qtdeItem, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      valorUnit: [materiais[0][_i3].valorUnit],
-                      valor: [materiais[0][_i3].valor, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      percentualIpi: [materiais[0][_i3].percentualIpi],
-                      valorIpi: [materiais[0][_i3].valorIpi, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      percentualIcms: [materiais[0][_i3].percentualIcms],
-                      valorIcms: [materiais[0][_i3].valorIcms, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      valorIcmsSt: [materiais[0][_i3].valorIcmsSt != null ? materiais[0][_i3].valorIcmsSt : 0, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      tipoDesc: [materiais[0][_i3].tipoDesc],
-                      valorDesc: [materiais[0][_i3].valorDesc],
-                      percentualDesc: [materiais[0][_i3].percentualDesc],
-                      valorTotalOri: [materiais[0][_i3].valorTotalOri],
-                      valorTotal: [materiais[0][_i3].valorTotal, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      codEmpresa: [materiais[0][_i3].codEmpresa],
-                      nomeEmpresa: [materiais[0][_i3].nomeEmpresa],
-                      codDeposito: [materiais[0][_i3].codDeposito],
-                      nomeDeposito: [materiais[0][_i3].nomeDeposito],
-                      medida1: [materiais[0][_i3].medida1],
-                      medida2: [materiais[0][_i3].medida2],
-                      pesoEspecifico: [materiais[0][_i3].peso],
-                      materialAssociado: [materiais[0][_i3].materialAssociado]
+                      idReservado: [materiais[0][_i2].idReservado],
+                      codCotacao: [materiais[0][_i2].codCotacao],
+                      codMaterial: [materiais[0][_i2].codMaterial],
+                      nomeMaterial: [materiais[0][_i2].nomeMaterial],
+                      quantidade: [materiais[0][_i2].qtdeItem, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      valorUnit: [materiais[0][_i2].valorUnit],
+                      valor: [materiais[0][_i2].valor, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      percentualIpi: [materiais[0][_i2].percentualIpi],
+                      valorIpi: [materiais[0][_i2].valorIpi, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      percentualIcms: [materiais[0][_i2].percentualIcms],
+                      valorIcms: [materiais[0][_i2].valorIcms, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      valorIcmsSt: [materiais[0][_i2].valorIcmsSt != null ? materiais[0][_i2].valorIcmsSt : 0, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      tipoDesc: [materiais[0][_i2].tipoDesc],
+                      valorDesc: [materiais[0][_i2].valorDesc],
+                      percentualDesc: [materiais[0][_i2].percentualDesc],
+                      valorTotalOri: [materiais[0][_i2].valorTotalOri],
+                      valorTotal: [materiais[0][_i2].valorTotal, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      codEmpresa: [materiais[0][_i2].codEmpresa],
+                      nomeEmpresa: [materiais[0][_i2].nomeEmpresa],
+                      codDeposito: [materiais[0][_i2].codDeposito],
+                      nomeDeposito: [materiais[0][_i2].nomeDeposito],
+                      medida1: [materiais[0][_i2].medida1],
+                      medida2: [materiais[0][_i2].medida2],
+                      pesoEspecifico: [materiais[0][_i2].peso],
+                      materialAssociado: [materiais[0][_i2].materialAssociado]
                     }));
-                    this.setSelectedCodEmpresa(materiais[0][_i3].codEmpresa);
+                    this.setSelectedCodEmpresa(materiais[0][_i2].codEmpresa);
                     _qtdeAdicionados++;
                   }
                 }

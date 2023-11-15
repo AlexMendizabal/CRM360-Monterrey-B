@@ -517,7 +517,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | romaneios-romaneios-module */
-          [__webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null,
           /*! ./romaneios/romaneios.module */
           "ZD/H")).then(function (m) {
             return m.LogisticaEntregaRomaneiosModule;
@@ -528,7 +528,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | controle-entregas-controle-entregas-module */
-          [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("common"), __webpack_require__.e("controle-entregas-controle-entregas-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("common"), __webpack_require__.e("controle-entregas-controle-entregas-module")]).then(__webpack_require__.bind(null,
           /*! ./controle-entregas/controle-entregas.module */
           "bH31")).then(function (m) {
             return m.ComercialControleEntregasModule;
@@ -539,7 +539,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | desmembramento-desmembramento-module */
-          [__webpack_require__.e("default~agendamentos-agendamentos-module~clientes-clientes-module~comissoes-representantes-comissoes~aca75b5b"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null,
           /*! ./desmembramento/desmembramento.module */
           "9bwc")).then(function (m) {
             return m.LogisticaEntregaDesmembramentoModule;
@@ -550,7 +550,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | monitores-monitores-module */
-          [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~29b4a15b"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~fbbac6a4"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~cadastros-cadastr~c775e3ff"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null,
           /*! ./monitores/monitores.module */
           "D14F")).then(function (m) {
             return m.LogisticaEntregaMonitoresModule;

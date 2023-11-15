@@ -1056,6 +1056,13 @@
             }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "getUpSellService",
+          value: function getUpSellService(params) {
+            return this.http.get("".concat(this.API, "/materiales_suplementarios"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getLinhas",
           value: function getLinhas(params) {
             var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();

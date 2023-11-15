@@ -1517,7 +1517,8 @@ class CadastroController extends AbstractController
   public function getContatos(Connection $connection, Request $request, $codCliente)
   {
     try {
-      $res = $connection->query("
+
+        $res = $connection->query("
           EXEC [PRC_CLIE_CONT_CONS]
             @ID_CLIE = {$codCliente}
       ")->fetchAll();
@@ -1573,6 +1574,7 @@ class CadastroController extends AbstractController
       } else {
         return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
+      
     } catch (DBALException $e) {
       return FunctionsController::Retorno(
         false, 
@@ -1887,6 +1889,7 @@ class CadastroController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
+
         $res = $connection->query(
           "
             EXEC [PRC_CLIE_DADO_RELA_CONS]

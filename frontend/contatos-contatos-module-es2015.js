@@ -638,6 +638,12 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/grupo-economico/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getVendedorCiudad(id_vendedor) {
+        const httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]().set('id_vendedor', id_vendedor);
+        return this.http
+            .get(`${this.API}/vendedor/ciudad`, { params: httpParams })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getPermissaoAcesso(id) {
         return this.http
             .get(`${this.API}/permissao-acesso/${id}`)
@@ -665,6 +671,9 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/contactodetalle/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getTipoClientes() {
+        return this.http.get(`${this.API}/tipo_cliente`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
     getExisteCpfCnpj(documento, getDadosCliente) {
         return this.http
             .get(`${this.API}/verificar-cpf-cnpj/${documento}?getDadosCliente=${getDadosCliente === true ? 1 : 0}`)
@@ -678,7 +687,7 @@ let ComercialClientesService = class ComercialClientesService {
     sapPostClient(data) {
         return this.http
             .post(`${this.API}/postsap`, data)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(0));
     }
     getPropostaAnaliseCredito(codCliente) {
         return this.http
@@ -1025,6 +1034,22 @@ let DateService = class DateService {
     getToday() {
         let date = new Date();
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    // Función para obtener la fecha de inicio de la semana actual (lunes)
+    getStartOfWeek() {
+        const currentDate = new Date();
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+        startOfWeek.setHours(0, 0, 0, 0);
+        return startOfWeek;
+    }
+    // Función para obtener la fecha de fin de la semana actual (domingo)
+    getEndOfWeek() {
+        const currentDate = new Date();
+        const endOfWeek = new Date(currentDate);
+        endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 7);
+        endOfWeek.setHours(23, 59, 59, 999);
+        return endOfWeek;
     }
     convert2PhpDate(date) {
         const y = date.getFullYear();

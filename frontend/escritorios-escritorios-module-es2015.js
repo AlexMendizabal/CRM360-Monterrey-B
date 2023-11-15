@@ -258,6 +258,13 @@ let ComercialService = class ComercialService {
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getUpSellService(params) {
+        return this.http
+            .get(`${this.API}/materiales_suplementarios`, {
+            params: params,
+        })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getLinhas(params) {
         let httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
         for (let param in params) {

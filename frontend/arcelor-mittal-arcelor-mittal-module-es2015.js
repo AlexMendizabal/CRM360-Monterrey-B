@@ -211,7 +211,7 @@ const routes = [
             },
             {
                 path: 'vendedores',
-                loadChildren: () => Promise.all(/*! import() | vendedores-vendedores-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~cadas~a6a7f263"), __webpack_require__.e("vendedores-vendedores-module")]).then(__webpack_require__.bind(null, /*! ./vendedores/vendedores.module */ "OZMO")).then((m) => m.ComercialIntegracoesArcelorMittalVendedoresModule),
+                loadChildren: () => Promise.all(/*! import() | vendedores-vendedores-module */[__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("vendedores-vendedores-module")]).then(__webpack_require__.bind(null, /*! ./vendedores/vendedores.module */ "OZMO")).then((m) => m.ComercialIntegracoesArcelorMittalVendedoresModule),
             },
         ],
     },

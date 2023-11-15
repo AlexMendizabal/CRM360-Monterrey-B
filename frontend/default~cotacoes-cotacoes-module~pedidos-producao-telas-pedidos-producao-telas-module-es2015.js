@@ -234,7 +234,8 @@ let ComercialCicloVendasCotacoesFormularioMateriaisRelacionadosComponent = class
             codCliente: this.codCliente,
             codEndereco: this.codEndereco,
             codFormaPagamento: this.codFormaPagamento,
-            freteConta: this.freteConta
+            freteConta: this.freteConta,
+            id_vendedor: this.id_vendedor,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["finalize"])(() => {
             this.materiaisRelacionadosLoader = false;
@@ -289,7 +290,7 @@ let ComercialCicloVendasCotacoesFormularioMateriaisRelacionadosComponent = class
         });
     }
     postMateriaisRelacionados(materiais) {
-        /* console.log(materiais); */
+        /* console.log(this.id_vendedor); */
         this.materiaisRelacionadosLoader = true;
         this.materiaisRelacionados = [];
         this.cotacoesService
@@ -299,7 +300,9 @@ let ComercialCicloVendasCotacoesFormularioMateriaisRelacionadosComponent = class
             codCliente: this.codCliente,
             codEndereco: this.codEndereco,
             codFormaPagamento: this.codFormaPagamento,
-            freteConta: this.freteConta
+            freteConta: this.freteConta,
+            id_vendedor: this.id_vendedor,
+            id_lista: this.id_lista,
         })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["finalize"])(() => {
             this.materiaisRelacionadosLoader = false;
@@ -356,7 +359,9 @@ ComercialCicloVendasCotacoesFormularioMateriaisRelacionadosComponent.propDecorat
     codCliente: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['codCliente',] }],
     codEndereco: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['codEndereco',] }],
     codFormaPagamento: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['codFormaPagamento',] }],
-    freteConta: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['freteConta',] }]
+    freteConta: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['freteConta',] }],
+    id_vendedor: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['id_vendedor',] }],
+    id_lista: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['id_lista',] }]
 };
 ComercialCicloVendasCotacoesFormularioMateriaisRelacionadosComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
@@ -692,7 +697,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modal_historico_exclusao_historico_exclusao_service__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./modal/historico-exclusao/historico-exclusao.service */ "/1hp");
 /* harmony import */ var _modal_finalizacao_finalizacao_service__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./modal/finalizacao/finalizacao.service */ "zy1/");
 /* harmony import */ var _modal_cliente_selecionar_selecionar_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./modal/cliente/selecionar/selecionar.component */ "Qe3r");
-/* harmony import */ var _modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./modal/material/ubicacion/ubicacion.component */ "Lkym");
+/* harmony import */ var _formulario_modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ../formulario/modal/material/ubicacion/ubicacion.component */ "Lkym");
 /* harmony import */ var _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./modal/material/autorizar/autorizar.component */ "VBJ2");
 /* harmony import */ var _agm_core__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! @agm/core */ "LSHg");
 
@@ -801,9 +806,9 @@ ComercialCicloVendasCotacoesFormularioModule = Object(tslib__WEBPACK_IMPORTED_MO
             _templates_button_outros_button_outros_component__WEBPACK_IMPORTED_MODULE_46__["ComercialCicloVendasCotacoesFormularioTemplateButtonOutrosComponent"],
             _templates_progress_bar_progress_bar_component__WEBPACK_IMPORTED_MODULE_47__["ComercialCicloVendasCotacoesFormularioTemplateProgressBarComponent"],
             _modal_cliente_selecionar_selecionar_component__WEBPACK_IMPORTED_MODULE_63__["ComercialCicloVendasCotacoesFormularioModalSelecionarComponent"],
-            _modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent"],
             _modal_finalizacao_finalizacion_finalizacion_component__WEBPACK_IMPORTED_MODULE_41__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion"],
-            _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"]
+            _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"],
+            _formulario_modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent"],
         ],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_3__["CommonModule"],
@@ -858,7 +863,8 @@ ComercialCicloVendasCotacoesFormularioModule = Object(tslib__WEBPACK_IMPORTED_MO
             _templates_progress_bar_progress_bar_component__WEBPACK_IMPORTED_MODULE_47__["ComercialCicloVendasCotacoesFormularioTemplateProgressBarComponent"],
             _modal_cliente_selecionar_selecionar_component__WEBPACK_IMPORTED_MODULE_63__["ComercialCicloVendasCotacoesFormularioModalSelecionarComponent"],
             _modal_finalizacao_finalizacion_finalizacion_component__WEBPACK_IMPORTED_MODULE_41__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion"],
-            _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"]
+            _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"],
+            _formulario_modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent"],
         ],
         entryComponents: [
             _modal_cliente_selecionar_selecionar_component__WEBPACK_IMPORTED_MODULE_63__["ComercialCicloVendasCotacoesFormularioModalSelecionarComponent"],
@@ -879,7 +885,8 @@ ComercialCicloVendasCotacoesFormularioModule = Object(tslib__WEBPACK_IMPORTED_MO
             _modal_finalizacao_padrao_padrao_component__WEBPACK_IMPORTED_MODULE_40__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPadraoComponent"],
             _modal_finalizacao_perdida_perdida_component__WEBPACK_IMPORTED_MODULE_42__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPerdidaComponent"],
             _modal_finalizacao_finalizacion_finalizacion_component__WEBPACK_IMPORTED_MODULE_41__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion"],
-            _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"]
+            _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"],
+            _formulario_modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent"],
         ],
         providers: [
             ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_9__["BsModalRef"],
@@ -947,6 +954,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./modal/email-cotacao/email-cotacao.service */ "pnB1");
 /* harmony import */ var _modal_transfere_faturamento_transfere_faturamento_service__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./modal/transfere-faturamento/transfere-faturamento.service */ "5ywE");
 /* harmony import */ var _modal_historico_exclusao_historico_exclusao_service__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./modal/historico-exclusao/historico-exclusao.service */ "vSEy");
+/* harmony import */ var _pdf_pdf_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./pdf/pdf.component */ "yCb5");
+/* harmony import */ var _vista_vista_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./vista/vista.component */ "JBmo");
 
 
 
@@ -959,7 +968,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-Object(ngx_bootstrap_chronos__WEBPACK_IMPORTED_MODULE_9__["defineLocale"])('pt-br', ngx_bootstrap_locale__WEBPACK_IMPORTED_MODULE_10__["ptBrLocale"]);
+Object(ngx_bootstrap_chronos__WEBPACK_IMPORTED_MODULE_9__["defineLocale"])('es', ngx_bootstrap_locale__WEBPACK_IMPORTED_MODULE_10__["esLocale"]);
 // Services
 
 
@@ -979,8 +988,12 @@ Object(ngx_bootstrap_chronos__WEBPACK_IMPORTED_MODULE_9__["defineLocale"])('pt-b
 
 
 
+
+
 let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotacoesListaComponent {
-    constructor(router, activatedRoute, location, localeService, formBuilder, authService, pnotifyService, dateService, titleService, atividadesService, cotacoesService, listaService, vendedoresService, detailPanelService, historicoComercialService, historicoExclusaoService, consultaLiberacaoService, trocarClienteService, transfereFaturamentoService, duplicarPropostaService, desdobrarPropostaService, trocarEmpresaService, emailCotacaoService, modalService) {
+    constructor(router, activatedRoute, location, localeService, formBuilder, authService, pnotifyService, dateService, titleService, atividadesService, cotacoesService, listaService, vendedoresService, detailPanelService, historicoComercialService, historicoExclusaoService, consultaLiberacaoService, trocarClienteService, transfereFaturamentoService, duplicarPropostaService, desdobrarPropostaService, trocarEmpresaService, emailCotacaoService, modalService, resolver
+    // private pdfService: PdfService
+    ) {
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.location = location;
@@ -1005,6 +1018,7 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.trocarEmpresaService = trocarEmpresaService;
         this.emailCotacaoService = emailCotacaoService;
         this.modalService = modalService;
+        this.resolver = resolver;
         this.user = this.authService.getCurrentUser();
         this.loaderFullScreen = true;
         this.situacoes = [
@@ -1029,14 +1043,12 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.situacoesCores = [];
         this.vendedores = [];
         this.totalMateriales = [];
-        this.oferta = [];
         this.items = [];
+        this.ofer = [];
         this.dados = [];
+        this.cotizacion = [];
         this.dadosLoaded = false;
         this.dadosEmpty = false;
-        this.dadosEmptyModal = false;
-        this.dadosReturned = [];
-        this.dadosTotal = [];
         this.detalhes = {
             dataFaturamento: Date,
             contatos: [],
@@ -1052,14 +1064,14 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.itensLoaded = false;
         this.itensEmpty = false;
         this.maxSize = 10;
-        this.itemsPerPage = 10;
+        this.itemsPerPage = 20;
         this.currentPage = 1;
-        this.totalItems = 10;
+        this.totalItems = 0;
         this.totalModal = 0;
-        this.itemsPerPageModal = 5;
-        this.maxSizeModal = 5;
+        this.itemsPerPageModal = 20;
         this.imprimirPdf = false;
-        this.localeService.use('pt-br');
+        this.tipoEntregaSeleccionado = false;
+        this.localeService.use('es');
         this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue' }, { adaptivePosition: true }, { showWeekNumbers: false });
         this.pnotifyService.getPNotify();
     }
@@ -1071,13 +1083,15 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.setChangeEvents();
         this.getFilterValues();
         this.setFormFilter();
-        this.titleService.setTitle('Cotizaciones y pedidos');
+        this.titleService.setTitle('Ofertas');
         this.onDetailPanelEmitter();
         this.detalhesCodCliente = this.activatedRoute.snapshot.queryParams['codCliente'];
         this.search(null);
         this.formGroup = this.formBuilder.group({
             codSituacao: [this.defaultSelection]
         });
+        this.result = this.resultFromParent;
+        this.analiticos = this.resultFromParent.analitico;
     }
     ngOnDestroy() {
         this.unsetLoaderEvents();
@@ -1097,11 +1111,11 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
                     routerLink: '/comercial/home',
                 },
                 {
-                    descricao: 'Ciclo de ventas',
+                    descricao: 'Ciclo de Ventas',
                     routerLink: `/comercial/ciclo-vendas/${id}`,
                 },
                 {
-                    descricao: 'Cotizaciones y pedidos',
+                    descricao: 'Ofertas',
                 },
             ];
         });
@@ -1224,7 +1238,7 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
                 this.vendedores = response.result;
                 this.vendedores.unshift({
                     id: 0,
-                    nome: 'EXIBIR TODOS ',
+                    nome: 'EXIBIR TODOS',
                 });
             }
         });
@@ -1253,7 +1267,7 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
               codParametroSituacaoProposta: 0,
               situacaoProposta: 'EXIBIR TODOS',
             });
-            
+  
    */
             /*           console.log(response);
              */ this.situacoes = [
@@ -1290,7 +1304,7 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
                     {
                         id: 1,
                         text: 'Propuesta borrador',
-                        hex: '#0000FF' // Rojo 
+                        hex: '#0000FF' // Rojo
                     },
                     {
                         id: 2,
@@ -1324,7 +1338,7 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
             codSituacao: [formValue.codSituacao],
             cliente: [formValue.cliente],
             codVendedor: [formValue.codVendedor, [_angular_forms__WEBPACK_IMPORTED_MODULE_6__["Validators"].required]],
-            /* pagina: [formValue.pagina], */
+            pagina: [formValue.pagina],
             registros: [this.itemsPerPage, _angular_forms__WEBPACK_IMPORTED_MODULE_6__["Validators"].required],
             statusCliente: ['Ativo'],
         });
@@ -1353,15 +1367,15 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
                 let params = atob(queryParams.q);
                 params = JSON.parse(params);
                 this.search(params);
-                /*  if (params['pagina']) {
-                   this.currentPage = params['pagina'];
-                 } */
+                if (params['pagina']) {
+                    this.currentPage = params['pagina'];
+                }
                 Object.keys(formValue).forEach((formKey) => {
                     Object.keys(params).forEach((paramKey) => {
                         if (formKey == paramKey &&
                             formValue[formKey] != params[paramKey]) {
                             if (formKey === 'dataInicial' || formKey === 'dataFinal') {
-                                formValue[formKey] = this.dateService.convertStringToDate(params[paramKey], 'pt-br');
+                                formValue[formKey] = this.dateService.convertStringToDate(params[paramKey], 'es');
                             }
                             else {
                                 if (!isNaN(Number(params[paramKey]))) {
@@ -1459,10 +1473,8 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
     }
     onFilter() {
         /* if (this.form?.valid) { */
-        /* this.itemsPerPage = 10;
+        this.itemsPerPage = this.form.value.registros;
         this.currentPage = 1;
-     */
-        /* this.totalItems = 0; */
         this.detailPanelService.hide();
         this.setRouterParams(this.getFormFilterValues());
         /* } */
@@ -1537,7 +1549,6 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.dados = [];
         this.dadosLoaded = true;
         this.dadosEmpty = false;
-        this.dadosTotal = [];
         this.cotacoesService
             .getOfertas(params)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(() => {
@@ -1548,10 +1559,12 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
             next: (response) => {
                 if (response.responseCode === 200) {
                     this.loaderNavbar = false;
+                    console.log(response.result);
                     this.dados = [];
                     this.dados = response.result;
-                    this.dadosTotal = this.dados.slice(0, this.itemsPerPage);
+                    this.dados = this.dados.slice(0, this.itemsPerPage);
                     this.totalItems = this.dados.length;
+                    /* console.log(this.datos); */
                     this.dadosEmpty = false;
                 }
                 else {
@@ -1613,7 +1626,6 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         });
     }
     onPageChanged(event) {
-        //console.log(event)
         this.currentPage = event.page;
         this.getPaginateData();
     }
@@ -1622,6 +1634,10 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         const endIndex = startIndex + this.itemsPerPage;
         //this.getPaginatedData = this.resuldata.slice(startIndex, endIndex);
         return this.dados.slice(startIndex, endIndex);
+    }
+    onPageChangedModal(event) {
+        this.currentPage = event.page;
+        this.getPaginateDataModal();
     }
     getPaginateDataModal() {
         const startIndex = (this.currentPage - 1) * this.itemsPerPageModal;
@@ -1818,29 +1834,29 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.onFilter();
         /* if (materiais.length > 0) {
           this.itensLoaded = false;
-      
+    
           const filteredMateriais = this.detalhes.itens['materiais'].filter(
             (_material: any) =>
               !materiais.some(
                 (material: any) => material.codigo === _material.codigo
               )
           );
-      
+    
           let total = {
             quantidade: 0,
             valor: 0,
           };
-      
+    
           filteredMateriais.map((material: any) => {
             total.quantidade += material.quantidade;
             total.valor += material.valorTotal;
           });
-      
+    
           this.detalhes.itens = {
             materiais: filteredMateriais,
             total: total,
           };
-      
+    
           setTimeout(() => {
             this.itensLoaded = true;
           }, 1000);
@@ -1893,33 +1909,66 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
         this.onChangeEmpresa(selectedEmpresa, selectedDeposito);
         this.onFilter();
     }
-    // onImprimir(): void {
-    //   this.loaderNavbar = true;
-    //   console.log('aqui');
-    //   this.cotacoesService
-    //     .getImprimirCotacao(this.activeCotacao.nrPedido)
-    //     .pipe(
-    //       finalize(() => {
-    //         this.loaderNavbar = false;
-    //       })
-    //     )
-    //     .subscribe(
-    //       (response: JsonResponse) => {
-    //         if (response.hasOwnProperty('success') && response.success === true) {
-    //           this.pnotifyService.success();
-    //         } else {
-    //           this.pnotifyService.error();
-    //         }
-    //       },
-    //       (error: any) => {
-    //         if (error.error.hasOwnProperty('mensagem')) {
-    //           this.pnotifyService.error(error.error.mensagem);
-    //         } else {
-    //           this.pnotifyService.error();
-    //         }
-    //       }
-    //     );
-    // }
+    onVista(id_oferta) {
+        //this.router.navigate([]).then(result => {  window.open("/comercial/ciclo-vendas/23/cotacoes-pedidos/lista/vista", '_blank'); });
+        var params = {
+            "id_oferta": id_oferta
+        };
+        this.loaderNavbar = true;
+        this.cotacoesService
+            .getDetalleOferta(params)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(() => {
+            this.loaderNavbar = false;
+        }))
+            .subscribe((response) => {
+            if (response.estado === true) {
+                this.modalRef2 = this.modalService.show(_vista_vista_component__WEBPACK_IMPORTED_MODULE_31__["VistaComponent"], {
+                    initialState: { resultFromParent: response.result },
+                });
+                this.modalRef2.content.onClose.subscribe(result => {
+                    console.log('Modal closed with result:', result);
+                });
+            }
+            else {
+                this.pnotifyService.error();
+            }
+        }, (error) => {
+            if (error.error.hasOwnProperty('mensagem')) {
+                this.pnotifyService.error(error.error.mensagem);
+            }
+            else {
+                this.pnotifyService.error();
+            }
+        });
+    }
+    onImprimir(nmpedido) {
+        this.loaderNavbar = true;
+        this.cotacoesService
+            .getImprimirCotacao(nmpedido)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(() => {
+            this.loaderNavbar = false;
+        }))
+            .subscribe((response) => {
+            if (response.hasOwnProperty('success') && response.success === true) {
+                this.modalRef = this.modalService.show(_pdf_pdf_component__WEBPACK_IMPORTED_MODULE_30__["PdfComponent"], {
+                    initialState: { dataFromParent: response.data },
+                });
+                this.modalRef.content.onClose.subscribe(result => {
+                    console.log('Modal closed with result:', result);
+                });
+            }
+            else {
+                this.pnotifyService.error();
+            }
+        }, (error) => {
+            if (error.error.hasOwnProperty('mensagem')) {
+                this.pnotifyService.error(error.error.mensagem);
+            }
+            else {
+                this.pnotifyService.error();
+            }
+        });
+    }
     onEmailCotacao() {
         if (this.activeCotacao.codCliente &&
             this.activeCotacao.codCliente !== null) {
@@ -1936,16 +1985,15 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
             .subscribe({
             next: (response) => {
                 if (response.responseCode === 200) {
-                    this.items = response.result['analitico'];
+                    this.ofer = response.result.oferta[0];
+                    this.items = response.result.analitico;
                     this.totalMateriales = response.result.total;
-                    this.oferta = response.result.oferta[0];
                     this.totalModal = this.items.length;
-                    this.dadosEmptyModal = false;
                 }
                 else {
                     this.loaderNavbar = false;
                     this.pnotifyService.notice('Ningún registro encontrado');
-                    this.dadosEmptyModal = true;
+                    this.dadosEmpty = true;
                 }
             }
         });
@@ -2051,6 +2099,7 @@ let ComercialCicloVendasCotacoesListaComponent = class ComercialCicloVendasCotac
                 return 'maxDate';
             }
         }
+        //return field.status == 'INVALID' && field.touched;
         return '';
     }
     onFieldRequired(abstractControl, abstractControlField) {
@@ -2097,7 +2146,8 @@ ComercialCicloVendasCotacoesListaComponent.ctorParameters = () => [
     { type: _modal_desdobrar_proposta_desdobrar_proposta_service__WEBPACK_IMPORTED_MODULE_25__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaService"] },
     { type: _modal_trocar_empresa_trocar_empresa_service__WEBPACK_IMPORTED_MODULE_26__["ComercialCicloVendasCotacoesListaModalTrocarEmpresaService"] },
     { type: _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_27__["ComercialCicloVendasCotacoesListaModalEmailCotacaoService"] },
-    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_11__["BsModalService"] }
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_11__["BsModalService"] },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ComponentFactoryResolver"] }
 ];
 ComercialCicloVendasCotacoesListaComponent.propDecorators = {
     scrollToFilter: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"], args: ['scrollToFilter', {},] }],
@@ -2132,7 +2182,10 @@ ComercialCicloVendasCotacoesListaComponent = Object(tslib__WEBPACK_IMPORTED_MODU
         _modal_desdobrar_proposta_desdobrar_proposta_service__WEBPACK_IMPORTED_MODULE_25__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaService"],
         _modal_trocar_empresa_trocar_empresa_service__WEBPACK_IMPORTED_MODULE_26__["ComercialCicloVendasCotacoesListaModalTrocarEmpresaService"],
         _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_27__["ComercialCicloVendasCotacoesListaModalEmailCotacaoService"],
-        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_11__["BsModalService"]])
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_11__["BsModalService"],
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ComponentFactoryResolver"]
+        // private pdfService: PdfService
+    ])
 ], ComercialCicloVendasCotacoesListaComponent);
 
 
@@ -2522,6 +2575,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "741n":
+/*!**************************************************************************************!*\
+  !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/pdf/pdf.component.scss ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".title {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  -ms-flex-align: center;\n      align-items: center;\n}\n\n.data {\n  text-align: right;\n}\n\n.row {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-align: center;\n      align-items: center;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  margin-bottom: 20px;\n}\n\n.col {\n  -ms-flex: 1;\n      flex: 1;\n}\n\ntable {\n  border-collapse: collapse;\n  width: 100%;\n  margin-top: 20px;\n}\n\n.custom-modal-content {\n  margin: auto;\n  border: 2px solid black;\n  padding: 20px;\n}\n\nth, td {\n  border: 1px solid #ccc;\n  padding: 5px;\n  text-align: center;\n}\n\nth {\n  background-color: #f2f2f2;\n}\n\ninput[type=button] {\n  background-color: #007bff;\n  color: white;\n  border: none;\n  padding: 10px 20px;\n  cursor: pointer;\n}\n\n.header {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-align: center;\n      align-items: center;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  margin-bottom: 20px;\n}\n\n.header img {\n  width: 100px;\n  height: auto;\n}\n\n.title {\n  font-size: 24px;\n  font-weight: bold;\n}\n\ntable {\n  width: 100%;\n  border-collapse: collapse;\n  margin-top: 20px;\n}\n\nth, td {\n  border: 1px solid #ccc;\n  padding: 8px;\n  text-align: center;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\nth {\n  background-color: #f2f2f2;\n}\n\n.customer-info,\n.company-info {\n  margin-top: 4px;\n  border: 2px solid #000000;\n  padding: 10px;\n}\n\n.monterrey-info {\n  margin-bottom: 0px;\n}\n\n.totalpeso-font {\n  font-weight: bold;\n  margin-right: 50px;\n}\n\n.total {\n  margin-top: 5px;\n  text-align: right;\n  font-weight: bold;\n}\n\ninput[type=button] {\n  padding: 10px 20px;\n  background-color: #007bff;\n  color: #fff;\n  border: none;\n  cursor: pointer;\n}\n\n.container {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n}\n\n.left-div {\n  -ms-flex: 1;\n      flex: 1;\n}\n\n.right-div {\n  -ms-flex: 1;\n      flex: 1;\n  text-align: right;\n}\n\n.smaller-font {\n  font-size: 10px;\n}\n\n.tiny-font {\n  font-size: 15px;\n}\n\n.medium-font {\n  font-size: 20px;\n  font-weight: bold;\n}\n\n.cotizacion-font {\n  font-size: 30px;\n  text-decoration: underline;\n  font-weight: bold;\n  margin-right: 50px;\n  margin-top: 20px;\n  margin-left: 10px;\n}\n\n.descripcion-font {\n  font-size: 10px;\n}\n\n.mensaje-font {\n  font-size: 15px;\n}\n\n.custinf-weight {\n  font-weight: bold;\n}\n\n.datcotizacion-font {\n  font-size: 15px;\n}\n\n.left-align {\n  text-align: left;\n}\n\n.direccion-font {\n  font-size: 15px;\n  font-weight: bold;\n}\n\n.entrega-font {\n  font-weight: bold;\n}\n\n.negrita-font {\n  font-weight: bold;\n}\n\n.upspace {\n  margin-top: 10px;\n}\n\n.espaciobot-font {\n  margin-bottom: 20px;\n}\n\n.espaciotop-font {\n  border-top: 50px;\n}\n\ntable tr {\n  height: 1px;\n}\n\n.form-row {\n  margin-bottom: 20px;\n}\n\n.footer {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  margin-top: 380px;\n  -ms-flex-positive: 0;\n      flex-grow: 0;\n  -ms-flex-negative: 0;\n      flex-shrink: 0;\n}\n\n.footer-line {\n  text-align: center;\n  -ms-flex: 1;\n      flex: 1;\n  position: relative;\n}\n\n.signature-line {\n  position: absolute;\n  bottom: 40px;\n  left: 80px;\n  right: 80px;\n  border-top: 2px solid #000;\n}\n\n.flex-container {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  -ms-flex-align: center;\n      align-items: center;\n  margin-top: 5px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2ljbG8tdmVuZGFzL2NvdGFjb2VzL2xpc3RhL3BkZi9wZGYuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxvQkFBQTtFQUFBLGFBQUE7RUFDQSxzQkFBQTtNQUFBLDhCQUFBO0VBQ0Esc0JBQUE7TUFBQSxtQkFBQTtBQUNGOztBQUVBO0VBQ0UsaUJBQUE7QUFDRjs7QUFFQTtFQUNFLG9CQUFBO0VBQUEsYUFBQTtFQUNBLHNCQUFBO01BQUEsbUJBQUE7RUFDQSxzQkFBQTtNQUFBLDhCQUFBO0VBQ0EsbUJBQUE7QUFDRjs7QUFFQTtFQUNFLFdBQUE7TUFBQSxPQUFBO0FBQ0Y7O0FBRUE7RUFDRSx5QkFBQTtFQUNBLFdBQUE7RUFDQSxnQkFBQTtBQUNGOztBQUVBO0VBRUUsWUFBQTtFQUNBLHVCQUFBO0VBQ0EsYUFBQTtBQUFGOztBQUdBO0VBQ0Usc0JBQUE7RUFDQSxZQUFBO0VBQ0Esa0JBQUE7QUFBRjs7QUFHQTtFQUNFLHlCQUFBO0FBQUY7O0FBR0E7RUFDRSx5QkFBQTtFQUNBLFlBQUE7RUFDQSxZQUFBO0VBQ0Esa0JBQUE7RUFDQSxlQUFBO0FBQUY7O0FBS0E7RUFDRSxvQkFBQTtFQUFBLGFBQUE7RUFDQSxzQkFBQTtNQUFBLG1CQUFBO0VBQ0Esc0JBQUE7TUFBQSw4QkFBQTtFQUNBLG1CQUFBO0FBRkY7O0FBS0E7RUFDRSxZQUFBO0VBQ0EsWUFBQTtBQUZGOztBQUtBO0VBQ0UsZUFBQTtFQUNBLGlCQUFBO0FBRkY7O0FBS0E7RUFDRSxXQUFBO0VBQ0EseUJBQUE7RUFDQSxnQkFBQTtBQUZGOztBQUtBO0VBQ0Usc0JBQUE7RUFDQSxZQUFBO0VBQ0Esa0JBQUE7RUFDQSxtQkFBQTtFQUNBLGdCQUFBO0VBQ0EsdUJBQUE7QUFGRjs7QUFLQTtFQUNFLHlCQUFBO0FBRkY7O0FBS0E7O0VBRUUsZUFBQTtFQUNBLHlCQUFBO0VBQ0EsYUFBQTtBQUZGOztBQUtBO0VBQ0Usa0JBQUE7QUFGRjs7QUFNQTtFQUNFLGlCQUFBO0VBQ0Esa0JBQUE7QUFIRjs7QUFLQTtFQUNFLGVBQUE7RUFDQSxpQkFBQTtFQUNBLGlCQUFBO0FBRkY7O0FBS0E7RUFDRSxrQkFBQTtFQUNBLHlCQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0FBRkY7O0FBS0E7RUFDRSxvQkFBQTtFQUFBLGFBQUE7RUFDQSxzQkFBQTtNQUFBLDhCQUFBO0FBRkY7O0FBS0E7RUFDRSxXQUFBO01BQUEsT0FBQTtBQUZGOztBQU1BO0VBQ0UsV0FBQTtNQUFBLE9BQUE7RUFDQSxpQkFBQTtBQUhGOztBQU1BO0VBQ0UsZUFBQTtBQUhGOztBQU1BO0VBQ0UsZUFBQTtBQUhGOztBQU1BO0VBQ0UsZUFBQTtFQUNBLGlCQUFBO0FBSEY7O0FBTUE7RUFDRSxlQUFBO0VBQ0EsMEJBQUE7RUFDQSxpQkFBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7RUFDQSxpQkFBQTtBQUhGOztBQU1BO0VBQ0UsZUFBQTtBQUhGOztBQU1BO0VBQ0UsZUFBQTtBQUhGOztBQU1BO0VBQ0UsaUJBQUE7QUFIRjs7QUFNQTtFQUNFLGVBQUE7QUFIRjs7QUFNQTtFQUNFLGdCQUFBO0FBSEY7O0FBTUE7RUFDRSxlQUFBO0VBQ0EsaUJBQUE7QUFIRjs7QUFNQTtFQUNFLGlCQUFBO0FBSEY7O0FBTUE7RUFDRSxpQkFBQTtBQUhGOztBQU1BO0VBQ0UsZ0JBQUE7QUFIRjs7QUFNQTtFQUNFLG1CQUFBO0FBSEY7O0FBTUE7RUFDRSxnQkFBQTtBQUhGOztBQU1BO0VBQ0UsV0FBQTtBQUhGOztBQU1BO0VBQ0UsbUJBQUE7QUFIRjs7QUFNQTtFQUNFLG9CQUFBO0VBQUEsYUFBQTtFQUNBLHNCQUFBO01BQUEsOEJBQUE7RUFDQSxpQkFBQTtFQUNBLG9CQUFBO01BQUEsWUFBQTtFQUNBLG9CQUFBO01BQUEsY0FBQTtBQUhGOztBQU1BO0VBQ0Usa0JBQUE7RUFDQSxXQUFBO01BQUEsT0FBQTtFQUNBLGtCQUFBO0FBSEY7O0FBTUE7RUFDRSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxVQUFBO0VBQ0EsV0FBQTtFQUNBLDBCQUFBO0FBSEY7O0FBTUE7RUFDRSxvQkFBQTtFQUFBLGFBQUE7RUFDQSxzQkFBQTtNQUFBLDhCQUFBO0VBQ0Esc0JBQUE7TUFBQSxtQkFBQTtFQUNBLGVBQUE7QUFIRiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2NpY2xvLXZlbmRhcy9jb3RhY29lcy9saXN0YS9wZGYvcGRmLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRpdGxlIHtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcclxuICBhbGlnbi1pdGVtczogY2VudGVyO1xyXG59XHJcblxyXG4uZGF0YSB7XHJcbiAgdGV4dC1hbGlnbjogcmlnaHQ7XHJcbn1cclxuXHJcbi5yb3cge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XHJcbiAgbWFyZ2luLWJvdHRvbTogMjBweDtcclxufVxyXG5cclxuLmNvbCB7XHJcbiAgZmxleDogMTtcclxufVxyXG5cclxudGFibGUge1xyXG4gIGJvcmRlci1jb2xsYXBzZTogY29sbGFwc2U7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgbWFyZ2luLXRvcDogMjBweDtcclxufVxyXG5cclxuLmN1c3RvbS1tb2RhbC1jb250ZW50IHtcclxuXHJcbiAgbWFyZ2luOiBhdXRvO1xyXG4gIGJvcmRlcjogMnB4IHNvbGlkIGJsYWNrO1xyXG4gIHBhZGRpbmc6IDIwcHg7XHJcbn1cclxuXHJcbnRoLCB0ZCB7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgI2NjYztcclxuICBwYWRkaW5nOiA1cHg7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG59XHJcblxyXG50aCB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogI2YyZjJmMjtcclxufVxyXG5cclxuaW5wdXRbdHlwZT0nYnV0dG9uJ10ge1xyXG4gIGJhY2tncm91bmQtY29sb3I6ICMwMDdiZmY7XHJcbiAgY29sb3I6IHdoaXRlO1xyXG4gIGJvcmRlcjogbm9uZTtcclxuICBwYWRkaW5nOiAxMHB4IDIwcHg7XHJcbiAgY3Vyc29yOiBwb2ludGVyO1xyXG59XHJcblxyXG5cclxuXHJcbi5oZWFkZXIge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XHJcbiAgbWFyZ2luLWJvdHRvbTogMjBweDtcclxufVxyXG5cclxuLmhlYWRlciBpbWcge1xyXG4gIHdpZHRoOiAxMDBweDtcclxuICBoZWlnaHQ6IGF1dG87XHJcbn1cclxuXHJcbi50aXRsZSB7XHJcbiAgZm9udC1zaXplOiAyNHB4O1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG50YWJsZSB7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgYm9yZGVyLWNvbGxhcHNlOiBjb2xsYXBzZTtcclxuICBtYXJnaW4tdG9wOiAyMHB4O1xyXG59XHJcblxyXG50aCwgdGQge1xyXG4gIGJvcmRlcjogMXB4IHNvbGlkICNjY2M7XHJcbiAgcGFkZGluZzogOHB4O1xyXG4gIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICB3aGl0ZS1zcGFjZTogbm93cmFwO1xyXG4gIG92ZXJmbG93OiBoaWRkZW47XHJcbiAgdGV4dC1vdmVyZmxvdzogZWxsaXBzaXM7XHJcbn1cclxuXHJcbnRoIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjJmMmYyO1xyXG59XHJcblxyXG4uY3VzdG9tZXItaW5mbyxcclxuLmNvbXBhbnktaW5mbyB7XHJcbiAgbWFyZ2luLXRvcDogNHB4O1xyXG4gIGJvcmRlcjogMnB4IHNvbGlkICMwMDAwMDA7XHJcbiAgcGFkZGluZzogMTBweDtcclxufVxyXG5cclxuLm1vbnRlcnJleS1pbmZve1xyXG4gIG1hcmdpbi1ib3R0b206IDBweDtcclxuXHJcbn1cclxuXHJcbi50b3RhbHBlc28tZm9udHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxuICBtYXJnaW4tcmlnaHQ6IDUwcHg7XHJcbn1cclxuLnRvdGFsIHtcclxuICBtYXJnaW4tdG9wOiA1cHg7XHJcbiAgdGV4dC1hbGlnbjogcmlnaHQ7XHJcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbn1cclxuXHJcbmlucHV0W3R5cGU9J2J1dHRvbiddIHtcclxuICBwYWRkaW5nOiAxMHB4IDIwcHg7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogIzAwN2JmZjtcclxuICBjb2xvcjogI2ZmZjtcclxuICBib3JkZXI6IG5vbmU7XHJcbiAgY3Vyc29yOiBwb2ludGVyO1xyXG59XHJcblxyXG4uY29udGFpbmVyIHtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcclxufVxyXG5cclxuLmxlZnQtZGl2IHtcclxuICBmbGV4OiAxO1xyXG59XHJcblxyXG5cclxuLnJpZ2h0LWRpdiB7XHJcbiAgZmxleDogMTtcclxuICB0ZXh0LWFsaWduOiByaWdodDtcclxufVxyXG5cclxuLnNtYWxsZXItZm9udCB7XHJcbiAgZm9udC1zaXplOiAxMHB4O1xyXG59XHJcblxyXG4udGlueS1mb250e1xyXG4gIGZvbnQtc2l6ZTogMTVweDtcclxufVxyXG5cclxuLm1lZGl1bS1mb250e1xyXG4gIGZvbnQtc2l6ZTogMjBweDtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxufVxyXG5cclxuLmNvdGl6YWNpb24tZm9udHtcclxuICBmb250LXNpemU6IDMwcHg7XHJcbiAgdGV4dC1kZWNvcmF0aW9uOiB1bmRlcmxpbmU7XHJcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiAgbWFyZ2luLXJpZ2h0OiA1MHB4O1xyXG4gIG1hcmdpbi10b3A6IDIwcHg7XHJcbiAgbWFyZ2luLWxlZnQ6IDEwcHg7XHJcbn1cclxuXHJcbi5kZXNjcmlwY2lvbi1mb250e1xyXG4gIGZvbnQtc2l6ZTogMTBweDtcclxufVxyXG5cclxuLm1lbnNhamUtZm9udHtcclxuICBmb250LXNpemU6IDE1cHg7XHJcbn1cclxuXHJcbi5jdXN0aW5mLXdlaWdodHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxufVxyXG5cclxuLmRhdGNvdGl6YWNpb24tZm9udHtcclxuICBmb250LXNpemU6IDE1cHg7XHJcbn1cclxuXHJcbi5sZWZ0LWFsaWduIHtcclxuICB0ZXh0LWFsaWduOiBsZWZ0O1xyXG59XHJcblxyXG4uZGlyZWNjaW9uLWZvbnR7XHJcbiAgZm9udC1zaXplOiAxNXB4O1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG4uZW50cmVnYS1mb250e1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG4ubmVncml0YS1mb250e1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG4udXBzcGFjZXtcclxuICBtYXJnaW4tdG9wOiAxMHB4O1xyXG59XHJcblxyXG4uZXNwYWNpb2JvdC1mb250e1xyXG4gIG1hcmdpbi1ib3R0b206IDIwcHg7XHJcbn1cclxuXHJcbi5lc3BhY2lvdG9wLWZvbnR7XHJcbiAgYm9yZGVyLXRvcDogNTBweDtcclxufVxyXG5cclxudGFibGUgdHIge1xyXG4gIGhlaWdodDogMXB4O1xyXG59XHJcblxyXG4uZm9ybS1yb3cge1xyXG4gIG1hcmdpbi1ib3R0b206IDIwcHg7XHJcbn1cclxuXHJcbi5mb290ZXIge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xyXG4gIG1hcmdpbi10b3A6IDM4MHB4O1xyXG4gIGZsZXgtZ3JvdzogMDtcclxuICBmbGV4LXNocmluazogMDtcclxufVxyXG5cclxuLmZvb3Rlci1saW5lIHtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgZmxleDogMTtcclxuICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbn1cclxuXHJcbi5zaWduYXR1cmUtbGluZSB7XHJcbiAgcG9zaXRpb246IGFic29sdXRlO1xyXG4gIGJvdHRvbTogNDBweDtcclxuICBsZWZ0OiA4MHB4O1xyXG4gIHJpZ2h0OiA4MHB4O1xyXG4gIGJvcmRlci10b3A6IDJweCBzb2xpZCAjMDAwO1xyXG59XHJcblxyXG4uZmxleC1jb250YWluZXIge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xyXG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XHJcbiAgbWFyZ2luLXRvcDogNXB4O1xyXG59XHJcbiJdfQ== */");
+
+/***/ }),
+
+/***/ "7lsu":
+/*!****************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/pdf/pdf.component.html ***!
+  \****************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content \" id=\"contentToConvert\" >\r\n  <div class=\"modal-body \">\r\n    <div #contentToConvert>\r\n      <div class=\"header monterrey-info\">\r\n        <div class=\"group col\">\r\n          <img [src]=\"imageSrc\" alt=\"Logo\" [style.width.px]=\"imageWidth\" [style.height.px]=\"imageHeight\" />\r\n          <p>\r\n\r\n          </p>\r\n          <p class=\"direccion-font\"> {{ dataFromParent.pedido[0].nombre_almacen }}</p>\r\n        </div>\r\n        <div class=\"title customer-info custinf-weight custom-modal-content\" >\r\n          <div class=\"vertical-text form-row\">\r\n            <div>\r\n              <h3 class=\"cotizacion-font\">COTIZACIÓN</h3>\r\n            </div>\r\n          </div>\r\n          <div>\r\n            <div>\r\n              <div class=\"no-bullet datcotizacion-font\">N°: <span class=\"text-right\">{{dataFromParent.pedido[0].codigo_oferta}}</span> </div>\r\n              <div class=\"no-bullet datcotizacion-font\">Fecha: <span class=\"text-right\"> {{dataFromParent.pedido[0].fecha_inicial | date:'short'}}</span>  </div>\r\n              <div class=\"no-bullet datcotizacion-font\">Almacén: <span class=\"text-right\">{{dataFromParent.pedido[0].codigo_almacen}}</span>  </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"customer-info custom-modal-content \">\r\n        <h4 class=\"medium-font\"> Señor(es): {{ dataFromParent.pedido[0].nombre_cliente }} </h4>\r\n      </div>\r\n      <div class=\"customer-info custom-modal-content\">\r\n        <p class=\"mensaje-font\">\r\n          De nuestra mayor consideración tenemos a bien hacerle llegar nuestra\r\n          cotización de los materiales solicitados, esperando sea de su\r\n          utilidad. Para cualquier consulta no dude en comunicarse con nosotros\r\n        </p>\r\n      </div>\r\n      <div>\r\n        <table class=\"table tr\">\r\n          <tr class=\"customer-info\">\r\n            <th>NRO</th>\r\n            <th>COD</th>\r\n            <th>DESCRIPCIÓN</th>\r\n            <th>UND</th>\r\n            <th>CANT</th>\r\n            <th>PRECIO</th>\r\n            <th>%</th>\r\n            <th>PRECIO NETO</th>\r\n            <th>TOTAL USD.</th>\r\n            <th>PESO</th>\r\n          </tr>\r\n          <tr *ngFor=\"let material of materiais; let i = index\">\r\n            <td>{{ i + 1 }}</td>\r\n            <td>{{ material.codigo_material }}</td>\r\n            <td class=\"descripcion-font\">{{ material.descripcion }}</td>\r\n            <td>{{ material.unidad }}</td>\r\n            <td>{{ material.cantidad }}</td>\r\n            <td>{{ material.precio }}</td>\r\n            <td>{{ material.descuento }}</td>\r\n            <td>{{ (material.subtotal).toFixed(2) }}</td>\r\n            <td>{{ (material.total).toFixed(2) }}</td>\r\n            <td>{{ material.preso }}</td>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n      <div>\r\n        <p>\r\n\r\n        </p>\r\n      </div>\r\n      <div class=\"flex-container\">\r\n        <p class=\"totalpeso-font\"> TOTAL PESO Kg . {{ dataFromParent.pedido[0].peso_total }}</p>\r\n        <p class=\"total\">Total Bs. <span class=\"customer-info custom-modal-content\"> BS.{{ (dataFromParent.pedido[0].total * 6.96).toFixed(2) }}</span> </p>\r\n      </div>\r\n      <style>\r\n        .total p {\r\n          margin-bottom: 17px; /* You can adjust the value to control the amount of space */\r\n        }\r\n      </style>\r\n      <div class=\"total\">\r\n        <p>Total  USD. <span class=\"customer-info custom-modal-content\"> USD.{{ dataFromParent.pedido[0].total }}</span> </p>\r\n      </div>\r\n      <div class=\"form-row\">\r\n        <div class=\"group col upspace\">\r\n          <div class=\"left-div customer-info custom-modal-content\">\r\n            <div class=\"entrega-font\">\r\n              <div class=\"no-bullet\">Lugar de entrega: {{ dataFromParent.parcelas[0].direccion_entrega }}</div>\r\n              <div class=\"no-bullet\">Forma de pago: {{ dataFromParent.parcelas[0].forma_pago }} </div>\r\n              <div class=\"no-bullet\">Tiempo de entrega: 48 Hrs.</div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"group col negrita-font upspace\">\r\n          <div class=\"left-div customer-info custom-modal-content \">\r\n            <div >\r\n              Esta cotización está sujeta a stock.\r\n            </div>\r\n            <div class=\"espaciobot-font\">\r\n              Comentario:\r\n            </div>\r\n          </div>\r\n          TODOS NUESTROS PRECIOS INCLUYEN IMPUESTOS DE LEY.\r\n        </div>\r\n      </div>\r\n      <div class=\"footer\">\r\n        <div class=\"footer-line\">\r\n          <div class=\"signature-line\"></div>\r\n          <div class=\"negrita-font\">Vendedor</div>\r\n          <div>{{ dataFromParent.dadosVendedor[0].nombre_vendedor }} {{dataFromParent.dadosVendedor[0].apellido_vendedor}}</div>\r\n        </div>\r\n        <div class=\"footer-line\">\r\n          <div class=\"signature-line\"></div>\r\n          <div>Visto Bueno</div>\r\n          <div>Cliente</div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n      <button type=\"button\" class=\"btn btn-secondary\" #captureButton (click)=\"onDownloadPDF()\">DESCARGAR</button>\r\n      <button type=\"button\" class=\"btn btn-secondary\" (click)=\"captureScreen()\">IMPRIMIR</button>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n");
+
+/***/ }),
+
 /***/ "8Z9F":
 /*!**********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/templates/button-imprimir-separacao/button-imprimir-separacao.component.html ***!
@@ -2545,6 +2624,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\">\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"mtc-title mb-0 my-auto\">\r\n      #{{ material.codigo_material }} - {{ material.nombre_material | uppercase }} ({{ material.nombre_almacen |\r\n      uppercase }})\r\n    </h4>\r\n    <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <custom-table>\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <th scope=\"col\">Material</th>\r\n              <th class=\"text-center\" scope=\"col\">Unidad</th>\r\n              <!--               <th class=\"text-center\" scope=\"col\">Compra</th>\r\n -->\r\n             <!--  <th class=\"text-center\" scope=\"col\">Actual</th> -->\r\n              <th class=\"text-center\" scope=\"col\">Comprometido</th>\r\n              <th class=\"text-center\" scope=\"col\">Pedido</th>\r\n              <th class=\"text-center\" scope=\"col\">Almacen</th>\r\n\r\n      <!--         <th class=\"text-center\" scope=\"col\">Disponible</th> -->\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            \r\n            <tr *ngFor=\"let detalhe of detalhes;\">\r\n              <ng-container *ngIf=\"material.id_almacen === detalhe.id_almacen\">\r\n                <td>\r\n                  {{ material.codigo_material }} - {{ material.nombre_material | uppercase }}\r\n                </td>\r\n                <td class=\"text-center\">{{ detalhe.unidad | uppercase }}</td>\r\n                <!--  <td class=\"text-center\">{{ detalhe.pedCompra | number:'1.3-3' }}</td>\r\n                <td class=\"text-center\">{{ detalhe.estoqueAtual | number:'1.3-3' }}</td> -->\r\n                <td class=\"text-center\">{{ detalhe.cantidad | number:'1.3-3' }} {{ detalhes.unidad }}</td>\r\n                <td class=\"text-center\">{{ detalhe.codigo_oferta }}</td>\r\n                <td class=\"text-center\">{{ detalhe.nombre_almacen }}</td>\r\n          \r\n                <!-- <td class=\"text-center\">{{ material.cantidad | number:'1.3-3' }}</td> -->\r\n              </ng-container>\r\n            </tr>\r\n            <tr *ngIf=\"material.id_almacen !== detalhes[0].id_almacen\">\r\n              <td colspan=\"5\" class=\"text-center\"> No hay datos disponibles </td>\r\n            </tr>\r\n          </ng-template>\r\n          \r\n        </custom-table>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
+
+/***/ }),
+
+/***/ "920F":
+/*!********************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/vista/vista.component.html ***!
+  \********************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content custom-modal\" id=\"contentToConvert\">\r\n  <div #contentToConvert>\r\n    <div class=\"wrapper card-bodyy\">\r\n      <!-- Main content -->\r\n      <section class=\"invoice\">\r\n        <!-- title row -->\r\n        <div class=\"row\">\r\n          <div class=\"col-12\">\r\n            <h2 class=\"page-header\">\r\n              <img [src]=\"imageSrc\" alt=\"Logo\" [style.width.px]=\"imageWidth\" [style.height.px]=\"imageHeight\" />\r\n              <small class=\"float-right\">Nº Oferta: {{ resultFromParent.oferta[0].id_oferta}}</small>\r\n            </h2>\r\n          </div>\r\n          <!-- /.col -->\r\n        </div>\r\n        <!-- info row -->\r\n        <div class=\"row invoice-info\">\r\n          <div class=\"col-md-12\">\r\n            <div class=\"row\">\r\n              <div class=\"col-md-12\">\r\n                <div class=\"card wider-card\">\r\n                  <div class=\"card-header\">\r\n                    <h5>\r\n                      DATOS DE OFERTA\r\n                    </h5>\r\n                  </div>\r\n                  <div class=\"card-body\">\r\n                    <div class=\"col-md-12\">\r\n                      <div class=\"row\">\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre de Oferta:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_oferta }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Fecha Inicial:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_inicial }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Fecha Final:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_final }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Fecha de Creación:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_creacion }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Monto total Bruto:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total_bruto }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Monto Total:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Descuento Total:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].descuento_total}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Observación:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].observacion}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Peso Total:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].peso_total}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre del modo de entrega:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_modo_entrega}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12\">\r\n            <div class=\"row\">\r\n              <div class=\"col-md-12\">\r\n                <div class=\"cardwider-card\">\r\n                  <div class=\"card-header\">\r\n                    <h5>\r\n                      DATOS DEL CLIENTE\r\n                    </h5>\r\n                  </div>\r\n                  <div class=\"card-body\">\r\n                    <div class=\"col-md-12\">\r\n                      <div class=\"row\">\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Codigo del cliente:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].codigo_cliente}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre del cliente:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_cliente}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Celular:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].celular_clie}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">E-mail:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].e_mail}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Contacto del cliente:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_cont }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre lista:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_lista }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12\">\r\n            <div class=\"row\">\r\n              <div class=\"col-md-12\">\r\n                <div class=\"card wider-card\">\r\n                  <div class=\"card-header\">\r\n                    <h5>\r\n                      DATOS DEL VENDEDOR\r\n                    </h5>\r\n                  </div>\r\n                  <div class=\"card-body\">\r\n                    <div class=\"col-md-12\">\r\n                      <div class=\"row\">\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre vendedor:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_vendedor}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Ubicacion almacen:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].ubicacion_almacen}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Codigo almacen:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].codigo_almacen}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <!-- /.col -->\r\n        </div>\r\n        <!-- Table row -->\r\n        <div class=\"row\">\r\n          <div class=\"col-12 \">\r\n            <div class=\"card wider-card\">\r\n              <div class=\"card-header\">\r\n                <h5>\r\n                  DETALLE\r\n                </h5>\r\n              </div>\r\n              <div class=\"card-body table-container\">\r\n                <table class=\"table table-striped\">\r\n                  <thead>\r\n                    <tr>\r\n                      <th>CODIGO MATERIAL</th>\r\n                      <th>NOMBRE MATERIAL</th>\r\n                      <th>UNIDAD</th>\r\n                      <th>PRECIO</th>\r\n                      <th>CANTIDAD</th>\r\n                      <th>TOTAL BRUTO</th>\r\n                      <th>PRECIO DESCUENTO</th>\r\n                      <th>SUBTOTAL</th>\r\n                      <th>NOMBRE ALMACEN</th>\r\n                      <th>NOMBRE MONEDA</th>\r\n                    </tr>\r\n                  </thead>\r\n                  <tbody>\r\n                    <tr *ngFor=\"let analitico of analiticos; let i = index\">\r\n                      <td>{{ analitico.codigo_material }}</td>\r\n                      <td>{{ analitico.nombre_material }}</td>\r\n                      <td>{{ analitico.unidad }}</td>\r\n                      <td>{{ (analitico.precio).toFixed(2) }}</td>\r\n                      <td>{{ (analitico.cantidad).toFixed(2) }}</td>\r\n                      <td>{{ analitico.total_bruto }}</td>\r\n                      <td>{{ analitico.precio_descuento}}</td>\r\n                      <td>{{ analitico.subtotal }}</td>\r\n                      <td>{{ analitico.nombre_almacen }}</td>\r\n                      <td>{{ analitico.nombre_moneda }}</td>\r\n                    </tr>\r\n                  </tbody>\r\n                </table>\r\n                <div class=\"col-md-3\">\r\n                  <label for=\"\">Monto total Bruto:</label>\r\n                  <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total_bruto }}\" class=\"form-control\" readonly>\r\n                </div>\r\n                <div class=\"col-md-3\">\r\n                  <label for=\"\">Monto Total:</label>\r\n                  <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total}}\" class=\"form-control\" readonly>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <!-- /.col -->\r\n        </div>\r\n        <!-- /.row -->\r\n      </section>\r\n      <!-- /.content -->\r\n    </div>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n    <button type=\"button\" class=\"btn btn-secondary\" #captureButton (click)=\"onDownloadPDF()\">DESCARGAR</button>\r\n    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"captureScreen()\">IMPRIMIR</button>\r\n  </div>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -2604,12 +2696,12 @@ let ComercialCicloVendasCotacoesFormularioModalDetalhesClienteService = class Co
             this.loaderNavbar.emit(false);
         }))
             .subscribe((response) => {
-            if (response.success === true) {
+            if (response.responseCode === 200) {
                 const modalConfig = {
                     animated: false,
                 };
                 const initialState = {
-                    cliente: response.data,
+                    cliente: response.result,
                 };
                 this.modalService.show(_cliente_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalDetalhesClienteComponent"], Object.assign({}, modalConfig, {
                     initialState,
@@ -2736,7 +2828,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div *ngIf=\"materiais.length > 0\">\r\n  <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco()\">\r\n    <span class=\"fas fa-clipboard d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n    <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Resumen de cotización</strong></div>\r\n    <div class=\"col\"></div>\r\n    <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco3\">\r\n        <i class=\"fas fa-caret-down\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco3\">\r\n        <i class=\"fas fa-caret-up\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"col\" [hidden]=showBloco3>\r\n    <div class=\"row mb-5\" #scrollToCarrinho>\r\n      <div class=\"col\">\r\n        <div class=\"row\">\r\n          <div class=\"col\"><br><br>\r\n            <!-- <subtitles [data]=\"subtitles\" [show]=\"true\"></subtitles> -->\r\n          </div>\r\n          <div class=\"col\">\r\n            <div class=\"d-flex justify-content-end\" *ngIf=\"!visualizar\">\r\n              <!-- <button\r\n                type=\"button\"\r\n                class=\"btn btn-sm btn-primary mr-3\"\r\n                (click)=\"onDescontoCarrinho()\"\r\n               >\r\n                <i class=\"fas fa-percentage\"></i>\r\n                <span>Descuento</span>\r\n              </button> -->\r\n              <button type=\"button\" class=\"btn btn-sm btn-danger\" (click)=\"onReset()\">\r\n                <i class=\"fas fa-trash\"></i>\r\n                <span>Limpiar</span>\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <form [formGroup]=\"form\" autocomplete=\"off\">\r\n          <div class=\"table-responsive\">\r\n            <custom-table [config]=\"tableHeadConfig\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('index') }\">\r\n                    <span class=\"ml-0\">Item</span>\r\n                  </th>\r\n                  <th scope=\"col\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\">Material</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('quantidade') }\">Peso Kg.</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('qtdeItem') }\">Cantidad</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valor') }\">Precio uni.</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('qtdeItem') }\">Unidad</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorDesc') }\">Descuento %</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorDesc') }\">Precio bruto</th>\r\n\r\n                  <!-- <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorIcms') }\">ICMS</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorIpi') }\">IPI</th> -->\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorTotal') }\">Precio Total</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('codDeposito') }\">Depósito</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('codDeposito') }\"></th>\r\n\r\n                  <th scope=\"col\" class=\"text-end\">Acciones </th>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n            <custom-table [config]=\"tableBodyConfig\" style=\"position: relative; top: -2px;\">\r\n              <div formArrayName=\"materiais\">\r\n                <ng-template #tbody let-tbody>\r\n                  <tr class=\"mb-1\" *ngFor=\"let material of materiais.controls; let i = index\" [formGroupName]=\"i\">\r\n                    <td class=\"align-middle text-center border-light\"\r\n                      [ngClass]=\"classStatusBorder(form.value.materiais[i])\" [ngStyle]=\"{ width: columSize('index') }\">\r\n                      {{ i + 1 }}\r\n                    </td>\r\n                    <td class=\"align-middle text-truncate border-light\"\r\n                      [ngStyle]=\"{ width: columSize('nomeMaterial') }\">\r\n                      <span [tooltip]=\"tooltipNomeMaterial\" container=\"body\">\r\n                        {{ form.value.materiais[i].codMaterial }} - {{ form.value.materiais[i].nomeMaterial}}\r\n                      </span>\r\n                      <ng-template #tooltipNomeMaterial>\r\n                        <p class=\"mb-0\">{{ form.value.materiais[i].codMaterial }} - {{\r\n                          form.value.materiais[i].nomeMaterial}}</p>\r\n                      </ng-template>\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('quantidade') }\">\r\n                      {{ form.value.materiais[i].quantidade | number:'1.3-3' }}\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"form.value.materiais[i].cantidad > 0\">\r\n                      {{ form.value.materiais[i].qtdeItem }}\r\n                    </td>\r\n                    <!--  <td class=\" text-center border-light\" >\r\n                      {{ form.value.materiais[i].unidad | number:'1.2-2' }}\r\n                    </td> -->\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"form.value.materiais[i].cantidad == 0 || form.value.materiais[i].cantidad == null\">\r\n                      -\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valor') }\">\r\n                      <span *ngIf=\"checkValorMaterial(form.value.materiais[i]) === true\">\r\n                        {{ form.value.materiais[i].valor | number:'1.4-4' }}\r\n                      </span>\r\n                      <span *ngIf=\"checkValorMaterial(form.value.materiais[i]) === false\">\r\n                        <span class=\"text-danger font-weight-bolder mr-1\" [tooltip]=\"tooltipPrecoMinimoTemplate\"\r\n                          container=\"body\">\r\n                          {{ form.value.materiais[i].valor | number:'1.4-4' }}\r\n                        </span>\r\n                        <ng-template #tooltipPrecoMinimoTemplate>\r\n                          <p class=\"text-nowrap mb-0\">Este material está com</p>\r\n                          <p class=\"text-nowrap mb-0\">preço abaixo do mínimo.</p>\r\n                          <p class=\"text-nowrap mb-0\">O ideal é acima de {{ form.value.materiais[i].valorUnit |\r\n                            currency:'BRL':'symbol':'1.2-2' }}</p>\r\n                        </ng-template>\r\n                      </span>\r\n                    </td>\r\n                    <td class=\"text-center border-light\">\r\n                      <p class=\"text-nowrap mb-0\"> {{ form.value.materiais[i].unidade}} </p>\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valorDesc') }\">\r\n                      <!-- <span *ngIf=\"form.value.materiais[i].valorDesc < descuento_permitido\">0,00 </span> -->\r\n                      <span class=\"text-warning font-weight-bolder mr-1\" *ngIf=\"form.value.materiais[i].percentualDesc <= 0\">\r\n                        0.00 %\r\n                      </span>\r\n\r\n                      <span *ngIf=\"form.value.materiais[i].percentualDesc > form.value.materiais[i].descuento_permitido\">\r\n                        <span class=\"text-danger font-weight-bolder mr-1\">\r\n                          {{ form.value.materiais[i].percentualDesc | number:'1.2-2' }}%\r\n                        </span>\r\n                        <i class=\"far fa-question-circle text-danger\" [tooltip]=\"tooltipDescontoTemplate\"\r\n                        container=\"body\"></i>\r\n                        <ng-template #tooltipDescontoTemplate>\r\n                          <p class=\"text-nowrap mb-0\"> Permitido {{ form.value.materiais[i].descuento_permitido }}%</p>\r\n                        </ng-template>\r\n                      </span>\r\n\r\n                \r\n                      \r\n\r\n                      <span *ngIf=\"form.value.materiais[i].valorDesc > 0 &&  form.value.materiais[i].descuento_permitido  >= form.value.materiais[i].percentualDesc\">\r\n                        \r\n                        <span class=\"text-success font-weight-bolder mr-1\">\r\n                          {{ form.value.materiais[i].percentualDesc | number:'1.2-2' }}%\r\n                        </span>\r\n                        <ng-template #tooltipDescontoTemplate>\r\n                          <p class=\"text-nowrap mb-0\">Permitido {{ form.value.materiais[i].descuento_permitido }}%</p>\r\n                        </ng-template>\r\n                        <i class=\"far fa-question-circle text-success\" [tooltip]=\"tooltipDescontoTemplate\"\r\n                          container=\"body\"></i>\r\n                      </span>\r\n                    </td>\r\n                    <!-- <td class=\"align-middle text-center border-light\" [ngStyle]=\"{ width: columSize('valorIcms') }\">\r\n                      {{ form.value.materiais[i].valorIcms  }}\r\n                    </td>\r\n                    <td class=\"align-middle text-center border-light\" [ngStyle]=\"{ width: columSize('valorIpi') }\">\r\n                      {{ form.value.materiais[i].valorIpi  }}\r\n                    </td> -->\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ form.value.materiais[i].valorTotalBruto| number:'1.4-4' }}\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ form.value.materiais[i].valorTotal| number:'1.4-4' }}\r\n                    </td>\r\n\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('codDeposito') }\">\r\n                      <!-- <ng-template #tooltipDescontoTemplate>\r\n                        <p class=\"text-left mb-0\"><u>Empresa:</u></p>\r\n                        <p class=\"text-left text-nowrap mb-0\">{{ form.value.materiais[i].nomeEmpresa | uppercase }}</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipDescontoTemplate\" container=\"body\"></i> -->\r\n                      <span class=\"\">\r\n                        {{ form.value.materiais[i].codDeposito | uppercase }}\r\n                      </span>\r\n                    </td>\r\n                    <td class=\" text-right border-light\" [ngStyle]=\"{ width: columSize('buttons') }\">\r\n\r\n                      <span>\r\n                        <btn-icon icon=\"far fa-question-circle\" class=\"mr-3 \" [tooltip]=\"tooltipLoteTemplate\"\r\n                          container=\"body\" [disabled]=true\r\n                          *ngIf=\"form.value.materiais[i].controladoPorLote === 1 && form.value.materiais[i].sequenciaLote !== null\">\r\n                        </btn-icon>\r\n                        <ng-template #tooltipLoteTemplate>\r\n                          <p class=\"text-center text-nowrap mb-0\">Lote selecionado:\r\n                            {{form.value.materiais[i].loteFabricacao}},</p>\r\n                          <p class=\"text-center text-nowrap mb-0\">estoque: {{form.value.materiais[i].estoqueLote}} TON\r\n                          </p>\r\n                        </ng-template>\r\n                      </span>\r\n\r\n                      <btn-icon icon=\"fas fa-list-alt\" class=\"mr-3 \" tooltip=\"Selecione Lote\" container=\"body\"\r\n                        (click)=\"onSelecionaLote(i, form.value.materiais[i])\" [disabled]=\"visualizar\"\r\n                        *ngIf=\"form.value.materiais[i].controladoPorLote === 1 && form.value.materiais[i].sequenciaLote === null\">\r\n                      </btn-icon>\r\n\r\n                      <btn-icon icon=\"fas fa-th\" class=\"mr-3\" tooltip=\"Materiais associados\" container=\"body\"\r\n                        (click)=\"onAssocMaterial(form.value.materiais[i])\" [disabled]=\"visualizar\"\r\n                        *ngIf=\"form.value.materiais[i].materialAssociado === 1\">\r\n                      </btn-icon>\r\n                      <btn-icon icon=\"fas fa-calculator\" class=\"mr-3\" tooltip=\"Calcular cantidades\" container=\"body\"\r\n                        (click)=\"onCalcMaterial(i, form.value.materiais[i])\" [disabled]=\"visualizar\">\r\n                      </btn-icon>\r\n                      <btn-icon icon=\"fas fa-percentage\" class=\"mr-3\" tooltip=\"Aplicar descuento\" container=\"body\"\r\n                        (click)=\"onDescontoMaterial(i, form.value.materiais[i])\">\r\n                      </btn-icon>\r\n                      <btn-icon icon=\"fas fa-trash\" class=\"mr-3\" tooltip=\"Remover\" container=\"body\"\r\n                        (click)=\"onDeleteMaterial(i, form.value.materiais[i])\" [disabled]=\"visualizar\">\r\n                      </btn-icon>\r\n                    </td>\r\n                  </tr>\r\n                  <tr>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('index') }\"></td>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\"></td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('quantidade') }\">\r\n                      {{ total.quantidade | number:'1.3-3' }}\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"total.qtdeItem > 0\">\r\n                      {{ total.qtdeItem }}\r\n                    </td>\r\n                    <!-- <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"total.qtdePecas == 0\">\r\n                      -\r\n                    </td> -->\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valor') }\">\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorDesc') }\">\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorIcms') }\">\r\n\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ total.bruto | number:'1.4-4' }}\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ total.valorTotal | number:'1.4-4' }}\r\n                    </td>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('codDeposito') }\"></td>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('buttons') }\"></td>\r\n                    <!--   <td></td> -->\r\n                  </tr>\r\n                </ng-template>\r\n              </div>\r\n            </custom-table>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n    <div class=\"my-5\" style=\"background-color: #FBFCFF;\" *ngIf=\"canLoadRelacionados === true\" [hidden]=\"visualizar\">\r\n      <comercial-ciclo-vendas-cotacoes-formulario-materiais-relacionados [codEmpresa]=\"selectedCodEmpresa\"\r\n        [materiais]=\"materiaisRelacionados\" [codCliente]=\"codCliente\" [codEndereco]=\"codEndereco\"\r\n        [codFormaPagamento]=\"codFormaPagamento\" [freteConta]=\"freteConta\">\r\n      </comercial-ciclo-vendas-cotacoes-formulario-materiais-relacionados>\r\n    </div>\r\n    <div class=\"row my-5\">\r\n\r\n      <div class=\"col\"></div>\r\n      <div class=\"col-3\">\r\n        <div class=\"col-md \" id=\"card-strong-grey\">\r\n          <div class=\"row d-flex\">\r\n            <div class=\"col\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Impuesto</div>\r\n              <div class=\"col\" id=\"card-value-grey\">USD. {{ total.impuesto | number:'1.2-2'}} </div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-4\">\r\n              <span class=\"fas fa-money-bill-wave d-flex p-3\" id=\"icon-strong-grey\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"my-3\"></div>\r\n\r\n        <div class=\"col-md \" id=\"card-strong-grey\">\r\n          <div class=\"row d-flex\">\r\n            <div class=\"col\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Total en Bs. 6.96</div>\r\n              <div class=\"col\" id=\"card-value-grey\">Bs. {{ total.monedaLocal | number:'1.2-2'}} </div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-4\">\r\n              <span class=\"fas fa-tags d-flex p-3\" id=\"icon-strong-grey\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-3 d-flex justify-content-center align-items-center\" id=\"card-strong-grey\">\r\n        <div class=\"col-md\" style=\"height: 140;\">\r\n          <div class=\"row d-flex mh-100\">\r\n            <div class=\"col-9\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Peso Total</div>\r\n              <div class=\"col\" id=\"card-value-grey\">{{ total.quantidade | number:'1.2-2' }} Kg.</div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-3\">\r\n              <span class=\"fas fa-weight-hanging d-flex p-3\" id=\"icon-strong-grey\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-3 d-flex justify-content-center align-items-center\" id=\"card-green\">\r\n        <div class=\"col-md\" style=\"height: 140;\">\r\n          <div class=\"row d-flex mh-100\">\r\n            <div class=\"col-9\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Monto total </div>\r\n              <div class=\"col\" id=\"card-value-grey\">USD. {{ total.valorProposta | number:'1.2-2' }}</div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-3\">\r\n              <span class=\"fas fa-money-bill-wave d-flex p-3\" id=\"icon-green\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div *ngIf=\"materiais.length > 0\">\r\n  <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco()\">\r\n    <span class=\"fas fa-clipboard d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n    <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Resumen de cotización</strong></div>\r\n    <div class=\"col\"></div>\r\n    <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco3\">\r\n        <i class=\"fas fa-caret-down\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco3\">\r\n        <i class=\"fas fa-caret-up\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"col\" [hidden]=showBloco3>\r\n    <div class=\"row mb-5\" #scrollToCarrinho>\r\n      <div class=\"col\">\r\n        <div class=\"row\">\r\n          <div class=\"col\"><br><br>\r\n            <!-- <subtitles [data]=\"subtitles\" [show]=\"true\"></subtitles> -->\r\n          </div>\r\n          <div class=\"col\">\r\n            <div class=\"d-flex justify-content-end\" *ngIf=\"!visualizar\">\r\n              <!-- <button\r\n                type=\"button\"\r\n                class=\"btn btn-sm btn-primary mr-3\"\r\n                (click)=\"onDescontoCarrinho()\"\r\n               >\r\n                <i class=\"fas fa-percentage\"></i>\r\n                <span>Descuento</span>\r\n              </button> -->\r\n              <button type=\"button\" class=\"btn btn-sm btn-danger\" (click)=\"onReset()\">\r\n                <i class=\"fas fa-trash\"></i>\r\n                <span>Limpiar</span>\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <form [formGroup]=\"form\" autocomplete=\"off\">\r\n          <div class=\"table-responsive\">\r\n            <custom-table [config]=\"tableHeadConfig\">\r\n              <ng-template #thead let-thead>\r\n                <tr>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('index') }\">\r\n                    <span class=\"ml-0\">Item</span>\r\n                  </th>\r\n                  <th scope=\"col\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\">Material</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('quantidade') }\">Peso Kg.</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('qtdeItem') }\">Cantidad</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valor') }\">Precio uni.</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('qtdeItem') }\">Unidad</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorDesc') }\">Descuento %</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorDesc') }\">Precio bruto</th>\r\n\r\n                  <!-- <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorIcms') }\">ICMS</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorIpi') }\">IPI</th> -->\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('valorTotal') }\">Precio Total</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('codDeposito') }\">Depósito</th>\r\n                  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('codDeposito') }\"></th>\r\n\r\n                  <th scope=\"col\" class=\"text-end\">Acciones </th>\r\n                </tr>\r\n              </ng-template>\r\n            </custom-table>\r\n            <custom-table [config]=\"tableBodyConfig\" style=\"position: relative; top: -2px;\">\r\n              <div formArrayName=\"materiais\">\r\n                <ng-template #tbody let-tbody>\r\n                  <tr class=\"mb-1\" *ngFor=\"let material of materiais.controls; let i = index\" [formGroupName]=\"i\">\r\n                    <td class=\"align-middle text-center border-light\"\r\n                      [ngClass]=\"classStatusBorder(form.value.materiais[i])\" [ngStyle]=\"{ width: columSize('index') }\">\r\n                      {{ i + 1 }}\r\n                    </td>\r\n                    <td class=\"align-middle text-truncate border-light\"\r\n                      [ngStyle]=\"{ width: columSize('nomeMaterial') }\">\r\n                      <span [tooltip]=\"tooltipNomeMaterial\" container=\"body\">\r\n                        {{ form.value.materiais[i].codMaterial }} - {{ form.value.materiais[i].nomeMaterial}}\r\n                      </span>\r\n                      <ng-template #tooltipNomeMaterial>\r\n                        <p class=\"mb-0\">{{ form.value.materiais[i].codMaterial }} - {{\r\n                          form.value.materiais[i].nomeMaterial}}</p>\r\n                      </ng-template>\r\n                    </td>\r\n                   \r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('quantidade') }\">\r\n                      {{ form.value.materiais[i].quantidade | number:'1.3-3' }}\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"form.value.materiais[i].cantidad > 0\">\r\n                      {{ form.value.materiais[i].qtdeItem }}\r\n                    </td>\r\n                    <!--  <td class=\" text-center border-light\" >\r\n                      {{ form.value.materiais[i].unidad | number:'1.2-2' }}\r\n                    </td> -->\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"form.value.materiais[i].cantidad == 0 || form.value.materiais[i].cantidad == null\">\r\n                      -\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valor') }\">\r\n                      <span *ngIf=\"checkValorMaterial(form.value.materiais[i]) === true\">\r\n                        {{ form.value.materiais[i].valor | number:'1.4-4' }}\r\n                      </span>\r\n                      <span *ngIf=\"checkValorMaterial(form.value.materiais[i]) === false\">\r\n                        <span class=\"text-danger font-weight-bolder mr-1\" [tooltip]=\"tooltipPrecoMinimoTemplate\"\r\n                          container=\"body\">\r\n                          {{ form.value.materiais[i].valor | number:'1.4-4' }}\r\n                        </span>\r\n                        <ng-template #tooltipPrecoMinimoTemplate>\r\n                          <p class=\"text-nowrap mb-0\">Este material está com</p>\r\n                          <p class=\"text-nowrap mb-0\">preço abaixo do mínimo.</p>\r\n                          <p class=\"text-nowrap mb-0\">O ideal é acima de {{ form.value.materiais[i].valorUnit |\r\n                            currency:'BRL':'symbol':'1.2-2' }}</p>\r\n                        </ng-template>\r\n                      </span>\r\n                    </td>\r\n                    <td class=\"text-center border-light\">\r\n                      <p class=\"text-nowrap mb-0\"> {{ form.value.materiais[i].unidade}} </p>\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valorDesc') }\">\r\n                      <!-- <span *ngIf=\"form.value.materiais[i].valorDesc < descuento_permitido\">0,00 </span> -->\r\n                      <span class=\"text-warning font-weight-bolder mr-1\" *ngIf=\"form.value.materiais[i].percentualDesc <= 0\">\r\n                        0.00 %\r\n                      </span>\r\n\r\n                      <span *ngIf=\"form.value.materiais[i].percentualDesc > form.value.materiais[i].descuento_permitido\">\r\n                        <span class=\"text-danger font-weight-bolder mr-1\">\r\n                          {{ form.value.materiais[i].percentualDesc | number:'1.2-2' }}%\r\n                        </span>\r\n                        <i class=\"far fa-question-circle text-danger\" [tooltip]=\"tooltipDescontoTemplate\"\r\n                        container=\"body\"></i>\r\n                        <ng-template #tooltipDescontoTemplate>\r\n                          <p class=\"text-nowrap mb-0\"> Permitido {{ form.value.materiais[i].descuento_permitido }}%</p>\r\n                        </ng-template>\r\n                      </span>\r\n\r\n                \r\n                      \r\n\r\n                      <span *ngIf=\"form.value.materiais[i].valorDesc > 0 &&  form.value.materiais[i].descuento_permitido  >= form.value.materiais[i].percentualDesc\">\r\n                        \r\n                        <span class=\"text-success font-weight-bolder mr-1\">\r\n                          {{ form.value.materiais[i].percentualDesc | number:'1.2-2' }}%\r\n                        </span>\r\n                        <ng-template #tooltipDescontoTemplate>\r\n                          <p class=\"text-nowrap mb-0\">Permitido {{ form.value.materiais[i].descuento_permitido }}%</p>\r\n                        </ng-template>\r\n                        <i class=\"far fa-question-circle text-success\" [tooltip]=\"tooltipDescontoTemplate\"\r\n                          container=\"body\"></i>\r\n                      </span>\r\n                    </td>\r\n                    <!-- <td class=\"align-middle text-center border-light\" [ngStyle]=\"{ width: columSize('valorIcms') }\">\r\n                      {{ form.value.materiais[i].valorIcms  }}\r\n                    </td>\r\n                    <td class=\"align-middle text-center border-light\" [ngStyle]=\"{ width: columSize('valorIpi') }\">\r\n                      {{ form.value.materiais[i].valorIpi  }}\r\n                    </td> -->\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ form.value.materiais[i].valorTotalBruto| number:'1.4-4' }}\r\n                    </td>\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ form.value.materiais[i].valorTotal| number:'1.4-4' }}\r\n                    </td>\r\n\r\n                    <td class=\" text-center border-light\" [ngStyle]=\"{ width: columSize('codDeposito') }\">\r\n                      <!-- <ng-template #tooltipDescontoTemplate>\r\n                        <p class=\"text-left mb-0\"><u>Empresa:</u></p>\r\n                        <p class=\"text-left text-nowrap mb-0\">{{ form.value.materiais[i].nomeEmpresa | uppercase }}</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipDescontoTemplate\" container=\"body\"></i> -->\r\n                      <span class=\"\">\r\n                        {{ form.value.materiais[i].codDeposito | uppercase }}\r\n                      </span>\r\n                    </td>\r\n                    <td class=\" text-right border-light\" [ngStyle]=\"{ width: columSize('buttons') }\">\r\n\r\n                      <span>\r\n                        <btn-icon icon=\"far fa-question-circle\" class=\"mr-3 \" [tooltip]=\"tooltipLoteTemplate\"\r\n                          container=\"body\" [disabled]=true\r\n                          *ngIf=\"form.value.materiais[i].controladoPorLote === 1 && form.value.materiais[i].sequenciaLote !== null\">\r\n                        </btn-icon>\r\n                        <ng-template #tooltipLoteTemplate>\r\n                          <p class=\"text-center text-nowrap mb-0\">Lote selecionado:\r\n                            {{form.value.materiais[i].loteFabricacao}},</p>\r\n                          <p class=\"text-center text-nowrap mb-0\">estoque: {{form.value.materiais[i].estoqueLote}} TON\r\n                          </p>\r\n                        </ng-template>\r\n                      </span>\r\n\r\n                      <btn-icon icon=\"fas fa-list-alt\" class=\"mr-3 \" tooltip=\"Selecione Lote\" container=\"body\"\r\n                        (click)=\"onSelecionaLote(i, form.value.materiais[i])\" [disabled]=\"visualizar\"\r\n                        *ngIf=\"form.value.materiais[i].controladoPorLote === 1 && form.value.materiais[i].sequenciaLote === null\">\r\n                      </btn-icon>\r\n\r\n                      <btn-icon icon=\"fas fa-th\" class=\"mr-3\" tooltip=\"Materiais associados\" container=\"body\"\r\n                        (click)=\"onAssocMaterial(form.value.materiais[i])\" [disabled]=\"visualizar\"\r\n                        *ngIf=\"form.value.materiais[i].materialAssociado === 1\">\r\n                      </btn-icon>\r\n                      <btn-icon icon=\"fas fa-calculator\" class=\"mr-3\" tooltip=\"Calcular cantidades\" container=\"body\"\r\n                        (click)=\"onCalcMaterial(i, form.value.materiais[i])\" [disabled]=\"visualizar\">\r\n                      </btn-icon>\r\n                      <btn-icon icon=\"fas fa-percentage\" class=\"mr-3\" tooltip=\"Aplicar descuento\" container=\"body\"\r\n                        (click)=\"onDescontoMaterial(i, form.value.materiais[i])\">\r\n                      </btn-icon>\r\n                      <btn-icon icon=\"fas fa-trash\" class=\"mr-3\" tooltip=\"Remover\" container=\"body\"\r\n                        (click)=\"onDeleteMaterial(i, form.value.materiais[i])\" [disabled]=\"visualizar\">\r\n                      </btn-icon>\r\n                    </td>\r\n                  </tr>\r\n                  <tr>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('index') }\"></td>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\"></td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('quantidade') }\">\r\n                      {{ total.quantidade | number:'1.3-3' }}\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"total.qtdeItem > 0\">\r\n                      {{ total.qtdeItem }}\r\n                    </td>\r\n                    <!-- <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('qtdeItem') }\"\r\n                      *ngIf=\"total.qtdePecas == 0\">\r\n                      -\r\n                    </td> -->\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valor') }\">\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorDesc') }\">\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorIcms') }\">\r\n\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ total.bruto | number:'1.4-4' }}\r\n                    </td>\r\n                    <td class=\"text-center border-light\" [ngStyle]=\"{ width: columSize('valorTotal') }\">\r\n                      {{ total.valorTotal | number:'1.4-4' }}\r\n                    </td>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('codDeposito') }\"></td>\r\n                    <td class=\"border-light\" [ngStyle]=\"{ width: columSize('buttons') }\"></td>\r\n                    <!--   <td></td> -->\r\n                  </tr>\r\n                </ng-template>\r\n              </div>\r\n            </custom-table>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n    <div class=\"my-5\" style=\"background-color: #FBFCFF;\" *ngIf=\"canLoadRelacionados === true\" [hidden]=\"visualizar\">\r\n      <comercial-ciclo-vendas-cotacoes-formulario-materiais-relacionados [codEmpresa]=\"selectedCodEmpresa\"\r\n        [materiais]=\"materiaisRelacionados\" [codCliente]=\"codCliente\" [codEndereco]=\"codEndereco\"\r\n        [codFormaPagamento]=\"codFormaPagamento\" [freteConta]=\"freteConta\" [id_vendedor] = \"this.id_vendedor\" [id_lista]=\"this.id_lista\">\r\n      </comercial-ciclo-vendas-cotacoes-formulario-materiais-relacionados>\r\n    </div>\r\n    <div class=\"row my-5\">\r\n\r\n      <div class=\"col\"></div>\r\n      <div class=\"col-3\">\r\n        <div class=\"col-md \" id=\"card-strong-grey\">\r\n          <div class=\"row d-flex\">\r\n            <div class=\"col\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Impuesto</div>\r\n              <div class=\"col\" id=\"card-value-grey\">USD. {{ total.impuesto | number:'1.2-2'}} </div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-4\">\r\n              <span class=\"fas fa-money-bill-wave d-flex p-3\" id=\"icon-strong-grey\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"my-3\"></div>\r\n\r\n        <div class=\"col-md \" id=\"card-strong-grey\">\r\n          <div class=\"row d-flex\">\r\n            <div class=\"col\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Total en Bs. 6.96</div>\r\n              <div class=\"col\" id=\"card-value-grey\">Bs. {{ total.monedaLocal | number:'1.2-2'}} </div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-4\">\r\n              <span class=\"fas fa-tags d-flex p-3\" id=\"icon-strong-grey\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-3 d-flex justify-content-center align-items-center\" id=\"card-strong-grey\">\r\n        <div class=\"col-md\" style=\"height: 140;\">\r\n          <div class=\"row d-flex mh-100\">\r\n            <div class=\"col-9\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Peso Total</div>\r\n              <div class=\"col\" id=\"card-value-grey\">{{ total.quantidade | number:'1.2-2' }} Kg.</div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-3\">\r\n              <span class=\"fas fa-weight-hanging d-flex p-3\" id=\"icon-strong-grey\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-3 d-flex justify-content-center align-items-center\" id=\"card-green\">\r\n        <div class=\"col-md\" style=\"height: 140;\">\r\n          <div class=\"row d-flex mh-100\">\r\n            <div class=\"col-9\">\r\n              <div class=\"col\" id=\"card-label-light\" style=\"font-size: small;\">Monto total </div>\r\n              <div class=\"col\" id=\"card-value-grey\">USD. {{ total.valorProposta | number:'1.2-2' }}</div>\r\n              <div class=\"col\" id=\"\"></div>\r\n            </div>\r\n            <div class=\"col-3\">\r\n              <span class=\"fas fa-money-bill-wave d-flex p-3\" id=\"icon-green\"></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
 
 /***/ }),
 
@@ -3006,7 +3098,7 @@ let ComercialCicloVendasCotacoesFormularioModalDetalhesContatoService = class Co
     showModal(codCliente, codContato) {
         this.loaderNavbar.emit(true);
         this.clientesService
-            .getContato(codCliente, codContato)
+            .getContato(codContato, codCliente)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(() => {
             this.loaderNavbar.emit(false);
         }))
@@ -3086,7 +3178,11 @@ let ComercialCicloVendasCotacoesFormularioModalDetalhesClienteComponent = class 
     constructor(bsModalRef) {
         this.bsModalRef = bsModalRef;
     }
-    ngOnInit() { }
+    ngOnInit() {
+        this.datoscliente = this.cliente.datos_cliente;
+        // @ts-ignore: Ignorar error TS2339
+        this.datosdireccion = this.cliente.datos_direccion;
+    }
     onClose() {
         this.bsModalRef.hide();
     }
@@ -3534,7 +3630,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("::ng-deep #actions button {\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  background-color: #eff3f6;\n  background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);\n  background-position: -1px -1px;\n  background-repeat: repeat-x;\n  background-size: 110% 110%;\n  border: 1px solid rgba(27, 31, 35, 0.2);\n  border-radius: 0.25em;\n  color: #000000;\n  cursor: pointer;\n  display: inline-block;\n  font-size: 12px;\n  font-weight: 600;\n  height: 30px;\n  line-height: 20px;\n  padding: 4px 10px;\n  position: relative;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  vertical-align: middle;\n  white-space: nowrap;\n}\n::ng-deep #actions button:hover {\n  background-color: #e6ebf1;\n  background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);\n  background-position: -0.5em;\n  border-color: rgba(27, 31, 35, 0.35);\n}\n::ng-deep #actions button:hover.active {\n  background-color: #eff3f6;\n  background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);\n  background-position: -1px -1px;\n  border-color: rgba(27, 31, 35, 0.2);\n  cursor: default;\n}\n::ng-deep #actions button.active {\n  color: #005fdc;\n}\n::ng-deep #actions button:disabled {\n  opacity: 0.6;\n}\n::ng-deep #actions button:disabled:hover {\n  box-shadow: unset;\n  color: #000000;\n  cursor: no-drop;\n}\n::ng-deep #actions button:not(:first-child) {\n  margin-left: 5px;\n}\n::ng-deep #actions button:not(:last-child) {\n  margin-right: 5px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2ljbG8tdmVuZGFzL2NvdGFjb2VzL2xpc3RhL2xpc3RhLmNvbXBvbmVudC5zY3NzIiwic3JjL2Fzc2V0cy9zY3NzL2NvbG9ycy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQU9RO0VBQ0ksd0JBQUE7S0FBQSxxQkFBQTtVQUFBLGdCQUFBO0VBQ0EseUJBQUE7RUFDQSxnRUFBQTtFQUNBLDhCQUFBO0VBQ0EsMkJBQUE7RUFDQSwwQkFBQTtFQUNBLHVDQUFBO0VBQ0EscUJBQUE7RUFDQSxjQ2hCSjtFRGlCSSxlQUFBO0VBQ0EscUJBQUE7RUFDQSxlQUFBO0VBQ0EsZ0JBQUE7RUFDQSxZQUFBO0VBQ0EsaUJBQUE7RUFDQSxpQkFBQTtFQUNBLGtCQUFBO0VBQ0EseUJBQUE7S0FBQSxzQkFBQTtNQUFBLHFCQUFBO1VBQUEsaUJBQUE7RUFDQSxzQkFBQTtFQUNBLG1CQUFBO0FBTlo7QUFPWTtFQUNBLHlCQUFBO0VBQ0EsZ0VBQUE7RUFDQSwyQkFBQTtFQUNBLG9DQUFBO0FBTFo7QUFNWTtFQUNJLHlCQUFBO0VBQ0EsZ0VBQUE7RUFDQSw4QkFBQTtFQUNBLG1DQUFBO0VBQ0EsZUFBQTtBQUpoQjtBQU9ZO0VBQ0EsY0NwQ0w7QUQrQlA7QUFPWTtFQUNBLFlBQUE7QUFMWjtBQU1ZO0VBQ0ksaUJBQUE7RUFDQSxjQ2hEUjtFRGlEUSxlQUFBO0FBSmhCO0FBT1k7RUFDQSxnQkFBQTtBQUxaO0FBT1k7RUFDQSxpQkFBQTtBQUxaIiwiZmlsZSI6InNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2ljbG8tdmVuZGFzL2NvdGFjb2VzL2xpc3RhL2xpc3RhLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiOjpuZy1kZWVwIHtcclxuICAgIEBpbXBvcnQgJ3NyYy9hc3NldHMvc2Nzcy9jb2xvcnMuc2Nzcyc7XHJcbiAgICBAaW1wb3J0ICdzcmMvYXNzZXRzL3Njc3MvdmFyaWFibGVzJztcclxuXHJcblxyXG5cclxuICAgICNhY3Rpb25zIHtcclxuICAgICAgICBidXR0b24ge1xyXG4gICAgICAgICAgICBhcHBlYXJhbmNlOiBub25lO1xyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWZmM2Y2O1xyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kLWltYWdlOiBsaW5lYXItZ3JhZGllbnQoLTE4MGRlZywgI2ZhZmJmYywgI2VmZjNmNiA5MCUpO1xyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kLXBvc2l0aW9uOiAtMXB4IC0xcHg7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtcmVwZWF0OiByZXBlYXQteDtcclxuICAgICAgICAgICAgYmFja2dyb3VuZC1zaXplOiAxMTAlIDExMCU7XHJcbiAgICAgICAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHJnYmEoMjcsIDMxLCAzNSwgMC4yKTtcclxuICAgICAgICAgICAgYm9yZGVyLXJhZGl1czogMC4yNWVtO1xyXG4gICAgICAgICAgICBjb2xvcjogJGJsYWNrO1xyXG4gICAgICAgICAgICBjdXJzb3I6IHBvaW50ZXI7XHJcbiAgICAgICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgICAgICAgZm9udC1zaXplOiAxMnB4O1xyXG4gICAgICAgICAgICBmb250LXdlaWdodDogNjAwO1xyXG4gICAgICAgICAgICBoZWlnaHQ6IDMwcHg7XHJcbiAgICAgICAgICAgIGxpbmUtaGVpZ2h0OiAyMHB4O1xyXG4gICAgICAgICAgICBwYWRkaW5nOiA0cHggMTBweDtcclxuICAgICAgICAgICAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG4gICAgICAgICAgICB1c2VyLXNlbGVjdDogbm9uZTtcclxuICAgICAgICAgICAgdmVydGljYWwtYWxpZ246IG1pZGRsZTtcclxuICAgICAgICAgICAgd2hpdGUtc3BhY2U6IG5vd3JhcDtcclxuICAgICAgICAgICAgJjpob3ZlciB7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtY29sb3I6ICNlNmViZjE7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtaW1hZ2U6IGxpbmVhci1ncmFkaWVudCgtMTgwZGVnLCAjZjBmM2Y2LCAjZTZlYmYxIDkwJSk7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtcG9zaXRpb246IC0wLjVlbTtcclxuICAgICAgICAgICAgYm9yZGVyLWNvbG9yOiByZ2JhKDI3LCAzMSwgMzUsIDAuMzUpO1xyXG4gICAgICAgICAgICAmLmFjdGl2ZSB7XHJcbiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWZmM2Y2O1xyXG4gICAgICAgICAgICAgICAgYmFja2dyb3VuZC1pbWFnZTogbGluZWFyLWdyYWRpZW50KC0xODBkZWcsICNmYWZiZmMsICNlZmYzZjYgOTAlKTtcclxuICAgICAgICAgICAgICAgIGJhY2tncm91bmQtcG9zaXRpb246IC0xcHggLTFweDtcclxuICAgICAgICAgICAgICAgIGJvcmRlci1jb2xvcjogcmdiYSgyNywgMzEsIDM1LCAwLjIpO1xyXG4gICAgICAgICAgICAgICAgY3Vyc29yOiBkZWZhdWx0O1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgJi5hY3RpdmUge1xyXG4gICAgICAgICAgICBjb2xvcjogJGJsdWU7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgJjpkaXNhYmxlZCB7XHJcbiAgICAgICAgICAgIG9wYWNpdHk6IDAuNjtcclxuICAgICAgICAgICAgJjpob3ZlciB7XHJcbiAgICAgICAgICAgICAgICBib3gtc2hhZG93OiB1bnNldDtcclxuICAgICAgICAgICAgICAgIGNvbG9yOiAkYmxhY2s7XHJcbiAgICAgICAgICAgICAgICBjdXJzb3I6IG5vLWRyb3A7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAmOm5vdCg6Zmlyc3QtY2hpbGQpIHtcclxuICAgICAgICAgICAgbWFyZ2luLWxlZnQ6IDVweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAmOm5vdCg6bGFzdC1jaGlsZCkge1xyXG4gICAgICAgICAgICBtYXJnaW4tcmlnaHQ6IDVweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgIH1cclxuICAgICAgICB9XHJcblxyXG59XHJcbiIsIiRibGFjazogIzAwMDAwMDtcclxuJGdyYXk6ICM1YTVhNWE7XHJcbiRkYXJrLWdyYXk6ICMyMTI1Mjk7XHJcbiRtZWRpdW0tZ3JheTogIzU4NjQ2NDtcclxuJGxpZ2h0LWdyYXk6ICNlNWU1ZTM7XHJcbiRjeWFubzogIzAwZTBkODtcclxuJGJsdWU6ICMwMDVmZGM7XHJcbiRsaWdodC1ibHVlOiAjOEZCOUVGO1xyXG4kZGFyay1ibHVlOiAjMDQzMzVlO1xyXG4kcmVkOiAjYjgzNDJjO1xyXG4kb3JhbmdlOiAjZmY2NjMzO1xyXG4kbGlnaHQtb3JhbmdlOiAjZmY4NDI5O1xyXG4kYXF1YTogIzIyZmZhMTtcclxuJGdyZWVuOiAjNGRjYzcxO1xyXG4kbGlnaHQtZ3JlZW46ICNiZmZmMDA7XHJcbiRkYXJrLWdyZWVuOiAjMDA4MDYwO1xyXG4keWVsbG93OiAjZmZlYTAwO1xyXG4kZ29sZGVuOiAjY2E5ZjFkO1xyXG4kcGluazogI2NjMDc2NjtcclxuJHB1cnBsZTogIzc5MGFhMztcclxuJHdoaXRlOiAjZmZmZmZmO1xyXG4kaWNlOiAjZjdmN2Y3O1xyXG4kcHVycGxlTXRDb3JwOiAjM2UwNzUyO1xyXG4kcHVycGxlTGlnaHRNdENvcnA6ICM5NjIxOGU7XHJcbiRvcmFuZ2VNdENvcnA6ICNGQzlGM0E7XHJcbiRvcmFuZ2VEYXJrTXRDb3JwOiAjOWU1MjAxO1xyXG4iXX0= */");
+/* harmony default export */ __webpack_exports__["default"] = ("@charset \"UTF-8\";\n::ng-deep .modal-dialog {\n  max-width: 60%;\n  /* Establece el ancho máximo del modal en relación al viewport */\n}\n::ng-deep .modal-content {\n  width: 100%;\n  /* Asegura que el contenido del modal ocupe todo el ancho disponible */\n}\n::ng-deep #actions button {\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  background-color: #eff3f6;\n  background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);\n  background-position: -1px -1px;\n  background-repeat: repeat-x;\n  background-size: 110% 110%;\n  border: 1px solid rgba(27, 31, 35, 0.2);\n  border-radius: 0.25em;\n  color: #000000;\n  cursor: pointer;\n  display: inline-block;\n  font-size: 12px;\n  font-weight: 600;\n  height: 30px;\n  line-height: 20px;\n  padding: 4px 10px;\n  position: relative;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  vertical-align: middle;\n  white-space: nowrap;\n}\n::ng-deep #actions button:hover {\n  background-color: #e6ebf1;\n  background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);\n  background-position: -0.5em;\n  border-color: rgba(27, 31, 35, 0.35);\n}\n::ng-deep #actions button:hover.active {\n  background-color: #eff3f6;\n  background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);\n  background-position: -1px -1px;\n  border-color: rgba(27, 31, 35, 0.2);\n  cursor: default;\n}\n::ng-deep #actions button.active {\n  color: #005fdc;\n}\n::ng-deep #actions button:disabled {\n  opacity: 0.6;\n}\n::ng-deep #actions button:disabled:hover {\n  box-shadow: unset;\n  color: #000000;\n  cursor: no-drop;\n}\n::ng-deep #actions button:not(:first-child) {\n  margin-left: 5px;\n}\n::ng-deep #actions button:not(:last-child) {\n  margin-right: 5px;\n}\n::ng-deep .parallel-divs {\n  display: -ms-flexbox;\n  display: flex;\n  /* Crea un contenedor flex */\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  /* Distribuye los elementos con espacio entre ellos */\n  -ms-flex-align: start;\n      align-items: flex-start;\n  /* Alinea los elementos en la parte superior del contenedor */\n}\n::ng-deep .left-div, ::ng-deep .right-div {\n  -ms-flex: 1;\n      flex: 1;\n  /* Distribuye el espacio disponible de manera uniforme entre los dos divs */\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2ljbG8tdmVuZGFzL2NvdGFjb2VzL2xpc3RhL2xpc3RhLmNvbXBvbmVudC5zY3NzIiwic3JjL2Fzc2V0cy9zY3NzL2NvbG9ycy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGdCQUFnQjtBQUlaO0VBQ0UsY0FBQTtFQUFnQixnRUFBQTtBQUR0QjtBQUlJO0VBQ0UsV0FBQTtFQUFhLHNFQUFBO0FBRG5CO0FBS1E7RUFDSSx3QkFBQTtLQUFBLHFCQUFBO1VBQUEsZ0JBQUE7RUFDQSx5QkFBQTtFQUNBLGdFQUFBO0VBQ0EsOEJBQUE7RUFDQSwyQkFBQTtFQUNBLDBCQUFBO0VBQ0EsdUNBQUE7RUFDQSxxQkFBQTtFQUNBLGNDdEJKO0VEdUJJLGVBQUE7RUFDQSxxQkFBQTtFQUNBLGVBQUE7RUFDQSxnQkFBQTtFQUNBLFlBQUE7RUFDQSxpQkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7RUFDQSx5QkFBQTtLQUFBLHNCQUFBO01BQUEscUJBQUE7VUFBQSxpQkFBQTtFQUNBLHNCQUFBO0VBQ0EsbUJBQUE7QUFIWjtBQUlZO0VBQ0EseUJBQUE7RUFDQSxnRUFBQTtFQUNBLDJCQUFBO0VBQ0Esb0NBQUE7QUFGWjtBQUdZO0VBQ0kseUJBQUE7RUFDQSxnRUFBQTtFQUNBLDhCQUFBO0VBQ0EsbUNBQUE7RUFDQSxlQUFBO0FBRGhCO0FBSVk7RUFDQSxjQzFDTDtBRHdDUDtBQUlZO0VBQ0EsWUFBQTtBQUZaO0FBR1k7RUFDSSxpQkFBQTtFQUNBLGNDdERSO0VEdURRLGVBQUE7QUFEaEI7QUFJWTtFQUNBLGdCQUFBO0FBRlo7QUFJWTtFQUNBLGlCQUFBO0FBRlo7QUFPUTtFQUNFLG9CQUFBO0VBQUEsYUFBQTtFQUFlLDRCQUFBO0VBQ2Ysc0JBQUE7TUFBQSw4QkFBQTtFQUFnQyxxREFBQTtFQUNoQyxxQkFBQTtNQUFBLHVCQUFBO0VBQXlCLDZEQUFBO0FBRm5DO0FBS1E7RUFDRSxXQUFBO01BQUEsT0FBQTtFQUFTLDJFQUFBO0FBRm5CIiwiZmlsZSI6InNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2ljbG8tdmVuZGFzL2NvdGFjb2VzL2xpc3RhL2xpc3RhLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGNoYXJzZXQgXCJVVEYtOFwiO1xuOjpuZy1kZWVwIC5tb2RhbC1kaWFsb2cge1xuICBtYXgtd2lkdGg6IDYwJTtcbiAgLyogRXN0YWJsZWNlIGVsIGFuY2hvIG3DoXhpbW8gZGVsIG1vZGFsIGVuIHJlbGFjacOzbiBhbCB2aWV3cG9ydCAqL1xufVxuOjpuZy1kZWVwIC5tb2RhbC1jb250ZW50IHtcbiAgd2lkdGg6IDEwMCU7XG4gIC8qIEFzZWd1cmEgcXVlIGVsIGNvbnRlbmlkbyBkZWwgbW9kYWwgb2N1cGUgdG9kbyBlbCBhbmNobyBkaXNwb25pYmxlICovXG59XG46Om5nLWRlZXAgI2FjdGlvbnMgYnV0dG9uIHtcbiAgYXBwZWFyYW5jZTogbm9uZTtcbiAgYmFja2dyb3VuZC1jb2xvcjogI2VmZjNmNjtcbiAgYmFja2dyb3VuZC1pbWFnZTogbGluZWFyLWdyYWRpZW50KC0xODBkZWcsICNmYWZiZmMsICNlZmYzZjYgOTAlKTtcbiAgYmFja2dyb3VuZC1wb3NpdGlvbjogLTFweCAtMXB4O1xuICBiYWNrZ3JvdW5kLXJlcGVhdDogcmVwZWF0LXg7XG4gIGJhY2tncm91bmQtc2l6ZTogMTEwJSAxMTAlO1xuICBib3JkZXI6IDFweCBzb2xpZCByZ2JhKDI3LCAzMSwgMzUsIDAuMik7XG4gIGJvcmRlci1yYWRpdXM6IDAuMjVlbTtcbiAgY29sb3I6ICMwMDAwMDA7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICBmb250LXNpemU6IDEycHg7XG4gIGZvbnQtd2VpZ2h0OiA2MDA7XG4gIGhlaWdodDogMzBweDtcbiAgbGluZS1oZWlnaHQ6IDIwcHg7XG4gIHBhZGRpbmc6IDRweCAxMHB4O1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIHVzZXItc2VsZWN0OiBub25lO1xuICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xuICB3aGl0ZS1zcGFjZTogbm93cmFwO1xufVxuOjpuZy1kZWVwICNhY3Rpb25zIGJ1dHRvbjpob3ZlciB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNlNmViZjE7XG4gIGJhY2tncm91bmQtaW1hZ2U6IGxpbmVhci1ncmFkaWVudCgtMTgwZGVnLCAjZjBmM2Y2LCAjZTZlYmYxIDkwJSk7XG4gIGJhY2tncm91bmQtcG9zaXRpb246IC0wLjVlbTtcbiAgYm9yZGVyLWNvbG9yOiByZ2JhKDI3LCAzMSwgMzUsIDAuMzUpO1xufVxuOjpuZy1kZWVwICNhY3Rpb25zIGJ1dHRvbjpob3Zlci5hY3RpdmUge1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWZmM2Y2O1xuICBiYWNrZ3JvdW5kLWltYWdlOiBsaW5lYXItZ3JhZGllbnQoLTE4MGRlZywgI2ZhZmJmYywgI2VmZjNmNiA5MCUpO1xuICBiYWNrZ3JvdW5kLXBvc2l0aW9uOiAtMXB4IC0xcHg7XG4gIGJvcmRlci1jb2xvcjogcmdiYSgyNywgMzEsIDM1LCAwLjIpO1xuICBjdXJzb3I6IGRlZmF1bHQ7XG59XG46Om5nLWRlZXAgI2FjdGlvbnMgYnV0dG9uLmFjdGl2ZSB7XG4gIGNvbG9yOiAjMDA1ZmRjO1xufVxuOjpuZy1kZWVwICNhY3Rpb25zIGJ1dHRvbjpkaXNhYmxlZCB7XG4gIG9wYWNpdHk6IDAuNjtcbn1cbjo6bmctZGVlcCAjYWN0aW9ucyBidXR0b246ZGlzYWJsZWQ6aG92ZXIge1xuICBib3gtc2hhZG93OiB1bnNldDtcbiAgY29sb3I6ICMwMDAwMDA7XG4gIGN1cnNvcjogbm8tZHJvcDtcbn1cbjo6bmctZGVlcCAjYWN0aW9ucyBidXR0b246bm90KDpmaXJzdC1jaGlsZCkge1xuICBtYXJnaW4tbGVmdDogNXB4O1xufVxuOjpuZy1kZWVwICNhY3Rpb25zIGJ1dHRvbjpub3QoOmxhc3QtY2hpbGQpIHtcbiAgbWFyZ2luLXJpZ2h0OiA1cHg7XG59XG46Om5nLWRlZXAgLnBhcmFsbGVsLWRpdnMge1xuICBkaXNwbGF5OiBmbGV4O1xuICAvKiBDcmVhIHVuIGNvbnRlbmVkb3IgZmxleCAqL1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIC8qIERpc3RyaWJ1eWUgbG9zIGVsZW1lbnRvcyBjb24gZXNwYWNpbyBlbnRyZSBlbGxvcyAqL1xuICBhbGlnbi1pdGVtczogZmxleC1zdGFydDtcbiAgLyogQWxpbmVhIGxvcyBlbGVtZW50b3MgZW4gbGEgcGFydGUgc3VwZXJpb3IgZGVsIGNvbnRlbmVkb3IgKi9cbn1cbjo6bmctZGVlcCAubGVmdC1kaXYsIDo6bmctZGVlcCAucmlnaHQtZGl2IHtcbiAgZmxleDogMTtcbiAgLyogRGlzdHJpYnV5ZSBlbCBlc3BhY2lvIGRpc3BvbmlibGUgZGUgbWFuZXJhIHVuaWZvcm1lIGVudHJlIGxvcyBkb3MgZGl2cyAqL1xufSIsIiRibGFjazogIzAwMDAwMDtcclxuJGdyYXk6ICM1YTVhNWE7XHJcbiRkYXJrLWdyYXk6ICMyMTI1Mjk7XHJcbiRtZWRpdW0tZ3JheTogIzU4NjQ2NDtcclxuJGxpZ2h0LWdyYXk6ICNlNWU1ZTM7XHJcbiRjeWFubzogIzAwZTBkODtcclxuJGJsdWU6ICMwMDVmZGM7XHJcbiRsaWdodC1ibHVlOiAjOEZCOUVGO1xyXG4kZGFyay1ibHVlOiAjMDQzMzVlO1xyXG4kcmVkOiAjYjgzNDJjO1xyXG4kb3JhbmdlOiAjZmY2NjMzO1xyXG4kbGlnaHQtb3JhbmdlOiAjZmY4NDI5O1xyXG4kYXF1YTogIzIyZmZhMTtcclxuJGdyZWVuOiAjNGRjYzcxO1xyXG4kbGlnaHQtZ3JlZW46ICNiZmZmMDA7XHJcbiRkYXJrLWdyZWVuOiAjMDA4MDYwO1xyXG4keWVsbG93OiAjZmZlYTAwO1xyXG4kZ29sZGVuOiAjY2E5ZjFkO1xyXG4kcGluazogI2NjMDc2NjtcclxuJHB1cnBsZTogIzc5MGFhMztcclxuJHdoaXRlOiAjZmZmZmZmO1xyXG4kaWNlOiAjZjdmN2Y3O1xyXG4kcHVycGxlTXRDb3JwOiAjM2UwNzUyO1xyXG4kcHVycGxlTGlnaHRNdENvcnA6ICM5NjIxOGU7XHJcbiRvcmFuZ2VNdENvcnA6ICNGQzlGM0E7XHJcbiRvcmFuZ2VEYXJrTXRDb3JwOiAjOWU1MjAxO1xyXG4iXX0= */");
 
 /***/ }),
 
@@ -3547,7 +3643,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<div class=\"modal-content\" *ngIf=\"dataCotacao\" [hidden]=\"loaderFullScreen\">\r\n  <div class=\"modal-header\" id=\"actions\">\r\n    <h4 class=\"mtc-title mb-0 my-auto\">Cotización #{{ dataCotacao.codigo_oferta }} / Realizada con éxito</h4>\r\n\r\n    <button type=\"button\" class=\"btn btn-primary\"\r\n    (click)=\"onClose()\">\r\n    Finalizar\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body py-5\">\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <div class=\"mtc-title\">Resumen de Pedido</div>\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <th scope=\"col\" width=\"10%\" class=\"text-center\">Código </th>\r\n              <th scope=\"col\" width=\"34%\">Nombre</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">Peso Kg.</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">Cantidad.</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">USD.</th>\r\n              <th scope=\"col\" width=\"20%\">Almacen</th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <tr *ngFor=\"let material of dataCotacao.carrinho; let i = index\">\r\n              <td width=\"10%\" class=\"text-center\">{{ material.codItemPedidoCliente | uppercase }}</td>\r\n              <td width=\"34%\" class=\"text-truncate\">{{ material.nomeMaterial | uppercase }} </td>\r\n              <td width=\"12%\" class=\"text-center\">{{ material.quantidade | number:'1.3-3' }} </td>\r\n              <td width=\"12%\" class=\"text-center\">\r\n                <span class=\"mr-2\"> {{ material.qtdeItem }} </span>\r\n                <i\r\n                  *ngIf=\"material.variacaoPreco !== 0\"\r\n                  [ngClass]=\"classVariacaoPreco(material.variacaoPreco)\"\r\n                  [tooltip]=\"formatVariacaoPreco(material.variacaoPreco)\">\r\n                </i>\r\n              </td>\r\n              <td width=\"12%\" class=\"text-center\">{{ material.valorTotal| number:'1.2-2'  }} </td>\r\n              <td width=\"20%\" class=\"text-truncate\">{{ material.codDeposito | uppercase }}  </td>\r\n            </tr>\r\n            <tr>\r\n              <td width=\"10%\"></td>\r\n              <td width=\"34%\" class=\"text-right\">TOTAL</td>\r\n              <td width=\"12%\" class=\"text-center\"> {{ calcularTotais('quantidade') | number:'1.3-3' }} KG</td>\r\n              <td width=\"12%\" class=\"text-center\"></td>\r\n              <td width=\"12%\" class=\"text-center\">{{ calcularTotais('valor') | number:'1.3-3' }} USD.  </td>\r\n              <td width=\"20%\"></td>\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n      </div>\r\n    </div>\r\n    <div class=\"row py-5\">\r\n      <div class=\"col-5 d-flex\">\r\n        <div class=\"my-auto\">\r\n          <span class=\"mtc-title mb-0 mr-2\">Cotización realizada para:</span>\r\n          <span> {{ dataCotacao.nombre_cliente }} </span>\r\n        </div>\r\n      </div>\r\n      <!-- <div class=\"col-3\" *ngIf=\"user.idVendedor !== null && showMetas\">\r\n        <div class=\"border rounded bg-light text-center py-3 px-2\">\r\n          <div class=\"mb-2\">Comissão mínima aproximada</div>\r\n          <h6 class=\"mb-0\">\r\n            <span *ngIf=\"!comissaoLoaded\" class=\"spinner-border spinner-border-sm text-dark\"></span>\r\n            <span [hidden]=\"comissaoMin == 0 || !comissaoLoaded\"> -->\r\n              <!-- {{ comissaoMin | currency:'BRL':'symbol':'1.2-2' }} -->\r\n        <!--     </span>\r\n          </h6>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-3\" *ngIf=\"user.idVendedor !== null && showMetas\">\r\n        <div class=\"border rounded bg-light text-center py-3 px-2\">\r\n          <div class=\"mb-2\">Comissão máxima aproximada</div>\r\n          <h6 class=\"mb-0\">\r\n            <span *ngIf=\"!comissaoLoaded\" class=\"spinner-border spinner-border-sm text-dark\"></span>\r\n            <span [hidden]=\"comissaoMax == 0 || !comissaoLoaded\"> -->\r\n              <!-- {{ comissaoMax | currency:'BRL':'symbol':'1.2-2' }} -->\r\n      <!--       </span>\r\n          </h6>\r\n        </div>\r\n      </div>\r\n    </div> -->\r\n    <!-- <div class=\"row\" *ngIf=\"user.idVendedor !== null && showMetas\">\r\n      <div class=\"col\" *ngIf=\"!metasEmpty\">\r\n        <div class=\"mtc-title mb-0\">Seu progresso após o faturamento dessa cotação:</div>\r\n        <div class=\"row justify-content-center\">\r\n          <div class=\"col\">\r\n            <comercial-templates-mapa-metas\r\n              [idVendedor]=\"user.idVendedor\"\r\n              [idEscritorio]=\"user.idEscritorio\"\r\n              [showHeader]=\"false\"\r\n              loaderStyle=\"tiny\"\r\n              (onData)=\"onData($event)\">\r\n            </comercial-templates-mapa-metas>\r\n            <div id=\"progress-bar-mapa-metas\" class=\"row\" *ngIf=\"metasLoaded\">\r\n              <div class=\"col-lg-4\">\r\n                <comercial-ciclo-vendas-cotacoes-formulario-template-progress-bar\r\n                  [metaAtual]=\"metasProgresso.toneladas.valor\"\r\n                  [somaCotacao]=\"metasProgresso.toneladas.progresso\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-progress-bar>\r\n              </div>\r\n              <div class=\"col-lg-4\">\r\n                <comercial-ciclo-vendas-cotacoes-formulario-template-progress-bar\r\n                  [metaAtual]=\"metasProgresso.clientes.valor\"\r\n                  [somaCotacao]=\"metasProgresso.clientes.progresso\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-progress-bar>\r\n              </div>\r\n              <div class=\"col-lg-4\">\r\n                <comercial-ciclo-vendas-cotacoes-formulario-template-progress-bar\r\n                  [metaAtual]=\"metasProgresso.extras.valor\"\r\n                  [somaCotacao]=\"metasProgresso.extras.progresso\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-progress-bar>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col\" *ngIf=\"metasEmpty\">\r\n        <span class=\"mtc-title mb-0 mr-2\">ATENÇÃO:</span>\r\n        <span>Não foi possível localizar seu mapa de metas deste mês.</span>\r\n      </div>\r\n    </div> -->\r\n  </div>\r\n</div>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<div class=\"modal-content\" *ngIf=\"dataCotacao\" [hidden]=\"loaderFullScreen\">\r\n  <form [formGroup]=\"checkoutForm\" autocomplete=\"off\" #autorizaciones (ngSubmit)=\"onSubmit(checkoutForm.value)\">\r\n  <div class=\"modal-header\" id=\"actions\">\r\n    <h4 class=\"mtc-title mb-0 my-auto\">Cotización #{{ dataCotacao.id_oferta }} / Realizada con éxito</h4>\r\n    <button class=\"btn btn-success\" type=\"button\" (click)=\"enviar()\">Finalizar</button>\r\n  </div>\r\n  <div class=\"modal-body py-5\">\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <div class=\"mtc-title\">Resumen de Pedido</div>\r\n        <div class=\"my-auto\">\r\n          <span class=\"mtc-title mb-0 mr-2\">Cotización realizada para:</span>\r\n          <span> {{ dataCotacao.nombre_cliente }} </span>\r\n        </div>\r\n\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <th scope=\"col\" width=\"10%\" class=\"text-center\">Código</th>\r\n              <th scope=\"col\" width=\"34%\">Nombre</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">Peso Kg.</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">Cantidad.</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">Descuento.</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">Descuento Permitido.</th>\r\n              <th scope=\"col\" width=\"12%\" class=\"text-center\">USD.</th>\r\n              <th scope=\"col\" width=\"20%\">Almacen</th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <tr *ngFor=\"let material of dataCotacao.carrinho; let i = index\">\r\n              <td width=\"10%\" class=\"text-center\">{{ material.codItemPedidoCliente | uppercase }}</td>\r\n              <td width=\"34%\" class=\"text-truncate\">{{ material.nomeMaterial | uppercase }} </td>\r\n              <td width=\"12%\" class=\"text-center\">{{ material.quantidade | number:'1.3-3' }} </td>\r\n              <td width=\"12%\" class=\"text-center\"><span class=\"mr-2\"> {{ material.qtdeItem }} </span>\r\n                <i\r\n                  *ngIf=\"material.variacaoPreco !== 0\"\r\n                  [ngClass]=\"classVariacaoPreco(material.variacaoPreco)\"\r\n                  [tooltip]=\"formatVariacaoPreco(material.variacaoPreco)\">\r\n                </i>\r\n              </td>\r\n              <td width=\"12%\" class=\"text-center\" [ngStyle]=\"{'color': material.percentualDesc > material.descuento_permitido ? 'red' : 'green'}\">{{ material.percentualDesc| number:'1.2-2'  }} </td>\r\n              <td width=\"12%\" class=\"text-center\">{{ material.descuento_permitido| number:'1.2-2'  }} </td>\r\n              <td width=\"12%\" class=\"text-center\">{{ material.valorTotal| number:'1.2-2'  }} </td>\r\n              <td width=\"20%\" class=\"text-truncate\">{{ material.codDeposito | uppercase }}  </td>\r\n            </tr>\r\n            <tr>\r\n              <td width=\"10%\"></td>\r\n              <td width=\"34%\" class=\"text-right\">TOTAL</td>\r\n              <td width=\"12%\" class=\"text-center\"> {{ calcularTotais('quantidade') | number:'1.3-3' }} KG</td>\r\n              <td width=\"12%\" class=\"text-center\"></td>\r\n              <td width=\"12%\" class=\"text-center\"></td>\r\n              <td width=\"12%\" class=\"text-center\"></td>\r\n              <td width=\"12%\" class=\"text-center\">{{ calcularTotais('valor') | number:'1.3-3' }} USD.</td>\r\n              <td width=\"20%\"></td>\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n      </div>\r\n    </div>\r\n      <div class=\"row\">\r\n        <div class=\"alert alert-warning col-md-6 ml-3\" *ngIf=\"deshabilitar === false\">\r\n          <strong>Al superar el límite permitido, su solicitud debe ser aprobada, describa el motivo del descuento solicitado.</strong>\r\n        </div>\r\n        <div class=\"col-md-5\" *ngIf=\"deshabilitar === false\">\r\n        </div>\r\n        <div class=\"col-md-6\" >\r\n          <span class=\"mtc-title\"  id=\"titulo_observacio\">Observación del Ejecutivo de venta:</span>\r\n          <br>\r\n            <input type=\"text\" name=\"observacion\" formControlName=\"observacion\" id=\"observacion\" class=\"form-control\" [disabled]=\"verificador()\">\r\n        </div>\r\n      </div>\r\n  </div>\r\n</form>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -3636,6 +3732,11 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
                 text: 'Disponibles en stock',
                 color: 'green',
             },
+            {
+                id: 2,
+                text: 'UP SELL',
+                color: 'blue',
+            },
         ];
         this.tableConfig = {
             subtitleBorder: true,
@@ -3648,6 +3749,8 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
         this.searchParams = {};
         this.swTodos = false;
         this.swVendedor = true;
+        this.swAppSell = false;
+        this.swAppSellColor = false;
         this.orderBy = 'nrPedido';
         this.orderType = 'asc';
         this.linhas = [];
@@ -3664,6 +3767,7 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
         this.dadosEmpty = false;
         this.idMaterial = 0;
         this.idLista = 0;
+        this.swActivarBusqueda = false;
         this.toggleAll = false;
         this.clickCounter = 0;
         this.pnotifyService.getPNotify();
@@ -3746,6 +3850,12 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
         });
     }
     cambioMaterial(idMaterial) {
+        if (idMaterial > 0) {
+            this.swActivarBusqueda = true;
+        }
+        else {
+            this.swActivarBusqueda = false;
+        }
         this.idMaterial = idMaterial;
         this.registros = this.form.controls.registros.value;
     }
@@ -3798,6 +3908,7 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
             if (src === 'application') {
                 this.loaderNavbar.emit(true);
             }
+            /* console.log('aqui'); */
             const params = {
                 id_familia: '',
                 id_grupo: '',
@@ -4038,8 +4149,8 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
             /*   this.scrollToFormOnTop.emit(true); */
         }
     }
-    onFilterVend() {
-        var tipo = 1;
+    onFilterVend(a) {
+        var tipo = a;
         if (this.checkFieldErrors() === false) {
             if (this.searching === false && this.form.valid) {
                 this.setRouterParams(this.getFormFilterValues(), tipo);
@@ -4068,6 +4179,7 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
         params.codLinha = this.form.value.codLinha;
         params.codClasse = this.form.value.codClasse;
         params.codMaterial = this.form.value.codMaterial;
+        params.codigo_material = this.form.value.codigo_material;
         params.codEmpresa = this.codEmpresa;
         if (this.codDeposito) {
             params.codDeposito = this.codDeposito;
@@ -4093,11 +4205,23 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
         this.dados = [];
         this.dadosLoaded = false;
         this.dadosEmpty = false;
-        const params = {
-            id_material: this.idMaterial,
-            id_lista: this.id_lista,
-            registros: this.form.controls.registros.value
-        };
+        let params = {};
+        if (tipo == 1 || tipo == 3) {
+            params = {
+                id_material: this.idMaterial,
+                id_lista: this.id_lista,
+                id_vendedor: this.id_vendedor,
+                registros: this.form.controls.registros.value
+            };
+        }
+        else if (tipo == 2) {
+            params = {
+                id_material: this.idMaterial,
+                codigo_material: this.codigo_material,
+                id_lista: this.id_lista,
+                registros: this.form.controls.registros.value
+            };
+        }
         if (tipo == 1) {
             this.swTodos = false;
             this.swVendedor = true;
@@ -4113,14 +4237,15 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
                 next: (response) => {
                     /*           console.log(response.responseCode);
                      */ /*  if (response.hasOwnProperty('success')
-               && response.success === true
-               && !response.data[0].msg) {
-                 this.dados = response.data.map(function (el: any) {
-                   var o = Object.assign({}, el);
-                   o.checked = 0;
-                   return o;
-                 }); */
+            && response.success === true
+            && !response.data[0].msg) {
+              this.dados = response.data.map(function (el: any) {
+                var o = Object.assign({}, el);
+                o.checked = 0;
+                return o;
+              }); */
                     if (response.responseCode === 200) {
+                        this.swAppSellColor = false;
                         this.dados = response.result.map((el) => {
                             var o = Object.assign({}, el);
                             o.checked = 0;
@@ -4139,13 +4264,20 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
                         //this.dadosEmpty = true;
                     }
                     else {
-                        this.swTodos = true;
+                        this.swTodos = false;
                         this.swVendedor = false;
+                        this.swAppSell = true;
                         this.dadosEmpty = true;
                         this.form.controls.codMaterial.disable();
+                        this.swAppSellColor = false;
                     }
                 },
                 error: (error) => {
+                    this.swTodos = false;
+                    this.swVendedor = false;
+                    this.swAppSell = true;
+                    this.dadosEmpty = true;
+                    this.form.controls.codMaterial.disable();
                     if (error['error'].hasOwnProperty('mensagem')) {
                         this.pnotifyService.error(error.error.mensagem);
                     }
@@ -4153,6 +4285,7 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
                         this.pnotifyService.error();
                     }
                     this.dadosEmpty = true;
+                    this.swAppSellColor = false;
                 }
             });
         }
@@ -4172,17 +4305,19 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
                 next: (response) => {
                     /*           console.log(response.responseCode);
                      */ /*  if (response.hasOwnProperty('success')
-               && response.success === true
-               && !response.data[0].msg) {
-                 this.dados = response.data.map(function (el: any) {
-                   var o = Object.assign({}, el);
-                   o.checked = 0;
-                   return o;
-                 }); */
+            && response.success === true
+            && !response.data[0].msg) {
+              this.dados = response.data.map(function (el: any) {
+                var o = Object.assign({}, el);
+                o.checked = 0;
+                return o;
+              }); */
                     if (response.responseCode === 200) {
                         this.form.controls.codMaterial.enable();
                         this.swTodos = false;
                         this.swVendedor = true;
+                        this.swAppSell = false;
+                        this.swAppSellColor = false;
                         this.dados = response.result.map((el) => {
                             var o = Object.assign({}, el);
                             o.checked = 0;
@@ -4203,10 +4338,67 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
                         this.swTodos = false;
                         this.swVendedor = true;
                         this.dadosEmpty = true;
+                        this.swAppSellColor = false;
                         this.form.controls.codMaterial.enable();
                     }
                 },
                 error: (error) => {
+                    if (error['error'].hasOwnProperty('mensagem')) {
+                        this.pnotifyService.error(error.error.mensagem);
+                    }
+                    else {
+                        this.pnotifyService.error();
+                    }
+                    this.dadosEmpty = true;
+                }
+            });
+        }
+        else if (tipo === 3) {
+            this.swTodos = false;
+            this.swVendedor = false;
+            this.swAppSell = true;
+            this.form.controls.codMaterial.disable();
+            console.log(params);
+            this.comercialService
+                .getUpSellService(params)
+                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["finalize"])(() => {
+                this.loaderNavbar.emit(false);
+                this.searching = false;
+                this.firstSearch = true;
+                this.dadosLoaded = true;
+            }))
+                .subscribe({
+                next: (response) => {
+                    if (response.responseCode === 200) {
+                        this.swAppSellColor = true;
+                        this.form.controls.codMaterial.enable();
+                        this.swTodos = false;
+                        this.swVendedor = true;
+                        this.swAppSell = false;
+                        this.dados = response.result.map((el) => {
+                            var o = Object.assign({}, el);
+                            o.checked = 0;
+                            return o;
+                        });
+                        this.dadosEmpty = false;
+                        this.tableConfig.fixedHeader = true;
+                    }
+                    else {
+                        this.swAppSellColor = false;
+                        this.swTodos = true;
+                        this.swVendedor = false;
+                        this.dadosEmpty = true;
+                        this.swAppSell = false;
+                        //this.form.controls.codMaterial.enable();
+                    }
+                },
+                error: (error) => {
+                    this.swAppSellColor = false;
+                    this.swTodos = true;
+                    this.swVendedor = false;
+                    this.dadosEmpty = true;
+                    this.swAppSell = false;
+                    this.form.controls.codMaterial.enable();
                     if (error['error'].hasOwnProperty('mensagem')) {
                         this.pnotifyService.error(error.error.mensagem);
                     }
@@ -4231,16 +4423,13 @@ let ComercialCicloVendasCotacoesFormularioMateriaisListaComponent = class Comerc
         //}
         return hasError;
     }
-    classStatusBorder(disponibilidade) {
+    classStatusBorder(swAppSellColor) {
         let borderClass;
-        if (disponibilidade == 1) {
+        if (swAppSellColor == true) {
+            borderClass = 'border-primary';
+        }
+        else if (swAppSellColor == false) {
             borderClass = 'border-success';
-        }
-        else if (disponibilidade == 2) {
-            borderClass = 'border-danger';
-        }
-        else {
-            borderClass = 'border-secondary';
         }
         return borderClass;
     }
@@ -4392,6 +4581,7 @@ ComercialCicloVendasCotacoesFormularioMateriaisListaComponent.propDecorators = {
     codFormaPagamento: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['codFormaPagamento',] }],
     freteConta: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['freteConta',] }],
     id_lista: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['id_lista_precio',] }],
+    id_vendedor: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['id_vendedor',] }],
     resetRequested: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"] }],
     loaderNavbar: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"], args: ['loaderNavbar',] }],
     loaderFullScreen: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"], args: ['loaderFullScreen',] }],
@@ -4812,6 +5002,143 @@ ComercialCicloVendasCotacoesListaModalHistoricoComercialComponent = Object(tslib
 
 /***/ }),
 
+/***/ "JBmo":
+/*!****************************************************************************************!*\
+  !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/vista/vista.component.ts ***!
+  \****************************************************************************************/
+/*! exports provided: VistaComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VistaComponent", function() { return VistaComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _raw_loader_vista_component_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! raw-loader!./vista.component.html */ "920F");
+/* harmony import */ var _vista_component_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./vista.component.scss */ "OAnu");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "iInd");
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/platform-browser */ "cUpR");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ "qCKp");
+/* harmony import */ var html2canvas__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! html2canvas */ "wOnQ");
+/* harmony import */ var html2canvas__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(html2canvas__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! jspdf */ "5RHE");
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jspdf__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
+
+
+
+
+
+
+
+let VistaComponent = class VistaComponent {
+    constructor(activatedRoute, router, 
+    // tslint:disable-next-line:variable-name
+    _bsModalRef, sanitizer) {
+        this.activatedRoute = activatedRoute;
+        this.router = router;
+        this._bsModalRef = _bsModalRef;
+        this.sanitizer = sanitizer;
+        this.name = 'Angular ' + _angular_core__WEBPACK_IMPORTED_MODULE_3__["VERSION"].major;
+        this.imageWidth = 300;
+        this.imageHeight = 85;
+    }
+    ngOnInit() {
+        this.result = this.resultFromParent;
+        this.analiticos = this.resultFromParent.analitico;
+        this.onClose = new rxjs__WEBPACK_IMPORTED_MODULE_7__["Subject"]();
+        this.imageSrc = this.sanitizer.bypassSecurityTrustUrl('assets/images/logo/logo-monterrey.png');
+        // console.log('Received data in modal:', this.result);
+    }
+    ngAfterViewInit() {
+        // Capture the content when the modal opens
+        // this.captureScreen();
+    }
+    onConfirm() {
+        this.onClose.next(true);
+        this._bsModalRef.hide();
+    }
+    onCancel() {
+        this.onClose.next(false);
+        this._bsModalRef.hide();
+    }
+    /*public openInNewTab() {
+      // Construct the URL with the 'ofertaId' parameter
+      const url = `/comercial/ciclo-vendas/23/cotacoes-pedidos/lista/vista/${this.ofertaId}`;
+  
+      // Open the URL in a new tab
+      window.open(url, '_blank');
+    }*/
+    captureScreen() {
+        const content = this.contentToConvert.nativeElement;
+        if (!content) {
+            console.error('Element with id contentToConvert not found.');
+            return;
+        }
+        if (content.childElementCount === 0) {
+            console.error('No content found inside the contentToConvert element.');
+            return;
+        }
+        html2canvas__WEBPACK_IMPORTED_MODULE_8___default()(content).then((canvas) => {
+            const imgWidth = 980;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            const contentDataURL = canvas.toDataURL('image/png');
+            // Create a new window and open the PDF in a new tab
+            const newWindow = window.open('', '_blank');
+            newWindow.document.open();
+            newWindow.document.write(`<html><body><img src="${contentDataURL}" width="${imgWidth}" height="${imgHeight}" /></body></html>`);
+            newWindow.document.close();
+            setTimeout(() => {
+                newWindow.print();
+            }, 500);
+        });
+    }
+    onDownloadPDF() {
+        const content = this.contentToConvert.nativeElement;
+        // Use html2canvas to capture the content as an image
+        html2canvas__WEBPACK_IMPORTED_MODULE_8___default()(content).then(canvas => {
+            // Create a new PDF document
+            const pdf = new jspdf__WEBPACK_IMPORTED_MODULE_9__('p', 'mm', 'a4');
+            // Calculate the image dimensions to fit the PDF page
+            const imgWidth = 210;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            // Add the captured image to the PDF
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+            // Download the PDF
+            pdf.save('your_pdf_filename.pdf');
+        });
+    }
+};
+VistaComponent.ctorParameters = () => [
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"] }
+];
+VistaComponent.propDecorators = {
+    contentToConvert: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"], args: ['contentToConvert', { static: true },] }],
+    ofertaId: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"] }]
+};
+VistaComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+        // tslint:disable-next-line:component-selector
+        selector: 'app-vista',
+        template: _raw_loader_vista_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
+        styles: [_vista_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
+    }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"],
+        _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"]])
+], VistaComponent);
+
+
+
+/***/ }),
+
 /***/ "JC9j":
 /*!*****************************************************************************************************************!*\
   !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/formulario/modal/finalizacao/padrao/padrao.component.ts ***!
@@ -5104,15 +5431,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _templates_button_imprimir_button_imprimir_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./templates/button-imprimir/button-imprimir.component */ "Y6ov");
 /* harmony import */ var _templates_button_imprimir_separacao_button_imprimir_separacao_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./templates/button-imprimir-separacao/button-imprimir-separacao.component */ "litE");
 /* harmony import */ var _modal_historico_exclusao_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./modal/historico-exclusao/historico-exclusao.component */ "inOF");
-/* harmony import */ var _modal_historico_comercial_historico_comercial_service__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./modal/historico-comercial/historico-comercial.service */ "qY7+");
-/* harmony import */ var _modal_consulta_liberacao_consulta_liberacao_service__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./modal/consulta-liberacao/consulta-liberacao.service */ "n+td");
-/* harmony import */ var _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./modal/email-cotacao/email-cotacao.service */ "pnB1");
-/* harmony import */ var _modal_trocar_empresa_trocar_empresa_service__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./modal/trocar-empresa/trocar-empresa.service */ "K6eK");
-/* harmony import */ var _modal_duplicar_proposta_duplicar_proposta_service__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./modal/duplicar-proposta/duplicar-proposta.service */ "II0c");
-/* harmony import */ var _modal_desdobrar_proposta_desdobrar_proposta_service__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./modal/desdobrar-proposta/desdobrar-proposta.service */ "tcjY");
-/* harmony import */ var _modal_trocar_cliente_trocar_cliente_service__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./modal/trocar-cliente/trocar-cliente.service */ "UTA4");
-/* harmony import */ var _modal_transfere_faturamento_transfere_faturamento_service__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./modal/transfere-faturamento/transfere-faturamento.service */ "5ywE");
-/* harmony import */ var _modal_historico_exclusao_historico_exclusao_service__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./modal/historico-exclusao/historico-exclusao.service */ "vSEy");
+/* harmony import */ var _pdf_pdf_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./pdf/pdf.component */ "yCb5");
+/* harmony import */ var _modal_historico_comercial_historico_comercial_service__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./modal/historico-comercial/historico-comercial.service */ "qY7+");
+/* harmony import */ var _modal_consulta_liberacao_consulta_liberacao_service__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./modal/consulta-liberacao/consulta-liberacao.service */ "n+td");
+/* harmony import */ var _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./modal/email-cotacao/email-cotacao.service */ "pnB1");
+/* harmony import */ var _modal_trocar_empresa_trocar_empresa_service__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./modal/trocar-empresa/trocar-empresa.service */ "K6eK");
+/* harmony import */ var _modal_duplicar_proposta_duplicar_proposta_service__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./modal/duplicar-proposta/duplicar-proposta.service */ "II0c");
+/* harmony import */ var _modal_desdobrar_proposta_desdobrar_proposta_service__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./modal/desdobrar-proposta/desdobrar-proposta.service */ "tcjY");
+/* harmony import */ var _modal_trocar_cliente_trocar_cliente_service__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./modal/trocar-cliente/trocar-cliente.service */ "UTA4");
+/* harmony import */ var _modal_transfere_faturamento_transfere_faturamento_service__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./modal/transfere-faturamento/transfere-faturamento.service */ "5ywE");
+/* harmony import */ var _modal_historico_exclusao_historico_exclusao_service__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./modal/historico-exclusao/historico-exclusao.service */ "vSEy");
+/* harmony import */ var _vista_vista_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./vista/vista.component */ "JBmo");
 
 
 
@@ -5145,7 +5474,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 // Services
+
 
 
 
@@ -5160,6 +5491,7 @@ let ComercialCicloVendasCotacoesListaModule = class ComercialCicloVendasCotacoes
 ComercialCicloVendasCotacoesListaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [
+            _pdf_pdf_component__WEBPACK_IMPORTED_MODULE_28__["PdfComponent"],
             _lista_component__WEBPACK_IMPORTED_MODULE_16__["ComercialCicloVendasCotacoesListaComponent"],
             _modal_historico_comercial_historico_comercial_component__WEBPACK_IMPORTED_MODULE_17__["ComercialCicloVendasCotacoesListaModalHistoricoComercialComponent"],
             _modal_historico_exclusao_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_27__["ComercialCicloVendasCotacoesListaModalHistoricoExclusaoComponent"],
@@ -5171,7 +5503,8 @@ ComercialCicloVendasCotacoesListaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_
             _modal_duplicar_proposta_duplicar_proposta_component__WEBPACK_IMPORTED_MODULE_21__["ComercialCicloVendasCotacoesListaModalDuplicarPropostaComponent"],
             _modal_desdobrar_proposta_desdobrar_proposta_component__WEBPACK_IMPORTED_MODULE_22__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaComponent"],
             _modal_trocar_cliente_trocar_cliente_component__WEBPACK_IMPORTED_MODULE_23__["ComercialCicloVendasCotacoesListaModalTrocarClienteComponent"],
-            _modal_transfere_faturamento_transfere_faturamento_component__WEBPACK_IMPORTED_MODULE_24__["ComercialCicloVendasCotacoesListaModalTransfereFaturamentoComponent"]
+            _modal_transfere_faturamento_transfere_faturamento_component__WEBPACK_IMPORTED_MODULE_24__["ComercialCicloVendasCotacoesListaModalTransfereFaturamentoComponent"],
+            _vista_vista_component__WEBPACK_IMPORTED_MODULE_38__["VistaComponent"],
         ],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
@@ -5188,7 +5521,7 @@ ComercialCicloVendasCotacoesListaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_
             src_app_shared_modules_shared_module__WEBPACK_IMPORTED_MODULE_12__["SharedModule"],
             src_app_shared_templates_templates_module__WEBPACK_IMPORTED_MODULE_13__["TemplatesModule"],
             _clientes_dashboard_dashboard_module__WEBPACK_IMPORTED_MODULE_14__["ComercialClientesDashboardModule"],
-            _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_15__["ComercialCicloVendasCotacoesFormularioModule"],
+            _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_15__["ComercialCicloVendasCotacoesFormularioModule"]
         ],
         exports: [
             _lista_component__WEBPACK_IMPORTED_MODULE_16__["ComercialCicloVendasCotacoesListaComponent"],
@@ -5216,15 +5549,15 @@ ComercialCicloVendasCotacoesListaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_
             _modal_transfere_faturamento_transfere_faturamento_component__WEBPACK_IMPORTED_MODULE_24__["ComercialCicloVendasCotacoesListaModalTransfereFaturamentoComponent"],
         ],
         providers: [
-            _modal_historico_comercial_historico_comercial_service__WEBPACK_IMPORTED_MODULE_28__["ComercialCicloVendasCotacoesListaModalHistoricoComercialService"],
-            _modal_historico_exclusao_historico_exclusao_service__WEBPACK_IMPORTED_MODULE_36__["ComercialCicloVendasCotacoesListaModalHistoricoExclusaoService"],
-            _modal_consulta_liberacao_consulta_liberacao_service__WEBPACK_IMPORTED_MODULE_29__["ComercialCicloVendasCotacoesListaModalConsultaLiberacaoService"],
-            _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_30__["ComercialCicloVendasCotacoesListaModalEmailCotacaoService"],
-            _modal_trocar_empresa_trocar_empresa_service__WEBPACK_IMPORTED_MODULE_31__["ComercialCicloVendasCotacoesListaModalTrocarEmpresaService"],
-            _modal_duplicar_proposta_duplicar_proposta_service__WEBPACK_IMPORTED_MODULE_32__["ComercialCicloVendasCotacoesListaModalDuplicarPropostaService"],
-            _modal_desdobrar_proposta_desdobrar_proposta_service__WEBPACK_IMPORTED_MODULE_33__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaService"],
-            _modal_trocar_cliente_trocar_cliente_service__WEBPACK_IMPORTED_MODULE_34__["ComercialCicloVendasCotacoesListaModalTrocarClienteService"],
-            _modal_transfere_faturamento_transfere_faturamento_service__WEBPACK_IMPORTED_MODULE_35__["ComercialCicloVendasCotacoesListaModalTransfereFaturamentoService"]
+            _modal_historico_comercial_historico_comercial_service__WEBPACK_IMPORTED_MODULE_29__["ComercialCicloVendasCotacoesListaModalHistoricoComercialService"],
+            _modal_historico_exclusao_historico_exclusao_service__WEBPACK_IMPORTED_MODULE_37__["ComercialCicloVendasCotacoesListaModalHistoricoExclusaoService"],
+            _modal_consulta_liberacao_consulta_liberacao_service__WEBPACK_IMPORTED_MODULE_30__["ComercialCicloVendasCotacoesListaModalConsultaLiberacaoService"],
+            _modal_email_cotacao_email_cotacao_service__WEBPACK_IMPORTED_MODULE_31__["ComercialCicloVendasCotacoesListaModalEmailCotacaoService"],
+            _modal_trocar_empresa_trocar_empresa_service__WEBPACK_IMPORTED_MODULE_32__["ComercialCicloVendasCotacoesListaModalTrocarEmpresaService"],
+            _modal_duplicar_proposta_duplicar_proposta_service__WEBPACK_IMPORTED_MODULE_33__["ComercialCicloVendasCotacoesListaModalDuplicarPropostaService"],
+            _modal_desdobrar_proposta_desdobrar_proposta_service__WEBPACK_IMPORTED_MODULE_34__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaService"],
+            _modal_trocar_cliente_trocar_cliente_service__WEBPACK_IMPORTED_MODULE_35__["ComercialCicloVendasCotacoesListaModalTrocarClienteService"],
+            _modal_transfere_faturamento_transfere_faturamento_service__WEBPACK_IMPORTED_MODULE_36__["ComercialCicloVendasCotacoesListaModalTransfereFaturamentoService"],
         ],
     })
 ], ComercialCicloVendasCotacoesListaModule);
@@ -5416,6 +5749,7 @@ let ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent = clas
         this.comercialService = comercialService;
         /* @Input('id_presentacion') id_presentacion : number; */
         this.latLngChanged = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
+        this.fecharModal = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
         this.swDesactivarForm = true;
         this.currencyMaskOptions = {
             align: 'left',
@@ -5608,16 +5942,14 @@ let ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent = clas
     }
     emitLatLng() {
         this.latLngChanged.emit({ latitud: this.latitud, longitud: this.longitud });
+        this.onClose();
     }
     onSubmit() {
         this.emitLatLng();
-        this.onClose();
+        //
     }
     onClose() {
-        this.showModal = false;
-        if (this.bsModalRef) {
-            /* this.bsModalRef.hide(); */
-        }
+        this.fecharModal.emit(true);
     }
 };
 ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent.ctorParameters = () => [
@@ -5630,7 +5962,8 @@ ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent.ctorParame
     { type: _comercial_service__WEBPACK_IMPORTED_MODULE_10__["ComercialService"] }
 ];
 ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent.propDecorators = {
-    latLngChanged: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"] }]
+    latLngChanged: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"] }],
+    fecharModal: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"] }]
 };
 ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
@@ -5668,11 +6001,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "iInd");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "SVse");
-/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
-/* harmony import */ var src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! src/app/shared/services/core/auth.service */ "yxCR");
-/* harmony import */ var _cotacoes_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../cotacoes.service */ "uuri");
-/* harmony import */ var _formulario_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../formulario.service */ "/Zk1");
-/* harmony import */ var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/app/shared/services/core/pnotify.service */ "g+W+");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/forms */ "s7LF");
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
+/* harmony import */ var src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/app/shared/services/core/auth.service */ "yxCR");
+/* harmony import */ var _cotacoes_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../cotacoes.service */ "uuri");
+/* harmony import */ var _formulario_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../formulario.service */ "/Zk1");
+/* harmony import */ var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! src/app/shared/services/core/pnotify.service */ "g+W+");
+
 
 
 
@@ -5688,7 +6023,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion {
-    constructor(location, bsModalRef, cotacoesService, formularioService, router, authService, pnotifyService, activatedRoute) {
+    constructor(location, bsModalRef, cotacoesService, formularioService, router, authService, pnotifyService, activatedRoute, formBuilder) {
         this.location = location;
         this.bsModalRef = bsModalRef;
         this.cotacoesService = cotacoesService;
@@ -5697,11 +6032,14 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
         this.authService = authService;
         this.pnotifyService = pnotifyService;
         this.activatedRoute = activatedRoute;
+        this.formBuilder = formBuilder;
+        this.autorizacion = [];
         this.viewChecked = false;
         this.user = {
             idVendedor: 88,
             idEscritorio: 58,
         };
+        this.deshabilitar = true;
         this.loaderFullScreen = true;
         this.tableConfig = {
             isFixed: true,
@@ -5728,10 +6066,13 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
         };
         this.comissaoMax = 0;
         this.comissaoMin = 0;
+        this.formObj = {};
+        this.checkoutForm = this.formBuilder.group({
+            observacion: ''
+        });
     }
     ngOnInit() {
         //this.confirmDuplicatas();
-        console.log(this.dataCotacao);
     }
     ngAfterViewChecked() {
         if (this.dataCotacao) {
@@ -5744,13 +6085,78 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
     loadComponentData() {
         this.getComissao();
     }
+    enviar() {
+        if (this.checkoutForm.get('observacion').value !== null && this.deshabilitar === false) {
+            this.checkoutForm.reset();
+            this.id_oferta = this.dataCotacao.id_oferta;
+            this.fecha = this.dataCotacao.fecha_inicial;
+            const observacion_vendedor = this.checkoutForm.get('observacion').value;
+            let mayor = null;
+            let item = null;
+            this.dataCotacao.carrinho.forEach((data) => {
+                if (data.percentualDesc > data.descuento_permitido) {
+                    if (mayor === null || data.percentualDesc > mayor) {
+                        item = data.codigo_material;
+                        mayor = data.percentualDesc;
+                    }
+                }
+            });
+            this.formObj = {
+                descripcion_vend: this.checkoutForm.get('observacion').value,
+                id_oferta: this.id_oferta,
+                fecha_solicitud: this.fecha,
+                rango: mayor,
+                id_item: item
+            };
+            console.log(this.formObj);
+            this.cotacoesService.autorizaciones(this.formObj)
+                .pipe().subscribe((response) => {
+                console.log(response);
+            });
+            //this.onClose();
+        }
+        else {
+            this.onClose();
+        }
+    }
+    onSubmit(customerData) {
+        if (customerData !== undefined && customerData !== null) {
+            this.checkoutForm.reset();
+            this.id_oferta = this.dataCotacao.id_oferta;
+            this.fecha = this.dataCotacao.fecha_inicial;
+            const observacion_vendedor = customerData.observacion;
+            let mayor = null;
+            let item = null;
+            this.dataCotacao.carrinho.forEach((data) => {
+                if (data.percentualDesc > data.descuento_permitido) {
+                    if (mayor === null || data.percentualDesc > mayor) {
+                        item = data.codigo_material;
+                        mayor = data.percentualDesc;
+                    }
+                }
+            });
+            this.formObj = {
+                descripcion_vend: observacion_vendedor,
+                id_oferta: this.id_oferta,
+                fecha_solicitud: this.fecha,
+                rango: mayor,
+                id_item: item
+            };
+            console.log(this.formObj);
+            this.cotacoesService.autorizaciones(this.formObj)
+                .pipe().subscribe((response) => {
+                console.log(response);
+            });
+            this.onClose();
+        }
+        else {
+            this.onClose();
+        }
+    }
     onClose() {
-        let idSubModulo = this.dataCotacao.idSubModulo;
-        let codCotacao = this.dataCotacao.codCotacao;
-        let codEmpresa = this.dataCotacao.codEmpresa;
         this.formularioService.limparCarrinhoSubject.next(true);
-        /*         console.log('ew')
-         */ this.bsModalRef.hide();
+        this.bsModalRef.hide();
+        location.reload();
         this.router.navigate([`/comercial/ciclo-vendas/23/cotacoes-pedidos/lista`]);
     }
     calcularTotais(field) {
@@ -5763,6 +6169,24 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
             total.valor += this.dataCotacao.carrinho[index].valorTotal;
         }
         return total[field];
+    }
+    verificador() {
+        this.dataCotacao.carrinho.forEach((data) => {
+            if (data.percentualDesc > data.descuento_permitido) {
+                this.deshabilitar = false;
+                return;
+            }
+        });
+        if (this.deshabilitar) {
+            const observacionElement = document.getElementById('observacion');
+            const titulo_observacionElement = document.getElementById('titulo_observacio');
+            observacionElement.disabled = this.deshabilitar;
+            observacionElement.style.display = this.deshabilitar ? 'none' : 'block';
+            titulo_observacionElement.disabled = this.deshabilitar;
+            titulo_observacionElement.style.display = this.deshabilitar ? 'none' : 'block';
+            console.log(this.deshabilitar);
+            return;
+        }
     }
     onData(event) {
         if (event.corrente && Object.entries(event.corrente).length > 0) {
@@ -5785,6 +6209,7 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
                 this.metasLoaded = true;
             }))
                 .subscribe((response) => {
+                console.log('cotizaciones', response);
                 if (response.success === true) {
                     this.metasProgresso.toneladas.progresso = response.data.toneladas;
                     this.metasProgresso.clientes.progresso = response.data.clientes;
@@ -5813,7 +6238,7 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
                     )
                     .subscribe((response: JsonResponse) => {
                         if (response.success === true) {
-
+        
                             if (response.data.tipoVendedor == 'Representante') {
                                 this.showMetas = false;
                             }
@@ -5844,7 +6269,7 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
             .subscribe({
                 next: (response: JsonResponse) => {
                     if (response.success === true) {
-
+    
                     } else {
                         this.pnotifyService.notice(response.mensagem);
                     }
@@ -5881,13 +6306,14 @@ let ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = class C
 };
 ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion.ctorParameters = () => [
     { type: _angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"] },
-    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_7__["BsModalRef"] },
-    { type: _cotacoes_service__WEBPACK_IMPORTED_MODULE_9__["ComercialCicloVendasCotacoesService"] },
-    { type: _formulario_service__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasCotacoesFormularioService"] },
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalRef"] },
+    { type: _cotacoes_service__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasCotacoesService"] },
+    { type: _formulario_service__WEBPACK_IMPORTED_MODULE_11__["ComercialCicloVendasCotacoesFormularioService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
-    { type: src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_8__["AuthService"] },
-    { type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__["PNotifyService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] }
+    { type: src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_9__["AuthService"] },
+    { type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_12__["PNotifyService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_7__["FormBuilder"] }
 ];
 ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion.propDecorators = {
     dataCotacao: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['dataCotacao',] }]
@@ -5899,13 +6325,14 @@ ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion = Object(tsli
         styles: [_finalizacion_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
     }),
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"],
-        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_7__["BsModalRef"],
-        _cotacoes_service__WEBPACK_IMPORTED_MODULE_9__["ComercialCicloVendasCotacoesService"],
-        _formulario_service__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasCotacoesFormularioService"],
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalRef"],
+        _cotacoes_service__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasCotacoesService"],
+        _formulario_service__WEBPACK_IMPORTED_MODULE_11__["ComercialCicloVendasCotacoesFormularioService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
-        src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_8__["AuthService"],
-        src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__["PNotifyService"],
-        _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"]])
+        src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_9__["AuthService"],
+        src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_12__["PNotifyService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+        _angular_forms__WEBPACK_IMPORTED_MODULE_7__["FormBuilder"]])
 ], ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion);
 
 
@@ -5971,7 +6398,7 @@ ComercialCicloVendasCotacoesFormularioModalMaterialEstoqueComponent = Object(tsl
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div *ngIf=\"showApp\" >\r\n  <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco()\">\r\n    <span class=\"fas fa-search d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n    <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Búsqueda de Materiales</strong></div>\r\n    <div class=\"col\"></div>\r\n    <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco2\">\r\n        <i class=\"fas fa-caret-down\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco2\">\r\n        <i class=\"fas fa-caret-up\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"col\" [hidden]=showBloco2 >\r\n    <div class=\"row mb-2\">\r\n      <div class=\"col\">\r\n        <div class=\"d-flex justify-content-end\">\r\n          <button type=\"button\" class=\"btn btn-sm btn-danger mr-3\" (click)=\"onReset()\">\r\n            <i class=\"fas fa-trash\"></i>\r\n            <span>Limpiar</span>\r\n          </button>\r\n          <button type=\"button\" class=\"btn btn-sm btn-secondary mr-3\" (click)=\"onFilterVend()\" *ngIf=\"swVendedor === true\">\r\n            <i class=\"fas fa-search\"></i>\r\n            <span>Buscar</span>\r\n          </button>\r\n\r\n          <button type=\"button\" class=\"btn btn-sm btn-secondary\" (click)=\"onFilter()\" *ngIf=\"swTodos === true\">\r\n            <i class=\"fas fa-search\"></i>\r\n            <span>Buscar en todos</span>\r\n          </button>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <tabset class=\"mx-3 pb-3 pt-1\">\r\n      <tab heading=\"Filtros\">\r\n        <form [formGroup]=\"form\">\r\n          <div class=\"form-row py-3\">\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"codLinha\">Familia</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"linhas\"  placeholder=\"Seleccione...\"\r\n                formControlName=\"codLinha\" [virtualScroll]=\"true\" labelForId=\"idClasse\" bindLabel=\"nomeClasse\"\r\n                bindValue=\"idClasse\" (change)=\"onChangeLinha($event.idClasse, true)\">\r\n                <!--  [ngClass]=\"onFieldError('codLinha') + ' ' + onFieldRequired(form.controls.codLinha)\"-->\r\n              </ng-select>\r\n            </div>\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"codClasse\">Grupo</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"grupos\"  placeholder=\"Seleccione...\"\r\n                formControlName=\"codClasse\" [virtualScroll]=\"true\" labelForId=\"id_linha\" bindLabel=\"descricao\"\r\n                bindValue=\"id_linha\" (change)=\"onChangegrupo($event.id_linha)\">\r\n              </ng-select>\r\n            </div>\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"codLinea\">Línea </label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"lineas\" placeholder=\"Seleccione...\"\r\n                formControlName=\"codLinea\" [virtualScroll]=\"true\" labelForId=\"ID\" bindLabel=\"NM_SUB_LINH\"\r\n                bindValue=\"idClasse\" (change)=\"onChangeClasse($event.ID, true, 'application')\">\r\n              </ng-select>\r\n            </div>\r\n            <div class=\"form-group col-lg-4\">\r\n              <label for=\"codMaterial\">Material</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"materiais\" placeholder=\"Seleccione...\"\r\n                formControlName=\"codMaterial\" [virtualScroll]=\"true\" labelForId=\"id_material\"\r\n                bindLabel=\"nombre\" bindValue=\"codigoMaterial\" [loading]=\"materiaisLoader\"\r\n                loadingText=\"Cargando...\"  (change)=\"cambioMaterial($event.id_material)\">\r\n              </ng-select>\r\n            </div>\r\n            <!--<div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Unid</label>\r\n              <select class=\"form-control custom-select\" formControlName=\"orderBy\" id=\"orderBy\">\r\n                <option value=\"nrPedido\">kg</option>\r\n                <option value=\"nmPedido\">tn</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Monto total</label>\r\n              <input type=\"text\" class=\"form-control\" formControlName=\"pesquisa\" (keydown.enter)=\"onFilter()\" />\r\n            </div>\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"comEstoque\">Solamente con</label>\r\n              <select class=\"form-control custom-select\" id=\"comEstoque\" formControlName=\"comEstoque\">\r\n                <option value=\"0\">Mostrar todos</option>\r\n                <option value=\"1\">Si</option>\r\n                <option value=\"2\">No</option>\r\n                [ngClass]=\"onFieldError('comEstoque') + ' ' + onFieldRequired(form.controls.comEstoque)\"\r\n              </select>\r\n            </div> -->\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"registros\">Registros</label>\r\n              <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\" (change)=\"cambioRegistros($event)\">\r\n                <option>50</option>\r\n                <option>100</option>\r\n                <option>200</option>\r\n                <option>300</option>\r\n                <option>1000</option>\r\n\r\n              </select>\r\n            </div>\r\n            <!-- <div class=\"form-group col-lg-1\">\r\n              <label for=\"orderBy\">Ordenación</label>\r\n              <select class=\"form-control custom-select\" formControlName=\"orderBy\" id=\"orderBy\">\r\n                <option value=\"nrPedido\">Por código</option>\r\n                <option value=\"nmPedido\">Por nombre</option>\r\n              </select>\r\n            </div> -->\r\n            <!-- <div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Código </label>\r\n              <input type=\"text\" class=\"form-control\"  />\r\n\r\n            </div>\r\n            <div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Nombre </label>\r\n              <input type=\"text\" class=\"form-control\"  />\r\n\r\n            </div> -->\r\n          </div>\r\n        </form>\r\n      </tab>\r\n    </tabset>\r\n    <!-- <div *ngIf=\"dados.length > 0 && !dadosEmpty\"> -->\r\n    <div class=\"row\">\r\n      <div class=\"col my-auto\">\r\n        <subtitles [data]=\"subtitles\" [show]=\"true\"></subtitles>\r\n      </div>\r\n      <div class=\"col mb-2\">\r\n        <div class=\"d-flex justify-content-end\">\r\n          <div class=\"form-group pt-1 mb-0 mr-3\">\r\n           <!--  <div class=\"custom-control custom-checkbox\">\r\n              <input type=\"checkbox\" class=\"custom-control-input\" id=\"auto-scroll\" [(ngModel)]=\"autoScroll\"\r\n                [ngModelOptions]=\"{ standalone: true }\"> \r\n              <label class=\"custom-control-label\" for=\"auto-scroll\">\r\n                <span class=\"mr-1\">Auto-scroll</span>\r\n                <ng-template #tooltipAutoScrollTemplate>\r\n                  <p class=\"text-nowrap mb-0\">Habilitar essa opção</p>\r\n                  <p class=\"text-nowrap mb-0\">redireciona para o carrinho</p>\r\n                  <p class=\"text-nowrap mb-0\">ao adicionar um material</p>\r\n                </ng-template>\r\n                <i class=\"far fa-question-circle\" [tooltip]=\"tooltipAutoScrollTemplate\"></i>\r\n              </label>\r\n            </div> -->\r\n          </div>\r\n          <div class=\"form-group mb-0\">\r\n            <button type=\"button\" class=\"btn btn-sm btn-success\" (click)=\"onAddMaterial()\">\r\n              <i class=\"fas fa-cart-plus\"></i>\r\n              <span>Adicionar</span>\r\n            </button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"table-responsive\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead *ngIf=\"form.get('orderBy').value == 'nrPedido'\">\r\n            <tr>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('disponibilidade') }\">\r\n                <btn-icon [icon]=\"toggleAll ? 'fas fa-check-square' : 'far fa-square'\" size=\"small\"\r\n                  class=\"d-flex align-items-center justify-content-center\" (click)=\"onToggleAll()\">\r\n                </btn-icon>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center align-items-center\" [ngStyle]=\"{ width: columSize('codMaterial') }\">\r\n                <thead-sorter value=\"Código\" [active]=\"orderBy == 'codigo_material'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('codigo_material')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\">\r\n                <thead-sorter value=\"Descripción de material\" [active]=\"orderBy == 'nombre_material'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('nombre_material')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" [ngStyle]=\"{ width: columSize('nombre_almacen') }\">\r\n                <thead-sorter value=\"Almacén\" [active]=\"orderBy == 'nombre_almacen'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('nombre_almacen')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Unidades\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Cantidad\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Precio\r\n              </th>\r\n             <!--  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Porcentaje Autorizado\r\n              </th> -->\r\n              <!-- <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Precio Neto\r\n              </th> -->\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Moneda\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                IVA\r\n              </th>\r\n              <!-- <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Modo Entrega\r\n              </th> -->\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody *ngIf=\"form.get('orderBy').value == 'nrPedido'\">\r\n            <tr *ngFor=\"let material of dados; let i = index\" [class.table-active]=\"i == activeRow\">\r\n              <td class=\"text-truncate text-center\" [ngClass]=\"classStatusBorder(material.disponibilidade)\"\r\n                [ngStyle]=\"{ width: columSize('disponibilidade') }\">\r\n                <ng-template #tooltipMaterialSemEstoqueTemplate>\r\n                  <p class=\"text-nowrap mb-0\">Seleccionar material</p>\r\n                </ng-template>\r\n                <btn-icon [icon]=\"material.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\" size=\"small\"\r\n                  [isDisabled]=\"material.disponibilidade === 1\" [tooltip]=\"tooltipMaterialSemEstoqueTemplate\"\r\n                  placement=\"left\" (click)=\"onCheckMaterial(i, material)\">\r\n                </btn-icon>\r\n              </td>\r\n              <td class=\"text-truncate text-center\" [ngStyle]=\"{ width: columSize('codMaterial') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.codigo_material }}\r\n              </td>\r\n              <td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.nombre_material }}\r\n              </td>\r\n              <!--<td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeLinha') }\"\r\n                  (click)=\"onClickMaterial(i, material)\">\r\n                  {{ material.nomeLinha }}\r\n                </td> -->\r\n              <td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeDeposito') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.nombre_almacen }}\r\n              </td>\r\n              <!--- <td class=\"text-truncate text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\"\r\n                  (click)=\"onClickMaterial(i, material)\">\r\n                  {{ material.estoqueDisponivel | number:'1.3-3' }} {{ material.unidade }}\r\n                </td> -->\r\n              <td class=\"text-center\"> {{material.unidad}}</td>\r\n              <td class=\"text-center\"> {{material.cantidad}}</td>\r\n              <td class=\"text-center\"> {{ material.precio | number:'1.4-4' }}</td>\r\n              <!-- <td> {{ material.descuento | number:'1.2-2' }}</td> -->\r\n              <!-- <td class=\"text-center\"> {{ material.precio_neto | number:'1.4-4' }}</td> -->\r\n              <td class=\"text-center\"> {{material.nombre_moneda}}</td>\r\n              <td class=\"text-center\"> {{material.iva | number:'1.2-2' }} %</td>\r\n             <!--  <td> {{material.columna8}}</td> -->\r\n              <td class=\"text-right\" [ngStyle]=\"{ width: columSize('buttons') }\">\r\n                <btn-icon icon=\"fas fa-warehouse\" size=\"small\" class=\"mr-3\" tooltip=\"MATERIAL COMPROMETIDO\"\r\n                  container=\"body\" (click)=\"onEstoqueDetalhes(material)\">\r\n                </btn-icon>\r\n                <!-- <comercial-ciclo-vendas-cotacoes-formulario-template-button-disponibilidade [index]=\"i\"\r\n                  [codMaterial]=\"material.codMaterial\"\r\n                  [deposito]=\"{ codDeposito: material.codDeposito, nomeDeposito: material.nomeDeposito, quantidade: material.estoqueAtual, unidade: material.unidade }\"\r\n                  (onChange)=\"onChangeDeposito($event)\" (activeRow)=\"onActiveRow($event)\"\r\n                  tooltip=\"Estoque em outras unidades\" container=\"body\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-button-disponibilidade>\r\n                <comercial-ciclo-vendas-cotacoes-formulario-template-button-outros [codCliente]=\"this.codCliente\"\r\n                  [codEndereco]=\"this.codEndereco\" [index]=\"i\" [material]=\"material\"\r\n                  [codFormaPagamento]=\"this.codFormaPagamento\" [freteConta]=\"this.freteConta\"\r\n                  (activeRow)=\"onActiveRow($event)\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-button-outros> -->\r\n              </td>\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n      </div>\r\n    </div>\r\n    <!--     </div> -->\r\n    <div class=\"row\" *ngIf=\"searching === true\">\r\n      <div class=\"col\">\r\n        <message icon=\"fas fa-cog fa-spin\" text=\"Estamos buscando materiales...\">\r\n        </message>\r\n      </div>\r\n    </div>\r\n    <div *ngIf=\"searching === false\">\r\n      <div class=\"row\" *ngIf=\"dadosEmpty && dadosLoaded\">\r\n        <div class=\"col\">\r\n          <message icon=\"fas fa-box-open\" text=\"Sin stock disponible\">\r\n          </message>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"dados.length === 0 && !firstSearch\">\r\n        <div class=\"col\">\r\n          <message icon=\"fas fa-search\" text=\"Rellene los campos de arriba para buscar materiales\">\r\n          </message>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  \r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div *ngIf=\"showApp\">\r\n  <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco()\">\r\n    <span class=\"fas fa-search d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n    <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Búsqueda de Materiales</strong></div>\r\n    <div class=\"col\"></div>\r\n    <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco2\">\r\n        <i class=\"fas fa-caret-down\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n\r\n      <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco2\">\r\n        <i class=\"fas fa-caret-up\"\r\n          style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"col\" [hidden]=showBloco2>\r\n    <div class=\"row mb-2\">\r\n      <div class=\"col\">\r\n        <div class=\"d-flex justify-content-end\">\r\n          <button type=\"button\" class=\"btn btn-sm btn-danger mr-3\" (click)=\"onReset()\">\r\n            <i class=\"fas fa-trash\"></i>\r\n            <span>Limpiar</span>\r\n          </button>\r\n          <button type=\"button\" class=\"btn btn-sm btn-secondary mr-3\" (click)=\"onFilterVend(1)\"\r\n            *ngIf=\"swVendedor === true && swActivarBusqueda === true\">\r\n            <i class=\"fas fa-search\"></i>\r\n            <span>Buscar</span>\r\n          </button>\r\n\r\n          <button type=\"button\" class=\"btn btn-sm btn-secondary\" (click)=\"onFilter()\" *ngIf=\"swTodos === true\">\r\n            <i class=\"fas fa-search\"></i>\r\n            <span>Buscar en todos</span>\r\n          </button>\r\n\r\n          <button type=\"button\" class=\"btn btn-sm btn-primary\" (click)=\"onFilterVend(3)\" *ngIf=\"swAppSell === true\">\r\n            <i class=\"fas fa-search\"></i>\r\n            <span>UP SELL</span>\r\n          </button>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <tabset class=\"mx-3 pb-3 pt-1\">\r\n      <tab heading=\"Filtros\">\r\n        <form [formGroup]=\"form\">\r\n          <div class=\"form-row py-3\">\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"codLinha\">Familia</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"linhas\"\r\n                placeholder=\"Seleccione...\" formControlName=\"codLinha\" [virtualScroll]=\"true\" labelForId=\"idClasse\"\r\n                bindLabel=\"nomeClasse\" bindValue=\"idClasse\" (change)=\"onChangeLinha($event.idClasse, true)\">\r\n                <!--  [ngClass]=\"onFieldError('codLinha') + ' ' + onFieldRequired(form.controls.codLinha)\"-->\r\n              </ng-select>\r\n            </div>\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"codClasse\">Grupo</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"grupos\"\r\n                placeholder=\"Seleccione...\" formControlName=\"codClasse\" [virtualScroll]=\"true\" labelForId=\"id_linha\"\r\n                bindLabel=\"descricao\" bindValue=\"id_linha\" (change)=\"onChangegrupo($event.id_linha)\">\r\n              </ng-select>\r\n            </div>\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"codLinea\">Línea </label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"lineas\"\r\n                placeholder=\"Seleccione...\" formControlName=\"codLinea\" [virtualScroll]=\"true\" labelForId=\"ID\"\r\n                bindLabel=\"NM_SUB_LINH\" bindValue=\"idClasse\" (change)=\"onChangeClasse($event.ID, true, 'application')\">\r\n              </ng-select>\r\n            </div>\r\n            <div class=\"form-group col-lg-4\">\r\n              <label for=\"codMaterial\">Material</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"materiais\" placeholder=\"Seleccione...\"\r\n                formControlName=\"codMaterial\" [virtualScroll]=\"true\" labelForId=\"id_material\" bindLabel=\"nombre\"\r\n                bindValue=\"codigoMaterial\" [loading]=\"materiaisLoader\" loadingText=\"Cargando...\"\r\n                (change)=\"cambioMaterial($event.id_material)\">\r\n              </ng-select>\r\n            </div>\r\n            <!--<div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Unid</label>\r\n              <select class=\"form-control custom-select\" formControlName=\"orderBy\" id=\"orderBy\">\r\n                <option value=\"nrPedido\">kg</option>\r\n                <option value=\"nmPedido\">tn</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Monto total</label>\r\n              <input type=\"text\" class=\"form-control\" formControlName=\"pesquisa\" (keydown.enter)=\"onFilter()\" />\r\n            </div>\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"comEstoque\">Solamente con</label>\r\n              <select class=\"form-control custom-select\" id=\"comEstoque\" formControlName=\"comEstoque\">\r\n                <option value=\"0\">Mostrar todos</option>\r\n                <option value=\"1\">Si</option>\r\n                <option value=\"2\">No</option>\r\n                [ngClass]=\"onFieldError('comEstoque') + ' ' + onFieldRequired(form.controls.comEstoque)\"\r\n              </select>\r\n            </div> -->\r\n            <div class=\"form-group col-lg-2\">\r\n              <label for=\"registros\">Registros</label>\r\n              <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\"\r\n                (change)=\"cambioRegistros($event)\">\r\n                <option>50</option>\r\n                <option>100</option>\r\n                <option>200</option>\r\n                <option>300</option>\r\n                <option>1000</option>\r\n\r\n              </select>\r\n            </div>\r\n            <!-- <div class=\"form-group col-lg-1\">\r\n              <label for=\"orderBy\">Ordenación</label>\r\n              <select class=\"form-control custom-select\" formControlName=\"orderBy\" id=\"orderBy\">\r\n                <option value=\"nrPedido\">Por código</option>\r\n                <option value=\"nmPedido\">Por nombre</option>\r\n              </select>\r\n            </div> -->\r\n            <!-- <div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Código </label>\r\n              <input type=\"text\" class=\"form-control\"  />\r\n\r\n            </div>\r\n            <div class=\"form-group col-lg-3\">\r\n              <label for=\"codClasse\">Nombre </label>\r\n              <input type=\"text\" class=\"form-control\"  />\r\n\r\n            </div> -->\r\n          </div>\r\n        </form>\r\n      </tab>\r\n    </tabset>\r\n    <!-- <div *ngIf=\"dados.length > 0 && !dadosEmpty\"> -->\r\n    <div class=\"row\">\r\n      <div class=\"col my-auto\">\r\n        <subtitles [data]=\"subtitles\" [show]=\"true\"></subtitles>\r\n      </div>\r\n      <div class=\"col mb-2\">\r\n        <div class=\"d-flex justify-content-end\">\r\n          <div class=\"form-group pt-1 mb-0 mr-3\">\r\n            <!--  <div class=\"custom-control custom-checkbox\">\r\n              <input type=\"checkbox\" class=\"custom-control-input\" id=\"auto-scroll\" [(ngModel)]=\"autoScroll\"\r\n                [ngModelOptions]=\"{ standalone: true }\"> \r\n              <label class=\"custom-control-label\" for=\"auto-scroll\">\r\n                <span class=\"mr-1\">Auto-scroll</span>\r\n                <ng-template #tooltipAutoScrollTemplate>\r\n                  <p class=\"text-nowrap mb-0\">Habilitar essa opção</p>\r\n                  <p class=\"text-nowrap mb-0\">redireciona para o carrinho</p>\r\n                  <p class=\"text-nowrap mb-0\">ao adicionar um material</p>\r\n                </ng-template>\r\n                <i class=\"far fa-question-circle\" [tooltip]=\"tooltipAutoScrollTemplate\"></i>\r\n              </label>\r\n            </div> -->\r\n          </div>\r\n          <div class=\"form-group mb-0\">\r\n            <button type=\"button\" class=\"btn btn-sm btn-success\" (click)=\"onAddMaterial()\">\r\n              <i class=\"fas fa-cart-plus\"></i>\r\n              <span>Adicionar</span>\r\n            </button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"table-responsive\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead *ngIf=\"form.get('orderBy').value == 'nrPedido'\">\r\n            <tr>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('disponibilidade') }\">\r\n                <btn-icon [icon]=\"toggleAll ? 'fas fa-check-square' : 'far fa-square'\" size=\"small\"\r\n                  class=\"d-flex align-items-center justify-content-center\" (click)=\"onToggleAll()\">\r\n                </btn-icon>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center align-items-center\" [ngStyle]=\"{ width: columSize('codMaterial') }\">\r\n                <thead-sorter value=\"Código\" [active]=\"orderBy == 'codigo_material'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('codigo_material')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\">\r\n                <thead-sorter value=\"Descripción de material\" [active]=\"orderBy == 'nombre_material'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('nombre_material')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" [ngStyle]=\"{ width: columSize('nombre_almacen') }\">\r\n                <thead-sorter value=\"Almacén\" [active]=\"orderBy == 'nombre_almacen'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('nombre_almacen')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Unidades\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Cantidad\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Precio\r\n              </th>\r\n              <!--  <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Porcentaje Autorizado\r\n              </th> -->\r\n              <!-- <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Precio Neto\r\n              </th> -->\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Moneda\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                IVA\r\n              </th>\r\n              <!-- <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n                Modo Entrega\r\n              </th> -->\r\n              <th scope=\"col\" class=\"text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\">\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody *ngIf=\"form.get('orderBy').value == 'nrPedido' && swAppSellColor === false\">\r\n            <tr *ngFor=\"let material of dados; let i = index\" [class.table-active]=\"i == activeRow\">\r\n              <td class=\"text-truncate text-center\" [ngClass]=\"classStatusBorder(material.disponibilidade)\"\r\n                [ngStyle]=\"{ width: columSize('disponibilidade') }\">\r\n                <ng-template #tooltipMaterialSemEstoqueTemplate>\r\n                  <p class=\"text-nowrap mb-0\">Seleccionar material</p>\r\n                </ng-template>\r\n                <btn-icon [icon]=\"material.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\" size=\"small\"\r\n                  [isDisabled]=\"material.disponibilidade === 1\" [tooltip]=\"tooltipMaterialSemEstoqueTemplate\"\r\n                  placement=\"left\" (click)=\"onCheckMaterial(i, material)\">\r\n                </btn-icon>\r\n              </td>\r\n              <td class=\"text-truncate text-center\" [ngStyle]=\"{ width: columSize('codMaterial') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.codigo_material }}\r\n              </td>\r\n              <td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.nombre_material }}\r\n              </td>\r\n              <!--<td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeLinha') }\"\r\n                  (click)=\"onClickMaterial(i, material)\">\r\n                  {{ material.nomeLinha }}\r\n                </td> -->\r\n              <td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeDeposito') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.nombre_almacen }}\r\n              </td>\r\n              <!--- <td class=\"text-truncate text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\"\r\n                  (click)=\"onClickMaterial(i, material)\">\r\n                  {{ material.estoqueDisponivel | number:'1.3-3' }} {{ material.unidade }}\r\n                </td> -->\r\n              <td class=\"text-center\"> {{material.unidad}}</td>\r\n              <td class=\"text-center\"> {{material.cantidad}}</td>\r\n              <td class=\"text-center\"> {{ material.precio | number:'1.4-4' }}</td>\r\n              <!-- <td> {{ material.descuento | number:'1.2-2' }}</td> -->\r\n              <!-- <td class=\"text-center\"> {{ material.precio_neto | number:'1.4-4' }}</td> -->\r\n              <td class=\"text-center\"> {{material.nombre_moneda}}</td>\r\n              <td class=\"text-center\"> {{material.iva | number:'1.2-2' }} %</td>\r\n              <!--  <td> {{material.columna8}}</td> -->\r\n              <td class=\"text-right\" [ngStyle]=\"{ width: columSize('buttons') }\">\r\n                <btn-icon icon=\"fas fa-warehouse\" size=\"small\" class=\"mr-3\" tooltip=\"MATERIAL COMPROMETIDO\"\r\n                  container=\"body\" (click)=\"onEstoqueDetalhes(material)\">\r\n                </btn-icon>\r\n                <!-- <comercial-ciclo-vendas-cotacoes-formulario-template-button-disponibilidade [index]=\"i\"\r\n                  [codMaterial]=\"material.codMaterial\"\r\n                  [deposito]=\"{ codDeposito: material.codDeposito, nomeDeposito: material.nomeDeposito, quantidade: material.estoqueAtual, unidade: material.unidade }\"\r\n                  (onChange)=\"onChangeDeposito($event)\" (activeRow)=\"onActiveRow($event)\"\r\n                  tooltip=\"Estoque em outras unidades\" container=\"body\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-button-disponibilidade>\r\n                <comercial-ciclo-vendas-cotacoes-formulario-template-button-outros [codCliente]=\"this.codCliente\"\r\n                  [codEndereco]=\"this.codEndereco\" [index]=\"i\" [material]=\"material\"\r\n                  [codFormaPagamento]=\"this.codFormaPagamento\" [freteConta]=\"this.freteConta\"\r\n                  (activeRow)=\"onActiveRow($event)\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-button-outros> -->\r\n              </td>\r\n            </tr>\r\n          </ng-template>\r\n          <!-- APP SELL -->\r\n          <ng-template #tbody let-tbody *ngIf=\"form.get('orderBy').value == 'nrPedido' && swAppSellColor === true\">\r\n            <tr *ngFor=\"let material of dados; let i = index\" [class.table-active]=\"i == activeRow\">\r\n              <td class=\"text-truncate text-center \" [ngClass]=\"classStatusBorder(swAppSellColor)\"\r\n                [ngStyle]=\"{ width: columSize('disponibilidade') }\">\r\n                <ng-template #tooltipMaterialSemEstoqueTemplate>\r\n                  <p class=\"text-nowrap mb-0\">Seleccionar material</p>\r\n                </ng-template>\r\n                <btn-icon [icon]=\"material.checked == 1 ? 'fas fa-check-square' : 'far fa-square'\" size=\"small\"\r\n                  [isDisabled]=\"material.disponibilidade === 1\" [tooltip]=\"tooltipMaterialSemEstoqueTemplate\"\r\n                  placement=\"left\" (click)=\"onCheckMaterial(i, material)\">\r\n                </btn-icon>\r\n              </td>\r\n              <td class=\"text-truncate text-center \" [ngStyle]=\"{ width: columSize('codMaterial') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.codigo_material }}\r\n              </td>\r\n              <td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeMaterial') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.nombre_material }}\r\n              </td>\r\n              <!--<td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeLinha') }\"\r\n                  (click)=\"onClickMaterial(i, material)\">\r\n                  {{ material.nomeLinha }}\r\n                </td> -->\r\n              <td class=\"text-truncate\" [ngStyle]=\"{ width: columSize('nomeDeposito') }\"\r\n                (click)=\"onClickMaterial(i, material)\">\r\n                {{ material.nombre_almacen }}\r\n              </td>\r\n              <!--- <td class=\"text-truncate text-center\" [ngStyle]=\"{ width: columSize('estoqueDisponivel') }\"\r\n                  (click)=\"onClickMaterial(i, material)\">\r\n                  {{ material.estoqueDisponivel | number:'1.3-3' }} {{ material.unidade }}\r\n                </td> -->\r\n              <td class=\"text-center\"> {{material.unidad}}</td>\r\n              <td class=\"text-center\"> {{material.cantidad}}</td>\r\n              <td class=\"text-center\"> {{ material.precio | number:'1.4-4' }}</td>\r\n              <!-- <td> {{ material.descuento | number:'1.2-2' }}</td> -->\r\n              <!-- <td class=\"text-center\"> {{ material.precio_neto | number:'1.4-4' }}</td> -->\r\n              <td class=\"text-center\"> {{material.nombre_moneda}}</td>\r\n              <td class=\"text-center\"> {{material.iva | number:'1.2-2' }} %</td>\r\n              <!--  <td> {{material.columna8}}</td> -->\r\n              <td class=\"text-right\" [ngStyle]=\"{ width: columSize('buttons') }\">\r\n                <btn-icon icon=\"fas fa-warehouse\" size=\"small\" class=\"mr-3\" tooltip=\"MATERIAL COMPROMETIDO\"\r\n                  container=\"body\" (click)=\"onEstoqueDetalhes(material)\">\r\n                </btn-icon>\r\n                <!-- <comercial-ciclo-vendas-cotacoes-formulario-template-button-disponibilidade [index]=\"i\"\r\n                  [codMaterial]=\"material.codMaterial\"\r\n                  [deposito]=\"{ codDeposito: material.codDeposito, nomeDeposito: material.nomeDeposito, quantidade: material.estoqueAtual, unidade: material.unidade }\"\r\n                  (onChange)=\"onChangeDeposito($event)\" (activeRow)=\"onActiveRow($event)\"\r\n                  tooltip=\"Estoque em outras unidades\" container=\"body\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-button-disponibilidade>\r\n                <comercial-ciclo-vendas-cotacoes-formulario-template-button-outros [codCliente]=\"this.codCliente\"\r\n                  [codEndereco]=\"this.codEndereco\" [index]=\"i\" [material]=\"material\"\r\n                  [codFormaPagamento]=\"this.codFormaPagamento\" [freteConta]=\"this.freteConta\"\r\n                  (activeRow)=\"onActiveRow($event)\">\r\n                </comercial-ciclo-vendas-cotacoes-formulario-template-button-outros> -->\r\n              </td>\r\n            </tr>\r\n          </ng-template>\r\n\r\n        </custom-table>\r\n      </div>\r\n    </div>\r\n    <!--     </div> -->\r\n    <div class=\"row\" *ngIf=\"searching === true\">\r\n      <div class=\"col\">\r\n        <message icon=\"fas fa-cog fa-spin\" text=\"Estamos buscando materiales...\">\r\n        </message>\r\n      </div>\r\n    </div>\r\n    <div *ngIf=\"searching === false\">\r\n      <div class=\"row\" *ngIf=\"dadosEmpty && dadosLoaded\">\r\n        <div class=\"col\">\r\n          <message icon=\"fas fa-box-open\" text=\"Sin stock disponible\">\r\n          </message>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\" *ngIf=\"dados.length === 0 && !firstSearch\">\r\n        <div class=\"col\">\r\n          <message icon=\"fas fa-search\" text=\"Rellene los campos de arriba para buscar materiales\">\r\n          </message>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n</div>");
 
 /***/ }),
 
@@ -6081,6 +6508,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "OAnu":
+/*!******************************************************************************************!*\
+  !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/vista/vista.component.scss ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".custom-modal {\n  width: 100%;\n  max-width: 95%;\n  margin: auto;\n}\n\n.custom-modal table {\n  width: 100%;\n}\n\n.customer-info,\n.company-info {\n  margin-top: 4px;\n  margin-right: 5px;\n  border: 2px solid #000000;\n  padding: 10px;\n}\n\n.custinf-weight {\n  font-weight: bold;\n}\n\n.custom-modal-content {\n  margin: auto;\n  border: 2px solid black;\n  padding: 20px;\n}\n\n.title {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  -ms-flex-align: center;\n      align-items: center;\n}\n\n.datcotizacion-font {\n  font-size: 15px;\n}\n\n.header {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-align: center;\n      align-items: center;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  margin-bottom: 20px;\n}\n\n.cuerpo {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-align: center;\n      align-items: center;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  margin-bottom: 5px;\n}\n\n.monterrey-info {\n  margin-top: 20px;\n  margin-bottom: 20px;\n}\n\ntable tr {\n  height: 1px;\n}\n\n.wider-card {\n  width: 100%;\n  /* Adjust this value as needed */\n}\n\n.table-container {\n  max-height: 300px;\n  /* Adjust the height as per your requirements */\n  overflow-y: auto;\n}\n\n.card-bodyy {\n  padding: 20px;\n  /* Adjust this value to control the space inside each card */\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9jb21lcmNpYWwvY2ljbG8tdmVuZGFzL2NvdGFjb2VzL2xpc3RhL3Zpc3RhL3Zpc3RhLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsV0FBQTtFQUNBLGNBQUE7RUFDQSxZQUFBO0FBQ0Y7O0FBRUE7RUFDRSxXQUFBO0FBQ0Y7O0FBRUE7O0VBRUUsZUFBQTtFQUNBLGlCQUFBO0VBQ0EseUJBQUE7RUFDQSxhQUFBO0FBQ0Y7O0FBRUE7RUFDRSxpQkFBQTtBQUNGOztBQUVBO0VBQ0UsWUFBQTtFQUNBLHVCQUFBO0VBQ0EsYUFBQTtBQUNGOztBQUVBO0VBQ0Usb0JBQUE7RUFBQSxhQUFBO0VBQ0Esc0JBQUE7TUFBQSw4QkFBQTtFQUNBLHNCQUFBO01BQUEsbUJBQUE7QUFDRjs7QUFFQTtFQUNFLGVBQUE7QUFDRjs7QUFFQTtFQUNFLG9CQUFBO0VBQUEsYUFBQTtFQUNBLHNCQUFBO01BQUEsbUJBQUE7RUFDQSxzQkFBQTtNQUFBLDhCQUFBO0VBQ0EsbUJBQUE7QUFDRjs7QUFFQTtFQUNFLG9CQUFBO0VBQUEsYUFBQTtFQUNBLHNCQUFBO01BQUEsbUJBQUE7RUFDQSxzQkFBQTtNQUFBLDhCQUFBO0VBQ0Esa0JBQUE7QUFDRjs7QUFFQTtFQUNFLGdCQUFBO0VBQ0EsbUJBQUE7QUFDRjs7QUFFQTtFQUNFLFdBQUE7QUFDRjs7QUFFQTtFQUNFLFdBQUE7RUFBYSxnQ0FBQTtBQUVmOztBQUNBO0VBQ0UsaUJBQUE7RUFBbUIsK0NBQUE7RUFDbkIsZ0JBQUE7QUFHRjs7QUFBQTtFQUNFLGFBQUE7RUFBZSw0REFBQTtBQUlqQiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2NpY2xvLXZlbmRhcy9jb3RhY29lcy9saXN0YS92aXN0YS92aXN0YS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jdXN0b20tbW9kYWwge1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIG1heC13aWR0aDogOTUlO1xyXG4gIG1hcmdpbjogYXV0bztcclxufVxyXG5cclxuLmN1c3RvbS1tb2RhbCB0YWJsZSB7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbi5jdXN0b21lci1pbmZvLFxyXG4uY29tcGFueS1pbmZvIHtcclxuICBtYXJnaW4tdG9wOiA0cHg7XHJcbiAgbWFyZ2luLXJpZ2h0OiA1cHg7XHJcbiAgYm9yZGVyOiAycHggc29saWQgIzAwMDAwMDtcclxuICBwYWRkaW5nOiAxMHB4O1xyXG59XHJcblxyXG4uY3VzdGluZi13ZWlnaHR7XHJcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbn1cclxuXHJcbi5jdXN0b20tbW9kYWwtY29udGVudCB7XHJcbiAgbWFyZ2luOiBhdXRvO1xyXG4gIGJvcmRlcjogMnB4IHNvbGlkIGJsYWNrO1xyXG4gIHBhZGRpbmc6IDIwcHg7XHJcbn1cclxuXHJcbi50aXRsZSB7XHJcbiAgZGlzcGxheTogZmxleDtcclxuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XHJcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxufVxyXG5cclxuLmRhdGNvdGl6YWNpb24tZm9udHtcclxuICBmb250LXNpemU6IDE1cHg7XHJcbn1cclxuXHJcbi5oZWFkZXIge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XHJcbiAgbWFyZ2luLWJvdHRvbTogMjBweDtcclxufVxyXG5cclxuLmN1ZXJwbyB7XHJcbiAgZGlzcGxheTogZmxleDtcclxuICBhbGlnbi1pdGVtczogY2VudGVyO1xyXG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcclxuICBtYXJnaW4tYm90dG9tOiA1cHg7XHJcbn1cclxuXHJcbi5tb250ZXJyZXktaW5mb3tcclxuICBtYXJnaW4tdG9wOiAyMHB4O1xyXG4gIG1hcmdpbi1ib3R0b206IDIwcHg7XHJcbn1cclxuXHJcbnRhYmxlIHRyIHtcclxuICBoZWlnaHQ6IDFweDtcclxufVxyXG5cclxuLndpZGVyLWNhcmQge1xyXG4gIHdpZHRoOiAxMDAlOyAvKiBBZGp1c3QgdGhpcyB2YWx1ZSBhcyBuZWVkZWQgKi9cclxufVxyXG5cclxuLnRhYmxlLWNvbnRhaW5lciB7XHJcbiAgbWF4LWhlaWdodDogMzAwcHg7IC8qIEFkanVzdCB0aGUgaGVpZ2h0IGFzIHBlciB5b3VyIHJlcXVpcmVtZW50cyAqL1xyXG4gIG92ZXJmbG93LXk6IGF1dG87XHJcbn1cclxuXHJcbi5jYXJkLWJvZHl5IHtcclxuICBwYWRkaW5nOiAyMHB4OyAvKiBBZGp1c3QgdGhpcyB2YWx1ZSB0byBjb250cm9sIHRoZSBzcGFjZSBpbnNpZGUgZWFjaCBjYXJkICovXHJcbn1cclxuIl19 */");
+
+/***/ }),
+
 /***/ "OI/H":
 /*!******************************************************************************************************************************!*\
   !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/formulario/modal/material/ficha-cadastral/ficha-cadastral.service.ts ***!
@@ -6174,7 +6614,7 @@ ComercialCicloVendasCotacoesFormularioModalMaterialFichaCadastralService = Objec
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\">\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"mtc-title mb-0 my-auto\">Detalles del Cliente</h4>\r\n    <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"row\" *ngIf=\"cliente\">\r\n      <div class=\"col\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-6\">\r\n            <label><strong>NOMBRE</strong></label>\r\n            <div *ngIf=\"cliente.nomeFantasia == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"cliente.nomeFantasia != null\">{{ cliente.nomeFantasia }}</div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label><strong>RAZON SOCIAL</strong></label>\r\n            <div *ngIf=\"cliente.razaoSocial == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"cliente.razaoSocial != null\">{{ cliente.razaoSocial }}</div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label><strong>DIRECCION</strong></label>\r\n            <div *ngIf=\"cliente.endereco == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"cliente.endereco != null\">{{ cliente.endereco }}</div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-8\">\r\n            <label><strong>CIUDAD</strong></label>\r\n            <div *ngIf=\"cliente.cidade == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"cliente.cidade != null\">{{ cliente.cidade }} </div>\r\n          </div>\r\n\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-6\">\r\n            <label><strong>PROMOTOR</strong></label>\r\n            <div *ngIf=\"cliente.vendedor == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"cliente.vendedor != null\">{{ cliente.vendedor }}</div>\r\n          </div>\r\n          <div class=\"form-group col-lg-6\">\r\n            <label><strong>SUCURSAL</strong></label>\r\n            <div *ngIf=\"cliente.escritorio == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"cliente.escritorio != null\">{{ cliente.escritorio }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\">\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"mtc-title mb-0 my-auto\">Detalles del Cliente</h4>\r\n    <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"row\" *ngIf=\"cliente\">\r\n      <div class=\"col\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-6\">\r\n            <label><strong>NOMBRE</strong></label>\r\n            <div *ngIf=\"datoscliente.nombre == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"datoscliente.nombre != null\">{{ datoscliente.nombre }}</div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label><strong>RAZON SOCIAL</strong></label>\r\n            <div *ngIf=\"datoscliente.razon_social == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"datoscliente.razon_social != null\">{{ datoscliente.datos_cliente }}</div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label><strong>DIRECCIONES</strong></label>\r\n            <div *ngIf=\"datosdireccion.length === 0\">SIN INFORMACION</div>\r\n              <div *ngFor=\"let direccion of datosdireccion\">\r\n                {{ direccion.direccion }} <br>\r\n              </div>\r\n          </div>\r\n    \r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-8\">\r\n\r\n            <label><strong>CIUDAD</strong></label>\r\n            <div *ngIf=\"datosdireccion.length === 0\">SIN INFORMACION</div>\r\n              <div *ngFor=\"let direccion of datosdireccion\">\r\n                {{ direccion.ciudad }} <br>\r\n              </div>\r\n          </div>\r\n\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-6\">\r\n            <label><strong>PROMOTOR</strong></label>\r\n            <div *ngIf=\"datoscliente.vendedor == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"datoscliente.vendedor != null\">{{ datoscliente.vendedor }}</div>\r\n          </div>\r\n          <div class=\"form-group col-lg-6\">\r\n            <label><strong>Tipo de Cliente</strong></label>\r\n            <div *ngIf=\"datoscliente.tipo_cliente == null\">SIN INFORMACION</div>\r\n            <div *ngIf=\"datoscliente.tipo_cliente != null\">{{ datoscliente.tipo_cliente }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>");
 
 /***/ }),
 
@@ -6213,7 +6653,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\">\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"mtc-title mb-auto\">#{{ material.codMaterial }} - {{ material.nomeMaterial | uppercase }}</h4>\r\n    <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n      <span aria-hidden=\"true\" *ngIf=\"!loaderModal\">&times;</span>\r\n      <div class=\"spinner-border spinner-border-sm text-dark ml-auto\" *ngIf=\"loaderModal\"></div>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"row\" *ngIf=\"material && tipoCalculo1\">\r\n      <div class=\"col\">\r\n        <form [formGroup]=\"form\" autocomplete=\"off\">\r\n          <div class=\"row\">\r\n            <div class=\"col-6\">\r\n              <div class=\"row\">\r\n                <div class=\"col-7\">\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <div class=\"mtc-title mb-2 text-uppercase text-primary\">Calculo de cantidades</div>\r\n                      <!-- <p>{{nomeTipoLancamento | titlecase}}</p> -->\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label class=\"font-weight-bold\" for=\"quantidade\">Cantidad</label>\r\n                      <input type=\"text\" id=\"quantidade\" class=\"form-control\" formControlName=\"quantidade\"\r\n                        [ngClass]=\"onFieldError('quantidade') + ' ' + onFieldRequired(form.controls.quantidade)\">\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label for=\"preco1\">Precio</label>\r\n                      <input type=\"text\" id=\"preco1\" class=\"form-control\" formControlName=\"preco1\"\r\n                        placeholder=\"USD. 0,00\"\r\n                        [ngClass]=\"onFieldError('preco1') + ' ' + onFieldRequired(form.controls.preco1)\"\r\n                        aria-describedby=\"preco1-help\" (ngModelChange)=\"onDisablePreco2()\" readonly>\r\n                      <small *ngIf=\"tipoCalculo1 == 6 && material.valorMaterialContrato == 0\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço ideal acima de <strong>{{ material.valorUnit | currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                      </small>\r\n                      <small *ngIf=\"tipoCalculo1 != 6 && material.valorMaterialContrato == 0\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço ideal acima de <strong *ngIf=\"material.valorMaterialBarra > 0\">{{\r\n                          material.valorMaterialBarra | currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                        <strong *ngIf=\"material.valorMaterialBarra == 0\">{{ material.valorUnit |\r\n                          currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                      </small>\r\n                      <small *ngIf=\"material.valorMaterialContrato > 0 && tipoCalculo1 == 6\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço do contrato <strong>{{ material.valorMaterialContrato | currency:'BRL':'symbol':'1.2-2'\r\n                          }}</strong> por tonelada\r\n                      </small>\r\n                      <small *ngIf=\"material.valorMaterialContrato > 0 && tipoCalculo1 != 6\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço do contrato <strong>{{ material.valorMaterialContrato | currency:'BRL':'symbol':'1.2-2'\r\n                          }}</strong> por tonelada, calcular o preço por {{ nomeTipoCalculo1 | titlecase }}\r\n                      </small>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\" *ngIf=\"tipoCalculo2 > 0 && material.valorMaterialContrato == 0\">\r\n                    <div class=\"form-group col\">\r\n                      <label for=\"preco2\">Precio por kg.</label>\r\n                      <input type=\"text\" id=\"preco2\" class=\"form-control\" formControlName=\"preco2\" placeholder=\"R$ 0,00\"\r\n                        currencyMask\r\n                        [options]=\"{ align: 'left', prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }\"\r\n                        [ngClass]=\"onFieldError('preco2') + ' ' + onFieldRequired(form.controls.preco2)\"\r\n                        aria-describedby=\"preco2-help\" (ngModelChange)=\"onDisablePreco1()\">\r\n                      <small id=\"preco2-help\" class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço ideal acima de <strong>{{ material.valorUnit | currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                      </small>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\" *ngIf=\"showInputMedida()\">\r\n                    <div class=\"form-group col\">\r\n                      <label for=\"medida\">Medida (metros)</label>\r\n                      <input type=\"text\" id=\"medida\" class=\"form-control\" formControlName=\"medida\" currencyMask\r\n                        [options]=\"{ align: 'left', prefix: '', thousands: '.', decimal: ',', precision: 2 }\"\r\n                        [ngClass]=\"onFieldError('medida') + ' ' + onFieldRequired(form.controls.medida)\">\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row mt-1\">\r\n                    <div class=\"form-group col mb-0\">\r\n                      <button type=\"button\" class=\"btn btn-block btn-secondary mt-auto\" (click)=\"onCalcular()\"\r\n                        [disabled]=\"loaderModal\">\r\n                        <div *ngIf=\"!loaderModal\">\r\n                          <i class=\"fas fa-calculator\"></i>\r\n                          <span>Calcular</span>\r\n                        </div>\r\n                        <div *ngIf=\"loaderModal\">\r\n                          <i class=\"fas fa-cog fa-spin\"></i>\r\n                          <span>Aguarde</span>\r\n                        </div>\r\n                      </button>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row\">\r\n                <div class=\"col\">\r\n                  <div *ngIf=\"showInfoMetragem()\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"col\">\r\n                        <hr>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\" *ngIf=\"!showInputMedida()\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mr-1\">Medida 01:</label>\r\n                        <span>{{ material.medida1 | number:'1.2-2' }} metro(s)</span>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mr-1\">Medida 02:</label>\r\n                        <span>{{ material.medida2 | number:'1.2-2' }} metro(s)</span>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mb-0 mr-1\">Peso específico:</label>\r\n                        <span>{{ material.pesoEspecifico | number:'1.2-2' }} kg(s)</span>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div *ngIf=\"showInfoFatorMultiplo()\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"col\">\r\n                        <hr>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mr-1\">Fator múltiplo:</label>\r\n                        <span>{{ material.fatorMultiplo | number:'1.3-3' }}</span>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div *ngIf=\"opcoesVenda.length > 0\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"col\">\r\n                        <hr>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col\">\r\n                        <label>Selecione uma opção</label>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\" *ngFor=\"let opcaoVenda of opcoesVenda; let i = index\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <div class=\"custom-control custom-radio\">\r\n                          <input type=\"radio\" id=\"opcaoVenda_{{ i }}\" name=\"opcaoVenda\" class=\"custom-control-input\"\r\n                            (click)=\"calcularTotais(opcaoVenda)\">\r\n                          <label class=\"custom-control-label\" for=\"opcaoVenda_{{ i }}\">\r\n                            {{ opcaoVenda.tonelada | number }} Toneladas ({{ opcaoVenda.qtde }} {{ nomeTipoLancamento |\r\n                            titlecase }})\r\n                          </label>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <div class=\"col-6 pl-0 my-auto\">\r\n              <div class=\"text-right text-uppercase mr-1 mb-2\" style=\"font-size: 11px\">\r\n                <a class=\"text-primary\" href=\"javascript:void(0)\" (click)=\"onShowImpostos()\">\r\n                  <!-- <i class=\"fas mr-2\" [ngClass]=\"{'fa-chevron-up': showImpostos, 'fa-chevron-down': !showImpostos}\"></i> -->\r\n                  <!-- <strong>Detalhes</strong> -->\r\n                </a>\r\n              </div>\r\n              <ul class=\"list-group\">\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Unidad</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.unidade }}</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" *ngIf=\"swLargoMaterial===true\">\r\n                  <div class=\"d-flex justify-content-between w-100\" >\r\n                    <div class=\"my-auto\">\r\n                      <strong>Metros líneales</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.largo_material }} ML</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Peso Unitario</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.pesoEspecifico | number }} Kg</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Peso Item</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.tonelada | number }} Kg</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Valor unitario</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorUnitario }} USD.</strong>\r\n                  </div>\r\n                </li>\r\n                <!-- <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Valor Item</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorItem  }}</strong>\r\n                  </div>\r\n                </li> -->\r\n                <!-- <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Descuento %</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.descuento  }} </strong>\r\n                  </div>\r\n                </li> -->\r\n                <!-- <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Alíquota IPI</strong>\r\n                      <ng-template #tooltipAliquotaIpiTemplate>\r\n                        <p class=\"mb-0\">Incide nas mercadorias que passaram por algum processo de transformação ou de beneficiamento (5% no caso dos produtos Manetoni).</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipAliquotaIpiTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.aliquotaIpi | number:'1.2-2' }}%</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Valor IPI</strong>\r\n                      <ng-template #tooltipValorIpiTemplate>\r\n                        <p class=\"mb-0\">Calculado em relação ao valor da NF da mercadoria despachada, que eventualmente pode incluir valores sobre o frete e despesas acessórias (juros, taxas e outras).</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipValorIpiTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorIpi  }}</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Alíquota ICMS</strong>\r\n                      <ng-template #tooltipAliquotaIcmsTemplate>\r\n                        <p class=\"mb-0\">Ocorre quando existe transporte interestadual, intermunicipal e de comunicação. É de competência estadual e incide em diversas operações, principalmente em compras e vendas de produtos.</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipAliquotaIcmsTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.aliquotaIcms | number:'1.2-2' }}%</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Valor ICMS</strong>\r\n                      <ng-template #tooltipValorIcmsTemplate>\r\n                        <p class=\"mb-0\">Os percentuais variam por estado, operação, regime de tributação e produto.</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipValorIcmsTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorIcms  }}</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Valor ICMS Substituto</strong>\r\n                      <ng-template #tooltipValorIcmsStTemplate>\r\n                        <p class=\"mb-0\">Acontece quando a cobrança do ICMS é feita de forma antecipada. Varia de estado para estado.</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipValorIcmsStTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorIcmsSt  }}</strong>\r\n                  </div>\r\n                </li> -->\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Valor total</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorTotal | number:'1.2-2' }} USD.</strong>\r\n                  </div>\r\n                </li>\r\n\r\n              </ul>\r\n\r\n              <div class=\"col mt-3\">\r\n                <div class=\"mtc-title mb-2 text-uppercase text-primary\">Detalles del Pedido</div>\r\n                <div class=\"row\">\r\n\r\n                  <!-- <div class=\"form-group col-lg-4\">\r\n                    <label for=\"nrPedidoCliente\" class=\"fontBold\">Nro. Pedido</label>\r\n                    <input\r\n                      class=\"form-control\"\r\n                      id=\"nrPedidoCliente\"\r\n                      type=\"text\"\r\n                      formControlName=\"nrPedidoCliente\">\r\n                  </div> -->\r\n                  <div class=\"form-group col-lg-4 font-weight-bold\">\r\n                    <label for=\"codItemPedidoCliente\" class=\"fontBold\">Cód. Item</label>\r\n                    <input class=\"form-control\" id=\"codItemPedidoCliente\" type=\"text\"\r\n                      formControlName=\"codItemPedidoCliente\" readonly>\r\n                  </div>\r\n                  <div class=\"form-group col-lg-8 font-weight-bold\">\r\n                    <label for=\"codProdutoCliente\" class=\"fontBold\">Nomb. Item</label>\r\n                    <input class=\"form-control\" id=\"codProdutoCliente\" type=\"text\" formControlName=\"nrPedidoCliente\"\r\n                      readonly>\r\n                  </div>\r\n                  <div class=\"col-lg-12 mb-2\">\r\n                    <label for=\"codProdutoCliente\" class=\"fontBold\"> MODO DE ENTREGA</label>\r\n                    <!-- <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Seleccione...\"\r\n                      [items]=\"arrayPresentacion\"  [virtualScroll]=\"true\" formControlName=\"formPresentacion\"\r\n                      labelForId=\"id\" bindLabel=\"nombre_mat_presentacion\" bindValue=\"id_linha\" \r\n                      >\r\n                    </ng-select> -->\r\n                    <select class=\"form-control custom-select\" formControlName=\"formPresentacion\" (change)=\"changePresentacion($event.target.value)\">\r\n                      <ng-container *ngFor=\"let item of arrayPresentacion\">\r\n                        <option [value]=\"item.id\" >{{ item.nombre_mat_presentacion }}</option>\r\n                      </ng-container>\r\n                    </select>\r\n        \r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n    <button type=\"button\" class=\"btn btn-danger\" (click)=\"onClose()\">\r\n      Cancelar\r\n    </button>\r\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\" [disabled]=\"calculo.valorTotal === 0\">\r\n      Confirmar\r\n    </button>\r\n  </div>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\">\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"mtc-title mb-auto\">#{{ material.codMaterial }} - {{ material.nomeMaterial | uppercase }}</h4>\r\n    <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n      <span aria-hidden=\"true\" *ngIf=\"!loaderModal\">&times;</span>\r\n      <div class=\"spinner-border spinner-border-sm text-dark ml-auto\" *ngIf=\"loaderModal\"></div>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <div class=\"row\" *ngIf=\"material && tipoCalculo1\">\r\n      <div class=\"col\">\r\n        <form [formGroup]=\"form\" autocomplete=\"off\">\r\n          <div class=\"row\">\r\n            <div class=\"col-6\">\r\n              <div class=\"row\">\r\n                <div class=\"col-7\">\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <div class=\"mtc-title mb-2 text-uppercase text-primary\">Calculo de cantidades</div>\r\n                      <!-- <p>{{nomeTipoLancamento | titlecase}}</p> -->\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label class=\"font-weight-bold\" for=\"quantidade\">Cantidad</label>\r\n                      <input type=\"number\" [(ngModel)]=\"valorInput\" id=\"quantidade\" class=\"form-control\" formControlName=\"quantidade\"\r\n                        [ngClass]=\"onFieldError('quantidade') + ' ' + onFieldRequired(form.controls.quantidade)\">\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col\">\r\n                      <label for=\"preco1\">Precio</label>\r\n                      <input type=\"text\" id=\"preco1\" class=\"form-control\" formControlName=\"preco1\"\r\n                        placeholder=\"USD. 0,00\"\r\n                        [ngClass]=\"onFieldError('preco1') + ' ' + onFieldRequired(form.controls.preco1)\"\r\n                        aria-describedby=\"preco1-help\" (ngModelChange)=\"onDisablePreco2()\" readonly>\r\n                      <small *ngIf=\"tipoCalculo1 == 6 && material.valorMaterialContrato == 0\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço ideal acima de <strong>{{ material.valorUnit | currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                      </small>\r\n                      <small *ngIf=\"tipoCalculo1 != 6 && material.valorMaterialContrato == 0\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço ideal acima de <strong *ngIf=\"material.valorMaterialBarra > 0\">{{\r\n                          material.valorMaterialBarra | currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                        <strong *ngIf=\"material.valorMaterialBarra == 0\">{{ material.valorUnit |\r\n                          currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                      </small>\r\n                      <small *ngIf=\"material.valorMaterialContrato > 0 && tipoCalculo1 == 6\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço do contrato <strong>{{ material.valorMaterialContrato | currency:'BRL':'symbol':'1.2-2'\r\n                          }}</strong> por tonelada\r\n                      </small>\r\n                      <small *ngIf=\"material.valorMaterialContrato > 0 && tipoCalculo1 != 6\" id=\"preco1-help\"\r\n                        class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço do contrato <strong>{{ material.valorMaterialContrato | currency:'BRL':'symbol':'1.2-2'\r\n                          }}</strong> por tonelada, calcular o preço por {{ nomeTipoCalculo1 | titlecase }}\r\n                      </small>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\" *ngIf=\"tipoCalculo2 > 0 && material.valorMaterialContrato == 0\">\r\n                    <div class=\"form-group col\">\r\n                      <label for=\"preco2\">Precio por kg.</label>\r\n                      <input type=\"text\" id=\"preco2\" class=\"form-control\" formControlName=\"preco2\" placeholder=\"R$ 0,00\"\r\n                        currencyMask\r\n                        [options]=\"{ align: 'left', prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }\"\r\n                        [ngClass]=\"onFieldError('preco2') + ' ' + onFieldRequired(form.controls.preco2)\"\r\n                        aria-describedby=\"preco2-help\" (ngModelChange)=\"onDisablePreco1()\">\r\n                      <small id=\"preco2-help\" class=\"text-muted\" style=\"font-size: 11px\">\r\n                        Preço ideal acima de <strong>{{ material.valorUnit | currency:'BRL':'symbol':'1.2-2' }}</strong>\r\n                      </small>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row\" *ngIf=\"showInputMedida()\">\r\n                    <div class=\"form-group col\">\r\n                      <label for=\"medida\">Medida (metros)</label>\r\n                      <input type=\"text\" id=\"medida\" class=\"form-control\" formControlName=\"medida\" currencyMask\r\n                        [options]=\"{ align: 'left', prefix: '', thousands: '.', decimal: ',', precision: 2 }\"\r\n                        [ngClass]=\"onFieldError('medida') + ' ' + onFieldRequired(form.controls.medida)\">\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"form-row mt-1\">\r\n                    <div class=\"form-group col mb-0\">\r\n                      <button type=\"button\" class=\"btn btn-block btn-secondary mt-auto\" (click)=\"onCalcular()\"\r\n                      [disabled]=\"valorInput === 0 || loaderModal\">\r\n                        <div *ngIf=\"!loaderModal\">\r\n                          <i class=\"fas fa-calculator\"></i>\r\n                          <span>Calcular</span>\r\n                        </div>\r\n                        <div *ngIf=\"loaderModal\">\r\n                          <i class=\"fas fa-cog fa-spin\"></i>\r\n                          <span>Aguarde</span>\r\n                        </div>\r\n                      </button>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row\">\r\n                <div class=\"col\">\r\n                  <div *ngIf=\"showInfoMetragem()\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"col\">\r\n                        <hr>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\" *ngIf=\"!showInputMedida()\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mr-1\">Medida 01:</label>\r\n                        <span>{{ material.medida1 | number:'1.2-2' }} metro(s)</span>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mr-1\">Medida 02:</label>\r\n                        <span>{{ material.medida2 | number:'1.2-2' }} metro(s)</span>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mb-0 mr-1\">Peso específico:</label>\r\n                        <span>{{ material.pesoEspecifico | number:'1.2-2' }} kg(s)</span>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div *ngIf=\"showInfoFatorMultiplo()\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"col\">\r\n                        <hr>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <label class=\"mr-1\">Fator múltiplo:</label>\r\n                        <span>{{ material.fatorMultiplo | number:'1.3-3' }}</span>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div *ngIf=\"opcoesVenda.length > 0\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"col\">\r\n                        <hr>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col\">\r\n                        <label>Selecione uma opção</label>\r\n                      </div>\r\n                    </div>\r\n                    <div class=\"form-row\" *ngFor=\"let opcaoVenda of opcoesVenda; let i = index\">\r\n                      <div class=\"form-group col mb-0\">\r\n                        <div class=\"custom-control custom-radio\">\r\n                          <input type=\"radio\" id=\"opcaoVenda_{{ i }}\" name=\"opcaoVenda\" class=\"custom-control-input\"\r\n                            (click)=\"calcularTotais(opcaoVenda)\">\r\n                          <label class=\"custom-control-label\" for=\"opcaoVenda_{{ i }}\">\r\n                            {{ opcaoVenda.tonelada | number }} Toneladas ({{ opcaoVenda.qtde }} {{ nomeTipoLancamento |\r\n                            titlecase }})\r\n                          </label>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <div class=\"col-6 pl-0 my-auto\">\r\n              <div class=\"text-right text-uppercase mr-1 mb-2\" style=\"font-size: 11px\">\r\n                <a class=\"text-primary\" href=\"javascript:void(0)\" (click)=\"onShowImpostos()\">\r\n                  <!-- <i class=\"fas mr-2\" [ngClass]=\"{'fa-chevron-up': showImpostos, 'fa-chevron-down': !showImpostos}\"></i> -->\r\n                  <!-- <strong>Detalhes</strong> -->\r\n                </a>\r\n              </div>\r\n              <ul class=\"list-group\">\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Unidad</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.unidade }}</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" *ngIf=\"swLargoMaterial===true\">\r\n                  <div class=\"d-flex justify-content-between w-100\" >\r\n                    <div class=\"my-auto\">\r\n                      <strong>Metros líneales</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.largo_material }} ML</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Peso Unitario</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.pesoEspecifico | number }} Kg</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Peso Item</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.tonelada | number }} Kg</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Valor unitario</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorUnitario }} USD.</strong>\r\n                  </div>\r\n                </li>\r\n                <!-- <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Valor Item</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorItem  }}</strong>\r\n                  </div>\r\n                </li> -->\r\n                <!-- <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Descuento %</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.descuento  }} </strong>\r\n                  </div>\r\n                </li> -->\r\n                <!-- <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Alíquota IPI</strong>\r\n                      <ng-template #tooltipAliquotaIpiTemplate>\r\n                        <p class=\"mb-0\">Incide nas mercadorias que passaram por algum processo de transformação ou de beneficiamento (5% no caso dos produtos Manetoni).</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipAliquotaIpiTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.aliquotaIpi | number:'1.2-2' }}%</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Valor IPI</strong>\r\n                      <ng-template #tooltipValorIpiTemplate>\r\n                        <p class=\"mb-0\">Calculado em relação ao valor da NF da mercadoria despachada, que eventualmente pode incluir valores sobre o frete e despesas acessórias (juros, taxas e outras).</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipValorIpiTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorIpi  }}</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Alíquota ICMS</strong>\r\n                      <ng-template #tooltipAliquotaIcmsTemplate>\r\n                        <p class=\"mb-0\">Ocorre quando existe transporte interestadual, intermunicipal e de comunicação. É de competência estadual e incide em diversas operações, principalmente em compras e vendas de produtos.</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipAliquotaIcmsTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.aliquotaIcms | number:'1.2-2' }}%</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Valor ICMS</strong>\r\n                      <ng-template #tooltipValorIcmsTemplate>\r\n                        <p class=\"mb-0\">Os percentuais variam por estado, operação, regime de tributação e produto.</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipValorIcmsTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorIcms  }}</strong>\r\n                  </div>\r\n                </li>\r\n                <li class=\"list-group-item\" [hidden]=\"!showImpostos\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong class=\"mr-1\">Valor ICMS Substituto</strong>\r\n                      <ng-template #tooltipValorIcmsStTemplate>\r\n                        <p class=\"mb-0\">Acontece quando a cobrança do ICMS é feita de forma antecipada. Varia de estado para estado.</p>\r\n                      </ng-template>\r\n                      <i class=\"far fa-question-circle\" [tooltip]=\"tooltipValorIcmsStTemplate\"></i>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorIcmsSt  }}</strong>\r\n                  </div>\r\n                </li> -->\r\n                <li class=\"list-group-item\">\r\n                  <div class=\"d-flex justify-content-between w-100\">\r\n                    <div class=\"my-auto\">\r\n                      <strong>Valor total</strong>\r\n                    </div>\r\n                    <strong class=\"text-secondary\">{{ calculo.valorTotal | number:'1.2-2' }} USD.</strong>\r\n                  </div>\r\n                </li>\r\n\r\n              </ul>\r\n\r\n              <div class=\"col mt-3\">\r\n                <div class=\"mtc-title mb-2 text-uppercase text-primary\">Detalles del Pedido</div>\r\n                <div class=\"row\">\r\n\r\n                  <!-- <div class=\"form-group col-lg-4\">\r\n                    <label for=\"nrPedidoCliente\" class=\"fontBold\">Nro. Pedido</label>\r\n                    <input\r\n                      class=\"form-control\"\r\n                      id=\"nrPedidoCliente\"\r\n                      type=\"text\"\r\n                      formControlName=\"nrPedidoCliente\">\r\n                  </div> -->\r\n                  <div class=\"form-group col-lg-4 font-weight-bold\">\r\n                    <label for=\"codItemPedidoCliente\" class=\"fontBold\">Cód. Item</label>\r\n                    <input class=\"form-control\" id=\"codItemPedidoCliente\" type=\"text\"\r\n                      formControlName=\"codItemPedidoCliente\" readonly>\r\n                  </div>\r\n                  <div class=\"form-group col-lg-8 font-weight-bold\">\r\n                    <label for=\"codProdutoCliente\" class=\"fontBold\">Nomb. Item</label>\r\n                    <input class=\"form-control\" id=\"codProdutoCliente\" type=\"text\" formControlName=\"nrPedidoCliente\"\r\n                      readonly>\r\n                  </div>\r\n                  <div class=\"col-lg-12 mb-2\">\r\n                    <!--  <label for=\"codProdutoCliente\" class=\"fontBold\"> MODO DE ENTREGA</label> -->\r\n                    <!-- <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Seleccione...\"\r\n                      [items]=\"arrayPresentacion\"  [virtualScroll]=\"true\" formControlName=\"formPresentacion\"\r\n                      labelForId=\"id\" bindLabel=\"nombre_mat_presentacion\" bindValue=\"id_linha\" \r\n                      >\r\n                    </ng-select> -->\r\n                    <!-- <select class=\"form-control custom-select\" formControlName=\"formPresentacion\" (change)=\"changePresentacion($event.target.value)\">\r\n                      <ng-container *ngFor=\"let item of arrayPresentacion\">\r\n                        <option [value]=\"item.id\" >{{ item.nombre_mat_presentacion }}</option>\r\n                      </ng-container>\r\n                    </select> -->\r\n        \r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n    <button type=\"button\" class=\"btn btn-danger\" (click)=\"onClose()\">\r\n      Cancelar\r\n    </button>\r\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\" [disabled]=\"calculo.valorTotal === 0 || valorInput === 0\">\r\n      Confirmar\r\n    </button>\r\n  </div>\r\n</div>");
 
 /***/ }),
 
@@ -6391,7 +6831,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\" [hidden]=\"!showModal\">\r\n    <div class=\"modal-header\">\r\n        <h4 class=\"mtc-title mb-auto\">Definir entrega</h4>\r\n        <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n            <span aria-hidden=\"true\" *ngIf=\"!loaderModal\">&times;</span>\r\n            <div class=\"spinner-border spinner-border-sm text-dark ml-auto\" *ngIf=\"loaderModal\"></div>\r\n        </button>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <div class=\"row\">\r\n            <div class=\"col\">\r\n                <form [formGroup]=\"form\" autocomplete=\"off\">\r\n                    <div class=\"row\">\r\n                        <div class=\"form-group col-lg-2\">\r\n                            <label for=\"codOrigemContato\">Latitud</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"latitud\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-lg-2\">\r\n                            <label for=\"codOrigemContato\">Longitud</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"longitud\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-lg-8\">\r\n                            <label for=\"codOrigemContato\">Dirección</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"direccion\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-md-12\">\r\n                            <label for=\"codOrigemContato\">Seleccione en el mapa</label>\r\n\r\n                            <div class=\"embed-responsive embed-responsive-16by9\">\r\n                                <agm-map [latitude]=\"latitud\" [longitude]=\"longitud\" [zoom]=\"16\"\r\n                                    class=\"embed-responsive-item\" (mapClick)=\"actualizarMarcador($event)\">\r\n                                    <agm-marker [latitude]=\"latitud\" [longitude]=\"longitud\"\r\n                                        (markerDragEnd)=\"actualizarDireccion($event)\">\r\n                                    </agm-marker>\r\n                                </agm-map>\r\n                                <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </form>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-danger\" (click)=\"onClose()\">\r\n            Cancelar\r\n        </button>\r\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\r\n            Confirmar\r\n        </button>\r\n    </div>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\" [hidden]=\"!showModal\">\r\n    <div class=\"modal-header\">\r\n        <h4 class=\"mtc-title mb-auto\">Definir entrega</h4>\r\n        <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n            <span aria-hidden=\"true\" *ngIf=\"!loaderModal\">&times;</span>\r\n            <div class=\"spinner-border spinner-border-sm text-dark ml-auto\" *ngIf=\"loaderModal\"></div>\r\n        </button>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <div class=\"row\">\r\n            <div class=\"col\">\r\n                <form [formGroup]=\"form\" autocomplete=\"off\">\r\n                    <div class=\"row\">\r\n                        <div class=\"form-group col-lg-2\">\r\n                            <label for=\"codOrigemContato\">Latitud</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"latitud\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-lg-2\">\r\n                            <label for=\"codOrigemContato\">Longitud</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"longitud\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-lg-8\">\r\n                            <label for=\"codOrigemContato\">Dirección</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"direccion\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-md-12\">\r\n                            <label for=\"codOrigemContato\">Seleccione en el mapa</label>\r\n\r\n                            <div class=\"embed-responsive embed-responsive-16by9\">\r\n                                <agm-map [latitude]=\"latitud\" [longitude]=\"longitud\" [zoom]=\"16\"\r\n                                    class=\"embed-responsive-item\" (mapClick)=\"actualizarMarcador($event)\">\r\n                                    <agm-marker [latitude]=\"latitud\" [longitude]=\"longitud\"\r\n                                        (markerDragEnd)=\"actualizarDireccion($event)\">\r\n                                    </agm-marker>\r\n                                </agm-map>\r\n                                <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </form>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-danger\" (click)=\"onClose()\">\r\n            Cancelar\r\n        </button>\r\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\r\n            Confirmar\r\n        </button>\r\n    </div>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -6780,6 +7220,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _formulario_materiais_lista_lista_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ../formulario/materiais/lista/lista.component */ "G8m0");
 /* harmony import */ var _formulario_carrinho_carrinho_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ../formulario/carrinho/carrinho.component */ "pLP3");
 /* harmony import */ var _comercial_service__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ../../../comercial.service */ "VgqD");
+/* harmony import */ var _formulario_modal_material_ubicacion_ubicacion_service__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ../formulario/modal/material/ubicacion/ubicacion.service */ "feYP");
 
 
 
@@ -6825,8 +7266,9 @@ Object(ngx_bootstrap_chronos__WEBPACK_IMPORTED_MODULE_12__["defineLocale"])('pt-
 
 
 
+
 let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendasCotacoesFormularioComponent {
-    constructor(activatedRoute, authService, location, formBuilder, localeService, pnotifyService, confirmModalService, atividadesService, titleService, dateService, formularioService, formasPagamentoS, clientesService, fichaCadastralService, similaridadeService, historicoComprasService, clienteDetalhesService, enderecoDetalhesService, contatoDetalhesService, concorrenteDetalhesService, duplicatasService, historicoExclusaoService, finalizacaoService, autorizacionService, calculoService, descontoService, estoqueService, comboService, cotacoesService, vendedoresService, modalService, bsModalRef, router, comercialService) {
+    constructor(activatedRoute, authService, location, formBuilder, localeService, pnotifyService, confirmModalService, atividadesService, titleService, dateService, formularioService, formasPagamentoS, clientesService, fichaCadastralService, similaridadeService, historicoComprasService, clienteDetalhesService, enderecoDetalhesService, contatoDetalhesService, concorrenteDetalhesService, duplicatasService, historicoExclusaoService, finalizacaoService, autorizacionService, calculoService, descontoService, estoqueService, comboService, cotacoesService, vendedoresService, modalService, bsModalRef, router, comercialService, ubicacionService) {
         this.activatedRoute = activatedRoute;
         this.authService = authService;
         this.location = location;
@@ -6861,6 +7303,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.bsModalRef = bsModalRef;
         this.router = router;
         this.comercialService = comercialService;
+        this.ubicacionService = ubicacionService;
         this.user = this.authService.getCurrentUser();
         this.permissoesAcesso = {
             acessoClientes: false,
@@ -6871,6 +7314,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.loaderFullScreen = true;
         this.autoScrollToCarrinho = true;
         this.exibirClienteT = false;
+        this.carnet_cliente = '';
         this.breadCrumbTree = [];
         this.dependenciesLoaded = false;
         this.carrinhoHasError = false;
@@ -6898,7 +7342,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.listaEjecutivo = [];
         this.idVendedor = 0;
         this.tipoEntrega = [];
-        this.nombreDepartamento = "";
+        this.nombreDepartamento = '';
         this.visualizar = false;
         this.duplicatasSomenteCarteira = false;
         this.tableConfigAnexos = {
@@ -6943,7 +7387,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.changeDirty();
         this.getCarteira(this.urlPath);
         this.getTituloEndereco();
-        this.detalhesCodCliente.NM_CLIE = this.activatedRoute.snapshot.queryParams['codCliente'];
+        this.detalhesCodCliente.NM_CLIE = this.activatedRoute.snapshot.queryParams.codCliente;
         this.getClientes(this.detalhesCodCliente);
         this.getListarPrecios();
         this.getTodosVendedores();
@@ -6951,10 +7395,10 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.getRubros();
         this.tipoEntrega = [
             { id: 1, nombre: 'entrega en almacen' },
-            { id: 2, nombre: 'entrega en obra' }
+            { id: 2, nombre: 'entrega en obra ' }
         ];
         this.getIdOferta();
-        //console.log(this.swExisteCliente);
+        // console.log(this.swExisteCliente);
         /*     this.swExisteCliente = true;
          */ /* this.finalizacaoService.showModal(this.tipoEntrega, 1);  */
         /*   this.form.controls.codigoCliente.setValue('Código'); */
@@ -6972,9 +7416,9 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.cotacoesService.getIdOferta()
             .subscribe((response) => {
             if (response.responseCode == 200) {
-                var id_oferta = response.result.id_oferta + 1;
-                this.form.controls['codigo_oferta_crm'].setValue(id_oferta);
-                this.form.controls['codigo_oferta'].setValue(response.result.codigo_oferta);
+                this.id_oferta = response.result.id_oferta + 1;
+                this.form.controls.codigo_oferta_crm.setValue(this.id_oferta);
+                this.form.controls.codigo_oferta.setValue(response.result.codigo_oferta);
             }
         });
     }
@@ -7012,7 +7456,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         });
     }
     getTituloEndereco() {
-        let urlPath = this.activatedRoute.snapshot.url[0].path;
+        const urlPath = this.activatedRoute.snapshot.url[0].path;
         if (urlPath == 'editar') {
             this.formularioService
                 .getLocaisEntrega(this.form.controls.codCliente.value)
@@ -7075,14 +7519,14 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.activatedRoute.params.subscribe((params) => {
             if (params.codCotacao) {
                 this.codCotacao = parseInt(params.codCotacao);
-                this.appTitle = 'Editar cotação/pedido';
+                this.appTitle = 'Editar Cotización/pedido';
             }
             else if (params.idReservado) {
                 this.idReservado = parseInt(params.idReservado);
-                this.appTitle = 'Nova cotação/pedido';
+                this.appTitle = 'Nueva Cotización/pedido';
             }
             if (this.activatedRoute.snapshot.url[0].path == 'visualizar') {
-                this.appTitle = 'visualizar cotação/pedido';
+                this.appTitle = 'visualizar Cotizacion/pedido';
             }
             this.titleService.setTitle(this.appTitle);
             this.breadCrumbTree = [
@@ -7091,11 +7535,11 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                     routerLink: '/comercial/home',
                 },
                 {
-                    descricao: 'Ciclo de vendas',
+                    descricao: 'Ciclo de Ventas',
                     routerLink: `/comercial/ciclo-vendas/${id}`,
                 },
                 {
-                    descricao: 'Cotações e pedidos',
+                    descricao: 'Cotizaciones y Pedidos',
                     routerLink: `/comercial/ciclo-vendas/${id}/cotacoes-pedidos/lista`,
                 },
                 {
@@ -7126,7 +7570,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             .loadDependencies()
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(() => {
             this.dependenciesLoaded = true;
-            if (this.appTitle == 'Nova cotação/pedido') {
+            if (this.appTitle == 'Nueva Cotización/pedido') {
                 /*  this.setEmpresa();
                  this.setTransportadora(); */
             }
@@ -7136,10 +7580,10 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             this.empresas = response[1].result || [];
             this.depositos = response[2].result || [];
             this.filteredDepositos = this.depositos;
-            //this.formasPagamento = response[3].data || [];
+            // this.formasPagamento = response[3].data || [];
             this.formasContato = response[4].data || [];
             Object.keys(response[5].data).forEach((key) => {
-                response[5].data[key]['descricao'] = response[5].data[key]['descricao'].replace(/'/g, '');
+                response[5].data[key].descricao = response[5].data[key].descricao.replace(/'/g, '');
             });
             this.origensContato = response[5].data || [];
             this.transportadoras = response[6].data || [];
@@ -7162,8 +7606,10 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             animated: false,
             class: 'modal-lg',
         });
+        //this.ubicacionService.showModal();
     }
     onCliente(event) {
+        console.log(event);
         this.form.patchValue(event);
         this.onChangeCliente(event.codCliente, 'user');
         this.onLoadCliente(true);
@@ -7172,24 +7618,29 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         // Carga la dirección del cliente en el campo codEndereco del formulario
         /*     this.idListaPrecio = event.id_lista_precio; */
         this.codigoRubro = event.codigo_rubro;
-        this.form.controls['codFormaPagamento'].setValue(2);
-        this.form.controls['codEndereco'].setValue(event.direccion);
-        this.form.controls['razaoSocial'].setValue(event.razaoSocial);
-        this.form.controls['correo_electronico'].setValue(event.correo_electronico);
-        this.form.controls['nomeCliente'].setValue(event.nomeCliente);
-        this.form.controls['codigo_cliente'].setValue(event.codigo_cliente);
-        this.form.controls['telefono_cliente'].setValue(event.telefono);
-        this.form.controls['celular'].setValue(event.celular);
-        this.form.controls['celular'].setValue(event.celular);
-        this.form.controls['nombreTipo'].setValue(event.nombreTipo);
-        this.form.controls['id_tipo_cliente'].setValue(event.tipoCliente);
-        this.form.controls['id_departamento'].setValue(event.nombreDepartamento);
+        this.form.controls.codFormaPagamento.setValue(1);
+        this.form.controls.codEndereco.setValue(event.direccion);
+        this.direccion_cliente = event.direccion;
+        this.form.controls.razaoSocial.setValue(event.nombre_factura);
+        this.form.controls.codRazaoSocial.setValue(event.carnet);
+        this.form.controls.correoElectronico.setValue(event.correo_electronico);
+        this.form.controls.nomeCliente.setValue(event.nomeCliente);
+        this.form.controls.codigo_cliente.setValue(event.codigo_cliente);
+        this.form.controls.telefonoCliente.setValue(event.telefono);
+        this.form.controls.celular.setValue(event.celular);
+        this.form.controls.nombreTipo.setValue(event.nombreTipo);
+        this.form.controls.id_tipo_cliente.setValue(event.tipoCliente);
+        this.form.controls.id_departamento.setValue(event.id_departamento_lista);
+        this.form.controls.celular.setValue(event.celular);
+        this.form.controls.telefonoCliente.setValue(event.telefono);
+        this.carnet_cliente = event.carnet_cliente;
+        console.log(event);
     }
     datosVendedor(id_vendedor) {
         this.idvendedor = id_vendedor;
         this.idListaPrecio = 0;
         const params = {
-            id_vendedor: id_vendedor
+            id_vendedor
         };
         this.vendedoresService.getDetalleVendedor(params)
             .subscribe({
@@ -7197,11 +7648,12 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 if (response.responseCode == 200) {
                     this.idListaPrecio = response.detalle[0].id_lista;
                     this.nombreDepartamento = response.detalle[0].nombre_departamento;
+                    this.form.controls.nombreDepartamento.setValue(this.nombreDepartamento);
                     /*  this.form.controls['lista'].setValue(response.detalle[0].id_lista); */
                     // this.form.value.lista = response.detalle[0].id_lista;
                 }
                 else {
-                    this.form.controls['lista'].setValue(null);
+                    this.form.controls.lista.setValue(null);
                 }
             },
             error: (error) => {
@@ -7234,6 +7686,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         const resolver = this.activatedRoute.snapshot.data.data;
         if (resolver.success === true) {
             const data = resolver.data;
+            /* console.log(data.carnet); */
             const formValue = this.checkRouterParams();
             /* ('datos');
                (data); */
@@ -7298,6 +7751,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             else {
                 data.duplicatasSomenteCarteira = 0;
             }
+            //console.log(data);
             this.form = this.formBuilder.group({
                 codCotacao: [{ value: codCotacao, disabled: true }],
                 tipoCotacao: [{ value: data.tipoCotacao, disabled: true }],
@@ -7306,24 +7760,25 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                     data.codSituacao != 0 ? data.codSituacao : null,
                     [_angular_forms__WEBPACK_IMPORTED_MODULE_8__["Validators"].required],
                 ],
+                nombreDepartamento: [],
                 codCliente: [data.codCliente],
                 razaoSocial: [data.razaoSocial],
                 correo_electronico: [data.correo_electronico],
                 nomeCliente: [data.nomeCliente],
-                codRazaoSocial: [data.codRazaoSocial],
+                codRazaoSocial: [data.carnet],
                 nombreVendedor: [data.nombreVendedor],
                 codigo_oferta: [],
                 codigo_oferta_crm: [],
-                id_lista_precio: [data.id_lista_precio],
+                /*   id_lista_precio: [data.id_lista_precio], */
                 codigo_cliente: [data.codigo_cliente],
                 telefono_cliente: [data.telefono],
                 celular: [data.celular],
                 nombreTipo: [data.nombreTipo],
                 id_tipo_cliente: [data.tipoCliente],
                 id_departamento: [data.id_departamento_lista],
-                nombreDepartamento: [data.nombreDepartamento],
-                ejecutivo_ventas: [],
-                id_rubro: [data.rubros],
+                ejecutivo_ventas: [null, [_angular_forms__WEBPACK_IMPORTED_MODULE_8__["Validators"].required]],
+                direccion_entrega: [],
+                direccionEntrega: [],
                 /*  centroLogisticoControl:[], */
                 /* codEndereco: [data.direccion], */
                 codContato: [
@@ -7355,6 +7810,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 dataValidade: [dataValidade, [_angular_forms__WEBPACK_IMPORTED_MODULE_8__["Validators"].required]],
                 codFormaContato: [codFormaContato, [_angular_forms__WEBPACK_IMPORTED_MODULE_8__["Validators"].required]],
                 codOrigemContato: [codOrigemContato, [_angular_forms__WEBPACK_IMPORTED_MODULE_8__["Validators"].required]],
+                telefonoCliente: [],
                 dadosAdicionais: [
                     data.dadosAdicionaisNotaFiscal,
                     [_angular_forms__WEBPACK_IMPORTED_MODULE_8__["Validators"].required],
@@ -7370,6 +7826,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 novo: this.activatedRoute.snapshot.url[0].path,
                 COD_CLIE_TERC: [data.COD_CLIE_TERC],
                 TP_ACAO: [data.TP_ACAO],
+                correoElectronico: []
             });
             if (data.codEnderecoEntrega) {
                 this.exibirClienteTerceiro(data.notaFiscalMae);
@@ -7422,7 +7879,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 }
             },
             error: (error) => {
-                if (error['error'].hasOwnProperty('mensagem')) {
+                if (error.error.hasOwnProperty('mensagem')) {
                     this.pnotifyService.error(error.error.mensagem);
                 }
                 else {
@@ -7460,13 +7917,14 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         });
     }
     appendFile(files) {
-        if (files.length === 0)
+        if (files.length === 0) {
             return;
+        }
         const fd = new FormData();
         fd.append('file', files[0]);
         this.formData.push(fd);
         this.anexos.push(this.formBuilder.group({
-            nomeAnexo: [files[0]['name']],
+            nomeAnexo: [files[0].name],
         }));
         if (this.showAnexos === false) {
             this.showAnexos = true;
@@ -7507,7 +7965,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                         }
                     },
                     error: (error) => {
-                        if (error['error'].hasOwnProperty('mensagem')) {
+                        if (error.error.hasOwnProperty('mensagem')) {
                             this.pnotifyService.error(error.error.mensagem);
                         }
                         else {
@@ -7531,7 +7989,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.form.markAsDirty();
     }
     checkRouterParams() {
-        let formValue = {
+        const formValue = {
             codEmpresa: null,
             codDeposito: null,
             codFormaContato: null,
@@ -7665,7 +8123,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             return;
         }
         if (this.filteredDepositos.length === 1) {
-            this.form.controls.codDeposito.setValue(this.filteredDepositos[0]['idDeposito']);
+            this.form.controls.codDeposito.setValue(this.filteredDepositos[0].idDeposito);
             this.form.controls.codDeposito.disable();
             this.form.controls.codDeposito.clearValidators();
             this.form.controls.codDeposito.updateValueAndValidity();
@@ -7706,20 +8164,20 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             this.form.controls.codEmpresa.markAsTouched();
             this.form.controls.codEmpresa.markAsDirty();
             this.form.controls.codEmpresa.setErrors({ required: true });
-            //this.pnotifyService.notice('Selecione uma empresa.');
+            // this.pnotifyService.notice('Selecione uma empresa.');
             // }
-            //if (this.form.getRawValue().codDeposito === null) {
+            // if (this.form.getRawValue().codDeposito === null) {
             this.form.controls.codDeposito.markAsTouched();
             this.form.controls.codDeposito.markAsDirty();
             this.form.controls.codDeposito.setErrors({ required: true });
-            //this.pnotifyService.notice('Selecione um depósito.');
+            // this.pnotifyService.notice('Selecione um depósito.');
             // }
             // if (this.form.value.codEndereco === null) {
             this.form.controls.codEndereco.markAsTouched();
             this.form.controls.codEndereco.markAsDirty();
             this.form.controls.codEndereco.setErrors({ required: true });
-            //this.pnotifyService.notice('Selecione um endereço de entrega.');
-            //}
+            // this.pnotifyService.notice('Selecione um endereço de entrega.');
+            // }
         }
     }
     onHistoricoComprasFieldError(event) {
@@ -7729,19 +8187,19 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             this.form.controls.codEndereco.markAsTouched();
             this.form.controls.codEndereco.markAsDirty();
             this.form.controls.codEndereco.setErrors({ required: true });
-            //this.pnotifyService.notice('Selecione um endereço de entrega.');
+            // this.pnotifyService.notice('Selecione um endereço de entrega.');
             //  }
             //    if (this.form.controls.codFormaPagamento.errors !== null) {
             this.onScrollToForm('top');
             this.form.controls.codFormaPagamento.markAsTouched();
             this.form.controls.codFormaPagamento.setErrors({ incorrect: true });
-            //this.pnotifyService.notice('Selecione a forma de pagamento.');
+            // this.pnotifyService.notice('Selecione a forma de pagamento.');
             //     }
             //   if (this.form.controls.freteConta.errors !== null) {
             this.onScrollToForm('bottom');
             this.form.controls.freteConta.markAsTouched();
             this.form.controls.freteConta.setErrors({ incorrect: true });
-            //this.pnotifyService.notice('Selecione quem pagará o frete.');
+            // this.pnotifyService.notice('Selecione quem pagará o frete.');
             //    }
         }
     }
@@ -7758,17 +8216,24 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.carrinhoHasError = event;
     }
     onCarrinhoScrollTop(event) {
-        //if (event === true) {
+        // if (event === true) {
         this.onScrollToForm('top');
         this.codClientErrors = true;
         this.form.controls.codCliente.markAsTouched();
         this.form.controls.codCliente.setErrors({ required: true });
         // this.pnotifyService.notice('Selecione um cliente.');
-        //}
+        // }
     }
     onSubmit() {
-        this.formularioService.onNotifySubmit(true);
-        this.sendForm();
+        const formValue = this.form.getRawValue();
+        //console.log(this.idvendedor);
+        if (this.idvendedor > 0 && this.idListaPrecio > 0 && formValue.codEndereco > 0) {
+            this.formularioService.onNotifySubmit(true);
+            this.sendForm();
+        }
+        else {
+            this.pnotifyService.notice("Debe llenar todos los campos requeridos");
+        }
     }
     sendForm() {
         if (this.checkFormErrors() === false) {
@@ -7800,7 +8265,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             if (response) {
                 const formValue = this.form.getRawValue();
                 const carteiraClientes = this.formularioService.getCurrentCarteiraClientes();
-                let situacao = {
+                const situacao = {
                     codSituacaoProposta: null,
                     situacaoProposta: null,
                     codTipoFinalizacao: null,
@@ -7825,7 +8290,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                         };
                     }
                 }
-                var borrador = 0;
+                const borrador = 0;
                 /* const dataCotacao = {
                   codCotacao: formValue.codCotacao,
                   tipoCotacao: formValue.tipoCotacao,
@@ -7863,7 +8328,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                     descuento_total: this.descuentoTotal,
                     cantidad_total: this.cantidadTotal,
                     id_forma_pago: this.id_forma_contacto,
-                    id_lista_precio: formValue.lista,
+                    id_lista_precio: this.idListaPrecio,
                     id_modo_entrega: formValue.codEndereco,
                     id_cliente: formValue.codCliente,
                     id_vendedor: this.idvendedor,
@@ -7877,11 +8342,20 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                     carrinho: this.materiais,
                     nombre_cliente: formValue.nomeCliente,
                     observacion: formValue.observacoes,
+                    nit_factura: formValue.codRazaoSocial,
+                    nombre_factura: formValue.razaoSocial,
+                    direccion_cliente: this.direccion_cliente,
+                    direccion_entrega: formValue.direccionEntrega,
+                    carnet_cliente: this.carnet_cliente,
+                    correo_electronico: formValue.correoElectronico,
+                    celular: formValue.celular,
+                    id_oferta: this.id_oferta,
+                    telefono: formValue.telefonoCliente
                 };
                 /* this.autorizacionService.showModal();  */
-                //console.log(dataCotizacion);
+                /* console.log(dataCotizacion); */
                 this.finalizacaoService.sendCotizacion(dataCotizacion);
-                //this.onPostAnexos(dataCotacao.codCotacao);
+                // this.onPostAnexos(dataCotacao.codCotacao);
             }
         });
     }
@@ -7901,12 +8375,12 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             hasError = true;
         }
         else {
-            //if (this.form.controls.tipoCotacao.errors !== null) {
-            //this.onScrollToForm('top');
+            // if (this.form.controls.tipoCotacao.errors !== null) {
+            // this.onScrollToForm('top');
             // this.form.controls.tipoCotacao.markAsTouched();
-            //this.form.controls.tipoCotacao.setErrors({ incorrect: true });
+            // this.form.controls.tipoCotacao.setErrors({ incorrect: true });
             // this.pnotifyService.notice('Selecione o tipo de cotação.');
-            //hasError = true;
+            // hasError = true;
             // }
             // if (this.form.controls.codSituacao.errors !== null) {
             /*   this.onScrollToForm('top');
@@ -7916,7 +8390,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             /*  hasError = true; */
             //  }
             if (this.form.controls.codCliente.errors !== null) {
-                //console.log(1);
+                // console.log(1);
                 this.onScrollToForm('top');
                 this.codClientErrors = true;
                 this.form.controls.codCliente.markAsTouched();
@@ -7935,7 +8409,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             }
        */
             if (this.form.controls.codEndereco.errors !== null) {
-                //console.log(3);
+                // console.log(3);
                 this.onScrollToForm('top');
                 this.form.controls.codEndereco.markAsTouched();
                 this.form.controls.codEndereco.setErrors({ incorrect: true });
@@ -7949,13 +8423,13 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             // this.pnotifyService.notice('Selecione se existe Nota Fiscal Mãe.');
             /* hasError = true; */
             //  }
-            //if (this.form.controls.codFormaPagamento.errors !== null) {
+            // if (this.form.controls.codFormaPagamento.errors !== null) {
             /* this.onScrollToForm('top');
             this.form.controls.codFormaPagamento.markAsTouched();
             this.form.controls.codFormaPagamento.setErrors({ incorrect: true }); */
             // this.pnotifyService.notice('Selecione a forma de pagamento.');
             /*  hasError = true; */
-            //}
+            // }
             /*  if (this.form.controls.dataEntrega.errors !== null) {
                this.onScrollToForm('top');
                this.form.controls.dataEntrega.markAsTouched();
@@ -7964,7 +8438,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                hasError = true;
              } */
             if (this.form.controls.dataValidade.errors !== null) {
-                //console.log(4);
+                // console.log(4);
                 this.onScrollToForm('top');
                 this.form.controls.dataValidade.markAsTouched();
                 const maxDate = this.dateService.addDaysToDate(new Date(), 16);
@@ -7978,13 +8452,13 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 }
                 hasError = true;
             }
-            //if (this.form.controls.codFormaContato.errors !== null) {
+            // if (this.form.controls.codFormaContato.errors !== null) {
             /*  this.onScrollToForm('bottom');
              this.form.controls.codFormaContato.markAsTouched();
              this.form.controls.codFormaContato.setErrors({ incorrect: true }); */
             // this.pnotifyService.notice('Selecione a forma de contato.');
             /* hasError = true; */
-            //}
+            // }
             // if (this.form.controls.codOrigemContato.errors !== null) {
             /* this.onScrollToForm('bottom');
             this.form.controls.codOrigemContato.markAsTouched();
@@ -7992,20 +8466,20 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             // this.pnotifyService.notice('Selecione a origem de contato.');
             /* hasError = true; */
             // }
-            //if (this.form.controls.freteConta.errors !== null) {
+            // if (this.form.controls.freteConta.errors !== null) {
             /*   this.onScrollToForm('bottom');
               this.form.controls.freteConta.markAsTouched();
               this.form.controls.freteConta.setErrors({ incorrect: true }); */
             //  this.pnotifyService.notice('Selecione quem pagará o frete.');
             /* hasError = true; */
-            //}
-            //if (this.form.controls.codTransportadora.errors !== null) {
+            // }
+            // if (this.form.controls.codTransportadora.errors !== null) {
             /* this.onScrollToForm('bottom');
             this.form.controls.codTransportadora.markAsTouched();
             this.form.controls.codTransportadora.setErrors({ incorrect: true }); */
             //  this.pnotifyService.notice('Selecione a transportadora.');
             /*  hasError = true; */
-            //}
+            // }
             for (let i = 0; i < this.materiais.length; i++) {
                 if (this.materiais[i].qtdePecas == null) {
                     this.pnotifyService.notice(`Recalcule la cantidad de material ${this.materiais[i].codMaterial} - ${this.materiais[i].nomeMaterial} no carrinho`);
@@ -8052,7 +8526,8 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         this.getCliente(event.COD_CLIE_TERC);
     }
     datoEntrega(a) {
-        //console.log(a);
+        // console.log(a);
+        // @ts-ignore
         if (a.id == 2) {
             this.swEntrega = true;
         }
@@ -8078,7 +8553,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             if (response.success === true) {
                 const _enderecos = response.data.enderecos;
                 const _enderecosAguardando = response.data.enderecosAguardando || [];
-                let enderecos = [], enderecosAguardando = [];
+                const enderecos = [], enderecosAguardando = [];
                 for (let i = 0; i < _enderecos.length; i++) {
                     enderecos.push({
                         codEndereco: _enderecos[i].id,
@@ -8123,16 +8598,17 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             .subscribe((response) => {
             if (response.success === true) {
                 const _contatos = response.data;
-                let contatos = [];
+                const contatos = [];
                 for (let i = 0; i < _contatos.length; i++) {
                     if (_contatos[i].nomeCompleto &&
                         _contatos[i].nomeCompleto != null &&
                         _contatos[i].nomeCompleto != '' &&
-                        _contatos[i].nomeCompleto.length > 1)
+                        _contatos[i].nomeCompleto.length > 1) {
                         contatos.push({
                             codContato: _contatos[i].id,
                             nomeContato: _contatos[i].nomeCompleto,
                         });
+                    }
                 }
                 this.contatos = contatos;
                 // console.log(contatos);
@@ -8169,7 +8645,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         }
     }
     setParamsHistoricoCompras(params) {
-        let _params = {};
+        const _params = {};
         _params.codCliente = params.codCliente;
         _params.codEmpresa = this.form.getRawValue().codEmpresa;
         _params.codEndereco = params.codEndereco;
@@ -8224,12 +8700,12 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         if (this.appTitle == 'Editar cotação/pedido' || this.appTitle == 'visualizar cotação/pedido') {
             this.historicoExclusaoService.showModal(this.setParamsHistoricoExclusao(params));
         }
-        else if (this.appTitle == 'Nova cotação/pedido') {
+        else if (this.appTitle == 'Nueva Cotización/pedido') {
             this.pnotifyService.notice('Cotação nova, não possui histórico');
         }
     }
     setParamsHistoricoExclusao(params) {
-        let _params = {};
+        const _params = {};
         _params.nrPedido = this.codCotacao;
         _params.codEmpresa = this.form.getRawValue().codEmpresa;
         return _params;
@@ -8248,10 +8724,10 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 return;
             }
         }
-        //if (this.form.getRawValue().codEmpresa === null) {
+        // if (this.form.getRawValue().codEmpresa === null) {
         this.pnotifyService.notice('Selecione uma empresa.');
         return;
-        //}
+        // }
         // if (this.form.value.codFormaPagamento === null) {
         this.pnotifyService.notice('Selecione uma forma de pagamento.');
         return;
@@ -8279,8 +8755,8 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
             if (field.errors.hasOwnProperty('required') && field.touched) {
                 return 'required';
             }
-            if (field.errors.hasOwnProperty('maxDate') && field.touched) {
-                return 'maxDate';
+            if (field.errors.hasOwnProperty('maxlength') && field.touched) {
+                return 'maxlength';
             }
         }
         return '';
@@ -8313,7 +8789,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         }
     }
     onCancel() {
-        let idSubModulo = this.activatedRoute.snapshot.params.idSubModulo;
+        const idSubModulo = this.activatedRoute.snapshot.params.idSubModulo;
         this.formularioService.limparCarrinhoSubject.next(true);
         this.router.navigate([
             `/comercial/ciclo-vendas/${idSubModulo}/cotacoes-pedidos/lista`,
@@ -8370,7 +8846,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                         this.pnotifyService.notice('Cliente arquivado, favor entrar em contato com o Marketing');
                     }
                     else {
-                        this.form.controls.codRazaoSocial.setValue(this.clientes[0].codRazaoSocial);
+                        this.form.controls.codRazaoSocial.setValue(this.clientes[0].carnet);
                         /*               this.form.controls.codigoCliente.setValue(this.clientes[0].codRazaoSocial);
                          */
                         this.onChangeCliente(this.clientes[0].codCliente, 'user');
@@ -8387,7 +8863,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         frete = this.transportadoras;
         if (this.activatedRoute.snapshot.params.codEmpresa == 18) {
             this.form.controls.codTransportadora.setValue(598);
-            for (var i = 0; i < frete.length; i++) {
+            for (let i = 0; i < frete.length; i++) {
                 if (frete[i].codTransportadoraTid == 598) {
                     this.form.controls.freteConta.setValue(frete[i].codFreteConta);
                 }
@@ -8395,7 +8871,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         }
         if (this.activatedRoute.snapshot.params.codEmpresa == 79) {
             this.form.controls.codTransportadora.setValue(1597);
-            for (var i = 0; i < frete.length; i++) {
+            for (let i = 0; i < frete.length; i++) {
                 if (frete[i].codTransportadoraTid == 1597) {
                     this.form.controls.freteConta.setValue(frete[i].codFreteConta);
                 }
@@ -8403,7 +8879,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         }
         if (this.activatedRoute.snapshot.params.codEmpresa == 55) {
             this.form.controls.codTransportadora.setValue(1734);
-            for (var i = 0; i < frete.length; i++) {
+            for (let i = 0; i < frete.length; i++) {
                 if (frete[i].codTransportadoraTid == 1734) {
                     this.form.controls.freteConta.setValue(frete[i].codFreteConta);
                 }
@@ -8411,7 +8887,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
         }
         if (this.activatedRoute.snapshot.params.codEmpresa == 77) {
             this.form.controls.codTransportadora.setValue(1734);
-            for (var i = 0; i < frete.length; i++) {
+            for (let i = 0; i < frete.length; i++) {
                 if (frete[i].codTransportadoraTid == 1734) {
                     this.form.controls.freteConta.setValue(frete[i].codFreteConta);
                 }
@@ -8446,7 +8922,7 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
                 const data = [];
                 data[0] = response;
                 if (data[0].responseCode === 200) {
-                    const codRazao = (data[0].result.codCliente + " - " + data[0].result.razaoSocial);
+                    const codRazao = (data[0].result.codCliente + ' - ' + data[0].result.razaoSocial);
                     this.form.controls.COD_CLIE_TERC.setValue(codRazao);
                 }
             }
@@ -8454,8 +8930,8 @@ let ComercialCicloVendasCotacoesFormularioComponent = class ComercialCicloVendas
     }
     getFormasPagamento(params) {
         const data = {
-            'tipoConsulta': 2,
-            'codCliente': params
+            tipoConsulta: 2,
+            codCliente: params
         };
         /* (params, '-----') */
         this.formasPagamentoLoader = true;
@@ -8503,7 +8979,8 @@ ComercialCicloVendasCotacoesFormularioComponent.ctorParameters = () => [
     { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["BsModalService"] },
     { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["BsModalRef"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] },
-    { type: _comercial_service__WEBPACK_IMPORTED_MODULE_41__["ComercialService"] }
+    { type: _comercial_service__WEBPACK_IMPORTED_MODULE_41__["ComercialService"] },
+    { type: _formulario_modal_material_ubicacion_ubicacion_service__WEBPACK_IMPORTED_MODULE_42__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService"] }
 ];
 ComercialCicloVendasCotacoesFormularioComponent.propDecorators = {
     listaComponent: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["ViewChild"], args: [_formulario_materiais_lista_lista_component__WEBPACK_IMPORTED_MODULE_39__["ComercialCicloVendasCotacoesFormularioMateriaisListaComponent"], { static: false },] }],
@@ -8511,7 +8988,7 @@ ComercialCicloVendasCotacoesFormularioComponent.propDecorators = {
     scrollToFormOnTop: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["ViewChild"], args: ['scrollToFormOnTop', {},] }],
     scrollToFormOnBottom: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["ViewChild"], args: ['scrollToFormOnBottom', {},] }],
     scrollToCarrinho: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["ViewChild"], args: ['scrollToCarrinho', {},] }],
-    titulo: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["ViewChild"], args: ["titulo",] }],
+    titulo: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["ViewChild"], args: ['titulo',] }],
     handleBeforeUnload: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__["HostListener"], args: ['window:beforeunload', ['$event'],] }]
 };
 ComercialCicloVendasCotacoesFormularioComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
@@ -8553,7 +9030,8 @@ ComercialCicloVendasCotacoesFormularioComponent = Object(tslib__WEBPACK_IMPORTED
         ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["BsModalService"],
         ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["BsModalRef"],
         _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"],
-        _comercial_service__WEBPACK_IMPORTED_MODULE_41__["ComercialService"]])
+        _comercial_service__WEBPACK_IMPORTED_MODULE_41__["ComercialService"],
+        _formulario_modal_material_ubicacion_ubicacion_service__WEBPACK_IMPORTED_MODULE_42__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService"]])
 ], ComercialCicloVendasCotacoesFormularioComponent);
 
 
@@ -9259,7 +9737,7 @@ ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent = Object(t
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar [hidden]=\"!loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen [hidden]=\"!loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appTitle\">\r\n  <button class=\"btn btn-success\" type=\"button\" (click)=\"onSubmit()\" *ngIf=\"!visualizar\">\r\n    Finalizar\r\n  </button>\r\n  <button class=\"btn btn-danger\" type=\"button\" (click)=\"onCancel()\" *ngIf=\"!visualizar\">\r\n    Cancelar\r\n  </button>\r\n  <button class=\"btn btn-danger\" type=\"button\" (click)=\"onCancel()\" *ngIf=\"visualizar\">\r\n    Voltar\r\n  </button>\r\n  <div class=\"d-inline-block ml-1\" dropdown container=\"body\" *ngIf=\"permissoesAcesso.historicoExclusao === true\">\r\n    <button type=\"button\" dropdownToggle>\r\n      <i class=\"fas fa-ellipsis-v\"></i>\r\n    </button>\r\n    <!-- <ul *dropdownMenu class=\"dropdown-menu left\">\r\n      <li>\r\n        <a class=\"dropdown-item\" href=\"javascript:void(0)\" (click)=\"onHistoricoExclusao()\">\r\n          <i class=\"fas fa-history\"></i>\r\n          <span class=\"text-uppercase\">Historial de eliminación</span>\r\n        </a>\r\n      </li>\r\n    </ul> -->\r\n  </div>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <form [formGroup]=\"form\" autocomplete=\"off\" #scrollToFormOnTop>\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <hr class=\"mt-0 mb-4\">\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n\r\n      <div class=\"col-md\" id=\"card-green\">\r\n        <div class=\"row d-flex\">\r\n          <div class=\"col-9\">\r\n            <div class=\"col\" id=\"card-label-light\">Valor de la propuesta </div>\r\n            <div class=\"col\" id=\"card-value-grey\">USD. {{ valorProposta | number:'1.2-2' }}</div>\r\n          </div>\r\n          <div class=\"col-3\">\r\n            <span class=\"fas fa-money-bill-wave d-flex p-3\" id=\"icon-green\"></span>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col-md\" id=\"card-purple\">\r\n        <div class=\"row d-flex\" id=\"marginRow\">\r\n          <div class=\"col-2\">\r\n            <span class=\"fas fa-clock d-flex justify-content-center align-items-center\" id=\"icon-purple\"></span>\r\n          </div>\r\n          <div class=\"col-10\">\r\n            <div class=\"col\" id=\"card-label-purple\">Datos de lanzamiento</div>\r\n            <div class=\"col\" id=\"card-value-light\">{{ dadosLancamento.data | date:'dd/MM/yyyy' }} Hrs. {{\r\n              dadosLancamento.data | date:'HH:mm' }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-md\" id=\"card-purple\">\r\n        <div class=\"row d-flex\" id=\"marginRow\">\r\n          <div class=\"col-2\">\r\n            <span class=\"fas fa-user-tie d-flex justify-content-center align-items-center\" id=\"icon-purple\"></span>\r\n          </div>\r\n          <div class=\"col-10\">\r\n            <div class=\"col\" id=\"card-label-purple\">{{ dadosLancamento.nomeVendedor | uppercase }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- <div class=\"col\">\r\n        <div class=\"mtc-title\">Dados de lançamento</div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label>Data/Hora</label>\r\n            <p class=\"mb-0\">\r\n              {{ dadosLancamento.data | date:'dd/MM/yyyy' }} às {{ dadosLancamento.data | date:'HH:mm' }}\r\n            </p>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label>Usuário</label>\r\n            <p class=\"mb-0\">\r\n              {{ dadosLancamento.nomeVendedor | uppercase }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div> -->\r\n    </div>\r\n\r\n\r\n    <!-- <div class=\"row shadow-sm\">\r\n      <div class=\"col\">\r\n        <hr class=\"mt-4 mb-5\">\r\n      </div>\r\n    </div> -->\r\n\r\n    <!-- Datos de oferta -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(1)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos de la oferta</strong></div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco1\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco1\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col\" [hidden]=showBloco1>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"mb-1\" for=\"codigo_cliente\">N° de Oferta SAP.</label>\r\n            <input type=\"text\" id=\"codigo_cliente\" class=\"form-control\" formControlName=\"codigo_oferta\"\r\n              [readonly]=\"true\" [attr.disabled]=\"true\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"mb-1\" for=\"codigo_cliente\">N° de Oferta CRM.</label>\r\n            <input type=\"text\" id=\"codigo_cliente\" class=\"form-control\" formControlName=\"codigo_oferta_crm\"\r\n              [readonly]=\"true\" [attr.disabled]=\"true\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataEncerramento\">Fecha de cotización </label>\r\n            <input class=\"form-control\" id=\"dataEncerramento\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataEncerramento\" [readonly]=\"visualizar\"\r\n              [ngClass]=\"onFieldError('dataEncerramento') + ' ' + onFieldRequired(form.controls.dataEncerramento)\"\r\n              disabled>\r\n            <invalid-form-control [show]=\"onFieldInvalid('dataEncerramento')\"\r\n              message=\"Data de encerramento é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataValidade\">Válido hasta</label>\r\n            <input class=\"form-control\" id=\"dataValidade\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataValidade\" [readonly]=\"true\" (bsValueChange)=\"onChangeValidadeProposta($event)\"\r\n              [ngClass]=\"onFieldError('dataValidade') + ' ' + onFieldRequired(form.controls.dataValidade)\" disabled>\r\n            <invalid-form-control [show]=\"onFieldInvalid('dataValidade') == 'required'\"\r\n              message=\"La fecha de validez es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('dataValidade') == 'maxDate'\"\r\n              message=\"No debe sobrepasar los 30 días .\"></invalid-form-control>\r\n          </div>\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataValidade\"> Cambio de estado</label>\r\n            <input class=\"form-control\" id=\"fechaRecordatorio\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"fechaRecordatorio\" [readonly]=\"true\"\r\n              [ngClass]=\"onFieldError('fechaRecordatorio') + ' ' + onFieldRequired(form.controls.fechaRecordatorio)\" >\r\n          </div>\r\n -->\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n\r\n\r\n\r\n    <!-- Clientes -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(2)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos de cliente</strong></div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco2\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco2\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col\" [hidden]=showBloco2>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"mb-1\" for=\"codigo_cliente\">Codigo Cliente</label>\r\n            <input type=\"text\" id=\"codigo_cliente\" class=\"form-control\" formControlName=\"codigo_cliente\"\r\n              [readonly]=\"true\" [attr.disabled]=\"true\">\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-5\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"nomeCliente\">Cliente</label>\r\n              <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\" *ngIf=\"!visualizar\">\r\n                <a *ngIf=\"urlPath != 'editar'\" id=\"top-links\" class=\"text-primary mr-2\" href=\"javascript:void(0)\"\r\n                  (click)=\"openModal(selecionarCliente)\">\r\n                  Seleccionar\r\n                </a>\r\n\r\n                <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"onClienteDetalhes()\">\r\n                  Detalles\r\n                </a>\r\n\r\n                <!-- <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"onHistoricoCompras()\">\r\n                  Histórico de Compras\r\n                </a>\r\n\r\n                <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"navegarHistoricoFinanceiro()\">\r\n                  Histórico Financeiro\r\n                </a> -->\r\n              </div>\r\n            </div>\r\n            <input formControlName=\"nomeCliente\" type=\"text\" class=\"form-control\" id=\"nomeCliente\"\r\n              [readonly]=\"visualizar\" placeholder=\"Selecionar...\" [attr.disabled]=\"true\" />\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Tipo de Cliente</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"nombreTipo\" type=\"text\" class=\"form-control\" [readonly]=\"true\"\r\n                [attr.disabled]=\"true\" />\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Dirección</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"codEndereco\" type=\"text\" class=\"form-control\" [readonly]=\"true\"\r\n                [attr.disabled]=\"true\" />\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">NIT</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"codRazaoSocial\" type=\"text\" class=\"form-control\" [disabled]=\"swExisteCliente\" />\r\n\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Razón social</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"razaoSocial\" type=\"text\" class=\"form-control\" />\r\n              <input formControlName=\"id_tipo_cliente\" type=\"hidden\" />\r\n              <input formControlName=\"id_departamento\" type=\"hidden\" />\r\n\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Correo electrónico</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"correo_electronico\" type=\"text\" class=\"form-control\" />\r\n\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Celular </label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"celular\" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Teléfono </label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"telefono_cliente\" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div>\r\n\r\n\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Rubro</label>\r\n            <select class=\"form-control custom-select\" formControlName=\"id_rubro\" disabled>\r\n              <ng-container *ngFor=\"let rubro of rubros\">\r\n                <option [value]=\"rubro.codigo_rubro\" [selected]=\"rubro.codigo_rubro  === codigoRubro\">\r\n                  {{ rubro.descricao }}\r\n                </option>\r\n              </ng-container>\r\n            </select>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Tipo de pago</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"formasPagamento\" [searchFn]=\"customSearchFn\"\r\n              bindLabel=\"descricao\" bindValue=\"codFormaPagamento\" formControlName=\"codFormaPagamento\"\r\n              [loading]=\"formasPagamentoLoader\" loadingText=\"Carregando...\" [readonly]=\"true\"\r\n              [virtualScroll]=\"true\" placeholder=\"Seleccione...\" >\r\n              <!-- [ngClass]=\"onFieldError('codFormaPagamento') + ' ' + onFieldRequired(form.controls.codFormaPagamento)\"-->\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codFormaPagamento')\"\r\n              message=\"Forma de pago obligatorio\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"codContato\">Persona de contacto</label>\r\n              <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\"\r\n                *ngIf=\"form.value.codCliente != null && !visualizar\">\r\n                <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"onDetalhesContato()\">\r\n                  Detalles\r\n                </a>\r\n                <!--<a id=\"top-links\" class=\"text-primary mr-2\" href=\"javascript:void(0)\"\r\n                  [routerLink]=\"[getLinkAddContato()]\" target=\"_blank\">\r\n                  Adicionar\r\n                </a>-->\r\n                <!-- <a id=\"top-links\" class=\"text-primary mr-2\" href=\"javascript:void(0)\" tooltip=\"Recarregar\"\r\n                  (click)=\"onReloadContatos()\">\r\n                  <i class=\"fas fa-redo-alt text-light\"></i>\r\n                </a> -->\r\n              </div>\r\n            </div>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"contatos\" formControlName=\"codContato\"\r\n              placeholder=\"Selecione...\" [virtualScroll]=\"true\" bindLabel=\"nomeContato\" bindValue=\"codContato\"\r\n              [loading]=\"contatosLoader\" loadingText=\"Carregando...\" [readonly]=\"visualizar\"\r\n              (change)=\"changeContacto($event.codContato)\">\r\n            </ng-select>\r\n            <!-- [ngClass]=\"onFieldError('codContato') + ' ' + onFieldRequired(form.controls.codContato)\"-->\r\n            <!-- <invalid-form-control [show]=\"onFieldInvalid('codContato')\" message=\"Contato responsável é obrigatório.\"></invalid-form-control>-->\r\n          </div>\r\n          <!-- cambiar formControlName y for=\"codEndereco\"-->\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Número de celular</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\" \" type=\"text\" class=\"form-control\" [readonly]=\"true\" [attr.disabled]=\"true\" />\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <!--novos campos fim-->\r\n        <div class=\"row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <!-- <label for=\"orderBy\">Ejecutivo de ventas</label>\r\n            <select class=\"form-control custom-select\" formControlName=\"ejecutivo_ventas\" id=\"orderBy\">\r\n              <ng-container *ngFor=\"let listaEjecutivo of listaEjecutivo\">\r\n                <option [value]=\"listaEjecutivo.id\" [selected]=\"idVendedor === listaEjecutivo.id\">{{\r\n                  listaEjecutivo.nome\r\n                  }}</option>\r\n              </ng-container>\r\n            </select> -->\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Ejecutivo de venta</label>\r\n            <ng-select class=\"\" [formControlName]=\"ejecutivo_ventas\" id=\"orderBy\" (change)=\"datosVendedor($event);\">\r\n              <ng-container *ngFor=\"let listaEjecutivo of listaEjecutivo\">\r\n                <ng-option [value]=\"listaEjecutivo.id\">\r\n                  {{ listaEjecutivo.nome}}\r\n                </ng-option>\r\n              </ng-container>\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"orderBy\">Lista de precios</label>\r\n            <select class=\"form-control custom-select\" formControlName=\"lista\" (change)=\"updateLista()\" disabled>\r\n              <ng-container *ngFor=\"let listaPrecio of listaPrecios\">\r\n                <option [value]=\"listaPrecio.id\" [selected]=\"listaPrecio.id === idListaPrecio\">\r\n                  {{ listaPrecio.nombre_lista }}\r\n                </option>\r\n              </ng-container>\r\n            </select>\r\n\r\n            <!-- <label class=\"my-auto\" for=\"codFormaPagamento\">Lista de precios</label> -->\r\n            <!-- <ng-select class=\"\" [formControlName]=\"lista\" id=\"orderBy\"  [(ngModel)]=\"idListaPrecio\">\r\n              <ng-container *ng\r\n              For=\"let listaPrecio of listaPrecios\">\r\n                <ng-option [value]=\"listaPrecio.id\" >\r\n                  {{ listaPrecio.nombre_lista }}\r\n                </ng-option>\r\n                \r\n              </ng-container>\r\n            </ng-select> -->\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"orderBy\">Departamento</label>\r\n            <input formControlName=\"nombreDepartamento\" type=\"text\" class=\"form-control\" [value]=\"id_departamento\"\r\n              readonly />\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"orderBy\">Propietario</label>\r\n            <input formControlName=\" \" type=\"text\" class=\"form-control\" [value]=\"dadosLancamento.nomeVendedor\"\r\n              readonly />\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n\r\n    <!-- Materiales -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row\" [hidden]=\"visualizar\">\r\n        <div class=\"col\">\r\n          <comercial-ciclo-vendas-cotacoes-formulario-materiais-lista [codEndereco]=\"form.value.codEndereco\"\r\n            [codCliente]=\"form.value.codCliente\" [codEmpresa]=\"form.getRawValue().codEmpresa\"\r\n            [id_lista_precio]=\"idListaPrecio\" [codDeposito]=\"form.getRawValue().codDeposito\"\r\n            [codFormaPagamento]=\"form.value.codFormaPagamento\" [freteConta]=\"form.value.freteConta\"\r\n            (loaderNavbar)=\"onLoaderNavbar($event)\" (loaderFullScreen)=\"onLoaderFullScreen($event)\"\r\n            (scrollToFormOnTop)=\"onMateriaisScrollTop($event)\" (scrollToCarrinho)=\"onScrollToCarrinho($event)\">\r\n          </comercial-ciclo-vendas-cotacoes-formulario-materiais-lista>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n\r\n    <!-- <div class=\"row\" [hidden]=\"visualizar\">\r\n      <div class=\"col\">\r\n        <hr class=\"my-5\">\r\n      </div>\r\n    </div> -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\" [hidden]=\"this.materiais.length == 0\">\r\n      <div class=\"row\" #scrollToCarrinho>\r\n        <div class=\"col\">\r\n          <comercial-ciclo-vendas-cotacoes-formulario-carrinho [appTitle]=\"appTitle\"\r\n            [codFormaPagamento]=\"form.value.codFormaPagamento\" [freteConta]=\"form.value.freteConta\"\r\n            [id_tipo_cliente]=form.value.id_tipo_cliente [id_departamento]=\"form.value.id_departamento\"\r\n            [idReservado]=\"idReservado\" [codCotacao]=\"codCotacao\" [codCliente]=\"form.value.codCliente\"\r\n            [codEndereco]=\"form.value.codEndereco\" [initialValue]=\"carrinho\" (loaderNavbar)=\"onLoaderNavbar($event)\"\r\n            (hasError)=\"onCarrinhoError($event)\" (scrollTop)=\"onCarrinhoScrollTop($event)\"\r\n            (carrinho)=\"onCarrinho($event)\">\r\n          </comercial-ciclo-vendas-cotacoes-formulario-carrinho>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <!-- datos de envio -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(5)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos de Envio</strong></div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco6\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco6\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col\" [hidden]=showBloco5>\r\n\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"codEndereco\">Tipo de entrega</label>\r\n              <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\">\r\n                <!-- *ngIf=\"form.value.codCliente != null && !visualizar\"-->\r\n              </div>\r\n            </div>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"tipoEntrega\" (change)=\"datoEntrega($event)\"\r\n              formControlName=\"codEndereco\" [virtualScroll]=\"true\" bindLabel=\"nombre\" bindValue=\"id\"\r\n              placeholder=\"Selecione...\" [loading]=\"locaisEntregaLoader\" loadingText=\"Carregando...\" groupBy=\"tipo\"\r\n              [readonly]=\"visualizar\">\r\n            </ng-select>\r\n            <!--  [ngClass]=\"onFieldError('codEndereco') + ' ' + onFieldRequired(form.controls.codEndereco)\"-->\r\n            <!--<invalid-form-control [show]=\"onFieldInvalid('codEndereco')\" message=\"Local de entrega é obrigatório.\"></invalid-form-control>-->\r\n          </div>\r\n          <!-- <div *ngIf=\"swReferencia == true\" class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Dirección de destino</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\" \" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-1\" *ngIf=\"swEntrega == true\">\r\n            <label for=\"dataEntrega\">Referencia</label> <br>\r\n            <button class=\"btn btn-primary w-100\" type=\"button\" (click)=\"openModalUbicacion(seleccionarUbicacion)\"> <i\r\n                class=\"fas fa-map-marker-alt\"></i>Ubicación </button>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\" *ngIf=\"swEntrega == true\">\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Centro Logistico</label>\r\n            <ng-select class=\"\" [formControlName]=\"centroLogisticoControl\" id=\"orderBy\"\r\n              (change)=\"onCentroLogisticoChange($event)\">\r\n              <ng-container *ngFor=\"let centroLogistico of centrosLogisticos\">\r\n                <ng-option [value]=\"centroLogistico.id\">\r\n                  {{ centroLogistico.NOMBRE_DEPOSITO }}\r\n                </ng-option>\r\n              </ng-container>\r\n            </ng-select>\r\n            <!-- <invalid-form-control [show]=\"onFieldInvalid('codFormaPagamento')\"\r\n              message=\"Centro Logistico obligatorio.\"></invalid-form-control> -->\r\n          </div>\r\n\r\n          <!--  <div class=\"form-group col-lg-2\" *ngIf=\"swEntrega == true\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"codFormaPagamento\">Centro Logistico</label>\r\n              <select class=\"form-control custom-select\" formControlName=\"centroLogistico\" id=\"orderBy\">\r\n                <ng-container *ngFor=\"let centroLogistico of centroLogistico\">\r\n                  <option [value]=\"centroLogistico.id_almacen\"  [selected]=\"idVendedor === centroLogistico.id_almacen\">{{ centroLogistico.nombre_almacen }}</option>\r\n                </ng-container>\r\n              </select>\r\n            </div>\r\n          </div> -->\r\n\r\n          <div class=\"form-group col-lg-2\">\r\n            <div class=\"form-row\">\r\n              <div class=\"form-group col\">\r\n                <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n<!--                   <label class=\"my-auto\" for=\"codFormaPagamento\">Forma de Pago</label>\r\n -->                  <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\">\r\n                  </div>\r\n                </div>\r\n                <!-- <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"formasPagamento\" [searchFn]=\"customSearchFn\"\r\n                  bindLabel=\"descricao\" bindValue=\"codFormaPagamento\" formControlName=\"codFormaPagamento\"\r\n                  [loading]=\"formasPagamentoLoader\" loadingText=\"Carregando...\" [readonly]=\"visualizar\"\r\n                  [virtualScroll]=\"true\" placeholder=\"Selecione...\">\r\n                </ng-select> -->\r\n                <!-- <invalid-form-control [show]=\"onFieldInvalid('codFormaPagamento')\"\r\n                  message=\"El tipo de pago es obligatorio.\"></invalid-form-control> -->\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"codDeposito\">Almacén</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"filteredDepositos\" formControlName=\"codDeposito\"\r\n              [virtualScroll]=\"true\" labelForId=\"codDeposito\" placeholder=\"Selecione...\" bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\" [readonly]=\"visualizar\"> -->\r\n          <!--  [ngClass]=\"onFieldError('codDeposito') + ' ' + onFieldRequired(form.controls.codDeposito)\"-->\r\n          <!-- </ng-select>\r\n          </div> -->\r\n        </div>\r\n        <!--novos campos fim-->\r\n        <div class=\"form-row\">\r\n        </div>\r\n        <div class=\"row\">\r\n        </div>\r\n\r\n      </div>\r\n    </div>\r\n\r\n    <!-- Anexos y observaciones  -->\r\n    <!-- <div #scrollToFormOnBottom *ngIf=\"dependenciesLoaded\"> -->\r\n    <!--   <div class=\"row justify-content-between p x-3\">-->\r\n\r\n    <!-- Datos adicionales -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(6)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos Adicionales</strong>\r\n        </div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco6\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco6\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n        </div>\r\n      </div>\r\n      <div class=\"col\" [hidden]=showBloco6>\r\n\r\n        <!-- <div class=\"row\">\r\n              <div class=\"col\"><hr></div>\r\n            </div> -->\r\n        <!--<div class=\"form-row\">\r\n              <div class=\"form-group col\">\r\n                <label for=\"dadosAdicionais\">Dados Adicionais da Nota Fiscal</label>\r\n                <textarea class=\"form-control\" id=\"dadosAdicionais\" formControlName=\"dadosAdicionais\"\r\n                  [readonly]=\"visualizar\">\r\n                </textarea>\r\n              </div>\r\n            </div>-->\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"observacoes\">Observaciones</label>\r\n            <textarea class=\"form-control\" id=\"observacoes\" formControlName=\"observacoes\" [readonly]=\"visualizar\">\r\n                </textarea>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <!--  </div> -->\r\n    <!-- </div> -->\r\n  </form>\r\n  <ng-template #selecionarCliente>\r\n    <comercial-ciclo-vendas-cotacoes-formulario-modal-selecionar (fecharModal)=\"onFecharModal($event)\"\r\n      (cliente)=\"onCliente($event)\" (clientesParams)=\"getClientesParams($event)\">\r\n    </comercial-ciclo-vendas-cotacoes-formulario-modal-selecionar>\r\n  </ng-template>\r\n  <ng-template #seleccionarUbicacion>\r\n    <comercial-ciclo-vendas-cotacoes-formulario-modal-material-ubicacion\r\n      (latLngChanged)=\"changeLatitudLongitud($event)\">\r\n    </comercial-ciclo-vendas-cotacoes-formulario-modal-material-ubicacion>\r\n  </ng-template>\r\n\r\n\r\n  <ng-template #seleccionarAutorizacion>\r\n    <comercial-ciclo-vendas-cotacoes-formulario-modal-material-autorizar>\r\n    </comercial-ciclo-vendas-cotacoes-formulario-modal-material-autorizar>\r\n  </ng-template>\r\n\r\n</app-body>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar [hidden]=\"!loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen [hidden]=\"!loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appTitle\">\r\n  <button class=\"btn btn-success\" type=\"button\" (click)=\"onSubmit()\" *ngIf=\"!visualizar\">\r\n    Finalizar\r\n  </button>\r\n  <button class=\"btn btn-danger\" type=\"button\" (click)=\"onCancel()\" *ngIf=\"!visualizar\">\r\n    Cancelar\r\n  </button>\r\n  <button class=\"btn btn-danger\" type=\"button\" (click)=\"onCancel()\" *ngIf=\"visualizar\">\r\n    Voltar\r\n  </button>\r\n  <div class=\"d-inline-block ml-1\" dropdown container=\"body\" *ngIf=\"permissoesAcesso.historicoExclusao === true\">\r\n    <button type=\"button\" dropdownToggle>\r\n      <i class=\"fas fa-ellipsis-v\"></i>\r\n    </button>\r\n    <!-- <ul *dropdownMenu class=\"dropdown-menu left\">\r\n      <li>\r\n        <a class=\"dropdown-item\" href=\"javascript:void(0)\" (click)=\"onHistoricoExclusao()\">\r\n          <i class=\"fas fa-history\"></i>\r\n          <span class=\"text-uppercase\">Historial de eliminación</span>\r\n        </a>\r\n      </li>\r\n    </ul> -->\r\n  </div>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <form [formGroup]=\"form\" autocomplete=\"off\" #scrollToFormOnTop>\r\n    <div class=\"row\">\r\n      <div class=\"col\">\r\n        <hr class=\"mt-0 mb-4\">\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n\r\n      <div class=\"col-md\" id=\"card-green\">\r\n        <div class=\"row d-flex\">\r\n          <div class=\"col-9\">\r\n            <div class=\"col\" id=\"card-label-light\">Valor de la propuesta </div>\r\n            <div class=\"col\" id=\"card-value-grey\">USD. {{ valorProposta | number:'1.2-2' }}</div>\r\n          </div>\r\n          <div class=\"col-3\">\r\n            <span class=\"fas fa-money-bill-wave d-flex p-3\" id=\"icon-green\"></span>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col-md\" id=\"card-purple\">\r\n        <div class=\"row d-flex\" id=\"marginRow\">\r\n          <div class=\"col-2\">\r\n            <span class=\"fas fa-clock d-flex justify-content-center align-items-center\" id=\"icon-purple\"></span>\r\n          </div>\r\n          <div class=\"col-10\">\r\n            <div class=\"col\" id=\"card-label-purple\">Datos de lanzamiento</div>\r\n            <div class=\"col\" id=\"card-value-light\">{{ dadosLancamento.data | date:'dd/MM/yyyy' }} Hrs. {{\r\n              dadosLancamento.data | date:'HH:mm' }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-md\" id=\"card-purple\">\r\n        <div class=\"row d-flex\" id=\"marginRow\">\r\n          <div class=\"col-2\">\r\n            <span class=\"fas fa-user-tie d-flex justify-content-center align-items-center\" id=\"icon-purple\"></span>\r\n          </div>\r\n          <div class=\"col-10\">\r\n            <div class=\"col\" id=\"card-label-purple\">{{ dadosLancamento.nomeVendedor | uppercase }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- <div class=\"col\">\r\n        <div class=\"mtc-title\">Dados de lançamento</div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label>Data/Hora</label>\r\n            <p class=\"mb-0\">\r\n              {{ dadosLancamento.data | date:'dd/MM/yyyy' }} às {{ dadosLancamento.data | date:'HH:mm' }}\r\n            </p>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label>Usuário</label>\r\n            <p class=\"mb-0\">\r\n              {{ dadosLancamento.nomeVendedor | uppercase }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div> -->\r\n    </div>\r\n\r\n\r\n    <!-- <div class=\"row shadow-sm\">\r\n      <div class=\"col\">\r\n        <hr class=\"mt-4 mb-5\">\r\n      </div>\r\n    </div> -->\r\n\r\n    <!-- Datos de oferta -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(1)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos de la oferta</strong></div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco1\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco1\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col\" [hidden]=showBloco1>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"mb-1\" for=\"codigo_cliente\">N° de Oferta SAP.</label>\r\n            <input type=\"text\" id=\"codigo_cliente\" class=\"form-control\" formControlName=\"codigo_oferta\"\r\n              [readonly]=\"true\" [attr.disabled]=\"true\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"mb-1\" for=\"codigo_cliente\">N° de Oferta CRM.</label>\r\n            <input type=\"text\" id=\"codigo_cliente\" class=\"form-control\" formControlName=\"codigo_oferta_crm\"\r\n              [readonly]=\"true\" [attr.disabled]=\"true\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataEncerramento\">Fecha de cotización </label>\r\n            <input class=\"form-control\" id=\"dataEncerramento\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataEncerramento\" [readonly]=\"visualizar\"\r\n              [ngClass]=\"onFieldError('dataEncerramento') + ' ' + onFieldRequired(form.controls.dataEncerramento)\"\r\n              disabled>\r\n            <invalid-form-control [show]=\"onFieldInvalid('dataEncerramento')\"\r\n              message=\"Data de encerramento é obrigatório.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataValidade\">Válido hasta</label>\r\n            <input class=\"form-control\" id=\"dataValidade\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataValidade\" [readonly]=\"true\" (bsValueChange)=\"onChangeValidadeProposta($event)\"\r\n              [ngClass]=\"onFieldError('dataValidade') + ' ' + onFieldRequired(form.controls.dataValidade)\" disabled>\r\n            <invalid-form-control [show]=\"onFieldInvalid('dataValidade') == 'required'\"\r\n              message=\"La fecha de validez es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('dataValidade') == 'maxDate'\"\r\n              message=\"No debe sobrepasar los 30 días .\"></invalid-form-control>\r\n          </div>\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataValidade\"> Cambio de estado</label>\r\n            <input class=\"form-control\" id=\"fechaRecordatorio\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"fechaRecordatorio\" [readonly]=\"true\"\r\n              [ngClass]=\"onFieldError('fechaRecordatorio') + ' ' + onFieldRequired(form.controls.fechaRecordatorio)\" >\r\n          </div>\r\n -->\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n\r\n\r\n\r\n    <!-- Clientes -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(2)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos de cliente</strong></div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco2\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco2\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col\" [hidden]=showBloco2>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"mb-1\" for=\"codigo_cliente\">Codigo Cliente</label>\r\n            <input type=\"text\" id=\"codigo_cliente\" class=\"form-control\" formControlName=\"codigo_cliente\"\r\n              [readonly]=\"true\" [attr.disabled]=\"true\">\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-5\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"nomeCliente\">Cliente</label>\r\n              <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\" *ngIf=\"!visualizar\">\r\n                <a *ngIf=\"urlPath != 'editar'\" id=\"top-links\" class=\"text-primary mr-2\" href=\"javascript:void(0)\"\r\n                  (click)=\"openModal(selecionarCliente)\">\r\n                  Seleccionar\r\n                </a>\r\n\r\n                <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"onClienteDetalhes()\">\r\n                  Detalles\r\n                </a>\r\n\r\n                <!-- <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"onHistoricoCompras()\">\r\n                  Histórico de Compras\r\n                </a>\r\n\r\n                <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"navegarHistoricoFinanceiro()\">\r\n                  Histórico Financeiro\r\n                </a> -->\r\n              </div>\r\n            </div>\r\n            <input formControlName=\"nomeCliente\" type=\"text\" class=\"form-control\" id=\"nomeCliente\"\r\n              [readonly]=\"visualizar\" placeholder=\"Selecionar...\" [attr.disabled]=\"true\" />\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Tipo de Cliente</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"nombreTipo\" type=\"text\" class=\"form-control\" [readonly]=\"true\"\r\n                [attr.disabled]=\"true\" />\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Dirección</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"codEndereco\" type=\"text\" class=\"form-control\" readonly />\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Carnet</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"codRazaoSocial\" type=\"text\" id=\"codRazaoSocial\"  class=\"form-control\" \r\n              [disabled]=\"swExisteCliente\" />\r\n              \r\n              <invalid-form-control [show]=\"onFieldInvalid('codRazaoSocial') == 'required'\"\r\n              message=\"Nit requerido.\"></invalid-form-control>\r\n\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Nombre factura </label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"razaoSocial\" type=\"text\" class=\"form-control\" />\r\n              <input formControlName=\"id_tipo_cliente\" type=\"hidden\" />\r\n              <input formControlName=\"id_departamento\" type=\"hidden\" />\r\n\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Correo electrónico</label>\r\n            <div class=\"my-1\" style=\"font-size: 11px\">\r\n              <input formControlName=\"correoElectronico\" type=\"text\" class=\"form-control\" />\r\n\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Celular </label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"celular\" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Teléfono </label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"telefonoCliente\" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div>\r\n\r\n\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Rubro</label>\r\n            <select class=\"form-control custom-select\" formControlName=\"id_rubro\" disabled>\r\n              <ng-container *ngFor=\"let rubro of rubros\">\r\n                <option [value]=\"rubro.codigo_rubro\" [selected]=\"rubro.codigo_rubro  === codigoRubro\">\r\n                  {{ rubro.descricao }}\r\n                </option>\r\n              </ng-container>\r\n            </select>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Tipo de pago</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"formasPagamento\" [searchFn]=\"customSearchFn\"\r\n              bindLabel=\"descricao\" bindValue=\"codFormaPagamento\" formControlName=\"codFormaPagamento\"\r\n              [loading]=\"formasPagamentoLoader\" loadingText=\"Carregando...\" [readonly]=\"true\" [virtualScroll]=\"true\"\r\n              placeholder=\"Seleccione...\">\r\n              <!-- [ngClass]=\"onFieldError('codFormaPagamento') + ' ' + onFieldRequired(form.controls.codFormaPagamento)\"-->\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codFormaPagamento')\"\r\n              message=\"Forma de pago obligatorio\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"codContato\">Persona de contacto</label>\r\n              <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\"\r\n                *ngIf=\"form.value.codCliente != null && !visualizar\">\r\n                <a id=\"top-links\" *ngIf=\"form.value.codCliente != null\" class=\"text-primary mr-2\"\r\n                  href=\"javascript:void(0)\" (click)=\"onDetalhesContato()\">\r\n                  Detalles\r\n                </a>\r\n                <!--<a id=\"top-links\" class=\"text-primary mr-2\" href=\"javascript:void(0)\"\r\n                  [routerLink]=\"[getLinkAddContato()]\" target=\"_blank\">\r\n                  Adicionar\r\n                </a>-->\r\n                <!-- <a id=\"top-links\" class=\"text-primary mr-2\" href=\"javascript:void(0)\" tooltip=\"Recarregar\"\r\n                  (click)=\"onReloadContatos()\">\r\n                  <i class=\"fas fa-redo-alt text-light\"></i>\r\n                </a> -->\r\n              </div>\r\n            </div>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"contatos\" formControlName=\"codContato\"\r\n              placeholder=\"Selecione...\" [virtualScroll]=\"true\" bindLabel=\"nomeContato\" bindValue=\"codContato\"\r\n              [loading]=\"contatosLoader\" loadingText=\"Carregando...\" [readonly]=\"visualizar\"\r\n              (change)=\"changeContacto($event.codContato)\">\r\n            </ng-select>\r\n            <!-- [ngClass]=\"onFieldError('codContato') + ' ' + onFieldRequired(form.controls.codContato)\"-->\r\n            <!-- <invalid-form-control [show]=\"onFieldInvalid('codContato')\" message=\"Contato responsável é obrigatório.\"></invalid-form-control>-->\r\n          </div>\r\n          <!-- cambiar formControlName y for=\"codEndereco\"-->\r\n          <div class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Número de celular</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"formCelular\" type=\"text\" class=\"form-control\" [readonly]=\"true\" [attr.disabled]=\"true\" />\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <!--novos campos fim-->\r\n        <div class=\"row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <!-- <label for=\"orderBy\">Ejecutivo de ventas</label>\r\n            <select class=\"form-control custom-select\" formControlName=\"ejecutivo_ventas\" id=\"orderBy\">\r\n              <ng-container *ngFor=\"let listaEjecutivo of listaEjecutivo\">\r\n                <option [value]=\"listaEjecutivo.id\" [selected]=\"idVendedor === listaEjecutivo.id\">{{\r\n                  listaEjecutivo.nome\r\n                  }}</option>\r\n              </ng-container>\r\n            </select> -->\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Ejecutivo de venta</label>\r\n            <ng-select class=\"\" [formControlName]=\"ejecutivo_ventas\" id=\"orderBy\" (change)=\"datosVendedor($event);\" \r\n            [ngClass]=\"onFieldError('ejecutivo_ventas') + ' ' + onFieldRequired(form.controls.ejecutivo_ventas)\">\r\n              <ng-container *ngFor=\"let listaEjecutivo of listaEjecutivo\">\r\n                <ng-option [value]=\"listaEjecutivo.id\">\r\n                  {{ listaEjecutivo.nome}}\r\n                </ng-option>\r\n              </ng-container>\r\n              <invalid-form-control [show]=\"onFieldInvalid('ejecutivo_ventas')\" message=\"Ejecutivo de ventas es obligatorio.\"></invalid-form-control>\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"orderBy\">Lista de precios</label>\r\n            <select class=\"form-control custom-select\" formControlName=\"lista\" (change)=\"updateLista()\" disabled>\r\n              <ng-container *ngFor=\"let listaPrecio of listaPrecios\">\r\n                <option [value]=\"listaPrecio.id\" [selected]=\"listaPrecio.id === idListaPrecio\">\r\n                  {{ listaPrecio.nombre_lista }}\r\n                </option>\r\n              </ng-container>\r\n            </select>\r\n\r\n            <!-- <label class=\"my-auto\" for=\"codFormaPagamento\">Lista de precios</label> -->\r\n            <!-- <ng-select class=\"\" [formControlName]=\"lista\" id=\"orderBy\"  [(ngModel)]=\"idListaPrecio\">\r\n              <ng-container *ng\r\n              For=\"let listaPrecio of listaPrecios\">\r\n                <ng-option [value]=\"listaPrecio.id\" >\r\n                  {{ listaPrecio.nombre_lista }}\r\n                </ng-option>\r\n                \r\n              </ng-container>\r\n            </ng-select> -->\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"orderBy\">Departamento</label>\r\n            <input formControlName=\"nombreDepartamento\" type=\"text\" class=\"form-control\" [value]=\"id_departamento\"\r\n              readonly />\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"orderBy\">Propietario</label>\r\n            <input formControlName=\" \" type=\"text\" class=\"form-control\" [value]=\"dadosLancamento.nomeVendedor\"\r\n              readonly />\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n\r\n    <!-- Materiales -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row\" [hidden]=\"visualizar\">\r\n        <div class=\"col\">\r\n          <comercial-ciclo-vendas-cotacoes-formulario-materiais-lista [codEndereco]=\"form.value.codEndereco\"\r\n            [codCliente]=\"form.value.codCliente\" [codEmpresa]=\"form.getRawValue().codEmpresa\"\r\n            [id_lista_precio]=\"idListaPrecio\" [codDeposito]=\"form.getRawValue().codDeposito\" [id_vendedor] = \"this.idvendedor\"\r\n            [codFormaPagamento]=\"form.value.codFormaPagamento\" [freteConta]=\"form.value.freteConta\"\r\n            (loaderNavbar)=\"onLoaderNavbar($event)\" (loaderFullScreen)=\"onLoaderFullScreen($event)\"\r\n            (scrollToFormOnTop)=\"onMateriaisScrollTop($event)\" (scrollToCarrinho)=\"onScrollToCarrinho($event)\" >\r\n          </comercial-ciclo-vendas-cotacoes-formulario-materiais-lista>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n\r\n    <!-- <div class=\"row\" [hidden]=\"visualizar\">\r\n      <div class=\"col\">\r\n        <hr class=\"my-5\">\r\n      </div>\r\n    </div> -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\" [hidden]=\"this.materiais.length == 0\">\r\n      <div class=\"row\" #scrollToCarrinho>\r\n        <div class=\"col\">\r\n          <comercial-ciclo-vendas-cotacoes-formulario-carrinho [appTitle]=\"appTitle\"\r\n            [codFormaPagamento]=\"form.value.codFormaPagamento\" [freteConta]=\"form.value.freteConta\"\r\n            [id_tipo_cliente]=form.value.id_tipo_cliente [id_departamento]=\"form.value.id_departamento\"\r\n            [idReservado]=\"idReservado\" [codCotacao]=\"codCotacao\" [codCliente]=\"form.value.codCliente\"\r\n            [codEndereco]=\"form.value.codEndereco\" [initialValue]=\"carrinho\" (loaderNavbar)=\"onLoaderNavbar($event)\"\r\n            (hasError)=\"onCarrinhoError($event)\" (scrollTop)=\"onCarrinhoScrollTop($event)\"\r\n            (carrinho)=\"onCarrinho($event)\" [id_vendedor] =\"this.idvendedor\" [id_lista] =\"this.idListaPrecio\">\r\n          </comercial-ciclo-vendas-cotacoes-formulario-carrinho>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <!-- datos de envio -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(5)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos de Envio</strong></div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco6\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco6\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"col\" [hidden]=showBloco5>\r\n\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-2\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"codEndereco\">Tipo de entrega</label>\r\n              <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\">\r\n                <!-- *ngIf=\"form.value.codCliente != null && !visualizar\"-->\r\n              </div>\r\n            </div>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"tipoEntrega\" (change)=\"datoEntrega($event)\"\r\n              formControlName=\"codEndereco\" [virtualScroll]=\"true\" bindLabel=\"nombre\" bindValue=\"id\"\r\n              placeholder=\"Selecione...\" [loading]=\"locaisEntregaLoader\" loadingText=\"Carregando...\" groupBy=\"tipo\"\r\n              [readonly]=\"visualizar\"  [ngClass]=\"onFieldError('codEndereco') + ' ' + onFieldRequired(form.controls.codEndereco)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codEndereco')\" message=\"Local de entrega es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <!-- <div *ngIf=\"swReferencia == true\" class=\"form-group col-lg-2\">\r\n            <label class=\"my-auto\" for=\"codEndereco\">Dirección de destino</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\" \" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-1 mb-1\" *ngIf=\"swEntrega == true\">\r\n            <label for=\"dataEntrega\">Referencia</label> <br>\r\n            <button class=\"btn btn-primary w-100\" type=\"button\" (click)=\"openModalUbicacion(seleccionarUbicacion)\"> <i\r\n                class=\"fas fa-map-marker-alt\"></i>Ubicación </button>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-4\" *ngIf=\"swEntrega == true\">\r\n            <label class=\"my-auto\" for=\"razaoSocial\">Dirección entrega</label>\r\n            <div class=\"my-1 text-uppercase\" style=\"font-size: 11px\">\r\n              <input formControlName=\"direccionEntrega\" type=\"text\" class=\"form-control\" />\r\n            </div>\r\n          </div>\r\n\r\n          <div class=\"form-group col-lg-2\" *ngIf=\"swEntrega == true\">\r\n            <label class=\"my-auto\" for=\"codFormaPagamento\">Centro logistico</label>\r\n            <ng-select class=\"\" [formControlName]=\"centroLogisticoControl\" id=\"orderBy\"\r\n              (change)=\"onCentroLogisticoChange($event)\">\r\n              <ng-container *ngFor=\"let centroLogistico of centrosLogisticos\">\r\n                <ng-option [value]=\"centroLogistico.id\">\r\n                  {{ centroLogistico.NOMBRE_DEPOSITO }}\r\n                </ng-option>\r\n              </ng-container>\r\n            </ng-select>\r\n            <!-- <invalid-form-control [show]=\"onFieldInvalid('codFormaPagamento')\"\r\n              message=\"Centro Logistico obligatorio.\"></invalid-form-control> -->\r\n          </div>\r\n          \r\n          <!--  <div class=\"form-group col-lg-2\" *ngIf=\"swEntrega == true\">\r\n            <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n              <label class=\"my-auto\" for=\"codFormaPagamento\">Centro Logistico</label>\r\n              <select class=\"form-control custom-select\" formControlName=\"centroLogistico\" id=\"orderBy\">\r\n                <ng-container *ngFor=\"let centroLogistico of centroLogistico\">\r\n                  <option [value]=\"centroLogistico.id_almacen\"  [selected]=\"idVendedor === centroLogistico.id_almacen\">{{ centroLogistico.nombre_almacen }}</option>\r\n                </ng-container>\r\n              </select>\r\n            </div>\r\n          </div> -->\r\n\r\n          <div class=\"form-group col-lg-2\">\r\n            <div class=\"form-row\">\r\n              <div class=\"form-group col\">\r\n                <div class=\"mb-1 d-flex justify-content-between w-100\" style=\"height: 19px\">\r\n                  <!--                   <label class=\"my-auto\" for=\"codFormaPagamento\">Forma de Pago</label>\r\n -->\r\n                  <div class=\"my-auto text-uppercase\" style=\"font-size: 11px\">\r\n                  </div>\r\n                </div>\r\n                <!-- <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"formasPagamento\" [searchFn]=\"customSearchFn\"\r\n                  bindLabel=\"descricao\" bindValue=\"codFormaPagamento\" formControlName=\"codFormaPagamento\"\r\n                  [loading]=\"formasPagamentoLoader\" loadingText=\"Carregando...\" [readonly]=\"visualizar\"\r\n                  [virtualScroll]=\"true\" placeholder=\"Selecione...\">\r\n                </ng-select> -->\r\n                <!-- <invalid-form-control [show]=\"onFieldInvalid('codFormaPagamento')\"\r\n                  message=\"El tipo de pago es obligatorio.\"></invalid-form-control> -->\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"codDeposito\">Almacén</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"filteredDepositos\" formControlName=\"codDeposito\"\r\n              [virtualScroll]=\"true\" labelForId=\"codDeposito\" placeholder=\"Selecione...\" bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\" [readonly]=\"visualizar\"> -->\r\n          <!--  [ngClass]=\"onFieldError('codDeposito') + ' ' + onFieldRequired(form.controls.codDeposito)\"-->\r\n          <!-- </ng-select>\r\n          </div> -->\r\n        </div>\r\n        <!--novos campos fim-->\r\n        <div class=\"form-row\">\r\n        </div>\r\n        <div class=\"row\">\r\n        </div>\r\n\r\n      </div>\r\n    </div>\r\n\r\n    <!-- Anexos y observaciones  -->\r\n    <!-- <div #scrollToFormOnBottom *ngIf=\"dependenciesLoaded\"> -->\r\n    <!--   <div class=\"row justify-content-between p x-3\">-->\r\n\r\n    <!-- Datos adicionales -->\r\n    <div class=\"col shadow-sm mt-4\" id=\"blocos\">\r\n      <div class=\"row d-flex p-3\" style=\"cursor: pointer;\" (click)=\"onShowBloco(6)\">\r\n        <span class=\"fas fa-list-alt d-flex justify-content-center align-items-center\" id=\"icon-gray\"></span>\r\n        <div class=\"d-flex justify-content-center align-items-center ml-2\"><strong>Datos Adicionales</strong>\r\n        </div>\r\n        <div class=\"col\"></div>\r\n        <div class=\"d-flex justify-content-end align-items-center\">\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"showBloco6\">\r\n            <i class=\"fas fa-caret-down\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n          <div class=\"d-flex float-end align-items-center mr-4\" *ngIf=\"!showBloco6\">\r\n            <i class=\"fas fa-caret-up\"\r\n              style=\"background-color: transparent; color: #7F849C; border-color: transparent;\"></i>\r\n          </div>\r\n\r\n        </div>\r\n      </div>\r\n      <div class=\"col\" [hidden]=showBloco6>\r\n\r\n        <!-- <div class=\"row\">\r\n              <div class=\"col\"><hr></div>\r\n            </div> -->\r\n        <!--<div class=\"form-row\">\r\n              <div class=\"form-group col\">\r\n                <label for=\"dadosAdicionais\">Dados Adicionais da Nota Fiscal</label>\r\n                <textarea class=\"form-control\" id=\"dadosAdicionais\" formControlName=\"dadosAdicionais\"\r\n                  [readonly]=\"visualizar\">\r\n                </textarea>\r\n              </div>\r\n            </div>-->\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"observacoes\">Observaciones</label>\r\n            <textarea class=\"form-control\" id=\"observacoes\" formControlName=\"observacoes\" [readonly]=\"visualizar\">\r\n                </textarea>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <!--  </div> -->\r\n    <!-- </div> -->\r\n  </form>\r\n  <ng-template #selecionarCliente>\r\n    <comercial-ciclo-vendas-cotacoes-formulario-modal-selecionar (fecharModal)=\"onFecharModal($event)\"\r\n      (cliente)=\"onCliente($event)\" (clientesParams)=\"getClientesParams($event)\">\r\n    </comercial-ciclo-vendas-cotacoes-formulario-modal-selecionar>\r\n  </ng-template>\r\n  <ng-template #seleccionarUbicacion>\r\n    <comercial-ciclo-vendas-cotacoes-formulario-modal-material-ubicacion\r\n      (latLngChanged)=\"changeLatitudLongitud($event)\" (fecharModal)=\"onFecharModal($event)\">\r\n    </comercial-ciclo-vendas-cotacoes-formulario-modal-material-ubicacion>\r\n  </ng-template>\r\n \r\n\r\n  <ng-template #seleccionarAutorizacion>\r\n    <comercial-ciclo-vendas-cotacoes-formulario-modal-material-autorizar>\r\n    </comercial-ciclo-vendas-cotacoes-formulario-modal-material-autorizar>\r\n  </ng-template>\r\n\r\n</app-body>");
 
 /***/ }),
 
@@ -9412,7 +9890,7 @@ let ComercialCicloVendasCotacoesListaTemplatesButtonImprimirComponent = class Co
     getDataDocument() {
         const milliseconds = new Date().getTime();
         this.cotacoesService
-            .getImprimirCotacao(this.cotacao.nrPedido, this.cotacao.codEmpresa)
+            .getImprimirCotacao(this.cotacao.nrPedido)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(() => {
             setTimeout(() => {
                 if (this.imprimirPdf) {
@@ -10353,7 +10831,72 @@ ComercialCicloVendasCotacoesFormularioModalDetalhesEnderecoComponent = Object(ts
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar [hidden]=\"!loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Cotizaciones\">\r\n  <button type=\"button\" (click)=\"onReset()\">\r\n    Limpar\r\n  </button>\r\n  <button type=\"button\" (click)=\"nuevo()\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\" [disabled]=\"loaderNavbar \">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"tipoData\">Buscar por</label>\r\n            <select class=\"form-control custom-select\" id=\"tipoData\" formControlName=\"tipoData\">\r\n              <option value=\"1\">Fecha de publicacion</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataInicial\">Fecha inicial</label>\r\n            <input class=\"form-control\" id=\"dataInicial\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataInicial\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataFinal\">Fecha final</label>\r\n            <input class=\"form-control\" id=\"dataFinal\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataFinal\">\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codStatus\">Situacion</label>\r\n            <ng-select [items]=\"situacoes\" [searchable]=\"true\" [clearable]=\"false\" labelForId=\"id\" bindLabel=\"nombre\"\r\n              formControlName=\"codSituacao\" [(ngModel)]=\"defaultSelection\">\r\n            </ng-select>\r\n\r\n\r\n\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"nrPedido\">Núm. pedido</label>\r\n            <input type=\"text\" id=\"nrPedido\" placeholder=\"Digite...\" class=\"form-control\" formControlName=\"nrPedido\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"codEmpresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codEmpresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codEmpresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('codEmpresa') + ' ' + onFieldRequired(form.controls.codEmpresa)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codEmpresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"codDeposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codDeposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codDeposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event.idDeposito)\"\r\n              [ngClass]=\"onFieldError('codDeposito') + ' ' + onFieldRequired(form.controls.codDeposito)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codDeposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"cliente\">Cliente</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"cliente\"\r\n              placeholder=\"Digite...\"\r\n              formControlName=\"cliente\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codVendedor\">Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"vendedores\"\r\n              formControlName=\"codVendedor\" [virtualScroll]=\"true\" labelForId=\"codVendedor\" bindLabel=\"nome\"\r\n              bindValue=\"id\">\r\n            </ng-select>\r\n          </div>\r\n          <div *ngIf=\"filtroCotacoes\" class=\"form-group col-lg-1\">\r\n            <label for=\"statusCliente\">Status Cliente</label>\r\n            <select class=\"form-control custom-select\" id=\"statusCliente\" formControlName=\"statusCliente\">\r\n              <option>TODOS</option>\r\n              <option value=\"Ativo\">ACTIVO</option>\r\n              <option value=\"Inativo\">INACTIVO</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group \" [ngClass]=\"{'col-lg-2': !filtroCotacoes , 'col-lg-1': filtroCotacoes}\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles [data]=\"leyendas\" [allowActivation]=\"false\" [show]=\"dados.length > 0 && !dadosEmpty\">\r\n  </subtitles>\r\n  <div class=\"row\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n    <div [ngClass]=\"{'col-12': !showDetailPanel, 'col-6 pr-0': showDetailPanel}\">\r\n      <div class=\"table-responsive\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <!--  <th scope=\"col\"></th> -->\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Núm.\" [active]=\"orderBy == 'codigo_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('codigo_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha inicial\" [active]=\"orderBy == 'fecha_inicial'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_inicial')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha final\" [active]=\"orderBy == 'fecha_final'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_final')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Cliente\" [active]=\"orderBy == 'cliente'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('cliente')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Vendedor\" [active]=\"orderBy == 'vendedor'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('vendedor')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <!--  <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total bruto\" [active]=\"orderBy == 'monto_total_bruto'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total_bruto')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('descuento')\">\r\n                </thead-sorter>\r\n              </th> -->\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total\" [active]=\"orderBy == 'monto_total'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Peso total kg.\" [active]=\"orderBy == 'peso'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('peso_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <!--  <th scope=\"col\">\r\n                <thead-sorter value=\"Lista\" [active]=\"orderBy == 'lista_precio'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('lista_precio')\">\r\n                </thead-sorter>\r\n              </th> -->\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Modo de entrega\" [active]=\"orderBy == 'modo_entrega'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('modo_entrega')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Estado\" [active]=\"orderBy == 'estado_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('estado_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th class=\"text-truncate text-center\">\r\n                Reporte\r\n              </th>\r\n\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <tr *ngFor=\"let pedido of getPaginateData(); let i = index\" [class.table-active]=\"i == activeRow\">\r\n\r\n\r\n              <!-- <td class=\"text-center\" [ngStyle]=\"styleStatusBorder(pedido)\">\r\n                <span class=\"d-inline-flex\"> -->\r\n              <!-- <ng-template #tooltipLiberacao>\r\n                    <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                    <div *ngIf=\"pedido.travas.length > 0\">\r\n                      <dl>\r\n                        <ng-container *ngFor=\"let trava of pedido.travas\">\r\n                          <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> {{ trava['desTrava'] }}</dd>\r\n                        </ng-container>\r\n                      </dl>\r\n                    </div>\r\n                  </ng-template>  -->\r\n\r\n              <!--  <ng-template #tooltipLiberacaoAberto>\r\n                    <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                    <div>\r\n                      <dl>\r\n                        <ng-container>\r\n                          <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> PEDIDO EN ABIERTO</dd>\r\n                        </ng-container>\r\n                      </dl>\r\n                    </div>\r\n                  </ng-template>  -->\r\n\r\n              <!--  <i class=\"mr-2 text-warning fas fa-random\" *ngIf=\"pedido.estado_oferta === 1\"\r\n                    tooltip=\"Pedido transferido\" placement=\"right\"></i>\r\n  \r\n  \r\n                  <i class=\"mr-2 text-black-50 fas fa-random\" *ngIf=\"pedido.estado_oferta === 0\"\r\n                    tooltip=\"Pedido não transferido\" placement=\"right\"></i>\r\n  \r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\" *ngIf=\"pedido.pedidoEmLiberacao === 1\"\r\n                    [tooltip]=\"tooltipLiberacao\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-warning fas fa-unlock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao !== 1\" tooltip=\"Pedido liberado\"\r\n                    placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao == 1\" [tooltip]=\"tooltipLiberacaoAberto\"\r\n                    placement=\"right\"></i>\r\n  \r\n                  <i class=\"mr-2 text-warning fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 1\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 0\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n  \r\n                  <i class=\"mr-2 text-warning fas fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 1\"\r\n                    tooltip=\"Pedido faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 far fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 0\"\r\n                    tooltip=\"Pedido não faturado\" placement=\"right\"></i>\r\n                </span>\r\n              </td> -->\r\n\r\n\r\n              <td class=\"text-center hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\"\r\n                [ngClass]=\"estoqueSuspensoClassStatusBorder(pedido.estado_oferta)\">\r\n                {{ pedido.codigo_oferta }}\r\n              </td>\r\n              <td class=\"text-center hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.fecha_inicial\r\n                | date:\r\n                'dd/MM/yyyy'\r\n                }}</td>\r\n              <td class=\"text-center hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.fecha_final |\r\n                date: 'dd/MM/yyyy'\r\n                }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.cliente | uppercase }}\r\n              </td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.vendedor | uppercase }}\r\n              </td>\r\n              <!-- <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.monto_total_bruto }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.descuento }}</td> -->\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.monto_total }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.peso_total }}</td>\r\n              <!--               <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.lista_precio }}</td>\r\n -->\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.modo_entrega }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.estado_oferta }}</td>\r\n              <td class=\"hover\"> <a href=\"\" class=\"text-danger\"> <i class=\"fas fa-file-pdf text-danger\"></i> Nota </a>\r\n              </td>\r\n              <!-- \r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeEmpresa | uppercase }}</td>\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeVendedor | uppercase }}</td> -->\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n        <div class=\"d-flex justify-content-center mt-3\">\r\n          <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n          </pagination>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n  </div>\r\n  <div *ngIf=\"dadosEmpty && !dadosLoaded\" class=\"text-center d-flex justify-content-center align-items-center\"\r\n    style=\"height: 80%\">\r\n    <empty-result message=\"Ninguna información encontrada\"></empty-result>\r\n  </div>\r\n  <ng-template #modalDetalhes>\r\n    <div class=\"modal-header\">\r\n      <h6 class=\"modal-title pull-left\">Resumen de la oferta </h6>\r\n      <div class=\"d-flex justify-content-center align-items-center\">\r\n        <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"hideModal()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"row\">\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de la oferta</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-2\">\r\n                    <label for=\"customerName\"> <strong> N°:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{oferta.codigo_oferta}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. Cotizacion: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{oferta.fecha_inicial}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. validez: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{oferta.fecha_final}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Vendedor: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{oferta.nombre_vendedor}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos del cliente</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"customerName\"> <strong> Cod. Cliente:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{oferta.codigo_cliente}}\">\r\n                  </div>\r\n                  <div class=\"col-md-5\">\r\n                    <label for=\"sellerName\"> <strong>Cliente: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{oferta.nombre_cliente}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Lista de precios </strong>:</label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{oferta.nombre_lista}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Detalle de la cotización</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <div class=\"table-responsive\">\r\n                      <custom-table [config]=\"tableConfig\" *ngIf=\"items.length > 0\">\r\n                        <ng-template #thead let-thead>\r\n                          <tr>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('codigo_material')\">\r\n                              <!-- <thead-sorter value=\"Articulo\" [active]=\"orderBy == 'Articulo'\"> Código\r\n                              </thead-sorter> --> Código\r\n                            </th>\r\n                            <th class=\"text-truncate text-left\" (click)=\"setOrderByModal('nombre_material')\">\r\n                              <!-- <thead-sorter value=\"Descripcion\" [active]=\"orderBy == 'nombre_material'\"></thead-sorter> -->\r\n                              Nombre material\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('cantidad')\">\r\n                              <!-- <thead-sorter value=\"cantidad\" [active]=\"orderBy == 'cantidad'\"></thead-sorter> -->\r\n                              Cantidad\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('unidad')\">\r\n                              <!-- <thead-sorter value=\"unidad \" [active]=\"orderBy == 'unidad'\"></thead-sorter> -->\r\n                              Unidad\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio')\">\r\n                              <!-- <thead-sorter value=\"precio\" [active]=\"orderBy == 'precio'\"></thead-sorter> -->\r\n                              Precio\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('total_bruto')\">\r\n                              <!-- <thead-sorter value=\"total_bruto\" [active]=\"orderBy == 'total_bruto'\"></thead-sorter> -->\r\n                              Total Bruto\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <!-- <thead-sorter value=\"% Descuento\" [active]=\"orderBy == 'descuento'\"></thead-sorter> -->\r\n                              Descuento\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio_descuento')\">\r\n                              <!-- <thead-sorter value=\"Precio descuento\"\r\n                                [active]=\"orderBy == 'precio_descuento'\"></thead-sorter> --> Precio Descuento\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <!--  <thead-sorter value=\"Almacen\" [active]=\"orderBy == 'nombre_almacen'\"></thead-sorter> -->\r\n                              Almacém\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_moneda')\">\r\n                              <!-- <thead-sorter value=\"Total con descuento\"\r\n                                [active]=\"orderBy == 'nombre_moneda'\"></thead-sorter> --> Total\r\n                            </th>\r\n\r\n                          </tr>\r\n                        </ng-template>\r\n                        <ng-template #tbody let-tbody>\r\n                          <ng-container>\r\n                            <tr *ngFor=\"let item of getPaginateDataModal()\">\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.codigo_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-left\">\r\n                                {{item.nombre_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.cantidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.unidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.precio}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.total_bruto | number:'1.4-4'}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                0.00</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.precio_descuento}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.nombre_almacen}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{item.total_bruto | number:'1.4-4'}} </td>\r\n                            </tr>\r\n                            <tr class=\"bg-dark text-center text-dark\">\r\n                              <td colspan=\"8\" class=\"border-dark\"></td>\r\n                              <td><strong>Total</strong></td>\r\n                              <td class=\"text-center\"><strong>{{ totalMateriales.cantidad | number:'1.4-4' }}\r\n                                </strong>\r\n                              </td>\r\n                            </tr>\r\n                          </ng-container>\r\n                        </ng-template>\r\n                      </custom-table>\r\n                      <empty-result message=\"Ningún registro encontrado.\" *ngIf=\"dadosEmptyModal\"></empty-result>\r\n                      <div class=\"d-flex justify-content-center mt-3\">\r\n                        <pagination [maxSize]=\"maxSizeModal\" [(totalItems)]=\"totalModal\"\r\n                          (pageChanged)=\"onPageChangedModal($event)\" [(itemsPerPage)]=\"itemsPerPageModal\"\r\n                          [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\" nextText=\"&rsaquo;\"\r\n                          firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n                        </pagination>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de envío</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Tipo entrega:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{oferta.nombre_modo_entrega}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"><strong>Referencia:</strong></label>\r\n                    <ng-container *ngIf=\"oferta.latitud && oferta.longitud; else emptyLocation\">\r\n                      <!-- <a [href]=\"'http://google.com/maps/bylatlng?lat=' + oferta.latitud + '&lng=' + oferta.longitud\" target=\"_blank\" style=\"cursor: pointer;\">\r\n                            <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"Google\">\r\n                        </a> -->\r\n                      <a [href]=\"'http://maps.google.com/maps?q=' + oferta.latitud + ',' + oferta.longitud\"\r\n                        target=\"_blank\" style=\"cursor: pointer; text-decoration: none;\">\r\n                        <span class=\"form-control text-primary\" style=\"display: inline-block;\">Google Maps</span>\r\n                      </a>\r\n\r\n\r\n                    </ng-container>\r\n                    <ng-template #emptyLocation>\r\n                      <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"\">\r\n                    </ng-template>\r\n                  </div>\r\n\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Centro logístico:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{oferta.ubicacion_almacen}}\">\r\n                  </div>\r\n\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos adicionales</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <label for=\"customerName\"> <strong> Observaciones:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{oferta.observacion}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n      <button type=\"button\" class=\"btn btn-primary\">\r\n        Ver información completa\r\n      </button>\r\n    </div>\r\n  </ng-template>\r\n</app-body>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar [hidden]=\"!loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Cotizaciones\">\r\n  <button type=\"button\" (click)=\"onReset()\">\r\n    Limpar\r\n  </button>\r\n  <button type=\"button\" (click)=\"nuevo()\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\" [disabled]=\"loaderNavbar \">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"tipoData\">Buscar por</label>\r\n            <select class=\"form-control custom-select\" id=\"tipoData\" formControlName=\"tipoData\">\r\n              <option value=\"1\">Fecha de publicacion</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataInicial\">Fecha inicial</label>\r\n            <input class=\"form-control\" id=\"dataInicial\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataInicial\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataFinal\">Fecha final</label>\r\n            <input class=\"form-control\" id=\"dataFinal\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataFinal\">\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codStatus\">Situacion</label>\r\n            <ng-select [items]=\"situacoes\" [searchable]=\"true\" [clearable]=\"false\" labelForId=\"id\" bindLabel=\"nombre\"\r\n              formControlName=\"codSituacao\" [(ngModel)]=\"defaultSelection\">\r\n            </ng-select>\r\n\r\n\r\n\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"nrPedido\">Núm. pedido</label>\r\n            <input type=\"text\" id=\"nrPedido\" placeholder=\"Digite...\" class=\"form-control\" formControlName=\"nrPedido\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"codEmpresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codEmpresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codEmpresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('codEmpresa') + ' ' + onFieldRequired(form.controls.codEmpresa)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codEmpresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"codDeposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codDeposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codDeposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event.idDeposito)\"\r\n              [ngClass]=\"onFieldError('codDeposito') + ' ' + onFieldRequired(form.controls.codDeposito)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codDeposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"cliente\">Cliente</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"cliente\"\r\n              placeholder=\"Digite...\"\r\n              formControlName=\"cliente\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codVendedor\">Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"vendedores\"\r\n              formControlName=\"codVendedor\" [virtualScroll]=\"true\" labelForId=\"codVendedor\" bindLabel=\"nome\"\r\n              bindValue=\"id\">\r\n            </ng-select>\r\n          </div>\r\n          <div *ngIf=\"filtroCotacoes\" class=\"form-group col-lg-1\">\r\n            <label for=\"statusCliente\">Status Cliente</label>\r\n            <select class=\"form-control custom-select\" id=\"statusCliente\" formControlName=\"statusCliente\">\r\n              <option>TODOS</option>\r\n              <option value=\"Ativo\">ACTIVO</option>\r\n              <option value=\"Inativo\">INACTIVO</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group \" [ngClass]=\"{'col-lg-2': !filtroCotacoes , 'col-lg-1': filtroCotacoes}\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles [data]=\"leyendas\" [allowActivation]=\"false\" [show]=\"dados.length > 0 && !dadosEmpty\">\r\n\r\n  </subtitles>\r\n  <div class=\"row\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n    <div [ngClass]=\"{'col-12': !showDetailPanel, 'col-6 pr-0': showDetailPanel}\">\r\n      <div class=\"table-responsive\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <!--  <th scope=\"col\"></th> -->\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Núm.\" [active]=\"orderBy == 'codigo_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('codigo_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha inicial\" [active]=\"orderBy == 'fecha_inicial'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_inicial')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha final\" [active]=\"orderBy == 'fecha_final'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_final')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Cliente\" [active]=\"orderBy == 'cliente'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('cliente')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Vendedor\" [active]=\"orderBy == 'vendedor'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('vendedor')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <!--  <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total bruto\" [active]=\"orderBy == 'monto_total_bruto'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total_bruto')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('descuento')\">\r\n                </thead-sorter>\r\n              </th> -->\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total\" [active]=\"orderBy == 'monto_total'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Peso total kg.\" [active]=\"orderBy == 'peso'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('peso_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Lista\" [active]=\"orderBy == 'lista_precio'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('lista_precio')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Modo de entrega\" [active]=\"orderBy == 'modo_entrega'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('modo_entrega')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Estado\" [active]=\"orderBy == 'estado_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('estado_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Acciones\" [active]=\"orderBy == 'Acciones'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('Acciones')\">\r\n                </thead-sorter>\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <tr *ngFor=\"let pedido of dados; let i = index\"[class.table-active]=\"i == activeRow\">\r\n              <td class=\"text-center\" [ngStyle]=\"styleStatusBorder(pedido)\">\r\n                <span class=\"d-inline-flex\">\r\n                <ng-template #tooltipLiberacao>\r\n                  <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                  <div *ngIf=\"pedido.travas.length > 0\">\r\n                    <dl>\r\n                      <ng-container *ngFor=\"let trava of pedido.travas\">\r\n                        <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> {{ trava['desTrava'] }}</dd>\r\n                      </ng-container>\r\n                    </dl>\r\n                  </div>\r\n                </ng-template>\r\n                <ng-template #tooltipLiberacaoAberto>\r\n                    <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                    <div>\r\n                      <dl>\r\n                        <ng-container>\r\n                          <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> PEDIDO EN ABIERTO</dd>\r\n                        </ng-container>\r\n                      </dl>\r\n                    </div>\r\n                  </ng-template>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-random\" *ngIf=\"pedido.estado_oferta === 1\"\r\n                    tooltip=\"Pedido transferido\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-random\" *ngIf=\"pedido.estado_oferta === 0\"\r\n                    tooltip=\"Pedido não transferido\" placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\" *ngIf=\"pedido.pedidoEmLiberacao === 1\"\r\n                    [tooltip]=\"tooltipLiberacao\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-warning fas fa-unlock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao !== 1\" tooltip=\"Pedido liberado\"\r\n                    placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao == 1\" [tooltip]=\"tooltipLiberacaoAberto\"\r\n                    placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 1\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 0\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 1\"\r\n                    tooltip=\"Pedido faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 far fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 0\"\r\n                    tooltip=\"Pedido não faturado\" placement=\"right\"></i>\r\n                </span>\r\n              </td>\r\n\r\n              <!--<td class=\"text-center hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\"\r\n                [ngClass]=\"estoqueSuspensoClassStatusBorder(pedido.estado_oferta)\">\r\n                {{ pedido.codigo_oferta }}\r\n              </td>-->\r\n              <td class=\"text-center hover\">{{ pedido.fecha_inicial | date: 'dd/MM/yyyy' }}</td>\r\n              <td class=\"text-center hover\">{{ pedido.fecha_final | date: 'dd/MM/yyyy' }}</td>\r\n              <td class=\"hover\">{{ pedido.cliente | uppercase }}\r\n              </td>\r\n              <td class=\"hover\">{{ pedido.vendedor | uppercase }}\r\n              </td>\r\n              <!-- <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.monto_total_bruto }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.descuento }}</td> -->\r\n              <td class=\"hover\">{{ pedido.monto_total }}</td>\r\n              <td class=\"hover\">{{ pedido.peso_total }}</td>\r\n              <td class=\"hover\">{{ pedido.lista_precio }}</td>\r\n              <td class=\"hover\">{{ pedido.modo_entrega }}</td>\r\n              <td class=\"hover\">{{ pedido.estado_oferta }}</td>\r\n              <td class=\"\">\r\n                <a class=\"dropdown-item\" routerLink=\"/pdf\" (click)=\"onImprimir(pedido.id_oferta)\"><i class=\"fas fa-print\"></i><span class=\"text-uppercase\">\r\n                  PDF</span></a>\r\n                <a class=\"dropdown-item\" routerLink=\"/vista\" (click)=\"onVista(pedido.id_oferta)\"><i class=\"fas fa-print\"></i><span class=\"text-uppercase\">\r\n                    Vista</span></a>\r\n              </td>\r\n              <!--\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeEmpresa | uppercase }}</td>\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeVendedor | uppercase }}</td> -->\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n        <div class=\"d-flex justify-content-center mt-3\" >\r\n          <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n          </pagination>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n  </div>\r\n\r\n  <div *ngIf=\"dadosEmpty && !dadosLoaded\" class=\"text-center d-flex justify-content-center align-items-center\"\r\n    style=\"height: 80%\">\r\n    <empty-result message=\"Ninguna información encontrada\"></empty-result>\r\n  </div>\r\n  <ng-template #modalDetalhes>\r\n    <div class=\"modal-header\">\r\n      <h6 class=\"modal-title pull-left\">Detalle de la oferta </h6>\r\n      <div class=\"d-flex justify-content-center align-items-center\">\r\n        <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"hideModal()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"row\">\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de la oferta</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-2\">\r\n                    <label for=\"customerName\"> <strong> N°:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{ofer.codigo_oferta}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. Cotizacion: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.fecha_inicial}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. validez: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.fecha_final}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Vendedor: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.nombre_vendedor}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos del cliente</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"customerName\"> <strong> Cod. Cliente:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{ofer.codigo_cliente}}\">\r\n                  </div>\r\n                  <div class=\"col-md-5\">\r\n                    <label for=\"sellerName\"> <strong>Cliente: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" value=\"{{ofer.nombre_cliente}}\" class=\"form-control\" readonly>\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Lista de precios </strong>:</label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.nombre_lista}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Detalle de la cotización</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <div class=\"table-responsive\">\r\n                      <custom-table [config]=\"tableConfig\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n                        <ng-template #thead let-thead>\r\n                          <tr>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('codigo_material')\">\r\n                              <thead-sorter value=\"Articulo\" [active]=\"orderBy == 'Articulo'\" [sort]=\"orderType\"> Código\r\n                              </thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-left\" (click)=\"setOrderByModal('nombre_material')\">\r\n                              <thead-sorter value=\"Descripcion\" [active]=\"orderBy == 'nombre_material'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('cantidad')\">\r\n                              <thead-sorter value=\"cantidad\" [active]=\"orderBy == 'cantidad'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('unidad')\">\r\n                              <thead-sorter value=\"unidad \" [active]=\"orderBy == 'unidad'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio')\">\r\n                              <thead-sorter value=\"precio\" [active]=\"orderBy == 'precio'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('total_bruto')\">\r\n                              <thead-sorter value=\"total_bruto\" [active]=\"orderBy == 'total_bruto'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <thead-sorter value=\"% Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio_descuento')\">\r\n                              <thead-sorter value=\"Precio descuento\" [active]=\"orderBy == 'precio_descuento'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <thead-sorter value=\"Almacen\" [active]=\"orderBy == 'nombre_almacen'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_moneda')\">\r\n                              <thead-sorter value=\"Total con descuento\" [active]=\"orderBy == 'nombre_moneda'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                          </tr>\r\n                        </ng-template>\r\n                        <ng-template #tbody let-tbody>\r\n                          <ng-container>\r\n                            <tr *ngFor=\"let item of items\">\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.codigo_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-left\">\r\n                                {{items.nombre_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.cantidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.unidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.precio}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.total_bruto}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                0.00</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.precio_descuento}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.nombre_almacen}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.total_bruto}} {{item.nombre_moneda}}</td>\r\n                            </tr>\r\n                            <tr class=\"bg-dark text-center text-dark\">\r\n                              <td colspan=\"8\" class=\"border-dark\"></td>\r\n                              <td><strong>Total</strong></td>\r\n                              <td class=\"text-center\"><strong>{{ totalMateriales[0].cantidad | number:'1.4-4' }} DOLARES </strong></td>\r\n                            </tr>\r\n                          </ng-container>\r\n                        </ng-template>\r\n                      </custom-table>\r\n                      <empty-result message=\"Ningún registro encontrado.\" *ngIf=\"dadosEmptyModal\"></empty-result>\r\n                      <div class=\"d-flex justify-content-center mt-3\">\r\n                        <pagination [maxSize]=\"maxSizeModal\" [(totalItems)]=\"totalModal\"\r\n                          (pageChanged)=\"onPageChangedModal($event)\" [(itemsPerPage)]=\"itemsPerPageModal\"\r\n                          [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\" nextText=\"&rsaquo;\"\r\n                          firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n                        </pagination>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de envío</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Tipo entrega:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" name=\"tipoEntrega\" required\r\n                      value=\"{{oferta.nombre_modo_entrega}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"><strong>Referencia:</strong></label>\r\n                    <ng-container *ngIf=\"oferta.latitud && oferta.longitud; else emptyLocation\">\r\n                      <!-- <a [href]=\"'http://google.com/maps/bylatlng?lat=' + oferta.latitud + '&lng=' + oferta.longitud\" target=\"_blank\" style=\"cursor: pointer;\">\r\n                            <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"Google\">\r\n                        </a> -->\r\n                      <a [href]=\"'http://maps.google.com/maps?q=' + oferta.latitud + ',' + oferta.longitud\"\r\n                        target=\"_blank\" style=\"cursor: pointer; text-decoration: none;\">\r\n                        <span class=\"form-control text-primary\" style=\"display: inline-block;\">Google Maps</span>\r\n                      </a>\r\n                    </ng-container>\r\n                    <ng-template #emptyLocation>\r\n                      <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"\">\r\n                    </ng-template>\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Centro logístico:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{oferta.ubicacion_almacen}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos adicionales</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <label for=\"customerName\"> <strong> Observaciones:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{oferta.observacion}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n      <button type=\"button\" class=\"btn btn-primary\">\r\n        Ver información completa\r\n      </button>\r\n    </div>\r\n  </ng-template>\r\n</app-body>\r\n");
+
+/***/ }),
+
+/***/ "feYP":
+/*!******************************************************************************************************************!*\
+  !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/formulario/modal/material/ubicacion/ubicacion.service.ts ***!
+  \******************************************************************************************************************/
+/*! exports provided: ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService", function() { return ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
+/* harmony import */ var _ubicacion_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ubicacion.component */ "Lkym");
+/* harmony import */ var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/shared/services/core/pnotify.service */ "g+W+");
+/* harmony import */ var _cotacoes_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../cotacoes.service */ "uuri");
+
+
+// ngx-bootstrap
+
+// Components
+
+// Services
+
+
+let ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService = class ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService {
+    constructor(modalService, pnotifyService, cotacoesService) {
+        this.modalService = modalService;
+        this.pnotifyService = pnotifyService;
+        this.cotacoesService = cotacoesService;
+        this.loaderNavbar = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.pnotifyService.getPNotify();
+    }
+    showModal() {
+        this.loaderNavbar.emit(true);
+        const modalConfig = {
+            animated: false,
+            class: 'modal-lg',
+            ignoreBackdropClick: true,
+            keyboard: false,
+        };
+        const initialState = {};
+        this.modalService.show(_ubicacion_component__WEBPACK_IMPORTED_MODULE_3__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent"], Object.assign({}, modalConfig, {
+            initialState,
+        }));
+    }
+};
+ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService.ctorParameters = () => [
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__["BsModalService"] },
+    { type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_4__["PNotifyService"] },
+    { type: _cotacoes_service__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesService"] }
+];
+ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root',
+    }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__["BsModalService"],
+        src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_4__["PNotifyService"],
+        _cotacoes_service__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesService"]])
+], ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionService);
+
+
 
 /***/ }),
 
@@ -12150,6 +12693,7 @@ let ComercialCicloVendasCotacoesFormularioModalMaterialCalculoComponent = class 
         this.swPresentacion = false;
         this.id_presentacion = 0;
         this.showImpostos = false;
+        this.valorInput = 0;
         this.pnotifyService.getPNotify();
     }
     ngOnInit() {
@@ -12334,89 +12878,6 @@ let ComercialCicloVendasCotacoesFormularioModalMaterialCalculoComponent = class 
     }
     onCalcular() {
         this.swDesactivarForm == false;
-        /* this.form.controls['formPresentacion'].enable(); */
-        /* this.form.controls['formPresentacion'].setValue(3); */
-        /* if (this.checkFormValidators() === false && this.form.valid) {
-          if (this.material.valorMaterialContrato > 0) {
-            this.postCalculoMaterial(this.tipoCalculo1, this.form.value.preco1);
-          } else if (this.form.value.preco2 > 0) {
-            if (
-              Math.floor(this.material.valorUnit * 100) / 100 >
-              this.form.value.preco2
-              ) {
-                this.confirmModalService
-                .showConfirm(
-                  null,
-                  'Preço abaixo do mínimo',
-                  'O preço informado está abaixo do valor mínimo. Deseja continuar mesmo assim?',
-                  'Cancelar',
-                  'Confirmar'
-                  )
-                .subscribe((response: boolean) =>
-                response
-                ? this.postCalculoMaterial(
-                  this.tipoCalculo2,
-                  this.form.value.preco2
-                  )
-                  : EMPTY
-                  );
-                } else {
-                  this.postCalculoMaterial(this.tipoCalculo2, this.form.value.preco2);
-                }
-              } else if (this.form.value.preco1 > 0 && this.tipoLancamento == 6) {
-                if (
-                  Math.floor(this.material.valorUnit * 100) / 100 >
-                  this.form.value.preco1
-                  ) {
-                    this.confirmModalService
-                .showConfirm(
-                  null,
-                  'Preço abaixo do mínimo',
-                  'O preço informado está abaixo do valor mínimo. Deseja continuar mesmo assim?',
-                  'Cancelar',
-                  'Confirmar'
-                )
-                .subscribe((response: boolean) =>
-                  response
-                    ? this.postCalculoMaterial(
-                      this.tipoCalculo1,
-                      this.form.value.preco1
-                    )
-                    : EMPTY
-                );
-            } else {
-              ///ewqeqweqwqw////////////////
-              this.postCalculoMaterial(this.tipoCalculo1, this.form.value.preco1);
-            }
-          } else {
-            if (
-              Math.floor(this.material.valorMaterialBarra * 100) / 100 >
-              this.form.value.preco1
-            ) {
-              this.confirmModalService
-                .showConfirm(
-                  null,
-                  'Preço abaixo do mínimo',
-                  'O preço informado está abaixo do valor mínimo. Deseja continuar mesmo assim?',
-                  'Cancelar',
-                  'Confirmar'
-                )
-                .subscribe((response: boolean) =>
-                  response
-                    ? this.postCalculoMaterial(
-                      this.tipoCalculo1,
-                      this.form.value.preco1
-                    )
-                    : EMPTY
-                );
-            } else {
-              this.postCalculoMaterial(this.tipoCalculo1, this.form.value.preco1);
-            }
-          }
-        } */
-        /*     this.postCalculoMaterial(this.tipoCalculo1, this.form.value.preco1);
-        
-         */
         this.calcularTotais(this.material, 1, this.tipoLancamento, this.material.unidade);
     }
     postCalculoMaterial(tipoCalculo, preco) {
@@ -12547,7 +13008,7 @@ let ComercialCicloVendasCotacoesFormularioModalMaterialCalculoComponent = class 
                 /*    console.log('respuesta_calculo')
                 console.log(this.calculo); */
                 // @ts-ignore: Ignorar error TS2339
-                this.calculo.id_presentacion = this.form.value.formPresentacion;
+                this.calculo.id_presentacion = 0 /* this.form.value.formPresentacion */;
             this.calculo.index = this.index;
             this.formularioService.calculoSubject.next(this.calculo);
             /*  console.log(this.calculo); */
@@ -12686,6 +13147,8 @@ let ComercialCicloVendasCotacoesListaService = class ComercialCicloVendasCotacoe
         this.cotacaoDesdobrada = this.onCotacaoDesdobrada.asObservable();
         this.onChangeEmpresaCotacao = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]([]);
         this.empresaCotacao = this.onChangeEmpresaCotacao.asObservable();
+        this.onPdf = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]([]);
+        this.datosPdf = this.onPdf.asObservable();
     }
     loadDependencies() {
         const situacoes = this.situacoesService.getListaSituacaoProposta(null);
@@ -12716,6 +13179,9 @@ let ComercialCicloVendasCotacoesListaService = class ComercialCicloVendasCotacoe
             selectedDeposito,
             nrProposta,
         ]);
+    }
+    datosPdfService(datosPdfTOdo) {
+        this.onPdf.next(datosPdfTOdo);
     }
 };
 ComercialCicloVendasCotacoesListaService.ctorParameters = () => [
@@ -13823,6 +14289,8 @@ ComercialCicloVendasCotacoesFormularioCarrinhoComponent.propDecorators = {
     codFormaPagamento: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['codFormaPagamento',] }],
     freteConta: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['freteConta',] }],
     initialValue: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['initialValue',] }],
+    id_vendedor: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['id_vendedor',] }],
+    id_lista: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['id_lista',] }],
     loaderNavbar: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"], args: ['loaderNavbar',] }],
     hasError: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"], args: ['hasError',] }],
     scrollTop: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"], args: ['scrollTop',] }],
@@ -14899,6 +15367,137 @@ ComercialCicloVendasCotacoesListaModalHistoricoExclusaoService = Object(tslib__W
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\">\r\n  <div class=\"modal-header\">\r\n    <h4 class=\"mtc-title mb-0 my-auto\">POLÍTICA DE PREÇOS PRATICADOS</h4>\r\n    <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n      <span aria-hidden=\"true\">&times;</span>\r\n    </button>\r\n  </div>\r\n  <div class=\"modal-body\">\r\n    <comercial-clientes-dashboard-comercial-ultimos-precos\r\n      [codCliente]=\"codCliente\">\r\n    </comercial-clientes-dashboard-comercial-ultimos-precos>\r\n  </div>\r\n</div>\r\n\r\n");
+
+/***/ }),
+
+/***/ "yCb5":
+/*!************************************************************************************!*\
+  !*** ./src/app/modules/comercial/ciclo-vendas/cotacoes/lista/pdf/pdf.component.ts ***!
+  \************************************************************************************/
+/*! exports provided: PdfComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PdfComponent", function() { return PdfComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _raw_loader_pdf_component_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! raw-loader!./pdf.component.html */ "7lsu");
+/* harmony import */ var _pdf_component_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pdf.component.scss */ "741n");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "iInd");
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/platform-browser */ "cUpR");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ "qCKp");
+/* harmony import */ var html2canvas__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! html2canvas */ "wOnQ");
+/* harmony import */ var html2canvas__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(html2canvas__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! jspdf */ "5RHE");
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jspdf__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
+
+
+
+
+
+
+
+
+let PdfComponent = class PdfComponent {
+    constructor(activatedRoute, router, 
+    // tslint:disable-next-line:variable-name
+    _bsModalRef, sanitizer) {
+        this.activatedRoute = activatedRoute;
+        this.router = router;
+        this._bsModalRef = _bsModalRef;
+        this.sanitizer = sanitizer;
+        this.name = 'Angular ' + _angular_core__WEBPACK_IMPORTED_MODULE_3__["VERSION"].major;
+        this.imageWidth = 300; // Increase the width as needed
+        this.imageHeight = 85; // Increase the height as needed
+    }
+    ngOnInit() {
+        this.data = this.dataFromParent;
+        this.materiais = this.dataFromParent.materiais;
+        this.onClose = new rxjs__WEBPACK_IMPORTED_MODULE_7__["Subject"]();
+        this.imageSrc = this.sanitizer.bypassSecurityTrustUrl('assets/images/logo/logo-monterrey.png');
+        // console.log('Received data in modal:', this.data);
+    }
+    onPrint() {
+        // Call the window.print() method to open the print dialog
+        window.print();
+    }
+    onConfirm() {
+        this.onClose.next(true);
+        this._bsModalRef.hide();
+    }
+    onCancel() {
+        this.onClose.next(false);
+        this._bsModalRef.hide();
+    }
+    onDownloadPDF() {
+        const content = this.contentToConvert.nativeElement;
+        // Use html2canvas to capture the content as an image
+        html2canvas__WEBPACK_IMPORTED_MODULE_8___default()(content).then(canvas => {
+            // Create a new PDF document
+            const pdf = new jspdf__WEBPACK_IMPORTED_MODULE_9__('p', 'mm', 'a4');
+            // Calculate the image dimensions to fit the PDF page
+            const imgWidth = 210;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            // Add the captured image to the PDF
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+            // Download the PDF
+            pdf.save('your_pdf_filename.pdf');
+        });
+    }
+    captureScreen() {
+        const content = this.contentToConvert.nativeElement;
+        if (!content) {
+            console.error('Element with id contentToConvert not found.');
+            return;
+        }
+        if (content.childElementCount === 0) {
+            console.error('No content found inside the contentToConvert element.');
+            return;
+        }
+        html2canvas__WEBPACK_IMPORTED_MODULE_8___default()(content).then((canvas) => {
+            const imgWidth = 980;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            const contentDataURL = canvas.toDataURL('image/png');
+            // Create a new window and open the PDF in a new tab
+            const newWindow = window.open('', '_blank');
+            newWindow.document.open();
+            newWindow.document.write(`<html><body><img src="${contentDataURL}" width="${imgWidth}" height="${imgHeight}" /></body></html>`);
+            newWindow.document.close();
+            setTimeout(() => {
+                newWindow.print();
+            }, 500);
+        });
+    }
+};
+PdfComponent.ctorParameters = () => [
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"] }
+];
+PdfComponent.propDecorators = {
+    captureButtonRef: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"], args: ['captureButton', { static: true },] }],
+    contentToConvert: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"], args: ['contentToConvert', { static: false },] }]
+};
+PdfComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+        // tslint:disable-next-line:component-selector
+        selector: 'pdf',
+        template: _raw_loader_pdf_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
+        styles: [_pdf_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
+    }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"],
+        _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"]])
+], PdfComponent);
+
+
 
 /***/ }),
 

@@ -1156,6 +1156,231 @@
     },
 
     /***/
+    "VgqD":
+    /*!********************************************************!*\
+      !*** ./src/app/modules/comercial/comercial.service.ts ***!
+      \********************************************************/
+
+    /*! exports provided: ComercialService */
+
+    /***/
+    function VgqD(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "ComercialService", function () {
+        return ComercialService;
+      });
+      /* harmony import */
+
+
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "mrSG");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! @angular/core */
+      "8Y7J");
+      /* harmony import */
+
+
+      var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! @angular/common/http */
+      "IheW");
+      /* harmony import */
+
+
+      var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! rxjs/operators */
+      "kU1M");
+
+      var ComercialService = /*#__PURE__*/function () {
+        function ComercialService(http) {
+          _classCallCheck(this, ComercialService);
+
+          this.http = http;
+          this.API = "http://23.254.204.187/api/comercial";
+        }
+
+        _createClass(ComercialService, [{
+          key: "getEmpresas",
+          value: function getEmpresas(params) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+
+            for (var param in params) {
+              httpParams = httpParams.append(param, params[param]);
+            }
+
+            return this.http.get("".concat(this.API, "/empresas"), {
+              params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getDepositos",
+          value: function getDepositos(params) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+
+            for (var param in params) {
+              httpParams = httpParams.append(param, params[param]);
+            }
+
+            return this.http.get("".concat(this.API, "/depositos"), {
+              params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getAlmacen",
+          value: function getAlmacen(params) {
+            return this.http.get("".concat(this.API, "/almacen")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getLinhasId",
+          value: function getLinhasId(id) {
+            return this.http.get("".concat(this.API, "/linhas/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getSublineasId",
+          value: function getSublineasId(id) {
+            return this.http.get("".concat(this.API, "/sublineas/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "sincronizarMateriales",
+          value: function sincronizarMateriales() {
+            return this.http.get("".concat(this.API, "/sincronizar")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMateriales",
+          value: function getMateriales(params) {
+            return this.http.get("".concat(this.API, "/materiales"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesLista",
+          value: function getMaterialesLista(params) {
+            return this.http.get("".concat(this.API, "/materiales/lista"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesOferta",
+          value: function getMaterialesOferta(params) {
+            return this.http.get("".concat(this.API, "/materiales_lista_precio"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMaterialesOfertaVendedor",
+          value: function getMaterialesOfertaVendedor(params) {
+            return this.http.get("".concat(this.API, "/materiales_lista_precio_vendedor"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getUpSellService",
+          value: function getUpSellService(params) {
+            return this.http.get("".concat(this.API, "/materiales_suplementarios"), {
+              params: params
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getLinhas",
+          value: function getLinhas(params) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+
+            for (var param in params) {
+              httpParams = httpParams.append(param, params[param]);
+            }
+
+            return this.http.get("".concat(this.API, "/linhas"), {
+              params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getClasses",
+          value: function getClasses(params) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+
+            for (var param in params) {
+              httpParams = httpParams.append(param, params[param]);
+            }
+
+            return this.http.get("".concat(this.API, "/classes"), {
+              params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getMateriais",
+          value: function getMateriais() {
+            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+
+            for (var param in params) {
+              httpParams = httpParams.append(param, params[param]);
+            }
+
+            return this.http.get("".concat(this.API, "/materiais"), {
+              params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getPerfil",
+          value: function getPerfil() {
+            return this.http.get("".concat(this.API, "/perfil")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getEscritorios",
+          value: function getEscritorios() {
+            return this.http.get("".concat(this.API, "/escritorios")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getPresentacionMaterial",
+          value: function getPresentacionMaterial() {
+            return this.http.get("".concat(this.API, "/presentacion_materiales")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCliente",
+          value: function getCliente(codCliente) {
+            return this.http.get("".concat(this.API, "/clientes/detalhes/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+          }
+        }, {
+          key: "getListarPrecios",
+          value: function getListarPrecios() {
+            return this.http.get("".concat(this.API, "/vendedor/lista_precio")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getTodosVendedores",
+          value: function getTodosVendedores() {
+            return this.http.get("".concat(this.API, "/vendedor/allvendedor")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "getCentrosLogisticos",
+          value: function getCentrosLogisticos() {
+            return this.http.get("".concat(this.API, "/almacen/centros_logisticos"));
+          }
+        }]);
+
+        return ComercialService;
+      }();
+
+      ComercialService.ctorParameters = function () {
+        return [{
+          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
+        }];
+      };
+
+      ComercialService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])], ComercialService);
+      /***/
+    },
+
+    /***/
     "iMgG":
     /*!*************************************************!*\
       !*** ./src/app/guards/form-deactivate.guard.ts ***!

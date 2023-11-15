@@ -130,6 +130,12 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/grupo-economico/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getVendedorCiudad(id_vendedor) {
+        const httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]().set('id_vendedor', id_vendedor);
+        return this.http
+            .get(`${this.API}/vendedor/ciudad`, { params: httpParams })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
     getPermissaoAcesso(id) {
         return this.http
             .get(`${this.API}/permissao-acesso/${id}`)
@@ -157,6 +163,9 @@ let ComercialClientesService = class ComercialClientesService {
             .get(`${this.API}/pesquisa/contactodetalle/${codCliente}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getTipoClientes() {
+        return this.http.get(`${this.API}/tipo_cliente`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
     getExisteCpfCnpj(documento, getDadosCliente) {
         return this.http
             .get(`${this.API}/verificar-cpf-cnpj/${documento}?getDadosCliente=${getDadosCliente === true ? 1 : 0}`)
@@ -170,7 +179,7 @@ let ComercialClientesService = class ComercialClientesService {
     sapPostClient(data) {
         return this.http
             .post(`${this.API}/postsap`, data)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(0));
     }
     getPropostaAnaliseCredito(codCliente) {
         return this.http
@@ -327,35 +336,6 @@ ComercialClientesService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate
 
 /***/ }),
 
-/***/ "iMgG":
-/*!*************************************************!*\
-  !*** ./src/app/guards/form-deactivate.guard.ts ***!
-  \*************************************************/
-/*! exports provided: FormDeactivateGuard */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormDeactivateGuard", function() { return FormDeactivateGuard; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "8Y7J");
-
-
-let FormDeactivateGuard = class FormDeactivateGuard {
-    canDeactivate(component, route, state) {
-        return component.formCanDeactivate();
-    }
-};
-FormDeactivateGuard = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-    })
-], FormDeactivateGuard);
-
-
-
-/***/ }),
-
 /***/ "qdc5":
 /*!********************************************************************************************************!*\
   !*** ./src/app/modules/comercial/clientes/cadastro/dados-faturamento/formulario/formulario.service.ts ***!
@@ -420,6 +400,9 @@ let ComercialClientesCadastroDadosFaturamentoFormularioService = class Comercial
     }
     getCnaes() {
         return this.http.get(`${this.API}/cnaes`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+    }
+    getCiudades() {
+        return this.http.get(`${this.API}/ciudades`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
     }
 };
 ComercialClientesCadastroDadosFaturamentoFormularioService.ctorParameters = () => [

@@ -93,7 +93,7 @@ class CrossSellController extends AbstractController
           EXEC PRC_CROS_SELL_CONS
             @ID_PARA = 3,
             @ID_MATE = '{$codMaterial}'
-        " )->fetchAll();
+        ")->fetchAll();
         
         $arrFinal = [];
 

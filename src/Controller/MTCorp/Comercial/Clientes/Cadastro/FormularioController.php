@@ -86,6 +86,7 @@ class FormularioController extends AbstractController
    */
   public function getCiudades(Connection $connection, Request $request)
 {
+  //dd('aqui');
     if ($request->isMethod('GET')) {
         try {
             $res = $connection->query(

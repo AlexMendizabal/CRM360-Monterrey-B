@@ -246,6 +246,7 @@
           this.tidSoftwareService = tidSoftwareService;
           this.estoqueService = estoqueService;
           this.API = "http://23.254.204.187/api/comercial/ciclo-vendas/cotacoes";
+          this.API2 = "http://23.254.204.187/api/comercial/ciclo-vendas/autorizaciones";
         }
 
         _createClass(ComercialCicloVendasCotacoesService, [{
@@ -342,8 +343,8 @@
           }
         }, {
           key: "getImprimirCotacao",
-          value: function getImprimirCotacao(nrPedido, codEmpresa) {
-            return this.http.get("".concat(this.API, "/imprimir-cotacao/").concat(nrPedido, "/").concat(codEmpresa)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          value: function getImprimirCotacao(nrPedido) {
+            return this.http.get("".concat(this.API, "/imprimir-cotacao/").concat(nrPedido)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
           key: "getImprimirSeparacao",
@@ -436,6 +437,7 @@
         }, {
           key: "postMaterialesRelacionados",
           value: function postMaterialesRelacionados(params) {
+            console.log(params);
             return this.http.post("".concat(this.API, "/materiales/relacionados"), params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
@@ -570,6 +572,11 @@
           key: "getLoteMaterial",
           value: function getLoteMaterial(codMaterial, codEmpresa) {
             return this.http.get("".concat(this.API, "/material/lote/").concat(codMaterial, "/").concat(codEmpresa)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
+          key: "autorizaciones",
+          value: function autorizaciones(data) {
+            return this.http.post("".concat(this.API2, "/registrar"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }]);
 

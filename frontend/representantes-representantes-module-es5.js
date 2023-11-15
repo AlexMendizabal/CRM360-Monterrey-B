@@ -1091,6 +1091,14 @@
             return this.http.get("".concat(this.API, "/pesquisa/grupo-economico/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "getVendedorCiudad",
+          value: function getVendedorCiudad(id_vendedor) {
+            var httpParams = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]().set('id_vendedor', id_vendedor);
+            return this.http.get("".concat(this.API, "/vendedor/ciudad"), {
+              params: httpParams
+            }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+          }
+        }, {
           key: "getPermissaoAcesso",
           value: function getPermissaoAcesso(id) {
             return this.http.get("".concat(this.API, "/permissao-acesso/").concat(id)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -1118,6 +1126,11 @@
             return this.http.get("".concat(this.API, "/pesquisa/contactodetalle/").concat(codCliente)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
           }
         }, {
+          key: "getTipoClientes",
+          value: function getTipoClientes() {
+            return this.http.get("".concat(this.API, "/tipo_cliente")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1));
+          }
+        }, {
           key: "getExisteCpfCnpj",
           value: function getExisteCpfCnpj(documento, getDadosCliente) {
             return this.http.get("".concat(this.API, "/verificar-cpf-cnpj/").concat(documento, "?getDadosCliente=").concat(getDadosCliente === true ? 1 : 0)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -1130,7 +1143,7 @@
         }, {
           key: "sapPostClient",
           value: function sapPostClient(data) {
-            return this.http.post("".concat(this.API, "/postsap"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+            return this.http.post("".concat(this.API, "/postsap"), data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(0));
           }
         }, {
           key: "getPropostaAnaliseCredito",

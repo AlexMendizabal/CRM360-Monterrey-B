@@ -140,6 +140,7 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
         this.tidSoftwareService = tidSoftwareService;
         this.estoqueService = estoqueService;
         this.API = `http://23.254.204.187/api/comercial/ciclo-vendas/cotacoes`;
+        this.API2 = `http://23.254.204.187/api/comercial/ciclo-vendas/autorizaciones`;
     }
     getIdOferta() {
         return this.http
@@ -225,9 +226,9 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
             .post(`${this.API}/trocar/empresa`, params)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
-    getImprimirCotacao(nrPedido, codEmpresa) {
+    getImprimirCotacao(nrPedido) {
         return this.http
-            .get(`${this.API}/imprimir-cotacao/${nrPedido}/${codEmpresa}`)
+            .get(`${this.API}/imprimir-cotacao/${nrPedido}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
     getImprimirSeparacao(nrPedido, codEmpresa) {
@@ -310,6 +311,7 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
     postMaterialesRelacionados(params) {
+        console.log(params);
         return this.http
             .post(`${this.API}/materiales/relacionados`, params)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
@@ -423,6 +425,11 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
     getLoteMaterial(codMaterial, codEmpresa) {
         return this.http
             .get(`${this.API}/material/lote/${codMaterial}/${codEmpresa}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    autorizaciones(data) {
+        return this.http
+            .post(`${this.API2}/registrar`, data)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
 };
