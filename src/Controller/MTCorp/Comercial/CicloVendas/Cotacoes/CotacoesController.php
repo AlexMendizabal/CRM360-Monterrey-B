@@ -3179,6 +3179,6 @@ class CotacoesController extends AbstractController
     */
     public function getCierreOferta()
     {
-        
+        $query = $connection->query();
     }
 }
