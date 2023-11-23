@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -72,9 +68,9 @@
       /*! ./home.component */
       "jeu3");
 
-      var AbastecimentoHomeModule = /*#__PURE__*/_createClass(function AbastecimentoHomeModule() {
+      var AbastecimentoHomeModule = function AbastecimentoHomeModule() {
         _classCallCheck(this, AbastecimentoHomeModule);
-      });
+      };
 
       AbastecimentoHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_6__["AbastecimentoHomeComponent"]],
@@ -173,9 +169,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["ComercialHomeComponent"]
       }];
 
-      var ComercialHomeRoutingModule = /*#__PURE__*/_createClass(function ComercialHomeRoutingModule() {
+      var ComercialHomeRoutingModule = function ComercialHomeRoutingModule() {
         _classCallCheck(this, ComercialHomeRoutingModule);
-      });
+      };
 
       ComercialHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -253,9 +249,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["SulFluminenseHomeComponent"]
       }];
 
-      var SulFluminenseHomeRoutingModule = /*#__PURE__*/_createClass(function SulFluminenseHomeRoutingModule() {
+      var SulFluminenseHomeRoutingModule = function SulFluminenseHomeRoutingModule() {
         _classCallCheck(this, SulFluminenseHomeRoutingModule);
-      });
+      };
 
       SulFluminenseHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -333,9 +329,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["AbastecimentoHomeComponent"]
       }];
 
-      var AbastecimentoHomeRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoHomeRoutingModule() {
+      var AbastecimentoHomeRoutingModule = function AbastecimentoHomeRoutingModule() {
         _classCallCheck(this, AbastecimentoHomeRoutingModule);
-      });
+      };
 
       AbastecimentoHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -482,9 +478,9 @@
       // Components
 
 
-      var TecnologiaInformacaoHomeModule = /*#__PURE__*/_createClass(function TecnologiaInformacaoHomeModule() {
+      var TecnologiaInformacaoHomeModule = function TecnologiaInformacaoHomeModule() {
         _classCallCheck(this, TecnologiaInformacaoHomeModule);
-      });
+      };
 
       TecnologiaInformacaoHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_8__["TecnologiaInformacaoHomeComponent"]],
@@ -578,9 +574,9 @@
       // Components
 
 
-      var ComercialHomeModule = /*#__PURE__*/_createClass(function ComercialHomeModule() {
+      var ComercialHomeModule = function ComercialHomeModule() {
         _classCallCheck(this, ComercialHomeModule);
-      });
+      };
 
       ComercialHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_9__["ComercialHomeComponent"]],
@@ -753,9 +749,9 @@
       /*! ./home-routing.module */
       "I10j");
 
-      var SulFluminenseHomeModule = /*#__PURE__*/_createClass(function SulFluminenseHomeModule() {
+      var SulFluminenseHomeModule = function SulFluminenseHomeModule() {
         _classCallCheck(this, SulFluminenseHomeModule);
-      });
+      };
 
       SulFluminenseHomeModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_home_component__WEBPACK_IMPORTED_MODULE_1__["SulFluminenseHomeComponent"]],
@@ -1062,6 +1058,8 @@
               _this2.compromissosLoaded = true;
             })).subscribe({
               next: function next(response) {
+                console.log(response);
+
                 if (response['responseCode'] === 200) {
                   _this2.compromissos = response['result'];
                 }
@@ -1158,9 +1156,9 @@
         component: _home_component__WEBPACK_IMPORTED_MODULE_3__["TecnologiaInformacaoHomeComponent"]
       }];
 
-      var TecnologiaInformacaoHomeRoutingModule = /*#__PURE__*/_createClass(function TecnologiaInformacaoHomeRoutingModule() {
+      var TecnologiaInformacaoHomeRoutingModule = function TecnologiaInformacaoHomeRoutingModule() {
         _classCallCheck(this, TecnologiaInformacaoHomeRoutingModule);
-      });
+      };
 
       TecnologiaInformacaoHomeRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

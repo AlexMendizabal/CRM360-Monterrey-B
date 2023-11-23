@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -120,9 +116,9 @@
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_7__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_8___default.a);
 
-      var AbastecimentoCadastrosModule = /*#__PURE__*/_createClass(function AbastecimentoCadastrosModule() {
+      var AbastecimentoCadastrosModule = function AbastecimentoCadastrosModule() {
         _classCallCheck(this, AbastecimentoCadastrosModule);
-      });
+      };
 
       AbastecimentoCadastrosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_6__["NgModule"])({
         declarations: [_cadastros_component__WEBPACK_IMPORTED_MODULE_12__["AbastecimentoCadastrosComponent"]],
@@ -303,9 +299,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_3__["NotFoundComponent"]
       }];
 
-      var LogisticaCadastrosRoutingModule = /*#__PURE__*/_createClass(function LogisticaCadastrosRoutingModule() {
+      var LogisticaCadastrosRoutingModule = function LogisticaCadastrosRoutingModule() {
         _classCallCheck(this, LogisticaCadastrosRoutingModule);
-      });
+      };
 
       LogisticaCadastrosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -574,7 +570,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | representantes-representantes-module */
-            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("default~agenda-agenda-module~autorizaciones-autorizaciones-module~contratos-comerciais-contratos-com~c20bfe7f"), __webpack_require__.e("default~contratos-comerciais-contratos-comerciais-module~contratos-contratos-module~integracao-condi~c7866944"), __webpack_require__.e("common"), __webpack_require__.e("representantes-representantes-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("default~agenda-agenda-module~autorizaciones-autorizaciones-module~contratos-comerciais-contratos-com~c20bfe7f"), __webpack_require__.e("default~contratos-comerciais-contratos-comerciais-module~contratos-contratos-module~integracao-condi~c7866944"), __webpack_require__.e("common"), __webpack_require__.e("representantes-representantes-module")]).then(__webpack_require__.bind(null,
             /*! ./representantes/representantes.module */
             "9lVW")).then(function (m) {
               return m.ComercialCadastrosRepresentantesModule;
@@ -740,9 +736,9 @@
         }]
       }];
 
-      var ComercialCadastrosRoutingModule = /*#__PURE__*/_createClass(function ComercialCadastrosRoutingModule() {
+      var ComercialCadastrosRoutingModule = function ComercialCadastrosRoutingModule() {
         _classCallCheck(this, ComercialCadastrosRoutingModule);
-      });
+      };
 
       ComercialCadastrosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -811,7 +807,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | vinculo-material-deposito-new-vinculo-material-deposito-new-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("vinculo-material-deposito-new-vinculo-material-deposito-new-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("vinculo-material-deposito-new-vinculo-material-deposito-new-module")]).then(__webpack_require__.bind(null,
             /*! ./vinculo-material-deposito-new/vinculo-material-deposito-new.module */
             "j3AB")).then(function (m) {
               return m.AbastecimentoCadastrosVinculoMaterialDepositoNewModule;
@@ -822,7 +818,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | media-vendas-media-vendas-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("media-vendas-media-vendas-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("media-vendas-media-vendas-module")]).then(__webpack_require__.bind(null,
             /*! ./media-vendas/media-vendas.module */
             "92u1")).then(function (m) {
               return m.AbastecimentoCadastroMediaVendasModule;
@@ -833,7 +829,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | nivel-estoque-deposito-new-nivel-estoque-deposito-new-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("nivel-estoque-deposito-new-nivel-estoque-deposito-new-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("nivel-estoque-deposito-new-nivel-estoque-deposito-new-module")]).then(__webpack_require__.bind(null,
             /*! ./nivel-estoque-deposito-new/nivel-estoque-deposito-new.module */
             "UOSk")).then(function (m) {
               return m.AbastecimentoCadastrosNivelEstoqueDepositoNewModule;
@@ -844,7 +840,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | grupo-fornecedores-grupo-fornecedores-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("grupo-fornecedores-grupo-fornecedores-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("grupo-fornecedores-grupo-fornecedores-module")]).then(__webpack_require__.bind(null,
             /*! ./grupo-fornecedores/grupo-fornecedores.module */
             "C9+i")).then(function (m) {
               return m.AbastecimentoCadastrosGrupoFornecedoresModule;
@@ -855,7 +851,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | integrador-depositos-integrador-depositos-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("integrador-depositos-integrador-depositos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("integrador-depositos-integrador-depositos-module")]).then(__webpack_require__.bind(null,
             /*! ./integrador-depositos/integrador-depositos.module */
             "Y3Cv")).then(function (m) {
               return m.AbastecimentoCadastrosIntegradorDepositosModule;
@@ -866,7 +862,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | parametros-gerais-estoque-parametros-gerais-estoque-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("parametros-gerais-estoque-parametros-gerais-estoque-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("parametros-gerais-estoque-parametros-gerais-estoque-module")]).then(__webpack_require__.bind(null,
             /*! ./parametros-gerais-estoque/parametros-gerais-estoque.module */
             "/124")).then(function (m) {
               return m.AbastecimentoCadastrosParametrosGeraisEstoqueModule;
@@ -877,7 +873,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | classes-materiais-classes-materiais-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("classes-materiais-classes-materiais-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("classes-materiais-classes-materiais-module")]).then(__webpack_require__.bind(null,
             /*! ./classes-materiais/classes-materiais.module */
             "lJB2")).then(function (m) {
               return m.AbastecimentoCadastrosClassesMateriaisModule;
@@ -888,7 +884,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | manutencao-classes-manutencao-classes-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("manutencao-classes-manutencao-classes-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("manutencao-classes-manutencao-classes-module")]).then(__webpack_require__.bind(null,
             /*! ./manutencao-classes/manutencao-classes.module */
             "f8DH")).then(function (m) {
               return m.AbastecimentoCadastrosManutencaoClassesModule;
@@ -899,7 +895,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | manutencao-materiais-manutencao-materiais-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("manutencao-materiais-manutencao-materiais-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("manutencao-materiais-manutencao-materiais-module")]).then(__webpack_require__.bind(null,
             /*! ./manutencao-materiais/manutencao-materiais.module */
             "gswh")).then(function (m) {
               return m.AbastecimentoCadastrosManutencaoMateriaisModule;
@@ -910,7 +906,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | amarracao-materiais-amarracao-materiais-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("amarracao-materiais-amarracao-materiais-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("amarracao-materiais-amarracao-materiais-module")]).then(__webpack_require__.bind(null,
             /*! ./amarracao-materiais/amarracao-materiais.module */
             "fkOy")).then(function (m) {
               return m.AbastecimentoCadastrosAmarracaoMateriaisModule;
@@ -922,9 +918,9 @@
         }]
       }];
 
-      var AbastecimentoCadastroRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoCadastroRoutingModule() {
+      var AbastecimentoCadastroRoutingModule = function AbastecimentoCadastroRoutingModule() {
         _classCallCheck(this, AbastecimentoCadastroRoutingModule);
-      });
+      };
 
       AbastecimentoCadastroRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -1063,9 +1059,9 @@
       /*! ./cadastros-routing.module */
       "/U+1");
 
-      var CadastrosModule = /*#__PURE__*/_createClass(function CadastrosModule() {
+      var CadastrosModule = function CadastrosModule() {
         _classCallCheck(this, CadastrosModule);
-      });
+      };
 
       CadastrosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_cadastros_component__WEBPACK_IMPORTED_MODULE_6__["LogisticaCadastrosComponent"]],
@@ -1557,9 +1553,9 @@
       // Components
 
 
-      var ComercialCadastrosModule = /*#__PURE__*/_createClass(function ComercialCadastrosModule() {
+      var ComercialCadastrosModule = function ComercialCadastrosModule() {
         _classCallCheck(this, ComercialCadastrosModule);
-      });
+      };
 
       ComercialCadastrosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_cadastros_component__WEBPACK_IMPORTED_MODULE_7__["ComercialCadastrosComponent"]],

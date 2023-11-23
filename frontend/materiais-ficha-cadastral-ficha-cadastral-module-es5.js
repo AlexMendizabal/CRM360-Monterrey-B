@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["materiais-ficha-cadastral-ficha-cadastral-module"], {
     /***/
@@ -350,11 +346,6 @@
             }
           }
         }, {
-          key: "anexos",
-          get: function get() {
-            return this.form.get('anexos');
-          }
-        }, {
           key: "onAddAnexos",
           value: function onAddAnexos(anexo, manipulateForm) {
             if (this.checkAnexoExists(anexo) === false) {
@@ -596,6 +587,11 @@
 
             this.form.controls.codMaterial.setValue(material.codigoMaterial);
             this.form.controls.nomeMaterial.setValue(material.descricao);
+          }
+        }, {
+          key: "anexos",
+          get: function get() {
+            return this.form.get('anexos');
           }
         }]);
 
@@ -850,9 +846,9 @@
       // Components
 
 
-      var ComercialCadastrosMateriaisFichaCadastralModule = /*#__PURE__*/_createClass(function ComercialCadastrosMateriaisFichaCadastralModule() {
+      var ComercialCadastrosMateriaisFichaCadastralModule = function ComercialCadastrosMateriaisFichaCadastralModule() {
         _classCallCheck(this, ComercialCadastrosMateriaisFichaCadastralModule);
-      });
+      };
 
       ComercialCadastrosMateriaisFichaCadastralModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_lista_lista_component__WEBPACK_IMPORTED_MODULE_14__["ComercialCadastrosMateriaisFichaCadastralListaComponent"], _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_15__["ComercialCadastrosMateriaisFichaCadastralFormularioComponent"]],
@@ -2112,9 +2108,9 @@
         pathMatch: 'full'
       }];
 
-      var ComercialCadastrosMateriaisFichaCadastralModuleRoutingModule = /*#__PURE__*/_createClass(function ComercialCadastrosMateriaisFichaCadastralModuleRoutingModule() {
+      var ComercialCadastrosMateriaisFichaCadastralModuleRoutingModule = function ComercialCadastrosMateriaisFichaCadastralModuleRoutingModule() {
         _classCallCheck(this, ComercialCadastrosMateriaisFichaCadastralModuleRoutingModule);
-      });
+      };
 
       ComercialCadastrosMateriaisFichaCadastralModuleRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

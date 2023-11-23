@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["analise-compras-analise-compras-module"], {
     /***/
@@ -3499,9 +3495,9 @@
         component: _analise_compras_component__WEBPACK_IMPORTED_MODULE_3__["AbastecimentoMonitoresAnaliseComprasComponent"]
       }];
 
-      var AbastecimentoMonitoresAnaliseComprasRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresAnaliseComprasRoutingModule() {
+      var AbastecimentoMonitoresAnaliseComprasRoutingModule = function AbastecimentoMonitoresAnaliseComprasRoutingModule() {
         _classCallCheck(this, AbastecimentoMonitoresAnaliseComprasRoutingModule);
-      });
+      };
 
       AbastecimentoMonitoresAnaliseComprasRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -4124,9 +4120,9 @@
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_2__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_19___default.a);
       /* Localização Brasil */
 
-      var AbastecimentoMonitoresAnaliseComprasModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresAnaliseComprasModule() {
+      var AbastecimentoMonitoresAnaliseComprasModule = function AbastecimentoMonitoresAnaliseComprasModule() {
         _classCallCheck(this, AbastecimentoMonitoresAnaliseComprasModule);
-      });
+      };
 
       AbastecimentoMonitoresAnaliseComprasModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_analise_compras_component__WEBPACK_IMPORTED_MODULE_12__["AbastecimentoMonitoresAnaliseComprasComponent"], _modal_estoque_suspenso_modal_estoque_suspenso_component__WEBPACK_IMPORTED_MODULE_13__["AbastecimentoMonitoresAnaliseComprasModalEstoqueSuspensoComponent"], _modal_estoque_comprometido_modal_estoque_comprometido_component__WEBPACK_IMPORTED_MODULE_14__["AbastecimentoMonitoresAnaliseCompraModalEstoqueComprometidoComponent"], _modal_vendas_perdidas_modal_vendas_perdidas_component__WEBPACK_IMPORTED_MODULE_15__["AbastecimentoMonitoresAnaliseComprasModalVendasPerdidasComponent"], _modal_vendas_realizadas_modal_vendas_realizadas_component__WEBPACK_IMPORTED_MODULE_16__["AbastecimentoMonitoresAnaliseComprasModalVendasRealizadasComponent"], _modal_carteira_modal_carteira_component__WEBPACK_IMPORTED_MODULE_17__["AbastecimentoMonitoresAnaliseComprasModalCarteiraComponent"], _modal_nivel_estoque_modal_nivel_estoque_component__WEBPACK_IMPORTED_MODULE_18__["AbastecimentoMonitoresAnaliseComprasModalNivelEstoqueComponent"]],
@@ -4155,7 +4151,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = ".sticky {\n  position: sticky;\n}\n\n.btn-xm {\n  padding: 0.05rem 0.15rem;\n  font-size: 0.7rem;\n  border-radius: 0.2rem;\n}\n\n.btn-open-modal:disabled {\n  color: #fff;\n  background-color: #66c0ce;\n  border-color: #66c0ce;\n  opacity: 1;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9hYmFzdGVjaW1lbnRvL21vbml0b3Jlcy9hbmFsaXNlLWNvbXByYXMvYW5hbGlzZS1jb21wcmFzLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZ0JBQUE7QUFDRjs7QUFFQTtFQUNDLHdCQUFBO0VBQ0csaUJBQUE7RUFDQSxxQkFBQTtBQUNKOztBQUVBO0VBQ0UsV0FBQTtFQUNBLHlCQUFBO0VBQ0EscUJBQUE7RUFDQSxVQUFBO0FBQ0YiLCJmaWxlIjoic3JjL2FwcC9tb2R1bGVzL2FiYXN0ZWNpbWVudG8vbW9uaXRvcmVzL2FuYWxpc2UtY29tcHJhcy9hbmFsaXNlLWNvbXByYXMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuc3RpY2t5IHtcclxuICBwb3NpdGlvbjogc3RpY2t5O1xyXG59XHJcblxyXG4uYnRuLXhtIHtcclxuXHRwYWRkaW5nOiAwLjA1cmVtIDAuMTVyZW07XHJcbiAgICBmb250LXNpemU6IDAuN3JlbTtcclxuICAgIGJvcmRlci1yYWRpdXM6IDAuMnJlbTtcclxufVxyXG5cclxuLmJ0bi1vcGVuLW1vZGFsOmRpc2FibGVkIHtcclxuICBjb2xvcjogI2ZmZjtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjNjZjMGNlO1xyXG4gIGJvcmRlci1jb2xvcjogIzY2YzBjZTtcclxuICBvcGFjaXR5OiAxO1xyXG59Il19 */";
+      __webpack_exports__["default"] = ".sticky {\n  position: -webkit-sticky;\n  position: sticky;\n}\n\n.btn-xm {\n  padding: 0.05rem 0.15rem;\n  font-size: 0.7rem;\n  border-radius: 0.2rem;\n}\n\n.btn-open-modal:disabled {\n  color: #fff;\n  background-color: #66c0ce;\n  border-color: #66c0ce;\n  opacity: 1;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9hYmFzdGVjaW1lbnRvL21vbml0b3Jlcy9hbmFsaXNlLWNvbXByYXMvYW5hbGlzZS1jb21wcmFzLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usd0JBQUE7RUFBQSxnQkFBQTtBQUNGOztBQUVBO0VBQ0Msd0JBQUE7RUFDRyxpQkFBQTtFQUNBLHFCQUFBO0FBQ0o7O0FBRUE7RUFDRSxXQUFBO0VBQ0EseUJBQUE7RUFDQSxxQkFBQTtFQUNBLFVBQUE7QUFDRiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvYWJhc3RlY2ltZW50by9tb25pdG9yZXMvYW5hbGlzZS1jb21wcmFzL2FuYWxpc2UtY29tcHJhcy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5zdGlja3kge1xyXG4gIHBvc2l0aW9uOiBzdGlja3k7XHJcbn1cclxuXHJcbi5idG4teG0ge1xyXG5cdHBhZGRpbmc6IDAuMDVyZW0gMC4xNXJlbTtcclxuICAgIGZvbnQtc2l6ZTogMC43cmVtO1xyXG4gICAgYm9yZGVyLXJhZGl1czogMC4ycmVtO1xyXG59XHJcblxyXG4uYnRuLW9wZW4tbW9kYWw6ZGlzYWJsZWQge1xyXG4gIGNvbG9yOiAjZmZmO1xyXG4gIGJhY2tncm91bmQtY29sb3I6ICM2NmMwY2U7XHJcbiAgYm9yZGVyLWNvbG9yOiAjNjZjMGNlO1xyXG4gIG9wYWNpdHk6IDE7XHJcbn0iXX0= */";
       /***/
     },
 

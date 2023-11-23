@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["agenda-agenda-module"], {
     /***/
@@ -183,7 +179,11 @@
 
       var angular_calendar_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
       /*! angular-calendar/date-adapters/date-fns */
-      "L/mj");
+      "1BeU");
+      /* harmony import */
+
+
+      var angular_calendar_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(angular_calendar_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_7__);
       /* harmony import */
 
 
@@ -276,9 +276,9 @@
       // Modules
       // Components
 
-      var ComercialAgendaModule = /*#__PURE__*/_createClass(function ComercialAgendaModule() {
+      var ComercialAgendaModule = function ComercialAgendaModule() {
         _classCallCheck(this, ComercialAgendaModule);
-      });
+      };
 
       ComercialAgendaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_compromissos_compromissos_component__WEBPACK_IMPORTED_MODULE_18__["ComercialAgendaCompromissosComponent"], _detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_19__["ComercialAgendaDetalhesComponent"], _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_20__["ComercialAgendaFormularioComponent"]],
@@ -712,7 +712,7 @@
         }, {
           key: "dataFilter",
           value: function dataFilter(event) {
-            console.log(event);
+            // console.log(event)
             this.idVendedor = event.idVendedor;
             this.nomeEscritorio = this.user.info.nomeCompleto;
             this.idEscritorio = event.idEscritorio;
@@ -733,6 +733,7 @@
               if (Object.keys(queryParams).length > 0) {
                 var params = atob(queryParams['q']);
                 params = JSON.parse(params);
+                console.log(params);
                 _this3.idEscritorio = parseInt(params.idEscritorio);
                 _this3.idVendedor = parseInt(params.idVendedor);
                 _this3.nomeEscritorio = params.nomeEscritorio;
@@ -1083,9 +1084,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["NotFoundComponent"]
       }];
 
-      var ComercialAgendaRoutingModule = /*#__PURE__*/_createClass(function ComercialAgendaRoutingModule() {
+      var ComercialAgendaRoutingModule = function ComercialAgendaRoutingModule() {
         _classCallCheck(this, ComercialAgendaRoutingModule);
-      });
+      };
 
       ComercialAgendaRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -1232,7 +1233,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<ng-template #loading>\r\n  <loader-spinner-full-screen></loader-spinner-full-screen>\r\n</ng-template>\r\n<app-header [appTitle]=\"appTitle(viewDate)\">\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    (click)=\"refreshEvents()\">Actualizar</button>\r\n  <button\r\n    type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    mwlCalendarPreviousView\r\n    [view]=\"view\"\r\n    [(viewDate)]=\"viewDate\"\r\n    (viewDateChange)=\"fetchEvents()\">\r\n    Mes Anterior\r\n  </button>\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    mwlCalendarToday\r\n    [(viewDate)]=\"viewDate\"\r\n    (viewDateChange)=\"fetchEvents()\">\r\n    Mes Actual\r\n  </button>\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    mwlCalendarNextView\r\n    [view]=\"view\"\r\n    [(viewDate)]=\"viewDate\"\r\n    (viewDateChange)=\"fetchEvents()\">\r\n    Siguiente mes\r\n  </button>\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    [routerLink]=\"['../novo']\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\"\r\n    (click)=\"onFilter(showFilter)\"\r\n    *ngIf=\"enableFilterButton()\"\r\n    [disabled]=\"idEscritorio == null || idVendedor == null\">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\" *ngIf=\"showFilter\">\r\n    <div class=\"col\">\r\n      <comercial-templates-filtro-vendedor-escritorio\r\n        [profile]=\"profile\"\r\n        [showAll]=\"false\"\r\n        (formValue)=\"dataFilter($event)\">\r\n      </comercial-templates-filtro-vendedor-escritorio>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"showCalendar\">\r\n    <div class=\"col\">\r\n      <div class=\"row mb-3\"\r\n        *ngIf=\"(nomeEscritorio != null && nomeEscritorio.length > 0) || (nomeVendedor != null && nomeVendedor.length > 0)\">\r\n        <div class=\"col\">\r\n          <div class=\"d-flex\">\r\n            <h6 class=\"mb-0 mr-2\"\r\n              *ngIf=\"nomeVendedor != null && nomeEscritorio != null && nomeEscritorio.length > 0\">\r\n              <span class=\"badge badge-secondary\">{{ nomeEscritorio }}</span>\r\n            </h6>\r\n            <h6 class=\"mb-0\" *ngIf=\"nomeVendedor.length > 0\">\r\n              <span class=\"badge badge-primary\">{{ nomeVendedor }}</span>\r\n            </h6>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\">\r\n        <div class=\"col\">\r\n          <div *ngIf=\"events$ | async; else loading; let events\">\r\n            <div [ngSwitch]=\"view\">\r\n              <mwl-calendar-month-view\r\n                *ngSwitchCase=\"'month'\"\r\n                [@.disabled]=\"true\"\r\n                [viewDate]=\"viewDate\"\r\n                [events]=\"events\"\r\n                [activeDayIsOpen]=\"activeDayIsOpen\"\r\n                (dayClicked)=\"dayClicked($event.day)\"\r\n                (eventClicked)=\"eventClicked($event.event)\">\r\n\r\n              </mwl-calendar-month-view>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <permission-denied\r\n    message=\"Su perfil no tiene permisos para acceder a esta aplicacion\"\r\n    *ngIf=\"showPermissionDenied\">\r\n  </permission-denied>\r\n</app-body>\r\n";
+      __webpack_exports__["default"] = "<ng-template #loading>\r\n  <loader-spinner-full-screen></loader-spinner-full-screen>\r\n</ng-template>\r\n<app-header [appTitle]=\"appTitle(viewDate)\">\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    (click)=\"refreshEvents()\">Actualizar</button>\r\n  <button\r\n    type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    mwlCalendarPreviousView\r\n    [view]=\"view\"\r\n    [(viewDate)]=\"viewDate\"\r\n    (viewDateChange)=\"fetchEvents()\">\r\n    Mes Anterior\r\n  </button>\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    mwlCalendarToday\r\n    [(viewDate)]=\"viewDate\"\r\n    (viewDateChange)=\"fetchEvents()\">\r\n    Mes Actual\r\n  </button>\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    mwlCalendarNextView\r\n    [view]=\"view\"\r\n    [(viewDate)]=\"viewDate\"\r\n    (viewDateChange)=\"fetchEvents()\">\r\n    Siguiente mes\r\n  </button>\r\n  <button type=\"button\"\r\n    *ngIf=\"showCalendar\"\r\n    [routerLink]=\"['../novo']\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\"\r\n    (click)=\"onFilter(showFilter)\"\r\n    *ngIf=\"enableFilterButton()\"\r\n    [disabled]=\"idEscritorio == null || idVendedor == null\">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row\" *ngIf=\"showFilter\">\r\n    <div class=\"col\">\r\n      <comercial-templates-filtro-vendedor-escritorio\r\n        [profile]=\"profile\"\r\n        [showAll]=\"false\"\r\n        (formValue)=\"dataFilter($event)\">\r\n      </comercial-templates-filtro-vendedor-escritorio>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"showCalendar\">\r\n    <div class=\"col\">\r\n      <div class=\"row mb-3\"\r\n        *ngIf=\"(this.nomeEscritorio !== null ) || (this.nomeVendedor != null )\">\r\n        <div class=\"col\">\r\n          <div class=\"d-flex\">\r\n            <h6 class=\"mb-0 mr-2\" *ngIf=\"this.nomeVendedor != null || this.nomeEscritorio != null \">\r\n              <span class=\"badge badge-secondary\">{{ this.nomeEscritorio }}</span>\r\n            </h6>\r\n            <h6 class=\"mb-0\">\r\n              <span class=\"badge badge-primary\">{{ nomeVendedor }}</span>\r\n            </h6>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"row\">\r\n        <div class=\"col\">\r\n          <div *ngIf=\"events$ | async; else loading; let events\">\r\n            <div [ngSwitch]=\"view\">\r\n              <mwl-calendar-month-view\r\n                *ngSwitchCase=\"'month'\"\r\n                [@.disabled]=\"true\"\r\n                [viewDate]=\"viewDate\"\r\n                [events]=\"events\"\r\n                [activeDayIsOpen]=\"activeDayIsOpen\"\r\n                (dayClicked)=\"dayClicked($event.day)\"\r\n                (eventClicked)=\"eventClicked($event.event)\">\r\n              </mwl-calendar-month-view>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <permission-denied\r\n    message=\"Su perfil no tiene permisos para acceder a esta aplicacion\"\r\n    *ngIf=\"showPermissionDenied\">\r\n  </permission-denied>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -1292,7 +1293,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen\r\n  *ngIf=\"loaderFullScreen\"\r\n></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appTitle()\">\r\n  <button type=\"button\" (click)=\"onCancel()\" [disabled]=\"submittingForm\">\r\n    Cancelar\r\n  </button>\r\n  <button\r\n    type=\"button\"\r\n    (click)=\"onSubmit()\"\r\n    [disabled]=\"submittingForm || !form.valid\"\r\n  >\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-lg-5\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row justify-content-center\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"codTitulo\">Título</label>\r\n            <div class=\"input-group-prepend\">\r\n              <ng-select\r\n                class=\"custom-control-input form-control\"\r\n                [searchable]=\"true\"\r\n                [clearable]=\"true\"\r\n                class=\"col p-0\"\r\n                [items]=\"listarTitulosAgenda\"\r\n                [virtualScroll]=\"true\"\r\n                placeholder=\"Selecione...\"\r\n                labelForId=\"codTitulo\"\r\n                bindLabel=\"descricaoTitulo\"\r\n                bindValue=\"codTitulo\"\r\n                id=\"codTitulo\"\r\n                formControlName=\"codTitulo\"\r\n                (change)=\"onCodTituloChange()\"\r\n              >\r\n              </ng-select>\r\n            </div>\r\n            <invalid-form-control\r\n              [show]=\"onFieldInvalid('codTitulo')\"\r\n              message=\"Título obligatorio.\"\r\n            ></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div *ngIf=\"showInputVendedores\">\r\n          <div\r\n            class=\"form-row\"\r\n            *ngIf=\"permissoesAcesso.simuladorVendas === true\"\r\n          >\r\n            <div class=\"form-group col my-3\">\r\n              <div class=\"custom-control custom-checkbox\">\r\n                <input\r\n                  type=\"checkbox\"\r\n                  class=\"custom-control-input\"\r\n                  id=\"gerar-cotacao-pedido\"\r\n                  formControlName=\"gerarCotacaoPedido\"\r\n                  (change)=\"onGerarCotacaoPedido()\"\r\n                />\r\n                <label class=\"custom-control-label\" for=\"gerar-cotacao-pedido\">\r\n                  Generar presupuesto/solicitud para este contacto\r\n                </label>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"form-row\">\r\n            <div class=\"form-group col\">\r\n              <label for=\"promotor\">Promotor</label>\r\n              <ng-select\r\n                [searchable]=\"true\"\r\n                [clearable]=\"false\"\r\n                [items]=\"promotores\"\r\n                [virtualScroll]=\"true\"\r\n                labelForId=\"promotor\"\r\n                bindLabel=\"nome\"\r\n                bindValue=\"id\"\r\n                formControlName=\"promotor\"\r\n                [ngClass]=\"\r\n                  onFieldError('promotor') + ' ' + onFieldRequired('promotor')\r\n                \"\r\n                (change)=\"onInput()\"\r\n              >\r\n              </ng-select>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div *ngIf=\"showInputClientes\">\r\n          <div\r\n            class=\"form-row\"\r\n            *ngIf=\"permissoesAcesso.simuladorVendas === true\"\r\n          >\r\n            <div class=\"form-group col my-3\">\r\n              <div class=\"custom-control custom-checkbox\">\r\n                <input\r\n                  type=\"checkbox\"\r\n                  class=\"custom-control-input\"\r\n                  id=\"gerar-cotacao-pedido\"\r\n                  formControlName=\"gerarCotacaoPedido\"\r\n                  (change)=\"onGerarCotacaoPedido()\"\r\n                />\r\n                <label class=\"custom-control-label\" for=\"gerar-cotacao-pedido\">\r\n                  Generar presupuesto/solicitud para este contacto\r\n                </label>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"form-row\">\r\n            <div class=\"form-group col\">\r\n              <label for=\"cliente\">Cliente</label>\r\n              <ng-select\r\n                [searchable]=\"true\"\r\n                [clearable]=\"false\"\r\n                [items]=\"clientes\"\r\n                [virtualScroll]=\"true\"\r\n                labelForId=\"cliente\"\r\n                bindLabel=\"nomeCliente\"\r\n                bindValue=\"codCliente\"\r\n                formControlName=\"cliente\"\r\n                [ngClass]=\"\r\n                  onFieldError('cliente') + ' ' + onFieldRequired('cliente')\r\n                \"\r\n                (change)=\"updateDireccion($event)\"\r\n              >\r\n              </ng-select>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"codFormaContato\">FORMA DE CONTACTO</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"formasContato\"\r\n              formControlName=\"codFormaContato\"\r\n              [virtualScroll]=\"false\"\r\n              bindLabel=\"descricao\"\r\n              bindValue=\"codFormaContato\"\r\n              [ngClass]=\"\r\n                onFieldError('codFormaContato') +\r\n                ' ' +\r\n                onFieldRequired('codFormaContato')\r\n              \"\r\n            >\r\n            </ng-select>\r\n            <invalid-form-control\r\n              [show]=\"onFieldInvalid('codFormaContato')\"\r\n              message=\"Forma de contacto es obligatorio.\"\r\n            ></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"codOrigemContato\">ORIGEN DE CONTACTO</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"origensContato\"\r\n              formControlName=\"codOrigemContato\"\r\n              [virtualScroll]=\"false\"\r\n              bindLabel=\"DS_MEIO_CONT\"\r\n              bindValue=\"ID_MEIO_CONT\"\r\n              [ngClass]=\"\r\n                onFieldError('codOrigemContato') +\r\n                ' ' +\r\n                onFieldRequired('codOrigemContato')\r\n              \"\r\n            >\r\n            </ng-select>\r\n            <invalid-form-control\r\n              [show]=\"onFieldInvalid('codOrigemContato')\"\r\n              message=\"Origen de contacto es obligatorio.\"\r\n            ></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-12\">\r\n            <label for=\"codOrigemContato\">DIRECCION</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              formControlName=\"direccion\"\r\n              [ngClass]=\"\r\n                onFieldError('codOrigemContato') +\r\n                ' ' +\r\n                onFieldRequired('codOrigemContato')\r\n              \"\r\n            />\r\n            <input type=\"hidden\" formControlName=\"latitud_clie\" />\r\n            <input type=\"hidden\" formControlName=\"longitud_clie\" />\r\n            <input type=\"hidden\" formControlName=\"codigo_cliente\" />\r\n\r\n            <invalid-form-control\r\n              [show]=\"onFieldInvalid('codOrigemContato')\"\r\n              message=\"Origen de contacto es obligatorio.\"\r\n            ></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-12\">\r\n            <div class=\"embed-responsive embed-responsive-16by9\">\r\n              <agm-map\r\n                [latitude]=\"latitud\"\r\n                [longitude]=\"longitud\"\r\n                [zoom]=\"16\"\r\n                class=\"embed-responsive-item\"\r\n                (mapClick)=\"actualizarMarcador($event)\"\r\n              >\r\n                <agm-marker\r\n                  [latitude]=\"latitud\"\r\n                  [longitude]=\"longitud\"\r\n                  (markerDragEnd)=\"actualizarDireccion($event)\"\r\n                >\r\n                </agm-marker>\r\n              </agm-map>\r\n              <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <div class=\"row\">\r\n              <div class=\"col\">\r\n                <label for=\"inicioData\">Fecha Inicial</label>\r\n              </div>\r\n            </div>\r\n            <div class=\"row\">\r\n              <div class=\"col-md-6 pr-0\">\r\n                <div class=\"input-group\">\r\n                  <div class=\"input-group-prepend\">\r\n                    <span class=\"input-group-text\"\r\n                      ><i class=\"far fa-calendar-alt\"></i\r\n                    ></span>\r\n                  </div>\r\n                  <input\r\n                    class=\"form-control\"\r\n                    id=\"inicioData\"\r\n                    type=\"text\"\r\n                    bsDatepicker\r\n                    [bsConfig]=\"bsConfig\"\r\n                    formControlName=\"inicioData\"\r\n                    (input)=\"onInput()\"\r\n                    [ngClass]=\"\r\n                      onFieldError('inicioData') +\r\n                      ' ' +\r\n                      onFieldRequired('inicioData')\r\n                    \"\r\n                  />\r\n                </div>\r\n                <invalid-form-control\r\n                  [show]=\"onFieldInvalid('inicioData')\"\r\n                  message=\"Início é obrigatório.\"\r\n                ></invalid-form-control>\r\n              </div>\r\n              <div class=\"col-md-6\">\r\n                <div class=\"custom-mt d-flex\">\r\n                  <timepicker\r\n                    [showMeridian]=\"false\"\r\n                    [showSpinners]=\"false\"\r\n                    [mousewheel]=\"true\"\r\n                    formControlName=\"inicioHorario\"\r\n                    (input)=\"onInput()\"\r\n                  >\r\n                  </timepicker>\r\n                  <div class=\"custom-control custom-checkbox ml-3 mt-2\">\r\n                    <input\r\n                      type=\"checkbox\"\r\n                      class=\"custom-control-input\"\r\n                      id=\"diaInteiro\"\r\n                      formControlName=\"diaInteiro\"\r\n                      (input)=\"onInput()\"\r\n                      (change)=\"triggerAllDay()\"\r\n                    />\r\n                    <label class=\"custom-control-label\" for=\"diaInteiro\"\r\n                      >Dia completo</label\r\n                    >\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <div class=\"row\">\r\n              <div class=\"col\">\r\n                <label\r\n                  [ngClass]=\"{ required: !isDisabledTime }\"\r\n                  for=\"terminoData\"\r\n                  >Fecha Final</label\r\n                >\r\n              </div>\r\n            </div>\r\n            <div class=\"row\">\r\n              <div class=\"col-md-6 pr-0\">\r\n                <div class=\"input-group\">\r\n                  <div class=\"input-group-prepend\">\r\n                    <span class=\"input-group-text\"\r\n                      ><i class=\"far fa-calendar-alt\"></i\r\n                    ></span>\r\n                  </div>\r\n                  <input\r\n                    class=\"form-control\"\r\n                    id=\"terminoData\"\r\n                    type=\"text\"\r\n                    bsDatepicker\r\n                    [bsConfig]=\"bsConfig\"\r\n                    formControlName=\"terminoData\"\r\n                    (input)=\"onInput()\"\r\n                  />\r\n                </div>\r\n              </div>\r\n              <div class=\"col-md-6\">\r\n                <div class=\"custom-mt\">\r\n                  <timepicker\r\n                    [showMeridian]=\"false\"\r\n                    [showSpinners]=\"false\"\r\n                    [mousewheel]=\"true\"\r\n                    formControlName=\"terminoHorario\"\r\n                    (input)=\"onInput()\"\r\n                  >\r\n                  </timepicker>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\" *ngIf=\"action == 'reagendar'\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"motivoReagendamento\">Motivo de la reprogramación</label>\r\n            <select\r\n              class=\"form-control custom-select\"\r\n              id=\"motivoReagendamento\"\r\n              formControlName=\"motivoReagendamento\"\r\n              (change)=\"onInput()\"\r\n              [ngClass]=\"{\r\n                'is-invalid': onFieldInvalid(form.get('motivoReagendamento'))\r\n              }\"\r\n            >\r\n              <option\r\n                *ngFor=\"let item of motivosReagendamento\"\r\n                [value]=\"item.ID_REAG_MOTI\"\r\n              >\r\n                {{ item.DS_REAG_MOTI }}\r\n              </option>\r\n            </select>\r\n            <invalid-form-control\r\n              [show]=\"\r\n                form.get('motivoReagendamento').invalid &&\r\n                form.get('motivoReagendamento').touched\r\n              \"\r\n              message=\"Motivo de reagendamiento es obligatorio.\"\r\n            ></invalid-form-control>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"observacao\">Observación</label>\r\n            <textarea\r\n              class=\"form-control\"\r\n              id=\"observacao\"\r\n              formControlName=\"observacao\"\r\n              (input)=\"onInput()\"\r\n            >\r\n            </textarea>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-row\" *ngIf=\"action == 'finalizar'\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"Obsfinalizar\">Observación al finalizar</label>\r\n            <textarea\r\n              class=\"form-control\"\r\n              id=\"Obsfinalizar\"\r\n              formControlName=\"Obsfinalizar\"\r\n              (input)=\"onInput()\"\r\n            >\r\n            </textarea>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header [appTitle]=\"appTitle()\">\r\n  <button type=\"button\" (click)=\"onCancel()\" [disabled]=\"submittingForm\">\r\n    Cancelar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onSubmit()\" [disabled]=\"submittingForm || !form.valid\">\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-lg-5\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row justify-content-center\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"codTitulo\">Título</label>\r\n            <div class=\"input-group-prepend\">\r\n              <ng-select class=\"custom-control-input form-control\" [searchable]=\"true\" [clearable]=\"true\"\r\n                class=\"col p-0\" [items]=\"listarTitulosAgenda\" [virtualScroll]=\"true\" placeholder=\"Selecione...\"\r\n                labelForId=\"codTitulo\" bindLabel=\"descricaoTitulo\" bindValue=\"codTitulo\" id=\"codTitulo\"\r\n                formControlName=\"codTitulo\" (change)=\"onCodTituloChange()\">\r\n              </ng-select>\r\n            </div>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codTitulo')\"\r\n              message=\"Título obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div *ngIf=\"showInputVendedores\">\r\n          <div class=\"form-row\" *ngIf=\"permissoesAcesso.simuladorVendas === true\">\r\n            <div class=\"form-group col my-3\">\r\n              <div class=\"custom-control custom-checkbox\">\r\n                <input type=\"checkbox\" class=\"custom-control-input\" id=\"gerar-cotacao-pedido\"\r\n                  formControlName=\"gerarCotacaoPedido\" (change)=\"onGerarCotacaoPedido()\" />\r\n                <label class=\"custom-control-label\" for=\"gerar-cotacao-pedido\">\r\n                  Generar presupuesto/solicitud para este contacto\r\n                </label>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"form-row\">\r\n            <div class=\"form-group col\">\r\n              <label for=\"promotor\">Promotor</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"promotores\" [virtualScroll]=\"true\"\r\n                labelForId=\"promotor\" bindLabel=\"nombre\" bindValue=\"ID\" formControlName=\"promotor\"\r\n                [ngClass]=\"onFieldError('promotor') + ' ' + onFieldRequired('promotor')\" (change)=\"onInput()\">\r\n              </ng-select>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div *ngIf=\"showInputClientes\">\r\n          <div class=\"form-row\" *ngIf=\"permissoesAcesso.simuladorVendas === true\">\r\n            <div class=\"form-group col my-3\">\r\n              <div class=\"custom-control custom-checkbox\">\r\n                <input type=\"checkbox\" class=\"custom-control-input\" id=\"gerar-cotacao-pedido\"\r\n                  formControlName=\"gerarCotacaoPedido\" (change)=\"onGerarCotacaoPedido()\" />\r\n                <label class=\"custom-control-label\" for=\"gerar-cotacao-pedido\">\r\n                  Generar presupuesto/solicitud para este contacto\r\n                </label>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"form-row\">\r\n            <div class=\"form-group col\">\r\n              <label for=\"cliente\">Cliente</label>\r\n              <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"clientes\" [virtualScroll]=\"true\"\r\n                labelForId=\"cliente\" bindLabel=\"nomeCliente\" bindValue=\"codCliente\" formControlName=\"cliente\"\r\n                [ngClass]=\"onFieldError('cliente') + ' ' + onFieldRequired('cliente')\"\r\n                (change)=\"updateDireccion($event)\">\r\n              </ng-select>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"codFormaContato\">FORMA DE CONTACTO</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"formasContato\" formControlName=\"codFormaContato\"\r\n              [virtualScroll]=\"false\" bindLabel=\"descricao\" bindValue=\"codFormaContato\" [ngClass]=\"\r\n                onFieldError('codFormaContato') +\r\n                ' ' +\r\n                onFieldRequired('codFormaContato')\r\n              \">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codFormaContato')\"\r\n              message=\"Forma de contacto es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"codOrigemContato\">ORIGEN DE CONTACTO</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"origensContato\"\r\n              formControlName=\"codOrigemContato\" [virtualScroll]=\"false\" bindLabel=\"DS_MEIO_CONT\"\r\n              bindValue=\"ID_MEIO_CONT\" [ngClass]=\"\r\n                onFieldError('codOrigemContato') +\r\n                ' ' +\r\n                onFieldRequired('codOrigemContato')\r\n              \">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codOrigemContato')\"\r\n              message=\"Origen de contacto es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-12\">\r\n            <label for=\"codOrigemContato\">DIRECCION</label>\r\n            <input type=\"text\" class=\"form-control\" formControlName=\"direccion\" [ngClass]=\"\r\n                onFieldError('codOrigemContato') +\r\n                ' ' +\r\n                onFieldRequired('codOrigemContato')\r\n              \" />\r\n            <input type=\"hidden\" formControlName=\"latitud_clie\" />\r\n            <input type=\"hidden\" formControlName=\"longitud_clie\" />\r\n            <input type=\"hidden\" formControlName=\"codigo_cliente\" />\r\n\r\n            <invalid-form-control [show]=\"onFieldInvalid('codOrigemContato')\"\r\n              message=\"Origen de contacto es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-12\">\r\n            <div class=\"embed-responsive embed-responsive-16by9\">\r\n              <agm-map [latitude]=\"latitud\" [longitude]=\"longitud\" [zoom]=\"16\" class=\"embed-responsive-item\"\r\n                (mapClick)=\"actualizarMarcador($event)\">\r\n                <agm-marker [latitude]=\"latitud\" [longitude]=\"longitud\" (markerDragEnd)=\"actualizarDireccion($event)\">\r\n                </agm-marker>\r\n              </agm-map>\r\n              <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <div class=\"row\">\r\n              <div class=\"col\">\r\n                <label for=\"inicioData\">Fecha Inicial</label>\r\n              </div>\r\n            </div>\r\n            <div class=\"row\">\r\n              <div class=\"col-md-6 pr-0\">\r\n                <div class=\"input-group\">\r\n                  <div class=\"input-group-prepend\">\r\n                    <span class=\"input-group-text\"><i class=\"far fa-calendar-alt\"></i></span>\r\n                  </div>\r\n                  <input class=\"form-control\" id=\"inicioData\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n                    formControlName=\"inicioData\" (input)=\"onInput()\" [ngClass]=\"\r\n                      onFieldError('inicioData') +\r\n                      ' ' +\r\n                      onFieldRequired('inicioData')\r\n                    \" />\r\n                </div>\r\n                <invalid-form-control [show]=\"onFieldInvalid('inicioData')\"\r\n                  message=\"Início é obrigatório.\"></invalid-form-control>\r\n              </div>\r\n              <div class=\"col-md-6\">\r\n                <div class=\"custom-mt d-flex\">\r\n                  <timepicker [showMeridian]=\"false\" [showSpinners]=\"false\" [mousewheel]=\"true\"\r\n                    formControlName=\"inicioHorario\" (input)=\"onInput()\">\r\n                  </timepicker>\r\n                  <div class=\"custom-control custom-checkbox ml-3 mt-2\">\r\n                    <input type=\"checkbox\" class=\"custom-control-input\" id=\"diaInteiro\" formControlName=\"diaInteiro\"\r\n                      (input)=\"onInput()\" (change)=\"triggerAllDay()\" />\r\n                    <label class=\"custom-control-label\" for=\"diaInteiro\">Dia completo</label>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <div class=\"row\">\r\n              <div class=\"col\">\r\n                <label [ngClass]=\"{ required: !isDisabledTime }\" for=\"terminoData\">Fecha Final</label>\r\n              </div>\r\n            </div>\r\n            <div class=\"row\">\r\n              <div class=\"col-md-6 pr-0\">\r\n                <div class=\"input-group\">\r\n                  <div class=\"input-group-prepend\">\r\n                    <span class=\"input-group-text\"><i class=\"far fa-calendar-alt\"></i></span>\r\n                  </div>\r\n                  <input class=\"form-control\" id=\"terminoData\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n                    formControlName=\"terminoData\" (input)=\"onInput()\" />\r\n                </div>\r\n              </div>\r\n              <div class=\"col-md-6\">\r\n                <div class=\"custom-mt\">\r\n                  <timepicker [showMeridian]=\"false\" [showSpinners]=\"false\" [mousewheel]=\"true\"\r\n                    formControlName=\"terminoHorario\" (input)=\"onInput()\">\r\n                  </timepicker>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\" *ngIf=\"action == 'reagendar'\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"motivoReagendamento\">Motivo de la reprogramación</label>\r\n            <select class=\"form-control custom-select\" id=\"motivoReagendamento\" formControlName=\"motivoReagendamento\"\r\n              (change)=\"onInput()\" [ngClass]=\"{\r\n                'is-invalid': onFieldInvalid(form.get('motivoReagendamento'))\r\n              }\">\r\n              <option *ngFor=\"let item of motivosReagendamento\" [value]=\"item.ID_REAG_MOTI\">\r\n                {{ item.DS_REAG_MOTI }}\r\n              </option>\r\n            </select>\r\n            <invalid-form-control [show]=\"\r\n                form.get('motivoReagendamento').invalid &&\r\n                form.get('motivoReagendamento').touched\r\n              \" message=\"Motivo de reagendamiento es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"observacao\">Observación</label>\r\n            <textarea class=\"form-control\" id=\"observacao\" formControlName=\"observacao\" (input)=\"onInput()\">\r\n            </textarea>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-row\" *ngIf=\"action == 'finalizar'\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"Obsfinalizar\">Observación al finalizar</label>\r\n            <textarea class=\"form-control\" id=\"Obsfinalizar\" formControlName=\"Obsfinalizar\" (input)=\"onInput()\">\r\n            </textarea>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>";
       /***/
     },
 
@@ -1753,49 +1754,55 @@
       /* harmony import */
 
 
-      var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      var src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      /*! src/app/shared/services/core/auth.service */
+      "yxCR");
+      /* harmony import */
+
+
+      var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
       /*! src/app/shared/services/core/pnotify.service */
       "g+W+");
       /* harmony import */
 
 
-      var src_app_shared_services_core_date_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+      var src_app_shared_services_core_date_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
       /*! src/app/shared/services/core/date.service */
       "Rk3r");
       /* harmony import */
 
 
-      var src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      var src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
       /*! src/app/shared/services/requests/atividades.service */
       "0PD5");
       /* harmony import */
 
 
-      var _formulario_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
+      var _formulario_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
       /*! ./formulario.service */
       "L7KI");
       /* harmony import */
 
 
-      var src_app_modules_comercial_agenda_agenda_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
+      var src_app_modules_comercial_agenda_agenda_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(
       /*! src/app/modules/comercial/agenda/agenda.service */
       "73eH");
       /* harmony import */
 
 
-      var src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(
+      var src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(
       /*! src/app/shared/services/core/title.service */
       "dNnS");
       /* harmony import */
 
 
-      var _ciclo_vendas_cotacoes_cotacoes_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(
+      var _ciclo_vendas_cotacoes_cotacoes_service__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(
       /*! ../../ciclo-vendas/cotacoes/cotacoes.service */
       "uuri");
       /* harmony import */
 
 
-      var _services_vendedores_service__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(
+      var _services_vendedores_service__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(
       /*! ../../services/vendedores.service */
       "4xRd"); // ngx-bootstrap
 
@@ -1803,7 +1810,7 @@
       Object(ngx_bootstrap_chronos__WEBPACK_IMPORTED_MODULE_9__["defineLocale"])('es', ngx_bootstrap_locale__WEBPACK_IMPORTED_MODULE_10__["esLocale"]); // Services
 
       var ComercialAgendaFormularioComponent = /*#__PURE__*/function () {
-        function ComercialAgendaFormularioComponent(activatedRoute, atividadesService, formService, agendaService, router, formBuilder, location, localeService, pnotifyService, dateService, titleService, cotacoesService, ComercialVendedoresService) {
+        function ComercialAgendaFormularioComponent(activatedRoute, atividadesService, formService, agendaService, router, formBuilder, location, localeService, pnotifyService, dateService, titleService, cotacoesService, ComercialVendedoresService, authService) {
           _classCallCheck(this, ComercialAgendaFormularioComponent);
 
           this.activatedRoute = activatedRoute;
@@ -1819,6 +1826,8 @@
           this.titleService = titleService;
           this.cotacoesService = cotacoesService;
           this.ComercialVendedoresService = ComercialVendedoresService;
+          this.authService = authService;
+          this.user = this.authService.getCurrentUser();
           this.colors = [{
             hex: '#FFFF01',
             descricao: 'Amarillo'
@@ -2146,15 +2155,19 @@
                 _this9.listarTitulosAgenda = response[4].data;
               } else {
                 _this9.handleLoadDependenciesError();
-              } // @ts-ignore: Ignorar error TS2339
+              }
 
-
-              if (response[5].responseCode == 200) {
-                console.log(response[5].data); // @ts-ignore: Ignorar error TS2339
-
-                _this9.promotores = response[5].result;
+              if (_this9.user.info.matricula != 1) {
+                _this9.promotores = [{
+                  'id': _this9.user.info.idVendedor,
+                  'nombre': _this9.user.info.nomeCompleto
+                }];
               } else {
-                _this9.showInputVendedores = false;
+                if (response[5].success == true) {
+                  _this9.promotores = response[5].data;
+                } else {
+                  _this9.showInputVendedores = false;
+                }
               }
             });
           }
@@ -2265,7 +2278,6 @@
               this.loaderNavbar = true;
               this.submittingForm = true;
               var formValue = this.form.getRawValue();
-              console.log(formValue);
               var obsFinalizar = this.form.get('Obsfinalizar');
               var client, formContactDesc, typeContactDesc, inicioData, inicioHorario, terminoData, terminoHorario;
               var msgSuccess = 'Su cita fue creada.';
@@ -2371,8 +2383,6 @@
                 /* id_status: id_status, */
                 obsFinalizar: formValue.Obsfinalizar
               };
-              console.log(formObj.codClient);
-              console.log(formObj.idVendedor);
               this.agendaService.save(this.action, formObj).subscribe({
                 next: function next(response) {
                   if (response.responseCode === 200) {
@@ -2565,7 +2575,6 @@
         }, {
           key: "filtrovendedor",
           value: function filtrovendedor() {
-            console.log(this.form.value.promotor);
             var params = this.form.value.promotor;
             this.agendaService.reporte(params);
           }
@@ -2578,11 +2587,11 @@
         return [{
           type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"]
         }, {
-          type: src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_13__["AtividadesService"]
+          type: src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_14__["AtividadesService"]
         }, {
-          type: _formulario_service__WEBPACK_IMPORTED_MODULE_14__["ComercialAgendaFormularioService"]
+          type: _formulario_service__WEBPACK_IMPORTED_MODULE_15__["ComercialAgendaFormularioService"]
         }, {
-          type: src_app_modules_comercial_agenda_agenda_service__WEBPACK_IMPORTED_MODULE_15__["ComercialAgendaService"]
+          type: src_app_modules_comercial_agenda_agenda_service__WEBPACK_IMPORTED_MODULE_16__["ComercialAgendaService"]
         }, {
           type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"]
         }, {
@@ -2592,15 +2601,17 @@
         }, {
           type: ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_8__["BsLocaleService"]
         }, {
-          type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__["PNotifyService"]
+          type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_12__["PNotifyService"]
         }, {
-          type: src_app_shared_services_core_date_service__WEBPACK_IMPORTED_MODULE_12__["DateService"]
+          type: src_app_shared_services_core_date_service__WEBPACK_IMPORTED_MODULE_13__["DateService"]
         }, {
-          type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_16__["TitleService"]
+          type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_17__["TitleService"]
         }, {
-          type: _ciclo_vendas_cotacoes_cotacoes_service__WEBPACK_IMPORTED_MODULE_17__["ComercialCicloVendasCotacoesService"]
+          type: _ciclo_vendas_cotacoes_cotacoes_service__WEBPACK_IMPORTED_MODULE_18__["ComercialCicloVendasCotacoesService"]
         }, {
-          type: _services_vendedores_service__WEBPACK_IMPORTED_MODULE_18__["ComercialVendedoresService"]
+          type: _services_vendedores_service__WEBPACK_IMPORTED_MODULE_19__["ComercialVendedoresService"]
+        }, {
+          type: src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_11__["AuthService"]
         }];
       };
 
@@ -2608,7 +2619,7 @@
         selector: 'comercial-agenda-formulario',
         template: _raw_loader_formulario_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
         styles: [_formulario_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"], src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_13__["AtividadesService"], _formulario_service__WEBPACK_IMPORTED_MODULE_14__["ComercialAgendaFormularioService"], src_app_modules_comercial_agenda_agenda_service__WEBPACK_IMPORTED_MODULE_15__["ComercialAgendaService"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"], ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_8__["BsLocaleService"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__["PNotifyService"], src_app_shared_services_core_date_service__WEBPACK_IMPORTED_MODULE_12__["DateService"], src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_16__["TitleService"], _ciclo_vendas_cotacoes_cotacoes_service__WEBPACK_IMPORTED_MODULE_17__["ComercialCicloVendasCotacoesService"], _services_vendedores_service__WEBPACK_IMPORTED_MODULE_18__["ComercialVendedoresService"]])], ComercialAgendaFormularioComponent);
+      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"], src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_14__["AtividadesService"], _formulario_service__WEBPACK_IMPORTED_MODULE_15__["ComercialAgendaFormularioService"], src_app_modules_comercial_agenda_agenda_service__WEBPACK_IMPORTED_MODULE_16__["ComercialAgendaService"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"], ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_8__["BsLocaleService"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_12__["PNotifyService"], src_app_shared_services_core_date_service__WEBPACK_IMPORTED_MODULE_13__["DateService"], src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_17__["TitleService"], _ciclo_vendas_cotacoes_cotacoes_service__WEBPACK_IMPORTED_MODULE_18__["ComercialCicloVendasCotacoesService"], _services_vendedores_service__WEBPACK_IMPORTED_MODULE_19__["ComercialVendedoresService"], src_app_shared_services_core_auth_service__WEBPACK_IMPORTED_MODULE_11__["AuthService"]])], ComercialAgendaFormularioComponent);
       /***/
     },
 

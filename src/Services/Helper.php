@@ -2146,15 +2146,10 @@ class Helper
     public function guardarOfertaSap($array_oferta)
     {
         $api = '/crearProforma';
-
         /* Ruta destino */
         $url = $this->url_sap . $api;
-
         /* Conversión en JSON */
         $data = json_encode($array_oferta);
-        print_r($data);
-        //dd($data);
-
         /* Configuración de CURL */
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -2163,21 +2158,16 @@ class Helper
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
         ));
-
         /* Ejecución */
         $response = curl_exec($curl);
-        //dd($response);
-
         /* Verificar los errores de la solicitud */
         if (curl_errno($curl)) {
-            echo 'Error en la solicitud cURL: ' . curl_error($curl);
+            $respuesta = 'Error en la solicitud cURL: ' . curl_error($curl);
             curl_close($curl);
+            dd($respuesta);
             return false;
         }
-
-        /* Cerrar la sesión de CURL */
         curl_close($curl);
-
         /* Decodificar respuesta */
         $responseData = json_decode($response, true);
         dd($responseData);
@@ -2452,7 +2442,7 @@ class Helper
 
 
         $response = curl_exec($curl);
-        dd($response);
+        //dd($response);
 
         /* Verificar los errores de la solicitud */
         if (curl_errno($curl)) {
@@ -2465,8 +2455,8 @@ class Helper
         curl_close($curl);
 
         /* Decodificar respuesta */
+        dd($response);
         $responseData = json_decode($response, true);
-        //dd($responseData);
 
         if ($responseData['CodigoRespuesta'] == 200) {
             return true;
@@ -2580,12 +2570,23 @@ class Helper
         $correo = null;
         $swEncontrado = false;
 
-        $query = "SELECT * FROM TB_JERARQUIA_AUTORIZACION  WHERE 
-            rango = :rango AND  cod_item like :id_item AND estado = :estado AND multiple = :multiple";
+        $query = "	SELECT 
+        TJA.id_usuario as id_usuario,
+        TJA.id_item as item,
+        TJA.correo as correo,
+        TJA.rango as rango,
+        TCU.NM_COMP_RAZA_SOCI as nombres,
+        TCU.NM_DEPA AS DEPARTAMENTO,
+        TCU.NM_CARG_FUNC AS CARGO
+        FROM 
+        TB_JERARQUIA_AUTORIZACION  TJA 
+        inner join TB_CORE_USUA TCU on TCU.id =TJA.id_usuario
+         WHERE 
+            rango = :rango AND  id_item = :id_item AND estado = :estado AND multiple = :multiple";
 
         $stament = $connection->prepare($query);
         $stament->bindValue('rango', $rango);
-        $stament->bindValue('id_item', '%' . $id_item . '%');
+        $stament->bindValue('id_item', $id_item);
         $stament->bindValue('multiple', 0);
         $stament->bindValue('estado', 1);
         $stament->execute();
@@ -2596,11 +2597,21 @@ class Helper
             $correo = $datos_gestion['correo'];
             $swEncontrado = true;
         } else {
-            $query_registros = "SELECT * FROM TB_JERARQUIA_AUTORIZACION  WHERE 
-                cod_item like :id_item AND estado = :estado AND multiple = :multiple";
+            $query_registros = "SELECT 
+            TJA.id_usuario as id_usuario,
+            TJA.id_item as item,
+            TJA.correo as correo,
+            TJA.rango as rango,
+            TCU.NM_COMP_RAZA_SOCI as nombres,
+            TCU.NM_DEPA AS DEPARTAMENTO,
+            TCU.NM_CARG_FUNC AS CARGO
+            FROM 
+            TB_JERARQUIA_AUTORIZACION  TJA 
+            inner join TB_CORE_USUA TCU on TCU.id =TJA.id_usuario WHERE 
+                id_item like :id_item AND estado = :estado AND multiple = :multiple";
 
             $stament_t = $connection->prepare($query_registros);
-            $stament_t->bindValue('id_item', '%' . $id_item . '%');
+            $stament_t->bindValue('id_item', $id_item);
             $stament_t->bindValue('estado', 1);
             $stament_t->bindValue('multiple', 0);
 
@@ -2615,24 +2626,25 @@ class Helper
                     return $a['rango'] - $b['rango'];
                 });
 
-
                 foreach ($arrayDatos as $dato) {
                     //print_r($dato['rango']);
+                    $id_usuario = $dato['id_usuario'];
+                    $correo = $dato['correo'];
+                    $nombres = $dato['nombres'];
                     if ($rango === $dato['rango']) {
-                        $id_usuario = $dato['id_usuario'];
-                        $correo = $dato['correo'];
                         $arrayMultiple = ([
                             'id_usuario' => $id_usuario,
                             'correo' => $correo,
+                            'nombres' => $nombres,
                         ]);
                         $swEncontrado = true;
                         break;
-                    } else if ($rango <= $dato['rango']) {
-                        $id_usuario = $dato['id_usuario'];
-                        $correo = $dato['correo'];
+                    } else if ($rango <= $dato['rango']) 
+                    {
                         $arrayMultiple[]  = ([
                             'id_usuario' => $id_usuario,
                             'correo' => $correo,
+                            'nombres' => $nombres
                         ]);
                         $swEncontrado = true;
                         break;
@@ -2788,25 +2800,47 @@ class Helper
     {
         $arrFinal = array();
         $query_oferta =
-            "SELECT OFE.id AS id_oferta, OFE.nombre_oferta AS nombre_oferta, FORMAT(OFE.fecha_inicial, 'dd-MM-yyyy') AS fecha_inicial, FORMAT(OFE.fecha_final, 'dd-MM-yyyy') AS fecha_final, 
-            FORMAT(OFE.fecha_creacion, 'dd-MM-yyyy') AS fecha_creacion, OFE.cantidad_total as cantidad_total, OFE.monto_total_bruto AS monto_total_bruto, OFE.monto_total as monto_total,
-            OFE.descuento_total AS descuento_total, OFE.observacion AS observacion, OFE.latitud AS latitud, OFE.longitud AS longitud, OFE.autorizacion AS auth,
-            OFE.codigo_oferta AS codigo_oferta, OFE.peso_total AS peso_total,  CLIE.nombre_factura AS nombre_factura, 
-            CLIE.nit AS nit, OFE.id_persona_contacto AS id_persona_contacto,
-                CASE
-                    WHEN  OFE.estado_oferta = 0 THEN 'Borrador'
-                    WHEN  OFE.estado_oferta = 1 THEN 'Venta'
-                    WHEN  OFE.estado_oferta = 2 THEN 'Rechazado'
-                END AS estado_oferta,
-            
-            CLIE.prim_nome AS nombre_cliente, OFE.id_vendedor AS id_vendedor, CLIE.id_cliente AS id_cliente, CLIE.codigo_cliente AS codigo_cliente, ME.id AS id_modo_entrega,
-            ME.nombre_modo_entrega AS nombre_modo_entrega, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS nombre_vendedor,
-            DEPO.NOMBRE_DEPOSITO as ubicacion_almacen, DEPO.CODIGO_ALMACEN AS codigo_almacen,  LP.nombre_lista AS nombre_lista
-            
+            "SELECT OFE.id AS id_oferta, 
+            OFE.nombre_oferta AS nombre_oferta, 
+            FORMAT(OFE.fecha_inicial, 'dd-MM-yyyy') AS fecha_inicial, 
+            FORMAT(OFE.fecha_final, 'dd-MM-yyyy') AS fecha_final, 
+            FORMAT(OFE.fecha_creacion, 'dd-MM-yyyy') AS fecha_creacion, 
+            OFE.cantidad_total as cantidad_total, 
+            OFE.monto_total_bruto AS monto_total_bruto, 
+            OFE.monto_total as monto_total,
+            OFE.descuento_total AS descuento_total, 
+            OFE.observacion AS observacion, 
+            OFE.latitud AS latitud, 
+            OFE.longitud AS longitud, 
+            OFE.autorizacion AS auth,
+            OFE.codigo_oferta AS codigo_oferta, 
+            OFE.peso_total AS peso_total,  
+            CLIE.nombre_factura AS nombre_factura, 
+            CLIE.nit AS nit, 
+            OFE.id_persona_contacto AS id_persona_contacto,
+            CASE
+                WHEN  OFE.estado_oferta = 0 THEN 'Borrador'
+                WHEN  OFE.estado_oferta = 1 THEN 'Venta'
+                WHEN  OFE.estado_oferta = 2 THEN 'Rechazado'
+            END AS estado_oferta,
+            CLIE.prim_nome AS nombre_cliente, 
+            OFE.id_vendedor AS id_vendedor, 
+            CLIE.id_cliente AS id_cliente, 
+            CLIE.codigo_cliente AS codigo_cliente,
+            CLIE.cnpj_cpf as nit_factura, 
+            TCC.ds_cont AS codigo_direccion,
+            OFE.id_modo_entrega AS id_modo_entrega,
+            ME.nombre_modo_entrega AS nombre_modo_entrega, 
+            CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS nombre_vendedor,
+            DEPO.NOMBRE_DEPOSITO as ubicacion_almacen, 
+            DEPO.CODIGO_ALMACEN AS codigo_almacen,  
+            LP.nombre_lista AS nombre_lista,
+            CONCAT(OFE.latitud, ', ', OFE.longitud) AS geolocalizacion
             FROM TB_OFERTA OFE 
                 INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
+                left JOIN TB_CLIE_CONT TCC ON TCC.id_clie = OFE.id_cliente
                 INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
-                INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+                left JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
                 INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
                 LEFT JOIN TB_DEPO_FISI_ESTO AS DEPO ON OFE.id_almacen = DEPO.id
             WHERE  OFE.id = :id_oferta";
@@ -2815,26 +2849,47 @@ class Helper
         $stmt1->bindValue(':id_oferta', $id);
         $stmt1->execute();
         $res1 = $stmt1->fetch();
-
+        $stmt1->closeCursor();
         if ($res1 > 0) {
             $arrFinal['oferta'] = $res1;
             $query =
-                "SELECT OD.id, MATE.ID_CODIGOMATERIAL as id_material,  OFE.id as id_oferta, MATE.CODIGOMATERIAL as codigo_material, MATE.DESCRICAO as nombre_material,
-                    UNI.SIGLAS_UNI as unidad, PM.precio as precio,  OD.cantidad as cantidad,  OD.subtotal_bruto AS total_bruto, od.descuento as precio_descuento,
-                    od.subtotal as subtotal,
-                    DEPO.CODIGO_ALMACEN as nombre_almacen, MONE.nombre_moneda as nombre_moneda
-                FROM TB_MATE MATE INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_material = MATE.ID_CODIGOMATERIAL INNER JOIN TB_OFERTA OFE ON OFE.id = OD.id_oferta
-                    INNER JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad INNER JOIN TB_LISTA_PRECIO LP ON LP.id = OFE.id_lista_precio INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_lista = LP.id
+                "SELECT OD.id, MATE.ID_CODIGOMATERIAL as id_material,  
+				OFE.id as id_oferta, 
+				MATE.CODIGOMATERIAL as codigo_material,
+				MATE.DESCRICAO as nombre_material,
+                UNI.SIGLAS_UNI as unidad, 
+				PM.precio as precio,  
+				OD.cantidad as cantidad,  
+				OD.subtotal_bruto AS total_bruto, 
+				od.descuento as precio_descuento,
+                od.subtotal as subtotal,
+				OD.descuento_permitido as descuento,
+				OD.percentualDEsc as descuento_dado,
+                DEPO.CODIGO_ALMACEN as nombre_almacen, 
+				MONE.nombre_moneda as nombre_moneda,
+                CASE
+                    WHEN TME.id = 1 THEN 'D'
+                    WHEN TME.id = 2 THEN 'R'
+                    ELSE 'N'
+                END AS modo_entrega
+                FROM  TB_OFERTA_DETALLE OD 
+					INNER JOIN TB_MATE MATE ON OD.id_material = MATE.ID_CODIGOMATERIAL
+					INNER JOIN TB_OFERTA OFE ON OFE.id = OD.id_oferta
+                    INNER JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad 
+					INNER JOIN TB_LISTA_PRECIO LP ON LP.id = OFE.id_lista_precio 
+					INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_lista = LP.id
                     INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OD.id_almacen_carrito
                     INNER JOIN TB_MONEDA MONE ON MONE.id = OFE.id_moneda 
+                    left JOIN TB_MODO_ENTREGA TME ON TME.id = OFE.id_modo_entrega
                 WHERE MATE.ID_CODIGOMATERIAL = PM.id_material AND OFE.id = :id_oferta";
-
 
             $stmt = $connection->prepare($query);
             $stmt->bindValue(':id_oferta', $id);
             $stmt->execute();
             $res = $stmt->fetchAll();
+            $stmt->closeCursor();
             /* dd($res); */
+       
 
             if (count($res) > 0) {
                 $arrFinal['analitico'] = $res;
@@ -3016,6 +3071,9 @@ class Helper
                         'direccion_contacto' => $contacto['direccion'],
                         'celular_contacto' => $celular,
                         'telefono_contacto' => $telefono,
+                        'latitude_contacto'=> $contacto['latitude'],
+                        'longitude_contacto'=> $contacto['longitud'],
+
                     ]);
                 }
                 $array_final['datos_contacto'] = $array_contactos;
@@ -3119,6 +3177,16 @@ class Helper
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function actualizaOfertaA($connection, $autorizacion, $id_oferta)
+    {      
+        $affectedRows = $connection->update('TB_OFERTA', ['autorizacion' => $autorizacion], ['id' => $id_oferta]);
+        if ($affectedRows > 0) {
+            return true;
+        } else {
+            return false; 
         }
     }
 }

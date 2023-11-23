@@ -87,6 +87,11 @@ let ComercialEstoqueService = class ComercialEstoqueService {
             .get(`${this.API}/estoquesuspenso/${params.idMaterial}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
     }
+    getStockAlmacenes(params) {
+        return this.http
+            .get(`${this.API}/estoquealmacen/${params.idMaterial}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(2));
+    }
 };
 ComercialEstoqueService.ctorParameters = () => [
     { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
@@ -430,6 +435,16 @@ let ComercialCicloVendasCotacoesService = class ComercialCicloVendasCotacoesServ
     autorizaciones(data) {
         return this.http
             .post(`${this.API2}/registrar`, data)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getCierreOferta() {
+        return this.http
+            .get(`${this.API}/cierre`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    finalizarOferta(data) {
+        return this.http
+            .post(`${this.API}/post_cierre`, data)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
 };

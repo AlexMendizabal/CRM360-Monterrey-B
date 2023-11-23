@@ -119,6 +119,11 @@ let ComercialCicloVendasCotacoesFormularioService = class ComercialCicloVendasCo
     getLocaisEntrega(codCliente) {
         return this.clientesService.getEnderecos(codCliente, { localEntrega: 1 });
     }
+    getVerificaOfertasCliente(codCliente) {
+        return this.http
+            .get(`${this.API}/verifica-oferta/${codCliente}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1));
+    }
     getAnexos(codCotacao) {
         return this.http
             .get(`${this.API}/anexo/documentos/${codCotacao}`)

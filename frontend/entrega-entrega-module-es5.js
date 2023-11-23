@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["entrega-entrega-module"], {
     /***/
@@ -413,9 +409,9 @@
       import { LogisticaEntregaMonitorIntegracaoRavexComponent } from './monitores/ravex/ravex.component'; */
 
 
-      var LogisticaEntregaModule = /*#__PURE__*/_createClass(function LogisticaEntregaModule() {
+      var LogisticaEntregaModule = function LogisticaEntregaModule() {
         _classCallCheck(this, LogisticaEntregaModule);
-      });
+      };
 
       LogisticaEntregaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_entrega_component__WEBPACK_IMPORTED_MODULE_22__["LogisticaEntregaComponent"]
@@ -517,7 +513,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | romaneios-romaneios-module */
-          [__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~234d8aea"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null,
           /*! ./romaneios/romaneios.module */
           "ZD/H")).then(function (m) {
             return m.LogisticaEntregaRomaneiosModule;
@@ -539,7 +535,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | desmembramento-desmembramento-module */
-          [__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~234d8aea"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null,
           /*! ./desmembramento/desmembramento.module */
           "9bwc")).then(function (m) {
             return m.LogisticaEntregaDesmembramentoModule;
@@ -550,7 +546,7 @@
         loadChildren: function loadChildren() {
           return Promise.all(
           /*! import() | monitores-monitores-module */
-          [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null,
+          [__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null,
           /*! ./monitores/monitores.module */
           "D14F")).then(function (m) {
             return m.LogisticaEntregaMonitoresModule;
@@ -561,9 +557,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_3__["NotFoundComponent"]
       }];
 
-      var LogisticaEntregaRoutingModule = /*#__PURE__*/_createClass(function LogisticaEntregaRoutingModule() {
+      var LogisticaEntregaRoutingModule = function LogisticaEntregaRoutingModule() {
         _classCallCheck(this, LogisticaEntregaRoutingModule);
-      });
+      };
 
       LogisticaEntregaRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

@@ -1,15 +1,9 @@
 (function () {
-  function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == typeof h && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(typeof e + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
-
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["entrada-materiais-entrada-materiais-module"], {
     /***/
@@ -147,12 +141,6 @@
         }
 
         _createClass(LogisticaEntradaMateriaisFichasConformidadeDocumentosComponent, [{
-          key: "fichaId",
-          set: function set(id) {
-            if (!id) return;
-            this.postDocumentos(id);
-          }
-        }, {
           key: "ngOnInit",
           value: function ngOnInit() {
             var params = this.activatedRoute.snapshot.params;
@@ -167,46 +155,48 @@
         }, {
           key: "postDocumentos",
           value: function postDocumentos(fichaId) {
-            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
               var _this = this;
 
               var requests, promise;
-              return _regeneratorRuntime().wrap(function _callee$(_context) {
-                while (1) switch (_context.prev = _context.next) {
-                  case 0:
-                    requests = [];
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                  switch (_context.prev = _context.next) {
+                    case 0:
+                      requests = [];
 
-                    if (!(this.formData.length === 0)) {
-                      _context.next = 3;
-                      break;
-                    }
+                      if (!(this.formData.length === 0)) {
+                        _context.next = 3;
+                        break;
+                      }
 
-                    return _context.abrupt("return", requests);
+                      return _context.abrupt("return", requests);
 
-                  case 3:
-                    promise = function promise() {
-                      _this.formData.forEach(function (element) {
-                        requests.push(_this.fichaConformidadeService.postDocumento(element, fichaId));
+                    case 3:
+                      promise = function promise() {
+                        _this.formData.forEach(function (element) {
+                          requests.push(_this.fichaConformidadeService.postDocumento(element, fichaId));
+                        });
+                      };
+
+                      Promise.resolve(promise());
+                      Object(rxjs__WEBPACK_IMPORTED_MODULE_7__["forkJoin"])(requests).subscribe(function (responses) {
+                        responses.forEach(function (response) {
+                          if (response.status === 200) {
+                            _this.pnotify.success();
+                          } else {
+                            _this.pnotify.error();
+                          }
+                        });
+                      }, function (error) {
+                        _this.pnotify.error();
                       });
-                    };
+                      return _context.abrupt("return", requests);
 
-                    Promise.resolve(promise());
-                    Object(rxjs__WEBPACK_IMPORTED_MODULE_7__["forkJoin"])(requests).subscribe(function (responses) {
-                      responses.forEach(function (response) {
-                        if (response.status === 200) {
-                          _this.pnotify.success();
-                        } else {
-                          _this.pnotify.error();
-                        }
-                      });
-                    }, function (error) {
-                      _this.pnotify.error();
-                    });
-                    return _context.abrupt("return", requests);
-
-                  case 7:
-                  case "end":
-                    return _context.stop();
+                    case 7:
+                    case "end":
+                      return _context.stop();
+                  }
                 }
               }, _callee, this);
             }));
@@ -277,6 +267,12 @@
             this.documentos.push({
               NM_DOCU: files[0]['name']
             });
+          }
+        }, {
+          key: "fichaId",
+          set: function set(id) {
+            if (!id) return;
+            this.postDocumentos(id);
           }
         }]);
 
@@ -407,9 +403,9 @@
         }]
       }];
 
-      var SulFluminenseEntradaMateriaisRoutingModule = /*#__PURE__*/_createClass(function SulFluminenseEntradaMateriaisRoutingModule() {
+      var SulFluminenseEntradaMateriaisRoutingModule = function SulFluminenseEntradaMateriaisRoutingModule() {
         _classCallCheck(this, SulFluminenseEntradaMateriaisRoutingModule);
-      });
+      };
 
       SulFluminenseEntradaMateriaisRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterModule"].forChild(routes)],
@@ -2045,9 +2041,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_11__["NotFoundComponent"]
       }];
 
-      var LogisticaEntradaMateriaisRoutingModule = /*#__PURE__*/_createClass(function LogisticaEntradaMateriaisRoutingModule() {
+      var LogisticaEntradaMateriaisRoutingModule = function LogisticaEntradaMateriaisRoutingModule() {
         _classCallCheck(this, LogisticaEntradaMateriaisRoutingModule);
-      });
+      };
 
       LogisticaEntradaMateriaisRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_9__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_10__["RouterModule"].forChild(routes)],
@@ -2688,11 +2684,6 @@
             this.modalRef.hide();
           }
         }, {
-          key: "formMateriais",
-          get: function get() {
-            return this.form.get('materiais');
-          }
-        }, {
           key: "setMaterial",
           value: function setMaterial(material) {
             var _material = Object.assign(Object.assign({}, material), {
@@ -2709,63 +2700,65 @@
         }, {
           key: "postMateriais",
           value: function postMateriais(id) {
-            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
               var _this23 = this;
 
               var request, materiais, promise;
-              return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                while (1) switch (_context2.prev = _context2.next) {
-                  case 0:
-                    request = [];
-                    materiais = this.formMateriais.getRawValue();
+              return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                while (1) {
+                  switch (_context2.prev = _context2.next) {
+                    case 0:
+                      request = [];
+                      materiais = this.formMateriais.getRawValue();
 
-                    if (materiais) {
-                      _context2.next = 4;
-                      break;
-                    }
+                      if (materiais) {
+                        _context2.next = 4;
+                        break;
+                      }
 
-                    return _context2.abrupt("return");
+                      return _context2.abrupt("return");
 
-                  case 4:
-                    promise = function promise() {
-                      materiais.forEach(function (material) {
-                        var params = Object.assign(Object.assign({}, material), {
-                          'ID_LOGI_ENMA_FHNC': id
-                        });
-                        request.push(_this23.fichasConformidadeService.postMateriais(params));
-                      });
-                    };
-
-                    _context2.next = 7;
-                    return Promise.resolve(promise());
-
-                  case 7:
-                    Object(rxjs__WEBPACK_IMPORTED_MODULE_16__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["finalize"])(function () {
-                      _this23.loading = false;
-                      _this23.loadingNavBar = false;
-                    })).subscribe(function (responses) {
-                      responses.forEach(function (response) {
-                        if (response.status === 200) {
-                          _this23.pnotify.success('Material, salvo com sucesso!');
-
-                          _this23.router.navigate(['../'], {
-                            relativeTo: _this23.activatedRoute
+                    case 4:
+                      promise = function promise() {
+                        materiais.forEach(function (material) {
+                          var params = Object.assign(Object.assign({}, material), {
+                            'ID_LOGI_ENMA_FHNC': id
                           });
-                        } else {
+                          request.push(_this23.fichasConformidadeService.postMateriais(params));
+                        });
+                      };
+
+                      _context2.next = 7;
+                      return Promise.resolve(promise());
+
+                    case 7:
+                      Object(rxjs__WEBPACK_IMPORTED_MODULE_16__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["finalize"])(function () {
+                        _this23.loading = false;
+                        _this23.loadingNavBar = false;
+                      })).subscribe(function (responses) {
+                        responses.forEach(function (response) {
+                          if (response.status === 200) {
+                            _this23.pnotify.success('Material, salvo com sucesso!');
+
+                            _this23.router.navigate(['../'], {
+                              relativeTo: _this23.activatedRoute
+                            });
+                          } else {
+                            _this23.pnotify.error();
+                          }
+                        });
+                      }, function (error) {
+                        try {
+                          _this23.pnotify.error(error.error.message);
+                        } catch (error) {
                           _this23.pnotify.error();
                         }
                       });
-                    }, function (error) {
-                      try {
-                        _this23.pnotify.error(error.error.message);
-                      } catch (error) {
-                        _this23.pnotify.error();
-                      }
-                    });
 
-                  case 8:
-                  case "end":
-                    return _context2.stop();
+                    case 8:
+                    case "end":
+                      return _context2.stop();
+                  }
                 }
               }, _callee2, this);
             }));
@@ -2779,40 +2772,42 @@
             this.fichasConformidadeService.getFormMaterial(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["finalize"])(function () {
               _this24.loading = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this24, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this24, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
                 var _this25 = this;
 
                 var materiais, promise;
-                return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                  while (1) switch (_context3.prev = _context3.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context3.next = 3;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  while (1) {
+                    switch (_context3.prev = _context3.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context3.next = 3;
+                          break;
+                        }
 
-                      this.noMateriais = true;
-                      return _context3.abrupt("return");
+                        this.noMateriais = true;
+                        return _context3.abrupt("return");
 
-                    case 3:
-                      materiais = response['body']['data'];
+                      case 3:
+                        materiais = response['body']['data'];
 
-                      promise = function promise() {
-                        return materiais.forEach(function () {
-                          return _this25.onAddMaterial();
-                        });
-                      };
+                        promise = function promise() {
+                          return materiais.forEach(function () {
+                            return _this25.onAddMaterial();
+                          });
+                        };
 
-                      _context3.next = 7;
-                      return Promise.resolve(promise());
+                        _context3.next = 7;
+                        return Promise.resolve(promise());
 
-                    case 7:
-                      this.form.get('materiais').patchValue(materiais);
-                      this.noMateriais = false;
+                      case 7:
+                        this.form.get('materiais').patchValue(materiais);
+                        this.noMateriais = false;
 
-                    case 9:
-                    case "end":
-                      return _context3.stop();
+                      case 9:
+                      case "end":
+                        return _context3.stop();
+                    }
                   }
                 }, _callee3, this);
               }));
@@ -2831,43 +2826,45 @@
             this.fichasConformidadeService.getNotasFiscaisMateriais(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_17__["finalize"])(function () {
               _this26.loading = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this26, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this26, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
                 var _this27 = this;
 
                 var materiais, promise;
-                return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                  while (1) switch (_context4.prev = _context4.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context4.next = 3;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context4.next = 3;
+                          break;
+                        }
 
-                      this.noMateriais = true;
-                      return _context4.abrupt("return");
+                        this.noMateriais = true;
+                        return _context4.abrupt("return");
 
-                    case 3:
-                      materiais = response['body']['data'];
+                      case 3:
+                        materiais = response['body']['data'];
 
-                      promise = function promise() {
-                        return materiais.forEach(function (material, index) {
-                          _this27.onAddMaterial();
+                        promise = function promise() {
+                          return materiais.forEach(function (material, index) {
+                            _this27.onAddMaterial();
 
-                          materiais[index]['TT_MATE_ORIG'] = materiais[index]['TT_MATE'];
-                          materiais[index]['TT_MATE'] = null;
-                        });
-                      };
+                            materiais[index]['TT_MATE_ORIG'] = materiais[index]['TT_MATE'];
+                            materiais[index]['TT_MATE'] = null;
+                          });
+                        };
 
-                      _context4.next = 7;
-                      return Promise.resolve(promise());
+                        _context4.next = 7;
+                        return Promise.resolve(promise());
 
-                    case 7:
-                      this.form.get('materiais').patchValue(materiais);
-                      this.noMateriais = false;
+                      case 7:
+                        this.form.get('materiais').patchValue(materiais);
+                        this.noMateriais = false;
 
-                    case 9:
-                    case "end":
-                      return _context4.stop();
+                      case 9:
+                      case "end":
+                        return _context4.stop();
+                    }
                   }
                 }, _callee4, this);
               }));
@@ -3012,6 +3009,11 @@
             }
 
             return false;
+          }
+        }, {
+          key: "formMateriais",
+          get: function get() {
+            return this.form.get('materiais');
           }
         }]);
 
@@ -3820,13 +3822,6 @@
         }
 
         _createClass(LogisticaEntradaMateriaisFichasConformidadeOcorrenciasComponent, [{
-          key: "fichaId",
-          set: function set(id) {
-            if (!id) return;
-            this.setFormBuilder();
-            this.form.get('ID_LOGI_ENMA_FHNC').setValue(id);
-          }
-        }, {
           key: "ngOnInit",
           value: function ngOnInit() {
             this.registrarAcesso();
@@ -3882,38 +3877,40 @@
             this.fichasConformidadeService.getResponsaveis(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_14__["finalize"])(function () {
               _this32.loadingNavBar = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this32, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this32, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
                 var _this33 = this;
 
                 var responsaveis, promise;
-                return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-                  while (1) switch (_context5.prev = _context5.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context5.next = 2;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                  while (1) {
+                    switch (_context5.prev = _context5.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context5.next = 2;
+                          break;
+                        }
 
-                      return _context5.abrupt("return");
+                        return _context5.abrupt("return");
 
-                    case 2:
-                      responsaveis = response['body']['data'];
+                      case 2:
+                        responsaveis = response['body']['data'];
 
-                      promise = function promise() {
-                        return responsaveis.forEach(function () {
-                          return _this33.onAddResponsavel();
-                        });
-                      };
+                        promise = function promise() {
+                          return responsaveis.forEach(function () {
+                            return _this33.onAddResponsavel();
+                          });
+                        };
 
-                      _context5.next = 6;
-                      return Promise.resolve(promise());
+                        _context5.next = 6;
+                        return Promise.resolve(promise());
 
-                    case 6:
-                      this.form.get('responsaveis').patchValue(responsaveis);
+                      case 6:
+                        this.form.get('responsaveis').patchValue(responsaveis);
 
-                    case 7:
-                    case "end":
-                      return _context5.stop();
+                      case 7:
+                      case "end":
+                        return _context5.stop();
+                    }
                   }
                 }, _callee5, this);
               }));
@@ -4056,53 +4053,55 @@
         }, {
           key: "postResponsaveis",
           value: function postResponsaveis(id) {
-            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
               var _this36 = this;
 
               var request, responsaveis, promise;
-              return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-                while (1) switch (_context6.prev = _context6.next) {
-                  case 0:
-                    request = [];
-                    responsaveis = this.formResponsaveis.getRawValue();
+              return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                while (1) {
+                  switch (_context6.prev = _context6.next) {
+                    case 0:
+                      request = [];
+                      responsaveis = this.formResponsaveis.getRawValue();
 
-                    if (responsaveis) {
-                      _context6.next = 4;
-                      break;
-                    }
-
-                    return _context6.abrupt("return");
-
-                  case 4:
-                    promise = function promise() {
-                      responsaveis.forEach(function (responsavel) {
-                        var params = Object.assign(Object.assign({}, responsavel), {
-                          'ID_LOGI_ENMA_FHNC_OCOR': id
-                        });
-                        request.push(_this36.fichasConformidadeService.postResponsaveis(params));
-                      });
-                    };
-
-                    _context6.next = 7;
-                    return Promise.resolve(promise());
-
-                  case 7:
-                    Object(rxjs__WEBPACK_IMPORTED_MODULE_13__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_14__["finalize"])(function () {
-                      _this36.loading = false;
-                      _this36.loadingNavBar = false;
-                    })).subscribe(function (responses) {
-                      _this36.pnotify.success('Responsáveis cadastrados com sucesso');
-                    }, function (error) {
-                      try {
-                        _this36.pnotify.error(error.error.message);
-                      } catch (error) {
-                        _this36.pnotify.error();
+                      if (responsaveis) {
+                        _context6.next = 4;
+                        break;
                       }
-                    });
 
-                  case 8:
-                  case "end":
-                    return _context6.stop();
+                      return _context6.abrupt("return");
+
+                    case 4:
+                      promise = function promise() {
+                        responsaveis.forEach(function (responsavel) {
+                          var params = Object.assign(Object.assign({}, responsavel), {
+                            'ID_LOGI_ENMA_FHNC_OCOR': id
+                          });
+                          request.push(_this36.fichasConformidadeService.postResponsaveis(params));
+                        });
+                      };
+
+                      _context6.next = 7;
+                      return Promise.resolve(promise());
+
+                    case 7:
+                      Object(rxjs__WEBPACK_IMPORTED_MODULE_13__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_14__["finalize"])(function () {
+                        _this36.loading = false;
+                        _this36.loadingNavBar = false;
+                      })).subscribe(function (responses) {
+                        _this36.pnotify.success('Responsáveis cadastrados com sucesso');
+                      }, function (error) {
+                        try {
+                          _this36.pnotify.error(error.error.message);
+                        } catch (error) {
+                          _this36.pnotify.error();
+                        }
+                      });
+
+                    case 8:
+                    case "end":
+                      return _context6.stop();
+                  }
                 }
               }, _callee6, this);
             }));
@@ -4192,11 +4191,6 @@
             });
           }
         }, {
-          key: "formResponsaveis",
-          get: function get() {
-            return this.form.get('responsaveis');
-          }
-        }, {
           key: "onAddResponsavel",
           value: function onAddResponsavel() {
             this.formResponsaveis.push(this.formBuilder.group({
@@ -4268,46 +4262,48 @@
         }, {
           key: "postDocumentosOcorrencia",
           value: function postDocumentosOcorrencia(fichaId) {
-            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
               var _this39 = this;
 
               var requests, promise;
-              return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-                while (1) switch (_context7.prev = _context7.next) {
-                  case 0:
-                    requests = [];
+              return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                while (1) {
+                  switch (_context7.prev = _context7.next) {
+                    case 0:
+                      requests = [];
 
-                    if (!(this.formData.length === 0)) {
-                      _context7.next = 3;
-                      break;
-                    }
+                      if (!(this.formData.length === 0)) {
+                        _context7.next = 3;
+                        break;
+                      }
 
-                    return _context7.abrupt("return", requests);
+                      return _context7.abrupt("return", requests);
 
-                  case 3:
-                    promise = function promise() {
-                      _this39.formData.forEach(function (element) {
-                        requests.push(_this39.fichasConformidadeService.postDocumentoOcorrencia(element, fichaId));
+                    case 3:
+                      promise = function promise() {
+                        _this39.formData.forEach(function (element) {
+                          requests.push(_this39.fichasConformidadeService.postDocumentoOcorrencia(element, fichaId));
+                        });
+                      };
+
+                      Promise.resolve(promise());
+                      Object(rxjs__WEBPACK_IMPORTED_MODULE_13__["forkJoin"])(requests).subscribe(function (responses) {
+                        responses.forEach(function (response) {
+                          if (response.status === 200) {
+                            _this39.pnotify.success();
+                          } else {
+                            _this39.pnotify.error();
+                          }
+                        });
+                      }, function (error) {
+                        _this39.pnotify.error();
                       });
-                    };
+                      return _context7.abrupt("return", requests);
 
-                    Promise.resolve(promise());
-                    Object(rxjs__WEBPACK_IMPORTED_MODULE_13__["forkJoin"])(requests).subscribe(function (responses) {
-                      responses.forEach(function (response) {
-                        if (response.status === 200) {
-                          _this39.pnotify.success();
-                        } else {
-                          _this39.pnotify.error();
-                        }
-                      });
-                    }, function (error) {
-                      _this39.pnotify.error();
-                    });
-                    return _context7.abrupt("return", requests);
-
-                  case 7:
-                  case "end":
-                    return _context7.stop();
+                    case 7:
+                    case "end":
+                      return _context7.stop();
+                  }
                 }
               }, _callee7, this);
             }));
@@ -4378,6 +4374,18 @@
             this.documentos.push({
               NM_DOCU: files[0]['name']
             });
+          }
+        }, {
+          key: "fichaId",
+          set: function set(id) {
+            if (!id) return;
+            this.setFormBuilder();
+            this.form.get('ID_LOGI_ENMA_FHNC').setValue(id);
+          }
+        }, {
+          key: "formResponsaveis",
+          get: function get() {
+            return this.form.get('responsaveis');
           }
         }]);
 
@@ -5765,38 +5773,40 @@
               _this53.loadingNavBar = false;
               _this53.loadingMateriais = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this53, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this53, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
                 var _this54 = this;
 
                 var materiais, promise;
-                return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-                  while (1) switch (_context8.prev = _context8.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context8.next = 2;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                  while (1) {
+                    switch (_context8.prev = _context8.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context8.next = 2;
+                          break;
+                        }
 
-                      return _context8.abrupt("return");
+                        return _context8.abrupt("return");
 
-                    case 2:
-                      materiais = response['body']['data'];
+                      case 2:
+                        materiais = response['body']['data'];
 
-                      promise = function promise() {
-                        return materiais.forEach(function () {
-                          return _this54.onAddMaterial();
-                        });
-                      };
+                        promise = function promise() {
+                          return materiais.forEach(function () {
+                            return _this54.onAddMaterial();
+                          });
+                        };
 
-                      _context8.next = 6;
-                      return Promise.resolve(promise());
+                        _context8.next = 6;
+                        return Promise.resolve(promise());
 
-                    case 6:
-                      this.form.get('materiais').patchValue(materiais);
+                      case 6:
+                        this.form.get('materiais').patchValue(materiais);
 
-                    case 7:
-                    case "end":
-                      return _context8.stop();
+                      case 7:
+                      case "end":
+                        return _context8.stop();
+                    }
                   }
                 }, _callee8, this);
               }));
@@ -6013,81 +6023,83 @@
         }, {
           key: "postMateriais",
           value: function postMateriais(id) {
-            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
               var _this57 = this;
 
               var request, materiais, promise;
-              return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-                while (1) switch (_context9.prev = _context9.next) {
-                  case 0:
-                    request = [];
-                    materiais = this.formMateriais.getRawValue();
+              return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                while (1) {
+                  switch (_context9.prev = _context9.next) {
+                    case 0:
+                      request = [];
+                      materiais = this.formMateriais.getRawValue();
 
-                    if (!(!materiais || !this.formMateriais.dirty)) {
-                      _context9.next = 6;
-                      break;
-                    }
+                      if (!(!materiais || !this.formMateriais.dirty)) {
+                        _context9.next = 6;
+                        break;
+                      }
 
-                    this.pnotify.notice('Nenhum material alterado!');
-                    this.router.navigate(['./../'], {
-                      relativeTo: this.activatedRoute
-                    });
-                    return _context9.abrupt("return");
-
-                  case 6:
-                    if (this.form.get('ID_LOGI_ENMA_NOFI').value) {
-                      _context9.next = 8;
-                      break;
-                    }
-
-                    return _context9.abrupt("return");
-
-                  case 8:
-                    promise = function promise() {
-                      var controls = Object.keys(_this57.formMateriais.controls);
-                      controls.forEach(function (key) {
-                        if (!_this57.formMateriais.controls[key].dirty) {
-                          return;
-                        }
-
-                        var material = _this57.formMateriais.get(key).value;
-
-                        material['SEQU_MATE'] = materiais[key]['SEQU_MATE'];
-                        material['ID_LOGI_ENMA_NOFI'] = id;
-                        request.push(_this57.notasFiscaisService.postMateriais(material));
+                      this.pnotify.notice('Nenhum material alterado!');
+                      this.router.navigate(['./../'], {
+                        relativeTo: this.activatedRoute
                       });
-                    };
+                      return _context9.abrupt("return");
 
-                    _context9.next = 11;
-                    return Promise.resolve(promise());
+                    case 6:
+                      if (this.form.get('ID_LOGI_ENMA_NOFI').value) {
+                        _context9.next = 8;
+                        break;
+                      }
 
-                  case 11:
-                    Object(rxjs__WEBPACK_IMPORTED_MODULE_14__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["finalize"])(function () {
-                      _this57.loading = false;
-                      _this57.loadingNavBar = false;
-                    })).subscribe(function (responses) {
-                      responses.forEach(function (response) {
-                        if (response.status === 200) {
-                          _this57.pnotify.success('Material, salvo com sucesso!');
+                      return _context9.abrupt("return");
 
-                          _this57.router.navigate(['../'], {
-                            relativeTo: _this57.activatedRoute
-                          });
-                        } else {
+                    case 8:
+                      promise = function promise() {
+                        var controls = Object.keys(_this57.formMateriais.controls);
+                        controls.forEach(function (key) {
+                          if (!_this57.formMateriais.controls[key].dirty) {
+                            return;
+                          }
+
+                          var material = _this57.formMateriais.get(key).value;
+
+                          material['SEQU_MATE'] = materiais[key]['SEQU_MATE'];
+                          material['ID_LOGI_ENMA_NOFI'] = id;
+                          request.push(_this57.notasFiscaisService.postMateriais(material));
+                        });
+                      };
+
+                      _context9.next = 11;
+                      return Promise.resolve(promise());
+
+                    case 11:
+                      Object(rxjs__WEBPACK_IMPORTED_MODULE_14__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["finalize"])(function () {
+                        _this57.loading = false;
+                        _this57.loadingNavBar = false;
+                      })).subscribe(function (responses) {
+                        responses.forEach(function (response) {
+                          if (response.status === 200) {
+                            _this57.pnotify.success('Material, salvo com sucesso!');
+
+                            _this57.router.navigate(['../'], {
+                              relativeTo: _this57.activatedRoute
+                            });
+                          } else {
+                            _this57.pnotify.error();
+                          }
+                        });
+                      }, function (error) {
+                        try {
+                          _this57.pnotify.error(error.error.message);
+                        } catch (error) {
                           _this57.pnotify.error();
                         }
                       });
-                    }, function (error) {
-                      try {
-                        _this57.pnotify.error(error.error.message);
-                      } catch (error) {
-                        _this57.pnotify.error();
-                      }
-                    });
 
-                  case 12:
-                  case "end":
-                    return _context9.stop();
+                    case 12:
+                    case "end":
+                      return _context9.stop();
+                  }
                 }
               }, _callee9, this);
             }));
@@ -6156,11 +6168,6 @@
           key: "hideModal",
           value: function hideModal() {
             this.modalRef.hide();
-          }
-        }, {
-          key: "formMateriais",
-          get: function get() {
-            return this.form.get('materiais');
           }
         }, {
           key: "onAddMaterial",
@@ -6300,6 +6307,11 @@
               ID_LOGI_ENMA_NOFI: id
             }));
             window.open("".concat(window.location.origin, "/#/logistica/entrada-materiais/").concat(idSubmodulo, "/fichas-nao-conformidade/novo?q=").concat(queryParams), 'blank');
+          }
+        }, {
+          key: "formMateriais",
+          get: function get() {
+            return this.form.get('materiais');
           }
         }]);
 
@@ -7290,25 +7302,27 @@
             this.fichasConformidadeService.getDocumentoOcorrencia(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["finalize"])(function () {
               _this71.loadingDocumentosOcorrencias = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this71, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this71, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
                 var documentos;
-                return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-                  while (1) switch (_context10.prev = _context10.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context10.next = 2;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee10$(_context10) {
+                  while (1) {
+                    switch (_context10.prev = _context10.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context10.next = 2;
+                          break;
+                        }
 
-                      return _context10.abrupt("return");
+                        return _context10.abrupt("return");
 
-                    case 2:
-                      documentos = response['body']['data'];
-                      this.documentosOcorrencia[params.ID_LOGI_ENMA_FHNC_OCOR] = documentos;
+                      case 2:
+                        documentos = response['body']['data'];
+                        this.documentosOcorrencia[params.ID_LOGI_ENMA_FHNC_OCOR] = documentos;
 
-                    case 4:
-                    case "end":
-                      return _context10.stop();
+                      case 4:
+                      case "end":
+                        return _context10.stop();
+                    }
                   }
                 }, _callee10, this);
               }));
@@ -7325,27 +7339,29 @@
             this.fichasConformidadeService.getResponsaveisOcorrencia(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_15__["finalize"])(function () {
               _this72.loadingResponsaveisOcorrencias = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this72, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this72, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
                 var responsaveis;
-                return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-                  while (1) switch (_context11.prev = _context11.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context11.next = 3;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee11$(_context11) {
+                  while (1) {
+                    switch (_context11.prev = _context11.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context11.next = 3;
+                          break;
+                        }
 
-                      this.noResponsaveisOcorrencia = true;
-                      return _context11.abrupt("return");
+                        this.noResponsaveisOcorrencia = true;
+                        return _context11.abrupt("return");
 
-                    case 3:
-                      responsaveis = response['body']['data'];
-                      this.noResponsaveisOcorrencia = false;
-                      this.responsaveisOcorrencia[params.ID_LOGI_ENMA_FHNC_OCOR] = responsaveis;
+                      case 3:
+                        responsaveis = response['body']['data'];
+                        this.noResponsaveisOcorrencia = false;
+                        this.responsaveisOcorrencia[params.ID_LOGI_ENMA_FHNC_OCOR] = responsaveis;
 
-                    case 6:
-                    case "end":
-                      return _context11.stop();
+                      case 6:
+                      case "end":
+                        return _context11.stop();
+                    }
                   }
                 }, _callee11, this);
               }));
@@ -7989,9 +8005,9 @@
       /*! ./consulta-recebimento-bobinas/consulta-recebimento-bobinas.component */
       "Anp4");
 
-      var SulFluminenseEntradaMateriaisModule = /*#__PURE__*/_createClass(function SulFluminenseEntradaMateriaisModule() {
+      var SulFluminenseEntradaMateriaisModule = function SulFluminenseEntradaMateriaisModule() {
         _classCallCheck(this, SulFluminenseEntradaMateriaisModule);
-      });
+      };
 
       SulFluminenseEntradaMateriaisModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_entrada_materiais_component__WEBPACK_IMPORTED_MODULE_10__["SulFluminenseEntradaMateriaisComponent"], _painel_bobinas_qualidade_painel_bobinas_qualidade_component__WEBPACK_IMPORTED_MODULE_11__["SulFluminensePainelBobinasQualidadeComponent"], _consulta_recebimento_bobinas_consulta_recebimento_bobinas_component__WEBPACK_IMPORTED_MODULE_12__["SulFluminenseConsultaRecebimentoBobinasComponent"]],
@@ -10839,25 +10855,27 @@
             this.tiposConformidadeService.getResponsaveis(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_13__["finalize"])(function () {
               _this104.loadingResponsaveis = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this104, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
-                return _regeneratorRuntime().wrap(function _callee12$(_context12) {
-                  while (1) switch (_context12.prev = _context12.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context12.next = 3;
-                        break;
-                      }
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this104, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
+                return regeneratorRuntime.wrap(function _callee12$(_context12) {
+                  while (1) {
+                    switch (_context12.prev = _context12.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context12.next = 3;
+                          break;
+                        }
 
-                      this.noResponsaveis = true;
-                      return _context12.abrupt("return");
+                        this.noResponsaveis = true;
+                        return _context12.abrupt("return");
 
-                    case 3:
-                      this.responsaveis = response['body']['data'];
-                      this.noResponsaveis = false;
+                      case 3:
+                        this.responsaveis = response['body']['data'];
+                        this.noResponsaveis = false;
 
-                    case 5:
-                    case "end":
-                      return _context12.stop();
+                      case 5:
+                      case "end":
+                        return _context12.stop();
+                    }
                   }
                 }, _callee12, this);
               }));
@@ -11224,38 +11242,40 @@
             this.tiposConformidadeService.getResponsaveis(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_13__["finalize"])(function () {
               _this107.loadingNavBar = false;
             })).subscribe(function (response) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this107, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this107, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
                 var _this108 = this;
 
                 var responsaveis, promise;
-                return _regeneratorRuntime().wrap(function _callee13$(_context13) {
-                  while (1) switch (_context13.prev = _context13.next) {
-                    case 0:
-                      if (!(response.status !== 200)) {
-                        _context13.next = 2;
-                        break;
-                      }
+                return regeneratorRuntime.wrap(function _callee13$(_context13) {
+                  while (1) {
+                    switch (_context13.prev = _context13.next) {
+                      case 0:
+                        if (!(response.status !== 200)) {
+                          _context13.next = 2;
+                          break;
+                        }
 
-                      return _context13.abrupt("return");
+                        return _context13.abrupt("return");
 
-                    case 2:
-                      responsaveis = response['body']['data'];
+                      case 2:
+                        responsaveis = response['body']['data'];
 
-                      promise = function promise() {
-                        return responsaveis.forEach(function () {
-                          return _this108.onAddResponsavel();
-                        });
-                      };
+                        promise = function promise() {
+                          return responsaveis.forEach(function () {
+                            return _this108.onAddResponsavel();
+                          });
+                        };
 
-                      _context13.next = 6;
-                      return Promise.resolve(promise());
+                        _context13.next = 6;
+                        return Promise.resolve(promise());
 
-                    case 6:
-                      this.form.get('responsaveis').patchValue(responsaveis);
+                      case 6:
+                        this.form.get('responsaveis').patchValue(responsaveis);
 
-                    case 7:
-                    case "end":
-                      return _context13.stop();
+                      case 7:
+                      case "end":
+                        return _context13.stop();
+                    }
                   }
                 }, _callee13, this);
               }));
@@ -11380,54 +11400,56 @@
         }, {
           key: "postResponsaveis",
           value: function postResponsaveis(id) {
-            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
+            return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
               var _this110 = this;
 
               var request, responsaveis, promise;
-              return _regeneratorRuntime().wrap(function _callee14$(_context14) {
-                while (1) switch (_context14.prev = _context14.next) {
-                  case 0:
-                    request = [];
-                    responsaveis = this.formResponsaveis.getRawValue();
+              return regeneratorRuntime.wrap(function _callee14$(_context14) {
+                while (1) {
+                  switch (_context14.prev = _context14.next) {
+                    case 0:
+                      request = [];
+                      responsaveis = this.formResponsaveis.getRawValue();
 
-                    if (responsaveis) {
-                      _context14.next = 4;
-                      break;
-                    }
-
-                    return _context14.abrupt("return");
-
-                  case 4:
-                    promise = function promise() {
-                      responsaveis.forEach(function (responsavel) {
-                        var params = Object.assign(Object.assign({}, responsavel), {
-                          'ID_LOGI_ENMA_FHNC_TIPO': id,
-                          IN_STAT: '1'
-                        });
-                        request.push(_this110.tiposConformidadeService.postResponsaveis(params));
-                      });
-                    };
-
-                    _context14.next = 7;
-                    return Promise.resolve(promise());
-
-                  case 7:
-                    Object(rxjs__WEBPACK_IMPORTED_MODULE_12__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_13__["finalize"])(function () {
-                      _this110.loading = false;
-                      _this110.loadingNavBar = false;
-                    })).subscribe(function (responses) {
-                      _this110.pnotify.success('Responsáveis cadastrados com sucesso');
-                    }, function (error) {
-                      try {
-                        _this110.pnotify.error(error.error.message);
-                      } catch (error) {
-                        _this110.pnotify.error();
+                      if (responsaveis) {
+                        _context14.next = 4;
+                        break;
                       }
-                    });
 
-                  case 8:
-                  case "end":
-                    return _context14.stop();
+                      return _context14.abrupt("return");
+
+                    case 4:
+                      promise = function promise() {
+                        responsaveis.forEach(function (responsavel) {
+                          var params = Object.assign(Object.assign({}, responsavel), {
+                            'ID_LOGI_ENMA_FHNC_TIPO': id,
+                            IN_STAT: '1'
+                          });
+                          request.push(_this110.tiposConformidadeService.postResponsaveis(params));
+                        });
+                      };
+
+                      _context14.next = 7;
+                      return Promise.resolve(promise());
+
+                    case 7:
+                      Object(rxjs__WEBPACK_IMPORTED_MODULE_12__["forkJoin"])(request).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_13__["finalize"])(function () {
+                        _this110.loading = false;
+                        _this110.loadingNavBar = false;
+                      })).subscribe(function (responses) {
+                        _this110.pnotify.success('Responsáveis cadastrados com sucesso');
+                      }, function (error) {
+                        try {
+                          _this110.pnotify.error(error.error.message);
+                        } catch (error) {
+                          _this110.pnotify.error();
+                        }
+                      });
+
+                    case 8:
+                    case "end":
+                      return _context14.stop();
+                  }
                 }
               }, _callee14, this);
             }));
@@ -11513,11 +11535,6 @@
             });
           }
         }, {
-          key: "formResponsaveis",
-          get: function get() {
-            return this.form.get('responsaveis');
-          }
-        }, {
           key: "onAddResponsavel",
           value: function onAddResponsavel() {
             this.formResponsaveis.push(this.formBuilder.group({
@@ -11584,6 +11601,11 @@
           value: function onPageChanged(event) {
             this.begin = (event.page - 1) * event.itemsPerPage;
             this.end = event.page * event.itemsPerPage;
+          }
+        }, {
+          key: "formResponsaveis",
+          get: function get() {
+            return this.form.get('responsaveis');
           }
         }]);
 
@@ -11859,9 +11881,9 @@
       //Components
 
 
-      var LogisticaEntradaMateriaisModule = /*#__PURE__*/_createClass(function LogisticaEntradaMateriaisModule() {
+      var LogisticaEntradaMateriaisModule = function LogisticaEntradaMateriaisModule() {
         _classCallCheck(this, LogisticaEntradaMateriaisModule);
-      });
+      };
 
       LogisticaEntradaMateriaisModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_15__["NgModule"])({
         declarations: [_entrada_materiais_component__WEBPACK_IMPORTED_MODULE_19__["LogisticaEntradaMateriaisComponent"], _notas_fiscais_cadastro_cadastro_component__WEBPACK_IMPORTED_MODULE_18__["LogisticaEntradaMateriaisNotasFiscaisCadastroComponent"], _notas_fiscais_lista_lista_component__WEBPACK_IMPORTED_MODULE_17__["LogisticaEntradaMateriaisNotasFiscaisListaComponent"], _status_recebimento_lista_lista_component__WEBPACK_IMPORTED_MODULE_21__["LogisticaEntradaMateriaisStatusRecebimentoListaComponent"], _status_recebimento_cadastro_cadastro_component__WEBPACK_IMPORTED_MODULE_20__["LogisticaEntradaMateriaisStatusRecebimentoCadastroComponent"], _painel_aprovacao_lista_lista_component__WEBPACK_IMPORTED_MODULE_22__["LogisticaEntradaMateriaisPainelAprovacaoListaComponent"], _motivos_lista_lista_component__WEBPACK_IMPORTED_MODULE_23__["LogisticaEntradaMateriaisMotivosListaComponent"], _motivos_cadastro_cadastro_component__WEBPACK_IMPORTED_MODULE_24__["LogisticaEntradaMateriaisMotivosCadastroComponent"], _tipos_conformidade_lista_lista_component__WEBPACK_IMPORTED_MODULE_25__["LogisticaEntradaMateriaisTiposConformidadeListaComponent"], _tipos_conformidade_cadastro_cadastro_component__WEBPACK_IMPORTED_MODULE_26__["LogisticaEntradaMateriaisTiposConformidadeCadastroComponent"], _ficha_conformidade_lista_lista_component__WEBPACK_IMPORTED_MODULE_27__["LogisticaEntradaMateriaisFichaConformidadeListaComponent"], _ficha_conformidade_cadastro_cadastro_component__WEBPACK_IMPORTED_MODULE_28__["LogisticaEntradaMateriaisFichasConformidadeCadastroComponent"], _ficha_conformidade_documentos_documentos_component__WEBPACK_IMPORTED_MODULE_29__["LogisticaEntradaMateriaisFichasConformidadeDocumentosComponent"], _ficha_conformidade_ocorrencias_ocorrencias_component__WEBPACK_IMPORTED_MODULE_30__["LogisticaEntradaMateriaisFichasConformidadeOcorrenciasComponent"], _parecer_lista_lista_component__WEBPACK_IMPORTED_MODULE_31__["LogisticaEntradaMateriaisParecerListaComponent"], _parecer_cadastro_cadastro_component__WEBPACK_IMPORTED_MODULE_32__["LogisticaEntradaMateriaisParecerCadastroComponent"], _notas_fiscais_lista_duplicadas_duplicadas_component__WEBPACK_IMPORTED_MODULE_33__["LogisticaEntradaMateriaisNotasFiscaisDuplicadasComponent"]],

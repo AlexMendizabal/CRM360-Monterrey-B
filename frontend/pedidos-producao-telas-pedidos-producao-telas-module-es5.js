@@ -5,21 +5,17 @@
 
   function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-  function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+  function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
   function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["pedidos-producao-telas-pedidos-producao-telas-module"], {
     /***/
@@ -497,12 +493,12 @@
       "g+W+"); // Services
 
 
-      var ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarService = /*#__PURE__*/_createClass(function ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarService(pnotifyService) {
+      var ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarService = function ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarService(pnotifyService) {
         _classCallCheck(this, ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarService);
 
         this.pnotifyService = pnotifyService;
         this.pnotifyService.getPNotify();
-      });
+      };
 
       ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarService.ctorParameters = function () {
         return [{
@@ -693,11 +689,6 @@
             this.onAddMaterial(this.dataCotacao.carrinho);
           }
         }, {
-          key: "materiais",
-          get: function get() {
-            return this.form.get('materiais');
-          }
-        }, {
           key: "onAddMaterial",
           value: function onAddMaterial(materiais) {
             if (materiais.length > 0) {
@@ -823,6 +814,11 @@
               _this6.router.navigate(['/comercial/ciclo-vendas/cotacoes-pedidos/lista']);
             }, 100);
           }
+        }, {
+          key: "materiais",
+          get: function get() {
+            return this.form.get('materiais');
+          }
         }]);
 
         return ComercialCicloVendasPedidosProducaoTelasFormularioModalFinalizacaoPerdidaComponent;
@@ -944,9 +940,9 @@
       // Interfaces
 
 
-      var ComercialCicloVendasPedidosProducaoTelasModule = /*#__PURE__*/_createClass(function ComercialCicloVendasPedidosProducaoTelasModule() {
+      var ComercialCicloVendasPedidosProducaoTelasModule = function ComercialCicloVendasPedidosProducaoTelasModule() {
         _classCallCheck(this, ComercialCicloVendasPedidosProducaoTelasModule);
-      });
+      };
 
       ComercialCicloVendasPedidosProducaoTelasModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [],
@@ -2052,9 +2048,9 @@
       // Modules
 
 
-      var ComercialCicloVendasPedidosProducaoTelasListaModule = /*#__PURE__*/_createClass(function ComercialCicloVendasPedidosProducaoTelasListaModule() {
+      var ComercialCicloVendasPedidosProducaoTelasListaModule = function ComercialCicloVendasPedidosProducaoTelasListaModule() {
         _classCallCheck(this, ComercialCicloVendasPedidosProducaoTelasListaModule);
-      });
+      };
 
       ComercialCicloVendasPedidosProducaoTelasListaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"])({
         declarations: [_lista_component__WEBPACK_IMPORTED_MODULE_2__["ComercialCicloVendasPedidosProducaoTelasListaComponent"]],
@@ -2184,9 +2180,9 @@
         pathMatch: 'full'
       }];
 
-      var ComercialCicloVendasPedidosProducaoTelasRoutingModule = /*#__PURE__*/_createClass(function ComercialCicloVendasPedidosProducaoTelasRoutingModule() {
+      var ComercialCicloVendasPedidosProducaoTelasRoutingModule = function ComercialCicloVendasPedidosProducaoTelasRoutingModule() {
         _classCallCheck(this, ComercialCicloVendasPedidosProducaoTelasRoutingModule);
-      });
+      };
 
       ComercialCicloVendasPedidosProducaoTelasRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes), _lista_lista_module__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasPedidosProducaoTelasListaModule"], _formulario_formulario_module__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasPedidosProducaoTelasFormularioModule"]],
@@ -2921,10 +2917,10 @@
                   });
                 }
 
-                for (var _i = 0; _i < _enderecosAguardando.length; _i++) {
+                for (var _i2 = 0; _i2 < _enderecosAguardando.length; _i2++) {
                   enderecosAguardando.push({
-                    codEndereco: _enderecosAguardando[_i].id,
-                    descricao: _this12.formatLocalEntrega(_enderecosAguardando[_i]),
+                    codEndereco: _enderecosAguardando[_i2].id,
+                    descricao: _this12.formatLocalEntrega(_enderecosAguardando[_i2]),
                     tipo: 'Aguardando aprovação'
                   });
                 }
@@ -4223,11 +4219,6 @@
             }
           }
         }, {
-          key: "materiais",
-          get: function get() {
-            return this.form.get('materiais');
-          }
-        }, {
           key: "onAddMaterial",
           value: function onAddMaterial(materiais) {
             this.nrPedido = materiais[0].nrPedido;
@@ -4290,37 +4281,37 @@
                 var _hasError = false,
                     _qtdeAdicionados = 0;
 
-                for (var _i2 = 0; _i2 < materiais[0].length; _i2++) {
-                  if (this.checkMaterialExists(materiais[_i2]) === false) {
+                for (var _i3 = 0; _i3 < materiais[0].length; _i3++) {
+                  if (this.checkMaterialExists(materiais[_i3]) === false) {
                     this.materiais.push(this.formBuilder.group({
                       nrItem: [this.nrItem],
-                      idReservado: [materiais[0][_i2].idReservado],
-                      codCotacao: [materiais[0][_i2].codCotacao],
-                      codMaterial: [materiais[0][_i2].codMaterial],
-                      nomeMaterial: [materiais[0][_i2].nomeMaterial],
-                      quantidade: [materiais[0][_i2].qtdeItem, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      valorUnit: [materiais[0][_i2].valorUnit],
-                      valor: [materiais[0][_i2].valor, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      percentualIpi: [materiais[0][_i2].percentualIpi],
-                      valorIpi: [materiais[0][_i2].valorIpi, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      percentualIcms: [materiais[0][_i2].percentualIcms],
-                      valorIcms: [materiais[0][_i2].valorIcms, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      valorIcmsSt: [materiais[0][_i2].valorIcmsSt != null ? materiais[0][_i2].valorIcmsSt : 0, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      tipoDesc: [materiais[0][_i2].tipoDesc],
-                      valorDesc: [materiais[0][_i2].valorDesc],
-                      percentualDesc: [materiais[0][_i2].percentualDesc],
-                      valorTotalOri: [materiais[0][_i2].valorTotalOri],
-                      valorTotal: [materiais[0][_i2].valorTotal, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
-                      codEmpresa: [materiais[0][_i2].codEmpresa],
-                      nomeEmpresa: [materiais[0][_i2].nomeEmpresa],
-                      codDeposito: [materiais[0][_i2].codDeposito],
-                      nomeDeposito: [materiais[0][_i2].nomeDeposito],
-                      medida1: [materiais[0][_i2].medida1],
-                      medida2: [materiais[0][_i2].medida2],
-                      pesoEspecifico: [materiais[0][_i2].peso],
-                      materialAssociado: [materiais[0][_i2].materialAssociado]
+                      idReservado: [materiais[0][_i3].idReservado],
+                      codCotacao: [materiais[0][_i3].codCotacao],
+                      codMaterial: [materiais[0][_i3].codMaterial],
+                      nomeMaterial: [materiais[0][_i3].nomeMaterial],
+                      quantidade: [materiais[0][_i3].qtdeItem, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      valorUnit: [materiais[0][_i3].valorUnit],
+                      valor: [materiais[0][_i3].valor, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      percentualIpi: [materiais[0][_i3].percentualIpi],
+                      valorIpi: [materiais[0][_i3].valorIpi, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      percentualIcms: [materiais[0][_i3].percentualIcms],
+                      valorIcms: [materiais[0][_i3].valorIcms, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      valorIcmsSt: [materiais[0][_i3].valorIcmsSt != null ? materiais[0][_i3].valorIcmsSt : 0, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      tipoDesc: [materiais[0][_i3].tipoDesc],
+                      valorDesc: [materiais[0][_i3].valorDesc],
+                      percentualDesc: [materiais[0][_i3].percentualDesc],
+                      valorTotalOri: [materiais[0][_i3].valorTotalOri],
+                      valorTotal: [materiais[0][_i3].valorTotal, [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required]],
+                      codEmpresa: [materiais[0][_i3].codEmpresa],
+                      nomeEmpresa: [materiais[0][_i3].nomeEmpresa],
+                      codDeposito: [materiais[0][_i3].codDeposito],
+                      nomeDeposito: [materiais[0][_i3].nomeDeposito],
+                      medida1: [materiais[0][_i3].medida1],
+                      medida2: [materiais[0][_i3].medida2],
+                      pesoEspecifico: [materiais[0][_i3].peso],
+                      materialAssociado: [materiais[0][_i3].materialAssociado]
                     }));
-                    this.setSelectedCodEmpresa(materiais[0][_i2].codEmpresa);
+                    this.setSelectedCodEmpresa(materiais[0][_i3].codEmpresa);
                     _qtdeAdicionados++;
                   }
                 }
@@ -4740,6 +4731,11 @@
           key: "setSelectedCodEmpresa",
           value: function setSelectedCodEmpresa(codEmpresa) {
             this.selectedCodEmpresa = codEmpresa;
+          }
+        }, {
+          key: "materiais",
+          get: function get() {
+            return this.form.get('materiais');
           }
         }]);
 
@@ -6389,9 +6385,9 @@
       // Services
 
 
-      var ComercialCicloVendasPedidosProducaoTelasFormularioModule = /*#__PURE__*/_createClass(function ComercialCicloVendasPedidosProducaoTelasFormularioModule() {
+      var ComercialCicloVendasPedidosProducaoTelasFormularioModule = function ComercialCicloVendasPedidosProducaoTelasFormularioModule() {
         _classCallCheck(this, ComercialCicloVendasPedidosProducaoTelasFormularioModule);
-      });
+      };
 
       ComercialCicloVendasPedidosProducaoTelasFormularioModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_16__["NgModule"])({
         declarations: [_materiais_lista_lista_component__WEBPACK_IMPORTED_MODULE_14__["ComercialCicloVendasPedidosProducaoTelasFormularioMateriaisListaComponent"], _formulario_component__WEBPACK_IMPORTED_MODULE_15__["ComercialCicloVendasPedidosProducaoTelasFormularioComponent"], _carrinho_carrinho_component__WEBPACK_IMPORTED_MODULE_13__["ComercialCicloVendasPedidosProducaoTelasFormularioCarrinhoComponent"], _modal_historico_exclusao_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_11__["ComercialCicloVendasPedidosProducaoTelasFormularioModalHistoricoExclusaoComponent"], _modal_finalizacao_padrao_padrao_component__WEBPACK_IMPORTED_MODULE_10__["ComercialCicloVendasPedidosProducaoTelasFormularioModalFinalizacaoPadraoComponent"], _modal_finalizacao_perdida_perdida_component__WEBPACK_IMPORTED_MODULE_9__["ComercialCicloVendasPedidosProducaoTelasFormularioModalFinalizacaoPerdidaComponent"], _modal_material_calculo_calculo_component__WEBPACK_IMPORTED_MODULE_12__["ComercialCicloVendasPedidosProducaoTelasFormularioModalMaterialCalculoComponent"], _modal_selecionar_selecionar_component__WEBPACK_IMPORTED_MODULE_2__["ComercialCicloVendasPedidosProducaoTelasFormularioModalSelecionarComponent"], _modal_detalhes_cliente_component__WEBPACK_IMPORTED_MODULE_1__["ComercialCicloVendasPedidosProducaoTelasFormularioModalDetalhesComponent"]],

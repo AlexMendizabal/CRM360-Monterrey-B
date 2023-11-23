@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["representantes-representantes-module"], {
     /***/
@@ -853,11 +849,6 @@
             }
           }
         }, {
-          key: "anexos",
-          get: function get() {
-            return this.form.get('anexos');
-          }
-        }, {
           key: "onAddAnexos",
           value: function onAddAnexos(anexo, manipulateForm) {
             if (this.checkAnexoExists(anexo) === false) {
@@ -959,6 +950,11 @@
           key: "confirmDelete",
           value: function confirmDelete() {
             return this.confirmModalService.showConfirm('delete', 'Confirmar exclusão', 'Deseja realmente prosseguir com a exclusão do registro?', 'Cancelar', 'Confirmar');
+          }
+        }, {
+          key: "anexos",
+          get: function get() {
+            return this.form.get('anexos');
           }
         }]);
 
@@ -1464,9 +1460,9 @@
       // Services
 
 
-      var ComercialCadastrosRepresentantesModule = /*#__PURE__*/_createClass(function ComercialCadastrosRepresentantesModule() {
+      var ComercialCadastrosRepresentantesModule = function ComercialCadastrosRepresentantesModule() {
         _classCallCheck(this, ComercialCadastrosRepresentantesModule);
-      });
+      };
 
       ComercialCadastrosRepresentantesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_lista_lista_component__WEBPACK_IMPORTED_MODULE_18__["ComercialCadastrosRepresentantesListaComponent"], _formulario_formulario_component__WEBPACK_IMPORTED_MODULE_19__["ComercialCadastrosRepresentantesFormularioComponent"]],
@@ -1721,9 +1717,9 @@
         }]
       }];
 
-      var ComercialCadastrosRepresentantesRoutingModule = /*#__PURE__*/_createClass(function ComercialCadastrosRepresentantesRoutingModule() {
+      var ComercialCadastrosRepresentantesRoutingModule = function ComercialCadastrosRepresentantesRoutingModule() {
         _classCallCheck(this, ComercialCadastrosRepresentantesRoutingModule);
-      });
+      };
 
       ComercialCadastrosRepresentantesRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -1918,9 +1914,9 @@
       // Pipe
 
 
-      var ComercialComissoesRepresentantesProgramacaoPagamentosModule = /*#__PURE__*/_createClass(function ComercialComissoesRepresentantesProgramacaoPagamentosModule() {
+      var ComercialComissoesRepresentantesProgramacaoPagamentosModule = function ComercialComissoesRepresentantesProgramacaoPagamentosModule() {
         _classCallCheck(this, ComercialComissoesRepresentantesProgramacaoPagamentosModule);
-      });
+      };
 
       ComercialComissoesRepresentantesProgramacaoPagamentosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_lista_lista_component__WEBPACK_IMPORTED_MODULE_16__["ComercialComissoesRepresentantesProgramacaoPagamentosListaComponent"], _shared_pipes_cpf_pipe__WEBPACK_IMPORTED_MODULE_18__["CPFPipe"]],
@@ -2082,9 +2078,9 @@
       // Components
 
 
-      var ComercialComissoesRepresentantesModule = /*#__PURE__*/_createClass(function ComercialComissoesRepresentantesModule() {
+      var ComercialComissoesRepresentantesModule = function ComercialComissoesRepresentantesModule() {
         _classCallCheck(this, ComercialComissoesRepresentantesModule);
-      });
+      };
 
       ComercialComissoesRepresentantesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_representantes_component__WEBPACK_IMPORTED_MODULE_16__["ComercialComissoesRepresentantesComponent"]],
@@ -3075,9 +3071,9 @@
         }]
       }];
 
-      var ComercialComissoesRepresentantesRoutingModule = /*#__PURE__*/_createClass(function ComercialComissoesRepresentantesRoutingModule() {
+      var ComercialComissoesRepresentantesRoutingModule = function ComercialComissoesRepresentantesRoutingModule() {
         _classCallCheck(this, ComercialComissoesRepresentantesRoutingModule);
-      });
+      };
 
       ComercialComissoesRepresentantesRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -4129,9 +4125,9 @@
         }]
       }];
 
-      var ComercialComissoesRepresentantesProgramacaoPagamentosRoutingModule = /*#__PURE__*/_createClass(function ComercialComissoesRepresentantesProgramacaoPagamentosRoutingModule() {
+      var ComercialComissoesRepresentantesProgramacaoPagamentosRoutingModule = function ComercialComissoesRepresentantesProgramacaoPagamentosRoutingModule() {
         _classCallCheck(this, ComercialComissoesRepresentantesProgramacaoPagamentosRoutingModule);
-      });
+      };
 
       ComercialComissoesRepresentantesProgramacaoPagamentosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

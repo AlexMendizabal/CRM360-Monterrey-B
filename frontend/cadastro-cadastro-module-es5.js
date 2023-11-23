@@ -1,19 +1,15 @@
 (function () {
-  function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+  function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
   function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["cadastro-cadastro-module"], {
     /***/
@@ -624,11 +620,6 @@
             }
           }
         }, {
-          key: "anexos",
-          get: function get() {
-            return this.form.get('anexos');
-          }
-        }, {
           key: "onAddAnexos",
           value: function onAddAnexos(anexo, manipulateForm) {
             if (this.checkAnexoExists(anexo) === false) {
@@ -782,6 +773,11 @@
           key: "confirmDelete",
           value: function confirmDelete() {
             return this.confirmModalService.showConfirm('delete', 'Confirmar exclusão', 'Deseja realmente prosseguir com a exclusão do registro?', 'Cancelar', 'Confirmar');
+          }
+        }, {
+          key: "anexos",
+          get: function get() {
+            return this.form.get('anexos');
           }
         }]);
 
@@ -1073,9 +1069,9 @@
       // Components
 
 
-      var ComercialClientesCadastroModule = /*#__PURE__*/_createClass(function ComercialClientesCadastroModule() {
+      var ComercialClientesCadastroModule = function ComercialClientesCadastroModule() {
         _classCallCheck(this, ComercialClientesCadastroModule);
-      });
+      };
 
       ComercialClientesCadastroModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_cadastro_component__WEBPACK_IMPORTED_MODULE_16__["ComercialClientesCadastroComponent"], _dados_faturamento_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_17__["ComercialClientesCadastroDadosFaturamentoDetalhesComponent"], _dados_faturamento_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_18__["ComercialClientesCadastroDadosFaturamentoFormularioComponent"], _enderecos_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_19__["ComercialClientesCadastroEnderecosDetalhesComponent"], _enderecos_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_20__["ComercialClientesCadastroEnderecosFormularioComponent"], _contatos_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_21__["ComercialClientesCadastroContatosDetalhesComponent"], _contatos_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_22__["ComercialClientesCadastroContatosFormularioComponent"], _dados_relacionamento_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_23__["ComercialClientesCadastroDadosRelacionamentoDetalhesComponent"], _dados_relacionamento_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_24__["ComercialClientesCadastroDadosRelacionamentoFormularioComponent"], _potencial_compra_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_25__["ComercialClientesCadastroPotencialCompraDetalhesComponent"], _potencial_compra_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_26__["ComercialClientesCadastroPotencialCompraFormularioComponent"], _anexos_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_27__["ComercialClientesCadastroAnexosDetalhesComponent"], _anexos_formulario_formulario_component__WEBPACK_IMPORTED_MODULE_28__["ComercialClientesCadastroAnexosFormularioComponent"], _filial_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_29__["ComercialClientesCadastroFilialDetalhesComponent"], _travas_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_30__["ComercialClientesCadastroTravasDetalhesComponent"], _informacoes_financeiras_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_31__["ComercialClientesCadastroInfosFinanceirasDetalhesComponent"], _informacoes_comerciais_detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_32__["ComercialClientesCadastroInfosComerciaisDetalhesComponent"]],
@@ -1787,11 +1783,6 @@
             this.formChanged = true;
           }
         }, {
-          key: "linhas",
-          get: function get() {
-            return this.form.get('linhas');
-          }
-        }, {
           key: "pushLinha",
           value: function pushLinha(linhas) {
             for (var i = 0; i < linhas.length; i++) {
@@ -1883,6 +1874,11 @@
           key: "onSended",
           value: function onSended() {
             this.cadastroService.onNotifySended(true);
+          }
+        }, {
+          key: "linhas",
+          get: function get() {
+            return this.form.get('linhas');
           }
         }]);
 
@@ -2625,11 +2621,6 @@
             }
           }
         }, {
-          key: "atividadesSecundarias",
-          get: function get() {
-            return this.form.get('atividadesSecundarias');
-          }
-        }, {
           key: "pushAtividadeSecundaria",
           value: function pushAtividadeSecundaria(data) {
             this.atividadesSecundarias.push(this.formBuilder.group({
@@ -2767,6 +2758,11 @@
           key: "onSended",
           value: function onSended() {
             this.cadastroService.onNotifySended(true);
+          }
+        }, {
+          key: "atividadesSecundarias",
+          get: function get() {
+            return this.form.get('atividadesSecundarias');
           }
         }]);
 
@@ -5067,9 +5063,9 @@
         pathMatch: 'full'
       }];
 
-      var ComercialCadastrosRoutingModule = /*#__PURE__*/_createClass(function ComercialCadastrosRoutingModule() {
+      var ComercialCadastrosRoutingModule = function ComercialCadastrosRoutingModule() {
         _classCallCheck(this, ComercialCadastrosRoutingModule);
-      });
+      };
 
       ComercialCadastrosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -6262,11 +6258,6 @@
             }
           }
         }, {
-          key: "anexos",
-          get: function get() {
-            return this.form.get('anexos');
-          }
-        }, {
           key: "onAddAnexos",
           value: function onAddAnexos(anexo, manipulateForm) {
             if (this.checkAnexoExists(anexo) === false) {
@@ -6833,6 +6824,11 @@
               }
             });
           }
+        }, {
+          key: "anexos",
+          get: function get() {
+            return this.form.get('anexos');
+          }
         }]);
 
         return ComercialClientesCadastroEnderecosFormularioComponent;
@@ -7193,26 +7189,6 @@
             }
           }
         }, {
-          key: "celulares",
-          get: function get() {
-            return this.form.get('celulares');
-          }
-        }, {
-          key: "telefones",
-          get: function get() {
-            return this.form.get('telefones');
-          }
-        }, {
-          key: "emails",
-          get: function get() {
-            return this.form.get('emails');
-          }
-        }, {
-          key: "filhos",
-          get: function get() {
-            return this.form.get('filhos');
-          }
-        }, {
           key: "pushMeioContato",
           value: function pushMeioContato(contato) {
             if (contato['tipo'] == 'Celular') {
@@ -7555,6 +7531,26 @@
           key: "onSended",
           value: function onSended() {
             this.cadastroService.onNotifySended(true);
+          }
+        }, {
+          key: "celulares",
+          get: function get() {
+            return this.form.get('celulares');
+          }
+        }, {
+          key: "telefones",
+          get: function get() {
+            return this.form.get('telefones');
+          }
+        }, {
+          key: "emails",
+          get: function get() {
+            return this.form.get('emails');
+          }
+        }, {
+          key: "filhos",
+          get: function get() {
+            return this.form.get('filhos');
           }
         }]);
 
@@ -8034,12 +8030,12 @@
 
         _createClass(FileType, null, [{
           key: "getMimeClass",
-          value:
+
           /**
            * @param {?} file
            * @return {?}
            */
-          function getMimeClass(file) {
+          value: function getMimeClass(file) {
             /** @type {?} */
             var mimeClass = 'application';
 
@@ -9637,9 +9633,9 @@
        */
 
 
-      var FileUploadModule = /*#__PURE__*/_createClass(function FileUploadModule() {
+      var FileUploadModule = function FileUploadModule() {
         _classCallCheck(this, FileUploadModule);
-      });
+      };
 
       FileUploadModule.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"],

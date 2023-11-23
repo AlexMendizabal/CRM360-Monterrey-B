@@ -597,7 +597,7 @@ class SapController extends AbstractController
             if (empty($codigo_cliente) || $codigo_cliente == '' || $codigo_cliente == null) {
                 $ruta = '/crearCliente';
                 $respuesta = $helper->conexionSap($ruta, $data);
-                dd($respuesta);                
+                dd($data);                
                 if ($respuesta == true) {
                     $resp = [
                         "response" => 200,

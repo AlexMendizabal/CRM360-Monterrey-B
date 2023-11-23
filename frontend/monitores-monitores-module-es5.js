@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -133,9 +129,9 @@
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_1__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_9___default.a);
 
-      var AbastecimentoMonitoresModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresModule() {
+      var AbastecimentoMonitoresModule = function AbastecimentoMonitoresModule() {
         _classCallCheck(this, AbastecimentoMonitoresModule);
-      });
+      };
 
       AbastecimentoMonitoresModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_6__["NgModule"])({
         declarations: [_monitores_component__WEBPACK_IMPORTED_MODULE_14__["AbastecimentoMonitoresComponent"], _painel_estoque_painel_estoque_component__WEBPACK_IMPORTED_MODULE_15__["AbastecimentoPainelEstoqueComponent"]],
@@ -1135,9 +1131,9 @@
       // ng-select
       //masks
 
-      var LogisticaEntregaMonitoresModule = /*#__PURE__*/_createClass(function LogisticaEntregaMonitoresModule() {
+      var LogisticaEntregaMonitoresModule = function LogisticaEntregaMonitoresModule() {
         _classCallCheck(this, LogisticaEntregaMonitoresModule);
-      });
+      };
 
       LogisticaEntregaMonitoresModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_fusion_manetoni_pedidos_component__WEBPACK_IMPORTED_MODULE_23__["LogisticaEngregasMonitoresFusionManetoniPedidosComponent"], _ravex_ravex_component__WEBPACK_IMPORTED_MODULE_22__["LogisticaEntregaMonitoresRavexComponent"]],
@@ -2292,9 +2288,9 @@
         component: _fusion_manetoni_pedidos_component__WEBPACK_IMPORTED_MODULE_3__["LogisticaEngregasMonitoresFusionManetoniPedidosComponent"]
       }];
 
-      var LogisticaEntregaMonitoresRoutingModule = /*#__PURE__*/_createClass(function LogisticaEntregaMonitoresRoutingModule() {
+      var LogisticaEntregaMonitoresRoutingModule = function LogisticaEntregaMonitoresRoutingModule() {
         _classCallCheck(this, LogisticaEntregaMonitoresRoutingModule);
-      });
+      };
 
       LogisticaEntregaMonitoresRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -2434,7 +2430,7 @@
           loadChildren: function loadChildren() {
             return Promise.all(
             /*! import() | integracao-pedidos-integracao-pedidos-module */
-            [__webpack_require__.e("common"), __webpack_require__.e("integracao-pedidos-integracao-pedidos-module")]).then(__webpack_require__.bind(null,
+            [__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("integracao-pedidos-integracao-pedidos-module")]).then(__webpack_require__.bind(null,
             /*! ./integracao-pedidos/integracao-pedidos.module */
             "C9+X")).then(function (m) {
               return m.AbastecimentoMonitoresIntegracaoPedidosModule;
@@ -2457,9 +2453,9 @@
         }]
       }];
 
-      var AbastecimentoMonitoresRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresRoutingModule() {
+      var AbastecimentoMonitoresRoutingModule = function AbastecimentoMonitoresRoutingModule() {
         _classCallCheck(this, AbastecimentoMonitoresRoutingModule);
-      });
+      };
 
       AbastecimentoMonitoresRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterModule"].forChild(routes)],

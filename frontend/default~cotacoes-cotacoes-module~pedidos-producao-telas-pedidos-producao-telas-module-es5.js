@@ -3,7 +3,7 @@
 
   function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-  function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+  function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
   function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -13,21 +13,17 @@
 
   function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
   function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~cotacoes-cotacoes-module~pedidos-producao-telas-pedidos-producao-telas-module"], {
     /***/
@@ -1386,9 +1382,9 @@
       // Services
 
 
-      var ComercialCicloVendasCotacoesFormularioModule = /*#__PURE__*/_createClass(function ComercialCicloVendasCotacoesFormularioModule() {
+      var ComercialCicloVendasCotacoesFormularioModule = function ComercialCicloVendasCotacoesFormularioModule() {
         _classCallCheck(this, ComercialCicloVendasCotacoesFormularioModule);
-      });
+      };
 
       ComercialCicloVendasCotacoesFormularioModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_formulario_component__WEBPACK_IMPORTED_MODULE_22__["ComercialCicloVendasCotacoesFormularioComponent"], _materiais_lista_lista_component__WEBPACK_IMPORTED_MODULE_23__["ComercialCicloVendasCotacoesFormularioMateriaisListaComponent"], _carrinho_carrinho_component__WEBPACK_IMPORTED_MODULE_24__["ComercialCicloVendasCotacoesFormularioCarrinhoComponent"], _modal_material_ficha_cadastral_ficha_cadastral_component__WEBPACK_IMPORTED_MODULE_25__["ComercialCicloVendasCotacoesFormularioModalMaterialFichaCadastralComponent"], _modal_material_similaridade_similaridade_component__WEBPACK_IMPORTED_MODULE_26__["ComercialCicloVendasCotacoesFormularioModalMaterialSimilaridadeComponent"], _modal_material_calculo_calculo_component__WEBPACK_IMPORTED_MODULE_27__["ComercialCicloVendasCotacoesFormularioModalMaterialCalculoComponent"], _modal_material_lote_lote_component__WEBPACK_IMPORTED_MODULE_28__["ComercialCicloVendasCotacoesFormularioModalMaterialLoteComponent"], _modal_material_desconto_desconto_component__WEBPACK_IMPORTED_MODULE_29__["ComercialCicloVendasCotacoesFormularioModalMaterialDescontoComponent"], _modal_material_estoque_estoque_component__WEBPACK_IMPORTED_MODULE_30__["ComercialCicloVendasCotacoesFormularioModalMaterialEstoqueComponent"], _modal_material_combo_combo_component__WEBPACK_IMPORTED_MODULE_31__["ComercialCicloVendasCotacoesFormularioModalMaterialComboComponent"], _modal_cliente_historico_compras_historico_compras_component__WEBPACK_IMPORTED_MODULE_32__["ComercialCicloVendasCotacoesFormularioModalHistoricoComprasComponent"], _materiais_relacionados_relacionados_component__WEBPACK_IMPORTED_MODULE_33__["ComercialCicloVendasCotacoesFormularioMateriaisRelacionadosComponent"], _modal_detalhes_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_34__["ComercialCicloVendasCotacoesFormularioModalDetalhesClienteComponent"], _modal_detalhes_endereco_endereco_component__WEBPACK_IMPORTED_MODULE_35__["ComercialCicloVendasCotacoesFormularioModalDetalhesEnderecoComponent"], _modal_detalhes_contato_contato_component__WEBPACK_IMPORTED_MODULE_36__["ComercialCicloVendasCotacoesFormularioModalDetalhesContatoComponent"], _modal_detalhes_concorrente_concorrente_component__WEBPACK_IMPORTED_MODULE_37__["ComercialCicloVendasCotacoesFormularioModalDetalhesConcorrenteComponent"], _modal_duplicatas_duplicatas_component__WEBPACK_IMPORTED_MODULE_38__["ComercialCicloVendasCotacoesFormularioModalDuplicatasComponent"], _modal_historico_exclusao_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_39__["ComercialCicloVendasCotacoesFormularioModalHistoricoExclusaoComponent"], _modal_finalizacao_padrao_padrao_component__WEBPACK_IMPORTED_MODULE_40__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPadraoComponent"], _modal_finalizacao_perdida_perdida_component__WEBPACK_IMPORTED_MODULE_42__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPerdidaComponent"], _templates_card_material_card_material_component__WEBPACK_IMPORTED_MODULE_43__["ComercialCicloVendasCotacoesFormularioTemplateCardMaterialComponent"], _templates_clientes_clientes_component__WEBPACK_IMPORTED_MODULE_44__["ComercialCicloVendasCotacoesFormularioTemplateClientesComponent"], _templates_button_disponibilidade_button_disponibilidade_component__WEBPACK_IMPORTED_MODULE_45__["ComercialCicloVendasCotacoesFormularioTemplateButtonDisponibilidadeComponent"], _templates_button_outros_button_outros_component__WEBPACK_IMPORTED_MODULE_46__["ComercialCicloVendasCotacoesFormularioTemplateButtonOutrosComponent"], _templates_progress_bar_progress_bar_component__WEBPACK_IMPORTED_MODULE_47__["ComercialCicloVendasCotacoesFormularioTemplateProgressBarComponent"], _modal_cliente_selecionar_selecionar_component__WEBPACK_IMPORTED_MODULE_63__["ComercialCicloVendasCotacoesFormularioModalSelecionarComponent"], _modal_finalizacao_finalizacion_finalizacion_component__WEBPACK_IMPORTED_MODULE_41__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion"], _modal_material_autorizar_autorizar_component__WEBPACK_IMPORTED_MODULE_65__["ComercialCicloVendasCotacoesFormularioModalMaterialAutorizarComponent"], _formulario_modal_material_ubicacion_ubicacion_component__WEBPACK_IMPORTED_MODULE_64__["ComercialCicloVendasCotacoesFormularioModalMaterialUbicacionComponent"]],
@@ -1979,28 +1975,33 @@
             var _this15 = this;
 
             if (this.situacoesCores.length > 0) {
-              this.situacoesCores.map(function (situacao) {
-                _this15.leyendas = [{
-                  id: 1,
-                  text: 'Propuesta borrador',
-                  hex: '#0000FF' // Rojo
+              this.dados.forEach(function (oferta) {
+                var situacao = oferta.id_oferta_estado;
 
-                }, {
-                  id: 2,
-                  text: 'Propuesta aceptada',
-                  hex: '#00FF00' // Azul 00FF00
+                _this15.situacoesCores.map(function (situacao) {
+                  _this15.leyendas = [{
+                    id: 1,
+                    text: 'Propuesta borrador',
+                    hex: '#0000FF' // Rojo
 
-                }, {
-                  id: 3,
-                  text: 'Propuesta rechazada',
-                  hex: '#FF0000' // Verde
+                  }, {
+                    id: 2,
+                    text: 'Propuesta aceptada',
+                    hex: '#00FF00' // Azul 00FF00
 
-                }];
+                  }, {
+                    id: 3,
+                    text: 'Propuesta rechazada',
+                    hex: '#FF0000' // Verde
+
+                  }];
+                });
                 /*  this.subtitles.push({
                    id: situacao.codAssociacao,
                    text: situacao.descLegenda,
                    hex: situacao.cor,
                  }); */
+
               });
             }
           }
@@ -2307,7 +2308,6 @@
               next: function next(response) {
                 if (response.responseCode === 200) {
                   _this19.loaderNavbar = false;
-                  console.log(response.result);
                   _this19.dados = [];
                   _this19.dados = response.result;
                   _this19.dados = _this19.dados.slice(0, _this19.itemsPerPage);
@@ -3698,7 +3698,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<div class=\"modal-content custom-modal\" id=\"contentToConvert\">\r\n  <div #contentToConvert>\r\n    <div class=\"wrapper card-bodyy\">\r\n      <!-- Main content -->\r\n      <section class=\"invoice\">\r\n        <!-- title row -->\r\n        <div class=\"row\">\r\n          <div class=\"col-12\">\r\n            <h2 class=\"page-header\">\r\n              <img [src]=\"imageSrc\" alt=\"Logo\" [style.width.px]=\"imageWidth\" [style.height.px]=\"imageHeight\" />\r\n              <small class=\"float-right\">Nº Oferta: {{ resultFromParent.oferta[0].id_oferta}}</small>\r\n            </h2>\r\n          </div>\r\n          <!-- /.col -->\r\n        </div>\r\n        <!-- info row -->\r\n        <div class=\"row invoice-info\">\r\n          <div class=\"col-md-12\">\r\n            <div class=\"row\">\r\n              <div class=\"col-md-12\">\r\n                <div class=\"card wider-card\">\r\n                  <div class=\"card-header\">\r\n                    <h5>\r\n                      DATOS DE OFERTA\r\n                    </h5>\r\n                  </div>\r\n                  <div class=\"card-body\">\r\n                    <div class=\"col-md-12\">\r\n                      <div class=\"row\">\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre de Oferta:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_oferta }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Fecha Inicial:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_inicial }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Fecha Final:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_final }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Fecha de Creación:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_creacion }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Monto total Bruto:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total_bruto }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Monto Total:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Descuento Total:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].descuento_total}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Observación:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].observacion}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Peso Total:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].peso_total}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre del modo de entrega:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_modo_entrega}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12\">\r\n            <div class=\"row\">\r\n              <div class=\"col-md-12\">\r\n                <div class=\"cardwider-card\">\r\n                  <div class=\"card-header\">\r\n                    <h5>\r\n                      DATOS DEL CLIENTE\r\n                    </h5>\r\n                  </div>\r\n                  <div class=\"card-body\">\r\n                    <div class=\"col-md-12\">\r\n                      <div class=\"row\">\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Codigo del cliente:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].codigo_cliente}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre del cliente:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_cliente}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Celular:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].celular_clie}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">E-mail:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].e_mail}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Contacto del cliente:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_cont }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre lista:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_lista }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12\">\r\n            <div class=\"row\">\r\n              <div class=\"col-md-12\">\r\n                <div class=\"card wider-card\">\r\n                  <div class=\"card-header\">\r\n                    <h5>\r\n                      DATOS DEL VENDEDOR\r\n                    </h5>\r\n                  </div>\r\n                  <div class=\"card-body\">\r\n                    <div class=\"col-md-12\">\r\n                      <div class=\"row\">\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Nombre vendedor:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_vendedor}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Ubicacion almacen:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].ubicacion_almacen}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                        <div class=\"col-md-3\">\r\n                          <label for=\"\">Codigo almacen:</label>\r\n                          <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].codigo_almacen}}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <!-- /.col -->\r\n        </div>\r\n        <!-- Table row -->\r\n        <div class=\"row\">\r\n          <div class=\"col-12 \">\r\n            <div class=\"card wider-card\">\r\n              <div class=\"card-header\">\r\n                <h5>\r\n                  DETALLE\r\n                </h5>\r\n              </div>\r\n              <div class=\"card-body table-container\">\r\n                <table class=\"table table-striped\">\r\n                  <thead>\r\n                    <tr>\r\n                      <th>CODIGO MATERIAL</th>\r\n                      <th>NOMBRE MATERIAL</th>\r\n                      <th>UNIDAD</th>\r\n                      <th>PRECIO</th>\r\n                      <th>CANTIDAD</th>\r\n                      <th>TOTAL BRUTO</th>\r\n                      <th>PRECIO DESCUENTO</th>\r\n                      <th>SUBTOTAL</th>\r\n                      <th>NOMBRE ALMACEN</th>\r\n                      <th>NOMBRE MONEDA</th>\r\n                    </tr>\r\n                  </thead>\r\n                  <tbody>\r\n                    <tr *ngFor=\"let analitico of analiticos; let i = index\">\r\n                      <td>{{ analitico.codigo_material }}</td>\r\n                      <td>{{ analitico.nombre_material }}</td>\r\n                      <td>{{ analitico.unidad }}</td>\r\n                      <td>{{ (analitico.precio).toFixed(2) }}</td>\r\n                      <td>{{ (analitico.cantidad).toFixed(2) }}</td>\r\n                      <td>{{ analitico.total_bruto }}</td>\r\n                      <td>{{ analitico.precio_descuento}}</td>\r\n                      <td>{{ analitico.subtotal }}</td>\r\n                      <td>{{ analitico.nombre_almacen }}</td>\r\n                      <td>{{ analitico.nombre_moneda }}</td>\r\n                    </tr>\r\n                  </tbody>\r\n                </table>\r\n                <div class=\"col-md-3\">\r\n                  <label for=\"\">Monto total Bruto:</label>\r\n                  <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total_bruto }}\" class=\"form-control\" readonly>\r\n                </div>\r\n                <div class=\"col-md-3\">\r\n                  <label for=\"\">Monto Total:</label>\r\n                  <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total}}\" class=\"form-control\" readonly>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <!-- /.col -->\r\n        </div>\r\n        <!-- /.row -->\r\n      </section>\r\n      <!-- /.content -->\r\n    </div>\r\n  </div>\r\n  <div class=\"modal-footer\">\r\n    <button type=\"button\" class=\"btn btn-secondary\" #captureButton (click)=\"onDownloadPDF()\">DESCARGAR</button>\r\n    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"captureScreen()\">IMPRIMIR</button>\r\n  </div>\r\n</div>\r\n";
+      __webpack_exports__["default"] = "<div class=\"modal-content custom-modal\" id=\"contentToConvert\">\r\n  <form [formGroup]=\"myForm\" (ngSubmit)=\"onSubmit()\">\r\n    <div #contentToConvert>\r\n      <div class=\"wrapper card-bodyy\">\r\n        <!-- Main content -->\r\n        <section class=\"invoice\">\r\n          <!-- title row -->\r\n          <div class=\"row\">\r\n            <div class=\"col-12\">\r\n              <h2 class=\"page-header\">\r\n                <img [src]=\"imageSrc\" alt=\"Logo\" [style.width.px]=\"imageWidth\" [style.height.px]=\"imageHeight\" />\r\n                <small class=\"float-right\">Nº Oferta: {{ resultFromParent.oferta[0].id_oferta}}</small>\r\n              </h2>\r\n            </div>\r\n            <!-- /.col -->\r\n          </div>\r\n          <!-- info row -->\r\n          <div class=\"row invoice-info\">\r\n            <div class=\"col-md-12\">\r\n              <div class=\"row\">\r\n                <div class=\"col-md-12\">\r\n                  <div class=\"card wider-card\">\r\n                    <div class=\"card-header\">\r\n                      <h5>\r\n                        DATOS DE OFERTA\r\n                      </h5>\r\n                    </div>\r\n                    <div class=\"card-body\">\r\n                      <div class=\"col-md-12\">\r\n                        <div class=\"row\">\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Nombre de Oferta:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_oferta }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Fecha Inicial:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_inicial }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Fecha final:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_final }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Fecha de Creación:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].fecha_creacion }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Monto total Bruto:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total_bruto }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Monto Total:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Descuento Total:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].descuento_total}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Observación:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].observacion}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Peso Total:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].peso_total}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Modo de entrega:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_modo_entrega}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <div class=\"col-md-12\">\r\n              <div class=\"row\">\r\n                <div class=\"col-md-12\">\r\n                  <div class=\"cardwider-card\">\r\n                    <div class=\"card-header\">\r\n                      <h5>\r\n                        DATOS DEL CLIENTE\r\n                      </h5>\r\n                    </div>\r\n                    <div class=\"card-body\">\r\n                      <div class=\"col-md-12\">\r\n                        <div class=\"row\">\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Codigo del cliente:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].codigo_cliente}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Nombre del cliente:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_cliente}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Celular:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].celular_clie}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">E-mail:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].e_mail}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Contacto del cliente:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_cont }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <div class=\"col-md-12\">\r\n              <div class=\"row\">\r\n                <div class=\"col-md-12\">\r\n                  <div class=\"card wider-card\">\r\n                    <div class=\"card-header\">\r\n                      <h5>\r\n                        DATOS DEL VENDEDOR\r\n                      </h5>\r\n                    </div>\r\n                    <div class=\"card-body\">\r\n                      <div class=\"col-md-12\">\r\n                        <div class=\"row\">\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Nombre vendedor:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_vendedor}}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                          <div class=\"col-md-3\">\r\n                            <label for=\"\">Nombre lista:</label>\r\n                            <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].nombre_lista }}\"\r\n                              class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <!-- /.col -->\r\n          </div>\r\n          <!-- Table row -->\r\n          <div class=\"row\">\r\n            <div class=\"col-12 \">\r\n              <div class=\"card wider-card\">\r\n                <div class=\"card-header\">\r\n                  <h5>\r\n                    DETALLE\r\n                  </h5>\r\n                </div>\r\n                <div class=\"card-body table-container\">\r\n                  <table class=\"table table-striped\">\r\n                    <thead>\r\n                      <tr>\r\n                        <th>CODIGO MATERIAL</th>\r\n                        <th>NOMBRE MATERIAL</th>\r\n                        <th>UNIDAD</th>\r\n                        <th>PRECIO</th>\r\n                        <th>CANTIDAD</th>\r\n                        <th>TOTAL BRUTO</th>\r\n                        <th>PRECIO DESCUENTO</th>\r\n                        <th>SUBTOTAL</th>\r\n                        <th>NOMBRE ALMACEN</th>\r\n                        <th>NOMBRE MONEDA</th>\r\n                      </tr>\r\n                    </thead>\r\n                    <tbody>\r\n                      <tr *ngFor=\"let analitico of analiticos; let i = index\">\r\n                        <td>{{ analitico.codigo_material }}</td>\r\n                        <td>{{ analitico.nombre_material }}</td>\r\n                        <td>{{ analitico.unidad }}</td>\r\n                        <td>{{ (analitico.precio).toFixed(2) }}</td>\r\n                        <td>{{ (analitico.cantidad).toFixed(2) }}</td>\r\n                        <td>{{ analitico.total_bruto }}</td>\r\n                        <td>{{ analitico.precio_descuento}}</td>\r\n                        <td>{{ analitico.subtotal }}</td>\r\n                        <td>{{ analitico.nombre_almacen }}</td>\r\n                        <td>{{ analitico.nombre_moneda }}</td>\r\n                      </tr>\r\n                    </tbody>\r\n                  </table>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"\">Monto total Bruto:</label>\r\n                    <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total_bruto }}\"\r\n                      class=\"form-control\" readonly>\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"\">Monto Total:</label>\r\n                    <input type=\"text\" name=\"\" id=\"\" value=\"{{ resultFromParent.oferta[0].monto_total}}\"\r\n                      class=\"form-control\" readonly>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <!-- /.col -->\r\n          </div>\r\n          <!-- /.row -->\r\n          <div class=\"row\" *ngIf=\"showDescripcionCard\">\r\n            <div class=\"col-12\">\r\n              <div class=\"card wider-card\">\r\n                <div class=\"card-header\">\r\n                  <h5>\r\n                    CIERRE DE OFERTA\r\n                  </h5>\r\n                </div>\r\n\r\n                <div class=\"card-body table-container\">\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"\">perdió la venta:</label>\r\n                    <select class=\"form-control\" formControlName=\"estadoOfert\">\r\n                      <option value=\"\" disabled selected>Selecciona una opción</option>\r\n                      <option *ngFor=\"let item of cierre_oferta\" [value]=\"item.id\">{{ item.descripcion }}</option>\r\n                    </select>\r\n                  </div>\r\n                  <div class=\"col-md-9\">\r\n                    <input type=\"text\" formControlName=\"descripcion\" class=\"form-control mt-2\" id=\"description\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </section>\r\n        <!-- /.content -->\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n      <a class=\"btn btn-secondary\" *ngIf=\"showCierreButton\" (click)=\"toggleDescripcionCard()\">CIERRE DE VENTA</a>\r\n      <button type=\"submit\" class=\"btn btn-secondary\" *ngIf=\"showGuardarButton\">GUARDAR</button>\r\n      <a type=\"button\" class=\"btn btn-secondary\" #captureButton (click)=\"onDownloadPDF()\">DESCARGAR</a>\r\n      <a type=\"button\" class=\"btn btn-secondary\" (click)=\"captureScreen()\">IMPRIMIR</a>\r\n    </div>\r\n  </form>\r\n</div>";
       /***/
     },
 
@@ -7220,17 +7220,44 @@
 
 
       var jspdf__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jspdf__WEBPACK_IMPORTED_MODULE_9__);
+      /* harmony import */
+
+
+      var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
+      /*! @angular/forms */
+      "s7LF");
+      /* harmony import */
+
+
+      var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      /*! src/app/shared/services/core/pnotify.service */
+      "g+W+");
+      /* harmony import */
+
+
+      var _cotacoes_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+      /*! ../../cotacoes.service */
+      "uuri");
 
       var VistaComponent = /*#__PURE__*/function () {
         function VistaComponent(activatedRoute, router, // tslint:disable-next-line:variable-name
-        _bsModalRef, sanitizer) {
+        _bsModalRef, cotacoesService, sanitizer, pnotifyService, fb) {
           _classCallCheck(this, VistaComponent);
 
           this.activatedRoute = activatedRoute;
           this.router = router;
           this._bsModalRef = _bsModalRef;
+          this.cotacoesService = cotacoesService;
           this.sanitizer = sanitizer;
+          this.pnotifyService = pnotifyService;
+          this.fb = fb;
+          this.loaderFullScreen = true;
           this.name = 'Angular ' + _angular_core__WEBPACK_IMPORTED_MODULE_3__["VERSION"].major;
+          this.formObj = {};
+          this.showCierreButton = true;
+          this.showDescripcionCard = false;
+          this.showGuardarButton = false;
+          this.dadosEmpty = false;
           this.imageWidth = 300;
           this.imageHeight = 85;
         }
@@ -7239,14 +7266,39 @@
           key: "ngOnInit",
           value: function ngOnInit() {
             this.result = this.resultFromParent;
+            this.cierreOferta();
             this.analiticos = this.resultFromParent.analitico;
             this.onClose = new rxjs__WEBPACK_IMPORTED_MODULE_7__["Subject"]();
-            this.imageSrc = this.sanitizer.bypassSecurityTrustUrl('assets/images/logo/logo-monterrey.png'); // console.log('Received data in modal:', this.result);
+            this.imageSrc = this.sanitizer.bypassSecurityTrustUrl('assets/images/logo/logo-monterrey.png');
+            this.myForm = this.fb.group({
+              id_oferta: [this.resultFromParent.oferta[0].id_oferta],
+              estadoOfert: [''],
+              descripcion: ['']
+            });
           }
         }, {
           key: "ngAfterViewInit",
           value: function ngAfterViewInit() {// Capture the content when the modal opens
             // this.captureScreen();
+          }
+        }, {
+          key: "cierreOferta",
+          value: function cierreOferta() {
+            var _this46 = this;
+
+            this.cotacoesService.getCierreOferta().pipe().subscribe({
+              next: function next(response) {
+                if (response.responseCode === 200) {
+                  _this46.cierre_oferta = response.result;
+                } else {
+                  _this46.loaderNavbar = false;
+
+                  _this46.pnotifyService.notice('Ningun dato encontrado');
+
+                  _this46.dadosEmpty = true;
+                }
+              }
+            });
           }
         }, {
           key: "onConfirm",
@@ -7315,6 +7367,30 @@
               pdf.save('your_pdf_filename.pdf');
             });
           }
+        }, {
+          key: "toggleDescripcionCard",
+          value: function toggleDescripcionCard() {
+            this.showCierreButton = false;
+            this.showDescripcionCard = true;
+            this.showGuardarButton = true;
+          }
+        }, {
+          key: "onSubmit",
+          value: function onSubmit() {
+            var _this47 = this;
+
+            this.cotacoesService.finalizarOferta(this.myForm.value).subscribe(function (response) {
+              if (response.success == false) {
+                _this47.pnotifyService.error(response.message);
+              } else {
+                _this47.pnotifyService.success(response.message);
+              }
+            });
+
+            this._bsModalRef.hide();
+
+            return '/comercial/ciclo-vendas/23/cotacoes-pedidos/lista';
+          }
         }]);
 
         return VistaComponent;
@@ -7328,7 +7404,13 @@
         }, {
           type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"]
         }, {
+          type: _cotacoes_service__WEBPACK_IMPORTED_MODULE_12__["ComercialCicloVendasCotacoesService"]
+        }, {
           type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"]
+        }, {
+          type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__["PNotifyService"]
+        }, {
+          type: _angular_forms__WEBPACK_IMPORTED_MODULE_10__["FormBuilder"]
         }];
       };
 
@@ -7348,7 +7430,7 @@
         selector: 'app-vista',
         template: _raw_loader_vista_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
         styles: [_vista_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"]])], VistaComponent);
+      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"], _cotacoes_service__WEBPACK_IMPORTED_MODULE_12__["ComercialCicloVendasCotacoesService"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["DomSanitizer"], src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_11__["PNotifyService"], _angular_forms__WEBPACK_IMPORTED_MODULE_10__["FormBuilder"]])], VistaComponent);
       /***/
     },
 
@@ -7554,17 +7636,17 @@
         }, {
           key: "getProgresso",
           value: function getProgresso() {
-            var _this46 = this;
+            var _this48 = this;
 
             if (this.user.idVendedor !== null) {
               this.metasLoaded = false;
               this.cotacoesService.getProgressoCotacao(this.dataCotacao.codCotacao, this.dataCotacao.codEmpresa).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-                _this46.metasLoaded = true;
+                _this48.metasLoaded = true;
               })).subscribe(function (response) {
                 if (response.success === true) {
-                  _this46.metasProgresso.toneladas.progresso = response.data.toneladas;
-                  _this46.metasProgresso.clientes.progresso = response.data.clientes;
-                  _this46.metasProgresso.extras.progresso = response.data.extras;
+                  _this48.metasProgresso.toneladas.progresso = response.data.toneladas;
+                  _this48.metasProgresso.clientes.progresso = response.data.clientes;
+                  _this48.metasProgresso.extras.progresso = response.data.extras;
                 }
               });
             }
@@ -7572,28 +7654,28 @@
         }, {
           key: "getComissao",
           value: function getComissao() {
-            var _this47 = this;
+            var _this49 = this;
 
             if (this.viewChecked === false) {
               if (this.user.idVendedor !== null) {
                 this.showMetas = true;
                 var profile = this.dataCotacao.profile;
                 this.cotacoesService.getComissaoCotacao(this.dataCotacao.codCotacao, this.dataCotacao.codEmpresa).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-                  _this47.comissaoLoaded = true;
-                  _this47.viewChecked = true;
-                  _this47.loaderFullScreen = false;
+                  _this49.comissaoLoaded = true;
+                  _this49.viewChecked = true;
+                  _this49.loaderFullScreen = false;
                 })).subscribe(function (response) {
                   if (response.success === true) {
                     if (response.data.tipoVendedor == 'Representante') {
-                      _this47.showMetas = false;
+                      _this49.showMetas = false;
                     }
 
                     if (profile.coordenador === true || profile.gestor === true) {
-                      _this47.showMetas = false;
+                      _this49.showMetas = false;
                     }
 
-                    _this47.comissaoMax = response.data.valorMaximoComissao;
-                    _this47.comissaoMin = response.data.valorMinimoComissao;
+                    _this49.comissaoMax = response.data.valorMaximoComissao;
+                    _this49.comissaoMin = response.data.valorMinimoComissao;
                   }
                 });
               }
@@ -7964,9 +8046,9 @@
       // Services
 
 
-      var ComercialCicloVendasCotacoesListaModule = /*#__PURE__*/_createClass(function ComercialCicloVendasCotacoesListaModule() {
+      var ComercialCicloVendasCotacoesListaModule = function ComercialCicloVendasCotacoesListaModule() {
         _classCallCheck(this, ComercialCicloVendasCotacoesListaModule);
-      });
+      };
 
       ComercialCicloVendasCotacoesListaModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_pdf_pdf_component__WEBPACK_IMPORTED_MODULE_28__["PdfComponent"], _lista_component__WEBPACK_IMPORTED_MODULE_16__["ComercialCicloVendasCotacoesListaComponent"], _modal_historico_comercial_historico_comercial_component__WEBPACK_IMPORTED_MODULE_17__["ComercialCicloVendasCotacoesListaModalHistoricoComercialComponent"], _modal_historico_exclusao_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_27__["ComercialCicloVendasCotacoesListaModalHistoricoExclusaoComponent"], _modal_consulta_liberacao_consulta_liberacao_component__WEBPACK_IMPORTED_MODULE_18__["ComercialCicloVendasCotacoesListaModalConsultaLiberacaoComponent"], _modal_email_cotacao_email_cotacao_component__WEBPACK_IMPORTED_MODULE_19__["ComercialCicloVendasCotacoesListaModalEmailCotacaoComponent"], _templates_button_imprimir_button_imprimir_component__WEBPACK_IMPORTED_MODULE_25__["ComercialCicloVendasCotacoesListaTemplatesButtonImprimirComponent"], _templates_button_imprimir_separacao_button_imprimir_separacao_component__WEBPACK_IMPORTED_MODULE_26__["ComercialCicloVendasCotacoesListaTemplatesButtonImprimirSeparacaoComponent"], _modal_trocar_empresa_trocar_empresa_component__WEBPACK_IMPORTED_MODULE_20__["ComercialCicloVendasCotacoesListaModalTrocarEmpresaComponent"], _modal_duplicar_proposta_duplicar_proposta_component__WEBPACK_IMPORTED_MODULE_21__["ComercialCicloVendasCotacoesListaModalDuplicarPropostaComponent"], _modal_desdobrar_proposta_desdobrar_proposta_component__WEBPACK_IMPORTED_MODULE_22__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaComponent"], _modal_trocar_cliente_trocar_cliente_component__WEBPACK_IMPORTED_MODULE_23__["ComercialCicloVendasCotacoesListaModalTrocarClienteComponent"], _modal_transfere_faturamento_transfere_faturamento_component__WEBPACK_IMPORTED_MODULE_24__["ComercialCicloVendasCotacoesListaModalTransfereFaturamentoComponent"], _vista_vista_component__WEBPACK_IMPORTED_MODULE_38__["VistaComponent"]],
@@ -8360,11 +8442,11 @@
         }, {
           key: "getPresentacionMaterial",
           value: function getPresentacionMaterial() {
-            var _this48 = this;
+            var _this50 = this;
 
             this.comercialService.getPresentacionMaterial().subscribe(function (response) {
               if (response.responseCode === 200) {
-                _this48.arrayPresentacion = response.result;
+                _this50.arrayPresentacion = response.result;
               }
             });
           }
@@ -8380,12 +8462,12 @@
         }, {
           key: "actualizarDireccion",
           value: function actualizarDireccion(event) {
-            var _this49 = this;
+            var _this51 = this;
 
             this.obtenerDireccion(event.coords.lat, event.coords.lng).then(function (direccion_mapa) {
-              _this49.form.controls['direccion'].setValue(direccion_mapa);
+              _this51.form.controls['direccion'].setValue(direccion_mapa);
             })["catch"](function (error) {
-              _this49.form.controls['direccion'].setValue('Error al obtener la dirección');
+              _this51.form.controls['direccion'].setValue('Error al obtener la dirección');
             });
           }
         }, {
@@ -8821,11 +8903,9 @@
               console.log(this.formObj);
               this.cotacoesService.autorizaciones(this.formObj).pipe().subscribe(function (response) {
                 console.log(response);
-              });
-              this.onClose();
-            } else {
-              this.onClose();
-            }
+              }); //this.onClose();
+            } else {//this.onClose();
+              }
           }
         }, {
           key: "onClose",
@@ -8853,11 +8933,11 @@
         }, {
           key: "verificador",
           value: function verificador() {
-            var _this50 = this;
+            var _this52 = this;
 
             this.dataCotacao.carrinho.forEach(function (data) {
               if (data.percentualDesc > data.descuento_permitido) {
-                _this50.deshabilitar = false;
+                _this52.deshabilitar = false;
                 return;
               }
             });
@@ -8889,19 +8969,19 @@
         }, {
           key: "getProgresso",
           value: function getProgresso() {
-            var _this51 = this;
+            var _this53 = this;
 
             if (this.user.idVendedor !== null) {
               this.metasLoaded = false;
               this.cotacoesService.getProgressoCotacao(this.dataCotacao.codCotacao, this.dataCotacao.codEmpresa).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-                _this51.metasLoaded = true;
+                _this53.metasLoaded = true;
               })).subscribe(function (response) {
                 console.log('cotizaciones', response);
 
                 if (response.success === true) {
-                  _this51.metasProgresso.toneladas.progresso = response.data.toneladas;
-                  _this51.metasProgresso.clientes.progresso = response.data.clientes;
-                  _this51.metasProgresso.extras.progresso = response.data.extras;
+                  _this53.metasProgresso.toneladas.progresso = response.data.toneladas;
+                  _this53.metasProgresso.clientes.progresso = response.data.clientes;
+                  _this53.metasProgresso.extras.progresso = response.data.extras;
                 }
               });
             }
@@ -9254,11 +9334,11 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalDetalhesConcorrenteService, [{
           key: "showModal",
           value: function showModal(codConcorrenteTid) {
-            var _this52 = this;
+            var _this54 = this;
 
             this.loaderNavbar.emit(true);
             this.concorrenteService.getConcorrente(codConcorrenteTid).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this52.loaderNavbar.emit(false);
+              _this54.loaderNavbar.emit(false);
             })).subscribe(function (response) {
               if (response.success === true) {
                 var modalConfig = {
@@ -9268,14 +9348,14 @@
                   concorrente: response.data
                 };
 
-                _this52.modalService.show(_concorrente_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalDetalhesConcorrenteComponent"], Object.assign({}, modalConfig, {
+                _this54.modalService.show(_concorrente_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalDetalhesConcorrenteComponent"], Object.assign({}, modalConfig, {
                   initialState: initialState
                 }));
               } else {
-                _this52.pnotifyService.error();
+                _this54.pnotifyService.error();
               }
             }, function (error) {
-              _this52.pnotifyService.error();
+              _this54.pnotifyService.error();
             });
           }
         }]);
@@ -9418,11 +9498,11 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalMaterialFichaCadastralService, [{
           key: "showModal",
           value: function showModal(codMaterial) {
-            var _this53 = this;
+            var _this55 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.getFichaCadastralMaterial(codMaterial).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this53.loaderNavbar.emit(false);
+              _this55.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -9434,15 +9514,15 @@
                     material: response.data
                   };
 
-                  _this53.modalService.show(_ficha_cadastral_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialFichaCadastralComponent"], Object.assign({}, modalConfig, {
+                  _this55.modalService.show(_ficha_cadastral_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialFichaCadastralComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else {
-                  _this53.pnotifyService.notice('Não foi possível localizar a ficha cadastral.');
+                  _this55.pnotifyService.notice('Não foi possível localizar a ficha cadastral.');
                 }
               },
               error: function error(_error14) {
-                _this53.pnotifyService.error();
+                _this55.pnotifyService.error();
               }
             });
           }
@@ -9676,7 +9756,7 @@
         }, {
           key: "getClientes",
           value: function getClientes(params) {
-            var _this54 = this;
+            var _this56 = this;
 
             var _params = params !== null && params !== void 0 ? params : {};
 
@@ -9686,20 +9766,20 @@
             /*     (_params, _obj); */
 
             this.comercialService.getCarteiraClientesCotizacion(_params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
-              _this54.loadingClientes = false;
+              _this56.loadingClientes = false;
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
-                  _this54.noClientes = false;
-                  _this54.clientes = response.data;
+                  _this56.noClientes = false;
+                  _this56.clientes = response.data;
                 } else {
-                  _this54.noClientes = true;
+                  _this56.noClientes = true;
 
-                  _this54.pnotifyService.notice('Nenhum cliente encontrado!');
+                  _this56.pnotifyService.notice('Nenhum cliente encontrado!');
                 }
               },
               error: function error(_error15) {
-                _this54.pnotifyService.error();
+                _this56.pnotifyService.error();
               }
             });
           }
@@ -9796,7 +9876,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<!-- <div class=\"border rounded p-3\">\r\n  <div class=\"row\">\r\n    <div class=\"col text-truncate\">\r\n      <div class=\"mtc-title mb-3 text-center\">{{ material.codMaterial }} - {{ material.nomeMaterial | uppercase }}</div>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"col-6 my-auto\">\r\n      <div >\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-secondary\"\r\n          (click)=\"onAddMaterial(material)\"\r\n          *ngIf=\"material.onCarrinho === false\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"fas fa-shopping-cart\"></i>\r\n            <span>Incluir</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluir no carrinho</span>\r\n        </button>\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-secondary\"\r\n          disabled=\"disabled\"\r\n          *ngIf=\"material.onCarrinho === true\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"far fa-check-circle\"></i>\r\n            <span>Incluído</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluído no carrinho</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-6 text-center\">\r\n      <img\r\n        class=\"img-fluid\"\r\n        [src]=\"material.pathImage\"\r\n        *ngIf=\"size == ''\">\r\n      <img\r\n        class=\"my-auto\"\r\n        [src]=\"material.pathImage\"\r\n        *ngIf=\"size == 'small'\"\r\n        height=\"100\"\r\n        width=\"auto\">\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <p class=\"text-dark mb-0\">Relacionado com:</p>\r\n      <p class=\"text-dark text-truncate mb-0\">{{ material.codMaterialSimilaridade }} - {{ material.nomeMaterialSimilaridade | uppercase }}</p>\r\n    </div>\r\n  </div>\r\n</div> -->\r\n\r\n<div class=\"card\">\r\n  <div class=\"card-header\">\r\n    {{ material.codigo_material }} - {{ material.nombre_material }}\r\n  </div>\r\n  <div class=\"card-body\">\r\n    <p class=\"text-dark mb-0\">Relacionado con:</p>\r\n    <p class=\"text-dark mb-0\">{{ filtro[0].codigo_material}} - {{ filtro[0].nombre_material }}</p>\r\n    <div class=\"d-flex justify-content-end mt-2\">\r\n      <div >\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-success\"\r\n          (click)=\"onAddMaterial(material)\"\r\n          *ngIf=\"material.onCarrinho === false\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"fas fa-cart-plus\"></i>\r\n            <span>Incluir</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluir no carrinho</span>\r\n        </button>\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-success\"\r\n          disabled=\"disabled\"\r\n          *ngIf=\"material.onCarrinho === true\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"far fa-check-circle\"></i>\r\n            <span>Incluído</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluído no carrinho</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n";
+      __webpack_exports__["default"] = "<!-- <div class=\"border rounded p-3\">\r\n  <div class=\"row\">\r\n    <div class=\"col text-truncate\">\r\n      <div class=\"mtc-title mb-3 text-center\">{{ material.codMaterial }} - {{ material.nomeMaterial | uppercase }}</div>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"col-6 my-auto\">\r\n      <div >\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-secondary\"\r\n          (click)=\"onAddMaterial(material)\"\r\n          *ngIf=\"material.onCarrinho === false\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"fas fa-shopping-cart\"></i>\r\n            <span>Incluir</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluir no carrinho</span>\r\n        </button>\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-secondary\"\r\n          disabled=\"disabled\"\r\n          *ngIf=\"material.onCarrinho === true\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"far fa-check-circle\"></i>\r\n            <span>Incluído</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluído no carrinho</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-6 text-center\">\r\n      <img\r\n        class=\"img-fluid\"\r\n        [src]=\"material.pathImage\"\r\n        *ngIf=\"size == ''\">\r\n      <img\r\n        class=\"my-auto\"\r\n        [src]=\"material.pathImage\"\r\n        *ngIf=\"size == 'small'\"\r\n        height=\"100\"\r\n        width=\"auto\">\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"col\">\r\n      <p class=\"text-dark mb-0\">Relacionado com:</p>\r\n      <p class=\"text-dark text-truncate mb-0\">{{ material.codMaterialSimilaridade }} - {{ material.nomeMaterialSimilaridade | uppercase }}</p>\r\n    </div>\r\n  </div>\r\n</div> -->\r\n\r\n<div class=\"card\">\r\n  <div class=\"card-header\" *ngIf=\"material.onCarrinho === false\" >\r\n    {{ material.codigo_material }} - {{ material.nombre_material }}\r\n  </div>\r\n  <div class=\"card-header\" *ngIf=\"material.onCarrinho === true\" style=\"background-color: #28a745; color:white\">\r\n    {{ material.codigo_material }} - {{ material.nombre_material }}\r\n  </div>\r\n  <div class=\"card-body\">\r\n    <p class=\"text-dark mb-0\">Relacionado con:</p>\r\n    <p class=\"text-dark mb-0\">{{ filtro[0].codigo_material}} - {{ filtro[0].nombre_material }}</p>\r\n    <div class=\"d-flex justify-content-end mt-2\">\r\n      <div >\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-success\"\r\n          (click)=\"onAddMaterial(material)\"\r\n          *ngIf=\"material.onCarrinho === false\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"fas fa-cart-plus\"></i>\r\n            <span>Incluir</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluir no carrinho</span>\r\n        </button>\r\n        <button\r\n          type=\"button\"\r\n          class=\"btn btn-block btn-success\"\r\n          disabled=\"disabled\"\r\n          *ngIf=\"material.onCarrinho === true\">\r\n          <div *ngIf=\"size == 'small'\">\r\n            <i class=\"far fa-check-circle\"></i>\r\n            <span>Incluído</span>\r\n          </div>\r\n          <span *ngIf=\"size == ''\">Incluído no carrinho</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n";
       /***/
     },
 
@@ -10276,15 +10356,15 @@
         }, {
           key: "getEstoqueDepositos",
           value: function getEstoqueDepositos() {
-            var _this55 = this;
+            var _this57 = this;
 
             this.disponibilidade = [];
             this.disponibilidadeLoaded = false;
             this.cotacoesService.getEstoqueDepositos(this.deposito.codDeposito, this.codMaterial).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-              _this55.disponibilidadeLoaded = true;
+              _this57.disponibilidadeLoaded = true;
             })).subscribe(function (response) {
               if (response.success === true) {
-                _this55.disponibilidade = response.data;
+                _this57.disponibilidade = response.data;
               }
             });
           }
@@ -10309,11 +10389,11 @@
         }, {
           key: "showConfirmChangeDeposito",
           value: function showConfirmChangeDeposito(deposito) {
-            var _this56 = this;
+            var _this58 = this;
 
             this.confirmModalService.showConfirm(null, 'Alteração de depósito', "Deseja alterar para o dep\xF3sito \"".concat(deposito.nomeDeposito, "\"?"), 'Cancelar', 'Confirmar').subscribe(function (response) {
-              return response ? _this56.onChange.emit({
-                index: _this56.index,
+              return response ? _this58.onChange.emit({
+                index: _this58.index,
                 deposito: deposito
               }) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
             });
@@ -10795,26 +10875,26 @@
         }, {
           key: "getCarteira",
           value: function getCarteira(action) {
-            var _this57 = this;
+            var _this59 = this;
 
             if (action == 'editar') {
               this.cotacoesService.getCotacao(this.activatedRoute.snapshot.params.codCotacao, this.activatedRoute.snapshot.params.idEmpresa).subscribe(function (response) {
-                _this57.getClientesParams(response.data.cobrancaSomenteCarteira);
+                _this59.getClientesParams(response.data.cobrancaSomenteCarteira);
               });
             }
           }
         }, {
           key: "getIdOferta",
           value: function getIdOferta() {
-            var _this58 = this;
+            var _this60 = this;
 
             this.cotacoesService.getIdOferta().subscribe(function (response) {
               if (response.responseCode == 200) {
-                _this58.id_oferta = response.result.id_oferta + 1;
+                _this60.id_oferta = response.result.id_oferta + 1;
 
-                _this58.form.controls.codigo_oferta_crm.setValue(_this58.id_oferta);
+                _this60.form.controls.codigo_oferta_crm.setValue(_this60.id_oferta);
 
-                _this58.form.controls.codigo_oferta.setValue(response.result.codigo_oferta);
+                _this60.form.controls.codigo_oferta.setValue(response.result.codigo_oferta);
               }
             });
           }
@@ -10828,31 +10908,31 @@
         }, {
           key: "getTodosVendedores",
           value: function getTodosVendedores() {
-            var _this59 = this;
+            var _this61 = this;
 
             this.comercialService.getTodosVendedores().subscribe(function (response) {
-              _this59.listaEjecutivo = response.data;
+              _this61.listaEjecutivo = response.data;
             }, function (error) {});
           }
         }, {
           key: "getRubros",
           value: function getRubros() {
-            var _this60 = this;
+            var _this62 = this;
 
             this.vendedoresService.getRubros().subscribe(function (response) {
               if (response.responseCode == 200) {
-                _this60.rubros = response.result;
+                _this62.rubros = response.result;
               }
             });
           }
         }, {
           key: "getListarPrecios",
           value: function getListarPrecios() {
-            var _this61 = this;
+            var _this63 = this;
 
             /* onsole.log("aqui"); */
             this.comercialService.getListarPrecios().subscribe(function (response) {
-              _this61.listaPrecios = response.data;
+              _this63.listaPrecios = response.data;
             }, function (error) {
               console.error('Error al obtener la lista de precios:', error);
             });
@@ -10860,24 +10940,24 @@
         }, {
           key: "getCentrosLogisticos",
           value: function getCentrosLogisticos() {
-            var _this62 = this;
+            var _this64 = this;
 
             this.comercialService.getCentrosLogisticos().subscribe(function (response) {
-              _this62.centrosLogisticos = response.data;
+              _this64.centrosLogisticos = response.data;
             }, function (error) {});
           }
         }, {
           key: "getTituloEndereco",
           value: function getTituloEndereco() {
-            var _this63 = this;
+            var _this65 = this;
 
             var urlPath = this.activatedRoute.snapshot.url[0].path;
 
             if (urlPath == 'editar') {
               this.formularioService.getLocaisEntrega(this.form.controls.codCliente.value).subscribe(function (response) {
                 response.data.enderecos.forEach(function (element) {
-                  if (element.id == _this63.form.controls.codEndereco.value) {
-                    _this63.form.controls.titulo.setValue(element.titulo);
+                  if (element.id == _this65.form.controls.codEndereco.value) {
+                    _this65.form.controls.titulo.setValue(element.titulo);
                   }
                 });
               });
@@ -10939,25 +11019,25 @@
         }, {
           key: "setBreadCrumb",
           value: function setBreadCrumb() {
-            var _this64 = this;
+            var _this66 = this;
 
             var id = this.activatedRoute.snapshot.params.idSubModulo;
             this.activatedRoute.params.subscribe(function (params) {
               if (params.codCotacao) {
-                _this64.codCotacao = parseInt(params.codCotacao);
-                _this64.appTitle = 'Editar Cotización/pedido';
+                _this66.codCotacao = parseInt(params.codCotacao);
+                _this66.appTitle = 'Editar Cotización/pedido';
               } else if (params.idReservado) {
-                _this64.idReservado = parseInt(params.idReservado);
-                _this64.appTitle = 'Nueva Cotización/pedido';
+                _this66.idReservado = parseInt(params.idReservado);
+                _this66.appTitle = 'Nueva Cotización/pedido';
               }
 
-              if (_this64.activatedRoute.snapshot.url[0].path == 'visualizar') {
-                _this64.appTitle = 'visualizar Cotizacion/pedido';
+              if (_this66.activatedRoute.snapshot.url[0].path == 'visualizar') {
+                _this66.appTitle = 'visualizar Cotizacion/pedido';
               }
 
-              _this64.titleService.setTitle(_this64.appTitle);
+              _this66.titleService.setTitle(_this66.appTitle);
 
-              _this64.breadCrumbTree = [{
+              _this66.breadCrumbTree = [{
                 descricao: 'Home',
                 routerLink: '/comercial/home'
               }, {
@@ -10967,7 +11047,7 @@
                 descricao: 'Cotizaciones y Pedidos',
                 routerLink: "/comercial/ciclo-vendas/".concat(id, "/cotacoes-pedidos/lista")
               }, {
-                descricao: _this64.appTitle
+                descricao: _this66.appTitle
               }];
             });
           }
@@ -10996,27 +11076,27 @@
         }, {
           key: "getFormFields",
           value: function getFormFields() {
-            var _this65 = this;
+            var _this67 = this;
 
             this.formularioService.loadDependencies().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this65.dependenciesLoaded = true;
+              _this67.dependenciesLoaded = true;
 
-              if (_this65.appTitle == 'Nueva Cotización/pedido') {
+              if (_this67.appTitle == 'Nueva Cotización/pedido') {
                 /*  this.setEmpresa();
                  this.setTransportadora(); */
               }
             })).subscribe(function (response) {
-              _this65.situacoes = response[0].data || [];
-              _this65.empresas = response[1].result || [];
-              _this65.depositos = response[2].result || [];
-              _this65.filteredDepositos = _this65.depositos; // this.formasPagamento = response[3].data || [];
+              _this67.situacoes = response[0].data || [];
+              _this67.empresas = response[1].result || [];
+              _this67.depositos = response[2].result || [];
+              _this67.filteredDepositos = _this67.depositos; // this.formasPagamento = response[3].data || [];
 
-              _this65.formasContato = response[4].data || [];
+              _this67.formasContato = response[4].data || [];
               Object.keys(response[5].data).forEach(function (key) {
                 response[5].data[key].descricao = response[5].data[key].descricao.replace(/'/g, '');
               });
-              _this65.origensContato = response[5].data || [];
-              _this65.transportadoras = response[6].data || [];
+              _this67.origensContato = response[5].data || [];
+              _this67.transportadoras = response[6].data || [];
             });
           }
         }, {
@@ -11046,38 +11126,65 @@
         }, {
           key: "onCliente",
           value: function onCliente(event) {
-            console.log(event);
-            this.form.patchValue(event);
-            this.onChangeCliente(event.codCliente, 'user');
-            this.onLoadCliente(true); // Llama a la función exibirClienteTerceiro con los datos del cliente seleccio nado
+            var _this68 = this;
 
-            this.exibirClienteTerceiro(event); // Carga la dirección del cliente en el campo codEndereco del formulario
+            //console.log(event);
+            this.formularioService.getVerificaOfertasCliente(event.codCliente).subscribe(function (response) {
+              if (response.success == false) {
+                _this68.form.patchValue(event);
 
-            /*     this.idListaPrecio = event.id_lista_precio; */
+                _this68.onChangeCliente(event.codCliente, 'user');
 
-            this.codigoRubro = event.codigo_rubro;
-            this.form.controls.codFormaPagamento.setValue(1);
-            this.form.controls.codEndereco.setValue(event.direccion);
-            this.direccion_cliente = event.direccion;
-            this.form.controls.razaoSocial.setValue(event.nombre_factura);
-            this.form.controls.codRazaoSocial.setValue(event.carnet);
-            this.form.controls.correoElectronico.setValue(event.correo_electronico);
-            this.form.controls.nomeCliente.setValue(event.nomeCliente);
-            this.form.controls.codigo_cliente.setValue(event.codigo_cliente);
-            this.form.controls.telefonoCliente.setValue(event.telefono);
-            this.form.controls.celular.setValue(event.celular);
-            this.form.controls.nombreTipo.setValue(event.nombreTipo);
-            this.form.controls.id_tipo_cliente.setValue(event.tipoCliente);
-            this.form.controls.id_departamento.setValue(event.id_departamento_lista);
-            this.form.controls.celular.setValue(event.celular);
-            this.form.controls.telefonoCliente.setValue(event.telefono);
-            this.carnet_cliente = event.carnet_cliente;
-            console.log(event);
+                _this68.onLoadCliente(true); // Llama a la función exibirClienteTerceiro con los datos del cliente seleccio nado
+
+
+                _this68.exibirClienteTerceiro(event); // Carga la dirección del cliente en el campo codEndereco del formulario
+
+                /*     this.idListaPrecio = event.id_lista_precio; */
+
+
+                _this68.codigoRubro = event.codigo_rubro;
+
+                _this68.form.controls.codFormaPagamento.setValue(1);
+
+                _this68.form.controls.codEndereco.setValue(event.direccion);
+
+                _this68.direccion_cliente = event.direccion;
+
+                _this68.form.controls.razaoSocial.setValue(event.nombre_factura);
+
+                _this68.form.controls.codRazaoSocial.setValue(event.carnet);
+
+                _this68.form.controls.correoElectronico.setValue(event.correo_electronico);
+
+                _this68.form.controls.nomeCliente.setValue(event.nomeCliente);
+
+                _this68.form.controls.codigo_cliente.setValue(event.codigo_cliente);
+
+                _this68.form.controls.telefonoCliente.setValue(event.telefono);
+
+                _this68.form.controls.celular.setValue(event.celular);
+
+                _this68.form.controls.nombreTipo.setValue(event.nombreTipo);
+
+                _this68.form.controls.id_tipo_cliente.setValue(event.tipoCliente);
+
+                _this68.form.controls.id_departamento.setValue(event.id_departamento_lista);
+
+                _this68.form.controls.celular.setValue(event.celular);
+
+                _this68.form.controls.telefonoCliente.setValue(event.telefono);
+
+                _this68.carnet_cliente = event.carnet_cliente; //console.log(event);
+              } else {
+                _this68.pnotifyService.error("El Cliente tiene una oferta pendiente");
+              }
+            });
           }
         }, {
           key: "datosVendedor",
           value: function datosVendedor(id_vendedor) {
-            var _this66 = this;
+            var _this69 = this;
 
             this.idvendedor = id_vendedor;
             this.idListaPrecio = 0;
@@ -11087,19 +11194,19 @@
             this.vendedoresService.getDetalleVendedor(params).subscribe({
               next: function next(response) {
                 if (response.responseCode == 200) {
-                  _this66.idListaPrecio = response.detalle[0].id_lista;
-                  _this66.nombreDepartamento = response.detalle[0].nombre_departamento;
+                  _this69.idListaPrecio = response.detalle[0].id_lista;
+                  _this69.nombreDepartamento = response.detalle[0].nombre_departamento;
 
-                  _this66.form.controls.nombreDepartamento.setValue(_this66.nombreDepartamento);
+                  _this69.form.controls.nombreDepartamento.setValue(_this69.nombreDepartamento);
                   /*  this.form.controls['lista'].setValue(response.detalle[0].id_lista); */
                   // this.form.value.lista = response.detalle[0].id_lista;
 
                 } else {
-                  _this66.form.controls.lista.setValue(null);
+                  _this69.form.controls.lista.setValue(null);
                 }
               },
               error: function error(_error16) {
-                _this66.pnotifyService.error();
+                _this69.pnotifyService.error();
               }
             });
           }
@@ -11321,24 +11428,24 @@
         }, {
           key: "getAnexos",
           value: function getAnexos(codCotacao) {
-            var _this67 = this;
+            var _this70 = this;
 
             this.loaderNavbar = true;
             this.showAnexos = false;
             this.formularioService.getAnexos(codCotacao).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this67.loaderNavbar = false;
-              _this67.showAnexos = true;
+              _this70.loaderNavbar = false;
+              _this70.showAnexos = true;
             })).subscribe({
               next: function next(response) {
                 if (response.hasOwnProperty('success') && response.success === true) {
-                  _this67.setAnexos(response.data);
+                  _this70.setAnexos(response.data);
                 }
               },
               error: function error(_error17) {
                 if (_error17.error.hasOwnProperty('mensagem')) {
-                  _this67.pnotifyService.error(_error17.error.mensagem);
+                  _this70.pnotifyService.error(_error17.error.mensagem);
                 } else {
-                  _this67.pnotifyService.error();
+                  _this70.pnotifyService.error();
                 }
               }
             });
@@ -11351,11 +11458,6 @@
                 this.onAddAnexos(anexos[i], true);
               }
             }
-          }
-        }, {
-          key: "anexos",
-          get: function get() {
-            return this.form.get('anexos');
           }
         }, {
           key: "onAddAnexos",
@@ -11401,7 +11503,7 @@
         }, {
           key: "onPostAnexos",
           value: function onPostAnexos(codCotacao) {
-            var _this68 = this;
+            var _this71 = this;
 
             if (this.formData.length === 0) {
               /* this.pnotifyService.notice('Erro'); */
@@ -11411,42 +11513,42 @@
 
 
             this.formData.forEach(function (element, index) {
-              _this68.formularioService.postAnexos(element, codCotacao).subscribe();
+              _this71.formularioService.postAnexos(element, codCotacao).subscribe();
             });
           }
         }, {
           key: "onDeleteAnexo",
           value: function onDeleteAnexo(codAnexo, index) {
-            var _this69 = this;
+            var _this72 = this;
 
             this.confirmDelete().subscribe(function (r) {
               if (codAnexo) {
-                _this69.loaderNavbar = true;
+                _this72.loaderNavbar = true;
 
-                _this69.formularioService.deleteAnexo(codAnexo).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-                  _this69.loaderNavbar = false;
+                _this72.formularioService.deleteAnexo(codAnexo).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
+                  _this72.loaderNavbar = false;
                 })).subscribe({
                   next: function next(response) {
                     if (response.hasOwnProperty('success') && response.success === true) {
-                      r ? _this69.deleteDocumento(index) : null;
+                      r ? _this72.deleteDocumento(index) : null;
                     } else if (response.hasOwnProperty('success') && response.success === false && response.hasOwnProperty('mensagem')) {
-                      _this69.pnotifyService.error(response.mensagem);
+                      _this72.pnotifyService.error(response.mensagem);
                     } else {
-                      _this69.pnotifyService.error();
+                      _this72.pnotifyService.error();
                     }
                   },
                   error: function error(_error18) {
                     if (_error18.error.hasOwnProperty('mensagem')) {
-                      _this69.pnotifyService.error(_error18.error.mensagem);
+                      _this72.pnotifyService.error(_error18.error.mensagem);
                     } else {
-                      _this69.pnotifyService.error();
+                      _this72.pnotifyService.error();
                     }
                   }
                 });
               } else {
-                r ? _this69.deleteDocumento(index) : null;
+                r ? _this72.deleteDocumento(index) : null;
 
-                _this69.formData.splice(index, 1);
+                _this72.formData.splice(index, 1);
               }
             });
           }
@@ -11524,52 +11626,52 @@
         }, {
           key: "setLoaderEvents",
           value: function setLoaderEvents() {
-            var _this70 = this;
+            var _this73 = this;
 
             this.loaderFichaCadastralSubscription = this.fichaCadastralService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderSimilaridadeSubscription = this.similaridadeService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderCalculoSubscription = this.calculoService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderDescontoSubscription = this.descontoService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderAutorizacionSubscription = this.autorizacionService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderComboSubscription = this.comboService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderEstoqueDetalhesSubscription = this.estoqueService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderHistoricoComprasSubscription = this.historicoComprasService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderDetalhesClienteSubscription = this.clienteDetalhesService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderDetalhesEnderecoSubscription = this.enderecoDetalhesService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderDetalhesContatoSubscription = this.contatoDetalhesService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderDetalhesConcorrenteSubscription = this.concorrenteDetalhesService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderDuplicatasSubscription = this.duplicatasService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderHistoricoExclusaoSubscription = this.historicoExclusaoService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
             this.loaderFinalizacaoSubscription = this.finalizacaoService.loaderNavbar.subscribe(function (response) {
-              _this70.loaderNavbar = response;
+              _this73.loaderNavbar = response;
             });
           }
         }, {
@@ -11612,10 +11714,10 @@
         }, {
           key: "setDeposito",
           value: function setDeposito() {
-            var _this71 = this;
+            var _this74 = this;
 
             this.filteredDepositos = this.depositos.filter(function (value) {
-              return value.idEmpresa == _this71.form.getRawValue().codEmpresa;
+              return value.idEmpresa == _this74.form.getRawValue().codEmpresa;
             });
 
             if (this.filteredDepositos.length === 0) {
@@ -11638,7 +11740,7 @@
         }, {
           key: "onChangeValidadeProposta",
           value: function onChangeValidadeProposta(value) {
-            var _this72 = this;
+            var _this75 = this;
 
             var isValid = true;
             var maxDate = this.dateService.addDaysToDate(new Date(), 30);
@@ -11647,13 +11749,13 @@
               setTimeout(function () {
                 isValid = false;
 
-                _this72.form.controls.dataValidade.markAsTouched();
+                _this75.form.controls.dataValidade.markAsTouched();
 
-                _this72.form.controls.dataValidade.setErrors({
+                _this75.form.controls.dataValidade.setErrors({
                   maxDate: true
                 });
 
-                _this72.pnotifyService.notice('La fecha no debe sobrepasar los 30 días');
+                _this75.pnotifyService.notice('La fecha no debe sobrepasar los 30 días');
               }, 250);
             }
 
@@ -11662,13 +11764,13 @@
         }, {
           key: "onScrollToCarrinho",
           value: function onScrollToCarrinho(event) {
-            var _this73 = this;
+            var _this76 = this;
 
             this.autoScrollToCarrinho = event;
 
             if (this.autoScrollToCarrinho === true) {
               setTimeout(function () {
-                _this73.scrollToCarrinho.nativeElement.scrollIntoView({
+                _this76.scrollToCarrinho.nativeElement.scrollIntoView({
                   behavior: 'instant'
                 });
               }, 500);
@@ -11777,7 +11879,7 @@
         }, {
           key: "sendForm",
           value: function sendForm() {
-            var _this74 = this;
+            var _this77 = this;
 
             if (this.checkFormErrors() === false) {
               var hasPrecoMinimo = false;
@@ -11790,7 +11892,7 @@
 
               if (hasPrecoMinimo === true) {
                 this.confirmModalService.showConfirm(null, 'Preço abaixo do mínimo', 'Existem materiais com preço abaixo do mínimo. Deseja continuar mesmo assim?', 'Cancelar', 'Confirmar').subscribe(function (response) {
-                  return response ? _this74.sendCotacao() : rxjs__WEBPACK_IMPORTED_MODULE_9__["EMPTY"];
+                  return response ? _this77.sendCotacao() : rxjs__WEBPACK_IMPORTED_MODULE_9__["EMPTY"];
                 });
               } else {
                 this.sendCotacao();
@@ -11806,13 +11908,13 @@
         }, {
           key: "sendCotacao",
           value: function sendCotacao() {
-            var _this75 = this;
+            var _this78 = this;
 
             this.confirmModalService.showConfirm(null, 'Confirmar oferta', 'Desea continuar esta acción, se registrará la oferta?', 'Cancelar', 'Confirmar').subscribe(function (response) {
               if (response) {
-                var formValue = _this75.form.getRawValue();
+                var formValue = _this78.form.getRawValue();
 
-                var carteiraClientes = _this75.formularioService.getCurrentCarteiraClientes();
+                var carteiraClientes = _this78.formularioService.getCurrentCarteiraClientes();
 
                 var situacao = {
                   codSituacaoProposta: null,
@@ -11824,11 +11926,11 @@
                   razaoSocial: null
                 };
 
-                for (var i = 0; i < _this75.situacoes.length; i++) {
-                  if (Number(formValue.codSituacao) === _this75.situacoes[i].codParametroSituacaoProposta) {
-                    situacao.codSituacaoProposta = _this75.situacoes[i].codSituacaoProposta;
-                    situacao.situacaoProposta = _this75.situacoes[i].situacaoProposta;
-                    situacao.codTipoFinalizacao = _this75.situacoes[i].codTipoFinalizacao;
+                for (var i = 0; i < _this78.situacoes.length; i++) {
+                  if (Number(formValue.codSituacao) === _this78.situacoes[i].codParametroSituacaoProposta) {
+                    situacao.codSituacaoProposta = _this78.situacoes[i].codSituacaoProposta;
+                    situacao.situacaoProposta = _this78.situacoes[i].situacaoProposta;
+                    situacao.codTipoFinalizacao = _this78.situacoes[i].codTipoFinalizacao;
                   }
                 }
 
@@ -11874,41 +11976,41 @@
                 }; */
 
                 var dataCotizacion = {
-                  monto_total: _this75.valorProposta,
-                  monto_total_bruto: _this75.valorPropuestaBruto,
-                  peso_total: _this75.pesoTotal,
-                  descuento_total: _this75.descuentoTotal,
-                  cantidad_total: _this75.cantidadTotal,
-                  id_forma_pago: _this75.id_forma_contacto,
-                  id_lista_precio: _this75.idListaPrecio,
+                  monto_total: _this78.valorProposta,
+                  monto_total_bruto: _this78.valorPropuestaBruto,
+                  peso_total: _this78.pesoTotal,
+                  descuento_total: _this78.descuentoTotal,
+                  cantidad_total: _this78.cantidadTotal,
+                  id_forma_pago: _this78.id_forma_contacto,
+                  id_lista_precio: _this78.idListaPrecio,
                   id_modo_entrega: formValue.codEndereco,
                   id_cliente: formValue.codCliente,
-                  id_vendedor: _this75.idvendedor,
-                  id_almacen: _this75.id_centro_logistico,
+                  id_vendedor: _this78.idvendedor,
+                  id_almacen: _this78.id_centro_logistico,
                   codigo_oferta: null,
                   fecha_final: formValue.dataValidade,
                   fecha_inicial: formValue.dataEncerramento,
-                  latitud: _this75.latitud,
-                  longitud: _this75.longitud,
+                  latitud: _this78.latitud,
+                  longitud: _this78.longitud,
                   id_persona_contacto: formValue.codContato,
-                  carrinho: _this75.materiais,
+                  carrinho: _this78.materiais,
                   nombre_cliente: formValue.nomeCliente,
                   observacion: formValue.observacoes,
                   nit_factura: formValue.codRazaoSocial,
                   nombre_factura: formValue.razaoSocial,
-                  direccion_cliente: _this75.direccion_cliente,
+                  direccion_cliente: _this78.direccion_cliente,
                   direccion_entrega: formValue.direccionEntrega,
-                  carnet_cliente: _this75.carnet_cliente,
+                  carnet_cliente: _this78.carnet_cliente,
                   correo_electronico: formValue.correoElectronico,
                   celular: formValue.celular,
-                  id_oferta: _this75.id_oferta,
+                  id_oferta: _this78.id_oferta,
                   telefono: formValue.telefonoCliente
                 };
                 /* this.autorizacionService.showModal();  */
 
                 /* console.log(dataCotizacion); */
 
-                _this75.finalizacaoService.sendCotizacion(dataCotizacion); // this.onPostAnexos(dataCotacao.codCotacao);
+                _this78.finalizacaoService.sendCotizacion(dataCotizacion); // this.onPostAnexos(dataCotacao.codCotacao);
 
               }
             });
@@ -11916,14 +12018,14 @@
         }, {
           key: "changeDirty",
           value: function changeDirty() {
-            var _this76 = this;
+            var _this79 = this;
 
             this.finalizacaoService.makeFormAsDirty().subscribe(function () {
-              _this76.form.markAsDirty({
+              _this79.form.markAsDirty({
                 onlySelf: true
               });
 
-              _this76.form.markAsPristine({
+              _this79.form.markAsPristine({
                 onlySelf: false
               });
             });
@@ -12140,7 +12242,7 @@
         }, {
           key: "getLocaisEntrega",
           value: function getLocaisEntrega(codCliente, source) {
-            var _this77 = this;
+            var _this80 = this;
 
             if (source != 'application') {
               this.form.controls.codEndereco.markAsUntouched();
@@ -12151,9 +12253,9 @@
             this.locaisEntrega = [];
             this.locaisEntregaLoader = true;
             this.formularioService.getLocaisEntrega(codCliente).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this77.locaisEntregaLoader = false;
+              _this80.locaisEntregaLoader = false;
 
-              _this77.form.controls.codEndereco.enable();
+              _this80.form.controls.codEndereco.enable();
             })).subscribe(function (response) {
               if (response.success === true) {
                 var _enderecos = response.data.enderecos;
@@ -12166,7 +12268,7 @@
                 for (var i = 0; i < _enderecos.length; i++) {
                   enderecos.push({
                     codEndereco: _enderecos[i].id,
-                    descricao: _this77.formatLocalEntrega(_enderecos[i]),
+                    descricao: _this80.formatLocalEntrega(_enderecos[i]),
                     titulo: _enderecos[i].titulo,
                     tipo: 'Aprovados',
                     COD_CLIE_TERC: _enderecos[i].COD_CLIE_TERC,
@@ -12177,7 +12279,7 @@
                 for (var _i2 = 0; _i2 < _enderecosAguardando.length; _i2++) {
                   enderecosAguardando.push({
                     codEndereco: _enderecosAguardando[_i2].id,
-                    descricao: _this77.formatLocalEntrega(_enderecosAguardando[_i2]),
+                    descricao: _this80.formatLocalEntrega(_enderecosAguardando[_i2]),
                     titulo: _enderecos[_i2].titulo,
                     tipo: 'Aguardando aprovação',
                     COD_CLIE_TERC: _enderecosAguardando[_i2].COD_CLIE_TERC,
@@ -12185,18 +12287,18 @@
                   });
                 }
 
-                _this77.locaisEntrega = [].concat(enderecos, enderecosAguardando);
+                _this80.locaisEntrega = [].concat(enderecos, enderecosAguardando);
                 /*     (this.locaisEntrega);
                     (_enderecos); */
 
-                _this77.setClientTerceiro(_this77.form.controls.codEndereco.value);
+                _this80.setClientTerceiro(_this80.form.controls.codEndereco.value);
               }
             });
           }
         }, {
           key: "getContatos",
           value: function getContatos(codCliente, source) {
-            var _this78 = this;
+            var _this81 = this;
 
             if (source != 'application') {
               this.form.controls.codContato.markAsUntouched();
@@ -12207,9 +12309,9 @@
             this.contatos = [];
             this.contatosLoader = true;
             this.clientesService.getContatos(codCliente).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this78.contatosLoader = false;
+              _this81.contatosLoader = false;
 
-              _this78.form.controls.codContato.enable();
+              _this81.form.controls.codContato.enable();
             })).subscribe(function (response) {
               if (response.success === true) {
                 var _contatos = response.data;
@@ -12224,7 +12326,7 @@
                   }
                 }
 
-                _this78.contatos = contatos; // console.log(contatos);
+                _this81.contatos = contatos; // console.log(contatos);
               }
             });
           }
@@ -12279,24 +12381,24 @@
         }, {
           key: "navegarHistoricoFinanceiro",
           value: function navegarHistoricoFinanceiro() {
-            var _this79 = this;
+            var _this82 = this;
 
             this.router.navigate([], {
               relativeTo: this.activatedRoute
             }).then(function (result) {
-              window.open("/#/comercial/clientes/historico-financeiro/".concat(_this79.form.value.codCliente, "/resumo"), '_blank');
+              window.open("/#/comercial/clientes/historico-financeiro/".concat(_this82.form.value.codCliente, "/resumo"), '_blank');
             });
           }
         }, {
           key: "setClienteSubscription",
           value: function setClienteSubscription() {
-            var _this80 = this;
+            var _this83 = this;
 
             this.formularioService.getCarteiraClientes();
             this.codClienteSubscription = this.formularioService.codCliente.subscribe(function (codCliente) {
-              _this80.form.controls.codCliente.setValue(codCliente);
+              _this83.form.controls.codCliente.setValue(codCliente);
 
-              _this80.onChangeCliente(codCliente, 'user');
+              _this83.onChangeCliente(codCliente, 'user');
             });
           }
         }, {
@@ -12418,6 +12520,7 @@
             }
 
             return '';
+            return '';
           }
         }, {
           key: "onFieldRequired",
@@ -12492,14 +12595,14 @@
         }, {
           key: "getDadosRelacionamento",
           value: function getDadosRelacionamento(codCliente) {
-            var _this81 = this;
+            var _this84 = this;
 
             this.clientesService.getDadosRelacionamento(codCliente).subscribe({
               next: function next(response) {
-                _this81.obsPropostas[0] = response;
+                _this84.obsPropostas[0] = response;
 
-                if (_this81.urlPath != 'editar') {
-                  _this81.form.controls.observacoes.setValue(_this81.obsPropostas[0].result.obsPropostas);
+                if (_this84.urlPath != 'editar') {
+                  _this84.form.controls.observacoes.setValue(_this84.obsPropostas[0].result.obsPropostas);
                 }
               }
             });
@@ -12507,27 +12610,27 @@
         }, {
           key: "getClientes",
           value: function getClientes(codCliente) {
-            var _this82 = this;
+            var _this85 = this;
 
             this.vendedoresService.getCarteiraClientes(codCliente).subscribe({
               next: function next(response) {
                 if (response.success === true) {
-                  _this82.clientes = response.data;
+                  _this85.clientes = response.data;
 
-                  if (_this82.clientes[0].nomeSituacao == 'Arquivo') {
-                    _this82.pnotifyService.notice('Cliente arquivado, favor entrar em contato com o Marketing');
+                  if (_this85.clientes[0].nomeSituacao == 'Arquivo') {
+                    _this85.pnotifyService.notice('Cliente arquivado, favor entrar em contato com o Marketing');
                   } else {
-                    _this82.form.controls.codRazaoSocial.setValue(_this82.clientes[0].carnet);
+                    _this85.form.controls.codRazaoSocial.setValue(_this85.clientes[0].carnet);
                     /*               this.form.controls.codigoCliente.setValue(this.clientes[0].codRazaoSocial);
                      */
 
 
-                    _this82.onChangeCliente(_this82.clientes[0].codCliente, 'user');
+                    _this85.onChangeCliente(_this85.clientes[0].codCliente, 'user');
                   }
                 }
               },
               error: function error(_error19) {
-                _this82.pnotifyService.error();
+                _this85.pnotifyService.error();
               }
             });
           }
@@ -12599,12 +12702,12 @@
         }, {
           key: "getCliente",
           value: function getCliente(codCliente) {
-            var _this83 = this;
+            var _this86 = this;
 
             this.loaderNavbar = true;
             this.form.controls.COD_CLIE_TERC.setValue(null);
             this.formularioService.getCliente(codCliente).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this83.loaderNavbar = false;
+              _this86.loaderNavbar = false;
             })).subscribe({
               next: function next(response) {
                 var data = [];
@@ -12613,7 +12716,7 @@
                 if (data[0].responseCode === 200) {
                   var codRazao = data[0].result.codCliente + ' - ' + data[0].result.razaoSocial;
 
-                  _this83.form.controls.COD_CLIE_TERC.setValue(codRazao);
+                  _this86.form.controls.COD_CLIE_TERC.setValue(codRazao);
                 }
               }
             });
@@ -12621,7 +12724,7 @@
         }, {
           key: "getFormasPagamento",
           value: function getFormasPagamento(params) {
-            var _this84 = this;
+            var _this87 = this;
 
             var data = {
               tipoConsulta: 2,
@@ -12631,13 +12734,18 @@
 
             this.formasPagamentoLoader = true;
             this.formasPagamentoS.getListaFormasPagamento(data).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this84.formasPagamentoLoader = false;
+              _this87.formasPagamentoLoader = false;
             })).subscribe({
               next: function next(response) {
                 /* (response); */
-                _this84.formasPagamento = response.data;
+                _this87.formasPagamento = response.data;
               }
             });
+          }
+        }, {
+          key: "anexos",
+          get: function get() {
+            return this.form.get('anexos');
           }
         }]);
 
@@ -13197,14 +13305,14 @@
         }, {
           key: "getConcorrentes",
           value: function getConcorrentes() {
-            var _this85 = this;
+            var _this88 = this;
 
             this.concorrentes = [];
             this.concorrentesLoader = true;
             this.concorrentesService.getListaConcorrentes({}).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-              _this85.concorrentesLoader = false;
+              _this88.concorrentesLoader = false;
             })).subscribe(function (response) {
-              _this85.concorrentes = response.data;
+              _this88.concorrentes = response.data;
             });
           }
         }, {
@@ -13232,11 +13340,6 @@
               materiais: this.formBuilder.array([])
             });
             this.onAddMaterial(this.dataCotacao.carrinho);
-          }
-        }, {
-          key: "materiais",
-          get: function get() {
-            return this.form.get('materiais');
           }
         }, {
           key: "onAddMaterial",
@@ -13297,7 +13400,7 @@
         }, {
           key: "onSubmit",
           value: function onSubmit() {
-            var _this86 = this;
+            var _this89 = this;
 
             if (this.checkFormValidators() === true) {
               return;
@@ -13310,17 +13413,17 @@
             };
             var dataCotacao = Object.assign(this.dataCotacao, formValue);
             this.cotacoesService.postCotacaoPerdida(dataCotacao).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-              _this86.submittingForm = false;
+              _this89.submittingForm = false;
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
-                  _this86.onClose();
+                  _this89.onClose();
                 } else {
-                  _this86.pnotifyService.error();
+                  _this89.pnotifyService.error();
                 }
               },
               error: function error(_error20) {
-                _this86.pnotifyService.error();
+                _this89.pnotifyService.error();
               }
             });
             this.onClose();
@@ -13360,6 +13463,11 @@
             this.formularioService.limparCarrinhoSubject.next(true);
             this.bsModalRef.hide();
             this.router.navigate(["/comercial/ciclo-vendas/".concat(idSubModulo, "/cotacoes-pedidos/lista")]);
+          }
+        }, {
+          key: "materiais",
+          get: function get() {
+            return this.form.get('materiais');
           }
         }]);
 
@@ -14004,54 +14112,54 @@
         }, {
           key: "getDataDocument",
           value: function getDataDocument() {
-            var _this87 = this;
+            var _this90 = this;
 
             var milliseconds = new Date().getTime();
             this.cotacoesService.getImprimirCotacao(this.cotacao.nrPedido).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
               setTimeout(function () {
-                if (_this87.imprimirPdf) {
+                if (_this90.imprimirPdf) {
                   var doc;
                   new Promise(function (resolve) {
-                    resolve(doc = _this87.pdfService.generateEmailPdf(_this87.getDocument()));
+                    resolve(doc = _this90.pdfService.generateEmailPdf(_this90.getDocument()));
                   }).then(function () {
                     doc.getBase64(function (data) {
                       doc = data;
 
-                      _this87.pdfData.emit(doc);
+                      _this90.pdfData.emit(doc);
                     });
 
-                    _this87.loading.emit(false);
+                    _this90.loading.emit(false);
 
-                    _this87.resetImprimir.emit(false);
+                    _this90.resetImprimir.emit(false);
                   })["catch"](console.error);
                 } else {
-                  _this87.pdfService.generatePdf(_this87.getDocument(), "".concat(_this87.cotacao['nrPedido'], "_").concat(milliseconds));
+                  _this90.pdfService.generatePdf(_this90.getDocument(), "".concat(_this90.cotacao['nrPedido'], "_").concat(milliseconds));
 
-                  _this87.loading.emit(false);
+                  _this90.loading.emit(false);
                 }
               }, 1000);
             })).subscribe({
               next: function next(response) {
                 if (response.hasOwnProperty('success') && response.success === true) {
-                  _this87.dados = response.data;
-                  _this87.dadosManetoni = _this87.dados['dadosManetoni'];
-                  _this87.pedido = _this87.dados['pedido'];
-                  _this87.contatos = _this87.dados['contatos'];
-                  _this87.enderecos = _this87.dados['enderecos'];
-                  _this87.materiais = _this87.dados['materiais'];
-                  _this87.parcelas = _this87.dados['parcelas'];
-                  _this87.dadosVendedor = _this87.dados['dadosVendedor'];
+                  _this90.dados = response.data;
+                  _this90.dadosManetoni = _this90.dados['dadosManetoni'];
+                  _this90.pedido = _this90.dados['pedido'];
+                  _this90.contatos = _this90.dados['contatos'];
+                  _this90.enderecos = _this90.dados['enderecos'];
+                  _this90.materiais = _this90.dados['materiais'];
+                  _this90.parcelas = _this90.dados['parcelas'];
+                  _this90.dadosVendedor = _this90.dados['dadosVendedor'];
                 } else if (response.hasOwnProperty('success') && response.success === false && response.hasOwnProperty('mensagem') && response.mensagem !== null) {
-                  _this87.pnotifyService.error(response.mensagem);
+                  _this90.pnotifyService.error(response.mensagem);
                 } else {
-                  _this87.pnotifyService.notice('Nenhuma informação encontrada');
+                  _this90.pnotifyService.notice('Nenhuma informação encontrada');
                 }
               },
               error: function error(_error21) {
                 if (_error21.error.hasOwnProperty('mensagem')) {
-                  _this87.pnotifyService.error(_error21.error.mensagem);
+                  _this90.pnotifyService.error(_error21.error.mensagem);
                 } else {
-                  _this87.pnotifyService.error();
+                  _this90.pnotifyService.error();
                 }
               }
             });
@@ -14059,14 +14167,14 @@
         }, {
           key: "setDocumentImages",
           value: function setDocumentImages() {
-            var _this88 = this;
+            var _this91 = this;
 
             this.getDocumentImages().subscribe(function (base64Url) {
-              _this88.images.leftLogo = base64Url[0];
-              _this88.images.rightLogo = base64Url[1];
-              _this88.images.instagramLogo = base64Url[2];
-              _this88.images.facebookLogo = base64Url[3];
-              _this88.images.linkedinLogo = base64Url[4];
+              _this91.images.leftLogo = base64Url[0];
+              _this91.images.rightLogo = base64Url[1];
+              _this91.images.instagramLogo = base64Url[2];
+              _this91.images.facebookLogo = base64Url[3];
+              _this91.images.linkedinLogo = base64Url[4];
             });
           }
         }, {
@@ -14429,12 +14537,12 @@
         }, {
           key: "getEnderecos",
           value: function getEnderecos() {
-            var _this89 = this;
+            var _this92 = this;
 
             var enderecos = [];
             this.enderecos.map(function (e) {
               enderecos.push({
-                text: "".concat(e.tipoEndereco, ": ").concat(e.endereco, " - ").concat(e.bairro, " - ").concat(e.cidade, "/").concat(e.uf, " - CEP: ").concat(_this89.transformNumberToCEP(e.cep)),
+                text: "".concat(e.tipoEndereco, ": ").concat(e.endereco, " - ").concat(e.bairro, " - ").concat(e.cidade, "/").concat(e.uf, " - CEP: ").concat(_this92.transformNumberToCEP(e.cep)),
                 fontSize: 10,
                 margin: [0, 0, 0, 4]
               });
@@ -14997,32 +15105,32 @@
         }, {
           key: "onSubmit",
           value: function onSubmit() {
-            var _this90 = this;
+            var _this93 = this;
 
             var selectedMateriais = this.materiais.filter(function (material) {
               return material.checked === 1;
             });
             this.confirmSubmit().asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (result) {
-              return result ? _this90.submit(selectedMateriais) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
+              return result ? _this93.submit(selectedMateriais) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
             }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-              _this90.submittingForm = false;
+              _this93.submittingForm = false;
             })).subscribe(function (response) {
               if (response.hasOwnProperty('success') && response.success === true) {
-                _this90.listaCotacoesService.updateCotacaoDesdobrada([response.data, _this90.cotacao, selectedMateriais]);
+                _this93.listaCotacoesService.updateCotacaoDesdobrada([response.data, _this93.cotacao, selectedMateriais]);
 
-                _this90.pnotifyService.success();
+                _this93.pnotifyService.success();
 
-                _this90.onClose();
+                _this93.onClose();
               } else if (response.hasOwnProperty('success') && response.success === false && response.hasOwnProperty('mensagem')) {
-                _this90.pnotifyService.error(response.mensagem);
+                _this93.pnotifyService.error(response.mensagem);
               } else {
-                _this90.pnotifyService.error();
+                _this93.pnotifyService.error();
               }
             }, function (error) {
               if (error['error'].hasOwnProperty('mensagem')) {
-                _this90.pnotifyService.error(error.error.mensagem);
+                _this93.pnotifyService.error(error.error.mensagem);
               } else {
-                _this90.pnotifyService.error();
+                _this93.pnotifyService.error();
               }
             });
           }
@@ -15203,7 +15311,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<loader-spinner-navbar [hidden]=\"!loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Cotizaciones\">\r\n  <button type=\"button\" (click)=\"onReset()\">\r\n    Limpar\r\n  </button>\r\n  <button type=\"button\" (click)=\"nuevo()\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\" [disabled]=\"loaderNavbar \">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"tipoData\">Buscar por</label>\r\n            <select class=\"form-control custom-select\" id=\"tipoData\" formControlName=\"tipoData\">\r\n              <option value=\"1\">Fecha de publicacion</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataInicial\">Fecha inicial</label>\r\n            <input class=\"form-control\" id=\"dataInicial\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataInicial\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataFinal\">Fecha final</label>\r\n            <input class=\"form-control\" id=\"dataFinal\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataFinal\">\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codStatus\">Situacion</label>\r\n            <ng-select [items]=\"situacoes\" [searchable]=\"true\" [clearable]=\"false\" labelForId=\"id\" bindLabel=\"nombre\"\r\n              formControlName=\"codSituacao\" [(ngModel)]=\"defaultSelection\">\r\n            </ng-select>\r\n\r\n\r\n\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"nrPedido\">Núm. pedido</label>\r\n            <input type=\"text\" id=\"nrPedido\" placeholder=\"Digite...\" class=\"form-control\" formControlName=\"nrPedido\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"codEmpresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codEmpresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codEmpresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('codEmpresa') + ' ' + onFieldRequired(form.controls.codEmpresa)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codEmpresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"codDeposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codDeposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codDeposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event.idDeposito)\"\r\n              [ngClass]=\"onFieldError('codDeposito') + ' ' + onFieldRequired(form.controls.codDeposito)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codDeposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"cliente\">Cliente</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"cliente\"\r\n              placeholder=\"Digite...\"\r\n              formControlName=\"cliente\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div> -->\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codVendedor\">Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"vendedores\"\r\n              formControlName=\"codVendedor\" [virtualScroll]=\"true\" labelForId=\"codVendedor\" bindLabel=\"nome\"\r\n              bindValue=\"id\">\r\n            </ng-select>\r\n          </div>\r\n          <div *ngIf=\"filtroCotacoes\" class=\"form-group col-lg-1\">\r\n            <label for=\"statusCliente\">Status Cliente</label>\r\n            <select class=\"form-control custom-select\" id=\"statusCliente\" formControlName=\"statusCliente\">\r\n              <option>TODOS</option>\r\n              <option value=\"Ativo\">ACTIVO</option>\r\n              <option value=\"Inativo\">INACTIVO</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group \" [ngClass]=\"{'col-lg-2': !filtroCotacoes , 'col-lg-1': filtroCotacoes}\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles [data]=\"leyendas\" [allowActivation]=\"false\" [show]=\"dados.length > 0 && !dadosEmpty\">\r\n\r\n  </subtitles>\r\n  <div class=\"row\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n    <div [ngClass]=\"{'col-12': !showDetailPanel, 'col-6 pr-0': showDetailPanel}\">\r\n      <div class=\"table-responsive\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <!--  <th scope=\"col\"></th> -->\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Núm.\" [active]=\"orderBy == 'codigo_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('codigo_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha inicial\" [active]=\"orderBy == 'fecha_inicial'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_inicial')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha final\" [active]=\"orderBy == 'fecha_final'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_final')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Cliente\" [active]=\"orderBy == 'cliente'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('cliente')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Vendedor\" [active]=\"orderBy == 'vendedor'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('vendedor')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <!--  <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total bruto\" [active]=\"orderBy == 'monto_total_bruto'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total_bruto')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('descuento')\">\r\n                </thead-sorter>\r\n              </th> -->\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total\" [active]=\"orderBy == 'monto_total'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Peso total kg.\" [active]=\"orderBy == 'peso'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('peso_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Lista\" [active]=\"orderBy == 'lista_precio'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('lista_precio')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Modo de entrega\" [active]=\"orderBy == 'modo_entrega'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('modo_entrega')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Estado\" [active]=\"orderBy == 'estado_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('estado_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Acciones\" [active]=\"orderBy == 'Acciones'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('Acciones')\">\r\n                </thead-sorter>\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <tr *ngFor=\"let pedido of dados; let i = index\"[class.table-active]=\"i == activeRow\">\r\n              <td class=\"text-center\" [ngStyle]=\"styleStatusBorder(pedido)\">\r\n                <span class=\"d-inline-flex\">\r\n                <ng-template #tooltipLiberacao>\r\n                  <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                  <div *ngIf=\"pedido.travas.length > 0\">\r\n                    <dl>\r\n                      <ng-container *ngFor=\"let trava of pedido.travas\">\r\n                        <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> {{ trava['desTrava'] }}</dd>\r\n                      </ng-container>\r\n                    </dl>\r\n                  </div>\r\n                </ng-template>\r\n                <ng-template #tooltipLiberacaoAberto>\r\n                    <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                    <div>\r\n                      <dl>\r\n                        <ng-container>\r\n                          <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> PEDIDO EN ABIERTO</dd>\r\n                        </ng-container>\r\n                      </dl>\r\n                    </div>\r\n                  </ng-template>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-random\" *ngIf=\"pedido.estado_oferta === 1\"\r\n                    tooltip=\"Pedido transferido\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-random\" *ngIf=\"pedido.estado_oferta === 0\"\r\n                    tooltip=\"Pedido não transferido\" placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\" *ngIf=\"pedido.pedidoEmLiberacao === 1\"\r\n                    [tooltip]=\"tooltipLiberacao\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-warning fas fa-unlock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao !== 1\" tooltip=\"Pedido liberado\"\r\n                    placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao == 1\" [tooltip]=\"tooltipLiberacaoAberto\"\r\n                    placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 1\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 0\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 1\"\r\n                    tooltip=\"Pedido faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 far fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 0\"\r\n                    tooltip=\"Pedido não faturado\" placement=\"right\"></i>\r\n                </span>\r\n              </td>\r\n\r\n              <!--<td class=\"text-center hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\"\r\n                [ngClass]=\"estoqueSuspensoClassStatusBorder(pedido.estado_oferta)\">\r\n                {{ pedido.codigo_oferta }}\r\n              </td>-->\r\n              <td class=\"text-center hover\">{{ pedido.fecha_inicial | date: 'dd/MM/yyyy' }}</td>\r\n              <td class=\"text-center hover\">{{ pedido.fecha_final | date: 'dd/MM/yyyy' }}</td>\r\n              <td class=\"hover\">{{ pedido.cliente | uppercase }}\r\n              </td>\r\n              <td class=\"hover\">{{ pedido.vendedor | uppercase }}\r\n              </td>\r\n              <!-- <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.monto_total_bruto }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.descuento }}</td> -->\r\n              <td class=\"hover\">{{ pedido.monto_total }}</td>\r\n              <td class=\"hover\">{{ pedido.peso_total }}</td>\r\n              <td class=\"hover\">{{ pedido.lista_precio }}</td>\r\n              <td class=\"hover\">{{ pedido.modo_entrega }}</td>\r\n              <td class=\"hover\">{{ pedido.estado_oferta }}</td>\r\n              <td class=\"\">\r\n                <a class=\"dropdown-item\" routerLink=\"/pdf\" (click)=\"onImprimir(pedido.id_oferta)\"><i class=\"fas fa-print\"></i><span class=\"text-uppercase\">\r\n                  PDF</span></a>\r\n                <a class=\"dropdown-item\" routerLink=\"/vista\" (click)=\"onVista(pedido.id_oferta)\"><i class=\"fas fa-print\"></i><span class=\"text-uppercase\">\r\n                    Vista</span></a>\r\n              </td>\r\n              <!--\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeEmpresa | uppercase }}</td>\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeVendedor | uppercase }}</td> -->\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n        <div class=\"d-flex justify-content-center mt-3\" >\r\n          <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n          </pagination>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n  </div>\r\n\r\n  <div *ngIf=\"dadosEmpty && !dadosLoaded\" class=\"text-center d-flex justify-content-center align-items-center\"\r\n    style=\"height: 80%\">\r\n    <empty-result message=\"Ninguna información encontrada\"></empty-result>\r\n  </div>\r\n  <ng-template #modalDetalhes>\r\n    <div class=\"modal-header\">\r\n      <h6 class=\"modal-title pull-left\">Detalle de la oferta </h6>\r\n      <div class=\"d-flex justify-content-center align-items-center\">\r\n        <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"hideModal()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"row\">\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de la oferta</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-2\">\r\n                    <label for=\"customerName\"> <strong> N°:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{ofer.codigo_oferta}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. Cotizacion: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.fecha_inicial}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. validez: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.fecha_final}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Vendedor: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.nombre_vendedor}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos del cliente</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"customerName\"> <strong> Cod. Cliente:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{ofer.codigo_cliente}}\">\r\n                  </div>\r\n                  <div class=\"col-md-5\">\r\n                    <label for=\"sellerName\"> <strong>Cliente: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" value=\"{{ofer.nombre_cliente}}\" class=\"form-control\" readonly>\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Lista de precios </strong>:</label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.nombre_lista}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Detalle de la cotización</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <div class=\"table-responsive\">\r\n                      <custom-table [config]=\"tableConfig\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n                        <ng-template #thead let-thead>\r\n                          <tr>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('codigo_material')\">\r\n                              <thead-sorter value=\"Articulo\" [active]=\"orderBy == 'Articulo'\" [sort]=\"orderType\"> Código\r\n                              </thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-left\" (click)=\"setOrderByModal('nombre_material')\">\r\n                              <thead-sorter value=\"Descripcion\" [active]=\"orderBy == 'nombre_material'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('cantidad')\">\r\n                              <thead-sorter value=\"cantidad\" [active]=\"orderBy == 'cantidad'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('unidad')\">\r\n                              <thead-sorter value=\"unidad \" [active]=\"orderBy == 'unidad'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio')\">\r\n                              <thead-sorter value=\"precio\" [active]=\"orderBy == 'precio'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('total_bruto')\">\r\n                              <thead-sorter value=\"total_bruto\" [active]=\"orderBy == 'total_bruto'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <thead-sorter value=\"% Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio_descuento')\">\r\n                              <thead-sorter value=\"Precio descuento\" [active]=\"orderBy == 'precio_descuento'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <thead-sorter value=\"Almacen\" [active]=\"orderBy == 'nombre_almacen'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_moneda')\">\r\n                              <thead-sorter value=\"Total con descuento\" [active]=\"orderBy == 'nombre_moneda'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                          </tr>\r\n                        </ng-template>\r\n                        <ng-template #tbody let-tbody>\r\n                          <ng-container>\r\n                            <tr *ngFor=\"let item of items\">\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.codigo_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-left\">\r\n                                {{items.nombre_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.cantidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.unidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.precio}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.total_bruto}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                0.00</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.precio_descuento}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.nombre_almacen}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.total_bruto}} {{item.nombre_moneda}}</td>\r\n                            </tr>\r\n                            <tr class=\"bg-dark text-center text-dark\">\r\n                              <td colspan=\"8\" class=\"border-dark\"></td>\r\n                              <td><strong>Total</strong></td>\r\n                              <td class=\"text-center\"><strong>{{ totalMateriales[0].cantidad | number:'1.4-4' }} DOLARES </strong></td>\r\n                            </tr>\r\n                          </ng-container>\r\n                        </ng-template>\r\n                      </custom-table>\r\n                      <empty-result message=\"Ningún registro encontrado.\" *ngIf=\"dadosEmptyModal\"></empty-result>\r\n                      <div class=\"d-flex justify-content-center mt-3\">\r\n                        <pagination [maxSize]=\"maxSizeModal\" [(totalItems)]=\"totalModal\"\r\n                          (pageChanged)=\"onPageChangedModal($event)\" [(itemsPerPage)]=\"itemsPerPageModal\"\r\n                          [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\" nextText=\"&rsaquo;\"\r\n                          firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n                        </pagination>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de envío</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Tipo entrega:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" name=\"tipoEntrega\" required\r\n                      value=\"{{oferta.nombre_modo_entrega}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"><strong>Referencia:</strong></label>\r\n                    <ng-container *ngIf=\"oferta.latitud && oferta.longitud; else emptyLocation\">\r\n                      <!-- <a [href]=\"'http://google.com/maps/bylatlng?lat=' + oferta.latitud + '&lng=' + oferta.longitud\" target=\"_blank\" style=\"cursor: pointer;\">\r\n                            <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"Google\">\r\n                        </a> -->\r\n                      <a [href]=\"'http://maps.google.com/maps?q=' + oferta.latitud + ',' + oferta.longitud\"\r\n                        target=\"_blank\" style=\"cursor: pointer; text-decoration: none;\">\r\n                        <span class=\"form-control text-primary\" style=\"display: inline-block;\">Google Maps</span>\r\n                      </a>\r\n                    </ng-container>\r\n                    <ng-template #emptyLocation>\r\n                      <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"\">\r\n                    </ng-template>\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Centro logístico:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{oferta.ubicacion_almacen}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos adicionales</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <label for=\"customerName\"> <strong> Observaciones:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{oferta.observacion}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n      <button type=\"button\" class=\"btn btn-primary\">\r\n        Ver información completa\r\n      </button>\r\n    </div>\r\n  </ng-template>\r\n</app-body>\r\n";
+      __webpack_exports__["default"] = "<loader-spinner-navbar [hidden]=\"!loaderNavbar\"></loader-spinner-navbar>\r\n<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<app-header appTitle=\"Cotizaciones\">\r\n  <button type=\"button\" (click)=\"onReset()\">\r\n    Limpar\r\n  </button>\r\n  <button type=\"button\" (click)=\"nuevo()\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\" [disabled]=\"loaderNavbar \">\r\n    Filtrar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div #scrollToFilter>\r\n    <advanced-filter>\r\n      <form [formGroup]=\"form\">\r\n        <div class=\"form-row\">\r\n         <!--  <div class=\"form-group col-lg-3\">\r\n            <label for=\"tipoData\">Buscar por</label>\r\n            <select class=\"form-control custom-select\" id=\"tipoData\" formControlName=\"tipoData\">\r\n              <option value=\"1\">Fecha de publicacion</option>\r\n            </select>\r\n          </div> -->\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataInicial\">Fecha inicial</label>\r\n            <input class=\"form-control\" id=\"dataInicial\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataInicial\">\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"dataFinal\">Fecha final</label>\r\n            <input class=\"form-control\" id=\"dataFinal\" type=\"text\" bsDatepicker [bsConfig]=\"bsConfig\"\r\n              formControlName=\"dataFinal\">\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codStatus\">Situacion</label>\r\n            <ng-select [items]=\"situacoes\" [searchable]=\"true\" [clearable]=\"false\" labelForId=\"id\" bindLabel=\"nombre\"\r\n              formControlName=\"codSituacao\" [(ngModel)]=\"defaultSelection\">\r\n            </ng-select>\r\n          </div>\r\n          <div class=\"form-group col-lg-2\">\r\n            <label for=\"nrPedido\">Núm. pedido</label>\r\n            <input type=\"text\" id=\"nrPedido\" placeholder=\"Digite...\" class=\"form-control\" formControlName=\"nrPedido\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div>\r\n          <div class=\"form-group col-lg-3\">\r\n            <label for=\"codVendedor\">Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" placeholder=\"Selecione...\" [items]=\"vendedores\"\r\n              formControlName=\"codVendedor\" [virtualScroll]=\"true\" labelForId=\"codVendedor\" bindLabel=\"nome\"\r\n              bindValue=\"id\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <!-- <div class=\"form-group col-lg-3\">\r\n            <label for=\"codEmpresa\">Empresa</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"empresas\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codEmpresa\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codEmpresa\"\r\n              bindLabel=\"nomeEmpresa\"\r\n              bindValue=\"idEmpresa\"\r\n              (change)=\"onChangeEmpresa($event.idEmpresa)\"\r\n              [ngClass]=\"onFieldError('codEmpresa') + ' ' + onFieldRequired(form.controls.codEmpresa)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codEmpresa')\" message=\"Empresa é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"codDeposito\">Depósito</label>\r\n            <ng-select\r\n              [searchable]=\"true\"\r\n              [clearable]=\"false\"\r\n              [items]=\"filteredDepositos\"\r\n              placeholder=\"Selecione...\"\r\n              formControlName=\"codDeposito\"\r\n              [virtualScroll]=\"true\"\r\n              labelForId=\"codDeposito\"\r\n              bindLabel=\"nomeDeposito\"\r\n              bindValue=\"idDeposito\"\r\n              (change)=\"onChangeDeposito($event.idDeposito)\"\r\n              [ngClass]=\"onFieldError('codDeposito') + ' ' + onFieldRequired(form.controls.codDeposito)\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('codDeposito')\" message=\"Depósito é obrigatório.\"></invalid-form-control>\r\n          </div> -->\r\n          <!-- <div class=\"form-group col-lg-2\">\r\n            <label for=\"cliente\">Cliente</label>\r\n            <input\r\n              type=\"text\"\r\n              class=\"form-control\"\r\n              id=\"cliente\"\r\n              placeholder=\"Digite...\"\r\n              formControlName=\"cliente\"\r\n              (keydown.enter)=\"onFilter()\">\r\n          </div> -->\r\n         \r\n          <div *ngIf=\"filtroCotacoes\" class=\"form-group col-lg-1\">\r\n            <label for=\"statusCliente\">Status Cliente</label>\r\n            <select class=\"form-control custom-select\" id=\"statusCliente\" formControlName=\"statusCliente\">\r\n              <option>TODOS</option>\r\n              <option value=\"Ativo\">CERRADO</option>\r\n              <option value=\"Inativo\">BORRADOR</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group \" [ngClass]=\"{'col-lg-2': !filtroCotacoes , 'col-lg-1': filtroCotacoes}\">\r\n            <label for=\"registros\">Registros</label>\r\n            <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n              <option>100</option>\r\n              <option>200</option>\r\n              <option>300</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </advanced-filter>\r\n  </div>\r\n  <subtitles [data]=\"leyendas\" [allowActivation]=\"false\" [show]=\"dados.length > 0 && !dadosEmpty\">\r\n\r\n  </subtitles>\r\n  <div class=\"row\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n    <div [ngClass]=\"{'col-12': !showDetailPanel, 'col-6 pr-0': showDetailPanel}\">\r\n      <div class=\"table-responsive\">\r\n        <custom-table [config]=\"tableConfig\">\r\n          <ng-template #thead let-thead>\r\n            <tr>\r\n              <!--  <th scope=\"col\"></th> -->\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Num.\" [active]=\"orderBy == 'codigo_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('id_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha inicial\" [active]=\"orderBy == 'fecha_inicial'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_inicial')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\" class=\"text-center\">\r\n                <thead-sorter value=\"Fecha final\" [active]=\"orderBy == 'fecha_final'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('fecha_final')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Cliente\" [active]=\"orderBy == 'cliente'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('cliente')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Vendedor\" [active]=\"orderBy == 'vendedor'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('vendedor')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <!--  <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total bruto\" [active]=\"orderBy == 'monto_total_bruto'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total_bruto')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('descuento')\">\r\n                </thead-sorter>\r\n              </th> -->\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Monto total\" [active]=\"orderBy == 'monto_total'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('monto_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Peso total kg.\" [active]=\"orderBy == 'peso'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('peso_total')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Lista\" [active]=\"orderBy == 'lista_precio'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('lista_precio')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Modo de entrega\" [active]=\"orderBy == 'modo_entrega'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('modo_entrega')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Estado\" [active]=\"orderBy == 'estado_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('estado_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Estado Oferta\" [active]=\"orderBy == 'estado_oferta'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('estado_oferta')\">\r\n                </thead-sorter>\r\n              </th>\r\n              <th scope=\"col\">\r\n                <thead-sorter value=\"Acciones\" [active]=\"orderBy == 'Acciones'\" [sort]=\"orderType\"\r\n                  (click)=\"setOrderBy('Acciones')\">\r\n                </thead-sorter>\r\n              </th>\r\n            </tr>\r\n          </ng-template>\r\n          <ng-template #tbody let-tbody>\r\n            <tr *ngFor=\"let pedido of dados; let i = index\"[class.table-active]=\"i == activeRow\">\r\n              <td class=\"text-center\" [ngStyle]=\"styleStatusBorder(pedido)\">\r\n                <span class=\"d-inline-flex\">\r\n                <ng-template #tooltipLiberacao>\r\n                  <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                  <div *ngIf=\"pedido.travas.length > 0\">\r\n                    <dl>\r\n                      <ng-container *ngFor=\"let trava of pedido.travas\">\r\n                        <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> {{ trava['desTrava'] }}</dd>\r\n                      </ng-container>\r\n                    </dl>\r\n                  </div>\r\n                </ng-template>\r\n                <ng-template #tooltipLiberacaoAberto>\r\n                    <p class=\"mb-2\">ESPERANDO LIBERACION:</p><br>\r\n                    <div>\r\n                      <dl>\r\n                        <ng-container>\r\n                          <dd><i class=\"fas fa-exclamation-triangle small mr-1\"></i> PEDIDO EN ABIERTO</dd>\r\n                        </ng-container>\r\n                      </dl>\r\n                    </div>\r\n                  </ng-template>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-random\" *ngIf=\"pedido.estado_oferta === 1\"\r\n                    tooltip=\"Pedido transferido\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-random\" *ngIf=\"pedido.estado_oferta === 0\"\r\n                    tooltip=\"Pedido não transferido\" placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\" *ngIf=\"pedido.pedidoEmLiberacao === 1\"\r\n                    [tooltip]=\"tooltipLiberacao\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-warning fas fa-unlock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao !== 1\" tooltip=\"Pedido liberado\"\r\n                    placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-lock\"\r\n                    *ngIf=\"pedido.pedidoEmLiberacao === 0 && pedido.codSituacao == 1\" [tooltip]=\"tooltipLiberacaoAberto\"\r\n                    placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 1\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 fas fa-dollar-sign\" *ngIf=\"pedido.pedidoPreFaturado === 0\"\r\n                    tooltip=\"Pré-faturado\" placement=\"right\"></i>\r\n\r\n                  <i class=\"mr-2 text-warning fas fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 1\"\r\n                    tooltip=\"Pedido faturado\" placement=\"right\"></i>\r\n                  <i class=\"mr-2 text-black-50 far fa-check-square\" *ngIf=\"pedido.pedidoFaturado === 0\"\r\n                    tooltip=\"Pedido não faturado\" placement=\"right\"></i>\r\n                </span>\r\n              </td>\r\n\r\n              <!--<td class=\"text-center hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\"\r\n                [ngClass]=\"estoqueSuspensoClassStatusBorder(pedido.estado_oferta)\">\r\n                {{ pedido.codigo_oferta }}\r\n              </td>-->\r\n              <td class=\"text-center hover\">{{ pedido.fecha_inicial | date: 'dd/MM/yyyy' }}</td>\r\n              <td class=\"text-center hover\">{{ pedido.fecha_final | date: 'dd/MM/yyyy' }}</td>\r\n              <td class=\"hover\">{{ pedido.cliente | uppercase }}\r\n              </td>\r\n              <td class=\"hover\">{{ pedido.vendedor | uppercase }}\r\n              </td>\r\n              <!-- <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.monto_total_bruto }}</td>\r\n              <td class=\"hover\" (click)=\"openModal(modalDetalhes, pedido.id_oferta)\">{{ pedido.descuento }}</td> -->\r\n              <td class=\"hover\">{{ pedido.monto_total }}</td>\r\n              <td class=\"hover\">{{ pedido.peso_total }}</td>\r\n              <td class=\"hover\">{{ pedido.lista_precio }}</td>\r\n              <td class=\"hover\">{{ pedido.modo_entrega }}</td>\r\n              <td class=\"hover\">{{ pedido.nombre_lista }}</td>\r\n              <td class=\"hover\">\r\n                <ng-container *ngIf=\"pedido.id_estado_oferta !== 1; else borradorEstado\">\r\n                  <i class=\"text-danger\">CERRADO</i>\r\n                </ng-container>\r\n                <ng-template #borradorEstado>\r\n                  <i class=\"text-primary\">BORRADOR</i>\r\n                </ng-template>\r\n              </td>\r\n              <td class=\"\">\r\n                <a class=\"dropdown-item\" routerLink=\"/pdf\" (click)=\"onImprimir(pedido.id_oferta)\"><i class=\"fas fa-print\"></i><span class=\"text-uppercase\">\r\n                  PDF</span></a>\r\n                <a class=\"dropdown-item\" routerLink=\"/vista\" (click)=\"onVista(pedido.id_oferta)\"><i class=\"fas fa-print\"></i><span class=\"text-uppercase\">\r\n                    Vista</span></a>\r\n              </td>\r\n              <!--\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeEmpresa | uppercase }}</td>\r\n              <td class=\"hover\" (click)=\"viewRegister(i, pedido)\" [hidden]=\"showDetailPanel\">{{ pedido.nomeVendedor | uppercase }}</td> -->\r\n            </tr>\r\n          </ng-template>\r\n        </custom-table>\r\n        <div class=\"d-flex justify-content-center mt-3\" >\r\n          <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n            [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n            nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n          </pagination>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n  </div>\r\n\r\n  <div *ngIf=\"dadosEmpty && !dadosLoaded\" class=\"text-center d-flex justify-content-center align-items-center\"\r\n    style=\"height: 80%\">\r\n    <empty-result message=\"Ninguna información encontrada\"></empty-result>\r\n  </div>\r\n  <ng-template #modalDetalhes>\r\n    <div class=\"modal-header\">\r\n      <h6 class=\"modal-title pull-left\">Detalle de la oferta </h6>\r\n      <div class=\"d-flex justify-content-center align-items-center\">\r\n        <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"hideModal()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n      <div class=\"col-md-12\">\r\n        <div class=\"row\">\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de la oferta</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-2\">\r\n                    <label for=\"customerName\"> <strong> N°:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{ofer.codigo_oferta}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. Cotizacion: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.fecha_inicial}}\">\r\n                  </div>\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"sellerName\"> <strong>F. validez: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.fecha_final}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Vendedor: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.nombre_vendedor}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos del cliente</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-3\">\r\n                    <label for=\"customerName\"> <strong> Cod. Cliente:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{ofer.codigo_cliente}}\">\r\n                  </div>\r\n                  <div class=\"col-md-5\">\r\n                    <label for=\"sellerName\"> <strong>Cliente: </strong></label>\r\n                    <input type=\"text\" id=\"sellerName\" value=\"{{ofer.nombre_cliente}}\" class=\"form-control\" readonly>\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"sellerName\"> <strong>Lista de precios </strong>:</label>\r\n                    <input type=\"text\" id=\"sellerName\" class=\"form-control\" readonly value=\"{{ofer.nombre_lista}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-12 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Detalle de la cotización</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <div class=\"table-responsive\">\r\n                      <custom-table [config]=\"tableConfig\" *ngIf=\"dados.length > 0 && !dadosEmpty\">\r\n                        <ng-template #thead let-thead>\r\n                          <tr>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('codigo_material')\">\r\n                              <thead-sorter value=\"Articulo\" [active]=\"orderBy == 'Articulo'\" [sort]=\"orderType\"> Código\r\n                              </thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-left\" (click)=\"setOrderByModal('nombre_material')\">\r\n                              <thead-sorter value=\"Descripcion\" [active]=\"orderBy == 'nombre_material'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('cantidad')\">\r\n                              <thead-sorter value=\"cantidad\" [active]=\"orderBy == 'cantidad'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('unidad')\">\r\n                              <thead-sorter value=\"unidad \" [active]=\"orderBy == 'unidad'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio')\">\r\n                              <thead-sorter value=\"precio\" [active]=\"orderBy == 'precio'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('total_bruto')\">\r\n                              <thead-sorter value=\"total_bruto\" [active]=\"orderBy == 'total_bruto'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <thead-sorter value=\"% Descuento\" [active]=\"orderBy == 'descuento'\" [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('precio_descuento')\">\r\n                              <thead-sorter value=\"Precio descuento\" [active]=\"orderBy == 'precio_descuento'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_almacen')\">\r\n                              <thead-sorter value=\"Almacen\" [active]=\"orderBy == 'nombre_almacen'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                            <th class=\"text-truncate text-center\" (click)=\"setOrderByModal('nombre_moneda')\">\r\n                              <thead-sorter value=\"Total con descuento\" [active]=\"orderBy == 'nombre_moneda'\"\r\n                                [sort]=\"orderType\"></thead-sorter>\r\n                            </th>\r\n                          </tr>\r\n                        </ng-template>\r\n                        <ng-template #tbody let-tbody>\r\n                          <ng-container>\r\n                            <tr *ngFor=\"let item of items\">\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.codigo_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-left\">\r\n                                {{items.nombre_material}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.cantidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.unidad}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.precio}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.total_bruto}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                0.00</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.precio_descuento}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.nombre_almacen}}</td>\r\n                              <td class=\"font-weight-bold hover text-center\">\r\n                                {{items.total_bruto}} {{item.nombre_moneda}}</td>\r\n                            </tr>\r\n                            <tr class=\"bg-dark text-center text-dark\">\r\n                              <td colspan=\"8\" class=\"border-dark\"></td>\r\n                              <td><strong>Total</strong></td>\r\n                              <td class=\"text-center\"><strong>{{ totalMateriales[0].cantidad | number:'1.4-4' }} DOLARES </strong></td>\r\n                            </tr>\r\n                          </ng-container>\r\n                        </ng-template>\r\n                      </custom-table>\r\n                      <empty-result message=\"Ningún registro encontrado.\" *ngIf=\"dadosEmptyModal\"></empty-result>\r\n                      <div class=\"d-flex justify-content-center mt-3\">\r\n                        <pagination [maxSize]=\"maxSizeModal\" [(totalItems)]=\"totalModal\"\r\n                          (pageChanged)=\"onPageChangedModal($event)\" [(itemsPerPage)]=\"itemsPerPageModal\"\r\n                          [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\" nextText=\"&rsaquo;\"\r\n                          firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n                        </pagination>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos de envío</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Tipo entrega:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" name=\"tipoEntrega\" required\r\n                      value=\"{{oferta.nombre_modo_entrega}}\">\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"><strong>Referencia:</strong></label>\r\n                    <ng-container *ngIf=\"oferta.latitud && oferta.longitud; else emptyLocation\">\r\n                      <!-- <a [href]=\"'http://google.com/maps/bylatlng?lat=' + oferta.latitud + '&lng=' + oferta.longitud\" target=\"_blank\" style=\"cursor: pointer;\">\r\n                            <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"Google\">\r\n                        </a> -->\r\n                      <a [href]=\"'http://maps.google.com/maps?q=' + oferta.latitud + ',' + oferta.longitud\"\r\n                        target=\"_blank\" style=\"cursor: pointer; text-decoration: none;\">\r\n                        <span class=\"form-control text-primary\" style=\"display: inline-block;\">Google Maps</span>\r\n                      </a>\r\n                    </ng-container>\r\n                    <ng-template #emptyLocation>\r\n                      <input type=\"text\" id=\"customerName\" class=\"form-control text-primary\" readonly value=\"\">\r\n                    </ng-template>\r\n                  </div>\r\n                  <div class=\"col-md-4\">\r\n                    <label for=\"customerName\"> <strong> Centro logístico:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly\r\n                      value=\"{{oferta.ubicacion_almacen}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-6 mt-2\">\r\n            <div class=\"card\">\r\n              <div class=\"card-body\">\r\n                <h6 class=\"card-title\">Datos adicionales</h6>\r\n                <div class=\"row\">\r\n                  <div class=\"col-md-12\">\r\n                    <label for=\"customerName\"> <strong> Observaciones:</strong></label>\r\n                    <input type=\"text\" id=\"customerName\" class=\"form-control\" readonly value=\"{{oferta.observacion}}\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n      <button type=\"button\" class=\"btn btn-primary\">\r\n        Ver información completa\r\n      </button>\r\n    </div>\r\n  </ng-template>\r\n</app-body>\r\n";
       /***/
     },
 
@@ -15392,11 +15500,11 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalHistoricoComprasService, [{
           key: "showModal",
           value: function showModal(params) {
-            var _this91 = this;
+            var _this94 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.getHistoricoCompras(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this91.loaderNavbar.emit(false);
+              _this94.loaderNavbar.emit(false);
             })).subscribe(function (response) {
               if (response.success === true) {
                 var modalConfig = {
@@ -15410,16 +15518,16 @@
                   _maisComprados: response.data.maisComprados
                 };
 
-                _this91.modalService.show(_historico_compras_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalHistoricoComprasComponent"], Object.assign({}, modalConfig, {
+                _this94.modalService.show(_historico_compras_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalHistoricoComprasComponent"], Object.assign({}, modalConfig, {
                   initialState: initialState
                 }));
               } else if (response.success === false && response.data == 'vazio') {
-                _this91.pnotifyService.notice(response.mensagem);
+                _this94.pnotifyService.notice(response.mensagem);
               } else {
-                _this91.pnotifyService.error();
+                _this94.pnotifyService.error();
               }
             }, function (error) {
-              _this91.pnotifyService.error();
+              _this94.pnotifyService.error();
             });
           }
         }]);
@@ -15844,7 +15952,7 @@
         }, {
           key: "onSubmit",
           value: function onSubmit() {
-            var _this92 = this;
+            var _this95 = this;
 
             if (this.form.valid) {
               this.submittingForm = true;
@@ -15868,24 +15976,24 @@
               }
 
               this.cotacoesService.postEmailCotacao(formObj).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-                _this92.submittingForm = false;
+                _this95.submittingForm = false;
               })).subscribe({
                 next: function next(response) {
                   if (response.hasOwnProperty('success') && response.success === true) {
-                    _this92.pnotifyService.success();
+                    _this95.pnotifyService.success();
 
-                    _this92.onClose();
+                    _this95.onClose();
                   } else if (response.hasOwnProperty('success') && response.success === false && response.hasOwnProperty('mensagem')) {
-                    _this92.pnotifyService.error(response.mensagem);
+                    _this95.pnotifyService.error(response.mensagem);
                   } else {
-                    _this92.pnotifyService.error();
+                    _this95.pnotifyService.error();
                   }
                 },
                 error: function error(_error22) {
                   if (_error22['error'].hasOwnProperty('mensagem')) {
-                    _this92.pnotifyService.error(_error22.error.mensagem);
+                    _this95.pnotifyService.error(_error22.error.mensagem);
                   } else {
-                    _this92.pnotifyService.error();
+                    _this95.pnotifyService.error();
                   }
                 }
               });
@@ -16038,11 +16146,11 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalMaterialLoteService, [{
           key: "showModal",
           value: function showModal(index, material) {
-            var _this93 = this;
+            var _this96 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.getLoteMaterial(material.codMaterial, material.codDeposito).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this93.loaderNavbar.emit(false);
+              _this96.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -16058,15 +16166,15 @@
                     lotes: response.data
                   };
 
-                  _this93.modalService.show(_lote_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialLoteComponent"], Object.assign({}, modalConfig, {
+                  _this96.modalService.show(_lote_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialLoteComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else {
-                  _this93.pnotifyService.notice("Nenhum resultado encontrado");
+                  _this96.pnotifyService.notice("Nenhum resultado encontrado");
                 }
               },
               error: function error(_error23) {
-                _this93.pnotifyService.error();
+                _this96.pnotifyService.error();
               }
             });
           }
@@ -16816,11 +16924,11 @@
         }, {
           key: "checkAlterouCliente",
           value: function checkAlterouCliente() {
-            var _this94 = this;
+            var _this97 = this;
 
             if (this._codCliente !== this.codCliente) {
               this.confirmModalService.showConfirm(null, 'Alteração de cliente', 'O cliente selecionado no histórico de compras não é o mesmo da cotação. Deseja alterar o cliente da cotação?', 'Cancelar', 'Confirmar').subscribe(function (response) {
-                return response ? _this94.formularioService.codCliente.emit(_this94.codCliente) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
+                return response ? _this97.formularioService.codCliente.emit(_this97.codCliente) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
               });
             }
           }
@@ -16865,10 +16973,10 @@
         }, {
           key: "onClonarCompra",
           value: function onClonarCompra(ultimaCompra) {
-            var _this95 = this;
+            var _this98 = this;
 
             this.confirmModalService.showConfirm(null, 'Clonar compra', 'Deseja clonar os materiais da cotação?', 'Cancelar', 'Confirmar').subscribe(function (response) {
-              return response ? _this95.clonarCompra(ultimaCompra) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
+              return response ? _this98.clonarCompra(ultimaCompra) : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
             });
           }
         }, {
@@ -16900,7 +17008,7 @@
         }, {
           key: "onAddMaterial",
           value: function onAddMaterial(historico) {
-            var _this96 = this;
+            var _this99 = this;
 
             var materiais = [];
             var inativos;
@@ -16918,7 +17026,7 @@
                   if (el.materiais[i]['checked'] == true && el.materiais[i]['codSituacao'] == 'A') {
                     materiais.push(el.materiais[i]);
                   } else if (el.materiais[i]['checked'] == true && el.materiais[i]['codSituacao'] != 'A') {
-                    _this96.pnotifyService.notice("Material #".concat(el.materiais[i]['codMaterial'], " inativo, favor entrar em contato com o Marketing"));
+                    _this99.pnotifyService.notice("Material #".concat(el.materiais[i]['codMaterial'], " inativo, favor entrar em contato com o Marketing"));
 
                     inativos++;
                   }
@@ -16930,7 +17038,7 @@
               this.formularioService.materiaisSubject.next(materiais);
               this.addedMaterial = true;
               setTimeout(function () {
-                _this96.addedMaterial = false;
+                _this99.addedMaterial = false;
               }, 1000);
               this.onClose();
             } else if (materiais.length == 0 && inativos == 0) {
@@ -17172,32 +17280,32 @@
         }, {
           key: "getDataDocument",
           value: function getDataDocument() {
-            var _this97 = this;
+            var _this100 = this;
 
             var milliseconds = new Date().getTime();
             this.cotacoesService.getImprimirSeparacao(this.cotacao.nrPedido, this.cotacao.codEmpresa).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
               setTimeout(function () {
-                _this97.pdfService.generatePdf(_this97.getDocument(), "".concat(_this97.cotacao['nrPedido'], "_").concat(milliseconds));
+                _this100.pdfService.generatePdf(_this100.getDocument(), "".concat(_this100.cotacao['nrPedido'], "_").concat(milliseconds));
 
-                _this97.loading.emit(false);
+                _this100.loading.emit(false);
               }, 1000);
             })).subscribe({
               next: function next(response) {
                 if (response.hasOwnProperty('success') && response.success === true) {
-                  _this97.dados = response.data;
-                  _this97.dadosCotacao = _this97.dados['dados'];
-                  _this97.materiais = _this97.dados['materiais'];
+                  _this100.dados = response.data;
+                  _this100.dadosCotacao = _this100.dados['dados'];
+                  _this100.materiais = _this100.dados['materiais'];
                 } else if (response.hasOwnProperty('success') && response.success === false && response.hasOwnProperty('mensagem') && response.mensagem !== null) {
-                  _this97.pnotifyService.error(response.mensagem);
+                  _this100.pnotifyService.error(response.mensagem);
                 } else {
-                  _this97.pnotifyService.notice('Nenhuma informação encontrada');
+                  _this100.pnotifyService.notice('Nenhuma informação encontrada');
                 }
               },
               error: function error(_error24) {
                 if (_error24.error.hasOwnProperty('mensagem')) {
-                  _this97.pnotifyService.error(_error24.error.mensagem);
+                  _this100.pnotifyService.error(_error24.error.mensagem);
                 } else {
-                  _this97.pnotifyService.error();
+                  _this100.pnotifyService.error();
                 }
               }
             });
@@ -17718,11 +17826,11 @@
         _createClass(ComercialCicloVendasCotacoesListaModalConsultaLiberacaoService, [{
           key: "showModal",
           value: function showModal(params) {
-            var _this98 = this;
+            var _this101 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.getSituacaoLiberacao(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this98.loaderNavbar.emit(false);
+              _this101.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -17736,17 +17844,17 @@
                     dadosLiberacao: response.data
                   };
 
-                  _this98.modalService.show(_consulta_liberacao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalConsultaLiberacaoComponent"], Object.assign({}, modalConfig, {
+                  _this101.modalService.show(_consulta_liberacao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalConsultaLiberacaoComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else if (response.success === false && response.data == 'vazio') {
-                  _this98.pnotifyService.notice(response.mensagem);
+                  _this101.pnotifyService.notice(response.mensagem);
                 } else {
-                  _this98.pnotifyService.error();
+                  _this101.pnotifyService.error();
                 }
               },
               error: function error(_error25) {
-                _this98.pnotifyService.error();
+                _this101.pnotifyService.error();
               }
             });
           }
@@ -18018,11 +18126,11 @@
         }, {
           key: "getPresentacionMaterial",
           value: function getPresentacionMaterial() {
-            var _this99 = this;
+            var _this102 = this;
 
             this.comercialService.getPresentacionMaterial().subscribe(function (response) {
               if (response.responseCode === 200) {
-                _this99.arrayPresentacion = response.result;
+                _this102.arrayPresentacion = response.result;
               }
             });
           }
@@ -18162,7 +18270,7 @@
         }, {
           key: "postCalculoMaterial",
           value: function postCalculoMaterial(tipoCalculo, preco) {
-            var _this100 = this;
+            var _this103 = this;
 
             this.loaderModal = true;
             this.resetTotais();
@@ -18179,14 +18287,14 @@
               codEndereco: this.codEndereco
             };
             this.cotacoesService.postCalculoMaterial(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_10__["finalize"])(function () {
-              _this100.loaderModal = false;
+              _this103.loaderModal = false;
             })).subscribe(function (response) {
               if (response.success === true) {
                 if (response.data.length === 1) {
-                  _this100.calcularTotais(response.data[0], tipoCalculo, _this100.tipoLancamento, _this100.material.unidade);
+                  _this103.calcularTotais(response.data[0], tipoCalculo, _this103.tipoLancamento, _this103.material.unidade);
                 }
               } else {
-                _this100.pnotifyService.notice(response.mensagem);
+                _this103.pnotifyService.notice(response.mensagem);
               }
             });
           }
@@ -18727,12 +18835,12 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalMaterialSimilaridadeService, [{
           key: "showModal",
           value: function showModal(material, codCliente, codEndereco, codFormaPagamento, freteConta) {
-            var _this101 = this;
+            var _this104 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService // @ts-ignore: Ignorar error TS2339
             .getSimilaridadeMaterial(material.codEmpresa, material.codMaterial, codCliente, codEndereco, codFormaPagamento, freteConta).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this101.loaderNavbar.emit(false);
+              _this104.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -18749,15 +18857,15 @@
                     })
                   };
 
-                  _this101.modalService.show(_similaridade_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialSimilaridadeComponent"], Object.assign({}, modalConfig, {
+                  _this104.modalService.show(_similaridade_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialSimilaridadeComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else {
-                  _this101.pnotifyService.notice('Nenhuma similaridade encontrada.');
+                  _this104.pnotifyService.notice('Nenhuma similaridade encontrada.');
                 }
               },
               error: function error(_error26) {
-                _this101.pnotifyService.error();
+                _this104.pnotifyService.error();
               }
             });
           }
@@ -19001,16 +19109,16 @@
         }, {
           key: "submitSubscription",
           value: function submitSubscription() {
-            var _this102 = this;
+            var _this105 = this;
 
             this.subscriptionSubmit = this.formularioService.notifySubmitObservable$.subscribe(function (response) {
               if (response) {
-                if (_this102.form.valid) {
-                  _this102.carrinhoEmitter();
+                if (_this105.form.valid) {
+                  _this105.carrinhoEmitter();
                 } else {
-                  _this102.hasError.emit(true);
+                  _this105.hasError.emit(true);
 
-                  _this102.pnotifyService.notice('Preencha os valores de todos os materiais.');
+                  _this105.pnotifyService.notice('Preencha os valores de todos os materiais.');
                 }
               }
             });
@@ -19018,48 +19126,48 @@
         }, {
           key: "loteSubject",
           value: function loteSubject() {
-            var _this103 = this;
+            var _this106 = this;
 
             this.loteSubscription = this.formularioService.loteSubject.subscribe(function (response) {
-              _this103.onLoteSelecionado(response);
+              _this106.onLoteSelecionado(response);
 
-              _this103.loaderNavbar.emit(false);
+              _this106.loaderNavbar.emit(false);
             });
           }
         }, {
           key: "materiaisSubject",
           value: function materiaisSubject() {
-            var _this104 = this;
+            var _this107 = this;
 
             this.materiaisSubscription = this.formularioService.materiaisSubject.subscribe(function (response) {
-              var materiais = _this104.formatMateriais(response);
+              var materiais = _this107.formatMateriais(response);
               /*         (materiais);
                */
 
               /*   ('materiales'); * */
 
 
-              _this104.onAddMaterial(materiais);
+              _this107.onAddMaterial(materiais);
             });
           }
         }, {
           key: "limparCarrinhoSubject",
           value: function limparCarrinhoSubject() {
-            var _this105 = this;
+            var _this108 = this;
 
             this.limparCarrinhoSubscription = this.formularioService.limparCarrinhoSubject.subscribe(function (response) {
               if (response === true) {
-                _this105.onLimparCarrinho();
+                _this108.onLimparCarrinho();
               }
             });
           }
         }, {
           key: "calculoSubject",
           value: function calculoSubject() {
-            var _this106 = this;
+            var _this109 = this;
 
             this.calculoSubscription = this.formularioService.calculoSubject.subscribe(function (calculo) {
-              var formArray = _this106.form.controls.materiais;
+              var formArray = _this109.form.controls.materiais;
               var formGroup = formArray.controls[calculo.index];
               var qtdePecas;
 
@@ -19128,16 +19236,16 @@
                 formGroup.controls.id_presentacion.setValue(calculo.id_presentacion);
               }
 
-              _this106.onCalcularTotais(true);
+              _this109.onCalcularTotais(true);
             });
           }
         }, {
           key: "descontoSubject",
           value: function descontoSubject() {
-            var _this107 = this;
+            var _this110 = this;
 
             this.descontoSubscription = this.formularioService.descontoSubject.subscribe(function (desconto) {
-              var formArray = _this107.form.controls.materiais;
+              var formArray = _this110.form.controls.materiais;
               /* ('descuento')
               (desconto) */
 
@@ -19146,9 +19254,9 @@
 
               if (desconto.aplicarDesconto === 'carrinho') {
                 if (desconto.desconto === 0) {
-                  _this107.resetDescontoCarrinho();
+                  _this110.resetDescontoCarrinho();
                 } else {
-                  _this107.descontoCarrinho = {
+                  _this110.descontoCarrinho = {
                     tipo: desconto.tipo,
                     desconto: desconto.desconto
                   };
@@ -19199,7 +19307,7 @@
                   } */
               }
 
-              _this107.onCalcularTotais(true);
+              _this110.onCalcularTotais(true);
             });
           }
         }, {
@@ -19228,14 +19336,9 @@
             }
           }
         }, {
-          key: "materiais",
-          get: function get() {
-            return this.form.get('materiais');
-          }
-        }, {
           key: "onAddMaterial",
           value: function onAddMaterial(materiais) {
-            var _this108 = this;
+            var _this111 = this;
 
             /* (materiais) */
             if (materiais.length > 0) {
@@ -19348,7 +19451,7 @@
                 this.onCalcularTotais(true);
                 this.setMateriaisRelacionados(this.form.value.materiais);
                 setTimeout(function () {
-                  _this108.canLoadRelacionados = true;
+                  _this111.canLoadRelacionados = true;
                 }, 500);
               }
             }
@@ -19431,7 +19534,7 @@
         }, {
           key: "onDescontoMaterial",
           value: function onDescontoMaterial(index, material) {
-            var _this109 = this;
+            var _this112 = this;
 
             /*   ("onDescontoMaterial")
                (material)  */
@@ -19450,18 +19553,18 @@
               if (response.responseCode == 200) {
                 /* (response); */
                 // @ts-ignore: Ignorar error TS2339
-                _this109.descuento = response.result.descuento;
+                _this112.descuento = response.result.descuento;
 
-                _this109.descuentoModal(index, material, _this109.descuento);
+                _this112.descuentoModal(index, material, _this112.descuento);
               } else {
-                _this109.pnotifyService.error();
+                _this112.pnotifyService.error();
 
-                _this109.descuentoModal(index, material, _this109.descuento);
+                _this112.descuentoModal(index, material, _this112.descuento);
               }
             }, function (error) {
-              _this109.pnotifyService.error();
+              _this112.pnotifyService.error();
 
-              _this109.descuentoModal(index, material, _this109.descuento);
+              _this112.descuentoModal(index, material, _this112.descuento);
             });
           }
         }, {
@@ -19494,14 +19597,14 @@
         }, {
           key: "onReset",
           value: function onReset() {
-            var _this110 = this;
+            var _this113 = this;
 
             this.confirmReset().subscribe(function (response) {
               if (response === true) {
-                _this110.onLimparCarrinho();
+                _this113.onLimparCarrinho();
               }
             }, function (error) {
-              _this110.pnotifyService.error();
+              _this113.pnotifyService.error();
             });
           }
         }, {
@@ -19533,49 +19636,49 @@
         }, {
           key: "onDeleteMaterial",
           value: function onDeleteMaterial(index, material) {
-            var _this111 = this;
+            var _this114 = this;
 
             if (this.appTitle == 'Editar cotizacion/pedido') {
               this.confirmDelete().asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["switchMap"])(function (result) {
-                return result ? _this111.deleteMaterialCotacao(material) : rxjs__WEBPACK_IMPORTED_MODULE_5__["EMPTY"];
+                return result ? _this114.deleteMaterialCotacao(material) : rxjs__WEBPACK_IMPORTED_MODULE_5__["EMPTY"];
               }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
-                _this111.loaderNavbar.emit(false);
+                _this114.loaderNavbar.emit(false);
               })).subscribe(function (response) {
                 if (response.success === true) {
-                  _this111.materiais.removeAt(index);
+                  _this114.materiais.removeAt(index);
 
-                  _this111.onCalcularTotais(true);
+                  _this114.onCalcularTotais(true);
 
-                  _this111.setLocalStorage(_this111.form.value.materiais);
+                  _this114.setLocalStorage(_this114.form.value.materiais);
 
-                  if (_this111.form.value.materiais.length === 0) {
-                    _this111.setSelectedCodEmpresa(null);
+                  if (_this114.form.value.materiais.length === 0) {
+                    _this114.setSelectedCodEmpresa(null);
                   }
                 } else {
-                  _this111.pnotifyService.error();
+                  _this114.pnotifyService.error();
                 }
               }, function (error) {
-                _this111.pnotifyService.error();
+                _this114.pnotifyService.error();
               });
             } else {
               this.confirmDelete().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["finalize"])(function () {
-                _this111.loaderNavbar.emit(false);
+                _this114.loaderNavbar.emit(false);
               })).subscribe(function (response) {
                 if (response === true) {
-                  _this111.materiais.removeAt(index);
+                  _this114.materiais.removeAt(index);
 
-                  _this111.onCalcularTotais(true);
+                  _this114.onCalcularTotais(true);
 
-                  _this111.setLocalStorage(_this111.form.value.materiais);
+                  _this114.setLocalStorage(_this114.form.value.materiais);
 
-                  if (_this111.form.value.materiais.length === 0) {
-                    _this111.setSelectedCodEmpresa(null);
+                  if (_this114.form.value.materiais.length === 0) {
+                    _this114.setSelectedCodEmpresa(null);
                   }
                 } else {
-                  _this111.pnotifyService.error();
+                  _this114.pnotifyService.error();
                 }
               }, function (error) {
-                _this111.pnotifyService.error();
+                _this114.pnotifyService.error();
               });
             }
           }
@@ -19689,7 +19792,7 @@
         }, {
           key: "checkPreviously",
           value: function checkPreviously() {
-            var _this112 = this;
+            var _this115 = this;
 
             var _localStorage = localStorage.getItem('materiais');
 
@@ -19698,7 +19801,7 @@
 
               if (materiais.length > 0 && this.idReservado !== null && this.idReservado == materiais[0].idReservado) {
                 this.confirmModalService.showConfirm(null, "#".concat(this.idReservado, " / Cotizacion no finalizada"), 'Parece que esta cotizacion se ha iniciado y no se ha finalizado. Desea recuperar los materiales de la cotizacion?', 'Cancelar', 'Confirmar').subscribe(function (response) {
-                  return response ? _this112.onConfirmAddMaterial(materiais) : _this112.clearLocalStorage();
+                  return response ? _this115.onConfirmAddMaterial(materiais) : _this115.clearLocalStorage();
                 });
               }
             }
@@ -19706,11 +19809,11 @@
         }, {
           key: "onConfirmAddMaterial",
           value: function onConfirmAddMaterial(materiais) {
-            var _this113 = this;
+            var _this116 = this;
 
             this.onAddMaterial(materiais);
             setTimeout(function () {
-              _this113.scrollToCarrinho.nativeElement.scrollIntoView({
+              _this116.scrollToCarrinho.nativeElement.scrollIntoView({
                 behavior: 'instant'
               });
             }, 500);
@@ -19941,6 +20044,11 @@
           value: function onShowBloco() {
             this.showBloco3 = !this.showBloco3;
           }
+        }, {
+          key: "materiais",
+          get: function get() {
+            return this.form.get('materiais');
+          }
         }]);
 
         return ComercialCicloVendasCotacoesFormularioCarrinhoComponent;
@@ -20128,11 +20236,11 @@
         _createClass(ComercialCicloVendasCotacoesListaModalEmailCotacaoService, [{
           key: "showModal",
           value: function showModal(codCliente, pdf, codCotacao) {
-            var _this114 = this;
+            var _this117 = this;
 
             this.loaderNavbar.emit(true);
             this.clientesService.getListaEmails(codCliente).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this114.loaderNavbar.emit(false);
+              _this117.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response != null) {
@@ -20149,18 +20257,18 @@
                       pdf: pdf
                     };
 
-                    _this114.modalService.show(_email_cotacao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalEmailCotacaoComponent"], Object.assign({}, modalConfig, {
+                    _this117.modalService.show(_email_cotacao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalEmailCotacaoComponent"], Object.assign({}, modalConfig, {
                       initialState: initialState
                     }));
                   } else {
-                    _this114.pnotifyService.error();
+                    _this117.pnotifyService.error();
                   }
                 } else {
-                  _this114.pnotifyService.notice('Não há e-mails cadastrados.');
+                  _this117.pnotifyService.notice('Não há e-mails cadastrados.');
                 }
               },
               error: function error(_error27) {
-                _this114.pnotifyService.error(_error27);
+                _this117.pnotifyService.error(_error27);
               }
             });
           }
@@ -20514,11 +20622,11 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalDetalhesEnderecoService, [{
           key: "showModal",
           value: function showModal(codCliente, codEndereco) {
-            var _this115 = this;
+            var _this118 = this;
 
             this.loaderNavbar.emit(true);
             this.clienteService.getEndereco(codCliente, codEndereco, 1).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this115.loaderNavbar.emit(false);
+              _this118.loaderNavbar.emit(false);
             })).subscribe(function (response) {
               if (response.responseCode === 200) {
                 var modalConfig = {
@@ -20529,14 +20637,14 @@
                   endereco: response.result
                 };
 
-                _this115.modalService.show(_endereco_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalDetalhesEnderecoComponent"], Object.assign({}, modalConfig, {
+                _this118.modalService.show(_endereco_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalDetalhesEnderecoComponent"], Object.assign({}, modalConfig, {
                   initialState: initialState
                 }));
               } else {
-                _this115.pnotifyService.error();
+                _this118.pnotifyService.error();
               }
             }, function (error) {
-              _this115.pnotifyService.error();
+              _this118.pnotifyService.error();
             });
           }
         }]);
@@ -20699,7 +20807,7 @@
         }, {
           key: "onSubmit",
           value: function onSubmit() {
-            var _this116 = this;
+            var _this119 = this;
 
             if (this.selectedCodCliente === this.cotacao.codCliente) {
               this.onClose();
@@ -20707,32 +20815,32 @@
             }
 
             this.confirmSubmit().asObservable().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (result) {
-              return result ? _this116.submit() : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
+              return result ? _this119.submit() : rxjs__WEBPACK_IMPORTED_MODULE_4__["EMPTY"];
             }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () {
-              _this116.submittingForm = false;
+              _this119.submittingForm = false;
             })).subscribe(function (response) {
               if (response.hasOwnProperty('success') && response.success === true) {
-                var selectedCliente = _this116.formCotacoesService.getCurrentCarteiraClientes().filter(function (cliente) {
-                  if (cliente.codCliente === _this116.selectedCodCliente) {
+                var selectedCliente = _this119.formCotacoesService.getCurrentCarteiraClientes().filter(function (cliente) {
+                  if (cliente.codCliente === _this119.selectedCodCliente) {
                     return cliente;
                   }
                 });
 
-                _this116.listaCotacoesService.updateClienteCotacao([selectedCliente[0], _this116.cotacao]);
+                _this119.listaCotacoesService.updateClienteCotacao([selectedCliente[0], _this119.cotacao]);
 
-                _this116.pnotifyService.success();
+                _this119.pnotifyService.success();
 
-                _this116.onClose();
+                _this119.onClose();
               } else if (response.hasOwnProperty('success') && response.success === false && response.hasOwnProperty('mensagem') && response.mensagem !== null) {
-                _this116.pnotifyService.error(response.mensagem);
+                _this119.pnotifyService.error(response.mensagem);
               } else {
-                _this116.pnotifyService.error();
+                _this119.pnotifyService.error();
               }
             }, function (error) {
               if (error['error'].hasOwnProperty('mensagem') && error['error'].mensagem !== null) {
-                _this116.pnotifyService.error(error.error.mensagem);
+                _this119.pnotifyService.error(error.error.mensagem);
               } else {
-                _this116.pnotifyService.error();
+                _this119.pnotifyService.error();
               }
             });
           }
@@ -21243,11 +21351,11 @@
         _createClass(ComercialCicloVendasCotacoesListaModalDesdobrarPropostaService, [{
           key: "showModal",
           value: function showModal(cotacao) {
-            var _this117 = this;
+            var _this120 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.getMateriaisCotacao(cotacao.codEmpresa, cotacao.nrPedido).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this117.loaderNavbar.emit(false);
+              _this120.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -21266,15 +21374,15 @@
                     })
                   };
 
-                  _this117.modalService.show(_desdobrar_proposta_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaComponent"], Object.assign({}, modalConfig, {
+                  _this120.modalService.show(_desdobrar_proposta_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalDesdobrarPropostaComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else {
-                  _this117.pnotifyService.error();
+                  _this120.pnotifyService.error();
                 }
               },
               error: function error(_error28) {
-                _this117.pnotifyService.error();
+                _this120.pnotifyService.error();
               }
             });
           }
@@ -21438,13 +21546,13 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalMaterialComboService, [{
           key: "showModal",
           value: function showModal(material, codCliente, codEndereco, codFormaPagamento, freteConta) {
-            var _this118 = this;
+            var _this121 = this;
 
             this.loaderNavbar.emit(true);
             /* console.log('datos');  */
 
             this.cotacoesService.getMateriaisCombo(material.codEmpresa, material.codMaterial, codCliente, codEndereco, codFormaPagamento, freteConta).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this118.loaderNavbar.emit(false);
+              _this121.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -21463,15 +21571,15 @@
                     })
                   };
 
-                  _this118.modalService.show(_combo_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialComboComponent"], Object.assign({}, modalConfig, {
+                  _this121.modalService.show(_combo_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalMaterialComboComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else {
-                  _this118.pnotifyService.error();
+                  _this121.pnotifyService.error();
                 }
               },
               error: function error(_error29) {
-                _this118.pnotifyService.error();
+                _this121.pnotifyService.error();
               }
             });
           }
@@ -21575,11 +21683,11 @@
         _createClass(ComercialCicloVendasCotacoesListaModalHistoricoExclusaoService, [{
           key: "showModal",
           value: function showModal(params) {
-            var _this119 = this;
+            var _this122 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.getHistoricoExclusao(params).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this119.loaderNavbar.emit(false);
+              _this122.loaderNavbar.emit(false);
             })).subscribe({
               next: function next(response) {
                 if (response.success === true) {
@@ -21591,15 +21699,15 @@
                     exclusoes: response.data
                   };
 
-                  _this119.modalService.show(_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalHistoricoExclusaoComponent"], Object.assign({}, modalConfig, {
+                  _this122.modalService.show(_historico_exclusao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesListaModalHistoricoExclusaoComponent"], Object.assign({}, modalConfig, {
                     initialState: initialState
                   }));
                 } else {
-                  _this119.pnotifyService.notice('Nenhuma informação encontrada.');
+                  _this122.pnotifyService.notice('Nenhuma informação encontrada.');
                 }
               },
               error: function error(_error30) {
-                _this119.pnotifyService.error();
+                _this122.pnotifyService.error();
               }
             });
           }
@@ -21993,41 +22101,41 @@
         _createClass(ComercialCicloVendasCotacoesFormularioModalFinalizacaoService, [{
           key: "sendCotacao",
           value: function sendCotacao(dataCotacao) {
-            var _this120 = this;
+            var _this123 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.postCotacao(dataCotacao).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this120.loaderNavbar.emit(false);
+              _this123.loaderNavbar.emit(false);
             })).subscribe(function (response) {
-              _this120.eventDirty.emit(true);
+              _this123.eventDirty.emit(true);
 
               if (response.success === true) {
                 dataCotacao.carrinho = [];
                 dataCotacao.carrinho = response.data;
                 setTimeout(function () {
                   if (dataCotacao.situacao.codTipoFinalizacao === 1) {
-                    _this120.showModal(_perdida_perdida_component__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPerdidaComponent"], dataCotacao);
+                    _this123.showModal(_perdida_perdida_component__WEBPACK_IMPORTED_MODULE_5__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPerdidaComponent"], dataCotacao);
                   } else {
-                    _this120.showModal(_padrao_padrao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPadraoComponent"], dataCotacao);
+                    _this123.showModal(_padrao_padrao_component__WEBPACK_IMPORTED_MODULE_4__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoPadraoComponent"], dataCotacao);
                   }
                 }, 200);
               } else {
-                _this120.pnotifyService.error(response.mensagem);
+                _this123.pnotifyService.error(response.mensagem);
               }
             }, function (error) {
-              _this120.pnotifyService.error(error.error.mensagem);
+              _this123.pnotifyService.error(error.error.mensagem);
             });
           }
         }, {
           key: "sendCotizacion",
           value: function sendCotizacion(dataCotacao) {
-            var _this121 = this;
+            var _this124 = this;
 
             this.loaderNavbar.emit(true);
             this.cotacoesService.postCotizacion(dataCotacao).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
-              _this121.loaderNavbar.emit(false);
+              _this124.loaderNavbar.emit(false);
             })).subscribe(function (response) {
-              _this121.eventDirty.emit(true); // @ts-ignore: Ignorar error TS2339
+              _this124.eventDirty.emit(true); // @ts-ignore: Ignorar error TS2339
 
 
               if (response.responseCode == 200) {
@@ -22040,15 +22148,15 @@
                       dataCotacao
                     );
                   } else { */
-                  _this121.showModal(_finalizacion_finalizacion_component__WEBPACK_IMPORTED_MODULE_6__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion"], dataCotacao);
+                  _this124.showModal(_finalizacion_finalizacion_component__WEBPACK_IMPORTED_MODULE_6__["ComercialCicloVendasCotacoesFormularioModalFinalizacaoFinalizacion"], dataCotacao);
                   /*  } */
 
                 }, 200);
               } else {
-                _this121.pnotifyService.error(response.mensagem);
+                _this124.pnotifyService.error(response.mensagem);
               }
             }, function (error) {
-              _this121.pnotifyService.error(error.error.mensagem);
+              _this124.pnotifyService.error(error.error.mensagem);
             });
           }
         }, {

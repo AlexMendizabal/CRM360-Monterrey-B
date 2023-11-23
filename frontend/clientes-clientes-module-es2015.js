@@ -37,10 +37,19 @@ let EditarClienteComponent = class EditarClienteComponent {
         this.fecharModal = new _angular_core__WEBPACK_IMPORTED_MODULE_4__["EventEmitter"]();
         this.latitudPromedio = 0;
         this.longitudPromedio = 0;
+        this.latitudPromedioContacto = 0;
+        this.longitudPromedioContacto = 0;
         this.latitud = 0;
         this.longitud = 0;
         this.loaderFullScreen = true;
         this.coloresDisponibles = [
+            'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000',
+            'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FC9F3A',
+            'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFF00',
+            'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00FF00',
+            'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF',
+        ];
+        this.coloresDisponiblesContacto = [
             'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000',
             'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FC9F3A',
             'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFF00',
@@ -53,7 +62,8 @@ let EditarClienteComponent = class EditarClienteComponent {
             apellido_contacto: '',
             direccion_contacto: '',
             celular_contacto: '',
-            telefono_contacto: ''
+            telefono_contacto: '',
+            color: '',
         };
         this.nuevaDireccion = {
             ubicacion: '',
@@ -84,11 +94,13 @@ let EditarClienteComponent = class EditarClienteComponent {
     }
     ngOnInit() {
         this.categorizarUbicacion();
-        console.log(this.datos_cliente);
-        /*  */ /* //thi        console.log(this.cnaes);
-        s.data[0] = this.dataForm;
-                this.data = this.dataForm;
-                this.detalle = this.dataForm.detalle; */
+        this.categorizarContacto();
+        if (this.latitudPromedio === null || this.latitudPromedio === undefined) {
+            this.latitudPromedio = -17.7834799;
+        }
+        if (this.longitudPromedio === null || this.longitudPromedio === undefined) {
+            this.longitudPromedio = -63.1819648;
+        }
     }
     getVendedorNome(id_vendedor) {
         if (isNaN(id_vendedor)) {
@@ -98,8 +110,8 @@ let EditarClienteComponent = class EditarClienteComponent {
         return vendedor ? vendedor.nome : 'NO INFORMADO';
     }
     agregarContacto() {
-        /*         console.log(this.datos_cliente)
-         */ if (this.datos_cliente.datos_contacto > 0) {
+        console.log('aqui');
+        if (this.datos_cliente.datos_contacto > 0) {
             if (this.datos_cliente.datos_contacto.length < 5) {
                 this.datos_cliente.datos_contacto.push(Object.assign({}, this.nuevoContacto));
                 this.nuevoContacto = {
@@ -108,7 +120,8 @@ let EditarClienteComponent = class EditarClienteComponent {
                     apellido_contacto: '',
                     direccion_contacto: '',
                     celular_contacto: '',
-                    telefono_contacto: ''
+                    telefono_contacto: '',
+                    color: this.generarColorAleatorioContacto()
                 };
             }
         }
@@ -120,14 +133,23 @@ let EditarClienteComponent = class EditarClienteComponent {
                 apellido_contacto: '',
                 direccion_contacto: '',
                 celular_contacto: '',
-                telefono_contacto: ''
+                telefono_contacto: '',
+                color: '',
             };
         }
+        console.log(this.datos_cliente.datos_contacto);
     }
     categorizarUbicacion() {
         if (this.datos_cliente.datos_direccion && this.datos_cliente.datos_direccion.length > 0) {
             this.datos_cliente.datos_direccion.forEach((direccion) => {
                 direccion['color'] = this.generarColorAleatorio();
+            });
+        }
+    }
+    categorizarContacto() {
+        if (this.datos_cliente.datos_contacto && this.datos_cliente.datos_contacto.length > 0) {
+            this.datos_cliente.datos_contacto.forEach((direccion) => {
+                direccion['color'] = this.generarColorAleatorioContacto();
             });
         }
     }
@@ -163,6 +185,16 @@ let EditarClienteComponent = class EditarClienteComponent {
         const colorAleatorio = this.coloresDisponibles.splice(indiceAleatorio, 1)[0];
         return colorAleatorio;
     }
+    generarColorAleatorioContacto() {
+        console.log(this.coloresDisponiblesContacto);
+        if (this.coloresDisponiblesContacto.length === 0) {
+            return null;
+        }
+        const indiceAleatorio = Math.floor(Math.random() * this.coloresDisponiblesContacto.length);
+        const colorAleatorio = this.coloresDisponiblesContacto.splice(indiceAleatorio, 1)[0];
+        console.log(colorAleatorio);
+        return colorAleatorio;
+    }
     eliminarUbicacion(index) {
         this.coloresDisponibles.push(this.datos_cliente.datos_direccion[index].color);
         this.datos_cliente.datos_direccion.splice(index, 1);
@@ -172,9 +204,13 @@ let EditarClienteComponent = class EditarClienteComponent {
         this.datos_cliente.datos_direccion[index].latitud = latitud;
         this.datos_cliente.datos_direccion[index].longitud = longitud;
     }
+    actualizarMarcadorContacto(index, latitud, longitud) {
+        this.id_marcador = index;
+        this.datos_cliente.datos_contacto[index].latitude_contacto = latitud;
+        this.datos_cliente.datos_contacto[index].longitude_contacto = longitud;
+    }
     actualizarUbicacion(index) {
-        /*         console.log(this.datos_cliente.datos_direccion[index])
-         */ this.datos_cliente.datos_direccion[index].latitud = this.latitud;
+        this.datos_cliente.datos_direccion[index].latitud = this.latitud;
         this.datos_cliente.datos_direccion[index].longitud = this.longitud;
     }
     actualizarMapa(event) {
@@ -183,10 +219,27 @@ let EditarClienteComponent = class EditarClienteComponent {
         this.actualizarMarcador(this.id_marcador, this.latitud, this.longitud);
         this.actualizarDireccion(this.id_marcador, event);
     }
+    actualizarMapaContacto(event) {
+        this.latitud = event.coords.lat;
+        this.longitud = event.coords.lng;
+        this.actualizarMarcadorContacto(this.id_marcador, this.latitud, this.longitud);
+        this.actualizarDireccionContacto(this.id_marcador, event);
+    }
     actualizarDireccion(index, event) {
         this.obtenerDireccion(event.coords.lat, event.coords.lng)
             .then((direccion_mapa) => {
             this.datos_cliente.datos_direccion[index].direccion = direccion_mapa;
+        })
+            .catch((error) => {
+            /*  this.form.controls['direccion'].setValue(
+                'Error al obtener la dirección'
+             ); */
+        });
+    }
+    actualizarDireccionContacto(index, event) {
+        this.obtenerDireccion(event.coords.lat, event.coords.lng)
+            .then((direccion_mapa) => {
+            this.datos_cliente.datos_contacto[index].direccion = direccion_mapa;
         })
             .catch((error) => {
             /*  this.form.controls['direccion'].setValue(
@@ -229,7 +282,7 @@ let EditarClienteComponent = class EditarClienteComponent {
         var nombreInput = document.getElementById('nombre').value;
         // @ts-ignore: Ignorar error TS2339
         var nombreFacturaInput = document.getElementById('nombre_factura').value;
-        // @ts-ignore: Ignorar error TS2339
+        // @ts-ignore: Ignorar error TS2339      
         var idTipoPersonaInput = document.getElementById('id_tipo_persona').value;
         // @ts-ignore: Ignorar error TS2339
         var emailInput = document.getElementById('email').value;
@@ -261,7 +314,6 @@ let EditarClienteComponent = class EditarClienteComponent {
             'contactos': contactos
         };
         this.enviarPeticion(data);
-        console.log(data);
     }
     enviarPeticion(data) {
         this.preCadastroService
@@ -271,8 +323,10 @@ let EditarClienteComponent = class EditarClienteComponent {
             .subscribe((response) => {
             if (response.codigoRespuesta == 200) {
                 setTimeout(() => {
+                    this.pnotifyService.success('Cliente editado exitosamente');
                     this.onClose();
                 }, 200);
+                location.reload();
             }
             else {
                 this.pnotifyService.error(response.mensagem);
@@ -297,6 +351,8 @@ EditarClienteComponent.propDecorators = {
     ciudades: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__["Input"] }],
     latitudPromedio: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__["Input"] }],
     longitudPromedio: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__["Input"] }],
+    latitudPromedioContacto: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__["Input"] }],
+    longitudPromedioContacto: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__["Input"] }],
     tipos_personas: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__["Input"] }]
 };
 EditarClienteComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
@@ -350,7 +406,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Pre-Registro\">\r\n  <button type=\"button\" (click)=\"onCancel()\" [disabled]=\"submittingForm\">\r\n    Cancelar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onSubmit()\" [disabled]=\"!form.valid || submittingForm\">\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-6\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"nit\">CI</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"ci\" formControlName=\"ci\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('ci') + ' ' + onFieldRequired('ci')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('ci') == 'required'\"\r\n              message=\"NIT inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"nit\">NIT</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nit\" formControlName=\"nit\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nit') + ' ' + onFieldRequired('nit')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nit') == 'required'\"\r\n              message=\"NIT inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"tipopessoa\">Tipo de persona</label>\r\n            <select class=\"form-control\" id=\"tipopessoa\" formControlName=\"tipopessoa\" (change)=\"onInput()\">\r\n              <option value=\"S\">Sociedades</option>\r\n              <option value=\"P\">Privado</option>\r\n              <option value=\"G\">Gobierno</option>\r\n              <option value=\"E\">Empleado</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"vendedor\"> Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"vendedores\" [virtualScroll]=\"true\"\r\n              labelForId=\"vendedor\" bindLabel=\"nombre\" bindValue=\"ID\" formControlName=\"vendedor\"\r\n              (change)=\"changeVendedor($event.ID)\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nome\">Nombre completo</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nome\" formControlName=\"nome\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nome') + ' ' + onFieldRequired('nome')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'required'\"\r\n              message=\"Nombre es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'maxlength'\"\r\n              [message]=\"maxLengthMessages.nome\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nomeFantasia\">Nombre Factura</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nombre_factura\" formControlName=\"nombre_factura\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nomeFantasia') + ' ' + onFieldRequired('nomeFantasia')\">\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"razaoSocial\">Razon social</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"razaoSocial\" formControlName=\"razaoSocial\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('razaoSocial') + ' ' + onFieldRequired('razaoSocial')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'required'\"\r\n              message=\"Razon social es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'maxlength'\"\r\n              [message]=\"maxLengthMessages.razaoSocial\"></invalid-form-control>\r\n          </div>\r\n         <!--  <div class=\"form-group col-md-6\">\r\n            <label for=\"nomeFantasia\">Nombre de Fantasia</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nomeFantasia\" formControlName=\"nomeFantasia\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nomeFantasia') + ' ' + onFieldRequired('nomeFantasia')\">\r\n          </div> -->\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"celular\">Celular</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"celular\" formControlName=\"celular\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('celular') + ' ' + onFieldRequired('celular')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('celular') == 'required'\"\r\n              message=\"celular es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"email\">E-mail</label>\r\n            <input type=\"email\" class=\"form-control\" id=\"email\" formControlName=\"email\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('email') + ' ' + onFieldRequired('email')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('email') == 'required'\"\r\n              message=\"E-mail es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('email') == 'maxlength'\"\r\n              [message]=\"maxLengthMessages.email\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"telefone\">Telefono</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"telefone\" formControlName=\"telefone\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('telefone') + ' ' + onFieldRequired('telefone')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('telefone') == 'required'\"\r\n              message=\"Telefono es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-9\">\r\n            <label for=\"cnae\">Rubro (Actividad Economica)</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"cnaes\" [virtualScroll]=\"true\" labelForId=\"cnae\"\r\n              bindLabel=\"descripcion\" bindValue=\"id_cnae\" formControlName=\"cnae\" (change)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('cnae') + ' ' + onFieldRequired('cnae')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnae') == 'required'\"\r\n              message=\"CNAE es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"cnae\">Tipo de cliente</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"tipos_clientes\" [virtualScroll]=\"true\"\r\n              labelForId=\"cnae\" bindLabel=\"nombre_tipo\" bindValue=\"id\" formControlName=\"tipo_cliente\"\r\n              [ngClass]=\"onFieldError('tipo_cliente') + ' ' + onFieldRequired('tipo_cliente')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnae') == 'required'\"\r\n              message=\"CNAE es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"cnae\">Mapa</label>\r\n            <div class=\"embed-responsive embed-responsive-16by9\">\r\n              <agm-map (mapClick)=\"actualizarMapa($event)\" [latitude]=\"latitud\" [longitude]=\"longitud\" [zoom]=\"16\"\r\n                class=\"embed-responsive-item\">\r\n                <agm-marker *ngFor=\"let ubicacion of ubicaciones; let i = index\" [latitude]=\"ubicacion.latitud\"\r\n                  [longitude]=\"ubicacion.longitud\" (markerClick)=\"actualizarMarcador(i)\" [iconUrl]=\"ubicacion.color\"\r\n                  (markerDragEnd)=\"actualizarUbicacion(i, $event.coords.lat, $event.coords.lng)\">\r\n                </agm-marker>\r\n              </agm-map>\r\n              <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row mt-2\">\r\n          <div class=\"col-4\">\r\n            <button data-toggle=\"collapse\" data-target=\"#CollapseUbicacion\" class=\"btn btn-primary\"\r\n              id=\"btnAgregarUbicacion\" (click)=\"repetirFormulario('Ubicacion')\"> <i class=\"fas fa-plus\"></i>\r\n              Agregar Ubicación</button>\r\n\r\n          </div>\r\n          <div class=\"col\">\r\n            <button data-toggle=\"collapse\" data-target=\"#CollapseContacto\" class=\"btn btn-success\"\r\n              id=\"btnAgregarContacto\" (click)=\"repetirFormulario('Contacto')\"> <i class=\"fas fa-plus\"></i>\r\n              Agregar Contacto</button>\r\n          </div>\r\n        </div>\r\n        <div id=\"ContenedorFormularios\">\r\n          <div id=\"Ubicacion\" *ngFor=\"let ubicacionForm of ubicacionFormularios; let i = index\">\r\n            <div id=\"CollapseUbicacion\" [class.collapse]=\"!ubicacionCollapse\">\r\n              <div class=\"mt-3\"></div>\r\n              <div class=\"row \" style=\"border-radius: 13px; background-color: rgb(246, 243, 243);\">\r\n                <div class=\"form-group col-md-12 mt-2\" align=\"right\">\r\n                  <button class=\"btn btn-danger btn-sm\" (click)=\"eliminarContacto(i, 2)\" style=\"text-decoration: none\">\r\n                    X\r\n                  </button>\r\n                </div>\r\n                <div class=\"form-group col-md-9 mt-1\">\r\n                  <label for=\"titulo_ubicacion\">Nombre de ubicacion</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"titulo_ubicacion\" formControlName=\"titulo_ubicacion\"\r\n                    (input)=\"onInput()\" [value]=\"ubicacionForm.ubicacion\"\r\n                    (ngModelChange)=\"actualizarPosicion($event, i)\">\r\n                </div>\r\n                <div class=\"form-group col-md-3\">\r\n                  <label for=\"ciudadUbi\">Ciudad</label>\r\n                  <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"ciudades\" [virtualScroll]=\"true\"\r\n                    (change)=\"cambiarCiudad($event.id, i)\" labelForId=\"ciudad\" bindLabel=\"nombre_ciudad\" bindValue=\"id\"\r\n                    formControlName=\"nombre_ciudad\"\r\n                    [ngClass]=\"onFieldError('nombre_ciudad') + ' ' + onFieldRequired('nombre_ciudad')\">\r\n                    <ng-option *ngFor=\"let ciudad of ciudades\"\r\n                      [value]=\"ubicacionForm.ciudad_id !== 0 ? ubicacionForm.ciudad_id : ciudad_vendedor\"\r\n                      [disabled]=\"ciudad.id !== ciudad_vendedor\">\r\n                      {{ ciudad.nombre_ciudad }}\r\n                    </ng-option>\r\n\r\n                  </ng-select>\r\n\r\n                </div>\r\n                <div class=\"form-group col-md-6\" *ngIf=\"ubicacionForm.swActivarLatitud === true\">\r\n                  <label for=\"direccion\">Direccion</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"direccion\" formControlName=\"\" (input)=\"onInput()\"\r\n                    [(ngModel)]=\"ubicacionForm.direccion\" [value]=\"ubicacionForm.direccion\">\r\n                </div>\r\n                <div class=\"form-group col-md-6\" *ngIf=\"ubicacionForm.swActivarLatitud === false\">\r\n                  <label for=\"direccion\">Dirección </label> <br>\r\n                  <button class=\"btn btn-primary\" (click)=\"agregarDireccion(i)\"> <i class=\"fas fa-map-marker\"></i>\r\n                    Agregar </button>\r\n                </div>\r\n                <div class=\"form-group col-md-3\" *ngIf=\"ubicacionForm.swActivarLatitud === true\">\r\n                  <label for=\"ciudadUbi\">Latitud</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"titulo_ubicacion\" formControlName=\"latitud\"\r\n                    (input)=\"onInput()\" [(ngModel)]=\"ubicacionForm.latitud\" [value]=\"ubicacionForm.latitud\"\r\n                    [readonly]=\"true\">\r\n\r\n\r\n                </div>\r\n                <div class=\"form-group col-md-3\" *ngIf=\"ubicacionForm.swActivarLatitud === true\">\r\n                  <label for=\"ciudadUbi\">Longitud</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"titulo_ubicacion\" formControlName=\"longitud\"\r\n                    (input)=\"onInput()\" [(ngModel)]=\"ubicacionForm.longitud\" [value]=\"ubicacionForm.longitud\" readonly>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div id=\"Contacto\" *ngFor=\"let contactoForm of contactoFormularios; let i = index\">\r\n            <div id=\"CollapseContacto\" [class.collapse]=\"!contactoCollapse\">\r\n              <div class=\"col mt-3\">\r\n                <!--  -->\r\n              </div>\r\n              <div class=\"row\" style=\"border-radius: 13px; background-color: rgb(246, 243, 243);\">\r\n                <div class=\"form-group col-md-12\">\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col-md-12 mt-2\" align=\"right\">\r\n                      <button class=\"btn  btn-danger btn-sm\" (click)=\"eliminarContacto(i, 1)\">\r\n                        X\r\n                      </button>\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"titulo_contacto\">TÍTULO DE CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"titulo_contacto\" formControlName=\"titulo_contacto\"\r\n                        (input)=\"onInput()\"\r\n                        [ngClass]=\"onFieldError('titulo_contacto') + ' ' + onFieldRequired('titulo_contacto')\"\r\n                        [value]=\"contactoForm.titulo_contacto\" (ngModelChange)=\"actualizarContacto($event, 1, i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"nombres_contacto\">NOMBRE</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"nombres_contacto\" formControlName=\"nombres_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.nombres_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event, 2,  i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"apellido_contacto\">APELLIDO PATERNO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"apellido_contacto\" formControlName=\"apellido_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.apellido_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event, 3 , i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"apellido2_contacto\">APELLIDO MATERNO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"apellido2_contacto\"\r\n                        formControlName=\"apellido2_contacto\" (input)=\"onInput()\"\r\n                        [value]=\"contactoForm.apellido2_contacto\" (ngModelChange)=\"actualizarContacto($event, 4, i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"telefono_contacto\">TELÉFONO CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"telefono_contacto\" formControlName=\"telefono_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.telefono_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event,5 , i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"celular_contacto\">CELULAR DE CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"celular_contacto\" formControlName=\"celular_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.celular_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event, 6 , i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-6 mt-2\">\r\n                      <label for=\"direccion_contacto\">DIRECCIÓN DE CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"direccion_contacto\"\r\n                        formControlName=\"direccion_contacto\" (input)=\"onInput()\"\r\n                        [value]=\"contactoForm.direccion_contacto\" (ngModelChange)=\"actualizarContacto($event, 7,  i)\">\r\n                    </div>\r\n\r\n\r\n                  </div>\r\n                </div>\r\n                <!-- <label>CONTACTOS</label> -->\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</app-body>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-full-screen *ngIf=\"loaderFullScreen\"></loader-spinner-full-screen>\r\n<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Pre-Registro\">\r\n  <button type=\"button\" (click)=\"onCancel()\" [disabled]=\"submittingForm\">\r\n    Cancelar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onSubmit()\" [disabled]=\"!form.valid || submittingForm\">\r\n    Guardar\r\n  </button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\" [show]=\"!loaderFullScreen\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-6\">\r\n      <form [formGroup]=\"form\" autocomplete=\"off\">\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"nit\">CI</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"ci\" formControlName=\"ci\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('ci') + ' ' + onFieldRequired('ci')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('ci') == 'required'\"\r\n              message=\"NIT inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"nit\">NIT</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nit\" formControlName=\"nit\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nit') + ' ' + onFieldRequired('nit')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nit') == 'required'\"\r\n              message=\"NIT inválido.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"tipopessoa\">Tipo de persona</label>\r\n            <select class=\"form-control\" id=\"tipopessoa\" formControlName=\"tipopessoa\" (change)=\"onInput()\">\r\n              <option value=\"S\">Sociedades</option>\r\n              <option value=\"P\">Privado</option>\r\n              <option value=\"G\">Gobierno</option>\r\n              <option value=\"E\">Empleado</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"vendedor\"> Vendedor</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"vendedores\" [virtualScroll]=\"true\"\r\n              labelForId=\"vendedor\" bindLabel=\"nombre\" bindValue=\"ID\" formControlName=\"vendedor\"\r\n              (change)=\"changeVendedor($event.ID)\">\r\n            </ng-select>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nome\">Nombre completo</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nome\" formControlName=\"nome\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nome') + ' ' + onFieldRequired('nome')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'required'\"\r\n              message=\"Nombre es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('nome') == 'maxlength'\"\r\n              [message]=\"maxLengthMessages.nome\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"nomeFantasia\">Nombre Factura</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nombre_factura\" formControlName=\"nombre_factura\"\r\n              (input)=\"onInput()\" [ngClass]=\"onFieldError('nomeFantasia') + ' ' + onFieldRequired('nomeFantasia')\">\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"razaoSocial\">Razon social</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"razaoSocial\" formControlName=\"razaoSocial\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('razaoSocial') + ' ' + onFieldRequired('razaoSocial')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'required'\"\r\n              message=\"Razon social es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('razaoSocial') == 'maxlength'\"\r\n              [message]=\"maxLengthMessages.razaoSocial\"></invalid-form-control>\r\n          </div>\r\n          <!--  <div class=\"form-group col-md-6\">\r\n            <label for=\"nomeFantasia\">Nombre de Fantasia</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"nomeFantasia\" formControlName=\"nomeFantasia\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('nomeFantasia') + ' ' + onFieldRequired('nomeFantasia')\">\r\n          </div> -->\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"celular\">Celular</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"celular\" formControlName=\"celular\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('celular') + ' ' + onFieldRequired('celular')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('celular') == 'required'\"\r\n              message=\"celular es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"email\">E-mail</label>\r\n            <input type=\"email\" class=\"form-control\" id=\"email\" formControlName=\"email\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('email') + ' ' + onFieldRequired('email')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('email') == 'required'\"\r\n              message=\"E-mail es obligatorio.\"></invalid-form-control>\r\n            <invalid-form-control [show]=\"onFieldInvalid('email') == 'maxlength'\"\r\n              [message]=\"maxLengthMessages.email\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-6\">\r\n            <label for=\"telefone\">Telefono</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"telefone\" formControlName=\"telefone\" (input)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('telefone') + ' ' + onFieldRequired('telefone')\">\r\n            <invalid-form-control [show]=\"onFieldInvalid('telefone') == 'required'\"\r\n              message=\"Telefono es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n          <div class=\"form-group col-md-9\">\r\n            <label for=\"cnae\">Rubro (Actividad Economica)</label>\r\n            <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"cnaes\" [virtualScroll]=\"true\" labelForId=\"cnae\"\r\n              bindLabel=\"descripcion\" bindValue=\"id_cnae\" formControlName=\"cnae\" (change)=\"onInput()\"\r\n              [ngClass]=\"onFieldError('cnae') + ' ' + onFieldRequired('cnae')\">\r\n            </ng-select>\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnae') == 'required'\"\r\n              message=\"CNAE es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n          <div class=\"form-group col-md-3\">\r\n            <label for=\"cnae\">Tipo de cliente</label>\r\n            <!-- <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"tipos_clientes\" [virtualScroll]=\"true\"\r\n              labelForId=\"cnae\" bindLabel=\"nombre_tipo\" bindValue=\"id\" formControlName=\"tipo_cliente\"\r\n              [ngClass]=\"onFieldError('tipo_cliente') + ' ' + onFieldRequired('tipo_cliente')\"\r\n              [disabled]=\"this.disabled_form\">\r\n            </ng-select> -->\r\n            <input type=\"text\" value=\"REGULAR\" class=\"form-control\" disabled>\r\n            <invalid-form-control [show]=\"onFieldInvalid('cnae') == 'required'\"\r\n              message=\"CNAE es obligatorio.\"></invalid-form-control>\r\n          </div>\r\n        </div>\r\n        <!-- <div class=\"form-row\">\r\n          <div class=\"form-group col\">\r\n            <label for=\"cnae\">Mapa</label>\r\n            <div class=\"embed-responsive embed-responsive-16by9\">\r\n              <agm-map (mapClick)=\"actualizarMapa($event)\" [latitude]=\"latitud\" [longitude]=\"longitud\" [zoom]=\"16\"\r\n                class=\"embed-responsive-item\">\r\n                <agm-marker *ngFor=\"let ubicacion of ubicaciones; let i = index\" [latitude]=\"ubicacion.latitud\"\r\n                  [longitude]=\"ubicacion.longitud\" (markerClick)=\"actualizarMarcador(i)\" [iconUrl]=\"ubicacion.color\"\r\n                  (markerDragEnd)=\"actualizarUbicacion(i, $event.coords.lat, $event.coords.lng)\">\r\n                </agm-marker>\r\n              </agm-map>\r\n              <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n            </div>\r\n          </div>\r\n        </div> -->\r\n        <div class=\"form-row mt-2\">\r\n          <div class=\"col-md-3\">\r\n            <button data-toggle=\"collapse\" data-target=\"#CollapseUbicacion\" class=\"btn btn-primary\"\r\n              id=\"btnAgregarUbicacion\" (click)=\"repetirFormulario('Ubicacion')\"> <i class=\"fas fa-plus\"></i>\r\n              Agregar Ubicación</button>\r\n\r\n          </div>\r\n          <div class=\"col-md-3\">\r\n            <button data-toggle=\"collapse\" data-target=\"#CollapseContacto\" class=\"btn btn-success\"\r\n              id=\"btnAgregarContacto\" (click)=\"repetirFormulario('Contacto')\"> <i class=\"fas fa-plus\"></i>\r\n              Agregar Contacto</button>\r\n          </div>\r\n        </div>\r\n        <div id=\"ContenedorFormularios\" style=\"max-height: 700px; overflow-y: auto;\" class=\"col-md-12\">\r\n          <div class=\"alert alert-warning mt-3\" *ngIf=\"ubicacionFormularios.length > 0\"> <strong> La primera ubicación\r\n              se tomará como la principal </strong> </div>\r\n          <div id=\"Ubicacion\" *ngFor=\"let ubicacionForm of ubicacionFormularios; let i = index\">\r\n            <div id=\"CollapseUbicacion\" [class.collapse]=\"!ubicacionCollapse\">\r\n              <div class=\"mt-3\"></div>\r\n              <div class=\"row \"\r\n                style=\"border-radius: 13px; background-color: rgb(246, 243, 243);  border: 1px solid #007BFF;\">\r\n                <div class=\"form-group col-md-12 mt-2\" align=\"right\">\r\n                  <button class=\"btn btn-danger btn-sm\" (click)=\"eliminarContacto(i, 2)\" style=\"text-decoration: none\">\r\n                    X\r\n                  </button>\r\n                </div>\r\n                <div class=\"form-group col-md-9 mt-1\">\r\n                  <label for=\"titulo_ubicacion\">Nombre de ubicacion</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"titulo_ubicacion\" formControlName=\"titulo_ubicacion\"\r\n                    (input)=\"onInput()\" [value]=\"ubicacionForm.ubicacion\"\r\n                    (ngModelChange)=\"actualizarPosicion($event, i)\">\r\n                </div>\r\n                <div class=\"form-group col-md-3\">\r\n                  <label for=\"ciudadUbi\">Ciudad</label>\r\n                  <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"ciudades\" [virtualScroll]=\"true\"\r\n                    (change)=\"cambiarCiudad($event.id, i)\" labelForId=\"ciudad\" bindLabel=\"nombre_ciudad\" bindValue=\"id\"\r\n                    formControlName=\"nombre_ciudad\"\r\n                    [ngClass]=\"onFieldError('nombre_ciudad') + ' ' + onFieldRequired('nombre_ciudad')\">\r\n                    <ng-option *ngFor=\"let ciudad of ciudades\"\r\n                      [value]=\"ubicacionForm.ciudad_id !== 0 ? ubicacionForm.ciudad_id : ciudad_vendedor\"\r\n                      [disabled]=\"ciudad.id !== ciudad_vendedor\">\r\n                      {{ ciudad.nombre_ciudad }}\r\n                    </ng-option>\r\n\r\n                  </ng-select>\r\n\r\n                </div>\r\n                <div class=\"form-group col-md-12 \" >\r\n                  <label for=\"direccion\">Direccion</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"direccion\" formControlName=\"\" (input)=\"onInput()\"\r\n                    [(ngModel)]=\"ubicacionForm.direccion\" [value]=\"ubicacionForm.direccion\">\r\n                </div>\r\n                <div class=\"form-group col-md-12 text-center\" *ngIf=\"ubicacionForm.swActivarLatitud === false\">\r\n                  <label for=\"direccion\">Dirección </label> <br>\r\n                  <button class=\"btn btn-primary\" (click)=\"openModalUbicacion(seleccionarDireccion, i, 2)\" > \r\n                    Agregar Dirección </button>\r\n                </div>\r\n                <div class=\"form-group col-md-3\" *ngIf=\"ubicacionForm.swActivarLatitud === true\">\r\n                  <label for=\"ciudadUbi\">Latitud</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"titulo_ubicacion\" formControlName=\"latitud\"\r\n                    (input)=\"onInput()\" [(ngModel)]=\"ubicacionForm.latitud\" [value]=\"ubicacionForm.latitud\"\r\n                    [readonly]=\"true\">\r\n\r\n\r\n                </div>\r\n                <div class=\"form-group col-md-3\" *ngIf=\"ubicacionForm.swActivarLatitud === true\">\r\n                  <label for=\"ciudadUbi\">Longitud</label>\r\n                  <input type=\"text\" class=\"form-control\" id=\"titulo_ubicacion\" formControlName=\"longitud\"\r\n                    (input)=\"onInput()\" [(ngModel)]=\"ubicacionForm.longitud\" [value]=\"ubicacionForm.longitud\" readonly>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div id=\"Contacto\" *ngFor=\"let contactoForm of contactoFormularios; let i = index\">\r\n            <div id=\"CollapseContacto\" [class.collapse]=\"!contactoCollapse\">\r\n              <div class=\"col mt-3\">\r\n                <!--  -->\r\n              </div>\r\n              <div class=\"row\"\r\n                style=\"border-radius: 13px; background-color: rgb(246, 243, 243);  border: 2px solid #33CD56;\">\r\n                <div class=\"form-group col-md-12\">\r\n                  <div class=\"form-row\">\r\n                    <div class=\"form-group col-md-12 mt-2\" align=\"right\">\r\n                      <button class=\"btn  btn-danger btn-sm\" (click)=\"eliminarContacto(i, 1)\">\r\n                        X\r\n                      </button>\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"titulo_contacto\">TÍTULO DE CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"titulo_contacto\" formControlName=\"titulo_contacto\"\r\n                        (input)=\"onInput()\"\r\n                        [ngClass]=\"onFieldError('titulo_contacto') + ' ' + onFieldRequired('titulo_contacto')\"\r\n                        [value]=\"contactoForm.titulo_contacto\" (ngModelChange)=\"actualizarContacto($event, 1, i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"nombres_contacto\">NOMBRE</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"nombres_contacto\" formControlName=\"nombres_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.nombres_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event, 2,  i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"apellido_contacto\">APELLIDO PATERNO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"apellido_contacto\" formControlName=\"apellido_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.apellido_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event, 3 , i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"apellido2_contacto\">APELLIDO MATERNO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"apellido2_contacto\"\r\n                        formControlName=\"apellido2_contacto\" (input)=\"onInput()\"\r\n                        [value]=\"contactoForm.apellido2_contacto\" (ngModelChange)=\"actualizarContacto($event, 4, i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"telefono_contacto\">TELÉFONO CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"telefono_contacto\" formControlName=\"telefono_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.telefono_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event,5 , i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-3 mt-2\">\r\n                      <label for=\"celular_contacto\">CELULAR DE CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"celular_contacto\" formControlName=\"celular_contacto\"\r\n                        (input)=\"onInput()\" [value]=\"contactoForm.celular_contacto\"\r\n                        (ngModelChange)=\"actualizarContacto($event, 6 , i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-6 mt-2\">\r\n                      <label for=\"direccion_contacto\">DIRECCIÓN DE CONTACTO</label>\r\n                      <input type=\"text\" class=\"form-control\" id=\"direccion_contacto\"\r\n                        formControlName=\"direccion_contacto\" (input)=\"onInput()\"\r\n                        [value]=\"contactoForm.direccion_contacto\" (ngModelChange)=\"actualizarContacto($event, 7,  i)\">\r\n                    </div>\r\n                    <div class=\"form-group col-md-12 mt-2 text-center\">\r\n                      <button class=\"btn btn-warning \" (click)=\"openModalUbicacion(seleccionarUbicacion, i, 1)\"> Agregar\r\n                        Ubicación </button>\r\n                    </div>\r\n\r\n\r\n                  </div>\r\n                </div>\r\n                <!-- <label>CONTACTOS</label> -->\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </div>\r\n    <ng-template #seleccionarUbicacion>\r\n      <app-comercial-ciclo-vendas-cotacoes-precadastro-modal-ubicacion-contacto\r\n        (latLngChanged)=\"changeLatitudLongitud($event)\" (fecharModal)=\"onFecharModal($event)\"\r\n         [index]=\"this.indice\" [latitud] =\"this.latitud\"  [longitud] =\"this.longitud\" [tipo]= this.tipo_peticion\r\n         \r\n         [latitud_inicial] = \"this.latitud_inicial\" [longitud_inicial] = \"this.longitud_inicial\">\r\n      </app-comercial-ciclo-vendas-cotacoes-precadastro-modal-ubicacion-contacto>\r\n    </ng-template>\r\n    <ng-template #seleccionarDireccion>\r\n      <app-comercial-ciclo-vendas-cotacoes-precadastro-modal-ubicacion-contacto\r\n        (latLngChanged)=\"changeLatitudLongitud($event)\" (fecharModal)=\"onFecharModal($event)\"\r\n         [index]=\"this.indice\" [latitud] =\"this.latitud\"  [longitud] =\"this.longitud\" [tipo]= this.tipo_peticion\r\n         [latitud_inicial] = \"this.latitud_inicial\" [longitud_inicial] = \"this.longitud_inicial\"\r\n         >\r\n      </app-comercial-ciclo-vendas-cotacoes-precadastro-modal-ubicacion-contacto>\r\n    </ng-template>\r\n  </div>\r\n</app-body>");
 
 /***/ }),
 
@@ -546,6 +602,19 @@ ComercialClientesHistoricoFinanceiroComponent = Object(tslib__WEBPACK_IMPORTED_M
 
 /***/ }),
 
+/***/ "3ITs":
+/*!*****************************************************************************************************!*\
+  !*** ./src/app/modules/comercial/clientes/pre-cadastro/ubicacion_contacto/ubicacion.component.scss ***!
+  \*****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvY29tZXJjaWFsL2NsaWVudGVzL3ByZS1jYWRhc3Ryby91YmljYWNpb25fY29udGFjdG8vdWJpY2FjaW9uLmNvbXBvbmVudC5zY3NzIn0= */");
+
+/***/ }),
+
 /***/ "3oZO":
 /*!**********************************************************************************************************************!*\
   !*** ./src/app/modules/comercial/clientes/historico-financeiro/materiais-duplicata/materiais-duplicata.component.ts ***!
@@ -687,6 +756,154 @@ FunctionsService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
         providedIn: 'root'
     })
 ], FunctionsService);
+
+
+
+/***/ }),
+
+/***/ "6bJc":
+/*!***************************************************************************************************!*\
+  !*** ./src/app/modules/comercial/clientes/pre-cadastro/ubicacion_contacto/ubicacion.component.ts ***!
+  \***************************************************************************************************/
+/*! exports provided: PreCadastroUbicacionContactosComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PreCadastroUbicacionContactosComponent", function() { return PreCadastroUbicacionContactosComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _raw_loader_ubicacion_component_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! raw-loader!./ubicacion.component.html */ "ZsEz");
+/* harmony import */ var _ubicacion_component_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ubicacion.component.scss */ "3ITs");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "s7LF");
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
+/* harmony import */ var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/shared/services/core/pnotify.service */ "g+W+");
+/* harmony import */ var src_app_shared_modules_confirm_modal_confirm_modal_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/app/shared/modules/confirm-modal/confirm-modal.service */ "FOez");
+
+
+
+
+
+// ngx-bootstrap
+
+// Services
+
+
+let PreCadastroUbicacionContactosComponent = class PreCadastroUbicacionContactosComponent {
+    constructor(formBuilder, bsModalRef, pnotifyService, confirmModalService) {
+        this.formBuilder = formBuilder;
+        this.bsModalRef = bsModalRef;
+        this.pnotifyService = pnotifyService;
+        this.confirmModalService = confirmModalService;
+        this.latLngChanged = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
+        this.fecharModal = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
+        this.swDesactivarForm = true;
+        this.currencyMaskOptions = {
+            align: 'left',
+            prefix: '',
+            thousands: '.',
+            decimal: ',',
+            precision: 3,
+        };
+        this.opcoesVenda = [];
+        this.arrayPresentacion = [];
+        this.swPresentacion = false;
+        this.id_presentacion = 0;
+        this.showModal = true;
+        this.showImpostos = false;
+        this.pnotifyService.getPNotify();
+    }
+    ngOnInit() {
+        this.setFormBuilder();
+    }
+    setFormBuilder() {
+        this.estadoMapa();
+        this.form = this.formBuilder.group({
+            latitud: [this.latitud],
+            longitud: [this.longitud],
+            direccion: [this.direccion],
+        });
+    }
+    estadoMapa() {
+        if (this.latitud === 0) {
+            this.latitud = this.latitud_inicial;
+        }
+        if (this.longitud === 0) {
+            this.longitud = this.longitud_inicial;
+        }
+    }
+    actualizarMarcador(event) {
+        this.latitud = event.coords.lat;
+        this.longitud = event.coords.lng;
+        this.form.controls['latitud'].setValue(this.latitud);
+        this.form.controls['longitud'].setValue(this.longitud);
+        this.actualizarDireccion(event);
+    }
+    actualizarDireccion(event) {
+        this.obtenerDireccion(event.coords.lat, event.coords.lng)
+            .then((direccion_mapa) => {
+            this.direccion_mapa_act = direccion_mapa;
+            this.form.controls['direccion'].setValue(direccion_mapa);
+        })
+            .catch((error) => {
+            this.form.controls['direccion'].setValue('Error al obtener la dirección');
+        });
+    }
+    obtenerDireccion(latitud, longitud) {
+        return fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitud},${longitud}&key=AIzaSyDl5b7STz9xYNDhybTTer2POVncX9FYqCc`)
+            .then((response) => response.json())
+            .then((data) => {
+            const resultado = data.results[0];
+            if (resultado) {
+                return resultado.formatted_address;
+            }
+            else {
+                return 'Dirección no encontrada';
+            }
+        })
+            .catch((error) => {
+            return 'Error al obtener la dirección';
+        });
+    }
+    emitLatLng() {
+        this.latLngChanged.emit({ latitud: this.latitud,
+            longitud: this.longitud, direccion: this.direccion_mapa_act, index: this.index, tipo: this.tipo });
+        this.onClose();
+    }
+    onSubmit() {
+        this.emitLatLng();
+    }
+    onClose() {
+        this.fecharModal.emit(true);
+    }
+};
+PreCadastroUbicacionContactosComponent.ctorParameters = () => [
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"] },
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"] },
+    { type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_6__["PNotifyService"] },
+    { type: src_app_shared_modules_confirm_modal_confirm_modal_service__WEBPACK_IMPORTED_MODULE_7__["ConfirmModalService"] }
+];
+PreCadastroUbicacionContactosComponent.propDecorators = {
+    tipo: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['tipo',] }],
+    index: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['index',] }],
+    latitud: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['latitud',] }],
+    longitud: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['longitud',] }],
+    latitud_inicial: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['latitud_inicial',] }],
+    longitud_inicial: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"], args: ['longitud_inicial',] }],
+    latLngChanged: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"] }],
+    fecharModal: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"] }]
+};
+PreCadastroUbicacionContactosComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+        selector: 'app-comercial-ciclo-vendas-cotacoes-precadastro-modal-ubicacion-contacto',
+        template: _raw_loader_ubicacion_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
+        styles: [_ubicacion_component_scss__WEBPACK_IMPORTED_MODULE_2__["default"]]
+    }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"],
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_5__["BsModalRef"],
+        src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_6__["PNotifyService"],
+        src_app_shared_modules_confirm_modal_confirm_modal_service__WEBPACK_IMPORTED_MODULE_7__["ConfirmModalService"]])
+], PreCadastroUbicacionContactosComponent);
 
 
 
@@ -1565,6 +1782,66 @@ ComercialClientesHistoricoFinanceiroDetalhesComponent = Object(tslib__WEBPACK_IM
 
 /***/ }),
 
+/***/ "JZwC":
+/*!*************************************************************************************************!*\
+  !*** ./src/app/modules/comercial/clientes/pre-cadastro/ubicacion_contacto/ubicacion.service.ts ***!
+  \*************************************************************************************************/
+/*! exports provided: PreCadastroUbicacionContactosService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PreCadastroUbicacionContactosService", function() { return PreCadastroUbicacionContactosService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ngx-bootstrap/modal */ "LqlI");
+/* harmony import */ var _ubicacion_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ubicacion.component */ "6bJc");
+/* harmony import */ var src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/shared/services/core/pnotify.service */ "g+W+");
+
+
+// ngx-bootstrap
+
+// Components
+
+// Services
+
+let PreCadastroUbicacionContactosService = class PreCadastroUbicacionContactosService {
+    constructor(modalService, pnotifyService) {
+        this.modalService = modalService;
+        this.pnotifyService = pnotifyService;
+        this.loaderNavbar = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.pnotifyService.getPNotify();
+    }
+    showModal() {
+        this.loaderNavbar.emit(true);
+        const modalConfig = {
+            animated: false,
+            class: 'modal-lg',
+            ignoreBackdropClick: true,
+            keyboard: false,
+        };
+        const initialState = {};
+        this.modalService.show(_ubicacion_component__WEBPACK_IMPORTED_MODULE_3__["PreCadastroUbicacionContactosComponent"], Object.assign({}, modalConfig, {
+            initialState,
+        }));
+    }
+};
+PreCadastroUbicacionContactosService.ctorParameters = () => [
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__["BsModalService"] },
+    { type: src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_4__["PNotifyService"] }
+];
+PreCadastroUbicacionContactosService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root',
+    }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_2__["BsModalService"],
+        src_app_shared_services_core_pnotify_service__WEBPACK_IMPORTED_MODULE_4__["PNotifyService"]])
+], PreCadastroUbicacionContactosService);
+
+
+
+/***/ }),
+
 /***/ "K2I3":
 /*!***************************************************************!*\
   !*** ./src/app/modules/comercial/clientes/clientes.module.ts ***!
@@ -1603,7 +1880,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _proposta_analise_credito_proposta_analise_credito_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./proposta-analise-credito/proposta-analise-credito.component */ "dWJH");
 /* harmony import */ var _ultimos_precos_ultimos_precos_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./ultimos-precos/ultimos-precos.component */ "BTJQ");
 /* harmony import */ var _editar_editar_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./editar/editar.component */ "+C52");
-/* harmony import */ var _agm_core__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @agm/core */ "LSHg");
+/* harmony import */ var _pre_cadastro_ubicacion_contacto_ubicacion_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./pre-cadastro/ubicacion_contacto/ubicacion.component */ "6bJc");
+/* harmony import */ var _agm_core__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @agm/core */ "LSHg");
 
 
 
@@ -1637,6 +1915,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 let ComercialClientesModule = class ComercialClientesModule {
 };
 ComercialClientesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
@@ -1647,7 +1926,8 @@ ComercialClientesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"
             _detalhes_detalhes_component__WEBPACK_IMPORTED_MODULE_19__["ComercialClientesDetalhesComponent"],
             _proposta_analise_credito_proposta_analise_credito_component__WEBPACK_IMPORTED_MODULE_22__["ComercialClientesPropostaAnaliseCreditoComponent"],
             _ultimos_precos_ultimos_precos_component__WEBPACK_IMPORTED_MODULE_23__["ComercialClientesUltimosPrecosComponent"],
-            _editar_editar_component__WEBPACK_IMPORTED_MODULE_24__["EditarClienteComponent"]
+            _editar_editar_component__WEBPACK_IMPORTED_MODULE_24__["EditarClienteComponent"],
+            _pre_cadastro_ubicacion_contacto_ubicacion_component__WEBPACK_IMPORTED_MODULE_25__["PreCadastroUbicacionContactosComponent"]
         ],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
@@ -1667,12 +1947,12 @@ ComercialClientesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"
             _clientes_routing_module__WEBPACK_IMPORTED_MODULE_16__["ComercialClientesRoutingModule"],
             _dashboard_dashboard_module__WEBPACK_IMPORTED_MODULE_20__["ComercialClientesDashboardModule"],
             _historico_financeiro_historico_financeiro_module__WEBPACK_IMPORTED_MODULE_21__["ComercialClientesHistoricoFinanceiroModule"],
-            _agm_core__WEBPACK_IMPORTED_MODULE_25__["AgmCoreModule"].forRoot({
+            _agm_core__WEBPACK_IMPORTED_MODULE_26__["AgmCoreModule"].forRoot({
                 apiKey: 'AIzaSyDl5b7STz9xYNDhybTTer2POVncX9FYqCc' // Reemplaza con tu propia clave de API de Google Maps
             }),
         ],
         exports: [_editar_editar_component__WEBPACK_IMPORTED_MODULE_24__["EditarClienteComponent"]],
-        entryComponents: [_editar_editar_component__WEBPACK_IMPORTED_MODULE_24__["EditarClienteComponent"]],
+        entryComponents: [_editar_editar_component__WEBPACK_IMPORTED_MODULE_24__["EditarClienteComponent"], _pre_cadastro_ubicacion_contacto_ubicacion_component__WEBPACK_IMPORTED_MODULE_25__["PreCadastroUbicacionContactosComponent"]],
         providers: [
             ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["BsModalRef"]
         ]
@@ -2608,6 +2888,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "ZsEz":
+/*!*******************************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/modules/comercial/clientes/pre-cadastro/ubicacion_contacto/ubicacion.component.html ***!
+  \*******************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content\" [hidden]=\"!showModal\">\r\n    <div class=\"modal-header\">\r\n        <h4 class=\"mtc-title mb-auto\">Ubicación de contacto</h4>\r\n        <button type=\"button\" class=\"close\" (click)=\"onClose()\">\r\n            <span aria-hidden=\"true\" *ngIf=\"!loaderModal\">&times;</span>\r\n            <div class=\"spinner-border spinner-border-sm text-dark ml-auto\" *ngIf=\"loaderModal\"></div>\r\n        </button>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <div class=\"row\">\r\n            <div class=\"col\">\r\n                <form [formGroup]=\"form\" autocomplete=\"off\">\r\n                    <div class=\"row\">\r\n                        <div class=\"form-group col-lg-2\">\r\n                            <label for=\"codOrigemContato\">Latitud</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"latitud\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-lg-2\">\r\n                            <label for=\"codOrigemContato\">Longitud</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"longitud\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-lg-8\">\r\n                            <label for=\"codOrigemContato\">Dirección</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"direccion\" readonly />\r\n                        </div>\r\n                        <div class=\"form-group col-md-12\">\r\n                            <label for=\"codOrigemContato\">Seleccione en el mapa</label>\r\n\r\n                            <div class=\"embed-responsive embed-responsive-16by9\">\r\n                                <agm-map [latitude]=\"latitud\" [longitude]=\"longitud\" [zoom]=\"16\"\r\n                                    class=\"embed-responsive-item\" (mapClick)=\"actualizarMarcador($event)\">\r\n                                    <agm-marker [latitude]=\"latitud\" [longitude]=\"longitud\"\r\n                                        (markerDragEnd)=\"actualizarDireccion($event)\">\r\n                                    </agm-marker>\r\n                                </agm-map>\r\n                                <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </form>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-danger\" (click)=\"onClose()\">\r\n            Cancelar\r\n        </button>\r\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\r\n            Confirmar\r\n        </button>\r\n    </div>\r\n</div>\r\n");
+
+/***/ }),
+
 /***/ "bsvQ":
 /*!*************************************************************************************!*\
   !*** ./src/app/modules/comercial/clientes/pre-cadastro/pre-cadastro.component.scss ***!
@@ -2648,6 +2941,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! src/app/shared/services/requests/atividades.service */ "0PD5");
 /* harmony import */ var src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/app/shared/services/core/title.service */ "dNnS");
 /* harmony import */ var src_app_shared_services_core_functions_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! src/app/shared/services/core/functions.service */ "5oPb");
+/* harmony import */ var _ubicacion_contacto_ubicacion_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./ubicacion_contacto/ubicacion.service */ "JZwC");
 
 
 
@@ -2668,8 +2962,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroComponent {
-    constructor(preCadastroService, formBuilder, location, activatedRoute, router, clientesService, pnotifyService, cnpjService, atividadesService, titleService, functionsService, modalService) {
+    constructor(preCadastroService, formBuilder, location, activatedRoute, router, clientesService, pnotifyService, cnpjService, atividadesService, titleService, functionsService, modalService, ubicacionService, bsModalRef) {
         this.preCadastroService = preCadastroService;
         this.formBuilder = formBuilder;
         this.location = location;
@@ -2682,6 +2977,8 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
         this.titleService = titleService;
         this.functionsService = functionsService;
         this.modalService = modalService;
+        this.ubicacionService = ubicacionService;
+        this.bsModalRef = bsModalRef;
         this.modalConfig = {
             ignoreBackdropClick: true,
         };
@@ -2712,6 +3009,7 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
         this.maxLengthRules = {};
         this.maxLengthMessages = {};
         this.id_marcador = 0;
+        this.disabled_form = true;
         this.dadosCliente = {};
         this.ciudades = [];
         this.tipos_clientes = [];
@@ -2726,12 +3024,20 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
         this.telefono_contacto_array = '';
         this.celular_contacto_array = '';
         this.direccion_contacto_array = '';
+        this.latitud_contacto_array = 0;
+        this.longitud_contacto_array = 0;
+        this.direccion_mapa = '';
+        this.tipo_peticion = 0;
+        this.latitud_inicial = 0;
+        this.longitud_inicial = 0;
         this.ubicacionCollapse = false; // Inicialmente oculto
         this.contactoCollapse = false; // Inicialmente oculto
         this.ubicacionFormularios = [];
         this.contactoFormularios = [];
         this.formObjArray = [];
         this.ubicaciones = [];
+        this.indice = 0;
+        //bloquearSeleccion: boolean = true;
         this.ciudad_vendedor = 0;
         this.coloresDisponibles = [
             'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000',
@@ -2742,11 +3048,10 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
         ];
         this.pnotifyService.getPNotify();
     }
-    ;
-    ;
     ngOnInit() {
         this.titleService.setTitle('Pre-Registro');
         this.getFormFields();
+        //this.determinarBloqueo();
         this.obtenerTiposClientes();
         this.activatedRoute.queryParams.subscribe((queryParams) => {
             let documento = null;
@@ -2758,14 +3063,20 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
                 contactos: this.formBuilder.array([]),
             });
         });
+        this.disabled_form = true;
     }
+    /* determinarBloqueo() {
+      if (this.miFormulario.get('tipo_cliente').value === 0) {
+        this.bloquearSeleccion = this.true;
+      }
+    } */
     changeVendedor(a) {
         this.clientesService.getVendedorCiudad(a)
             .subscribe((response) => {
             if (response.responseCode === 200) {
                 // console.log(response.result.latitud);
-                this.latitud = response.result.latitud;
-                this.longitud = response.result.longitud;
+                this.latitud_inicial = response.result.latitud;
+                this.longitud_inicial = response.result.longitud;
                 this.ciudad_vendedor = response.result.id_ciudad;
                 // console.log(this.ciudad_vendedor);
             }
@@ -2795,54 +3106,58 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
       this.latitud = event.coords.lat;
       this.longitud = event.coords.lng;
     } */
-    actualizarMarcador(index, latitud, longitud) {
-        /* console.log(this.latitud); */
-        this.id_marcador = index;
-        //this.ubicacionFormularios[index].color = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00FF00';
-        // Actualizar solo la ubicación del marcador en la posición 'index'
-        this.ubicaciones[index].latitud = latitud;
-        this.ubicacionFormularios[index].latitud = latitud;
-        this.ubicaciones[index].longitud = longitud;
-        this.ubicacionFormularios[index].longitud = longitud;
-        //this.cambiarColorMarcador(index);
+    /*  actualizarMarcador(index: number, latitud, longitud): void {
+       /* console.log(this.latitud); */
+    /* this.id_marcador = index;
+    this.ubicacionFormularios[index].color = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00FF00';
+     Actualizar solo la ubicación del marcador en la posición 'index'
+    this.ubicaciones[index].latitud = latitud;
+    this.ubicacionFormularios[index].latitud = latitud;
+    this.ubicaciones[index].longitud = longitud
+    this.ubicacionFormularios[index].longitud = longitud;
+  
+  
+    this.cambiarColorMarcador(index);
+  } */
+    /* cambiarColorMarcador(i: number) {
+      this.ubicaciones[i].color = 'blue';
+    } */
+    /* actualizarMapa(event: any) {
+      //console.log(event);
+      this.latitud = event.coords.lat;
+      this.longitud = event.coords.lng;
+      this.actualizarMarcador(this.id_marcador, this.latitud, this.longitud);
+      this.actualizarDireccion(this.id_marcador, event);
     }
-    cambiarColorMarcador(i) {
-        this.ubicaciones[i].color = 'blue';
-    }
-    actualizarMapa(event) {
-        //console.log(event);
-        this.latitud = event.coords.lat;
-        this.longitud = event.coords.lng;
-        this.actualizarMarcador(this.id_marcador, this.latitud, this.longitud);
-        this.actualizarDireccion(this.id_marcador, event);
-    }
-    actualizarDireccion(index, event) {
-        this.obtenerDireccion(event.coords.lat, event.coords.lng)
-            .then((direccion_mapa) => {
-            this.ubicacionFormularios[index].direccion = direccion_mapa;
+  
+    actualizarDireccion(index, event: any) {
+      this.obtenerDireccion(event.coords.lat, event.coords.lng)
+        .then((direccion_mapa: string) => {
+          this.ubicacionFormularios[index].direccion = direccion_mapa;
         })
-            .catch((error) => {
-            /*  this.form.controls['direccion'].setValue(
-                'Error al obtener la dirección'
-             ); */
-        });
-    }
-    obtenerDireccion(latitud, longitud) {
-        return fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitud},${longitud}&key=AIzaSyDl5b7STz9xYNDhybTTer2POVncX9FYqCc`)
-            .then((response) => response.json())
-            .then((data) => {
-            const resultado = data.results[0];
-            if (resultado) {
-                return resultado.formatted_address;
-            }
-            else {
-                return 'Dirección no encontrada';
-            }
+        .catch((error: any) => {
+          /*  this.form.controls['direccion'].setValue(
+              'Error al obtener la dirección'
+           ); */
+    /*       });
+      } */
+    /* public obtenerDireccion(latitud: number, longitud: number): Promise<string> {
+      return fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitud},${longitud}&key=AIzaSyDl5b7STz9xYNDhybTTer2POVncX9FYqCc`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const resultado = data.results[0];
+          if (resultado) {
+            return resultado.formatted_address;
+          } else {
+            return 'Dirección no encontrada';
+          }
         })
-            .catch((error) => {
-            return 'Error al obtener la dirección';
+        .catch((error) => {
+          return 'Error al obtener la dirección';
         });
-    }
+    } */
     registrarAcesso() {
         this.atividadesService.registrarAcesso().subscribe();
     }
@@ -2932,6 +3247,8 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
                 this.contactoFormularios[this.index_array_contactos].apellido2_contacto = this.apellido_m_contacto_array;
                 this.contactoFormularios[this.index_array_contactos].telefono_contacto = this.telefono_contacto_array;
                 this.contactoFormularios[this.index_array_contactos].direccion_contacto = this.direccion_contacto_array;
+                this.contactoFormularios[this.index_array_contactos].latitude_contacto = this.latitud_contacto_array;
+                this.contactoFormularios[this.index_array_contactos].longitude_contacto = this.longitud_contacto_array;
             }
             //console.log(this.contactoFormularios);
             this.formObj.get('contactos').push(nuevoFormulario);
@@ -2953,10 +3270,33 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
             ubicacion: '',
             direccion: '',
             id_ciudad: this.ciudad_vendedor,
-            latitud: '',
-            longitud: '',
+            latitud: 0,
+            longitud: 0,
             swActivarLatitud: this.swActivarLatitud
         };
+    }
+    openModalUbicacion(template, index, tipo) {
+        this.indice = index;
+        if (tipo === 1) {
+            this.tipo_peticion = tipo;
+            this.latitud = this.contactoFormularios[index].latitude_contacto;
+            this.longitud = this.contactoFormularios[index].longitude_contacto;
+        }
+        else if (tipo === 2) {
+            this.tipo_peticion = tipo;
+            this.latitud = this.ubicacionFormularios[index].latitud;
+            this.longitud = this.ubicacionFormularios[index].longitud;
+        }
+        //console.log(this.latitud);
+        this.modalRef = this.modalService.show(template, {
+            animated: false,
+            class: 'modal-md',
+        });
+        //this.ubicacionService.showModal();
+    }
+    onFecharModal(event) {
+        //console.log(this.modalRef);
+        this.modalRef.hide();
     }
     crearFormularioContactoConDatosIngresados() {
         return {
@@ -2967,7 +3307,28 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
             telefono_contacto: '',
             celular_contacto: '',
             direccion_contacto: '',
+            latitude_contacto: 0,
+            longitude_contacto: 0,
         };
+    }
+    changeLatitudLongitud(event) {
+        //console.log(event.tipo)
+        if (event.tipo === 1) {
+            this.latitud_contacto_array = event.latitud;
+            this.longitud_contacto_array = event.longitud;
+            this.direccion_contacto_array = event.direccion;
+            this.contactoFormularios[event.index].latitude_contacto = this.latitud_contacto_array;
+            this.contactoFormularios[event.index].longitude_contacto = this.longitud_contacto_array;
+            this.contactoFormularios[event.index].direccion_contacto = this.direccion_contacto_array;
+        }
+        else if (event.tipo === 2) {
+            this.latitud = event.latitud;
+            this.longitud = event.longitud;
+            this.direccion_mapa = event.direccion;
+            this.ubicacionFormularios[event.index].latitud = this.latitud;
+            this.ubicacionFormularios[event.index].longitud = this.longitud;
+            this.ubicacionFormularios[event.index].direccion = this.direccion_mapa;
+        }
     }
     setFormBuilder(documento) {
         this.form = this.formBuilder.group({
@@ -3007,7 +3368,7 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
             ubicacion: this.formBuilder.array([]),
             contactos: this.formBuilder.array([]),
             nombre_ciudad: [],
-            tipo_cliente: []
+            tipo_cliente: [0]
         });
         this.form.get('tipopessoa').valueChanges.subscribe((value) => {
             if (value === 'P' || value === 'G' || value === 'E') {
@@ -3066,7 +3427,7 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
                 celular: this.form.value.celular,
                 ubicacion: data.ubicacion,
                 contactos: data.contactos,
-                id_tipo_cliente: this.form.value.tipo_cliente
+                id_tipo_cliente: 0
             }; /* console.log('Datos antes de enviarlos:', formObj);*/
             this.clientesService
                 .sapPostClient(formObj)
@@ -3151,14 +3512,19 @@ let ComercialClientesPreCadastroComponent = class ComercialClientesPreCadastroCo
             return 'is-required ';
         }
     }
-    showDetails() {
-        this.modalRef = this.modalService.show(this.modalDetalhesCliente, this.modalConfig);
+    /* showDetails(): void {
+      this.modalRef = this.modalService.show(
+        this.modalDetalhesCliente,
+        this.modalConfig
+      );
     }
-    onCloseDetails() {
-        this.modalRef.hide();
-    }
+  
+    onCloseDetails(): void {
+      this.modalRef.hide();
+    } */
     onNavigateDetail() {
         if (this.dadosCliente.podeAcessar == 1) {
+            // @ts-ignore: Ignorar error TS2339
             this.onCloseDetails();
             this.router.navigate(['../detalhes', this.dadosCliente.codCliente], {
                 relativeTo: this.activatedRoute,
@@ -3249,7 +3615,9 @@ ComercialClientesPreCadastroComponent.ctorParameters = () => [
     { type: src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_14__["AtividadesService"] },
     { type: src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_15__["TitleService"] },
     { type: src_app_shared_services_core_functions_service__WEBPACK_IMPORTED_MODULE_16__["FunctionsService"] },
-    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalService"] }
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalService"] },
+    { type: _ubicacion_contacto_ubicacion_service__WEBPACK_IMPORTED_MODULE_17__["PreCadastroUbicacionContactosService"] },
+    { type: ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalRef"] }
 ];
 ComercialClientesPreCadastroComponent.propDecorators = {
     modalDetalhesCliente: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"], args: ['modalDetalhesCliente', {},] }]
@@ -3271,7 +3639,9 @@ ComercialClientesPreCadastroComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0_
         src_app_shared_services_requests_atividades_service__WEBPACK_IMPORTED_MODULE_14__["AtividadesService"],
         src_app_shared_services_core_title_service__WEBPACK_IMPORTED_MODULE_15__["TitleService"],
         src_app_shared_services_core_functions_service__WEBPACK_IMPORTED_MODULE_16__["FunctionsService"],
-        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalService"]])
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalService"],
+        _ubicacion_contacto_ubicacion_service__WEBPACK_IMPORTED_MODULE_17__["PreCadastroUbicacionContactosService"],
+        ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_8__["BsModalRef"]])
 ], ComercialClientesPreCadastroComponent);
 
 
@@ -4011,7 +4381,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content custom-modal\">\r\n    <div class=\"modal-header\">\r\n        <h6 class=\"modal-title pull-left\">Editar datos de cliente </h6>\r\n        <div class=\"d-flex justify-content-center align-items-center\">\r\n            <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"onClose()\">\r\n                <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <div class=\"col-md-12\">\r\n            <div class=\"form row\">\r\n                <div class=\"col-md-12\">\r\n                    <div class=\"col mb-0\">\r\n                        <label for=\"\"> <strong> DATOS DE CLIENTE </strong> </label>\r\n                    </div>\r\n                    <div class=\"form-group col-md-12\">\r\n                        <form [formGroup]=\"form\">\r\n                            <div class=\"card\">\r\n                                <div class=\"card-body\">\r\n                                    <div class=\"row\">\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0\"> <strong> Codigo cliente </strong></label>\r\n\r\n                                            <input type=\"text\" class=\"form-control\" formControlName=\"codigo_cliente\"\r\n                                                value=\"{{datos_cliente.datos_cliente.codigo_cliente }}\"\r\n                                                id=\"codigo_cliente\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0\"> <strong> CI </strong></label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.carnet }}\" formControlName=\"carnet\"\r\n                                                id=\"carnet\">\r\n                                            <input type=\"hidden\" value=\"{{ datos_cliente.datos_cliente.id_cliente }}\"\r\n                                                id=\"id_cliente\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0\"> <strong> NIT </strong></label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.nit }}\" formControlName=\"nit\"\r\n                                                id=\"nit\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Nombre completo </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.nombre }}\" formControlName=\"nombre\"\r\n                                                id=\"nombre\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Nombre factura </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.nombre_factura  }}\"\r\n                                                formControlName=\"nombre_factura\" id=\"nombre_factura\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Tipo persona </strong> </label>\r\n                                            <select name=\"\" id=\"id_tipo_persona\" class=\"form-control\"\r\n                                                >\r\n                                                <option *ngFor=\"let tipo of tipos_personas | keyvalue\"\r\n                                                    [value]=\"tipo.key\"\r\n                                                    [selected]=\"tipo.key === datos_cliente.datos_cliente.id_tipo_persona\">\r\n                                                    {{ tipo.value }}\r\n                                                </option>\r\n\r\n                                            </select>\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Email </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.email }}\" formControlName=\"email\"\r\n                                                id=\"email\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong>Teléfono </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.telefono }}\"\r\n                                                formControlName=\"telefono\" id=\"telefono\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Celular </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.celular }}\"\r\n                                                formControlName=\"celular\" id=\"celular\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Rubro </strong> </label>\r\n                                            <select name=\"\" id=\"id_rubro\" class=\"form-control\">\r\n                                                <option *ngFor=\"let cnae of cnaes\" [value]=\"cnae.id_cnae\"\r\n                                                    [selected]=\"cnae.id_cnae === datos_cliente.datos_cliente.id_rubro\">\r\n                                                    {{ cnae.descripcion }}\r\n                                                </option>\r\n                                            </select>\r\n\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Tipo cliente </strong> </label>\r\n                                            <select name=\"vendedor\" class=\"form-control\" id=\"id_tipo_cliente\">\r\n                                                <option *ngFor=\"let tipo of tipos_clientes\" [value]=\"tipo.id\"\r\n                                                    [selected]=\"tipo.id === datos_cliente.datos_cliente.id_tipo_cliente\">\r\n                                                    {{ tipo.nombre_tipo }}\r\n                                                </option>\r\n                                            </select>\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Vendedor </strong> </label>\r\n                                            <select name=\"vendedor\" class=\"form-control\" id=\"id_vendedor\">\r\n                                                <option *ngFor=\"let vendedor of vendedoresList\" [value]=\"vendedor.ID\"\r\n                                                    [selected]=\"vendedor.ID === datos_cliente.datos_cliente.id_vendedor\">\r\n                                                    {{ vendedor.nombre }}\r\n                                                </option>\r\n                                            </select>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </form>\r\n                    </div>\r\n                </div>\r\n                <div class=\"col-md-6\">\r\n                    <div class=\"col mb-0\">\r\n                        <label for=\"\"> <strong> DATOS DE CONTACTO </strong> </label>\r\n                    </div>\r\n                    <div style=\"max-height: 350px; overflow-y: auto;\">\r\n                        <div class=\"form-group col-md-12\"\r\n                            *ngFor=\"let contacto of datos_cliente.datos_contacto; let i = index\">\r\n                            <div class=\"card\">\r\n                                <div class=\"card-body\">\r\n                                    <label>Título</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Nombre</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.nombres_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Dirección</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.direccion_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Celular</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.celular_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Teléfono</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.telefono_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <button (click)=\"eliminarContacto(i)\"\r\n                                        class=\"btn btn-danger mt-2 text-center\">Eliminar</button>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group col-md-12 text-center\">\r\n                        <button (click)=\"agregarContacto()\" class=\"btn btn-primary\"\r\n                            [disabled]=\"datos_cliente.datos_contacto.length >= 5\">Agregar Contacto</button>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-md-6\">\r\n                    <div class=\"col mb-0\">\r\n                        <label for=\"\"> <strong> DATOS DE UBICACIÓN </strong> </label>\r\n                    </div>\r\n                    <div class=\"col-md-12 mb-3\">\r\n                        <div class=\"embed-responsive embed-responsive-16by9\">\r\n                            <agm-map [latitude]=\"latitudPromedio\" [longitude]=\"longitudPromedio\" [zoom]=\"16\"\r\n                                (mapClick)=\"actualizarMapa($event)\" class=\"embed-responsive-item\">\r\n                                <agm-marker *ngFor=\"let ubicacion of datos_cliente.datos_direccion; let i = index\"\r\n                                    [latitude]=\"ubicacion.latitud\" [longitude]=\"ubicacion.longitud\"\r\n                                    [iconUrl]=\"ubicacion.color\" (markerClick)=\"actualizarMarcador(i)\"\r\n                                    (markerDragEnd)=\"actualizarUbicacion(i, $event.coords.lat, $event.coords.lng)\">\r\n                                </agm-marker>\r\n                            </agm-map>\r\n                            <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                        </div>\r\n                    </div>\r\n                    <div style=\"max-height: 150px; overflow-y: auto;\">\r\n                        <div class=\"form-group col-md-12\"\r\n                            *ngFor=\"let direccion of datos_cliente.datos_direccion; let i = index\">\r\n                            <div class=\"card\">\r\n                                <div class=\"card-body\">\r\n                                    <label>Título</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"direccion.ubicacion\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Ciudad</label>\r\n                                    <div>\r\n                                        <select name=\"\" id=\"\" class=\"form-control\"\r\n                                            (change)=\"actualizarCiudad(i, $event.target.value)\">\r\n                                            <option value=\"\"> SELECCIONAR...</option>\r\n                                            <option *ngFor=\"let ciudad of ciudades\" [value]=\"ciudad.id\"\r\n                                                [selected]=\"ciudad.id === direccion.id_ciudad\">\r\n                                                {{ ciudad.nombre_ciudad }}\r\n                                            </option>\r\n\r\n                                        </select>\r\n                                    </div>\r\n                                    <label>Dirección</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"direccion.direccion\" class=\"form-control\">\r\n                                    </div>\r\n                                    <button (click)=\"eliminarUbicacion(i)\"\r\n                                        class=\"btn btn-danger mt-2 text-center\">Eliminar</button>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group col-md-12 text-center\">\r\n                        <button (click)=\"agregarUbicacion()\" class=\"btn btn-primary\"\r\n                            [disabled]=\"datos_cliente.datos_direccion.length >= 5\">Agregar Ubicación</button>\r\n                    </div>\r\n                </div>\r\n\r\n\r\n\r\n            </div>\r\n        </div>\r\n\r\n    </div>\r\n    <div class=\"col-md-12\">\r\n        <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"onClose()\">\r\n                Cancelar\r\n            </button>\r\n            <button type=\"submit\" class=\"btn btn-success\" (click)=\"actualizarCliente()\">\r\n                Guardar\r\n            </button>\r\n        </div>\r\n    </div>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"modal-content custom-modal\">\r\n    <div class=\"modal-header\">\r\n        <h6 class=\"modal-title pull-left\">Editar datos de cliente </h6>\r\n        <div class=\"d-flex justify-content-center align-items-center\">\r\n            <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"onClose()\">\r\n                <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-body\">\r\n        <div class=\"col-md-12\">\r\n            <div class=\"form row\">\r\n                <div class=\"col-md-12\">\r\n                    <div class=\"col mb-0\">\r\n                        <label for=\"\"> <strong> DATOS DE CLIENTE </strong> </label>\r\n                    </div>\r\n                    <div class=\"form-group col-md-12\">\r\n                        <form [formGroup]=\"form\">\r\n                            <div class=\"card\">\r\n                                <div class=\"card-body\">\r\n                                    <div class=\"row\">\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0\"> <strong> Codigo cliente </strong></label>\r\n\r\n                                            <input type=\"text\" class=\"form-control\" formControlName=\"codigo_cliente\"\r\n                                                value=\"{{datos_cliente.datos_cliente.codigo_cliente }}\"\r\n                                                id=\"codigo_cliente\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0\"> <strong> CI </strong></label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.carnet }}\" formControlName=\"carnet\"\r\n                                                id=\"carnet\">\r\n                                            <input type=\"hidden\" value=\"{{ datos_cliente.datos_cliente.id_cliente }}\"\r\n                                                id=\"id_cliente\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0\"> <strong> NIT </strong></label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.nit }}\" formControlName=\"nit\"\r\n                                                id=\"nit\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Nombre completo </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.nombre }}\" formControlName=\"nombre\"\r\n                                                id=\"nombre\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Nombre factura </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.nombre_factura  }}\"\r\n                                                formControlName=\"nombre_factura\" id=\"nombre_factura\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Tipo persona </strong> </label>\r\n                                            <select name=\"\" id=\"id_tipo_persona\" class=\"form-control\">\r\n                                                <option *ngFor=\"let tipo of tipos_personas | keyvalue\"\r\n                                                    [value]=\"tipo.key\"\r\n                                                    [selected]=\"tipo.key === datos_cliente.datos_cliente.id_tipo_persona\">\r\n                                                    {{ tipo.value }}\r\n                                                </option>\r\n                                            </select>\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Email </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.email }}\" formControlName=\"email\"\r\n                                                id=\"email\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong>Teléfono </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.telefono }}\"\r\n                                                formControlName=\"telefono\" id=\"telefono\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Celular </strong> </label>\r\n                                            <input type=\"text\" class=\"form-control\"\r\n                                                value=\"{{datos_cliente.datos_cliente.celular }}\"\r\n                                                formControlName=\"celular\" id=\"celular\">\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Rubro </strong> </label>\r\n                                            <select name=\"\" id=\"id_rubro\" class=\"form-control\">\r\n                                                <option *ngFor=\"let cnae of cnaes\" [value]=\"cnae.id_cnae\"\r\n                                                    [selected]=\"cnae.id_cnae === datos_cliente.datos_cliente.id_rubro\">\r\n                                                    {{ cnae.descripcion }}\r\n                                                </option>\r\n                                            </select>\r\n\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Tipo cliente </strong> </label>\r\n                                            <select name=\"vendedor\" class=\"form-control\" id=\"id_tipo_cliente\">\r\n                                                <option *ngFor=\"let tipo of tipos_clientes\" [value]=\"tipo.id\"\r\n                                                    [selected]=\"tipo.id === datos_cliente.datos_cliente.id_tipo_cliente\">\r\n                                                    {{ tipo.nombre_tipo }}\r\n                                                </option>\r\n                                            </select>\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"mb-0 mt-2\"> <strong> Vendedor </strong> </label>\r\n                                            <select name=\"vendedor\" class=\"form-control\" id=\"id_vendedor\">\r\n                                                <option *ngFor=\"let vendedor of vendedoresList\" [value]=\"vendedor.ID\"\r\n                                                    [selected]=\"vendedor.ID === datos_cliente.datos_cliente.id_vendedor\">\r\n                                                    {{ vendedor.nombre }}\r\n                                                </option>\r\n                                            </select>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </form>\r\n                    </div>\r\n                </div>\r\n                <div class=\"col-md-6\">\r\n                    <div class=\"col mb-0\">\r\n                        <label for=\"\"> <strong> DATOS DE CONTACTO </strong> </label>\r\n                    </div>\r\n                    <div class=\"col-md-12 mb-3\">\r\n                        <div class=\"embed-responsive embed-responsive-16by9\">\r\n                            <agm-map [latitude]=\"latitudPromedioContacto\" [longitude]=\"longitudPromedioContacto\" [zoom]=\"16\"\r\n                                (mapClick)=\"actualizarMapaContacto($event)\" class=\"embed-responsive-item\">\r\n                                <agm-marker *ngFor=\"let ubicacion of datos_cliente.datos_contacto; let i = index\"\r\n                                    [latitude]=\"ubicacion.latitude_contacto\" [longitude]=\"ubicacion.longitude_contacto\"\r\n                                    [iconUrl]=\"ubicacion.color\" (markerClick)=\"actualizarMarcadorContacto(i)\"\r\n                                    (markerDragEnd)=\"actualizarUbicacion(i, $event.coords.lat, $event.coords.lng)\">\r\n                                </agm-marker>\r\n                            </agm-map>\r\n                            <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                        </div>\r\n                    </div>\r\n                    <div style=\"max-height: 350px; overflow-y: auto;\">\r\n                        <div class=\"form-group col-md-12\"\r\n                            *ngFor=\"let contacto of datos_cliente.datos_contacto; let i = index\">\r\n                            <div class=\"card\">\r\n                                <div class=\"card-body\">\r\n                                    <label>Título</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Nombre</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.nombres_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Dirección</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.direccion_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Celular</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.celular_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Teléfono</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"contacto.telefono_contacto\" class=\"form-control\">\r\n                                    </div>\r\n                                    <button (click)=\"eliminarContacto(i)\"\r\n                                        class=\"btn btn-danger mt-2 text-center\">Eliminar</button>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group col-md-12 text-center\">\r\n                        <button (click)=\"agregarContacto()\" class=\"btn btn-primary\"\r\n                            [disabled]=\"datos_cliente.datos_contacto.length >= 5\">Agregar Contacto</button>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-md-6\">\r\n                    <div class=\"col mb-0\">\r\n                        <label for=\"\"> <strong> DATOS DE UBICACIÓN </strong> </label>\r\n                    </div>\r\n                    <div class=\"col-md-12 mb-3\">\r\n                        <div class=\"embed-responsive embed-responsive-16by9\">\r\n                            <agm-map [latitude]=\"latitudPromedio\" [longitude]=\"longitudPromedio\" [zoom]=\"16\"\r\n                                (mapClick)=\"actualizarMapa($event)\" class=\"embed-responsive-item\">\r\n                                <agm-marker *ngFor=\"let ubicacion of datos_cliente.datos_direccion; let i = index\"\r\n                                    [latitude]=\"ubicacion.latitud\" [longitude]=\"ubicacion.longitud\"\r\n                                    [iconUrl]=\"ubicacion.color\" (markerClick)=\"actualizarMarcador(i)\"\r\n                                    (markerDragEnd)=\"actualizarUbicacion(i, $event.coords.lat, $event.coords.lng)\">\r\n                                </agm-marker>\r\n                            </agm-map>\r\n                            <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                        </div>\r\n                    </div>\r\n                    <div style=\"max-height: 150px; overflow-y: auto;\">\r\n                        <div class=\"form-group col-md-12\"\r\n                            *ngFor=\"let direccion of datos_cliente.datos_direccion; let i = index\">\r\n                            <div class=\"card\">\r\n                                <div class=\"card-body\">\r\n                                    <label>Título</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"direccion.ubicacion\" class=\"form-control\">\r\n                                    </div>\r\n                                    <label>Ciudad</label>\r\n                                    <div>\r\n                                        <select name=\"\" id=\"\" class=\"form-control\"\r\n                                            (change)=\"actualizarCiudad(i, $event.target.value)\">\r\n                                            <option value=\"\"> SELECCIONAR...</option>\r\n                                            <option *ngFor=\"let ciudad of ciudades\" [value]=\"ciudad.id\"\r\n                                                [selected]=\"ciudad.id === direccion.id_ciudad\">\r\n                                                {{ ciudad.nombre_ciudad }}\r\n                                            </option>\r\n\r\n                                        </select>\r\n                                    </div>\r\n                                    <label>Dirección</label>\r\n                                    <div>\r\n                                        <input [(ngModel)]=\"direccion.direccion\" class=\"form-control\">\r\n                                    </div>\r\n                                    <button (click)=\"eliminarUbicacion(i)\"\r\n                                        class=\"btn btn-danger mt-2 text-center\">Eliminar</button>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group col-md-12 text-center\">\r\n                        <button (click)=\"agregarUbicacion()\" class=\"btn btn-primary\"\r\n                            [disabled]=\"datos_cliente.datos_direccion.length >= 5\">Agregar Ubicación</button>\r\n                    </div>\r\n                </div>\r\n\r\n\r\n\r\n            </div>\r\n        </div>\r\n\r\n    </div>\r\n    <div class=\"col-md-12\">\r\n        <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"onClose()\">\r\n                Cancelar\r\n            </button>\r\n            <button type=\"submit\" class=\"btn btn-success\" (click)=\"actualizarCliente()\">\r\n                Guardar\r\n            </button>\r\n        </div>\r\n    </div>\r\n</div>");
 
 /***/ }),
 
@@ -4076,7 +4446,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Busqueda de clientes\">\r\n  <button type=\"button\" [routerLink]=\"['../pre-cadastro']\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\">Filtrar</button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row justify-content-center mb-2\">\r\n    <div class=\"col-lg-6\">\r\n      <ul class=\"list-unstyled mb-0 d-flex justify-content-around\">\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Ativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Activos</h6>\r\n          <div class=\"text-success\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"ativos\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoAtivos = $event\">\r\n                {{ handleCounter(countoAtivos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Inativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Inactivos</h6>\r\n          <div class=\"text-danger\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"inativos\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoInativos = $event\">\r\n                {{ handleCounter(countoInativos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Potenci')\">\r\n          <h6 class=\"text-muted font-weight-light\">Potencial</h6>\r\n          <div class=\"text-primary\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"potencial\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoPotencial = $event\">\r\n                {{ handleCounter(countoPotencial) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Arquivo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Archivados</h6>\r\n          <div class=\"text-secondary\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"arquivados\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoArquivados = $event\">\r\n                {{ handleCounter(countoArquivados) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n  <advanced-filter>\r\n    <form [formGroup]=\"formFilter\">\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"buscarPor\">Buscar por</label>\r\n          <select class=\"form-control custom-select\" id=\"buscarPor\" formControlName=\"buscarPor\">\r\n            <option value=\"1\">Código, nombre o razon social</option>\r\n            <option value=\"2\">C.I. o NIT</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"pesquisa\">Termino de busqueda</label>\r\n          <input type=\"text\" class=\"form-control\" formControlName=\"pesquisa\" (keydown.enter)=\"onFilter()\" />\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"situacao\">Situacion</label>\r\n          <select class=\"form-control custom-select\" id=\"situacao\" formControlName=\"situacao\">\r\n            <option value=\"Ativo\">Activos</option>\r\n            <option value=\"Inativo\">Inactivos</option>\r\n            <option value=\"Potenci\">Potenciales</option>\r\n            <option value=\"Arquivo\">Archivados</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"setorAtividade\">Sector empresarial</label>\r\n          <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"setorAtividades\" [virtualScroll]=\"true\"\r\n            labelForId=\"setorAtividade\" bindLabel=\"descricao\" bindValue=\"id\" formControlName=\"setorAtividade\">\r\n          </ng-select>\r\n        </div>\r\n      </div>\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"tipoPessoa\">Tipo de persona</label>\r\n          <select class=\"form-control custom-select\" id=\"tipoPessoa\" formControlName=\"tipoPessoa\">\r\n            <option value=\"F\">Persona física</option>\r\n            <option value=\"J\">Persona jurídica</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <!-- <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"grupoEconomico\">Esta en grupo economico</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"grupoEconomico\"\r\n            formControlName=\"grupoEconomico\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"segurado\">Asegurado</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"segurado\"\r\n            formControlName=\"segurado\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <!-- <div class=\"form-group col-lg-2 mb-lg-0\">\r\n          <label for=\"carteira\">Cartera</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"carteira\"\r\n            formControlName=\"carteira\">\r\n            <option value=\"S\" selected>Mi cartera</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <div class=\"form-group col-lg-1 mb-lg-0\">\r\n          <label for=\"registros\">Registros</label>\r\n          <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n            <option>10</option>\r\n            <option>25</option>\r\n            <option>50</option>\r\n            <option>100</option>\r\n            <option>200</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </advanced-filter>\r\n  <div class=\"row mt-3\" *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor != 2\r\n    \">\r\n    <div class=\"col-12\">\r\n      <empty-result message=\"No se encontraron clientes para esta búsqueda.\" class=\"py-4\"></empty-result>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-3\" *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor == 2\r\n    \">\r\n    <div class=\"col-7 d-flex justify-content-end w-100 pr-0\">\r\n      <empty-result message=\"No se encontraron clientes para esta búsqueda.\" class=\"py-4\"></empty-result>\r\n    </div>\r\n    <div class=\"col-5 d-flex w-100 pl-1\">\r\n      <a [routerLink]=\"['../pre-cadastro']\" [queryParams]=\"onPreCadastroCpfCnpj()\" class=\"my-auto\">\r\n        <strong>Pulse aquí para registrarse..</strong>\r\n      </a>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-4\" *ngIf=\"dataLoaded && clientes.length > 0\">\r\n    <div [ngClass]=\"{ 'col-12': !showDetailPanel, 'col-7 pr-0': showDetailPanel }\">\r\n      <custom-table [config]=\"tableConfig\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th scope=\"col\"></th>\r\n            <th scope=\"col\" class=\"text-center hover\" (click)=\"setOrderBy('codigo_cliente')\">\r\n              <thead-sorter value=\"Código Cliente\" [active]=\"orderBy == 'codigo_cliente'\"\r\n                [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"text-center hover\" (click)=\"setOrderBy('cpf')\">\r\n              <thead-sorter value=\"CI/NIT\" [active]=\"orderBy == 'cpf'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('nomeFantasia')\">\r\n              <thead-sorter value=\"Nombre y apelllido\" [active]=\"orderBy == 'nomeFantasia'\"\r\n                [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('razaoSocial')\" *ngIf=\"!showDetailPanel\">\r\n              <thead-sorter value=\"Razon Social\" [active]=\"orderBy == 'razaoSocial'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\"></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let cliente of clientes\" [class.table-active]=\"cliente.codigo_cliente == clienteSelecionado\">\r\n            <td class=\"text-center hover\" [ngClass]=\"classStatusBorder(cliente.situacao)\"\r\n              (click)=\"viewRegister(cliente)\">\r\n              <i class=\"text-black-50 far fa-check-square mr-3\" *ngIf=\"cliente.segurado == 0\"\r\n                tooltip=\"Cliente no asegurado\" placement=\"right\"></i>\r\n              <i class=\"text-warning fas fa-check-square mr-3\" *ngIf=\"cliente.segurado > 0\" tooltip=\"Cliente asegurado\"\r\n                placement=\"right\"></i>\r\n              <i class=\"text-black-50 far fa-folder-open\" *ngIf=\"cliente.grupoEconomico == 0\"\r\n                tooltip=\"No hace parte de grupo economico\" placement=\"right\"></i>\r\n              <i class=\"text-warning fas fa-folder-open\" *ngIf=\"cliente.grupoEconomico > 0\"\r\n                tooltip=\"Pertenece a un grupo economico\" placement=\"right\"></i>\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.codigo_cliente }}\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cpf)\">\r\n              {{ cliente.cpf }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.nomeFantasia | uppercase }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\" *ngIf=\"!showDetailPanel\">\r\n              {{ cliente.razaoSocial | uppercase }}\r\n            </td>\r\n            <td>\r\n              <span tooltip=\"Datos registrados\" placement=\"left\" container=\"body\">\r\n                <button type=\"button\" class=\"btn-icon-sm\" (click)=\"viewDetails(cliente)\">\r\n                  <i class=\"fas fa-user\"></i>\r\n                </button>\r\n              </span>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"clientes[0]['total'] > itemsPerPage\">\r\n        <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n          [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n          nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n        </pagination>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-5\" [hidden]=\"!showDetailPanel\">\r\n      <div class=\"sticky-top\">\r\n        <detail-panel>\r\n          <tabset>\r\n            <tab heading=\"Datos registrados\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"dadosCadastraisLoaded && !dadosCadastraisEmpty\">\r\n                  <div class=\"container\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Codigo Cliente </label>\r\n                        <input\r\n                          value=\"{{ dadosCadastrais.id_cliente == null ? 'NO INFORMADO' : dadosCadastrais.id_cliente }}\"\r\n                          class=\"form-control\" readonly>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Codigo Cliente SAP</label>\r\n                        <input\r\n                          value=\"{{ dadosCadastrais.codigo_cliente == '' ? 'NO INFORMADO' : dadosCadastrais.codigo_cliente }}\"\r\n                          class=\"form-control\" readonly>\r\n                      </div>\r\n\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>C.I.</label>\r\n                        <div>\r\n                          <div>\r\n                            <input value=\"{{ dadosCadastrais.carnet == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.carnet }}\" class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <!--  </div>\r\n                    <div class=\"form-row\"> -->\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Nombre</label>\r\n                        <div>\r\n                          <div>\r\n                            <input value=\"{{ dadosCadastrais.nombre == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.nombre }}\" class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Razon social</label>\r\n                        <div>\r\n                          <div>\r\n\r\n                            <input value=\"{{ dadosCadastrais.razon_social == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.razon_social }}\" class=\"form-control\" readonly>\r\n\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <!--  </div> -->\r\n                      <!-- <div class=\"form-row\"> -->\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Tipo Persona</label>\r\n                        <div>\r\n                          <input value=\"{{ getTipoPersonaLabel(dadosCadastrais.id_tipo_persona) }}\" class=\"form-control\"\r\n                            readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>NIT.</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.nit == null ? 'NO INFORMADO' :\r\n                          dadosCadastrais.nit }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <!--  </div> -->\r\n                      <!--  <div class=\"form-row\"> -->\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Celular</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.celular == null ? 'NO INFORMADO' :\r\n                          dadosCadastrais.celular }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Telefono</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.telefono == null ? 'NO INFORMADO' :\r\n                          dadosCadastrais.telefono }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label for=\"rubro\">Rubro</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.rubro || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Vendedor</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.vendedor || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Tipo cliente</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.tipo_cliente || 'NO INFORMADO' }}\" class=\"form-control\"\r\n                            readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"mb-3\" *ngIf=\"dadosCadastraisLoaded && dadosCadastraisEmpty\">\r\n                    <empty-result message=\"Nenhuma informação encontrada\"></empty-result>\r\n                    <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!dadosCadastraisLoaded\">\r\n                      <div class=\"spinner-border text-dark\"></div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"editingMode\">\r\n                  <div class=\"text-right mt-3\">\r\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"cancelEditing()\">Cancelar</button>\r\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveChanges()\">Guardar Cambios</button>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"!editingMode\">\r\n                  <div class=\"text-right mt-3\">\r\n                    <button type=\"button\" class=\"btn btn-light mb-2 text-center\"\r\n                      (click)=\"openModalEditar(editarCliente)\">Editar\r\n                      Cliente</button>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n            <tab heading=\"Contactos\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"contatosLoaded && !contatosEmpty\">\r\n                  <div *ngIf=\"contatos.lenght !==  0\">\r\n                    <div class=\"form-row\" *ngFor=\"let contato of contatos\">\r\n                      <!-- <div class=\"form-group col\" [ngClass]=\"{'hidden': contato.editing}\">\r\n                      <label>ID Contacto</label>\r\n                      <div>\r\n                        {{ contato.id_cont }}\r\n                      </div>\r\n                    </div> -->\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>título</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.contacto || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                          <!-- <div *ngIf=\"!editingContacto\">{{ contato.titulo }}</div>\r\n                        <div *ngIf=\"contato.editing\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>Nombre</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.nombres_contacto || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                          <!-- <div *ngIf=\"!editingContacto\">{{ contato.titulo }}</div>\r\n                        <div *ngIf=\"contato.editing\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <!-- <div class=\"form-group col\">\r\n                      <label>Tipo de Contacto</label>\r\n                      <div>\r\n                        <div *ngIf=\"!editingContacto\">{{ contato.ds_tipo_cont }} {{ contato.ds_cont_meio }}</div>\r\n                        <div *ngIf=\"contato.editing\">\r\n                          <input [(ngModel)]=\"contato.editedds_cont_meio\">\r\n                        </div>\r\n                      </div>\r\n                    </div> -->\r\n\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>Dirección</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.direccion_contacto || 'NO INFORMADO' }}\" class=\"form-control\"\r\n                            readonly>\r\n                          <!--  <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>Celular</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.celular_contacto || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                          <!--  <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4 mb-3\">\r\n                        <label>Teléfono</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.telefono_contacto || 'NO INFORMADO' }}\" class=\"form-control\"\r\n                            readonly>\r\n                          <!--  <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div> -->\r\n                        </div>\r\n                      </div>\r\n\r\n\r\n\r\n\r\n                      <!-- <div class=\"form-group col\">\r\n                      <label>Nombre</label>\r\n                      <div>\r\n                        <ng-container *ngIf=\"!editingContacto\">\r\n                          <div *ngIf=\"contato.ds_cont && contato.ds_cont.length > 1\" class=\"mr-1\">{{ contato.ds_cont }}\r\n                          </div>\r\n                        </ng-container>\r\n                        <ng-container *ngIf=\"contato.editing\">\r\n                          <input [(ngModel)]=\"contato.editedDsCont\">\r\n                        </ng-container>\r\n                      </div>\r\n                    </div> -->\r\n                      <!-- <button type=\"button\" class=\"btn btn-light\" (click)=\"editarContacto(contato)\"\r\n                      *ngIf=\"!contato.editing\">Editar Contacto</button>\r\n                    <div *ngIf=\"contato.editing\">\r\n                      <button type=\"button\" class=\"btn btn-secondary\"\r\n                        (click)=\"cancelEditingContact(contato)\">Cancelar</button>\r\n                      <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveEditedContact(contato)\">Guardar\r\n                        Cambios</button>\r\n                    </div> -->\r\n\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"contatosEmpty\">\r\n                  <label> <strong>Sin datos de contacto</strong></label>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n            <tab heading=\"Dirección\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"contatosLoaded && !direccionEmpty\">\r\n                  <div class=\"col-lg-12 mb-4\" *ngIf=\"direcciones.lenght !==  0\">\r\n                    \r\n                    <div class=\"embed-responsive embed-responsive-16by9\">\r\n                      <agm-map [latitude]=\"latitudPromedio\" [longitude]=\"longitudPromedio\" [zoom]=\"16\"\r\n                        class=\"embed-responsive-item\">\r\n                        <agm-marker *ngFor=\"let ubicacion of direcciones; let i = index\" [latitude]=\"ubicacion.latitud\"\r\n                          (markerClick)=\"verInformacion(i)\" [longitude]=\"ubicacion.longitud\">\r\n                        </agm-marker>\r\n                      </agm-map>\r\n                      <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                    </div>\r\n                    <div *ngIf=\"informacionMarcador\" class=\"info-box mt-3\">\r\n                      <h6>Información de la ubicación</h6>\r\n                      <p style=\"font-size: 13px;\"> <strong>Título: </strong> {{ informacionMarcador.nombre }}</p>\r\n                      <p style=\"font-size: 13px;\"> <strong>Dirección: </strong> {{ informacionMarcador.direccion }}</p>\r\n                    </div>\r\n                  </div>\r\n                  <div *ngIf=\"direcciones.lenght !==  0\">\r\n                    <div class=\"form-row\" *ngFor=\"let direccion of direcciones\">\r\n\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>título</label>\r\n                        <div>\r\n                          <input value=\"{{ direccion.ubicacion || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>dirección</label>\r\n                        <div>\r\n                          <input value=\"{{ direccion.direccion || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4 mb-3\">\r\n                        <label>ciudad</label>\r\n                        <div>\r\n                          <input value=\"{{ direccion.ciudad || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"direccionEmpty\">\r\n                  <label> <strong>Sin datos de dirección</strong></label>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n          </tabset>\r\n        </detail-panel>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <ng-template #editarCliente>\r\n    <editar-cliente (fecharModal)=\"onFecharModal($event)\" [datos_cliente]=\"cliente\" [vendedoresList]=\"vendedoresList\"\r\n      [cnaes]=\"cnaes\" [tipos_clientes]=\"tipos_clientes\" [ciudades]=\"ciudades\" [latitudPromedio]=\"latitudPromedio\"\r\n      [longitudPromedio]=\"longitudPromedio\" [tipos_personas] =\"tipos_personas\">\r\n    </editar-cliente>\r\n  </ng-template>\r\n\r\n\r\n</app-body>");
+/* harmony default export */ __webpack_exports__["default"] = ("<loader-spinner-navbar *ngIf=\"loaderNavbar\"></loader-spinner-navbar>\r\n<app-header appTitle=\"Busqueda de clientes\">\r\n  <button type=\"button\" [routerLink]=\"['../pre-cadastro']\">\r\n    Adicionar\r\n  </button>\r\n  <button type=\"button\" (click)=\"onFilter()\">Filtrar</button>\r\n</app-header>\r\n<app-body [breadCrumbTree]=\"breadCrumbTree\">\r\n  <div class=\"row justify-content-center mb-2\">\r\n    <div class=\"col-lg-6\">\r\n      <ul class=\"list-unstyled mb-0 d-flex justify-content-around\">\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Ativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Activos</h6>\r\n          <div class=\"text-success\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"ativos\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoAtivos = $event\">\r\n                {{ handleCounter(countoAtivos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Inativo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Inactivos</h6>\r\n          <div class=\"text-danger\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"inativos\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoInativos = $event\">\r\n                {{ handleCounter(countoInativos) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Potenci')\">\r\n          <h6 class=\"text-muted font-weight-light\">Potencial</h6>\r\n          <div class=\"text-primary\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"potencial\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoPotencial = $event\">\r\n                {{ handleCounter(countoPotencial) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n        <li class=\"text-center hover px-3\" (click)=\"filterByStatus('Arquivo')\">\r\n          <h6 class=\"text-muted font-weight-light\">Archivados</h6>\r\n          <div class=\"text-secondary\">\r\n            <h4>\r\n              <strong counto [step]=\"30\" [countTo]=\"arquivados\" [countFrom]=\"0\" [duration]=\"3\"\r\n                (countoChange)=\"countoArquivados = $event\">\r\n                {{ handleCounter(countoArquivados) }}\r\n              </strong>\r\n            </h4>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n  <advanced-filter>\r\n    <form [formGroup]=\"formFilter\">\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"buscarPor\">Buscar por</label>\r\n          <select class=\"form-control custom-select\" id=\"buscarPor\" formControlName=\"buscarPor\">\r\n            <option value=\"1\">Código, nombre o razon social</option>\r\n            <option value=\"2\">C.I. o NIT</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"pesquisa\">Termino de busqueda</label>\r\n          <input type=\"text\" class=\"form-control\" formControlName=\"pesquisa\" (keydown.enter)=\"onFilter()\" />\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"situacao\">Situacion</label>\r\n          <select class=\"form-control custom-select\" id=\"situacao\" formControlName=\"situacao\">\r\n            <option value=\"Ativo\">Activos</option>\r\n            <option value=\"Inativo\">Inactivos</option>\r\n            <option value=\"Potenci\">Potenciales</option>\r\n            <option value=\"Arquivo\">Archivados</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3\">\r\n          <label for=\"setorAtividade\">Sector empresarial</label>\r\n          <ng-select [searchable]=\"true\" [clearable]=\"false\" [items]=\"setorAtividades\" [virtualScroll]=\"true\"\r\n            labelForId=\"setorAtividade\" bindLabel=\"descricao\" bindValue=\"id\" formControlName=\"setorAtividade\">\r\n          </ng-select>\r\n        </div>\r\n      </div>\r\n      <div class=\"form-row\">\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"tipoPessoa\">Tipo de persona</label>\r\n          <select class=\"form-control custom-select\" id=\"tipoPessoa\" formControlName=\"tipoPessoa\">\r\n            <option value=\"F\">Persona física</option>\r\n            <option value=\"J\">Persona jurídica</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <!-- <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"grupoEconomico\">Esta en grupo economico</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"grupoEconomico\"\r\n            formControlName=\"grupoEconomico\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group col-lg-3 mb-lg-0\">\r\n          <label for=\"segurado\">Asegurado</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"segurado\"\r\n            formControlName=\"segurado\">\r\n            <option value=\"S\">Si</option>\r\n            <option value=\"N\">No</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <!-- <div class=\"form-group col-lg-2 mb-lg-0\">\r\n          <label for=\"carteira\">Cartera</label>\r\n          <select\r\n            class=\"form-control custom-select\"\r\n            id=\"carteira\"\r\n            formControlName=\"carteira\">\r\n            <option value=\"S\" selected>Mi cartera</option>\r\n            <option value=\"T\">Todos</option>\r\n          </select>\r\n        </div> -->\r\n        <div class=\"form-group col-lg-1 mb-lg-0\">\r\n          <label for=\"registros\">Registros</label>\r\n          <select class=\"form-control custom-select\" id=\"registros\" formControlName=\"registros\">\r\n            <option>10</option>\r\n            <option>25</option>\r\n            <option>50</option>\r\n            <option>100</option>\r\n            <option>200</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </advanced-filter>\r\n  <div class=\"row mt-3\" *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor != 2\r\n    \">\r\n    <div class=\"col-12\">\r\n      <empty-result message=\"No se encontraron clientes para esta búsqueda.\" class=\"py-4\"></empty-result>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-3\" *ngIf=\"\r\n      dataLoaded && searchSubmitted && clientes.length == 0 && buscandoPor == 2\r\n    \">\r\n    <div class=\"col-7 d-flex justify-content-end w-100 pr-0\">\r\n      <empty-result message=\"No se encontraron clientes para esta búsqueda.\" class=\"py-4\"></empty-result>\r\n    </div>\r\n    <div class=\"col-5 d-flex w-100 pl-1\">\r\n      <a [routerLink]=\"['../pre-cadastro']\" [queryParams]=\"onPreCadastroCpfCnpj()\" class=\"my-auto\">\r\n        <strong>Pulse aquí para registrarse..</strong>\r\n      </a>\r\n    </div>\r\n  </div>\r\n  <div class=\"row mt-4\" *ngIf=\"dataLoaded && clientes.length > 0\">\r\n    <div [ngClass]=\"{ 'col-12': !showDetailPanel, 'col-7 pr-0': showDetailPanel }\">\r\n      <custom-table [config]=\"tableConfig\">\r\n        <ng-template #thead let-thead>\r\n          <tr>\r\n            <th scope=\"col\"></th>\r\n            <th scope=\"col\" class=\"text-center hover\" (click)=\"setOrderBy('codigo_cliente')\">\r\n              <thead-sorter value=\"Código Cliente\" [active]=\"orderBy == 'codigo_cliente'\"\r\n                [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"text-center hover\" (click)=\"setOrderBy('cpf')\">\r\n              <thead-sorter value=\"CI/NIT\" [active]=\"orderBy == 'cpf'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('nomeFantasia')\">\r\n              <thead-sorter value=\"Nombre y apelllido\" [active]=\"orderBy == 'nomeFantasia'\"\r\n                [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\" class=\"hover\" (click)=\"setOrderBy('razaoSocial')\" *ngIf=\"!showDetailPanel\">\r\n              <thead-sorter value=\"Razon Social\" [active]=\"orderBy == 'razaoSocial'\" [sort]=\"orderType\"></thead-sorter>\r\n            </th>\r\n            <th scope=\"col\"></th>\r\n          </tr>\r\n        </ng-template>\r\n        <ng-template #tbody let-tbody>\r\n          <tr *ngFor=\"let cliente of clientes\" [class.table-active]=\"cliente.codigo_cliente == clienteSelecionado\">\r\n            <td class=\"text-center hover\" [ngClass]=\"classStatusBorder(cliente.situacao)\"\r\n              (click)=\"viewRegister(cliente)\">\r\n              <i class=\"text-black-50 far fa-check-square mr-3\" *ngIf=\"cliente.segurado == 0\"\r\n                tooltip=\"Cliente no asegurado\" placement=\"right\"></i>\r\n              <i class=\"text-warning fas fa-check-square mr-3\" *ngIf=\"cliente.segurado > 0\" tooltip=\"Cliente asegurado\"\r\n                placement=\"right\"></i>\r\n              <i class=\"text-black-50 far fa-folder-open\" *ngIf=\"cliente.grupoEconomico == 0\"\r\n                tooltip=\"No hace parte de grupo economico\" placement=\"right\"></i>\r\n              <i class=\"text-warning fas fa-folder-open\" *ngIf=\"cliente.grupoEconomico > 0\"\r\n                tooltip=\"Pertenece a un grupo economico\" placement=\"right\"></i>\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.codigo_cliente }}\r\n            </td>\r\n            <td class=\"text-center hover\" (click)=\"viewRegister(cpf)\">\r\n              {{ cliente.cpf }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\">\r\n              {{ cliente.nomeFantasia | uppercase }}\r\n            </td>\r\n            <td class=\"hover\" (click)=\"viewRegister(cliente)\" *ngIf=\"!showDetailPanel\">\r\n              {{ cliente.razaoSocial | uppercase }}\r\n            </td>\r\n            <td>\r\n              <span tooltip=\"Datos registrados\" placement=\"left\" container=\"body\">\r\n                <button type=\"button\" class=\"btn-icon-sm\" (click)=\"viewDetails(cliente)\">\r\n                  <i class=\"fas fa-user\"></i>\r\n                </button>\r\n              </span>\r\n            </td>\r\n          </tr>\r\n        </ng-template>\r\n      </custom-table>\r\n      <div class=\"d-flex justify-content-center mt-3\" *ngIf=\"clientes[0]['total'] > itemsPerPage\">\r\n        <pagination [maxSize]=\"maxSize\" [(totalItems)]=\"totalItems\" (pageChanged)=\"onPageChanged($event)\"\r\n          [(itemsPerPage)]=\"itemsPerPage\" [boundaryLinks]=\"true\" [(ngModel)]=\"currentPage\" previousText=\"&lsaquo;\"\r\n          nextText=\"&rsaquo;\" firstText=\"&laquo;\" lastText=\"&raquo;\">\r\n        </pagination>\r\n      </div>\r\n    </div>\r\n    <div class=\"col-5\" [hidden]=\"!showDetailPanel\">\r\n      <div class=\"sticky-top\">\r\n        <detail-panel>\r\n          <tabset>\r\n            <tab heading=\"Datos registrados\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"dadosCadastraisLoaded && !dadosCadastraisEmpty\">\r\n                  <div class=\"container\">\r\n                    <div class=\"form-row\">\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Codigo Cliente </label>\r\n                        <input\r\n                          value=\"{{ dadosCadastrais.id_cliente == null ? 'NO INFORMADO' : dadosCadastrais.id_cliente }}\"\r\n                          class=\"form-control\" readonly>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Codigo Cliente SAP</label>\r\n                        <input\r\n                          value=\"{{ dadosCadastrais.codigo_cliente == '' ? 'NO INFORMADO' : dadosCadastrais.codigo_cliente }}\"\r\n                          class=\"form-control\" readonly>\r\n                      </div>\r\n\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>C.I.</label>\r\n                        <div>\r\n                          <div>\r\n                            <input value=\"{{ dadosCadastrais.carnet == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.carnet }}\" class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <!--  </div>\r\n                    <div class=\"form-row\"> -->\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Nombre</label>\r\n                        <div>\r\n                          <div>\r\n                            <input value=\"{{ dadosCadastrais.nombre == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.nombre }}\" class=\"form-control\" readonly>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Razon social</label>\r\n                        <div>\r\n                          <div>\r\n\r\n                            <input value=\"{{ dadosCadastrais.razon_social == null ? 'NO INFORMADO' :\r\n                            dadosCadastrais.razon_social }}\" class=\"form-control\" readonly>\r\n\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <!--  </div> -->\r\n                      <!-- <div class=\"form-row\"> -->\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Tipo Persona</label>\r\n                        <div>\r\n                          <input value=\"{{ getTipoPersonaLabel(dadosCadastrais.id_tipo_persona) }}\" class=\"form-control\"\r\n                            readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>NIT.</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.nit == null ? 'NO INFORMADO' :\r\n                          dadosCadastrais.nit }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <!--  </div> -->\r\n                      <!--  <div class=\"form-row\"> -->\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Celular</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.celular == null ? 'NO INFORMADO' :\r\n                          dadosCadastrais.celular }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Telefono</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.telefono == null ? 'NO INFORMADO' :\r\n                          dadosCadastrais.telefono }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label for=\"rubro\">Rubro</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.rubro || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Vendedor</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.vendedor || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-6\">\r\n                        <label>Tipo cliente</label>\r\n                        <div>\r\n                          <input value=\"{{ dadosCadastrais.tipo_cliente || 'NO INFORMADO' }}\" class=\"form-control\"\r\n                            readonly>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                  <div class=\"mb-3\" *ngIf=\"dadosCadastraisLoaded && dadosCadastraisEmpty\">\r\n                    <empty-result message=\"Nenhuma informação encontrada\"></empty-result>\r\n                    <div class=\"d-flex justify-content-center mb-3\" *ngIf=\"!dadosCadastraisLoaded\">\r\n                      <div class=\"spinner-border text-dark\"></div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"editingMode\">\r\n                  <div class=\"text-right mt-3\">\r\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"cancelEditing()\">Cancelar</button>\r\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveChanges()\">Guardar Cambios</button>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"!editingMode\">\r\n                  <div class=\"text-right mt-3\">\r\n                    <button type=\"button\" class=\"btn btn-light mb-2 text-center\"\r\n                      (click)=\"openModalEditar(editarCliente)\">Editar\r\n                      Cliente</button>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n            <tab heading=\"Contactos\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div class=\"col-lg-12 mb-4\" *ngIf=\"contatos.lenght !==  0\">\r\n  \r\n                  <div class=\"embed-responsive embed-responsive-16by9\">\r\n                    <agm-map [latitude]=\"latitudPromedioContacto\" [longitude]=\"longitudPromedioContacto\" [zoom]=\"16\"\r\n                      class=\"embed-responsive-item\">\r\n                      <agm-marker *ngFor=\"let ubicacion of contatos; let i = index\" [latitude]=\"ubicacion.latitude_contacto\"\r\n                        (markerClick)=\"verInformacionContacto(i)\" [longitude]=\"ubicacion.longitude_contacto\">\r\n                      </agm-marker>\r\n                    </agm-map>\r\n                    <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                  </div>\r\n                  <div *ngIf=\"informacionMarcador\" class=\"info-box mt-3\">\r\n                    <h6>Información de la ubicación</h6>\r\n                    <p style=\"font-size: 13px;\"> <strong>Título: </strong> {{ informacionMarcador.nombre }}</p>\r\n                    <p style=\"font-size: 13px;\"> <strong>Dirección: </strong> {{ informacionMarcador.direccion }}</p>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"contatosLoaded && !contatosEmpty\">\r\n                  <div *ngIf=\"contatos.lenght !==  0\">\r\n                    <div class=\"form-row\" *ngFor=\"let contato of contatos\">\r\n                      <!-- <div class=\"form-group col\" [ngClass]=\"{'hidden': contato.editing}\">\r\n                      <label>ID Contacto</label>\r\n                      <div>\r\n                        {{ contato.id_cont }}\r\n                      </div>\r\n                    </div> -->\r\n\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>título</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.contacto || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                          <!-- <div *ngIf=\"!editingContacto\">{{ contato.titulo }}</div>\r\n                        <div *ngIf=\"contato.editing\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>Nombre</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.nombres_contacto || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                          <!-- <div *ngIf=\"!editingContacto\">{{ contato.titulo }}</div>\r\n                        <div *ngIf=\"contato.editing\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <!-- <div class=\"form-group col\">\r\n                      <label>Tipo de Contacto</label>\r\n                      <div>\r\n                        <div *ngIf=\"!editingContacto\">{{ contato.ds_tipo_cont }} {{ contato.ds_cont_meio }}</div>\r\n                        <div *ngIf=\"contato.editing\">\r\n                          <input [(ngModel)]=\"contato.editedds_cont_meio\">\r\n                        </div>\r\n                      </div>\r\n                    </div> -->\r\n\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>Dirección</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.direccion_contacto || 'NO INFORMADO' }}\" class=\"form-control\"\r\n                            readonly>\r\n                          <!--  <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>Celular</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.celular_contacto || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                          <!--  <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div> -->\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4 mb-3\">\r\n                        <label>Teléfono</label>\r\n                        <div>\r\n                          <input value=\"{{ contato.telefono_contacto || 'NO INFORMADO' }}\" class=\"form-control\"\r\n                            readonly>\r\n                          <!--  <div *ngIf=\"!editingContacto\">{{ contato.direccion }}</div>\r\n                        <div *ngIf=\"contato.editing\"><input [(ngModel)]=\"contato.editedDireccion\"></div> -->\r\n                        </div>\r\n                      </div>\r\n\r\n\r\n\r\n\r\n                      <!-- <div class=\"form-group col\">\r\n                      <label>Nombre</label>\r\n                      <div>\r\n                        <ng-container *ngIf=\"!editingContacto\">\r\n                          <div *ngIf=\"contato.ds_cont && contato.ds_cont.length > 1\" class=\"mr-1\">{{ contato.ds_cont }}\r\n                          </div>\r\n                        </ng-container>\r\n                        <ng-container *ngIf=\"contato.editing\">\r\n                          <input [(ngModel)]=\"contato.editedDsCont\">\r\n                        </ng-container>\r\n                      </div>\r\n                    </div> -->\r\n                      <!-- <button type=\"button\" class=\"btn btn-light\" (click)=\"editarContacto(contato)\"\r\n                      *ngIf=\"!contato.editing\">Editar Contacto</button>\r\n                    <div *ngIf=\"contato.editing\">\r\n                      <button type=\"button\" class=\"btn btn-secondary\"\r\n                        (click)=\"cancelEditingContact(contato)\">Cancelar</button>\r\n                      <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveEditedContact(contato)\">Guardar\r\n                        Cambios</button>\r\n                    </div> -->\r\n\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"contatosEmpty\">\r\n                  <label> <strong>Sin datos de contacto</strong></label>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n            <tab heading=\"Dirección\">\r\n              <div class=\"border-right border-left border-bottom px-3 pt-3\">\r\n                <div *ngIf=\"contatosLoaded && !direccionEmpty\">\r\n                  <div class=\"col-lg-12 mb-4\" *ngIf=\"direcciones.lenght !==  0\">\r\n\r\n                    <div class=\"embed-responsive embed-responsive-16by9\">\r\n                      <agm-map [latitude]=\"latitudPromedio\" [longitude]=\"longitudPromedio\" [zoom]=\"16\"\r\n                        class=\"embed-responsive-item\">\r\n                        <agm-marker *ngFor=\"let ubicacion of direcciones; let i = index\" [latitude]=\"ubicacion.latitud\"\r\n                          (markerClick)=\"verInformacion(i)\" [longitude]=\"ubicacion.longitud\">\r\n                        </agm-marker>\r\n                      </agm-map>\r\n                      <div id=\"map-zoom-control\" class=\"map-control\"></div>\r\n                    </div>\r\n                    <div *ngIf=\"informacionMarcador\" class=\"info-box mt-3\">\r\n                      <h6>Información de la ubicación</h6>\r\n                      <p style=\"font-size: 13px;\"> <strong>Título: </strong> {{ informacionMarcador.nombre }}</p>\r\n                      <p style=\"font-size: 13px;\"> <strong>Dirección: </strong> {{ informacionMarcador.direccion }}</p>\r\n                    </div>\r\n                  </div>\r\n                  <div *ngIf=\"direcciones.lenght !==  0\">\r\n                    <div class=\"form-row\" *ngFor=\"let direccion of direcciones\">\r\n\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>título</label>\r\n                        <div>\r\n                          <input value=\"{{ direccion.ubicacion || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4\">\r\n                        <label>dirección</label>\r\n                        <div>\r\n                          <input value=\"{{ direccion.direccion || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"form-group col-lg-4 mb-3\">\r\n                        <label>ciudad</label>\r\n                        <div>\r\n                          <input value=\"{{ direccion.ciudad || 'NO INFORMADO' }}\" class=\"form-control\" readonly>\r\n                        </div>\r\n                      </div>\r\n\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"direccionEmpty\">\r\n                  <label> <strong>Sin datos de dirección</strong></label>\r\n                </div>\r\n              </div>\r\n            </tab>\r\n          </tabset>\r\n        </detail-panel>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <ng-template #editarCliente>\r\n    <editar-cliente (fecharModal)=\"onFecharModal($event)\" [datos_cliente]=\"cliente\" [vendedoresList]=\"vendedoresList\"\r\n      [cnaes]=\"cnaes\" [tipos_clientes]=\"tipos_clientes\" [ciudades]=\"ciudades\" [latitudPromedio]=\"latitudPromedio\"\r\n      [longitudPromedio]=\"longitudPromedio\"   [latitudPromedioContacto]=\"latitudPromedioContacto\"\r\n      [longitudPromedioContacto]=\"longitudPromedioContacto\"  [tipos_personas]=\"tipos_personas\">\r\n    </editar-cliente>\r\n  </ng-template>\r\n\r\n\r\n</app-body>");
 
 /***/ }),
 
@@ -4188,6 +4558,7 @@ let ComercialClientesListaComponent = class ComercialClientesListaComponent {
         this.tipos_clientes = [];
         this.cliente = [];
         this.direcciones = [];
+        this.direcciones_contacto = [];
         this.editingMode = false;
         this.editedFields = {};
         this.vendedoresList = [];
@@ -4342,6 +4713,7 @@ let ComercialClientesListaComponent = class ComercialClientesListaComponent {
                     this.direccionEmpty = true;
                 }
                 this.contatos = response.result.datos_contacto;
+                this.calcularPromedioContacto(response.result.datos_contacto);
                 this.direcciones = response.result.datos_direccion;
                 this.editedFields.id_vendedor = this.dadosCadastrais.id_vendedor;
                 this.calcularPromedioUbicaciones(response.result.datos_direccion);
@@ -4379,6 +4751,20 @@ let ComercialClientesListaComponent = class ComercialClientesListaComponent {
             }
             this.latitudPromedio = sumLatitud / this.direcciones.length;
             this.longitudPromedio = sumLongitud / this.direcciones.length;
+        }
+    }
+    calcularPromedioContacto(contatos) {
+        //console.log(contatos);
+        let sumLatitud = 0;
+        let sumLongitud = 0;
+        if (contatos && contatos.length > 0) {
+            for (const ubicacion of contatos) {
+                sumLatitud += ubicacion.latitude_contacto;
+                sumLongitud += ubicacion.longitude_contacto;
+            }
+            console.log(sumLatitud);
+            this.latitudPromedioContacto = sumLatitud / this.contatos.length;
+            this.longitudPromedioContacto = sumLongitud / this.contatos.length;
         }
     }
     obtenerTiposClientes() {

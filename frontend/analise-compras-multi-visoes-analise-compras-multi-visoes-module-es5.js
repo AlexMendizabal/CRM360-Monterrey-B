@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -214,9 +210,9 @@
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_3__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_7___default.a);
 
-      var AbastecimentoMonitoresAnaliseComprasMultiVisoesModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresAnaliseComprasMultiVisoesModule() {
+      var AbastecimentoMonitoresAnaliseComprasMultiVisoesModule = function AbastecimentoMonitoresAnaliseComprasMultiVisoesModule() {
         _classCallCheck(this, AbastecimentoMonitoresAnaliseComprasMultiVisoesModule);
-      });
+      };
 
       AbastecimentoMonitoresAnaliseComprasMultiVisoesModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_analise_compras_multi_visoes_component__WEBPACK_IMPORTED_MODULE_12__["AbastecimentoMonitoresAnaliseComprasMultiVisoesComponent"], _visao_material_visao_material_component__WEBPACK_IMPORTED_MODULE_13__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoMaterialComponent"], _visao_classe_visao_classe_component__WEBPACK_IMPORTED_MODULE_14__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoClasseComponent"], _visao_sublinha_visao_sublinha_component__WEBPACK_IMPORTED_MODULE_15__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoSublinhaComponent"], _visao_linha_visao_linha_component__WEBPACK_IMPORTED_MODULE_16__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoLinhaComponent"], _visao_deposito_visao_deposito_component__WEBPACK_IMPORTED_MODULE_17__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoDepositoComponent"], _visao_empresa_visao_empresa_component__WEBPACK_IMPORTED_MODULE_18__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoEmpresaComponent"], _visao_tipo_material_visao_tipo_material_component__WEBPACK_IMPORTED_MODULE_19__["AbastecimentoMonitoresAnaliseComprasMultiVisoesVisaoTipoMaterialComponent"], _modal_visao_mensal_modal_visao_mensal_component__WEBPACK_IMPORTED_MODULE_20__["AbastecimentoMonitoresAnaliseComprasMultiVisoesModalVisaoMensalComponent"], _modal_alterar_agrupamento_modal_alterar_agrupamento_component__WEBPACK_IMPORTED_MODULE_21__["AbastecimentoMonitoresAnaliseComprasMultiVisoesModalAlterarAgrupamentoComponent"], _modal_favoritos_modal_favoritos_component__WEBPACK_IMPORTED_MODULE_22__["AbastecimentoMonitoresAnaliseComprasMultiVisoesModalFavoritosComponent"]],
@@ -298,9 +294,9 @@
         component: _analise_compras_multi_visoes_component__WEBPACK_IMPORTED_MODULE_3__["AbastecimentoMonitoresAnaliseComprasMultiVisoesComponent"]
       }];
 
-      var AbastecimentoMonitoresAnaliseComprasMultiVisoesRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresAnaliseComprasMultiVisoesRoutingModule() {
+      var AbastecimentoMonitoresAnaliseComprasMultiVisoesRoutingModule = function AbastecimentoMonitoresAnaliseComprasMultiVisoesRoutingModule() {
         _classCallCheck(this, AbastecimentoMonitoresAnaliseComprasMultiVisoesRoutingModule);
-      });
+      };
 
       AbastecimentoMonitoresAnaliseComprasMultiVisoesRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

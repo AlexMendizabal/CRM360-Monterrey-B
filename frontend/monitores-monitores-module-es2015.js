@@ -1675,7 +1675,7 @@ const routes = [
             },
             {
                 path: 'integracao-pedidos',
-                loadChildren: () => Promise.all(/*! import() | integracao-pedidos-integracao-pedidos-module */[__webpack_require__.e("common"), __webpack_require__.e("integracao-pedidos-integracao-pedidos-module")]).then(__webpack_require__.bind(null, /*! ./integracao-pedidos/integracao-pedidos.module */ "C9+X")).then(m => m.AbastecimentoMonitoresIntegracaoPedidosModule)
+                loadChildren: () => Promise.all(/*! import() | integracao-pedidos-integracao-pedidos-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("common"), __webpack_require__.e("integracao-pedidos-integracao-pedidos-module")]).then(__webpack_require__.bind(null, /*! ./integracao-pedidos/integracao-pedidos.module */ "C9+X")).then(m => m.AbastecimentoMonitoresIntegracaoPedidosModule)
             },
             {
                 path: 'nfe-sem-pedido-pai',

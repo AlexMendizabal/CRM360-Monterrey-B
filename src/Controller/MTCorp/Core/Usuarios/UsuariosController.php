@@ -137,6 +137,7 @@ class UsuariosController
             $senha                      = $data->senha              ?? null;
             $moduloId                   = $data->moduloId           ?? null;
             $situacao                   = $data->situacao           ?? null;
+            
 
             if(!empty($senha)){
                 $senha = password_hash($senha, PASSWORD_ARGON2I);
@@ -163,6 +164,7 @@ class UsuariosController
                     ,@DS_SENH			= :senha
                     ,@ID_MODU           = :moduloId
                     ,@IN_STAT           = :situacao
+                    
             SQL;
             
             $stmt = $connection->prepare($query);
@@ -185,6 +187,7 @@ class UsuariosController
             $stmt->bindValue(":senha",              $senha);
             $stmt->bindValue(":moduloId",           $moduloId);
             $stmt->bindValue(":situacao",           $situacao);
+            
 
             $stmt->execute();
 

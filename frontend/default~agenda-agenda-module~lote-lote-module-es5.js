@@ -1,23 +1,23 @@
 (function () {
-  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-  function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+  function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
   function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+  function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
   function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
-  function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+  function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
   function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
   function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
   function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
@@ -27,322 +27,159 @@
 
   function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-  function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+  function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
   function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~agenda-agenda-module~lote-lote-module"], {
     /***/
-    "C0Yq":
-    /*!********************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/utils/dates.js ***!
-      \********************************************************/
+    "1BeU":
+    /*!***********************************************************************!*\
+      !*** ./node_modules/angular-calendar/date-adapters/date-fns/index.js ***!
+      \***********************************************************************/
 
-    /*! exports provided: createDateFormatter, createDateParser, compareDates, compareTimes, isBetween, calculateSecondsSinceMidnight, parseSeconds, duration, getDefaultHours */
+    /*! no static exports found */
 
     /***/
-    function C0Yq(module, __webpack_exports__, __webpack_require__) {
+    function BeU(module, exports, __webpack_require__) {
       "use strict";
 
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "createDateFormatter", function () {
-        return createDateFormatter;
+      Object.defineProperty(exports, "__esModule", {
+        value: true
       });
-      /* harmony export (binding) */
 
+      var tslib_1 = __webpack_require__(
+      /*! tslib */
+      "UWrc");
 
-      __webpack_require__.d(__webpack_exports__, "createDateParser", function () {
-        return createDateParser;
-      });
-      /* harmony export (binding) */
+      var date_fns_1 = __webpack_require__(
+      /*! calendar-utils/date-adapters/date-fns */
+      "agoU");
 
-
-      __webpack_require__.d(__webpack_exports__, "compareDates", function () {
-        return compareDates;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "compareTimes", function () {
-        return compareTimes;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "isBetween", function () {
-        return isBetween;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "calculateSecondsSinceMidnight", function () {
-        return calculateSecondsSinceMidnight;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "parseSeconds", function () {
-        return parseSeconds;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "duration", function () {
-        return duration;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "getDefaultHours", function () {
-        return getDefaultHours;
-      });
-      /* harmony import */
-
-
-      var _formatting__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! ./formatting */
-      "gsBn");
-      /* harmony import */
-
-
-      var _types_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! ../types/options */
-      "nFBg");
-      /* harmony import */
-
-
-      var _l10n_default__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! ../l10n/default */
-      "TkX7");
-
-      var createDateFormatter = function createDateFormatter(_a) {
-        var _b = _a.config,
-            config = _b === void 0 ? _types_options__WEBPACK_IMPORTED_MODULE_1__["defaults"] : _b,
-            _c = _a.l10n,
-            l10n = _c === void 0 ? _l10n_default__WEBPACK_IMPORTED_MODULE_2__["english"] : _c,
-            _d = _a.isMobile,
-            isMobile = _d === void 0 ? false : _d;
-        return function (dateObj, frmt, overrideLocale) {
-          var locale = overrideLocale || l10n;
-
-          if (config.formatDate !== undefined && !isMobile) {
-            return config.formatDate(dateObj, frmt, locale);
-          }
-
-          return frmt.split("").map(function (c, i, arr) {
-            return _formatting__WEBPACK_IMPORTED_MODULE_0__["formats"][c] && arr[i - 1] !== "\\" ? _formatting__WEBPACK_IMPORTED_MODULE_0__["formats"][c](dateObj, locale, config) : c !== "\\" ? c : "";
-          }).join("");
-        };
-      };
-
-      var createDateParser = function createDateParser(_a) {
-        var _b = _a.config,
-            config = _b === void 0 ? _types_options__WEBPACK_IMPORTED_MODULE_1__["defaults"] : _b,
-            _c = _a.l10n,
-            l10n = _c === void 0 ? _l10n_default__WEBPACK_IMPORTED_MODULE_2__["english"] : _c;
-        return function (date, givenFormat, timeless, customLocale) {
-          if (date !== 0 && !date) return undefined;
-          var locale = customLocale || l10n;
-          var parsedDate;
-          var dateOrig = date;
-          if (date instanceof Date) parsedDate = new Date(date.getTime());else if (typeof date !== "string" && date.toFixed !== undefined) parsedDate = new Date(date);else if (typeof date === "string") {
-            var format = givenFormat || (config || _types_options__WEBPACK_IMPORTED_MODULE_1__["defaults"]).dateFormat;
-            var datestr = String(date).trim();
-
-            if (datestr === "today") {
-              parsedDate = new Date();
-              timeless = true;
-            } else if (config && config.parseDate) {
-              parsedDate = config.parseDate(date, format);
-            } else if (/Z$/.test(datestr) || /GMT$/.test(datestr)) {
-              parsedDate = new Date(date);
-            } else {
-              var matched = void 0,
-                  ops = [];
-
-              for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-                var token = format[i];
-                var isBackSlash = token === "\\";
-                var escaped = format[i - 1] === "\\" || isBackSlash;
-
-                if (_formatting__WEBPACK_IMPORTED_MODULE_0__["tokenRegex"][token] && !escaped) {
-                  regexStr += _formatting__WEBPACK_IMPORTED_MODULE_0__["tokenRegex"][token];
-                  var match = new RegExp(regexStr).exec(date);
-
-                  if (match && (matched = true)) {
-                    ops[token !== "Y" ? "push" : "unshift"]({
-                      fn: _formatting__WEBPACK_IMPORTED_MODULE_0__["revFormat"][token],
-                      val: match[++matchIndex]
-                    });
-                  }
-                } else if (!isBackSlash) regexStr += ".";
-              }
-
-              parsedDate = !config || !config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
-              ops.forEach(function (_a) {
-                var fn = _a.fn,
-                    val = _a.val;
-                return parsedDate = fn(parsedDate, val, locale) || parsedDate;
-              });
-              parsedDate = matched ? parsedDate : undefined;
-            }
-          }
-
-          if (!(parsedDate instanceof Date && !isNaN(parsedDate.getTime()))) {
-            config.errorHandler(new Error("Invalid date provided: " + dateOrig));
-            return undefined;
-          }
-
-          if (timeless === true) parsedDate.setHours(0, 0, 0, 0);
-          return parsedDate;
-        };
-      };
-
-      function compareDates(date1, date2, timeless) {
-        if (timeless === void 0) {
-          timeless = true;
-        }
-
-        if (timeless !== false) {
-          return new Date(date1.getTime()).setHours(0, 0, 0, 0) - new Date(date2.getTime()).setHours(0, 0, 0, 0);
-        }
-
-        return date1.getTime() - date2.getTime();
-      }
-
-      function compareTimes(date1, date2) {
-        return 3600 * (date1.getHours() - date2.getHours()) + 60 * (date1.getMinutes() - date2.getMinutes()) + date1.getSeconds() - date2.getSeconds();
-      }
-
-      var isBetween = function isBetween(ts, ts1, ts2) {
-        return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
-      };
-
-      var calculateSecondsSinceMidnight = function calculateSecondsSinceMidnight(hours, minutes, seconds) {
-        return hours * 3600 + minutes * 60 + seconds;
-      };
-
-      var parseSeconds = function parseSeconds(secondsSinceMidnight) {
-        var hours = Math.floor(secondsSinceMidnight / 3600),
-            minutes = (secondsSinceMidnight - hours * 3600) / 60;
-        return [hours, minutes, secondsSinceMidnight - hours * 3600 - minutes * 60];
-      };
-
-      var duration = {
-        DAY: 86400000
-      };
-
-      function getDefaultHours(config) {
-        var hours = config.defaultHour;
-        var minutes = config.defaultMinute;
-        var seconds = config.defaultSeconds;
-
-        if (config.minDate !== undefined) {
-          var minHour = config.minDate.getHours();
-          var minMinutes = config.minDate.getMinutes();
-          var minSeconds = config.minDate.getSeconds();
-
-          if (hours < minHour) {
-            hours = minHour;
-          }
-
-          if (hours === minHour && minutes < minMinutes) {
-            minutes = minMinutes;
-          }
-
-          if (hours === minHour && minutes === minMinutes && seconds < minSeconds) seconds = config.minDate.getSeconds();
-        }
-
-        if (config.maxDate !== undefined) {
-          var maxHr = config.maxDate.getHours();
-          var maxMinutes = config.maxDate.getMinutes();
-          hours = Math.min(hours, maxHr);
-          if (hours === maxHr) minutes = Math.min(maxMinutes, minutes);
-          if (hours === maxHr && minutes === maxMinutes) seconds = config.maxDate.getSeconds();
-        }
-
-        return {
-          hours: hours,
-          minutes: minutes,
-          seconds: seconds
-        };
-      }
-      /***/
-
-    },
-
-    /***/
-    "Ciwb":
-    /*!*************************************************************************!*\
-      !*** ./node_modules/calendar-utils/date-adapters/esm/date-fns/index.js ***!
-      \*************************************************************************/
-
-    /*! exports provided: adapterFactory */
-
-    /***/
-    function Ciwb(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "adapterFactory", function () {
-        return adapterFactory;
-      });
-      /* harmony import */
-
-
-      var date_fns__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      var date_fns_2 = __webpack_require__(
       /*! date-fns */
       "b/SL");
 
       function adapterFactory() {
-        return {
-          addDays: date_fns__WEBPACK_IMPORTED_MODULE_0__["addDays"],
-          addHours: date_fns__WEBPACK_IMPORTED_MODULE_0__["addHours"],
-          addMinutes: date_fns__WEBPACK_IMPORTED_MODULE_0__["addMinutes"],
-          addSeconds: date_fns__WEBPACK_IMPORTED_MODULE_0__["addSeconds"],
-          differenceInDays: date_fns__WEBPACK_IMPORTED_MODULE_0__["differenceInDays"],
-          differenceInMinutes: date_fns__WEBPACK_IMPORTED_MODULE_0__["differenceInMinutes"],
-          differenceInSeconds: date_fns__WEBPACK_IMPORTED_MODULE_0__["differenceInSeconds"],
-          endOfDay: date_fns__WEBPACK_IMPORTED_MODULE_0__["endOfDay"],
-          endOfMonth: date_fns__WEBPACK_IMPORTED_MODULE_0__["endOfMonth"],
-          endOfWeek: date_fns__WEBPACK_IMPORTED_MODULE_0__["endOfWeek"],
-          getDay: date_fns__WEBPACK_IMPORTED_MODULE_0__["getDay"],
-          getMonth: date_fns__WEBPACK_IMPORTED_MODULE_0__["getMonth"],
-          isSameDay: date_fns__WEBPACK_IMPORTED_MODULE_0__["isSameDay"],
-          isSameMonth: date_fns__WEBPACK_IMPORTED_MODULE_0__["isSameMonth"],
-          isSameSecond: date_fns__WEBPACK_IMPORTED_MODULE_0__["isSameSecond"],
-          max: date_fns__WEBPACK_IMPORTED_MODULE_0__["max"],
-          setHours: date_fns__WEBPACK_IMPORTED_MODULE_0__["setHours"],
-          setMinutes: date_fns__WEBPACK_IMPORTED_MODULE_0__["setMinutes"],
-          startOfDay: date_fns__WEBPACK_IMPORTED_MODULE_0__["startOfDay"],
-          startOfMinute: date_fns__WEBPACK_IMPORTED_MODULE_0__["startOfMinute"],
-          startOfMonth: date_fns__WEBPACK_IMPORTED_MODULE_0__["startOfMonth"],
-          startOfWeek: date_fns__WEBPACK_IMPORTED_MODULE_0__["startOfWeek"],
-          getHours: date_fns__WEBPACK_IMPORTED_MODULE_0__["getHours"],
-          getMinutes: date_fns__WEBPACK_IMPORTED_MODULE_0__["getMinutes"]
-        };
-      } //# sourceMappingURL=index.js.map
+        return tslib_1.__assign({}, date_fns_1.adapterFactory(), {
+          addWeeks: date_fns_2.addWeeks,
+          addMonths: date_fns_2.addMonths,
+          subDays: date_fns_2.subDays,
+          subWeeks: date_fns_2.subWeeks,
+          subMonths: date_fns_2.subMonths,
+          getISOWeek: date_fns_2.getISOWeek,
+          setDate: date_fns_2.setDate,
+          setMonth: date_fns_2.setMonth,
+          setYear: date_fns_2.setYear,
+          getDate: date_fns_2.getDate,
+          getYear: date_fns_2.getYear
+        });
+      }
+
+      exports.adapterFactory = adapterFactory; //# sourceMappingURL=index.js.map
 
       /***/
+    },
 
+    /***/
+    "6yRa":
+    /*!*****************************************************!*\
+      !*** ./node_modules/create-point-cb/dist/bundle.js ***!
+      \*****************************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function yRa(module, exports, __webpack_require__) {
+      "use strict";
+
+      var typeFunc = __webpack_require__(
+      /*! type-func */
+      "OJSY");
+
+      function createPointCB(object, options) {
+        // A persistent object (as opposed to returned object) is used to save memory
+        // This is good to prevent layout thrashing, or for games, and such
+        // NOTE
+        // This uses IE fixes which should be OK to remove some day. :)
+        // Some speed will be gained by removal of these.
+        // pointCB should be saved in a variable on return
+        // This allows the usage of element.removeEventListener
+        options = options || {};
+        var allowUpdate = typeFunc["boolean"](options.allowUpdate, true);
+        /*if(typeof options.allowUpdate === 'function'){
+            allowUpdate = options.allowUpdate;
+        }else{
+            allowUpdate = function(){return true;};
+        }*/
+
+        return function pointCB(event) {
+          event = event || window.event; // IE-ism
+
+          object.target = event.target || event.srcElement || event.originalTarget;
+          object.element = this;
+          object.type = event.type;
+
+          if (!allowUpdate(event)) {
+            return;
+          } // Support touch
+          // http://www.creativebloq.com/javascript/make-your-site-work-touch-devices-51411644
+
+
+          if (event.targetTouches) {
+            object.x = event.targetTouches[0].clientX;
+            object.y = event.targetTouches[0].clientY;
+            object.pageX = event.targetTouches[0].pageX;
+            object.pageY = event.targetTouches[0].pageY;
+            object.screenX = event.targetTouches[0].screenX;
+            object.screenY = event.targetTouches[0].screenY;
+          } else {
+            // If pageX/Y aren't available and clientX/Y are,
+            // calculate pageX/Y - logic taken from jQuery.
+            // (This is to support old IE)
+            // NOTE Hopefully this can be removed soon.
+            if (event.pageX === null && event.clientX !== null) {
+              var eventDoc = event.target && event.target.ownerDocument || document;
+              var doc = eventDoc.documentElement;
+              var body = eventDoc.body;
+              object.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+              object.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
+            } else {
+              object.pageX = event.pageX;
+              object.pageY = event.pageY;
+            } // pageX, and pageY change with page scroll
+            // so we're not going to use those for x, and y.
+            // NOTE Most browsers also alias clientX/Y with x/y
+            // so that's something to consider down the road.
+
+
+            object.x = event.clientX;
+            object.y = event.clientY;
+            object.screenX = event.screenX;
+            object.screenY = event.screenY;
+          }
+
+          object.clientX = object.x;
+          object.clientY = object.y;
+        }; //NOTE Remember accessibility, Aria roles, and labels.
+      }
+      /*
+      git remote add origin https://github.com/hollowdoor/create_point_cb.git
+      git push -u origin master
+      */
+
+
+      module.exports = createPointCB; //# sourceMappingURL=bundle.js.map
+
+      /***/
     },
 
     /***/
@@ -376,131 +213,195 @@
     },
 
     /***/
-    "L/mj":
-    /*!***************************************************************************!*\
-      !*** ./node_modules/angular-calendar/date-adapters/esm/date-fns/index.js ***!
-      \***************************************************************************/
+    "OJSY":
+    /*!***********************************************!*\
+      !*** ./node_modules/type-func/dist/bundle.js ***!
+      \***********************************************/
 
-    /*! exports provided: adapterFactory */
+    /*! no static exports found */
 
     /***/
-    function LMj(module, __webpack_exports__, __webpack_require__) {
+    function OJSY(module, exports, __webpack_require__) {
       "use strict";
 
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "adapterFactory", function () {
-        return adapterFactory;
-      });
-      /* harmony import */
-
-
-      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! tslib */
-      "b1EX");
-      /* harmony import */
-
-
-      var calendar_utils_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! calendar-utils/date-adapters/date-fns */
-      "Ciwb");
-      /* harmony import */
-
-
-      var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! date-fns */
-      "b/SL");
-
-      function adapterFactory() {
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, Object(calendar_utils_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_1__["adapterFactory"])()), {
-          addWeeks: date_fns__WEBPACK_IMPORTED_MODULE_2__["addWeeks"],
-          addMonths: date_fns__WEBPACK_IMPORTED_MODULE_2__["addMonths"],
-          subDays: date_fns__WEBPACK_IMPORTED_MODULE_2__["subDays"],
-          subWeeks: date_fns__WEBPACK_IMPORTED_MODULE_2__["subWeeks"],
-          subMonths: date_fns__WEBPACK_IMPORTED_MODULE_2__["subMonths"],
-          getISOWeek: date_fns__WEBPACK_IMPORTED_MODULE_2__["getISOWeek"],
-          setDate: date_fns__WEBPACK_IMPORTED_MODULE_2__["setDate"],
-          setMonth: date_fns__WEBPACK_IMPORTED_MODULE_2__["setMonth"],
-          setYear: date_fns__WEBPACK_IMPORTED_MODULE_2__["setYear"],
-          getDate: date_fns__WEBPACK_IMPORTED_MODULE_2__["getDate"],
-          getYear: date_fns__WEBPACK_IMPORTED_MODULE_2__["getYear"]
-        });
-      } //# sourceMappingURL=index.js.map
-
-      /***/
-
-    },
-
-    /***/
-    "N3r0":
-    /*!********************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/utils/index.js ***!
-      \********************************************************/
-
-    /*! exports provided: pad, int, debounce, arrayify */
-
-    /***/
-    function N3r0(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "pad", function () {
-        return pad;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "int", function () {
-        return _int;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "debounce", function () {
-        return debounce;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "arrayify", function () {
-        return arrayify;
+      Object.defineProperty(exports, '__esModule', {
+        value: true
       });
 
-      var pad = function pad(number, length) {
-        if (length === void 0) {
-          length = 2;
+      function getDef(f, d) {
+        if (typeof f === 'undefined') {
+          return typeof d === 'undefined' ? f : d;
         }
 
-        return ("000" + number).slice(length * -1);
-      };
+        return f;
+      }
 
-      var _int = function _int(bool) {
-        return bool === true ? 1 : 0;
-      };
+      function _boolean(func, def) {
+        func = getDef(func, def);
 
-      function debounce(fn, wait) {
-        var t;
-        return function () {
-          var _this = this;
+        if (typeof func === 'function') {
+          return function f() {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
 
-          var args = arguments;
-          clearTimeout(t);
-          t = setTimeout(function () {
-            return fn.apply(_this, args);
-          }, wait);
+            return !!func.apply(this, args);
+          };
+        }
+
+        return !!func ? function () {
+          return true;
+        } : function () {
+          return false;
         };
       }
 
-      var arrayify = function arrayify(obj) {
-        return obj instanceof Array ? obj : [obj];
-      };
-      /***/
+      function integer(func, def) {
+        func = getDef(func, def);
 
+        if (typeof func === 'function') {
+          return function f() {
+            for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+              args[_key2] = arguments[_key2];
+            }
+
+            var n = parseInt(func.apply(this, args), 10);
+            return n != n ? 0 : n;
+          };
+        }
+
+        func = parseInt(func, 10);
+        return func != func ? function () {
+          return 0;
+        } : function () {
+          return func;
+        };
+      }
+
+      function string(func, def) {
+        func = getDef(func, def);
+
+        if (typeof func === 'function') {
+          return function f() {
+            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+              args[_key3] = arguments[_key3];
+            }
+
+            return '' + func.apply(this, args);
+          };
+        }
+
+        func = '' + func;
+        return function () {
+          return func;
+        };
+      }
+
+      exports["boolean"] = _boolean;
+      exports.integer = integer;
+      exports.string = string; //# sourceMappingURL=bundle.js.map
+
+      /***/
+    },
+
+    /***/
+    "PTRy":
+    /*!***********************************************!*\
+      !*** ./node_modules/dom-plane/dist/bundle.js ***!
+      \***********************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function PTRy(module, exports, __webpack_require__) {
+      "use strict";
+
+      Object.defineProperty(exports, '__esModule', {
+        value: true
+      });
+
+      function _interopDefault(ex) {
+        return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+      }
+
+      var createPointCb = _interopDefault(__webpack_require__(
+      /*! create-point-cb */
+      "6yRa"));
+
+      function createWindowRect() {
+        var props = {
+          top: {
+            value: 0,
+            enumerable: true
+          },
+          left: {
+            value: 0,
+            enumerable: true
+          },
+          right: {
+            value: window.innerWidth,
+            enumerable: true
+          },
+          bottom: {
+            value: window.innerHeight,
+            enumerable: true
+          },
+          width: {
+            value: window.innerWidth,
+            enumerable: true
+          },
+          height: {
+            value: window.innerHeight,
+            enumerable: true
+          },
+          x: {
+            value: 0,
+            enumerable: true
+          },
+          y: {
+            value: 0,
+            enumerable: true
+          }
+        };
+
+        if (Object.create) {
+          return Object.create({}, props);
+        } else {
+          var rect = {};
+          Object.defineProperties(rect, props);
+          return rect;
+        }
+      }
+
+      function getClientRect(el) {
+        if (el === window) {
+          return createWindowRect();
+        } else {
+          try {
+            var rect = el.getBoundingClientRect();
+
+            if (rect.x === undefined) {
+              rect.x = rect.left;
+              rect.y = rect.top;
+            }
+
+            return rect;
+          } catch (e) {
+            throw new TypeError("Can't call getBoundingClientRect on " + el);
+          }
+        }
+      }
+
+      function pointInside(point, el) {
+        var rect = getClientRect(el);
+        return point.y > rect.top && point.y < rect.bottom && point.x > rect.left && point.x < rect.right;
+      }
+
+      exports.createPointCB = createPointCb;
+      exports.getClientRect = getClientRect;
+      exports.pointInside = pointInside; //# sourceMappingURL=bundle.js.map
+
+      /***/
     },
 
     /***/
@@ -561,9 +462,13 @@
       /* harmony import */
 
 
-      var _mattlewis92_dom_autoscroller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! @mattlewis92/dom-autoscroller */
-      "ahUn");
+      var dom_autoscroller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! dom-autoscroller */
+      "rJ3z");
+      /* harmony import */
+
+
+      var dom_autoscroller__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dom_autoscroller__WEBPACK_IMPORTED_MODULE_2__);
       /* harmony import */
 
 
@@ -582,11 +487,11 @@
        */
 
 
-      var DraggableHelper = /*#__PURE__*/_createClass(function DraggableHelper() {
+      var DraggableHelper = function DraggableHelper() {
         _classCallCheck(this, DraggableHelper);
 
         this.currentDrag = new rxjs__WEBPACK_IMPORTED_MODULE_0__["Subject"]();
-      });
+      };
 
       DraggableHelper.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"],
@@ -617,33 +522,104 @@
        * ```
        */
 
-      var DraggableScrollContainerDirective = /*#__PURE__*/_createClass(
-      /**
-       * @hidden
-       * @param {?} elementRef
-       */
-      function DraggableScrollContainerDirective(elementRef) {
-        _classCallCheck(this, DraggableScrollContainerDirective);
-
-        this.elementRef = elementRef;
+      var DraggableScrollContainerDirective = /*#__PURE__*/function () {
         /**
-         * Trigger the DragStart after a long touch in scrollable container when true
-         * @deprecated will be removed in v5 (use [touchStartLongPress]="{delay: 300, delta: 30}" on the mwlDraggable element instead)
+         * @hidden
+         * @param {?} elementRef
+         * @param {?} renderer
+         * @param {?} zone
+         */
+        function DraggableScrollContainerDirective(elementRef, renderer, zone) {
+          _classCallCheck(this, DraggableScrollContainerDirective);
+
+          this.elementRef = elementRef;
+          this.renderer = renderer;
+          this.zone = zone;
+          /**
+           * Trigger the DragStart after a long touch in scrollable container when true
+           */
+
+          this.activeLongPressDrag = false;
+          /**
+           * Configuration of a long touch
+           * Duration in ms of a long touch before activating DragStart
+           * Delta of the
+           */
+
+          this.longPressConfig = {
+            duration: 300,
+            delta: 30
+          };
+          this.cancelledScroll = false;
+        }
+        /**
+         * @return {?}
          */
 
-        this.activeLongPressDrag = false;
-        /**
-         * Configuration of a long touch
-         * Duration in ms of a long touch before activating DragStart
-         * Delta of the
-         * @deprecated will be removed in v5 (use [touchStartLongPress]="{delay: 300, delta: 30}" on the mwlDraggable element instead)
-         */
 
-        this.longPressConfig = {
-          duration: 300,
-          delta: 30
-        };
-      });
+        _createClass(DraggableScrollContainerDirective, [{
+          key: "ngOnInit",
+          value: function ngOnInit() {
+            var _this = this;
+
+            this.zone.runOutsideAngular(
+            /**
+            * @return {?}
+            */
+            function () {
+              _this.renderer.listen(_this.elementRef.nativeElement, 'touchmove',
+              /**
+              * @param {?} event
+              * @return {?}
+              */
+              function (event) {
+                if (_this.cancelledScroll && event.cancelable) {
+                  event.preventDefault();
+                }
+              });
+            });
+          }
+          /**
+           * @hidden
+           * @return {?}
+           */
+
+        }, {
+          key: "disableScroll",
+          value: function disableScroll() {
+            this.cancelledScroll = true;
+            this.renderer.setStyle(this.elementRef.nativeElement, 'overflow', 'hidden');
+          }
+          /**
+           * @hidden
+           * @return {?}
+           */
+
+        }, {
+          key: "enableScroll",
+          value: function enableScroll() {
+            this.cancelledScroll = false;
+            this.renderer.setStyle(this.elementRef.nativeElement, 'overflow', 'auto');
+          }
+          /**
+           * @hidden
+           * @return {?}
+           */
+
+        }, {
+          key: "hasScrollbar",
+          value: function hasScrollbar() {
+            /** @type {?} */
+            var containerHasHorizontalScroll = this.elementRef.nativeElement.scrollWidth - this.elementRef.nativeElement.clientWidth > 0;
+            /** @type {?} */
+
+            var containerHasVerticalScroll = this.elementRef.nativeElement.scrollHeight - this.elementRef.nativeElement.clientHeight > 0;
+            return containerHasHorizontalScroll || containerHasVerticalScroll;
+          }
+        }]);
+
+        return DraggableScrollContainerDirective;
+      }();
 
       DraggableScrollContainerDirective.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Directive"],
@@ -656,6 +632,10 @@
       DraggableScrollContainerDirective.ctorParameters = function () {
         return [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ElementRef"]
+        }, {
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Renderer2"]
+        }, {
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgZone"]
         }];
       };
 
@@ -671,51 +651,6 @@
        * @fileoverview added by tsickle
        * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
        */
-
-      /**
-       * @param {?} renderer
-       * @param {?} element
-       * @param {?} classToAdd
-       * @return {?}
-       */
-
-      function addClass(renderer, element, classToAdd) {
-        if (classToAdd) {
-          classToAdd.split(' ').forEach(
-          /**
-          * @param {?} className
-          * @return {?}
-          */
-          function (className) {
-            return renderer.addClass(element.nativeElement, className);
-          });
-        }
-      }
-      /**
-       * @param {?} renderer
-       * @param {?} element
-       * @param {?} classToRemove
-       * @return {?}
-       */
-
-
-      function removeClass(renderer, element, classToRemove) {
-        if (classToRemove) {
-          classToRemove.split(' ').forEach(
-          /**
-          * @param {?} className
-          * @return {?}
-          */
-          function (className) {
-            return renderer.removeClass(element.nativeElement, className);
-          });
-        }
-      }
-      /**
-       * @fileoverview added by tsickle
-       * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-       */
-
 
       var DraggableDirective = /*#__PURE__*/function () {
         /**
@@ -766,13 +701,6 @@
            */
 
           this.dragCursor = '';
-          /*
-             * Options used to control the behaviour of auto scrolling: https://www.npmjs.com/package/dom-autoscroller
-             */
-
-          this.autoScroll = {
-            margin: 20
-          };
           /**
            * Called when the element can be dragged along one axis and has the mouse or pointer device pressed on it
            */
@@ -851,25 +779,9 @@
               // stop mouse events propagating up the chain
               if (pointerDownEvent.event.stopPropagation && !_this2.scrollContainer) {
                 pointerDownEvent.event.stopPropagation();
-              } // hack to prevent text getting selected in safari while dragging
-
+              }
               /** @type {?} */
 
-
-              var globalDragStyle = _this2.renderer.createElement('style');
-
-              _this2.renderer.setAttribute(globalDragStyle, 'type', 'text/css');
-
-              _this2.renderer.appendChild(globalDragStyle, _this2.renderer.createText("\n          body * {\n           -moz-user-select: none;\n           -ms-user-select: none;\n           -webkit-user-select: none;\n           user-select: none;\n          }\n        "));
-
-              requestAnimationFrame(
-              /**
-              * @return {?}
-              */
-              function () {
-                _this2.document.head.appendChild(globalDragStyle);
-              });
-              /** @type {?} */
 
               var startScrollPosition = _this2.getScrollPosition();
               /** @type {?} */
@@ -938,8 +850,7 @@
                   clientX: pointerMoveEvent.clientX,
                   clientY: pointerMoveEvent.clientY,
                   scrollLeft: scroll.left,
-                  scrollTop: scroll.top,
-                  target: pointerMoveEvent.event.target
+                  scrollTop: scroll.top
                 };
               }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(
               /**
@@ -1032,15 +943,18 @@
                   });
                 });
 
-                _this2.scroller = Object(_mattlewis92_dom_autoscroller__WEBPACK_IMPORTED_MODULE_2__["default"])([_this2.scrollContainer ? _this2.scrollContainer.elementRef.nativeElement : _this2.document.defaultView], Object.assign({}, _this2.autoScroll, {
+                _this2.scroller = dom_autoscroller__WEBPACK_IMPORTED_MODULE_2___default()([_this2.scrollContainer ? _this2.scrollContainer.elementRef.nativeElement : _this2.document.defaultView], {
+                  margin: 20,
+
                   /**
-                  * @return {?}
-                  */
+                   * @return {?}
+                   */
                   autoScroll: function autoScroll() {
                     return true;
                   }
-                }));
-                addClass(_this2.renderer, _this2.element, _this2.dragActiveClass);
+                });
+
+                _this2.renderer.addClass(_this2.element.nativeElement, _this2.dragActiveClass);
 
                 if (_this2.ghostDragEnabled) {
                   /** @type {?} */
@@ -1064,7 +978,7 @@
                   }
 
                   _this2.ghostElement = clone;
-                  _this2.document.body.style.cursor = _this2.dragCursor;
+                  document.body.style.cursor = _this2.dragCursor;
 
                   _this2.setElementStyles(clone, {
                     position: 'fixed',
@@ -1177,21 +1091,35 @@
                   });
                 });
 
-                removeClass(_this2.renderer, _this2.element, _this2.dragActiveClass);
+                _this2.renderer.removeClass(_this2.element.nativeElement, _this2.dragActiveClass);
+
                 currentDrag$.complete();
               });
-              Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["merge"])(dragComplete$, dragEnded$).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["take"])(1)).subscribe(
+              /** @type {?} */
+
+              var selectionStart$ = new rxjs__WEBPACK_IMPORTED_MODULE_0__["Observable"](
               /**
+              * @param {?} observer
               * @return {?}
               */
-              function () {
-                requestAnimationFrame(
+              function (observer) {
+                return _this2.renderer.listen('document', 'selectstart',
                 /**
+                * @param {?} e
                 * @return {?}
                 */
-                function () {
-                  _this2.document.head.removeChild(globalDragStyle);
+                function (e) {
+                  return observer.next(e);
                 });
+              }); // hack to prevent text getting selected in safari while dragging
+
+              selectionStart$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["takeUntil"])(Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["merge"])(dragComplete$, dragEnded$))).subscribe(
+              /**
+              * @param {?} event
+              * @return {?}
+              */
+              function (event) {
+                event.preventDefault();
               });
               return pointerMove;
             }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["share"])());
@@ -1228,7 +1156,7 @@
                   next = _ref9[1];
 
               return next;
-            })).subscribe(
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["auditTime"])(0, rxjs__WEBPACK_IMPORTED_MODULE_0__["animationFrameScheduler"])).subscribe(
             /**
             * @param {?} __0
             * @return {?}
@@ -1240,8 +1168,7 @@
                   clientX = _ref10.clientX,
                   clientY = _ref10.clientY,
                   transformX = _ref10.transformX,
-                  transformY = _ref10.transformY,
-                  target = _ref10.target;
+                  transformY = _ref10.transformY;
 
               _this2.zone.run(
               /**
@@ -1254,29 +1181,23 @@
                 });
               });
 
-              requestAnimationFrame(
-              /**
-              * @return {?}
-              */
-              function () {
-                if (_this2.ghostElement) {
-                  /** @type {?} */
-                  var transform = "translate3d(".concat(transformX, "px, ").concat(transformY, "px, 0px)");
+              if (_this2.ghostElement) {
+                /** @type {?} */
+                var transform = "translate3d(".concat(transformX, "px, ").concat(transformY, "px, 0px)");
 
-                  _this2.setElementStyles(_this2.ghostElement, {
-                    transform: transform,
-                    '-webkit-transform': transform,
-                    '-ms-transform': transform,
-                    '-moz-transform': transform,
-                    '-o-transform': transform
-                  });
-                }
-              });
+                _this2.setElementStyles(_this2.ghostElement, {
+                  transform: transform,
+                  '-webkit-transform': transform,
+                  '-ms-transform': transform,
+                  '-moz-transform': transform,
+                  '-o-transform': transform
+                });
+              }
+
               currentDrag$.next({
                 clientX: clientX,
                 clientY: clientY,
-                dropData: _this2.dropData,
-                target: target
+                dropData: _this2.dropData
               });
             });
           }
@@ -1397,28 +1318,26 @@
           value: function onMouseDown(event) {
             var _this4 = this;
 
-            if (event.button === 0) {
-              if (!this.eventListenerSubscriptions.mousemove) {
-                this.eventListenerSubscriptions.mousemove = this.renderer.listen('document', 'mousemove',
-                /**
-                * @param {?} mouseMoveEvent
-                * @return {?}
-                */
-                function (mouseMoveEvent) {
-                  _this4.pointerMove$.next({
-                    event: mouseMoveEvent,
-                    clientX: mouseMoveEvent.clientX,
-                    clientY: mouseMoveEvent.clientY
-                  });
+            if (!this.eventListenerSubscriptions.mousemove) {
+              this.eventListenerSubscriptions.mousemove = this.renderer.listen('document', 'mousemove',
+              /**
+              * @param {?} mouseMoveEvent
+              * @return {?}
+              */
+              function (mouseMoveEvent) {
+                _this4.pointerMove$.next({
+                  event: mouseMoveEvent,
+                  clientX: mouseMoveEvent.clientX,
+                  clientY: mouseMoveEvent.clientY
                 });
-              }
-
-              this.pointerDown$.next({
-                event: event,
-                clientX: event.clientX,
-                clientY: event.clientY
               });
             }
+
+            this.pointerDown$.next({
+              event: event,
+              clientX: event.clientX,
+              clientY: event.clientY
+            });
           }
           /**
            * @private
@@ -1429,18 +1348,16 @@
         }, {
           key: "onMouseUp",
           value: function onMouseUp(event) {
-            if (event.button === 0) {
-              if (this.eventListenerSubscriptions.mousemove) {
-                this.eventListenerSubscriptions.mousemove();
-                delete this.eventListenerSubscriptions.mousemove;
-              }
-
-              this.pointerUp$.next({
-                event: event,
-                clientX: event.clientX,
-                clientY: event.clientY
-              });
+            if (this.eventListenerSubscriptions.mousemove) {
+              this.eventListenerSubscriptions.mousemove();
+              delete this.eventListenerSubscriptions.mousemove;
             }
+
+            this.pointerUp$.next({
+              event: event,
+              clientX: event.clientX,
+              clientY: event.clientY
+            });
           }
           /**
            * @private
@@ -1453,49 +1370,41 @@
           value: function onTouchStart(event) {
             var _this5 = this;
 
+            if (!this.scrollContainer) {
+              try {
+                event.preventDefault();
+              } catch (e) {}
+            }
             /** @type {?} */
+
+
+            var hasContainerScrollbar;
+            /** @type {?} */
+
             var startScrollPosition;
             /** @type {?} */
 
             var isDragActivated;
-            /** @type {?} */
 
-            var hasContainerScrollbar;
-
-            if (this.scrollContainer && this.scrollContainer.activeLongPressDrag || this.touchStartLongPress) {
+            if (this.scrollContainer && this.scrollContainer.activeLongPressDrag) {
               this.timeLongPress.timerBegin = Date.now();
               isDragActivated = false;
-              hasContainerScrollbar = this.hasScrollbar();
+              hasContainerScrollbar = this.scrollContainer.hasScrollbar();
               startScrollPosition = this.getScrollPosition();
             }
 
             if (!this.eventListenerSubscriptions.touchmove) {
-              /** @type {?} */
-              var contextMenuListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["fromEvent"])(this.document, 'contextmenu').subscribe(
-              /**
-              * @param {?} e
-              * @return {?}
-              */
-              function (e) {
-                e.preventDefault();
-              });
-              /** @type {?} */
-
-              var touchMoveListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["fromEvent"])(this.document, 'touchmove', {
-                passive: false
-              }).subscribe(
+              this.eventListenerSubscriptions.touchmove = this.renderer.listen('document', 'touchmove',
               /**
               * @param {?} touchMoveEvent
               * @return {?}
               */
               function (touchMoveEvent) {
-                if ((_this5.scrollContainer && _this5.scrollContainer.activeLongPressDrag || _this5.touchStartLongPress) && !isDragActivated && hasContainerScrollbar) {
+                if (_this5.scrollContainer && _this5.scrollContainer.activeLongPressDrag && !isDragActivated && hasContainerScrollbar) {
                   isDragActivated = _this5.shouldBeginDrag(event, touchMoveEvent, startScrollPosition);
                 }
 
-                if ((!_this5.scrollContainer || !_this5.scrollContainer.activeLongPressDrag) && !_this5.touchStartLongPress || !hasContainerScrollbar || isDragActivated) {
-                  touchMoveEvent.preventDefault();
-
+                if (!_this5.scrollContainer || !_this5.scrollContainer.activeLongPressDrag || !hasContainerScrollbar || isDragActivated) {
                   _this5.pointerMove$.next({
                     event: touchMoveEvent,
                     clientX: touchMoveEvent.targetTouches[0].clientX,
@@ -1503,15 +1412,6 @@
                   });
                 }
               });
-
-              this.eventListenerSubscriptions.touchmove =
-              /**
-              * @return {?}
-              */
-              function () {
-                contextMenuListener.unsubscribe();
-                touchMoveListener.unsubscribe();
-              };
             }
 
             this.pointerDown$.next({
@@ -1533,8 +1433,8 @@
               this.eventListenerSubscriptions.touchmove();
               delete this.eventListenerSubscriptions.touchmove;
 
-              if (this.scrollContainer && this.scrollContainer.activeLongPressDrag || this.touchStartLongPress) {
-                this.enableScroll();
+              if (this.scrollContainer && this.scrollContainer.activeLongPressDrag) {
+                this.scrollContainer.enableScroll();
               }
             }
 
@@ -1638,20 +1538,6 @@
            */
 
         }, {
-          key: "getScrollElement",
-          value: function getScrollElement() {
-            if (this.scrollContainer) {
-              return this.scrollContainer.elementRef.nativeElement;
-            } else {
-              return this.document.body;
-            }
-          }
-          /**
-           * @private
-           * @return {?}
-           */
-
-        }, {
           key: "getScrollPosition",
           value: function getScrollPosition() {
             if (this.scrollContainer) {
@@ -1661,8 +1547,8 @@
               };
             } else {
               return {
-                top: window.pageYOffset || this.document.documentElement.scrollTop,
-                left: window.pageXOffset || this.document.documentElement.scrollLeft
+                top: window.pageYOffset || document.documentElement.scrollTop,
+                left: window.pageXOffset || document.documentElement.scrollLeft
               };
             }
           }
@@ -1694,16 +1580,8 @@
             /** @type {?} */
 
             var deltaTotal = deltaX + deltaY;
-            /** @type {?} */
 
-            var longPressConfig = this.touchStartLongPress ? this.touchStartLongPress :
-            /* istanbul ignore next */
-            {
-              delta: this.scrollContainer.longPressConfig.delta,
-              delay: this.scrollContainer.longPressConfig.duration
-            };
-
-            if (deltaTotal > longPressConfig.delta || deltaScroll.top > 0 || deltaScroll.left > 0) {
+            if (deltaTotal > this.scrollContainer.longPressConfig.delta || deltaScroll.top > 0 || deltaScroll.left > 0) {
               this.timeLongPress.timerBegin = Date.now();
             }
 
@@ -1712,59 +1590,12 @@
 
             var duration = this.timeLongPress.timerEnd - this.timeLongPress.timerBegin;
 
-            if (duration >= longPressConfig.delay) {
-              this.disableScroll();
+            if (duration >= this.scrollContainer.longPressConfig.duration) {
+              this.scrollContainer.disableScroll();
               return true;
             }
 
             return false;
-          }
-          /**
-           * @private
-           * @return {?}
-           */
-
-        }, {
-          key: "enableScroll",
-          value: function enableScroll() {
-            if (this.scrollContainer) {
-              this.renderer.setStyle(this.scrollContainer.elementRef.nativeElement, 'overflow', '');
-            }
-
-            this.renderer.setStyle(this.document.body, 'overflow', '');
-          }
-          /**
-           * @private
-           * @return {?}
-           */
-
-        }, {
-          key: "disableScroll",
-          value: function disableScroll() {
-            /* istanbul ignore next */
-            if (this.scrollContainer) {
-              this.renderer.setStyle(this.scrollContainer.elementRef.nativeElement, 'overflow', 'hidden');
-            }
-
-            this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
-          }
-          /**
-           * @private
-           * @return {?}
-           */
-
-        }, {
-          key: "hasScrollbar",
-          value: function hasScrollbar() {
-            /** @type {?} */
-            var scrollContainer = this.getScrollElement();
-            /** @type {?} */
-
-            var containerHasHorizontalScroll = scrollContainer.scrollWidth > scrollContainer.clientWidth;
-            /** @type {?} */
-
-            var containerHasVerticalScroll = scrollContainer.scrollHeight > scrollContainer.clientHeight;
-            return containerHasHorizontalScroll || containerHasVerticalScroll;
           }
         }]);
 
@@ -1833,12 +1664,6 @@
           type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         ghostElementTemplate: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
-        }],
-        touchStartLongPress: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
-        }],
-        autoScroll: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         dragPointerDown: [{
@@ -1926,8 +1751,9 @@
             * @return {?}
             */
             function (drag$) {
-              addClass(_this8.renderer, _this8.element, _this8.dragActiveClass);
+              _this8.renderer.addClass(_this8.element.nativeElement, _this8.dragActiveClass);
               /** @type {?} */
+
 
               var droppableElement = {
                 updateCache: true
@@ -1955,8 +1781,7 @@
               function (_ref11) {
                 var clientX = _ref11.clientX,
                     clientY = _ref11.clientY,
-                    dropData = _ref11.dropData,
-                    target = _ref11.target;
+                    dropData = _ref11.dropData;
                 currentDragDropData = dropData;
 
                 if (droppableElement.updateCache) {
@@ -1974,20 +1799,13 @@
                 var isWithinElement = isCoordinateWithinRectangle(clientX, clientY,
                 /** @type {?} */
                 droppableElement.rect);
-                /** @type {?} */
-
-                var isDropAllowed = !_this8.validateDrop || _this8.validateDrop({
-                  clientX: clientX,
-                  clientY: clientY,
-                  target: target
-                });
 
                 if (droppableElement.scrollContainerRect) {
-                  return isWithinElement && isDropAllowed && isCoordinateWithinRectangle(clientX, clientY,
+                  return isWithinElement && isCoordinateWithinRectangle(clientX, clientY,
                   /** @type {?} */
                   droppableElement.scrollContainerRect);
                 } else {
-                  return isWithinElement && isDropAllowed;
+                  return isWithinElement;
                 }
               }));
               /** @type {?} */
@@ -2009,7 +1827,8 @@
               */
               function () {
                 dragOverActive = true;
-                addClass(_this8.renderer, _this8.element, _this8.dragOverClass);
+
+                _this8.renderer.addClass(_this8.element.nativeElement, _this8.dragOverClass);
 
                 _this8.zone.run(
                 /**
@@ -2060,7 +1879,8 @@
               */
               function () {
                 dragOverActive = false;
-                removeClass(_this8.renderer, _this8.element, _this8.dragOverClass);
+
+                _this8.renderer.removeClass(_this8.element.nativeElement, _this8.dragOverClass);
 
                 _this8.zone.run(
                 /**
@@ -2079,10 +1899,11 @@
                 */
                 function complete() {
                   deregisterScrollListener();
-                  removeClass(_this8.renderer, _this8.element, _this8.dragActiveClass);
+
+                  _this8.renderer.removeClass(_this8.element.nativeElement, _this8.dragActiveClass);
 
                   if (dragOverActive) {
-                    removeClass(_this8.renderer, _this8.element, _this8.dragOverClass);
+                    _this8.renderer.removeClass(_this8.element.nativeElement, _this8.dragOverClass);
 
                     _this8.zone.run(
                     /**
@@ -2146,9 +1967,6 @@
         dragActiveClass: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
-        validateDrop: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
-        }],
         dragEnter: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"]
         }],
@@ -2167,9 +1985,9 @@
        * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
        */
 
-      var DragAndDropModule = /*#__PURE__*/_createClass(function DragAndDropModule() {
+      var DragAndDropModule = function DragAndDropModule() {
         _classCallCheck(this, DragAndDropModule);
-      });
+      };
 
       DragAndDropModule.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"],
@@ -2193,2115 +2011,241 @@
     },
 
     /***/
-    "TkX7":
-    /*!*********************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/l10n/default.js ***!
-      \*********************************************************/
+    "RX3l":
+    /*!****************************************!*\
+      !*** ./node_modules/is-array/index.js ***!
+      \****************************************/
 
-    /*! exports provided: english, default */
+    /*! no static exports found */
 
     /***/
-    function TkX7(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
+    function RX3l(module, exports) {
+      /**
+       * isArray
+       */
+      var isArray = Array.isArray;
+      /**
+       * toString
+       */
 
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
+      var str = Object.prototype.toString;
+      /**
+       * Whether or not the given `val`
+       * is an array.
+       *
+       * example:
+       *
+       *        isArray([]);
+       *        // > true
+       *        isArray(arguments);
+       *        // > false
+       *        isArray('');
+       *        // > false
+       *
+       * @param {mixed} val
+       * @return {bool}
+       */
 
-
-      __webpack_require__.d(__webpack_exports__, "english", function () {
-        return english;
-      });
-
-      var english = {
-        weekdays: {
-          shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-          longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-        },
-        months: {
-          shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        },
-        daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-        firstDayOfWeek: 0,
-        ordinal: function ordinal(nth) {
-          var s = nth % 100;
-          if (s > 3 && s < 21) return "th";
-
-          switch (s % 10) {
-            case 1:
-              return "st";
-
-            case 2:
-              return "nd";
-
-            case 3:
-              return "rd";
-
-            default:
-              return "th";
-          }
-        },
-        rangeSeparator: " to ",
-        weekAbbreviation: "Wk",
-        scrollTitle: "Scroll to increment",
-        toggleTitle: "Click to toggle",
-        amPM: ["AM", "PM"],
-        yearAriaLabel: "Year",
-        monthAriaLabel: "Month",
-        hourAriaLabel: "Hour",
-        minuteAriaLabel: "Minute",
-        time_24hr: false
+      module.exports = isArray || function (val) {
+        return !!val && '[object Array]' == str.call(val);
       };
-      /* harmony default export */
-
-      __webpack_exports__["default"] = english;
       /***/
+
     },
 
     /***/
-    "X2Dv":
-    /*!**************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/index.js ***!
-      \**************************************************/
+    "VJNc":
+    /*!*********************************************!*\
+      !*** ./node_modules/dom-set/dist/bundle.js ***!
+      \*********************************************/
 
-    /*! exports provided: default */
+    /*! no static exports found */
 
     /***/
-    function X2Dv(module, __webpack_exports__, __webpack_require__) {
+    function VJNc(module, exports, __webpack_require__) {
       "use strict";
 
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony import */
+      Object.defineProperty(exports, '__esModule', {
+        value: true
+      });
+
+      function _interopDefault(ex) {
+        return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+      }
+
+      var arrayFrom = _interopDefault(__webpack_require__(
+      /*! array-from */
+      "uMIJ"));
+
+      var isArray = _interopDefault(__webpack_require__(
+      /*! is-array */
+      "RX3l"));
+
+      var isElement = _interopDefault(__webpack_require__(
+      /*! iselement */
+      "xijO"));
+
+      var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+        return typeof obj;
+      } : function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+      };
+      /**
+       * Returns `true` if provided input is Element.
+       * @name isElement
+       * @param {*} [input]
+       * @returns {boolean}
+       */
 
 
-      var _types_options__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! ./types/options */
-      "nFBg");
-      /* harmony import */
-
-
-      var _l10n_default__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! ./l10n/default */
-      "TkX7");
-      /* harmony import */
-
-
-      var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! ./utils */
-      "N3r0");
-      /* harmony import */
-
-
-      var _utils_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! ./utils/dom */
-      "YqbJ");
-      /* harmony import */
-
-
-      var _utils_dates__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
-      /*! ./utils/dates */
-      "C0Yq");
-      /* harmony import */
-
-
-      var _utils_formatting__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
-      /*! ./utils/formatting */
-      "gsBn");
-      /* harmony import */
-
-
-      var _utils_polyfills__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
-      /*! ./utils/polyfills */
-      "cW3J");
-      /* harmony import */
-
-
-      var _utils_polyfills__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_utils_polyfills__WEBPACK_IMPORTED_MODULE_6__);
-
-      var __assign = undefined && undefined.__assign || function () {
-        __assign = Object.assign || function (t) {
-          for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-          }
-
-          return t;
-        };
-
-        return __assign.apply(this, arguments);
+      var isElement$1 = function isElement$1(input) {
+        return input != null && (typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object' && input.nodeType === 1 && _typeof(input.style) === 'object' && _typeof(input.ownerDocument) === 'object';
       };
 
-      var __spreadArrays = undefined && undefined.__spreadArrays || function () {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-
-        for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
-
-        return r;
-      };
-
-      var DEBOUNCED_CHANGE_MS = 300;
-
-      function FlatpickrInstance(element, instanceConfig) {
-        var self = {
-          config: __assign(__assign({}, _types_options__WEBPACK_IMPORTED_MODULE_0__["defaults"]), flatpickr.defaultConfig),
-          l10n: _l10n_default__WEBPACK_IMPORTED_MODULE_1__["default"]
-        };
-        self.parseDate = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["createDateParser"])({
-          config: self.config,
-          l10n: self.l10n
-        });
-        self._handlers = [];
-        self.pluginElements = [];
-        self.loadedPlugins = [];
-        self._bind = bind;
-        self._setHoursFromDate = setHoursFromDate;
-        self._positionCalendar = positionCalendar;
-        self.changeMonth = changeMonth;
-        self.changeYear = changeYear;
-        self.clear = clear;
-        self.close = close;
-        self.onMouseOver = onMouseOver;
-        self._createElement = _utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"];
-        self.createDay = createDay;
-        self.destroy = destroy;
-        self.isEnabled = isEnabled;
-        self.jumpToDate = jumpToDate;
-        self.updateValue = updateValue;
-        self.open = open;
-        self.redraw = redraw;
-        self.set = set;
-        self.setDate = setDate;
-        self.toggle = toggle;
-
-        function setupHelperFunctions() {
-          self.utils = {
-            getDaysInMonth: function getDaysInMonth(month, yr) {
-              if (month === void 0) {
-                month = self.currentMonth;
-              }
-
-              if (yr === void 0) {
-                yr = self.currentYear;
-              }
-
-              if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
-              return self.l10n.daysInMonth[month];
-            }
-          };
-        }
-
-        function init() {
-          self.element = self.input = element;
-          self.isOpen = false;
-          parseConfig();
-          setupLocale();
-          setupInputs();
-          setupDates();
-          setupHelperFunctions();
-          if (!self.isMobile) build();
-          bindEvents();
-
-          if (self.selectedDates.length || self.config.noCalendar) {
-            if (self.config.enableTime) {
-              setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj : undefined);
-            }
-
-            updateValue(false);
-          }
-
-          setCalendarWidth();
-          var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-          if (!self.isMobile && isSafari) {
-            positionCalendar();
-          }
-
-          triggerEvent("onReady");
-        }
-
-        function getClosestActiveElement() {
-          var _a;
-
-          return ((_a = self.calendarContainer) === null || _a === void 0 ? void 0 : _a.getRootNode()).activeElement || document.activeElement;
-        }
-
-        function bindToInstance(fn) {
-          return fn.bind(self);
-        }
-
-        function setCalendarWidth() {
-          var config = self.config;
-
-          if (config.weekNumbers === false && config.showMonths === 1) {
-            return;
-          } else if (config.noCalendar !== true) {
-            window.requestAnimationFrame(function () {
-              if (self.calendarContainer !== undefined) {
-                self.calendarContainer.style.visibility = "hidden";
-                self.calendarContainer.style.display = "block";
-              }
-
-              if (self.daysContainer !== undefined) {
-                var daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
-                self.daysContainer.style.width = daysWidth + "px";
-                self.calendarContainer.style.width = daysWidth + (self.weekWrapper !== undefined ? self.weekWrapper.offsetWidth : 0) + "px";
-                self.calendarContainer.style.removeProperty("visibility");
-                self.calendarContainer.style.removeProperty("display");
-              }
-            });
-          }
-        }
-
-        function updateTime(e) {
-          if (self.selectedDates.length === 0) {
-            var defaultDate = self.config.minDate === undefined || Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(new Date(), self.config.minDate) >= 0 ? new Date() : new Date(self.config.minDate.getTime());
-            var defaults = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["getDefaultHours"])(self.config);
-            defaultDate.setHours(defaults.hours, defaults.minutes, defaults.seconds, defaultDate.getMilliseconds());
-            self.selectedDates = [defaultDate];
-            self.latestSelectedDateObj = defaultDate;
-          }
-
-          if (e !== undefined && e.type !== "blur") {
-            timeWrapper(e);
-          }
-
-          var prevValue = self._input.value;
-          setHoursFromInputs();
-          updateValue();
-
-          if (self._input.value !== prevValue) {
-            self._debouncedChange();
-          }
-        }
-
-        function ampm2military(hour, amPM) {
-          return hour % 12 + 12 * Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(amPM === self.l10n.amPM[1]);
-        }
-
-        function military2ampm(hour) {
-          switch (hour % 24) {
-            case 0:
-            case 12:
-              return 12;
-
-            default:
-              return hour % 12;
-          }
-        }
-
-        function setHoursFromInputs() {
-          if (self.hourElement === undefined || self.minuteElement === undefined) return;
-          var hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24,
-              minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
-              seconds = self.secondElement !== undefined ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
-
-          if (self.amPM !== undefined) {
-            hours = ampm2military(hours, self.amPM.textContent);
-          }
-
-          var limitMinHours = self.config.minTime !== undefined || self.config.minDate && self.minDateHasTime && self.latestSelectedDateObj && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(self.latestSelectedDateObj, self.config.minDate, true) === 0;
-          var limitMaxHours = self.config.maxTime !== undefined || self.config.maxDate && self.maxDateHasTime && self.latestSelectedDateObj && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(self.latestSelectedDateObj, self.config.maxDate, true) === 0;
-
-          if (self.config.maxTime !== undefined && self.config.minTime !== undefined && self.config.minTime > self.config.maxTime) {
-            var minBound = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["calculateSecondsSinceMidnight"])(self.config.minTime.getHours(), self.config.minTime.getMinutes(), self.config.minTime.getSeconds());
-            var maxBound = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["calculateSecondsSinceMidnight"])(self.config.maxTime.getHours(), self.config.maxTime.getMinutes(), self.config.maxTime.getSeconds());
-            var currentTime = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["calculateSecondsSinceMidnight"])(hours, minutes, seconds);
-
-            if (currentTime > maxBound && currentTime < minBound) {
-              var result = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["parseSeconds"])(minBound);
-              hours = result[0];
-              minutes = result[1];
-              seconds = result[2];
-            }
-          } else {
-            if (limitMaxHours) {
-              var maxTime = self.config.maxTime !== undefined ? self.config.maxTime : self.config.maxDate;
-              hours = Math.min(hours, maxTime.getHours());
-              if (hours === maxTime.getHours()) minutes = Math.min(minutes, maxTime.getMinutes());
-              if (minutes === maxTime.getMinutes()) seconds = Math.min(seconds, maxTime.getSeconds());
-            }
-
-            if (limitMinHours) {
-              var minTime = self.config.minTime !== undefined ? self.config.minTime : self.config.minDate;
-              hours = Math.max(hours, minTime.getHours());
-              if (hours === minTime.getHours() && minutes < minTime.getMinutes()) minutes = minTime.getMinutes();
-              if (minutes === minTime.getMinutes()) seconds = Math.max(seconds, minTime.getSeconds());
-            }
-          }
-
-          setHours(hours, minutes, seconds);
-        }
-
-        function setHoursFromDate(dateObj) {
-          var date = dateObj || self.latestSelectedDateObj;
-
-          if (date && date instanceof Date) {
-            setHours(date.getHours(), date.getMinutes(), date.getSeconds());
-          }
-        }
-
-        function setHours(hours, minutes, seconds) {
-          if (self.latestSelectedDateObj !== undefined) {
-            self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
-          }
-
-          if (!self.hourElement || !self.minuteElement || self.isMobile) return;
-          self.hourElement.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(!self.config.time_24hr ? (12 + hours) % 12 + 12 * Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(hours % 12 === 0) : hours);
-          self.minuteElement.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(minutes);
-          if (self.amPM !== undefined) self.amPM.textContent = self.l10n.amPM[Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(hours >= 12)];
-          if (self.secondElement !== undefined) self.secondElement.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(seconds);
-        }
-
-        function onYearInput(event) {
-          var eventTarget = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(event);
-          var year = parseInt(eventTarget.value) + (event.delta || 0);
-
-          if (year / 1000 > 1 || event.key === "Enter" && !/[^\d]/.test(year.toString())) {
-            changeYear(year);
-          }
-        }
-
-        function bind(element, event, handler, options) {
-          if (event instanceof Array) return event.forEach(function (ev) {
-            return bind(element, ev, handler, options);
-          });
-          if (element instanceof Array) return element.forEach(function (el) {
-            return bind(el, event, handler, options);
-          });
-          element.addEventListener(event, handler, options);
-
-          self._handlers.push({
-            remove: function remove() {
-              return element.removeEventListener(event, handler, options);
-            }
-          });
-        }
-
-        function triggerChange() {
-          triggerEvent("onChange");
-        }
-
-        function bindEvents() {
-          if (self.config.wrap) {
-            ["open", "close", "toggle", "clear"].forEach(function (evt) {
-              Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
-                return bind(el, "click", self[evt]);
-              });
-            });
-          }
-
-          if (self.isMobile) {
-            setupMobile();
-            return;
-          }
-
-          var debouncedResize = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["debounce"])(onResize, 50);
-          self._debouncedChange = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["debounce"])(triggerChange, DEBOUNCED_CHANGE_MS);
-          if (self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) bind(self.daysContainer, "mouseover", function (e) {
-            if (self.config.mode === "range") onMouseOver(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e));
-          });
-          bind(self._input, "keydown", onKeyDown);
-
-          if (self.calendarContainer !== undefined) {
-            bind(self.calendarContainer, "keydown", onKeyDown);
-          }
-
-          if (!self.config.inline && !self.config["static"]) bind(window, "resize", debouncedResize);
-          if (window.ontouchstart !== undefined) bind(window.document, "touchstart", documentClick);else bind(window.document, "mousedown", documentClick);
-          bind(window.document, "focus", documentClick, {
-            capture: true
-          });
-
-          if (self.config.clickOpens === true) {
-            bind(self._input, "focus", self.open);
-            bind(self._input, "click", self.open);
-          }
-
-          if (self.daysContainer !== undefined) {
-            bind(self.monthNav, "click", onMonthNavClick);
-            bind(self.monthNav, ["keyup", "increment"], onYearInput);
-            bind(self.daysContainer, "click", selectDate);
-          }
-
-          if (self.timeContainer !== undefined && self.minuteElement !== undefined && self.hourElement !== undefined) {
-            var selText = function selText(e) {
-              return Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e).select();
-            };
-
-            bind(self.timeContainer, ["increment"], updateTime);
-            bind(self.timeContainer, "blur", updateTime, {
-              capture: true
-            });
-            bind(self.timeContainer, "click", timeIncrement);
-            bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
-            if (self.secondElement !== undefined) bind(self.secondElement, "focus", function () {
-              return self.secondElement && self.secondElement.select();
-            });
-
-            if (self.amPM !== undefined) {
-              bind(self.amPM, "click", function (e) {
-                updateTime(e);
-              });
-            }
-          }
-
-          if (self.config.allowInput) {
-            bind(self._input, "blur", onBlur);
-          }
-        }
-
-        function jumpToDate(jumpDate, triggerChange) {
-          var jumpTo = jumpDate !== undefined ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate && self.config.minDate > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate < self.now ? self.config.maxDate : self.now);
-          var oldYear = self.currentYear;
-          var oldMonth = self.currentMonth;
-
+      function select(selector) {
+        if (typeof selector === 'string') {
           try {
-            if (jumpTo !== undefined) {
-              self.currentYear = jumpTo.getFullYear();
-              self.currentMonth = jumpTo.getMonth();
-            }
+            return document.querySelector(selector);
           } catch (e) {
-            e.message = "Invalid date supplied: " + jumpTo;
-            self.config.errorHandler(e);
+            throw e;
           }
-
-          if (triggerChange && self.currentYear !== oldYear) {
-            triggerEvent("onYearChange");
-            buildMonthSwitch();
-          }
-
-          if (triggerChange && (self.currentYear !== oldYear || self.currentMonth !== oldMonth)) {
-            triggerEvent("onMonthChange");
-          }
-
-          self.redraw();
+        } else if (isElement(selector)) {
+          return selector;
         }
-
-        function timeIncrement(e) {
-          var eventTarget = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-          if (~eventTarget.className.indexOf("arrow")) incrementNumInput(e, eventTarget.classList.contains("arrowUp") ? 1 : -1);
-        }
-
-        function incrementNumInput(e, delta, inputElem) {
-          var target = e && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-          var input = inputElem || target && target.parentNode && target.parentNode.firstChild;
-          var event = createEvent("increment");
-          event.delta = delta;
-          input && input.dispatchEvent(event);
-        }
-
-        function build() {
-          var fragment = window.document.createDocumentFragment();
-          self.calendarContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-calendar");
-          self.calendarContainer.tabIndex = -1;
-
-          if (!self.config.noCalendar) {
-            fragment.appendChild(buildMonthNav());
-            self.innerContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-innerContainer");
-
-            if (self.config.weekNumbers) {
-              var _a = buildWeeks(),
-                  weekWrapper = _a.weekWrapper,
-                  weekNumbers = _a.weekNumbers;
-
-              self.innerContainer.appendChild(weekWrapper);
-              self.weekNumbers = weekNumbers;
-              self.weekWrapper = weekWrapper;
-            }
-
-            self.rContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-rContainer");
-            self.rContainer.appendChild(buildWeekdays());
-
-            if (!self.daysContainer) {
-              self.daysContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-days");
-              self.daysContainer.tabIndex = -1;
-            }
-
-            buildDays();
-            self.rContainer.appendChild(self.daysContainer);
-            self.innerContainer.appendChild(self.rContainer);
-            fragment.appendChild(self.innerContainer);
-          }
-
-          if (self.config.enableTime) {
-            fragment.appendChild(buildTime());
-          }
-
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "rangeMode", self.config.mode === "range");
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "animate", self.config.animate === true);
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "multiMonth", self.config.showMonths > 1);
-          self.calendarContainer.appendChild(fragment);
-          var customAppend = self.config.appendTo !== undefined && self.config.appendTo.nodeType !== undefined;
-
-          if (self.config.inline || self.config["static"]) {
-            self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
-
-            if (self.config.inline) {
-              if (!customAppend && self.element.parentNode) self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);else if (self.config.appendTo !== undefined) self.config.appendTo.appendChild(self.calendarContainer);
-            }
-
-            if (self.config["static"]) {
-              var wrapper = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-wrapper");
-              if (self.element.parentNode) self.element.parentNode.insertBefore(wrapper, self.element);
-              wrapper.appendChild(self.element);
-              if (self.altInput) wrapper.appendChild(self.altInput);
-              wrapper.appendChild(self.calendarContainer);
-            }
-          }
-
-          if (!self.config["static"] && !self.config.inline) (self.config.appendTo !== undefined ? self.config.appendTo : window.document.body).appendChild(self.calendarContainer);
-        }
-
-        function createDay(className, date, _dayNumber, i) {
-          var dateIsEnabled = isEnabled(date, true),
-              dayElement = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", className, date.getDate().toString());
-          dayElement.dateObj = date;
-          dayElement.$i = i;
-          dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
-
-          if (className.indexOf("hidden") === -1 && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(date, self.now) === 0) {
-            self.todayDateElem = dayElement;
-            dayElement.classList.add("today");
-            dayElement.setAttribute("aria-current", "date");
-          }
-
-          if (dateIsEnabled) {
-            dayElement.tabIndex = -1;
-
-            if (isDateSelected(date)) {
-              dayElement.classList.add("selected");
-              self.selectedDateElem = dayElement;
-
-              if (self.config.mode === "range") {
-                Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(dayElement, "startRange", self.selectedDates[0] && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(date, self.selectedDates[0], true) === 0);
-                Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(dayElement, "endRange", self.selectedDates[1] && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(date, self.selectedDates[1], true) === 0);
-                if (className === "nextMonthDay") dayElement.classList.add("inRange");
-              }
-            }
-          } else {
-            dayElement.classList.add("flatpickr-disabled");
-          }
-
-          if (self.config.mode === "range") {
-            if (isDateInRange(date) && !isDateSelected(date)) dayElement.classList.add("inRange");
-          }
-
-          if (self.weekNumbers && self.config.showMonths === 1 && className !== "prevMonthDay" && i % 7 === 6) {
-            self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='flatpickr-day'>" + self.config.getWeek(date) + "</span>");
-          }
-
-          triggerEvent("onDayCreate", dayElement);
-          return dayElement;
-        }
-
-        function focusOnDayElem(targetNode) {
-          targetNode.focus();
-          if (self.config.mode === "range") onMouseOver(targetNode);
-        }
-
-        function getFirstAvailableDay(delta) {
-          var startMonth = delta > 0 ? 0 : self.config.showMonths - 1;
-          var endMonth = delta > 0 ? self.config.showMonths : -1;
-
-          for (var m = startMonth; m != endMonth; m += delta) {
-            var month = self.daysContainer.children[m];
-            var startIndex = delta > 0 ? 0 : month.children.length - 1;
-            var endIndex = delta > 0 ? month.children.length : -1;
-
-            for (var i = startIndex; i != endIndex; i += delta) {
-              var c = month.children[i];
-              if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj)) return c;
-            }
-          }
-
-          return undefined;
-        }
-
-        function getNextAvailableDay(current, delta) {
-          var givenMonth = current.className.indexOf("Month") === -1 ? current.dateObj.getMonth() : self.currentMonth;
-          var endMonth = delta > 0 ? self.config.showMonths : -1;
-          var loopDelta = delta > 0 ? 1 : -1;
-
-          for (var m = givenMonth - self.currentMonth; m != endMonth; m += loopDelta) {
-            var month = self.daysContainer.children[m];
-            var startIndex = givenMonth - self.currentMonth === m ? current.$i + delta : delta < 0 ? month.children.length - 1 : 0;
-            var numMonthDays = month.children.length;
-
-            for (var i = startIndex; i >= 0 && i < numMonthDays && i != (delta > 0 ? numMonthDays : -1); i += loopDelta) {
-              var c = month.children[i];
-              if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj) && Math.abs(current.$i - i) >= Math.abs(delta)) return focusOnDayElem(c);
-            }
-          }
-
-          self.changeMonth(loopDelta);
-          focusOnDay(getFirstAvailableDay(loopDelta), 0);
-          return undefined;
-        }
-
-        function focusOnDay(current, offset) {
-          var activeElement = getClosestActiveElement();
-          var dayFocused = isInView(activeElement || document.body);
-          var startElem = current !== undefined ? current : dayFocused ? activeElement : self.selectedDateElem !== undefined && isInView(self.selectedDateElem) ? self.selectedDateElem : self.todayDateElem !== undefined && isInView(self.todayDateElem) ? self.todayDateElem : getFirstAvailableDay(offset > 0 ? 1 : -1);
-
-          if (startElem === undefined) {
-            self._input.focus();
-          } else if (!dayFocused) {
-            focusOnDayElem(startElem);
-          } else {
-            getNextAvailableDay(startElem, offset);
-          }
-        }
-
-        function buildMonthDays(year, month) {
-          var firstOfMonth = (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
-          var prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12, year);
-          var daysInMonth = self.utils.getDaysInMonth(month, year),
-              days = window.document.createDocumentFragment(),
-              isMultiMonth = self.config.showMonths > 1,
-              prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
-              nextMonthDayClass = isMultiMonth ? "nextMonthDay hidden" : "nextMonthDay";
-          var dayNumber = prevMonthDays + 1 - firstOfMonth,
-              dayIndex = 0;
-
-          for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
-            days.appendChild(createDay("flatpickr-day " + prevMonthDayClass, new Date(year, month - 1, dayNumber), dayNumber, dayIndex));
-          }
-
-          for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
-            days.appendChild(createDay("flatpickr-day", new Date(year, month, dayNumber), dayNumber, dayIndex));
-          }
-
-          for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth && (self.config.showMonths === 1 || dayIndex % 7 !== 0); dayNum++, dayIndex++) {
-            days.appendChild(createDay("flatpickr-day " + nextMonthDayClass, new Date(year, month + 1, dayNum % daysInMonth), dayNum, dayIndex));
-          }
-
-          var dayContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "dayContainer");
-          dayContainer.appendChild(days);
-          return dayContainer;
-        }
-
-        function buildDays() {
-          if (self.daysContainer === undefined) {
-            return;
-          }
-
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["clearNode"])(self.daysContainer);
-          if (self.weekNumbers) Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["clearNode"])(self.weekNumbers);
-          var frag = document.createDocumentFragment();
-
-          for (var i = 0; i < self.config.showMonths; i++) {
-            var d = new Date(self.currentYear, self.currentMonth, 1);
-            d.setMonth(self.currentMonth + i);
-            frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
-          }
-
-          self.daysContainer.appendChild(frag);
-          self.days = self.daysContainer.firstChild;
-
-          if (self.config.mode === "range" && self.selectedDates.length === 1) {
-            onMouseOver();
-          }
-        }
-
-        function buildMonthSwitch() {
-          if (self.config.showMonths > 1 || self.config.monthSelectorType !== "dropdown") return;
-
-          var shouldBuildMonth = function shouldBuildMonth(month) {
-            if (self.config.minDate !== undefined && self.currentYear === self.config.minDate.getFullYear() && month < self.config.minDate.getMonth()) {
-              return false;
-            }
-
-            return !(self.config.maxDate !== undefined && self.currentYear === self.config.maxDate.getFullYear() && month > self.config.maxDate.getMonth());
-          };
-
-          self.monthsDropdownContainer.tabIndex = -1;
-          self.monthsDropdownContainer.innerHTML = "";
-
-          for (var i = 0; i < 12; i++) {
-            if (!shouldBuildMonth(i)) continue;
-            var month = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("option", "flatpickr-monthDropdown-month");
-            month.value = new Date(self.currentYear, i).getMonth().toString();
-            month.textContent = Object(_utils_formatting__WEBPACK_IMPORTED_MODULE_5__["monthToStr"])(i, self.config.shorthandCurrentMonth, self.l10n);
-            month.tabIndex = -1;
-
-            if (self.currentMonth === i) {
-              month.selected = true;
-            }
-
-            self.monthsDropdownContainer.appendChild(month);
-          }
-        }
-
-        function buildMonth() {
-          var container = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-month");
-          var monthNavFragment = window.document.createDocumentFragment();
-          var monthElement;
-
-          if (self.config.showMonths > 1 || self.config.monthSelectorType === "static") {
-            monthElement = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "cur-month");
-          } else {
-            self.monthsDropdownContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("select", "flatpickr-monthDropdown-months");
-            self.monthsDropdownContainer.setAttribute("aria-label", self.l10n.monthAriaLabel);
-            bind(self.monthsDropdownContainer, "change", function (e) {
-              var target = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-              var selectedMonth = parseInt(target.value, 10);
-              self.changeMonth(selectedMonth - self.currentMonth);
-              triggerEvent("onMonthChange");
-            });
-            buildMonthSwitch();
-            monthElement = self.monthsDropdownContainer;
-          }
-
-          var yearInput = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createNumberInput"])("cur-year", {
-            tabindex: "-1"
-          });
-          var yearElement = yearInput.getElementsByTagName("input")[0];
-          yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
-
-          if (self.config.minDate) {
-            yearElement.setAttribute("min", self.config.minDate.getFullYear().toString());
-          }
-
-          if (self.config.maxDate) {
-            yearElement.setAttribute("max", self.config.maxDate.getFullYear().toString());
-            yearElement.disabled = !!self.config.minDate && self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
-          }
-
-          var currentMonth = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-current-month");
-          currentMonth.appendChild(monthElement);
-          currentMonth.appendChild(yearInput);
-          monthNavFragment.appendChild(currentMonth);
-          container.appendChild(monthNavFragment);
-          return {
-            container: container,
-            yearElement: yearElement,
-            monthElement: monthElement
-          };
-        }
-
-        function buildMonths() {
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["clearNode"])(self.monthNav);
-          self.monthNav.appendChild(self.prevMonthNav);
-
-          if (self.config.showMonths) {
-            self.yearElements = [];
-            self.monthElements = [];
-          }
-
-          for (var m = self.config.showMonths; m--;) {
-            var month = buildMonth();
-            self.yearElements.push(month.yearElement);
-            self.monthElements.push(month.monthElement);
-            self.monthNav.appendChild(month.container);
-          }
-
-          self.monthNav.appendChild(self.nextMonthNav);
-        }
-
-        function buildMonthNav() {
-          self.monthNav = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-months");
-          self.yearElements = [];
-          self.monthElements = [];
-          self.prevMonthNav = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "flatpickr-prev-month");
-          self.prevMonthNav.innerHTML = self.config.prevArrow;
-          self.nextMonthNav = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "flatpickr-next-month");
-          self.nextMonthNav.innerHTML = self.config.nextArrow;
-          buildMonths();
-          Object.defineProperty(self, "_hidePrevMonthArrow", {
-            get: function get() {
-              return self.__hidePrevMonthArrow;
-            },
-            set: function set(bool) {
-              if (self.__hidePrevMonthArrow !== bool) {
-                Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.prevMonthNav, "flatpickr-disabled", bool);
-                self.__hidePrevMonthArrow = bool;
-              }
-            }
-          });
-          Object.defineProperty(self, "_hideNextMonthArrow", {
-            get: function get() {
-              return self.__hideNextMonthArrow;
-            },
-            set: function set(bool) {
-              if (self.__hideNextMonthArrow !== bool) {
-                Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.nextMonthNav, "flatpickr-disabled", bool);
-                self.__hideNextMonthArrow = bool;
-              }
-            }
-          });
-          self.currentYearElement = self.yearElements[0];
-          updateNavigationCurrentMonth();
-          return self.monthNav;
-        }
-
-        function buildTime() {
-          self.calendarContainer.classList.add("hasTime");
-          if (self.config.noCalendar) self.calendarContainer.classList.add("noCalendar");
-          var defaults = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["getDefaultHours"])(self.config);
-          self.timeContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-time");
-          self.timeContainer.tabIndex = -1;
-          var separator = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "flatpickr-time-separator", ":");
-          var hourInput = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createNumberInput"])("flatpickr-hour", {
-            "aria-label": self.l10n.hourAriaLabel
-          });
-          self.hourElement = hourInput.getElementsByTagName("input")[0];
-          var minuteInput = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createNumberInput"])("flatpickr-minute", {
-            "aria-label": self.l10n.minuteAriaLabel
-          });
-          self.minuteElement = minuteInput.getElementsByTagName("input")[0];
-          self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
-          self.hourElement.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.time_24hr ? defaults.hours : military2ampm(defaults.hours));
-          self.minuteElement.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(self.latestSelectedDateObj ? self.latestSelectedDateObj.getMinutes() : defaults.minutes);
-          self.hourElement.setAttribute("step", self.config.hourIncrement.toString());
-          self.minuteElement.setAttribute("step", self.config.minuteIncrement.toString());
-          self.hourElement.setAttribute("min", self.config.time_24hr ? "0" : "1");
-          self.hourElement.setAttribute("max", self.config.time_24hr ? "23" : "12");
-          self.hourElement.setAttribute("maxlength", "2");
-          self.minuteElement.setAttribute("min", "0");
-          self.minuteElement.setAttribute("max", "59");
-          self.minuteElement.setAttribute("maxlength", "2");
-          self.timeContainer.appendChild(hourInput);
-          self.timeContainer.appendChild(separator);
-          self.timeContainer.appendChild(minuteInput);
-          if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
-
-          if (self.config.enableSeconds) {
-            self.timeContainer.classList.add("hasSeconds");
-            var secondInput = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createNumberInput"])("flatpickr-second");
-            self.secondElement = secondInput.getElementsByTagName("input")[0];
-            self.secondElement.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(self.latestSelectedDateObj ? self.latestSelectedDateObj.getSeconds() : defaults.seconds);
-            self.secondElement.setAttribute("step", self.minuteElement.getAttribute("step"));
-            self.secondElement.setAttribute("min", "0");
-            self.secondElement.setAttribute("max", "59");
-            self.secondElement.setAttribute("maxlength", "2");
-            self.timeContainer.appendChild(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "flatpickr-time-separator", ":"));
-            self.timeContainer.appendChild(secondInput);
-          }
-
-          if (!self.config.time_24hr) {
-            self.amPM = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "flatpickr-am-pm", self.l10n.amPM[Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])((self.latestSelectedDateObj ? self.hourElement.value : self.config.defaultHour) > 11)]);
-            self.amPM.title = self.l10n.toggleTitle;
-            self.amPM.tabIndex = -1;
-            self.timeContainer.appendChild(self.amPM);
-          }
-
-          return self.timeContainer;
-        }
-
-        function buildWeekdays() {
-          if (!self.weekdayContainer) self.weekdayContainer = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-weekdays");else Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["clearNode"])(self.weekdayContainer);
-
-          for (var i = self.config.showMonths; i--;) {
-            var container = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-weekdaycontainer");
-            self.weekdayContainer.appendChild(container);
-          }
-
-          updateWeekdays();
-          return self.weekdayContainer;
-        }
-
-        function updateWeekdays() {
-          if (!self.weekdayContainer) {
-            return;
-          }
-
-          var firstDayOfWeek = self.l10n.firstDayOfWeek;
-
-          var weekdays = __spreadArrays(self.l10n.weekdays.shorthand);
-
-          if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
-            weekdays = __spreadArrays(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
-          }
-
-          for (var i = self.config.showMonths; i--;) {
-            self.weekdayContainer.children[i].innerHTML = "\n      <span class='flatpickr-weekday'>\n        " + weekdays.join("</span><span class='flatpickr-weekday'>") + "\n      </span>\n      ";
-          }
-        }
-
-        function buildWeeks() {
-          self.calendarContainer.classList.add("hasWeeks");
-          var weekWrapper = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-weekwrapper");
-          weekWrapper.appendChild(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
-          var weekNumbers = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("div", "flatpickr-weeks");
-          weekWrapper.appendChild(weekNumbers);
-          return {
-            weekWrapper: weekWrapper,
-            weekNumbers: weekNumbers
-          };
-        }
-
-        function changeMonth(value, isOffset) {
-          if (isOffset === void 0) {
-            isOffset = true;
-          }
-
-          var delta = isOffset ? value : value - self.currentMonth;
-          if (delta < 0 && self._hidePrevMonthArrow === true || delta > 0 && self._hideNextMonthArrow === true) return;
-          self.currentMonth += delta;
-
-          if (self.currentMonth < 0 || self.currentMonth > 11) {
-            self.currentYear += self.currentMonth > 11 ? 1 : -1;
-            self.currentMonth = (self.currentMonth + 12) % 12;
-            triggerEvent("onYearChange");
-            buildMonthSwitch();
-          }
-
-          buildDays();
-          triggerEvent("onMonthChange");
-          updateNavigationCurrentMonth();
-        }
-
-        function clear(triggerChangeEvent, toInitial) {
-          if (triggerChangeEvent === void 0) {
-            triggerChangeEvent = true;
-          }
-
-          if (toInitial === void 0) {
-            toInitial = true;
-          }
-
-          self.input.value = "";
-          if (self.altInput !== undefined) self.altInput.value = "";
-          if (self.mobileInput !== undefined) self.mobileInput.value = "";
-          self.selectedDates = [];
-          self.latestSelectedDateObj = undefined;
-
-          if (toInitial === true) {
-            self.currentYear = self._initialDate.getFullYear();
-            self.currentMonth = self._initialDate.getMonth();
-          }
-
-          if (self.config.enableTime === true) {
-            var _a = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["getDefaultHours"])(self.config),
-                hours = _a.hours,
-                minutes = _a.minutes,
-                seconds = _a.seconds;
-
-            setHours(hours, minutes, seconds);
-          }
-
-          self.redraw();
-          if (triggerChangeEvent) triggerEvent("onChange");
-        }
-
-        function close() {
-          self.isOpen = false;
-
-          if (!self.isMobile) {
-            if (self.calendarContainer !== undefined) {
-              self.calendarContainer.classList.remove("open");
-            }
-
-            if (self._input !== undefined) {
-              self._input.classList.remove("active");
-            }
-          }
-
-          triggerEvent("onClose");
-        }
-
-        function destroy() {
-          if (self.config !== undefined) triggerEvent("onDestroy");
-
-          for (var i = self._handlers.length; i--;) {
-            self._handlers[i].remove();
-          }
-
-          self._handlers = [];
-
-          if (self.mobileInput) {
-            if (self.mobileInput.parentNode) self.mobileInput.parentNode.removeChild(self.mobileInput);
-            self.mobileInput = undefined;
-          } else if (self.calendarContainer && self.calendarContainer.parentNode) {
-            if (self.config["static"] && self.calendarContainer.parentNode) {
-              var wrapper = self.calendarContainer.parentNode;
-              wrapper.lastChild && wrapper.removeChild(wrapper.lastChild);
-
-              if (wrapper.parentNode) {
-                while (wrapper.firstChild) wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
-
-                wrapper.parentNode.removeChild(wrapper);
-              }
-            } else self.calendarContainer.parentNode.removeChild(self.calendarContainer);
-          }
-
-          if (self.altInput) {
-            self.input.type = "text";
-            if (self.altInput.parentNode) self.altInput.parentNode.removeChild(self.altInput);
-            delete self.altInput;
-          }
-
-          if (self.input) {
-            self.input.type = self.input._type;
-            self.input.classList.remove("flatpickr-input");
-            self.input.removeAttribute("readonly");
-          }
-
-          ["_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow", "__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem", "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input", "_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem", "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav", "monthsDropdownContainer", "currentMonthElement", "currentYearElement", "navigationCurrentMonth", "selectedDateElem", "config"].forEach(function (k) {
-            try {
-              delete self[k];
-            } catch (_) {}
-          });
-        }
-
-        function isCalendarElem(elem) {
-          return self.calendarContainer.contains(elem);
-        }
-
-        function documentClick(e) {
-          if (self.isOpen && !self.config.inline) {
-            var eventTarget_1 = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-            var isCalendarElement = isCalendarElem(eventTarget_1);
-            var isInput = eventTarget_1 === self.input || eventTarget_1 === self.altInput || self.element.contains(eventTarget_1) || e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
-            var lostFocus = !isInput && !isCalendarElement && !isCalendarElem(e.relatedTarget);
-            var isIgnored = !self.config.ignoredFocusElements.some(function (elem) {
-              return elem.contains(eventTarget_1);
-            });
-
-            if (lostFocus && isIgnored) {
-              if (self.config.allowInput) {
-                self.setDate(self._input.value, false, self.config.altInput ? self.config.altFormat : self.config.dateFormat);
-              }
-
-              if (self.timeContainer !== undefined && self.minuteElement !== undefined && self.hourElement !== undefined && self.input.value !== "" && self.input.value !== undefined) {
-                updateTime();
-              }
-
-              self.close();
-              if (self.config && self.config.mode === "range" && self.selectedDates.length === 1) self.clear(false);
-            }
-          }
-        }
-
-        function changeYear(newYear) {
-          if (!newYear || self.config.minDate && newYear < self.config.minDate.getFullYear() || self.config.maxDate && newYear > self.config.maxDate.getFullYear()) return;
-          var newYearNum = newYear,
-              isNewYear = self.currentYear !== newYearNum;
-          self.currentYear = newYearNum || self.currentYear;
-
-          if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear()) {
-            self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
-          } else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
-            self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
-          }
-
-          if (isNewYear) {
-            self.redraw();
-            triggerEvent("onYearChange");
-            buildMonthSwitch();
-          }
-        }
-
-        function isEnabled(date, timeless) {
-          var _a;
-
-          if (timeless === void 0) {
-            timeless = true;
-          }
-
-          var dateToCheck = self.parseDate(date, undefined, timeless);
-          if (self.config.minDate && dateToCheck && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(dateToCheck, self.config.minDate, timeless !== undefined ? timeless : !self.minDateHasTime) < 0 || self.config.maxDate && dateToCheck && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(dateToCheck, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0) return false;
-          if (!self.config.enable && self.config.disable.length === 0) return true;
-          if (dateToCheck === undefined) return false;
-          var bool = !!self.config.enable,
-              array = (_a = self.config.enable) !== null && _a !== void 0 ? _a : self.config.disable;
-
-          for (var i = 0, d = void 0; i < array.length; i++) {
-            d = array[i];
-            if (typeof d === "function" && d(dateToCheck)) return bool;else if (d instanceof Date && dateToCheck !== undefined && d.getTime() === dateToCheck.getTime()) return bool;else if (typeof d === "string") {
-              var parsed = self.parseDate(d, undefined, true);
-              return parsed && parsed.getTime() === dateToCheck.getTime() ? bool : !bool;
-            } else if (typeof d === "object" && dateToCheck !== undefined && d.from && d.to && dateToCheck.getTime() >= d.from.getTime() && dateToCheck.getTime() <= d.to.getTime()) return bool;
-          }
-
-          return !bool;
-        }
-
-        function isInView(elem) {
-          if (self.daysContainer !== undefined) return elem.className.indexOf("hidden") === -1 && elem.className.indexOf("flatpickr-disabled") === -1 && self.daysContainer.contains(elem);
-          return false;
-        }
-
-        function onBlur(e) {
-          var isInput = e.target === self._input;
-          var valueChanged = self._input.value.trimEnd() !== getDateStr();
-
-          if (isInput && valueChanged && !(e.relatedTarget && isCalendarElem(e.relatedTarget))) {
-            self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
-          }
-        }
-
-        function onKeyDown(e) {
-          var eventTarget = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-          var isInput = self.config.wrap ? element.contains(eventTarget) : eventTarget === self._input;
-          var allowInput = self.config.allowInput;
-          var allowKeydown = self.isOpen && (!allowInput || !isInput);
-          var allowInlineKeydown = self.config.inline && isInput && !allowInput;
-
-          if (e.keyCode === 13 && isInput) {
-            if (allowInput) {
-              self.setDate(self._input.value, true, eventTarget === self.altInput ? self.config.altFormat : self.config.dateFormat);
-              self.close();
-              return eventTarget.blur();
-            } else {
-              self.open();
-            }
-          } else if (isCalendarElem(eventTarget) || allowKeydown || allowInlineKeydown) {
-            var isTimeObj = !!self.timeContainer && self.timeContainer.contains(eventTarget);
-
-            switch (e.keyCode) {
-              case 13:
-                if (isTimeObj) {
-                  e.preventDefault();
-                  updateTime();
-                  focusAndClose();
-                } else selectDate(e);
-
-                break;
-
-              case 27:
-                e.preventDefault();
-                focusAndClose();
-                break;
-
-              case 8:
-              case 46:
-                if (isInput && !self.config.allowInput) {
-                  e.preventDefault();
-                  self.clear();
-                }
-
-                break;
-
-              case 37:
-              case 39:
-                if (!isTimeObj && !isInput) {
-                  e.preventDefault();
-                  var activeElement = getClosestActiveElement();
-
-                  if (self.daysContainer !== undefined && (allowInput === false || activeElement && isInView(activeElement))) {
-                    var delta_1 = e.keyCode === 39 ? 1 : -1;
-                    if (!e.ctrlKey) focusOnDay(undefined, delta_1);else {
-                      e.stopPropagation();
-                      changeMonth(delta_1);
-                      focusOnDay(getFirstAvailableDay(1), 0);
-                    }
-                  }
-                } else if (self.hourElement) self.hourElement.focus();
-
-                break;
-
-              case 38:
-              case 40:
-                e.preventDefault();
-                var delta = e.keyCode === 40 ? 1 : -1;
-
-                if (self.daysContainer && eventTarget.$i !== undefined || eventTarget === self.input || eventTarget === self.altInput) {
-                  if (e.ctrlKey) {
-                    e.stopPropagation();
-                    changeYear(self.currentYear - delta);
-                    focusOnDay(getFirstAvailableDay(1), 0);
-                  } else if (!isTimeObj) focusOnDay(undefined, delta * 7);
-                } else if (eventTarget === self.currentYearElement) {
-                  changeYear(self.currentYear - delta);
-                } else if (self.config.enableTime) {
-                  if (!isTimeObj && self.hourElement) self.hourElement.focus();
-                  updateTime(e);
-
-                  self._debouncedChange();
-                }
-
-                break;
-
-              case 9:
-                if (isTimeObj) {
-                  var elems = [self.hourElement, self.minuteElement, self.secondElement, self.amPM].concat(self.pluginElements).filter(function (x) {
-                    return x;
-                  });
-                  var i = elems.indexOf(eventTarget);
-
-                  if (i !== -1) {
-                    var target = elems[i + (e.shiftKey ? -1 : 1)];
-                    e.preventDefault();
-
-                    (target || self._input).focus();
-                  }
-                } else if (!self.config.noCalendar && self.daysContainer && self.daysContainer.contains(eventTarget) && e.shiftKey) {
-                  e.preventDefault();
-
-                  self._input.focus();
-                }
-
-                break;
-
-              default:
-                break;
-            }
-          }
-
-          if (self.amPM !== undefined && eventTarget === self.amPM) {
-            switch (e.key) {
-              case self.l10n.amPM[0].charAt(0):
-              case self.l10n.amPM[0].charAt(0).toLowerCase():
-                self.amPM.textContent = self.l10n.amPM[0];
-                setHoursFromInputs();
-                updateValue();
-                break;
-
-              case self.l10n.amPM[1].charAt(0):
-              case self.l10n.amPM[1].charAt(0).toLowerCase():
-                self.amPM.textContent = self.l10n.amPM[1];
-                setHoursFromInputs();
-                updateValue();
-                break;
-            }
-          }
-
-          if (isInput || isCalendarElem(eventTarget)) {
-            triggerEvent("onKeyDown", e);
-          }
-        }
-
-        function onMouseOver(elem, cellClass) {
-          if (cellClass === void 0) {
-            cellClass = "flatpickr-day";
-          }
-
-          if (self.selectedDates.length !== 1 || elem && (!elem.classList.contains(cellClass) || elem.classList.contains("flatpickr-disabled"))) return;
-          var hoverDate = elem ? elem.dateObj.getTime() : self.days.firstElementChild.dateObj.getTime(),
-              initialDate = self.parseDate(self.selectedDates[0], undefined, true).getTime(),
-              rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
-              rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime());
-          var containsDisabled = false;
-          var minRange = 0,
-              maxRange = 0;
-
-          for (var t = rangeStartDate; t < rangeEndDate; t += _utils_dates__WEBPACK_IMPORTED_MODULE_4__["duration"].DAY) {
-            if (!isEnabled(new Date(t), true)) {
-              containsDisabled = containsDisabled || t > rangeStartDate && t < rangeEndDate;
-              if (t < initialDate && (!minRange || t > minRange)) minRange = t;else if (t > initialDate && (!maxRange || t < maxRange)) maxRange = t;
-            }
-          }
-
-          var hoverableCells = Array.from(self.rContainer.querySelectorAll("*:nth-child(-n+" + self.config.showMonths + ") > ." + cellClass));
-          hoverableCells.forEach(function (dayElem) {
-            var date = dayElem.dateObj;
-            var timestamp = date.getTime();
-            var outOfRange = minRange > 0 && timestamp < minRange || maxRange > 0 && timestamp > maxRange;
-
-            if (outOfRange) {
-              dayElem.classList.add("notAllowed");
-              ["inRange", "startRange", "endRange"].forEach(function (c) {
-                dayElem.classList.remove(c);
-              });
-              return;
-            } else if (containsDisabled && !outOfRange) return;
-
-            ["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
-              dayElem.classList.remove(c);
-            });
-
-            if (elem !== undefined) {
-              elem.classList.add(hoverDate <= self.selectedDates[0].getTime() ? "startRange" : "endRange");
-              if (initialDate < hoverDate && timestamp === initialDate) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate) dayElem.classList.add("endRange");
-              if (timestamp >= minRange && (maxRange === 0 || timestamp <= maxRange) && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["isBetween"])(timestamp, initialDate, hoverDate)) dayElem.classList.add("inRange");
-            }
-          });
-        }
-
-        function onResize() {
-          if (self.isOpen && !self.config["static"] && !self.config.inline) positionCalendar();
-        }
-
-        function open(e, positionElement) {
-          if (positionElement === void 0) {
-            positionElement = self._positionElement;
-          }
-
-          if (self.isMobile === true) {
-            if (e) {
-              e.preventDefault();
-              var eventTarget = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-
-              if (eventTarget) {
-                eventTarget.blur();
-              }
-            }
-
-            if (self.mobileInput !== undefined) {
-              self.mobileInput.focus();
-              self.mobileInput.click();
-            }
-
-            triggerEvent("onOpen");
-            return;
-          } else if (self._input.disabled || self.config.inline) {
-            return;
-          }
-
-          var wasOpen = self.isOpen;
-          self.isOpen = true;
-
-          if (!wasOpen) {
-            self.calendarContainer.classList.add("open");
-
-            self._input.classList.add("active");
-
-            triggerEvent("onOpen");
-            positionCalendar(positionElement);
-          }
-
-          if (self.config.enableTime === true && self.config.noCalendar === true) {
-            if (self.config.allowInput === false && (e === undefined || !self.timeContainer.contains(e.relatedTarget))) {
-              setTimeout(function () {
-                return self.hourElement.select();
-              }, 50);
-            }
-          }
-        }
-
-        function minMaxDateSetter(type) {
-          return function (date) {
-            var dateObj = self.config["_" + type + "Date"] = self.parseDate(date, self.config.dateFormat);
-            var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
-
-            if (dateObj !== undefined) {
-              self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] = dateObj.getHours() > 0 || dateObj.getMinutes() > 0 || dateObj.getSeconds() > 0;
-            }
-
-            if (self.selectedDates) {
-              self.selectedDates = self.selectedDates.filter(function (d) {
-                return isEnabled(d);
-              });
-              if (!self.selectedDates.length && type === "min") setHoursFromDate(dateObj);
-              updateValue();
-            }
-
-            if (self.daysContainer) {
-              redraw();
-              if (dateObj !== undefined) self.currentYearElement[type] = dateObj.getFullYear().toString();else self.currentYearElement.removeAttribute(type);
-              self.currentYearElement.disabled = !!inverseDateObj && dateObj !== undefined && inverseDateObj.getFullYear() === dateObj.getFullYear();
-            }
-          };
-        }
-
-        function parseConfig() {
-          var boolOpts = ["wrap", "weekNumbers", "allowInput", "allowInvalidPreload", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
-
-          var userConfig = __assign(__assign({}, JSON.parse(JSON.stringify(element.dataset || {}))), instanceConfig);
-
-          var formats = {};
-          self.config.parseDate = userConfig.parseDate;
-          self.config.formatDate = userConfig.formatDate;
-          Object.defineProperty(self.config, "enable", {
-            get: function get() {
-              return self.config._enable;
-            },
-            set: function set(dates) {
-              self.config._enable = parseDateRules(dates);
-            }
-          });
-          Object.defineProperty(self.config, "disable", {
-            get: function get() {
-              return self.config._disable;
-            },
-            set: function set(dates) {
-              self.config._disable = parseDateRules(dates);
-            }
-          });
-          var timeMode = userConfig.mode === "time";
-
-          if (!userConfig.dateFormat && (userConfig.enableTime || timeMode)) {
-            var defaultDateFormat = flatpickr.defaultConfig.dateFormat || _types_options__WEBPACK_IMPORTED_MODULE_0__["defaults"].dateFormat;
-            formats.dateFormat = userConfig.noCalendar || timeMode ? "H:i" + (userConfig.enableSeconds ? ":S" : "") : defaultDateFormat + " H:i" + (userConfig.enableSeconds ? ":S" : "");
-          }
-
-          if (userConfig.altInput && (userConfig.enableTime || timeMode) && !userConfig.altFormat) {
-            var defaultAltFormat = flatpickr.defaultConfig.altFormat || _types_options__WEBPACK_IMPORTED_MODULE_0__["defaults"].altFormat;
-            formats.altFormat = userConfig.noCalendar || timeMode ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K") : defaultAltFormat + (" h:i" + (userConfig.enableSeconds ? ":S" : "") + " K");
-          }
-
-          Object.defineProperty(self.config, "minDate", {
-            get: function get() {
-              return self.config._minDate;
-            },
-            set: minMaxDateSetter("min")
-          });
-          Object.defineProperty(self.config, "maxDate", {
-            get: function get() {
-              return self.config._maxDate;
-            },
-            set: minMaxDateSetter("max")
-          });
-
-          var minMaxTimeSetter = function minMaxTimeSetter(type) {
-            return function (val) {
-              self.config[type === "min" ? "_minTime" : "_maxTime"] = self.parseDate(val, "H:i:S");
-            };
-          };
-
-          Object.defineProperty(self.config, "minTime", {
-            get: function get() {
-              return self.config._minTime;
-            },
-            set: minMaxTimeSetter("min")
-          });
-          Object.defineProperty(self.config, "maxTime", {
-            get: function get() {
-              return self.config._maxTime;
-            },
-            set: minMaxTimeSetter("max")
-          });
-
-          if (userConfig.mode === "time") {
-            self.config.noCalendar = true;
-            self.config.enableTime = true;
-          }
-
-          Object.assign(self.config, formats, userConfig);
-
-          for (var i = 0; i < boolOpts.length; i++) self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
-
-          _types_options__WEBPACK_IMPORTED_MODULE_0__["HOOKS"].filter(function (hook) {
-            return self.config[hook] !== undefined;
-          }).forEach(function (hook) {
-            self.config[hook] = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["arrayify"])(self.config[hook] || []).map(bindToInstance);
-          });
-
-          self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-          for (var i = 0; i < self.config.plugins.length; i++) {
-            var pluginConf = self.config.plugins[i](self) || {};
-
-            for (var key in pluginConf) {
-              if (_types_options__WEBPACK_IMPORTED_MODULE_0__["HOOKS"].indexOf(key) > -1) {
-                self.config[key] = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["arrayify"])(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
-              } else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
-            }
-          }
-
-          if (!userConfig.altInputClass) {
-            self.config.altInputClass = getInputElem().className + " " + self.config.altInputClass;
-          }
-
-          triggerEvent("onParseConfig");
-        }
-
-        function getInputElem() {
-          return self.config.wrap ? element.querySelector("[data-input]") : element;
-        }
-
-        function setupLocale() {
-          if (typeof self.config.locale !== "object" && typeof flatpickr.l10ns[self.config.locale] === "undefined") self.config.errorHandler(new Error("flatpickr: invalid locale " + self.config.locale));
-          self.l10n = __assign(__assign({}, flatpickr.l10ns["default"]), typeof self.config.locale === "object" ? self.config.locale : self.config.locale !== "default" ? flatpickr.l10ns[self.config.locale] : undefined);
-          _utils_formatting__WEBPACK_IMPORTED_MODULE_5__["tokenRegex"].D = "(" + self.l10n.weekdays.shorthand.join("|") + ")";
-          _utils_formatting__WEBPACK_IMPORTED_MODULE_5__["tokenRegex"].l = "(" + self.l10n.weekdays.longhand.join("|") + ")";
-          _utils_formatting__WEBPACK_IMPORTED_MODULE_5__["tokenRegex"].M = "(" + self.l10n.months.shorthand.join("|") + ")";
-          _utils_formatting__WEBPACK_IMPORTED_MODULE_5__["tokenRegex"].F = "(" + self.l10n.months.longhand.join("|") + ")";
-          _utils_formatting__WEBPACK_IMPORTED_MODULE_5__["tokenRegex"].K = "(" + self.l10n.amPM[0] + "|" + self.l10n.amPM[1] + "|" + self.l10n.amPM[0].toLowerCase() + "|" + self.l10n.amPM[1].toLowerCase() + ")";
-
-          var userConfig = __assign(__assign({}, instanceConfig), JSON.parse(JSON.stringify(element.dataset || {})));
-
-          if (userConfig.time_24hr === undefined && flatpickr.defaultConfig.time_24hr === undefined) {
-            self.config.time_24hr = self.l10n.time_24hr;
-          }
-
-          self.formatDate = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["createDateFormatter"])(self);
-          self.parseDate = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["createDateParser"])({
-            config: self.config,
-            l10n: self.l10n
-          });
-        }
-
-        function positionCalendar(customPositionElement) {
-          if (typeof self.config.position === "function") {
-            return void self.config.position(self, customPositionElement);
-          }
-
-          if (self.calendarContainer === undefined) return;
-          triggerEvent("onPreCalendarPosition");
-          var positionElement = customPositionElement || self._positionElement;
-          var calendarHeight = Array.prototype.reduce.call(self.calendarContainer.children, function (acc, child) {
-            return acc + child.offsetHeight;
-          }, 0),
-              calendarWidth = self.calendarContainer.offsetWidth,
-              configPos = self.config.position.split(" "),
-              configPosVertical = configPos[0],
-              configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
-              inputBounds = positionElement.getBoundingClientRect(),
-              distanceFromBottom = window.innerHeight - inputBounds.bottom,
-              showOnTop = configPosVertical === "above" || configPosVertical !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
-          var top = window.pageYOffset + inputBounds.top + (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "arrowTop", !showOnTop);
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "arrowBottom", showOnTop);
-          if (self.config.inline) return;
-          var left = window.pageXOffset + inputBounds.left;
-          var isCenter = false;
-          var isRight = false;
-
-          if (configPosHorizontal === "center") {
-            left -= (calendarWidth - inputBounds.width) / 2;
-            isCenter = true;
-          } else if (configPosHorizontal === "right") {
-            left -= calendarWidth - inputBounds.width;
-            isRight = true;
-          }
-
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "arrowLeft", !isCenter && !isRight);
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "arrowCenter", isCenter);
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "arrowRight", isRight);
-          var right = window.document.body.offsetWidth - (window.pageXOffset + inputBounds.right);
-          var rightMost = left + calendarWidth > window.document.body.offsetWidth;
-          var centerMost = right + calendarWidth > window.document.body.offsetWidth;
-          Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "rightMost", rightMost);
-          if (self.config["static"]) return;
-          self.calendarContainer.style.top = top + "px";
-
-          if (!rightMost) {
-            self.calendarContainer.style.left = left + "px";
-            self.calendarContainer.style.right = "auto";
-          } else if (!centerMost) {
-            self.calendarContainer.style.left = "auto";
-            self.calendarContainer.style.right = right + "px";
-          } else {
-            var doc = getDocumentStyleSheet();
-            if (doc === undefined) return;
-            var bodyWidth = window.document.body.offsetWidth;
-            var centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
-            var centerBefore = ".flatpickr-calendar.centerMost:before";
-            var centerAfter = ".flatpickr-calendar.centerMost:after";
-            var centerIndex = doc.cssRules.length;
-            var centerStyle = "{left:" + inputBounds.left + "px;right:auto;}";
-            Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "rightMost", false);
-            Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["toggleClass"])(self.calendarContainer, "centerMost", true);
-            doc.insertRule(centerBefore + "," + centerAfter + centerStyle, centerIndex);
-            self.calendarContainer.style.left = centerLeft + "px";
-            self.calendarContainer.style.right = "auto";
-          }
-        }
-
-        function getDocumentStyleSheet() {
-          var editableSheet = null;
-
-          for (var i = 0; i < document.styleSheets.length; i++) {
-            var sheet = document.styleSheets[i];
-            if (!sheet.cssRules) continue;
-
-            try {
-              sheet.cssRules;
-            } catch (err) {
-              continue;
-            }
-
-            editableSheet = sheet;
-            break;
-          }
-
-          return editableSheet != null ? editableSheet : createStyleSheet();
-        }
-
-        function createStyleSheet() {
-          var style = document.createElement("style");
-          document.head.appendChild(style);
-          return style.sheet;
-        }
-
-        function redraw() {
-          if (self.config.noCalendar || self.isMobile) return;
-          buildMonthSwitch();
-          updateNavigationCurrentMonth();
-          buildDays();
-        }
-
-        function focusAndClose() {
-          self._input.focus();
-
-          if (window.navigator.userAgent.indexOf("MSIE") !== -1 || navigator.msMaxTouchPoints !== undefined) {
-            setTimeout(self.close, 0);
-          } else {
-            self.close();
-          }
-        }
-
-        function selectDate(e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          var isSelectable = function isSelectable(day) {
-            return day.classList && day.classList.contains("flatpickr-day") && !day.classList.contains("flatpickr-disabled") && !day.classList.contains("notAllowed");
-          };
-
-          var t = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["findParent"])(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e), isSelectable);
-          if (t === undefined) return;
-          var target = t;
-          var selectedDate = self.latestSelectedDateObj = new Date(target.dateObj.getTime());
-          var shouldChangeMonth = (selectedDate.getMonth() < self.currentMonth || selectedDate.getMonth() > self.currentMonth + self.config.showMonths - 1) && self.config.mode !== "range";
-          self.selectedDateElem = target;
-          if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
-            var selectedIndex = isDateSelected(selectedDate);
-            if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);else self.selectedDates.push(selectedDate);
-          } else if (self.config.mode === "range") {
-            if (self.selectedDates.length === 2) {
-              self.clear(false, false);
-            }
-
-            self.latestSelectedDateObj = selectedDate;
-            self.selectedDates.push(selectedDate);
-            if (Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(selectedDate, self.selectedDates[0], true) !== 0) self.selectedDates.sort(function (a, b) {
-              return a.getTime() - b.getTime();
-            });
-          }
-          setHoursFromInputs();
-
-          if (shouldChangeMonth) {
-            var isNewYear = self.currentYear !== selectedDate.getFullYear();
-            self.currentYear = selectedDate.getFullYear();
-            self.currentMonth = selectedDate.getMonth();
-
-            if (isNewYear) {
-              triggerEvent("onYearChange");
-              buildMonthSwitch();
-            }
-
-            triggerEvent("onMonthChange");
-          }
-
-          updateNavigationCurrentMonth();
-          buildDays();
-          updateValue();
-          if (!shouldChangeMonth && self.config.mode !== "range" && self.config.showMonths === 1) focusOnDayElem(target);else if (self.selectedDateElem !== undefined && self.hourElement === undefined) {
-            self.selectedDateElem && self.selectedDateElem.focus();
-          }
-          if (self.hourElement !== undefined) self.hourElement !== undefined && self.hourElement.focus();
-
-          if (self.config.closeOnSelect) {
-            var single = self.config.mode === "single" && !self.config.enableTime;
-            var range = self.config.mode === "range" && self.selectedDates.length === 2 && !self.config.enableTime;
-
-            if (single || range) {
-              focusAndClose();
-            }
-          }
-
-          triggerChange();
-        }
-
-        var CALLBACKS = {
-          locale: [setupLocale, updateWeekdays],
-          showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
-          minDate: [jumpToDate],
-          maxDate: [jumpToDate],
-          positionElement: [updatePositionElement],
-          clickOpens: [function () {
-            if (self.config.clickOpens === true) {
-              bind(self._input, "focus", self.open);
-              bind(self._input, "click", self.open);
-            } else {
-              self._input.removeEventListener("focus", self.open);
-
-              self._input.removeEventListener("click", self.open);
-            }
-          }]
-        };
-
-        function set(option, value) {
-          if (option !== null && typeof option === "object") {
-            Object.assign(self.config, option);
-
-            for (var key in option) {
-              if (CALLBACKS[key] !== undefined) CALLBACKS[key].forEach(function (x) {
-                return x();
-              });
-            }
-          } else {
-            self.config[option] = value;
-            if (CALLBACKS[option] !== undefined) CALLBACKS[option].forEach(function (x) {
-              return x();
-            });else if (_types_options__WEBPACK_IMPORTED_MODULE_0__["HOOKS"].indexOf(option) > -1) self.config[option] = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["arrayify"])(value);
-          }
-
-          self.redraw();
-          updateValue(true);
-        }
-
-        function setSelectedDate(inputDate, format) {
-          var dates = [];
-          if (inputDate instanceof Array) dates = inputDate.map(function (d) {
-            return self.parseDate(d, format);
-          });else if (inputDate instanceof Date || typeof inputDate === "number") dates = [self.parseDate(inputDate, format)];else if (typeof inputDate === "string") {
-            switch (self.config.mode) {
-              case "single":
-              case "time":
-                dates = [self.parseDate(inputDate, format)];
-                break;
-
-              case "multiple":
-                dates = inputDate.split(self.config.conjunction).map(function (date) {
-                  return self.parseDate(date, format);
-                });
-                break;
-
-              case "range":
-                dates = inputDate.split(self.l10n.rangeSeparator).map(function (date) {
-                  return self.parseDate(date, format);
-                });
-                break;
-
-              default:
-                break;
-            }
-          } else self.config.errorHandler(new Error("Invalid date supplied: " + JSON.stringify(inputDate)));
-          self.selectedDates = self.config.allowInvalidPreload ? dates : dates.filter(function (d) {
-            return d instanceof Date && isEnabled(d, false);
-          });
-          if (self.config.mode === "range") self.selectedDates.sort(function (a, b) {
-            return a.getTime() - b.getTime();
-          });
-        }
-
-        function setDate(date, triggerChange, format) {
-          if (triggerChange === void 0) {
-            triggerChange = false;
-          }
-
-          if (format === void 0) {
-            format = self.config.dateFormat;
-          }
-
-          if (date !== 0 && !date || date instanceof Array && date.length === 0) return self.clear(triggerChange);
-          setSelectedDate(date, format);
-          self.latestSelectedDateObj = self.selectedDates[self.selectedDates.length - 1];
-          self.redraw();
-          jumpToDate(undefined, triggerChange);
-          setHoursFromDate();
-
-          if (self.selectedDates.length === 0) {
-            self.clear(false);
-          }
-
-          updateValue(triggerChange);
-          if (triggerChange) triggerEvent("onChange");
-        }
-
-        function parseDateRules(arr) {
-          return arr.slice().map(function (rule) {
-            if (typeof rule === "string" || typeof rule === "number" || rule instanceof Date) {
-              return self.parseDate(rule, undefined, true);
-            } else if (rule && typeof rule === "object" && rule.from && rule.to) return {
-              from: self.parseDate(rule.from, undefined),
-              to: self.parseDate(rule.to, undefined)
-            };
-
-            return rule;
-          }).filter(function (x) {
-            return x;
-          });
-        }
-
-        function setupDates() {
-          self.selectedDates = [];
-          self.now = self.parseDate(self.config.now) || new Date();
-          var preloadedDate = self.config.defaultDate || ((self.input.nodeName === "INPUT" || self.input.nodeName === "TEXTAREA") && self.input.placeholder && self.input.value === self.input.placeholder ? null : self.input.value);
-          if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
-          self._initialDate = self.selectedDates.length > 0 ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now.getTime() ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now.getTime() ? self.config.maxDate : self.now;
-          self.currentYear = self._initialDate.getFullYear();
-          self.currentMonth = self._initialDate.getMonth();
-          if (self.selectedDates.length > 0) self.latestSelectedDateObj = self.selectedDates[0];
-          if (self.config.minTime !== undefined) self.config.minTime = self.parseDate(self.config.minTime, "H:i");
-          if (self.config.maxTime !== undefined) self.config.maxTime = self.parseDate(self.config.maxTime, "H:i");
-          self.minDateHasTime = !!self.config.minDate && (self.config.minDate.getHours() > 0 || self.config.minDate.getMinutes() > 0 || self.config.minDate.getSeconds() > 0);
-          self.maxDateHasTime = !!self.config.maxDate && (self.config.maxDate.getHours() > 0 || self.config.maxDate.getMinutes() > 0 || self.config.maxDate.getSeconds() > 0);
-        }
-
-        function setupInputs() {
-          self.input = getInputElem();
-
-          if (!self.input) {
-            self.config.errorHandler(new Error("Invalid input element specified"));
-            return;
-          }
-
-          self.input._type = self.input.type;
-          self.input.type = "text";
-          self.input.classList.add("flatpickr-input");
-          self._input = self.input;
-
-          if (self.config.altInput) {
-            self.altInput = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])(self.input.nodeName, self.config.altInputClass);
-            self._input = self.altInput;
-            self.altInput.placeholder = self.input.placeholder;
-            self.altInput.disabled = self.input.disabled;
-            self.altInput.required = self.input.required;
-            self.altInput.tabIndex = self.input.tabIndex;
-            self.altInput.type = "text";
-            self.input.setAttribute("type", "hidden");
-            if (!self.config["static"] && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
-          }
-
-          if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
-          updatePositionElement();
-        }
-
-        function updatePositionElement() {
-          self._positionElement = self.config.positionElement || self._input;
-        }
-
-        function setupMobile() {
-          var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
-          self.mobileInput = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["createElement"])("input", self.input.className + " flatpickr-mobile");
-          self.mobileInput.tabIndex = 1;
-          self.mobileInput.type = inputType;
-          self.mobileInput.disabled = self.input.disabled;
-          self.mobileInput.required = self.input.required;
-          self.mobileInput.placeholder = self.input.placeholder;
-          self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" : inputType === "date" ? "Y-m-d" : "H:i:S";
-
-          if (self.selectedDates.length > 0) {
-            self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
-          }
-
-          if (self.config.minDate) self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
-          if (self.config.maxDate) self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
-          if (self.input.getAttribute("step")) self.mobileInput.step = String(self.input.getAttribute("step"));
-          self.input.type = "hidden";
-          if (self.altInput !== undefined) self.altInput.type = "hidden";
-
-          try {
-            if (self.input.parentNode) self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
-          } catch (_a) {}
-
-          bind(self.mobileInput, "change", function (e) {
-            self.setDate(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e).value, false, self.mobileFormatStr);
-            triggerEvent("onChange");
-            triggerEvent("onClose");
-          });
-        }
-
-        function toggle(e) {
-          if (self.isOpen === true) return self.close();
-          self.open(e);
-        }
-
-        function triggerEvent(event, data) {
-          if (self.config === undefined) return;
-          var hooks = self.config[event];
-
-          if (hooks !== undefined && hooks.length > 0) {
-            for (var i = 0; hooks[i] && i < hooks.length; i++) hooks[i](self.selectedDates, self.input.value, self, data);
-          }
-
-          if (event === "onChange") {
-            self.input.dispatchEvent(createEvent("change"));
-            self.input.dispatchEvent(createEvent("input"));
-          }
-        }
-
-        function createEvent(name) {
-          var e = document.createEvent("Event");
-          e.initEvent(name, true, true);
-          return e;
-        }
-
-        function isDateSelected(date) {
-          for (var i = 0; i < self.selectedDates.length; i++) {
-            var selectedDate = self.selectedDates[i];
-            if (selectedDate instanceof Date && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(selectedDate, date) === 0) return "" + i;
-          }
-
-          return false;
-        }
-
-        function isDateInRange(date) {
-          if (self.config.mode !== "range" || self.selectedDates.length < 2) return false;
-          return Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(date, self.selectedDates[0]) >= 0 && Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"])(date, self.selectedDates[1]) <= 0;
-        }
-
-        function updateNavigationCurrentMonth() {
-          if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
-          self.yearElements.forEach(function (yearElement, i) {
-            var d = new Date(self.currentYear, self.currentMonth, 1);
-            d.setMonth(self.currentMonth + i);
-
-            if (self.config.showMonths > 1 || self.config.monthSelectorType === "static") {
-              self.monthElements[i].textContent = Object(_utils_formatting__WEBPACK_IMPORTED_MODULE_5__["monthToStr"])(d.getMonth(), self.config.shorthandCurrentMonth, self.l10n) + " ";
-            } else {
-              self.monthsDropdownContainer.value = d.getMonth().toString();
-            }
-
-            yearElement.value = d.getFullYear().toString();
-          });
-          self._hidePrevMonthArrow = self.config.minDate !== undefined && (self.currentYear === self.config.minDate.getFullYear() ? self.currentMonth <= self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear());
-          self._hideNextMonthArrow = self.config.maxDate !== undefined && (self.currentYear === self.config.maxDate.getFullYear() ? self.currentMonth + 1 > self.config.maxDate.getMonth() : self.currentYear > self.config.maxDate.getFullYear());
-        }
-
-        function getDateStr(specificFormat) {
-          var format = specificFormat || (self.config.altInput ? self.config.altFormat : self.config.dateFormat);
-          return self.selectedDates.map(function (dObj) {
-            return self.formatDate(dObj, format);
-          }).filter(function (d, i, arr) {
-            return self.config.mode !== "range" || self.config.enableTime || arr.indexOf(d) === i;
-          }).join(self.config.mode !== "range" ? self.config.conjunction : self.l10n.rangeSeparator);
-        }
-
-        function updateValue(triggerChange) {
-          if (triggerChange === void 0) {
-            triggerChange = true;
-          }
-
-          if (self.mobileInput !== undefined && self.mobileFormatStr) {
-            self.mobileInput.value = self.latestSelectedDateObj !== undefined ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
-          }
-
-          self.input.value = getDateStr(self.config.dateFormat);
-
-          if (self.altInput !== undefined) {
-            self.altInput.value = getDateStr(self.config.altFormat);
-          }
-
-          if (triggerChange !== false) triggerEvent("onValueUpdate");
-        }
-
-        function onMonthNavClick(e) {
-          var eventTarget = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e);
-          var isPrevMonth = self.prevMonthNav.contains(eventTarget);
-          var isNextMonth = self.nextMonthNav.contains(eventTarget);
-
-          if (isPrevMonth || isNextMonth) {
-            changeMonth(isPrevMonth ? -1 : 1);
-          } else if (self.yearElements.indexOf(eventTarget) >= 0) {
-            eventTarget.select();
-          } else if (eventTarget.classList.contains("arrowUp")) {
-            self.changeYear(self.currentYear + 1);
-          } else if (eventTarget.classList.contains("arrowDown")) {
-            self.changeYear(self.currentYear - 1);
-          }
-        }
-
-        function timeWrapper(e) {
-          e.preventDefault();
-          var isKeyDown = e.type === "keydown",
-              eventTarget = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["getEventTarget"])(e),
-              input = eventTarget;
-
-          if (self.amPM !== undefined && eventTarget === self.amPM) {
-            self.amPM.textContent = self.l10n.amPM[Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(self.amPM.textContent === self.l10n.amPM[0])];
-          }
-
-          var min = parseFloat(input.getAttribute("min")),
-              max = parseFloat(input.getAttribute("max")),
-              step = parseFloat(input.getAttribute("step")),
-              curValue = parseInt(input.value, 10),
-              delta = e.delta || (isKeyDown ? e.which === 38 ? 1 : -1 : 0);
-          var newValue = curValue + step * delta;
-
-          if (typeof input.value !== "undefined" && input.value.length === 2) {
-            var isHourElem = input === self.hourElement,
-                isMinuteElem = input === self.minuteElement;
-
-            if (newValue < min) {
-              newValue = max + newValue + Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(!isHourElem) + (Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(isHourElem) && Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(!self.amPM));
-              if (isMinuteElem) incrementNumInput(undefined, -1, self.hourElement);
-            } else if (newValue > max) {
-              newValue = input === self.hourElement ? newValue - max - Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(!self.amPM) : min;
-              if (isMinuteElem) incrementNumInput(undefined, 1, self.hourElement);
-            }
-
-            if (self.amPM && isHourElem && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) {
-              self.amPM.textContent = self.l10n.amPM[Object(_utils__WEBPACK_IMPORTED_MODULE_2__["int"])(self.amPM.textContent === self.l10n.amPM[0])];
-            }
-
-            input.value = Object(_utils__WEBPACK_IMPORTED_MODULE_2__["pad"])(newValue);
-          }
-        }
-
-        init();
-        return self;
       }
 
-      function _flatpickr(nodeList, config) {
-        var nodes = Array.prototype.slice.call(nodeList).filter(function (x) {
-          return x instanceof HTMLElement;
-        });
-        var instances = [];
+      function selectAll(selector) {
+        if (typeof selector === 'string') {
+          return Array.prototype.slice.apply(document.querySelectorAll(selector));
+        } else if (isArray(selector)) {
+          return selector.map(select);
+        } else if ('length' in selector) {
+          return arrayFrom(selector).map(select);
+        }
+      }
 
-        for (var i = 0; i < nodes.length; i++) {
-          var node = nodes[i];
+      function indexOfElement(elements, element) {
+        element = resolveElement(element, true);
 
-          try {
-            if (node.getAttribute("data-fp-omit") !== null) continue;
+        if (!isElement$1(element)) {
+          return -1;
+        }
 
-            if (node._flatpickr !== undefined) {
-              node._flatpickr.destroy();
+        for (var i = 0; i < elements.length; i++) {
+          if (elements[i] === element) {
+            return i;
+          }
+        }
 
-              node._flatpickr = undefined;
+        return -1;
+      }
+
+      function hasElement(elements, element) {
+        return -1 !== indexOfElement(elements, element);
+      }
+
+      function domListOf(arr) {
+        if (!arr) {
+          return [];
+        }
+
+        try {
+          if (typeof arr === 'string') {
+            return arrayFrom(document.querySelectorAll(arr));
+          } else if (isArray(arr)) {
+            return arr.map(resolveElement);
+          } else {
+            if (typeof arr.length === 'undefined') {
+              return [resolveElement(arr)];
             }
 
-            node._flatpickr = FlatpickrInstance(node, config || {});
-            instances.push(node._flatpickr);
+            return arrayFrom(arr, resolveElement);
+          }
+        } catch (e) {
+          throw new Error(e);
+        }
+      }
+
+      function concatElementLists() {
+        var lists = [],
+            len = arguments.length;
+
+        while (len--) {
+          lists[len] = arguments[len];
+        }
+
+        return lists.reduce(function (last, list) {
+          return list.length ? last : last.concat(domListOf(list));
+        }, []);
+      }
+
+      function pushElements(elements, toAdd) {
+        for (var i = 0; i < toAdd.length; i++) {
+          if (!hasElement(elements, toAdd[i])) {
+            elements.push(toAdd[i]);
+          }
+        }
+
+        return toAdd;
+      }
+
+      function addElements(elements) {
+        var toAdd = [],
+            len = arguments.length - 1;
+
+        while (len-- > 0) {
+          toAdd[len] = arguments[len + 1];
+        }
+
+        toAdd = toAdd.map(resolveElement);
+        return pushElements(elements, toAdd);
+      }
+
+      function removeElements(elements) {
+        var toRemove = [],
+            len = arguments.length - 1;
+
+        while (len-- > 0) {
+          toRemove[len] = arguments[len + 1];
+        }
+
+        return toRemove.map(resolveElement).reduce(function (last, e) {
+          var index = indexOfElement(elements, e);
+
+          if (index !== -1) {
+            return last.concat(elements.splice(index, 1));
+          }
+
+          return last;
+        }, []);
+      }
+
+      function resolveElement(element, noThrow) {
+        if (typeof element === 'string') {
+          try {
+            return document.querySelector(element);
           } catch (e) {
-            console.error(e);
+            throw e;
           }
         }
 
-        return instances.length === 1 ? instances[0] : instances;
-      }
-
-      if (typeof HTMLElement !== "undefined" && typeof HTMLCollection !== "undefined" && typeof NodeList !== "undefined") {
-        HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
-          return _flatpickr(this, config);
-        };
-
-        HTMLElement.prototype.flatpickr = function (config) {
-          return _flatpickr([this], config);
-        };
-      }
-
-      var flatpickr = function flatpickr(selector, config) {
-        if (typeof selector === "string") {
-          return _flatpickr(window.document.querySelectorAll(selector), config);
-        } else if (selector instanceof Node) {
-          return _flatpickr([selector], config);
-        } else {
-          return _flatpickr(selector, config);
+        if (!isElement$1(element) && !noThrow) {
+          throw new TypeError(element + " is not a DOM element.");
         }
-      };
 
-      flatpickr.defaultConfig = {};
-      flatpickr.l10ns = {
-        en: __assign({}, _l10n_default__WEBPACK_IMPORTED_MODULE_1__["default"]),
-        "default": __assign({}, _l10n_default__WEBPACK_IMPORTED_MODULE_1__["default"])
-      };
-
-      flatpickr.localize = function (l10n) {
-        flatpickr.l10ns["default"] = __assign(__assign({}, flatpickr.l10ns["default"]), l10n);
-      };
-
-      flatpickr.setDefaults = function (config) {
-        flatpickr.defaultConfig = __assign(__assign({}, flatpickr.defaultConfig), config);
-      };
-
-      flatpickr.parseDate = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["createDateParser"])({});
-      flatpickr.formatDate = Object(_utils_dates__WEBPACK_IMPORTED_MODULE_4__["createDateFormatter"])({});
-      flatpickr.compareDates = _utils_dates__WEBPACK_IMPORTED_MODULE_4__["compareDates"];
-
-      if (typeof jQuery !== "undefined" && typeof jQuery.fn !== "undefined") {
-        jQuery.fn.flatpickr = function (config) {
-          return _flatpickr(this, config);
-        };
+        return element;
       }
 
-      Date.prototype.fp_incr = function (days) {
-        return new Date(this.getFullYear(), this.getMonth(), this.getDate() + (typeof days === "string" ? parseInt(days, 10) : days));
-      };
+      exports.indexOfElement = indexOfElement;
+      exports.hasElement = hasElement;
+      exports.domListOf = domListOf;
+      exports.concatElementLists = concatElementLists;
+      exports.addElements = addElements;
+      exports.removeElements = removeElements;
+      exports.resolveElement = resolveElement;
+      exports.select = select;
+      exports.selectAll = selectAll; //# sourceMappingURL=bundle.js.map
 
-      if (typeof window !== "undefined") {
-        window.flatpickr = flatpickr;
-      }
-      /* harmony default export */
-
-
-      __webpack_exports__["default"] = flatpickr;
       /***/
     },
 
@@ -4702,565 +2646,101 @@
     },
 
     /***/
-    "YqbJ":
-    /*!******************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/utils/dom.js ***!
-      \******************************************************/
+    "agoU":
+    /*!*********************************************************************!*\
+      !*** ./node_modules/calendar-utils/date-adapters/date-fns/index.js ***!
+      \*********************************************************************/
 
-    /*! exports provided: toggleClass, createElement, clearNode, findParent, createNumberInput, getEventTarget */
+    /*! no static exports found */
 
     /***/
-    function YqbJ(module, __webpack_exports__, __webpack_require__) {
+    function agoU(module, exports, __webpack_require__) {
       "use strict";
 
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "toggleClass", function () {
-        return toggleClass;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "createElement", function () {
-        return createElement;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "clearNode", function () {
-        return clearNode;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "findParent", function () {
-        return findParent;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "createNumberInput", function () {
-        return createNumberInput;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "getEventTarget", function () {
-        return getEventTarget;
+      Object.defineProperty(exports, "__esModule", {
+        value: true
       });
 
-      function toggleClass(elem, className, bool) {
-        if (bool === true) return elem.classList.add(className);
-        elem.classList.remove(className);
+      var date_fns_1 = __webpack_require__(
+      /*! date-fns */
+      "b/SL");
+
+      function adapterFactory() {
+        return {
+          addDays: date_fns_1.addDays,
+          addHours: date_fns_1.addHours,
+          addMinutes: date_fns_1.addMinutes,
+          addSeconds: date_fns_1.addSeconds,
+          differenceInDays: date_fns_1.differenceInDays,
+          differenceInMinutes: date_fns_1.differenceInMinutes,
+          differenceInSeconds: date_fns_1.differenceInSeconds,
+          endOfDay: date_fns_1.endOfDay,
+          endOfMonth: date_fns_1.endOfMonth,
+          endOfWeek: date_fns_1.endOfWeek,
+          getDay: date_fns_1.getDay,
+          getMonth: date_fns_1.getMonth,
+          isSameDay: date_fns_1.isSameDay,
+          isSameMonth: date_fns_1.isSameMonth,
+          isSameSecond: date_fns_1.isSameSecond,
+          max: date_fns_1.max,
+          setHours: date_fns_1.setHours,
+          setMinutes: date_fns_1.setMinutes,
+          startOfDay: date_fns_1.startOfDay,
+          startOfMinute: date_fns_1.startOfMinute,
+          startOfMonth: date_fns_1.startOfMonth,
+          startOfWeek: date_fns_1.startOfWeek,
+          getHours: date_fns_1.getHours,
+          getMinutes: date_fns_1.getMinutes
+        };
       }
 
-      function createElement(tag, className, content) {
-        var e = window.document.createElement(tag);
-        className = className || "";
-        content = content || "";
-        e.className = className;
-        if (content !== undefined) e.textContent = content;
-        return e;
-      }
+      exports.adapterFactory = adapterFactory; //# sourceMappingURL=index.js.map
 
-      function clearNode(node) {
-        while (node.firstChild) node.removeChild(node.firstChild);
-      }
-
-      function findParent(node, condition) {
-        if (condition(node)) return node;else if (node.parentNode) return findParent(node.parentNode, condition);
-        return undefined;
-      }
-
-      function createNumberInput(inputClassName, opts) {
-        var wrapper = createElement("div", "numInputWrapper"),
-            numInput = createElement("input", "numInput " + inputClassName),
-            arrowUp = createElement("span", "arrowUp"),
-            arrowDown = createElement("span", "arrowDown");
-
-        if (navigator.userAgent.indexOf("MSIE 9.0") === -1) {
-          numInput.type = "number";
-        } else {
-          numInput.type = "text";
-          numInput.pattern = "\\d*";
-        }
-
-        if (opts !== undefined) for (var key in opts) numInput.setAttribute(key, opts[key]);
-        wrapper.appendChild(numInput);
-        wrapper.appendChild(arrowUp);
-        wrapper.appendChild(arrowDown);
-        return wrapper;
-      }
-
-      function getEventTarget(event) {
-        try {
-          if (typeof event.composedPath === "function") {
-            var path = event.composedPath();
-            return path[0];
-          }
-
-          return event.target;
-        } catch (error) {
-          return event.target;
-        }
-      }
       /***/
-
     },
 
     /***/
-    "ahUn":
-    /*!**********************************************************************!*\
-      !*** ./node_modules/@mattlewis92/dom-autoscroller/dist/bundle.es.js ***!
-      \**********************************************************************/
+    "c/fO":
+    /*!***********************************************************************************!*\
+      !*** ./node_modules/animation-frame-polyfill/lib/animation-frame-polyfill.cjs.js ***!
+      \***********************************************************************************/
 
-    /*! exports provided: default */
+    /*! no static exports found */
 
     /***/
-    function ahUn(module, __webpack_exports__, __webpack_require__) {
+    function cFO(module, exports, __webpack_require__) {
       "use strict";
 
-      __webpack_require__.r(__webpack_exports__);
-
-      function getDef(f, d) {
-        if (typeof f === 'undefined') {
-          return typeof d === 'undefined' ? f : d;
-        }
-
-        return f;
-      }
-
-      function _boolean(func, def) {
-        func = getDef(func, def);
-
-        if (typeof func === 'function') {
-          return function f() {
-            var arguments$1 = arguments;
-
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-              args[_key] = arguments$1[_key];
-            }
-
-            return !!func.apply(this, args);
-          };
-        }
-
-        return !!func ? function () {
-          return true;
-        } : function () {
-          return false;
-        };
-      }
-
-      var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-        return typeof obj;
-      } : function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-      };
-      /**
-       * Returns `true` if provided input is Element.
-       * @name isElement
-       * @param {*} [input]
-       * @returns {boolean}
-       */
-
-
-      var isElement$1 = function isElement$1(input) {
-        return input != null && (typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object' && input.nodeType === 1 && _typeof(input.style) === 'object' && _typeof(input.ownerDocument) === 'object';
-      };
-
-      function indexOfElement(elements, element) {
-        element = resolveElement(element, true);
-
-        if (!isElement$1(element)) {
-          return -1;
-        }
-
-        for (var i = 0; i < elements.length; i++) {
-          if (elements[i] === element) {
-            return i;
-          }
-        }
-
-        return -1;
-      }
-
-      function hasElement(elements, element) {
-        return -1 !== indexOfElement(elements, element);
-      }
-
-      function pushElements(elements, toAdd) {
-        for (var i = 0; i < toAdd.length; i++) {
-          if (!hasElement(elements, toAdd[i])) {
-            elements.push(toAdd[i]);
-          }
-        }
-
-        return toAdd;
-      }
-
-      function addElements(elements) {
-        var arguments$1 = arguments;
-        var toAdd = [],
-            len = arguments.length - 1;
-
-        while (len-- > 0) {
-          toAdd[len] = arguments$1[len + 1];
-        }
-
-        toAdd = toAdd.map(resolveElement);
-        return pushElements(elements, toAdd);
-      }
-
-      function removeElements(elements) {
-        var arguments$1 = arguments;
-        var toRemove = [],
-            len = arguments.length - 1;
-
-        while (len-- > 0) {
-          toRemove[len] = arguments$1[len + 1];
-        }
-
-        return toRemove.map(resolveElement).reduce(function (last, e) {
-          var index = indexOfElement(elements, e);
-
-          if (index !== -1) {
-            return last.concat(elements.splice(index, 1));
-          }
-
-          return last;
-        }, []);
-      }
-
-      function resolveElement(element, noThrow) {
-        if (typeof element === 'string') {
-          try {
-            return document.querySelector(element);
-          } catch (e) {
-            throw e;
-          }
-        }
-
-        if (!isElement$1(element) && !noThrow) {
-          throw new TypeError(element + " is not a DOM element.");
-        }
-
-        return element;
-      }
-
-      function createPointCB(object, options) {
-        // A persistent object (as opposed to returned object) is used to save memory
-        // This is good to prevent layout thrashing, or for games, and such
-        // NOTE
-        // This uses IE fixes which should be OK to remove some day. :)
-        // Some speed will be gained by removal of these.
-        // pointCB should be saved in a variable on return
-        // This allows the usage of element.removeEventListener
-        options = options || {};
-
-        var allowUpdate = _boolean(options.allowUpdate, true);
-        /*if(typeof options.allowUpdate === 'function'){
-            allowUpdate = options.allowUpdate;
-        }else{
-            allowUpdate = function(){return true;};
-        }*/
-
-
-        return function pointCB(event) {
-          event = event || window.event; // IE-ism
-
-          object.target = event.target || event.srcElement || event.originalTarget;
-          object.element = this;
-          object.type = event.type;
-
-          if (!allowUpdate(event)) {
-            return;
-          } // Support touch
-          // http://www.creativebloq.com/javascript/make-your-site-work-touch-devices-51411644
-
-
-          if (event.targetTouches) {
-            object.x = event.targetTouches[0].clientX;
-            object.y = event.targetTouches[0].clientY;
-            object.pageX = event.targetTouches[0].pageX;
-            object.pageY = event.targetTouches[0].pageY;
-            object.screenX = event.targetTouches[0].screenX;
-            object.screenY = event.targetTouches[0].screenY;
-          } else {
-            // If pageX/Y aren't available and clientX/Y are,
-            // calculate pageX/Y - logic taken from jQuery.
-            // (This is to support old IE)
-            // NOTE Hopefully this can be removed soon.
-            if (event.pageX === null && event.clientX !== null) {
-              var eventDoc = event.target && event.target.ownerDocument || document;
-              var doc = eventDoc.documentElement;
-              var body = eventDoc.body;
-              object.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
-              object.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
-            } else {
-              object.pageX = event.pageX;
-              object.pageY = event.pageY;
-            } // pageX, and pageY change with page scroll
-            // so we're not going to use those for x, and y.
-            // NOTE Most browsers also alias clientX/Y with x/y
-            // so that's something to consider down the road.
-
-
-            object.x = event.clientX;
-            object.y = event.clientY;
-            object.screenX = event.screenX;
-            object.screenY = event.screenY;
-          }
-
-          object.clientX = object.x;
-          object.clientY = object.y;
-        }; //NOTE Remember accessibility, Aria roles, and labels.
-      }
-
-      function createWindowRect() {
-        var props = {
-          top: {
-            value: 0,
-            enumerable: true
-          },
-          left: {
-            value: 0,
-            enumerable: true
-          },
-          right: {
-            value: window.innerWidth,
-            enumerable: true
-          },
-          bottom: {
-            value: window.innerHeight,
-            enumerable: true
-          },
-          width: {
-            value: window.innerWidth,
-            enumerable: true
-          },
-          height: {
-            value: window.innerHeight,
-            enumerable: true
-          },
-          x: {
-            value: 0,
-            enumerable: true
-          },
-          y: {
-            value: 0,
-            enumerable: true
-          }
-        };
-
-        if (Object.create) {
-          return Object.create({}, props);
-        } else {
-          var rect = {};
-          Object.defineProperties(rect, props);
-          return rect;
-        }
-      }
-
-      function getClientRect(el) {
-        if (el === window) {
-          return createWindowRect();
-        } else {
-          try {
-            var rect = el.getBoundingClientRect();
-
-            if (rect.x === undefined) {
-              rect.x = rect.left;
-              rect.y = rect.top;
-            }
-
-            return rect;
-          } catch (e) {
-            throw new TypeError("Can't call getBoundingClientRect on " + el);
-          }
-        }
-      }
-
-      function pointInside(point, el) {
-        var rect = getClientRect(el);
-        return point.y > rect.top && point.y < rect.bottom && point.x > rect.left && point.x < rect.right;
-      }
-
-      var objectCreate = void 0;
-
-      if (typeof Object.create != 'function') {
-        objectCreate = function (undefined$1) {
-          var Temp = function Temp() {};
-
-          return function (prototype, propertiesObject) {
-            if (prototype !== Object(prototype) && prototype !== null) {
-              throw TypeError('Argument must be an object, or null');
-            }
-
-            Temp.prototype = prototype || {};
-            var result = new Temp();
-            Temp.prototype = null;
-
-            if (propertiesObject !== undefined$1) {
-              Object.defineProperties(result, propertiesObject);
-            } // to imitate the case of Object.create(null)
-
-
-            if (prototype === null) {
-              result.__proto__ = null;
-            }
-
-            return result;
-          };
-        }();
-      } else {
-        objectCreate = Object.create;
-      }
-
-      var objectCreate$1 = objectCreate;
-      var mouseEventProps = ['altKey', 'button', 'buttons', 'clientX', 'clientY', 'ctrlKey', 'metaKey', 'movementX', 'movementY', 'offsetX', 'offsetY', 'pageX', 'pageY', 'region', 'relatedTarget', 'screenX', 'screenY', 'shiftKey', 'which', 'x', 'y'];
-
-      function createDispatcher(element) {
-        var defaultSettings = {
-          screenX: 0,
-          screenY: 0,
-          clientX: 0,
-          clientY: 0,
-          ctrlKey: false,
-          shiftKey: false,
-          altKey: false,
-          metaKey: false,
-          button: 0,
-          buttons: 1,
-          relatedTarget: null,
-          region: null
-        };
-
-        if (element !== undefined) {
-          element.addEventListener('mousemove', onMove);
-        }
-
-        function onMove(e) {
-          for (var i = 0; i < mouseEventProps.length; i++) {
-            defaultSettings[mouseEventProps[i]] = e[mouseEventProps[i]];
-          }
-        }
-
-        var dispatch = function () {
-          if (MouseEvent) {
-            return function m1(element, initMove, data) {
-              var evt = new MouseEvent('mousemove', createMoveInit(defaultSettings, initMove)); //evt.dispatched = 'mousemove';
-
-              setSpecial(evt, data);
-              return element.dispatchEvent(evt);
-            };
-          } else if (typeof document.createEvent === 'function') {
-            return function m2(element, initMove, data) {
-              var settings = createMoveInit(defaultSettings, initMove);
-              var evt = document.createEvent('MouseEvents');
-              evt.initMouseEvent("mousemove", true, //can bubble
-              true, //cancelable
-              window, //view
-              0, //detail
-              settings.screenX, //0, //screenX
-              settings.screenY, //0, //screenY
-              settings.clientX, //80, //clientX
-              settings.clientY, //20, //clientY
-              settings.ctrlKey, //false, //ctrlKey
-              settings.altKey, //false, //altKey
-              settings.shiftKey, //false, //shiftKey
-              settings.metaKey, //false, //metaKey
-              settings.button, //0, //button
-              settings.relatedTarget //null //relatedTarget
-              ); //evt.dispatched = 'mousemove';
-
-              setSpecial(evt, data);
-              return element.dispatchEvent(evt);
-            };
-          } else if (typeof document.createEventObject === 'function') {
-            return function m3(element, initMove, data) {
-              var evt = document.createEventObject();
-              var settings = createMoveInit(defaultSettings, initMove);
-
-              for (var name in settings) {
-                evt[name] = settings[name];
-              } //evt.dispatched = 'mousemove';
-
-
-              setSpecial(evt, data);
-              return element.dispatchEvent(evt);
-            };
-          }
-        }();
-
-        function destroy() {
-          if (element) {
-            element.removeEventListener('mousemove', onMove, false);
-          }
-
-          defaultSettings = null;
-        }
-
-        return {
-          destroy: destroy,
-          dispatch: dispatch
-        };
-      }
-
-      function createMoveInit(defaultSettings, initMove) {
-        initMove = initMove || {};
-        var settings = objectCreate$1(defaultSettings);
-
-        for (var i = 0; i < mouseEventProps.length; i++) {
-          if (initMove[mouseEventProps[i]] !== undefined) {
-            settings[mouseEventProps[i]] = initMove[mouseEventProps[i]];
-          }
-        }
-
-        return settings;
-      }
-
-      function setSpecial(e, data) {
-        console.log('data ', data);
-        e.data = data || {};
-        e.dispatched = 'mousemove';
-      }
-
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
       var prefix = ['webkit', 'moz', 'ms', 'o'];
 
-      var requestFrame = function () {
-        if (typeof window === "undefined") {
-          return function () {};
-        }
-
+      var requestAnimationFrame = exports.requestAnimationFrame = function () {
         for (var i = 0, limit = prefix.length; i < limit && !window.requestAnimationFrame; ++i) {
           window.requestAnimationFrame = window[prefix[i] + 'RequestAnimationFrame'];
         }
 
         if (!window.requestAnimationFrame) {
-          var lastTime = 0;
+          (function () {
+            var lastTime = 0;
 
-          window.requestAnimationFrame = function (callback) {
-            var now = new Date().getTime();
-            var ttc = Math.max(0, 16 - now - lastTime);
-            var timer = window.setTimeout(function () {
-              return callback(now + ttc);
-            }, ttc);
-            lastTime = now + ttc;
-            return timer;
-          };
+            window.requestAnimationFrame = function (callback) {
+              var now = new Date().getTime();
+              var ttc = Math.max(0, 16 - now - lastTime);
+              var timer = window.setTimeout(function () {
+                return callback(now + ttc);
+              }, ttc);
+              lastTime = now + ttc;
+              return timer;
+            };
+          })();
         }
 
         return window.requestAnimationFrame.bind(window);
       }();
 
-      var cancelFrame = function () {
-        if (typeof window === "undefined") {
-          return function () {};
-        }
-
+      var cancelAnimationFrame = exports.cancelAnimationFrame = function () {
         for (var i = 0, limit = prefix.length; i < limit && !window.cancelAnimationFrame; ++i) {
           window.cancelAnimationFrame = window[prefix[i] + 'CancelAnimationFrame'] || window[prefix[i] + 'CancelRequestAnimationFrame'];
         }
@@ -5273,625 +2753,8 @@
 
         return window.cancelAnimationFrame.bind(window);
       }();
-
-      function AutoScroller(elements, options) {
-        if (options === void 0) options = {};
-        var self = this;
-        var maxSpeed = 4,
-            scrolling = false;
-
-        if (typeof options.margin !== 'object') {
-          var margin = options.margin || -1;
-          this.margin = {
-            left: margin,
-            right: margin,
-            top: margin,
-            bottom: margin
-          };
-        } else {
-          this.margin = options.margin;
-        } //this.scrolling = false;
-
-
-        this.scrollWhenOutside = options.scrollWhenOutside || false;
-        var point = {},
-            pointCB = createPointCB(point),
-            dispatcher = createDispatcher(),
-            down = false;
-        window.addEventListener('mousemove', pointCB, false);
-        window.addEventListener('touchmove', pointCB, false);
-
-        if (!isNaN(options.maxSpeed)) {
-          maxSpeed = options.maxSpeed;
-        }
-
-        if (typeof maxSpeed !== 'object') {
-          maxSpeed = {
-            left: maxSpeed,
-            right: maxSpeed,
-            top: maxSpeed,
-            bottom: maxSpeed
-          };
-        }
-
-        this.autoScroll = _boolean(options.autoScroll);
-        this.syncMove = _boolean(options.syncMove, false);
-
-        this.destroy = function (forceCleanAnimation) {
-          window.removeEventListener('mousemove', pointCB, false);
-          window.removeEventListener('touchmove', pointCB, false);
-          window.removeEventListener('mousedown', onDown, false);
-          window.removeEventListener('touchstart', onDown, false);
-          window.removeEventListener('mouseup', onUp, false);
-          window.removeEventListener('touchend', onUp, false);
-          window.removeEventListener('pointerup', onUp, false);
-          window.removeEventListener('mouseleave', onMouseOut, false);
-          window.removeEventListener('mousemove', onMove, false);
-          window.removeEventListener('touchmove', onMove, false);
-          window.removeEventListener('scroll', setScroll, true);
-          elements = [];
-
-          if (forceCleanAnimation) {
-            cleanAnimation();
-          }
-        };
-
-        this.add = function () {
-          var element = [],
-              len = arguments.length;
-
-          while (len--) element[len] = arguments[len];
-
-          addElements.apply(void 0, [elements].concat(element));
-          return this;
-        };
-
-        this.remove = function () {
-          var element = [],
-              len = arguments.length;
-
-          while (len--) element[len] = arguments[len];
-
-          return removeElements.apply(void 0, [elements].concat(element));
-        };
-
-        var hasWindow = null,
-            windowAnimationFrame;
-
-        if (Object.prototype.toString.call(elements) !== '[object Array]') {
-          elements = [elements];
-        }
-
-        (function (temp) {
-          elements = [];
-          temp.forEach(function (element) {
-            if (element === window) {
-              hasWindow = window;
-            } else {
-              self.add(element);
-            }
-          });
-        })(elements);
-
-        Object.defineProperties(this, {
-          down: {
-            get: function get() {
-              return down;
-            }
-          },
-          maxSpeed: {
-            get: function get() {
-              return maxSpeed;
-            }
-          },
-          point: {
-            get: function get() {
-              return point;
-            }
-          },
-          scrolling: {
-            get: function get() {
-              return scrolling;
-            }
-          }
-        });
-        var current = null,
-            animationFrame;
-        window.addEventListener('mousedown', onDown, false);
-        window.addEventListener('touchstart', onDown, false);
-        window.addEventListener('mouseup', onUp, false);
-        window.addEventListener('touchend', onUp, false);
-        /*
-        IE does not trigger mouseup event when scrolling.
-        It is a known issue that Microsoft won't fix.
-        https://connect.microsoft.com/IE/feedback/details/783058/scrollbar-trigger-mousedown-but-not-mouseup
-        IE supports pointer events instead
-        */
-
-        window.addEventListener('pointerup', onUp, false);
-        window.addEventListener('mousemove', onMove, false);
-        window.addEventListener('touchmove', onMove, false);
-        window.addEventListener('mouseleave', onMouseOut, false);
-        window.addEventListener('scroll', setScroll, true);
-
-        function setScroll(e) {
-          for (var i = 0; i < elements.length; i++) {
-            if (elements[i] === e.target) {
-              scrolling = true;
-              break;
-            }
-          }
-
-          if (scrolling) {
-            requestFrame(function () {
-              return scrolling = false;
-            });
-          }
-        }
-
-        function onDown() {
-          down = true;
-        }
-
-        function onUp() {
-          down = false;
-          cleanAnimation();
-        }
-
-        function cleanAnimation() {
-          cancelFrame(animationFrame);
-          cancelFrame(windowAnimationFrame);
-        }
-
-        function onMouseOut() {
-          down = false;
-        }
-
-        function getTarget(target) {
-          if (!target) {
-            return null;
-          }
-
-          if (current === target) {
-            return target;
-          }
-
-          if (hasElement(elements, target)) {
-            return target;
-          }
-
-          while (target = target.parentNode) {
-            if (hasElement(elements, target)) {
-              return target;
-            }
-          }
-
-          return null;
-        }
-
-        function getElementUnderPoint() {
-          var underPoint = null;
-
-          for (var i = 0; i < elements.length; i++) {
-            if (inside(point, elements[i])) {
-              underPoint = elements[i];
-            }
-          }
-
-          return underPoint;
-        }
-
-        function onMove(event) {
-          if (!self.autoScroll()) {
-            return;
-          }
-
-          if (event['dispatched']) {
-            return;
-          }
-
-          var target = event.target,
-              body = document.body;
-
-          if (current && !inside(point, current)) {
-            if (!self.scrollWhenOutside) {
-              current = null;
-            }
-          }
-
-          if (target && target.parentNode === body) {
-            //The special condition to improve speed.
-            target = getElementUnderPoint();
-          } else {
-            target = getTarget(target);
-
-            if (!target) {
-              target = getElementUnderPoint();
-            }
-          }
-
-          if (target && target !== current) {
-            current = target;
-          }
-
-          if (hasWindow) {
-            cancelFrame(windowAnimationFrame);
-            windowAnimationFrame = requestFrame(scrollWindow);
-          }
-
-          if (!current) {
-            return;
-          }
-
-          cancelFrame(animationFrame);
-          animationFrame = requestFrame(scrollTick);
-        }
-
-        function scrollWindow() {
-          autoScroll(hasWindow);
-          cancelFrame(windowAnimationFrame);
-          windowAnimationFrame = requestFrame(scrollWindow);
-        }
-
-        function scrollTick() {
-          if (!current) {
-            return;
-          }
-
-          autoScroll(current);
-          cancelFrame(animationFrame);
-          animationFrame = requestFrame(scrollTick);
-        }
-
-        function autoScroll(el) {
-          var rect = getClientRect(el),
-              scrollx,
-              scrolly;
-
-          if (point.x < rect.left + self.margin.left) {
-            scrollx = Math.floor(Math.max(-1, (point.x - rect.left) / self.margin.left - 1) * self.maxSpeed.left);
-          } else if (point.x > rect.right - self.margin.right) {
-            scrollx = Math.ceil(Math.min(1, (point.x - rect.right) / self.margin.right + 1) * self.maxSpeed.right);
-          } else {
-            scrollx = 0;
-          }
-
-          if (point.y < rect.top + self.margin.top) {
-            scrolly = Math.floor(Math.max(-1, (point.y - rect.top) / self.margin.top - 1) * self.maxSpeed.top);
-          } else if (point.y > rect.bottom - self.margin.bottom) {
-            scrolly = Math.ceil(Math.min(1, (point.y - rect.bottom) / self.margin.bottom + 1) * self.maxSpeed.bottom);
-          } else {
-            scrolly = 0;
-          }
-
-          if (self.syncMove()) {
-            /*
-            Notes about mousemove event dispatch.
-            screen(X/Y) should need to be updated.
-            Some other properties might need to be set.
-            Keep the syncMove option default false until all inconsistencies are taken care of.
-            */
-            dispatcher.dispatch(el, {
-              pageX: point.pageX + scrollx,
-              pageY: point.pageY + scrolly,
-              clientX: point.x + scrollx,
-              clientY: point.y + scrolly
-            });
-          }
-
-          setTimeout(function () {
-            if (scrolly) {
-              scrollY(el, scrolly);
-            }
-
-            if (scrollx) {
-              scrollX(el, scrollx);
-            }
-          });
-        }
-
-        function scrollY(el, amount) {
-          if (el === window) {
-            window.scrollTo(el.pageXOffset, el.pageYOffset + amount);
-          } else {
-            el.scrollTop += amount;
-          }
-        }
-
-        function scrollX(el, amount) {
-          if (el === window) {
-            window.scrollTo(el.pageXOffset + amount, el.pageYOffset);
-          } else {
-            el.scrollLeft += amount;
-          }
-        }
-      }
-
-      function AutoScrollerFactory(element, options) {
-        return new AutoScroller(element, options);
-      }
-
-      function inside(point, el, rect) {
-        if (!rect) {
-          return pointInside(point, el);
-        } else {
-          return point.y > rect.top && point.y < rect.bottom && point.x > rect.left && point.x < rect.right;
-        }
-      }
-      /*
-      git remote add origin https://github.com/hollowdoor/dom_autoscroller.git
-      git push -u origin master
-      */
-
-      /* harmony default export */
-
-
-      __webpack_exports__["default"] = AutoScrollerFactory;
-      /***/
-    },
-
-    /***/
-    "cW3J":
-    /*!************************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/utils/polyfills.js ***!
-      \************************************************************/
-
-    /*! no static exports found */
-
-    /***/
-    function cW3J(module, exports, __webpack_require__) {
-      "use strict";
-
-      if (typeof Object.assign !== "function") {
-        Object.assign = function (target) {
-          var args = [];
-
-          for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-          }
-
-          if (!target) {
-            throw TypeError("Cannot convert undefined or null to object");
-          }
-
-          var _loop_1 = function _loop_1(source) {
-            if (source) {
-              Object.keys(source).forEach(function (key) {
-                return target[key] = source[key];
-              });
-            }
-          };
-
-          for (var _a = 0, args_1 = args; _a < args_1.length; _a++) {
-            var source = args_1[_a];
-
-            _loop_1(source);
-          }
-
-          return target;
-        };
-      }
       /***/
 
-    },
-
-    /***/
-    "gsBn":
-    /*!*************************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/utils/formatting.js ***!
-      \*************************************************************/
-
-    /*! exports provided: monthToStr, revFormat, tokenRegex, formats */
-
-    /***/
-    function gsBn(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "monthToStr", function () {
-        return monthToStr;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "revFormat", function () {
-        return revFormat;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "tokenRegex", function () {
-        return tokenRegex;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "formats", function () {
-        return formats;
-      });
-      /* harmony import */
-
-
-      var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! ../utils */
-      "N3r0");
-
-      var doNothing = function doNothing() {
-        return undefined;
-      };
-
-      var monthToStr = function monthToStr(monthNumber, shorthand, locale) {
-        return locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
-      };
-
-      var revFormat = {
-        D: doNothing,
-        F: function F(dateObj, monthName, locale) {
-          dateObj.setMonth(locale.months.longhand.indexOf(monthName));
-        },
-        G: function G(dateObj, hour) {
-          dateObj.setHours((dateObj.getHours() >= 12 ? 12 : 0) + parseFloat(hour));
-        },
-        H: function H(dateObj, hour) {
-          dateObj.setHours(parseFloat(hour));
-        },
-        J: function J(dateObj, day) {
-          dateObj.setDate(parseFloat(day));
-        },
-        K: function K(dateObj, amPM, locale) {
-          dateObj.setHours(dateObj.getHours() % 12 + 12 * Object(_utils__WEBPACK_IMPORTED_MODULE_0__["int"])(new RegExp(locale.amPM[1], "i").test(amPM)));
-        },
-        M: function M(dateObj, shortMonth, locale) {
-          dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
-        },
-        S: function S(dateObj, seconds) {
-          dateObj.setSeconds(parseFloat(seconds));
-        },
-        U: function U(_, unixSeconds) {
-          return new Date(parseFloat(unixSeconds) * 1000);
-        },
-        W: function W(dateObj, weekNum, locale) {
-          var weekNumber = parseInt(weekNum);
-          var date = new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0);
-          date.setDate(date.getDate() - date.getDay() + locale.firstDayOfWeek);
-          return date;
-        },
-        Y: function Y(dateObj, year) {
-          dateObj.setFullYear(parseFloat(year));
-        },
-        Z: function Z(_, ISODate) {
-          return new Date(ISODate);
-        },
-        d: function d(dateObj, day) {
-          dateObj.setDate(parseFloat(day));
-        },
-        h: function h(dateObj, hour) {
-          dateObj.setHours((dateObj.getHours() >= 12 ? 12 : 0) + parseFloat(hour));
-        },
-        i: function i(dateObj, minutes) {
-          dateObj.setMinutes(parseFloat(minutes));
-        },
-        j: function j(dateObj, day) {
-          dateObj.setDate(parseFloat(day));
-        },
-        l: doNothing,
-        m: function m(dateObj, month) {
-          dateObj.setMonth(parseFloat(month) - 1);
-        },
-        n: function n(dateObj, month) {
-          dateObj.setMonth(parseFloat(month) - 1);
-        },
-        s: function s(dateObj, seconds) {
-          dateObj.setSeconds(parseFloat(seconds));
-        },
-        u: function u(_, unixMillSeconds) {
-          return new Date(parseFloat(unixMillSeconds));
-        },
-        w: doNothing,
-        y: function y(dateObj, year) {
-          dateObj.setFullYear(2000 + parseFloat(year));
-        }
-      };
-      var tokenRegex = {
-        D: "",
-        F: "",
-        G: "(\\d\\d|\\d)",
-        H: "(\\d\\d|\\d)",
-        J: "(\\d\\d|\\d)\\w+",
-        K: "",
-        M: "",
-        S: "(\\d\\d|\\d)",
-        U: "(.+)",
-        W: "(\\d\\d|\\d)",
-        Y: "(\\d{4})",
-        Z: "(.+)",
-        d: "(\\d\\d|\\d)",
-        h: "(\\d\\d|\\d)",
-        i: "(\\d\\d|\\d)",
-        j: "(\\d\\d|\\d)",
-        l: "",
-        m: "(\\d\\d|\\d)",
-        n: "(\\d\\d|\\d)",
-        s: "(\\d\\d|\\d)",
-        u: "(.+)",
-        w: "(\\d\\d|\\d)",
-        y: "(\\d{2})"
-      };
-      var formats = {
-        Z: function Z(date) {
-          return date.toISOString();
-        },
-        D: function D(date, locale, options) {
-          return locale.weekdays.shorthand[formats.w(date, locale, options)];
-        },
-        F: function F(date, locale, options) {
-          return monthToStr(formats.n(date, locale, options) - 1, false, locale);
-        },
-        G: function G(date, locale, options) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(formats.h(date, locale, options));
-        },
-        H: function H(date) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(date.getHours());
-        },
-        J: function J(date, locale) {
-          return locale.ordinal !== undefined ? date.getDate() + locale.ordinal(date.getDate()) : date.getDate();
-        },
-        K: function K(date, locale) {
-          return locale.amPM[Object(_utils__WEBPACK_IMPORTED_MODULE_0__["int"])(date.getHours() > 11)];
-        },
-        M: function M(date, locale) {
-          return monthToStr(date.getMonth(), true, locale);
-        },
-        S: function S(date) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(date.getSeconds());
-        },
-        U: function U(date) {
-          return date.getTime() / 1000;
-        },
-        W: function W(date, _, options) {
-          return options.getWeek(date);
-        },
-        Y: function Y(date) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(date.getFullYear(), 4);
-        },
-        d: function d(date) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(date.getDate());
-        },
-        h: function h(date) {
-          return date.getHours() % 12 ? date.getHours() % 12 : 12;
-        },
-        i: function i(date) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(date.getMinutes());
-        },
-        j: function j(date) {
-          return date.getDate();
-        },
-        l: function l(date, locale) {
-          return locale.weekdays.longhand[date.getDay()];
-        },
-        m: function m(date) {
-          return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["pad"])(date.getMonth() + 1);
-        },
-        n: function n(date) {
-          return date.getMonth() + 1;
-        },
-        s: function s(date) {
-          return date.getSeconds();
-        },
-        u: function u(date) {
-          return date.getTime();
-        },
-        w: function w(date) {
-          return date.getDay();
-        },
-        y: function y(date) {
-          return String(date.getFullYear()).substring(2);
-        }
-      };
-      /***/
     },
 
     /***/
@@ -6152,7 +3015,7 @@
 
       var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
       /*! tslib */
-      "b1EX");
+      "UWrc");
       /* harmony import */
 
 
@@ -6214,13 +3077,13 @@
       /*! angular-resizable-element */
       "yotz");
 
-      var CalendarEventActionsComponent = /*#__PURE__*/_createClass(function CalendarEventActionsComponent() {
+      var CalendarEventActionsComponent = function CalendarEventActionsComponent() {
         _classCallCheck(this, CalendarEventActionsComponent);
 
         this.trackByActionId = function (index, action) {
           return action.id ? action.id : action;
         };
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarEventActionsComponent.prototype, "event", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["TemplateRef"])], CalendarEventActionsComponent.prototype, "customTemplate", void 0);
@@ -6229,9 +3092,9 @@
         template: "\n    <ng-template\n      #defaultTemplate\n      let-event=\"event\"\n      let-trackByActionId=\"trackByActionId\"\n    >\n      <span *ngIf=\"event.actions\" class=\"cal-event-actions\">\n        <a\n          class=\"cal-event-action\"\n          href=\"javascript:;\"\n          *ngFor=\"let action of event.actions; trackBy: trackByActionId\"\n          (mwlClick)=\"action.onClick({ event: event, sourceEvent: $event })\"\n          (mwlKeydownEnter)=\"\n            action.onClick({ event: event, sourceEvent: $event })\n          \"\n          [ngClass]=\"action.cssClass\"\n          [innerHtml]=\"action.label\"\n          tabindex=\"0\"\n          role=\"button\"\n          [attr.aria-label]=\"\n            { action: action } | calendarA11y: 'actionButtonLabel'\n          \"\n        >\n        </a>\n      </span>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        event: event,\n        trackByActionId: trackByActionId\n      }\"\n    >\n    </ng-template>\n  "
       })], CalendarEventActionsComponent);
 
-      var CalendarEventTitleComponent = /*#__PURE__*/_createClass(function CalendarEventTitleComponent() {
+      var CalendarEventTitleComponent = function CalendarEventTitleComponent() {
         _classCallCheck(this, CalendarEventTitleComponent);
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarEventTitleComponent.prototype, "event", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["TemplateRef"])], CalendarEventTitleComponent.prototype, "customTemplate", void 0);
@@ -6241,9 +3104,9 @@
         template: "\n    <ng-template #defaultTemplate let-event=\"event\" let-view=\"view\">\n      <span\n        class=\"cal-event-title\"\n        [innerHTML]=\"event.title | calendarEventTitle: view:event\"\n        [attr.aria-hidden]=\"{} | calendarA11y: 'hideEventTitle'\"\n      >\n      </span>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        event: event,\n        view: view\n      }\"\n    >\n    </ng-template>\n  "
       })], CalendarEventTitleComponent);
 
-      var CalendarTooltipWindowComponent = /*#__PURE__*/_createClass(function CalendarTooltipWindowComponent() {
+      var CalendarTooltipWindowComponent = function CalendarTooltipWindowComponent() {
         _classCallCheck(this, CalendarTooltipWindowComponent);
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)], CalendarTooltipWindowComponent.prototype, "contents", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)], CalendarTooltipWindowComponent.prototype, "placement", void 0);
@@ -6280,10 +3143,6 @@
               this.tooltipRef.instance.customTemplate = this.customTemplate;
               this.tooltipRef.instance.event = this.event;
               this.tooltipRef.changeDetectorRef.markForCheck();
-
-              if (!this.contents) {
-                this.hide();
-              }
             }
           }
         }, {
@@ -6387,9 +3246,9 @@
         selector: '[mwlCalendarTooltip]'
       }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(5, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_common__WEBPACK_IMPORTED_MODULE_2__["DOCUMENT"])), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ComponentFactoryResolver"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"], Object])], CalendarTooltipDirective);
 
-      var DateAdapter = /*#__PURE__*/_createClass(function DateAdapter() {
+      var DateAdapter = function DateAdapter() {
         _classCallCheck(this, DateAdapter);
-      });
+      };
 
       var CalendarView;
 
@@ -6403,8 +3262,8 @@
         var warn = function warn() {
           var _console;
 
-          for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            args[_key2] = arguments[_key2];
+          for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+            args[_key4] = arguments[_key4];
           }
 
           return (_console = console).warn.apply(_console, ['angular-calendar'].concat(args));
@@ -6903,7 +3762,7 @@
           return _super.apply(this, arguments);
         }
 
-        return _createClass(CalendarDateFormatter);
+        return CalendarDateFormatter;
       }(CalendarAngularDateFormatter);
 
       CalendarDateFormatter = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])()], CalendarDateFormatter);
@@ -6997,11 +3856,11 @@
 
         _createClass(CalendarEventTitleFormatter, [{
           key: "month",
-          value:
+
           /**
            * The month view event title.
            */
-          function month(event, title) {
+          value: function month(event, title) {
             return event.title;
           }
           /**
@@ -7149,41 +4008,19 @@
       }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_common__WEBPACK_IMPORTED_MODULE_2__["DOCUMENT"])), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"], Object])], ClickDirective);
 
       var KeydownEnterDirective = /*#__PURE__*/function () {
-        function KeydownEnterDirective(host, ngZone, renderer) {
+        function KeydownEnterDirective() {
           _classCallCheck(this, KeydownEnterDirective);
 
-          this.host = host;
-          this.ngZone = ngZone;
-          this.renderer = renderer;
           this.keydown = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"](); // tslint:disable-line
-
-          this.keydownListener = null;
         }
 
         _createClass(KeydownEnterDirective, [{
-          key: "ngOnInit",
-          value: function ngOnInit() {
-            var _this13 = this;
-
-            this.ngZone.runOutsideAngular(function () {
-              _this13.keydownListener = _this13.renderer.listen(_this13.host.nativeElement, 'keydown', function (event) {
-                if (event.keyCode === 13 || event.which === 13 || event.key === 'Enter') {
-                  event.preventDefault();
-                  event.stopPropagation();
-
-                  _this13.ngZone.run(function () {
-                    _this13.keydown.emit(event);
-                  });
-                }
-              });
-            });
-          }
-        }, {
-          key: "ngOnDestroy",
-          value: function ngOnDestroy() {
-            if (this.keydownListener !== null) {
-              this.keydownListener();
-              this.keydownListener = null;
+          key: "onKeyPress",
+          value: function onKeyPress(event) {
+            if (event.keyCode === 13 || event.which === 13 || event.key === 'Enter') {
+              event.preventDefault();
+              event.stopPropagation();
+              this.keydown.emit(event);
             }
           }
         }]);
@@ -7191,20 +4028,11 @@
         return KeydownEnterDirective;
       }();
 
-      KeydownEnterDirective.ctorParameters = function () {
-        return [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]
-        }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]
-        }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"]
-        }];
-      };
-
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])('mwlKeydownEnter'), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], KeydownEnterDirective.prototype, "keydown", void 0);
+      Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostListener"])('keydown', ['$event']), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Function), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [KeyboardEvent]), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:returntype", void 0)], KeydownEnterDirective.prototype, "onKeyPress", null);
       KeydownEnterDirective = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Directive"])({
         selector: '[mwlKeydownEnter]'
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"]])], KeydownEnterDirective);
+      })], KeydownEnterDirective);
 
       var CalendarUtils = /*#__PURE__*/function () {
         function CalendarUtils(dateAdapter) {
@@ -7587,7 +4415,7 @@
         }, {
           key: "weekViewTitle",
           value: function weekViewTitle(_ref35) {
-            var _this14 = this;
+            var _this13 = this;
 
             var date = _ref35.date,
                 locale = _ref35.locale,
@@ -7600,7 +4428,7 @@
                 viewEnd = _getWeekViewPeriod2.viewEnd;
 
             var format = function format(dateToFormat, showYear) {
-              return _this14.moment(dateToFormat).locale(locale).format('MMM D' + (showYear ? ', YYYY' : ''));
+              return _this13.moment(dateToFormat).locale(locale).format('MMM D' + (showYear ? ', YYYY' : ''));
             };
 
             return "".concat(format(viewStart, viewStart.getUTCFullYear() !== viewEnd.getUTCFullYear()), " - ").concat(format(viewEnd, true));
@@ -7885,7 +4713,7 @@
          * @hidden
          */
         function CalendarMonthViewComponent(cdr, utils, locale, dateAdapter) {
-          var _this15 = this;
+          var _this14 = this;
 
           _classCallCheck(this, CalendarMonthViewComponent);
 
@@ -7955,7 +4783,7 @@
            */
 
           this.trackByRowOffset = function (index, offset) {
-            return _this15.view.days.slice(offset, _this15.view.totalDaysVisibleInWeek).map(function (day) {
+            return _this14.view.days.slice(offset, _this14.view.totalDaysVisibleInWeek).map(function (day) {
               return day.date.toISOString();
             }).join('-');
           };
@@ -7978,13 +4806,13 @@
         _createClass(CalendarMonthViewComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this16 = this;
+            var _this15 = this;
 
             if (this.refresh) {
               this.refreshSubscription = this.refresh.subscribe(function () {
-                _this16.refreshAll();
+                _this15.refreshAll();
 
-                _this16.cdr.markForCheck();
+                _this15.cdr.markForCheck();
               });
             }
           }
@@ -8096,12 +4924,12 @@
         }, {
           key: "checkActiveDayIsOpen",
           value: function checkActiveDayIsOpen() {
-            var _this17 = this;
+            var _this16 = this;
 
             if (this.activeDayIsOpen === true) {
               var activeDay = this.activeDay || this.viewDate;
               this.openDay = this.view.days.find(function (day) {
-                return _this17.dateAdapter.isSameDay(day.date, activeDay);
+                return _this16.dateAdapter.isSameDay(day.date, activeDay);
               });
               var index = this.view.days.indexOf(this.openDay);
               this.openRowIndex = Math.floor(index / this.view.totalDaysVisibleInWeek) * this.view.totalDaysVisibleInWeek;
@@ -8175,15 +5003,15 @@
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarMonthViewComponent.prototype, "eventTimesChanged", void 0);
       CalendarMonthViewComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'mwl-calendar-month-view',
-        template: "\n    <div class=\"cal-month-view\" role=\"grid\">\n      <mwl-calendar-month-view-header\n        [days]=\"columnHeaders\"\n        [locale]=\"locale\"\n        (columnHeaderClicked)=\"columnHeaderClicked.emit($event)\"\n        [customTemplate]=\"headerTemplate\"\n      >\n      </mwl-calendar-month-view-header>\n      <div class=\"cal-days\">\n        <div\n          *ngFor=\"let rowIndex of view.rowOffsets; trackBy: trackByRowOffset\"\n        >\n          <div role=\"row\" class=\"cal-cell-row\">\n            <mwl-calendar-month-cell\n              role=\"gridcell\"\n              *ngFor=\"\n                let day of view.days\n                  | slice: rowIndex:rowIndex + view.totalDaysVisibleInWeek;\n                trackBy: trackByDate\n              \"\n              [ngClass]=\"day?.cssClass\"\n              [day]=\"day\"\n              [openDay]=\"openDay\"\n              [locale]=\"locale\"\n              [tooltipPlacement]=\"tooltipPlacement\"\n              [tooltipAppendToBody]=\"tooltipAppendToBody\"\n              [tooltipTemplate]=\"tooltipTemplate\"\n              [tooltipDelay]=\"tooltipDelay\"\n              [customTemplate]=\"cellTemplate\"\n              [ngStyle]=\"{ backgroundColor: day.backgroundColor }\"\n              (mwlClick)=\"dayClicked.emit({ day: day, sourceEvent: $event })\"\n              [clickListenerDisabled]=\"dayClicked.observers.length === 0\"\n              (mwlKeydownEnter)=\"\n                dayClicked.emit({ day: day, sourceEvent: $event })\n              \"\n              (highlightDay)=\"toggleDayHighlight($event.event, true)\"\n              (unhighlightDay)=\"toggleDayHighlight($event.event, false)\"\n              mwlDroppable\n              dragOverClass=\"cal-drag-over\"\n              (drop)=\"\n                eventDropped(\n                  day,\n                  $event.dropData.event,\n                  $event.dropData.draggedFrom\n                )\n              \"\n              (eventClicked)=\"\n                eventClicked.emit({\n                  event: $event.event,\n                  sourceEvent: $event.sourceEvent\n                })\n              \"\n              [attr.tabindex]=\"{} | calendarA11y: 'monthCellTabIndex'\"\n            >\n            </mwl-calendar-month-cell>\n          </div>\n          <mwl-calendar-open-day-events\n            [locale]=\"locale\"\n            [isOpen]=\"openRowIndex === rowIndex\"\n            [events]=\"openDay?.events\"\n            [date]=\"openDay?.date\"\n            [customTemplate]=\"openDayEventsTemplate\"\n            [eventTitleTemplate]=\"eventTitleTemplate\"\n            [eventActionsTemplate]=\"eventActionsTemplate\"\n            (eventClicked)=\"\n              eventClicked.emit({\n                event: $event.event,\n                sourceEvent: $event.sourceEvent\n              })\n            \"\n            mwlDroppable\n            dragOverClass=\"cal-drag-over\"\n            (drop)=\"\n              eventDropped(\n                openDay,\n                $event.dropData.event,\n                $event.dropData.draggedFrom\n              )\n            \"\n          >\n          </mwl-calendar-open-day-events>\n        </div>\n      </div>\n    </div>\n  "
+        template: "\n    <div class=\"cal-month-view\" role=\"grid\">\n      <mwl-calendar-month-view-header\n        [days]=\"columnHeaders\"\n        [locale]=\"locale\"\n        (columnHeaderClicked)=\"columnHeaderClicked.emit($event)\"\n        [customTemplate]=\"headerTemplate\"\n      >\n      </mwl-calendar-month-view-header>\n      <div class=\"cal-days\">\n        <div\n          *ngFor=\"let rowIndex of view.rowOffsets; trackBy: trackByRowOffset\"\n        >\n          <div class=\"cal-cell-row\">\n            <mwl-calendar-month-cell\n              *ngFor=\"\n                let day of view.days\n                  | slice: rowIndex:rowIndex + view.totalDaysVisibleInWeek;\n                trackBy: trackByDate\n              \"\n              [ngClass]=\"day?.cssClass\"\n              [day]=\"day\"\n              [openDay]=\"openDay\"\n              [locale]=\"locale\"\n              [tooltipPlacement]=\"tooltipPlacement\"\n              [tooltipAppendToBody]=\"tooltipAppendToBody\"\n              [tooltipTemplate]=\"tooltipTemplate\"\n              [tooltipDelay]=\"tooltipDelay\"\n              [customTemplate]=\"cellTemplate\"\n              [ngStyle]=\"{ backgroundColor: day.backgroundColor }\"\n              (mwlClick)=\"dayClicked.emit({ day: day, sourceEvent: $event })\"\n              [clickListenerDisabled]=\"dayClicked.observers.length === 0\"\n              (mwlKeydownEnter)=\"\n                dayClicked.emit({ day: day, sourceEvent: $event })\n              \"\n              (highlightDay)=\"toggleDayHighlight($event.event, true)\"\n              (unhighlightDay)=\"toggleDayHighlight($event.event, false)\"\n              mwlDroppable\n              dragOverClass=\"cal-drag-over\"\n              (drop)=\"\n                eventDropped(\n                  day,\n                  $event.dropData.event,\n                  $event.dropData.draggedFrom\n                )\n              \"\n              (eventClicked)=\"\n                eventClicked.emit({\n                  event: $event.event,\n                  sourceEvent: $event.sourceEvent\n                })\n              \"\n              [attr.tabindex]=\"{} | calendarA11y: 'monthCellTabIndex'\"\n            >\n            </mwl-calendar-month-cell>\n          </div>\n          <mwl-calendar-open-day-events\n            [locale]=\"locale\"\n            [isOpen]=\"openRowIndex === rowIndex\"\n            [events]=\"openDay?.events\"\n            [date]=\"openDay?.date\"\n            [customTemplate]=\"openDayEventsTemplate\"\n            [eventTitleTemplate]=\"eventTitleTemplate\"\n            [eventActionsTemplate]=\"eventActionsTemplate\"\n            (eventClicked)=\"\n              eventClicked.emit({\n                event: $event.event,\n                sourceEvent: $event.sourceEvent\n              })\n            \"\n            mwlDroppable\n            dragOverClass=\"cal-drag-over\"\n            (drop)=\"\n              eventDropped(\n                openDay,\n                $event.dropData.event,\n                $event.dropData.draggedFrom\n              )\n            \"\n          >\n          </mwl-calendar-open-day-events>\n        </div>\n      </div>\n    </div>\n  "
       }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_core__WEBPACK_IMPORTED_MODULE_1__["LOCALE_ID"])), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"], CalendarUtils, String, DateAdapter])], CalendarMonthViewComponent);
 
-      var CalendarMonthViewHeaderComponent = /*#__PURE__*/_createClass(function CalendarMonthViewHeaderComponent() {
+      var CalendarMonthViewHeaderComponent = function CalendarMonthViewHeaderComponent() {
         _classCallCheck(this, CalendarMonthViewHeaderComponent);
 
         this.columnHeaderClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.trackByWeekDayHeaderDate = trackByWeekDayHeaderDate;
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)], CalendarMonthViewHeaderComponent.prototype, "days", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)], CalendarMonthViewHeaderComponent.prototype, "locale", void 0);
@@ -8194,7 +5022,7 @@
         template: "\n    <ng-template\n      #defaultTemplate\n      let-days=\"days\"\n      let-locale=\"locale\"\n      let-trackByWeekDayHeaderDate=\"trackByWeekDayHeaderDate\"\n    >\n      <div class=\"cal-cell-row cal-header\" role=\"row\">\n        <div\n          class=\"cal-cell\"\n          *ngFor=\"let day of days; trackBy: trackByWeekDayHeaderDate\"\n          [class.cal-past]=\"day.isPast\"\n          [class.cal-today]=\"day.isToday\"\n          [class.cal-future]=\"day.isFuture\"\n          [class.cal-weekend]=\"day.isWeekend\"\n          (click)=\"\n            columnHeaderClicked.emit({\n              isoDayNumber: day.day,\n              sourceEvent: $event\n            })\n          \"\n          [ngClass]=\"day.cssClass\"\n          tabindex=\"0\"\n          role=\"columnheader\"\n        >\n          {{ day.date | calendarDate: 'monthViewColumnHeader':locale }}\n        </div>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        days: days,\n        locale: locale,\n        trackByWeekDayHeaderDate: trackByWeekDayHeaderDate\n      }\"\n    >\n    </ng-template>\n  "
       })], CalendarMonthViewHeaderComponent);
 
-      var CalendarMonthCellComponent = /*#__PURE__*/_createClass(function CalendarMonthCellComponent() {
+      var CalendarMonthCellComponent = function CalendarMonthCellComponent() {
         _classCallCheck(this, CalendarMonthCellComponent);
 
         this.highlightDay = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
@@ -8202,7 +5030,7 @@
         this.eventClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.trackByEventId = trackByEventId;
         this.validateDrag = isWithinThreshold;
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarMonthCellComponent.prototype, "day", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarMonthCellComponent.prototype, "openDay", void 0);
@@ -8217,7 +5045,7 @@
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarMonthCellComponent.prototype, "eventClicked", void 0);
       CalendarMonthCellComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'mwl-calendar-month-cell',
-        template: "\n    <ng-template\n      #defaultTemplate\n      let-day=\"day\"\n      let-openDay=\"openDay\"\n      let-locale=\"locale\"\n      let-tooltipPlacement=\"tooltipPlacement\"\n      let-highlightDay=\"highlightDay\"\n      let-unhighlightDay=\"unhighlightDay\"\n      let-eventClicked=\"eventClicked\"\n      let-tooltipTemplate=\"tooltipTemplate\"\n      let-tooltipAppendToBody=\"tooltipAppendToBody\"\n      let-tooltipDelay=\"tooltipDelay\"\n      let-trackByEventId=\"trackByEventId\"\n      let-validateDrag=\"validateDrag\"\n    >\n      <div\n        class=\"cal-cell-top\"\n        [attr.aria-label]=\"\n          { day: day, locale: locale } | calendarA11y: 'monthCell'\n        \"\n      >\n        <span aria-hidden=\"true\">\n          <span class=\"cal-day-badge\" *ngIf=\"day.badgeTotal > 0\">{{\n            day.badgeTotal\n          }}</span>\n          <span class=\"cal-day-number\">{{\n            day.date | calendarDate: 'monthViewDayNumber':locale\n          }}</span>\n        </span>\n      </div>\n      <div class=\"cal-events\" *ngIf=\"day.events.length > 0\">\n        <div\n          class=\"cal-event\"\n          *ngFor=\"let event of day.events; trackBy: trackByEventId\"\n          [ngStyle]=\"{ backgroundColor: event.color?.primary }\"\n          [ngClass]=\"event?.cssClass\"\n          (mouseenter)=\"highlightDay.emit({ event: event })\"\n          (mouseleave)=\"unhighlightDay.emit({ event: event })\"\n          [mwlCalendarTooltip]=\"\n            event.title | calendarEventTitle: 'monthTooltip':event\n          \"\n          [tooltipPlacement]=\"tooltipPlacement\"\n          [tooltipEvent]=\"event\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipAppendToBody]=\"tooltipAppendToBody\"\n          [tooltipDelay]=\"tooltipDelay\"\n          mwlDraggable\n          [class.cal-draggable]=\"event.draggable\"\n          dragActiveClass=\"cal-drag-active\"\n          [dropData]=\"{ event: event, draggedFrom: day }\"\n          [dragAxis]=\"{ x: event.draggable, y: event.draggable }\"\n          [validateDrag]=\"validateDrag\"\n          [touchStartLongPress]=\"{ delay: 300, delta: 30 }\"\n          (mwlClick)=\"eventClicked.emit({ event: event, sourceEvent: $event })\"\n          [attr.aria-hidden]=\"{} | calendarA11y: 'hideMonthCellEvents'\"\n        ></div>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        day: day,\n        openDay: openDay,\n        locale: locale,\n        tooltipPlacement: tooltipPlacement,\n        highlightDay: highlightDay,\n        unhighlightDay: unhighlightDay,\n        eventClicked: eventClicked,\n        tooltipTemplate: tooltipTemplate,\n        tooltipAppendToBody: tooltipAppendToBody,\n        tooltipDelay: tooltipDelay,\n        trackByEventId: trackByEventId,\n        validateDrag: validateDrag\n      }\"\n    >\n    </ng-template>\n  ",
+        template: "\n    <ng-template\n      #defaultTemplate\n      let-day=\"day\"\n      let-openDay=\"openDay\"\n      let-locale=\"locale\"\n      let-tooltipPlacement=\"tooltipPlacement\"\n      let-highlightDay=\"highlightDay\"\n      let-unhighlightDay=\"unhighlightDay\"\n      let-eventClicked=\"eventClicked\"\n      let-tooltipTemplate=\"tooltipTemplate\"\n      let-tooltipAppendToBody=\"tooltipAppendToBody\"\n      let-tooltipDelay=\"tooltipDelay\"\n      let-trackByEventId=\"trackByEventId\"\n      let-validateDrag=\"validateDrag\"\n    >\n      <div\n        class=\"cal-cell-top\"\n        [attr.aria-label]=\"\n          { day: day, locale: locale } | calendarA11y: 'monthCell'\n        \"\n      >\n        <span aria-hidden=\"true\">\n          <span class=\"cal-day-badge\" *ngIf=\"day.badgeTotal > 0\">{{\n            day.badgeTotal\n          }}</span>\n          <span class=\"cal-day-number\">{{\n            day.date | calendarDate: 'monthViewDayNumber':locale\n          }}</span>\n        </span>\n      </div>\n      <div class=\"cal-events\" *ngIf=\"day.events.length > 0\">\n        <div\n          class=\"cal-event\"\n          *ngFor=\"let event of day.events; trackBy: trackByEventId\"\n          [ngStyle]=\"{ backgroundColor: event.color?.primary }\"\n          [ngClass]=\"event?.cssClass\"\n          (mouseenter)=\"highlightDay.emit({ event: event })\"\n          (mouseleave)=\"unhighlightDay.emit({ event: event })\"\n          [mwlCalendarTooltip]=\"\n            event.title | calendarEventTitle: 'monthTooltip':event\n          \"\n          [tooltipPlacement]=\"tooltipPlacement\"\n          [tooltipEvent]=\"event\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipAppendToBody]=\"tooltipAppendToBody\"\n          [tooltipDelay]=\"tooltipDelay\"\n          mwlDraggable\n          [class.cal-draggable]=\"event.draggable\"\n          dragActiveClass=\"cal-drag-active\"\n          [dropData]=\"{ event: event, draggedFrom: day }\"\n          [dragAxis]=\"{ x: event.draggable, y: event.draggable }\"\n          [validateDrag]=\"validateDrag\"\n          (mwlClick)=\"eventClicked.emit({ event: event, sourceEvent: $event })\"\n          [attr.aria-hidden]=\"{} | calendarA11y: 'hideMonthCellEvents'\"\n        ></div>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        day: day,\n        openDay: openDay,\n        locale: locale,\n        tooltipPlacement: tooltipPlacement,\n        highlightDay: highlightDay,\n        unhighlightDay: unhighlightDay,\n        eventClicked: eventClicked,\n        tooltipTemplate: tooltipTemplate,\n        tooltipAppendToBody: tooltipAppendToBody,\n        tooltipDelay: tooltipDelay,\n        trackByEventId: trackByEventId,\n        validateDrag: validateDrag\n      }\"\n    >\n    </ng-template>\n  ",
         host: {
           "class": 'cal-cell cal-day-cell',
           '[class.cal-past]': 'day.isPast',
@@ -8243,14 +5071,14 @@
         'padding-bottom': '*'
       })), Object(_angular_animations__WEBPACK_IMPORTED_MODULE_8__["transition"])('* => void', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_8__["animate"])('150ms ease-out')), Object(_angular_animations__WEBPACK_IMPORTED_MODULE_8__["transition"])('void => *', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_8__["animate"])('150ms ease-in'))]);
 
-      var CalendarOpenDayEventsComponent = /*#__PURE__*/_createClass(function CalendarOpenDayEventsComponent() {
+      var CalendarOpenDayEventsComponent = function CalendarOpenDayEventsComponent() {
         _classCallCheck(this, CalendarOpenDayEventsComponent);
 
         this.isOpen = false;
         this.eventClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.trackByEventId = trackByEventId;
         this.validateDrag = isWithinThreshold;
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)], CalendarOpenDayEventsComponent.prototype, "locale", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Boolean)], CalendarOpenDayEventsComponent.prototype, "isOpen", void 0);
@@ -8262,13 +5090,13 @@
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarOpenDayEventsComponent.prototype, "eventClicked", void 0);
       CalendarOpenDayEventsComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'mwl-calendar-open-day-events',
-        template: "\n    <ng-template\n      #defaultTemplate\n      let-events=\"events\"\n      let-eventClicked=\"eventClicked\"\n      let-isOpen=\"isOpen\"\n      let-trackByEventId=\"trackByEventId\"\n      let-validateDrag=\"validateDrag\"\n    >\n      <div\n        class=\"cal-open-day-events\"\n        [@collapse]\n        *ngIf=\"isOpen\"\n        role=\"application\"\n      >\n        <span\n          tabindex=\"-1\"\n          role=\"alert\"\n          [attr.aria-label]=\"\n            { date: date, locale: locale } | calendarA11y: 'openDayEventsAlert'\n          \"\n        ></span>\n        <span\n          tabindex=\"0\"\n          role=\"landmark\"\n          [attr.aria-label]=\"\n            { date: date, locale: locale }\n              | calendarA11y: 'openDayEventsLandmark'\n          \"\n        ></span>\n        <div\n          *ngFor=\"let event of events; trackBy: trackByEventId\"\n          [ngClass]=\"event?.cssClass\"\n          mwlDraggable\n          [class.cal-draggable]=\"event.draggable\"\n          dragActiveClass=\"cal-drag-active\"\n          [dropData]=\"{ event: event }\"\n          [dragAxis]=\"{ x: event.draggable, y: event.draggable }\"\n          [validateDrag]=\"validateDrag\"\n          [touchStartLongPress]=\"{ delay: 300, delta: 30 }\"\n        >\n          <span\n            class=\"cal-event\"\n            [ngStyle]=\"{ backgroundColor: event.color?.primary }\"\n          >\n          </span>\n          &ngsp;\n          <mwl-calendar-event-title\n            [event]=\"event\"\n            [customTemplate]=\"eventTitleTemplate\"\n            view=\"month\"\n            (mwlClick)=\"\n              eventClicked.emit({ event: event, sourceEvent: $event })\n            \"\n            (mwlKeydownEnter)=\"\n              eventClicked.emit({ event: event, sourceEvent: $event })\n            \"\n            tabindex=\"0\"\n            [attr.aria-label]=\"\n              { event: event, locale: locale }\n                | calendarA11y: 'eventDescription'\n            \"\n          >\n          </mwl-calendar-event-title>\n          &ngsp;\n          <mwl-calendar-event-actions\n            [event]=\"event\"\n            [customTemplate]=\"eventActionsTemplate\"\n          >\n          </mwl-calendar-event-actions>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        events: events,\n        eventClicked: eventClicked,\n        isOpen: isOpen,\n        trackByEventId: trackByEventId,\n        validateDrag: validateDrag\n      }\"\n    >\n    </ng-template>\n  ",
+        template: "\n    <ng-template\n      #defaultTemplate\n      let-events=\"events\"\n      let-eventClicked=\"eventClicked\"\n      let-isOpen=\"isOpen\"\n      let-trackByEventId=\"trackByEventId\"\n      let-validateDrag=\"validateDrag\"\n    >\n      <div\n        class=\"cal-open-day-events\"\n        [@collapse]\n        *ngIf=\"isOpen\"\n        role=\"application\"\n      >\n        <span\n          tabindex=\"-1\"\n          role=\"alert\"\n          [attr.aria-label]=\"\n            { date: date, locale: locale } | calendarA11y: 'openDayEventsAlert'\n          \"\n        ></span>\n        <span\n          tabindex=\"0\"\n          role=\"landmark\"\n          [attr.aria-label]=\"\n            { date: date, locale: locale }\n              | calendarA11y: 'openDayEventsLandmark'\n          \"\n        ></span>\n        <div\n          *ngFor=\"let event of events; trackBy: trackByEventId\"\n          [ngClass]=\"event?.cssClass\"\n          mwlDraggable\n          [class.cal-draggable]=\"event.draggable\"\n          dragActiveClass=\"cal-drag-active\"\n          [dropData]=\"{ event: event }\"\n          [dragAxis]=\"{ x: event.draggable, y: event.draggable }\"\n          [validateDrag]=\"validateDrag\"\n        >\n          <span\n            class=\"cal-event\"\n            [ngStyle]=\"{ backgroundColor: event.color?.primary }\"\n          >\n          </span>\n          &ngsp;\n          <mwl-calendar-event-title\n            [event]=\"event\"\n            [customTemplate]=\"eventTitleTemplate\"\n            view=\"month\"\n            (mwlClick)=\"\n              eventClicked.emit({ event: event, sourceEvent: $event })\n            \"\n            (mwlKeydownEnter)=\"\n              eventClicked.emit({ event: event, sourceEvent: $event })\n            \"\n            tabindex=\"0\"\n            [attr.aria-label]=\"\n              { event: event, locale: locale }\n                | calendarA11y: 'eventDescription'\n            \"\n          >\n          </mwl-calendar-event-title>\n          &ngsp;\n          <mwl-calendar-event-actions\n            [event]=\"event\"\n            [customTemplate]=\"eventActionsTemplate\"\n          >\n          </mwl-calendar-event-actions>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        events: events,\n        eventClicked: eventClicked,\n        isOpen: isOpen,\n        trackByEventId: trackByEventId,\n        validateDrag: validateDrag\n      }\"\n    >\n    </ng-template>\n  ",
         animations: [collapseAnimation]
       })], CalendarOpenDayEventsComponent);
 
-      var CalendarMonthModule = /*#__PURE__*/_createClass(function CalendarMonthModule() {
+      var CalendarMonthModule = function CalendarMonthModule() {
         _classCallCheck(this, CalendarMonthModule);
-      });
+      };
 
       CalendarMonthModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], angular_draggable_droppable__WEBPACK_IMPORTED_MODULE_7__["DragAndDropModule"], CalendarCommonModule],
@@ -8400,7 +5228,7 @@
 
           this.snapDraggedEvents = true;
           /**
-           * The number of segments in an hour. Must divide equally into 60.
+           * The number of segments in an hour. Must be <= 6
            */
 
           this.hourSegments = 2;
@@ -8539,13 +5367,13 @@
         _createClass(CalendarWeekViewComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this18 = this;
+            var _this17 = this;
 
             if (this.refresh) {
               this.refreshSubscription = this.refresh.subscribe(function () {
-                _this18.refreshAll();
+                _this17.refreshAll();
 
-                _this18.cdr.markForCheck();
+                _this17.cdr.markForCheck();
               });
             }
           }
@@ -8586,6 +5414,21 @@
               this.refreshSubscription.unsubscribe();
             }
           }
+        }, {
+          key: "resizeStarted",
+          value: function resizeStarted(eventsContainer, minWidth) {
+            this.dayColumnWidth = this.getDayColumnWidth(eventsContainer);
+            var resizeHelper = new CalendarResizeHelper(eventsContainer, minWidth);
+
+            this.validateResize = function (_ref50) {
+              var rectangle = _ref50.rectangle;
+              return resizeHelper.validateResize({
+                rectangle: rectangle
+              });
+            };
+
+            this.cdr.markForCheck();
+          }
           /**
            * @hidden
            */
@@ -8603,7 +5446,7 @@
         }, {
           key: "timeEventResizing",
           value: function timeEventResizing(timeEvent, resizeEvent) {
-            var _this19 = this;
+            var _this18 = this;
 
             this.timeEventResizes.set(timeEvent.event, resizeEvent);
             var adjustedEvents = new Map();
@@ -8611,14 +5454,14 @@
             var tempEvents = _toConsumableArray(this.events);
 
             this.timeEventResizes.forEach(function (lastResizeEvent, event) {
-              var newEventDates = _this19.getTimeEventResizedDates(event, lastResizeEvent);
+              var newEventDates = _this18.getTimeEventResizedDates(event, lastResizeEvent);
 
-              var adjustedEvent = Object.assign(Object.assign({}, event), newEventDates);
+              var adjustedEvent = Object.assign({}, event, newEventDates);
               adjustedEvents.set(adjustedEvent, event);
               var eventIndex = tempEvents.indexOf(event);
               tempEvents[eventIndex] = adjustedEvent;
             });
-            this.restoreOriginalEvents(tempEvents, adjustedEvents, true);
+            this.restoreOriginalEvents(tempEvents, adjustedEvents);
           }
           /**
            * @hidden
@@ -8738,7 +5581,7 @@
         }, {
           key: "eventDropped",
           value: function eventDropped(dropEvent, date, allDay) {
-            if (shouldFireDroppedEvent(dropEvent, date, allDay, this.calendarId) && this.lastDragEnterDate.getTime() === date.getTime() && (!this.snapDraggedEvents || dropEvent.dropData.event !== this.lastDraggedEvent)) {
+            if (shouldFireDroppedEvent(dropEvent, date, allDay, this.calendarId) && this.lastDragEnterDate.getTime() === date.getTime()) {
               this.eventTimesChanged.emit({
                 type: CalendarEventTimesChangedEventType.Drop,
                 event: dropEvent.dropData.event,
@@ -8746,8 +5589,6 @@
                 allDay: allDay
               });
             }
-
-            this.lastDraggedEvent = null;
           }
           /**
            * @hidden
@@ -8774,27 +5615,26 @@
         }, {
           key: "dragStarted",
           value: function dragStarted(eventsContainer, event, dayEvent) {
-            var _this20 = this;
+            var _this19 = this;
 
             this.dayColumnWidth = this.getDayColumnWidth(eventsContainer);
             var dragHelper = new CalendarDragHelper(eventsContainer, event);
 
-            this.validateDrag = function (_ref50) {
-              var x = _ref50.x,
-                  y = _ref50.y,
-                  transform = _ref50.transform;
-              return _this20.allDayEventResizes.size === 0 && _this20.timeEventResizes.size === 0 && dragHelper.validateDrag({
+            this.validateDrag = function (_ref51) {
+              var x = _ref51.x,
+                  y = _ref51.y,
+                  transform = _ref51.transform;
+              return _this19.allDayEventResizes.size === 0 && _this19.timeEventResizes.size === 0 && dragHelper.validateDrag({
                 x: x,
                 y: y,
-                snapDraggedEvents: _this20.snapDraggedEvents,
-                dragAlreadyMoved: _this20.dragAlreadyMoved,
+                snapDraggedEvents: _this19.snapDraggedEvents,
+                dragAlreadyMoved: _this19.dragAlreadyMoved,
                 transform: transform
               });
             };
 
             this.dragActive = true;
             this.dragAlreadyMoved = false;
-            this.lastDraggedEvent = null;
             this.eventDragEnterByType = {
               allDay: 0,
               time: 0
@@ -8822,17 +5662,20 @@
         }, {
           key: "dragMove",
           value: function dragMove(dayEvent, dragEvent) {
-            var newEventTimes = this.getDragMovedEventTimes(dayEvent, dragEvent, this.dayColumnWidth, true);
-            var originalEvent = dayEvent.event;
-            var adjustedEvent = Object.assign(Object.assign({}, originalEvent), newEventTimes);
-            var tempEvents = this.events.map(function (event) {
-              if (event === originalEvent) {
-                return adjustedEvent;
-              }
+            if (this.snapDraggedEvents) {
+              var newEventTimes = this.getDragMovedEventTimes(dayEvent, dragEvent, this.dayColumnWidth, true);
+              var originalEvent = dayEvent.event;
+              var adjustedEvent = Object.assign({}, originalEvent, newEventTimes);
+              var tempEvents = this.events.map(function (event) {
+                if (event === originalEvent) {
+                  return adjustedEvent;
+                }
 
-              return event;
-            });
-            this.restoreOriginalEvents(tempEvents, new Map([[adjustedEvent, originalEvent]]), this.snapDraggedEvents);
+                return event;
+              });
+              this.restoreOriginalEvents(tempEvents, new Map([[adjustedEvent, originalEvent]]));
+            }
+
             this.dragAlreadyMoved = true;
           }
           /**
@@ -8854,14 +5697,12 @@
             var useY = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
             this.view = this.getWeekView(this.events);
             this.dragActive = false;
-            this.validateDrag = null;
 
             var _this$getDragMovedEve = this.getDragMovedEventTimes(weekEvent, dragEndEvent, dayWidth, useY),
                 start = _this$getDragMovedEve.start,
                 end = _this$getDragMovedEve.end;
 
-            if ((this.snapDraggedEvents || this.eventDragEnterByType[useY ? 'time' : 'allDay'] > 0) && isDraggedWithinPeriod(start, end, this.view.period)) {
-              this.lastDraggedEvent = weekEvent.event;
+            if (this.eventDragEnterByType[useY ? 'time' : 'allDay'] > 0 && isDraggedWithinPeriod(start, end, this.view.period)) {
               this.eventTimesChanged.emit({
                 newStart: start,
                 newEnd: end,
@@ -8945,13 +5786,8 @@
         }, {
           key: "restoreOriginalEvents",
           value: function restoreOriginalEvents(tempEvents, adjustedEvents) {
-            var snapDraggedEvents = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
             var previousView = this.view;
-
-            if (snapDraggedEvents) {
-              this.view = this.getWeekView(tempEvents);
-            }
-
+            this.view = this.getWeekView(tempEvents);
             var adjustedEventsArray = tempEvents.filter(function (event) {
               return adjustedEvents.has(event);
             });
@@ -8964,31 +5800,23 @@
               adjustedEventsArray.forEach(function (adjustedEvent) {
                 var originalEvent = adjustedEvents.get(adjustedEvent);
                 var existingColumnEvent = column.events.find(function (columnEvent) {
-                  return columnEvent.event === (snapDraggedEvents ? adjustedEvent : originalEvent);
+                  return columnEvent.event === adjustedEvent;
                 });
 
                 if (existingColumnEvent) {
                   // restore the original event so trackBy kicks in and the dom isn't changed
                   existingColumnEvent.event = originalEvent;
-                  existingColumnEvent['tempEvent'] = adjustedEvent;
-
-                  if (!snapDraggedEvents) {
-                    existingColumnEvent.height = 0;
-                    existingColumnEvent.width = 0;
-                  }
                 } else {
                   // add a dummy event to the drop so if the event was removed from the original column the drag doesn't end early
-                  var event = {
+                  column.events.push({
                     event: originalEvent,
                     left: 0,
                     top: 0,
                     height: 0,
                     width: 0,
                     startsBeforeDay: false,
-                    endsAfterDay: false,
-                    tempEvent: adjustedEvent
-                  };
-                  column.events.push(event);
+                    endsAfterDay: false
+                  });
                 }
               });
             });
@@ -9054,21 +5882,6 @@
 
             return newEventDates;
           }
-        }, {
-          key: "resizeStarted",
-          value: function resizeStarted(eventsContainer, minWidth) {
-            this.dayColumnWidth = this.getDayColumnWidth(eventsContainer);
-            var resizeHelper = new CalendarResizeHelper(eventsContainer, minWidth);
-
-            this.validateResize = function (_ref51) {
-              var rectangle = _ref51.rectangle;
-              return resizeHelper.validateResize({
-                rectangle: rectangle
-              });
-            };
-
-            this.cdr.markForCheck();
-          }
         }]);
 
         return CalendarWeekViewComponent;
@@ -9125,17 +5938,17 @@
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarWeekViewComponent.prototype, "hourSegmentClicked", void 0);
       CalendarWeekViewComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'mwl-calendar-week-view',
-        template: "\n    <div class=\"cal-week-view\" role=\"grid\">\n      <mwl-calendar-week-view-header\n        [days]=\"days\"\n        [locale]=\"locale\"\n        [customTemplate]=\"headerTemplate\"\n        (dayHeaderClicked)=\"dayHeaderClicked.emit($event)\"\n        (eventDropped)=\"\n          eventDropped({ dropData: $event }, $event.newStart, true)\n        \"\n        (dragEnter)=\"dateDragEnter($event.date)\"\n      >\n      </mwl-calendar-week-view-header>\n      <div\n        class=\"cal-all-day-events\"\n        #allDayEventsContainer\n        *ngIf=\"view.allDayEventRows.length > 0\"\n        mwlDroppable\n        (dragEnter)=\"dragEnter('allDay')\"\n        (dragLeave)=\"dragLeave('allDay')\"\n      >\n        <div class=\"cal-day-columns\">\n          <div\n            class=\"cal-time-label-column\"\n            [ngTemplateOutlet]=\"allDayEventsLabelTemplate\"\n          ></div>\n          <div\n            class=\"cal-day-column\"\n            *ngFor=\"let day of days; trackBy: trackByWeekDayHeaderDate\"\n            mwlDroppable\n            dragOverClass=\"cal-drag-over\"\n            (drop)=\"eventDropped($event, day.date, true)\"\n            (dragEnter)=\"dateDragEnter(day.date)\"\n          ></div>\n        </div>\n        <div\n          *ngFor=\"let eventRow of view.allDayEventRows; trackBy: trackById\"\n          #eventRowContainer\n          class=\"cal-events-row\"\n        >\n          <div\n            *ngFor=\"\n              let allDayEvent of eventRow.row;\n              trackBy: trackByWeekAllDayEvent\n            \"\n            #event\n            class=\"cal-event-container\"\n            [class.cal-draggable]=\"\n              allDayEvent.event.draggable && allDayEventResizes.size === 0\n            \"\n            [class.cal-starts-within-week]=\"!allDayEvent.startsBeforeWeek\"\n            [class.cal-ends-within-week]=\"!allDayEvent.endsAfterWeek\"\n            [ngClass]=\"allDayEvent.event?.cssClass\"\n            [style.width.%]=\"(100 / days.length) * allDayEvent.span\"\n            [style.marginLeft.%]=\"(100 / days.length) * allDayEvent.offset\"\n            mwlResizable\n            [resizeSnapGrid]=\"{ left: dayColumnWidth, right: dayColumnWidth }\"\n            [validateResize]=\"validateResize\"\n            (resizeStart)=\"\n              allDayEventResizeStarted(eventRowContainer, allDayEvent, $event)\n            \"\n            (resizing)=\"\n              allDayEventResizing(allDayEvent, $event, dayColumnWidth)\n            \"\n            (resizeEnd)=\"allDayEventResizeEnded(allDayEvent)\"\n            mwlDraggable\n            dragActiveClass=\"cal-drag-active\"\n            [dropData]=\"{ event: allDayEvent.event, calendarId: calendarId }\"\n            [dragAxis]=\"{\n              x: allDayEvent.event.draggable && allDayEventResizes.size === 0,\n              y:\n                !snapDraggedEvents &&\n                allDayEvent.event.draggable &&\n                allDayEventResizes.size === 0\n            }\"\n            [dragSnapGrid]=\"snapDraggedEvents ? { x: dayColumnWidth } : {}\"\n            [validateDrag]=\"validateDrag\"\n            [touchStartLongPress]=\"{ delay: 300, delta: 30 }\"\n            (dragStart)=\"dragStarted(eventRowContainer, event)\"\n            (dragging)=\"allDayEventDragMove()\"\n            (dragEnd)=\"dragEnded(allDayEvent, $event, dayColumnWidth)\"\n          >\n            <div\n              class=\"cal-resize-handle cal-resize-handle-before-start\"\n              *ngIf=\"\n                allDayEvent.event?.resizable?.beforeStart &&\n                !allDayEvent.startsBeforeWeek\n              \"\n              mwlResizeHandle\n              [resizeEdges]=\"{ left: true }\"\n            ></div>\n            <mwl-calendar-week-view-event\n              [locale]=\"locale\"\n              [weekEvent]=\"allDayEvent\"\n              [tooltipPlacement]=\"tooltipPlacement\"\n              [tooltipTemplate]=\"tooltipTemplate\"\n              [tooltipAppendToBody]=\"tooltipAppendToBody\"\n              [tooltipDelay]=\"tooltipDelay\"\n              [customTemplate]=\"eventTemplate\"\n              [eventTitleTemplate]=\"eventTitleTemplate\"\n              [eventActionsTemplate]=\"eventActionsTemplate\"\n              [daysInWeek]=\"daysInWeek\"\n              (eventClicked)=\"\n                eventClicked.emit({\n                  event: allDayEvent.event,\n                  sourceEvent: $event.sourceEvent\n                })\n              \"\n            >\n            </mwl-calendar-week-view-event>\n            <div\n              class=\"cal-resize-handle cal-resize-handle-after-end\"\n              *ngIf=\"\n                allDayEvent.event?.resizable?.afterEnd &&\n                !allDayEvent.endsAfterWeek\n              \"\n              mwlResizeHandle\n              [resizeEdges]=\"{ right: true }\"\n            ></div>\n          </div>\n        </div>\n      </div>\n      <div\n        class=\"cal-time-events\"\n        mwlDroppable\n        (dragEnter)=\"dragEnter('time')\"\n        (dragLeave)=\"dragLeave('time')\"\n      >\n        <div\n          class=\"cal-time-label-column\"\n          *ngIf=\"view.hourColumns.length > 0 && daysInWeek !== 1\"\n        >\n          <div\n            *ngFor=\"\n              let hour of view.hourColumns[0].hours;\n              trackBy: trackByHour;\n              let odd = odd\n            \"\n            class=\"cal-hour\"\n            [class.cal-hour-odd]=\"odd\"\n          >\n            <mwl-calendar-week-view-hour-segment\n              *ngFor=\"let segment of hour.segments; trackBy: trackByHourSegment\"\n              [style.height.px]=\"hourSegmentHeight\"\n              [segment]=\"segment\"\n              [segmentHeight]=\"hourSegmentHeight\"\n              [locale]=\"locale\"\n              [customTemplate]=\"hourSegmentTemplate\"\n              [isTimeLabel]=\"true\"\n              [daysInWeek]=\"daysInWeek\"\n            >\n            </mwl-calendar-week-view-hour-segment>\n          </div>\n        </div>\n        <div\n          class=\"cal-day-columns\"\n          [class.cal-resize-active]=\"timeEventResizes.size > 0\"\n          #dayColumns\n        >\n          <div\n            class=\"cal-day-column\"\n            *ngFor=\"let column of view.hourColumns; trackBy: trackByHourColumn\"\n          >\n            <mwl-calendar-week-view-current-time-marker\n              [columnDate]=\"column.date\"\n              [dayStartHour]=\"dayStartHour\"\n              [dayStartMinute]=\"dayStartMinute\"\n              [dayEndHour]=\"dayEndHour\"\n              [dayEndMinute]=\"dayEndMinute\"\n              [hourSegments]=\"hourSegments\"\n              [hourSegmentHeight]=\"hourSegmentHeight\"\n              [customTemplate]=\"currentTimeMarkerTemplate\"\n            ></mwl-calendar-week-view-current-time-marker>\n            <div class=\"cal-events-container\">\n              <div\n                *ngFor=\"\n                  let timeEvent of column.events;\n                  trackBy: trackByWeekTimeEvent\n                \"\n                #event\n                class=\"cal-event-container\"\n                [class.cal-draggable]=\"\n                  timeEvent.event.draggable && timeEventResizes.size === 0\n                \"\n                [class.cal-starts-within-day]=\"!timeEvent.startsBeforeDay\"\n                [class.cal-ends-within-day]=\"!timeEvent.endsAfterDay\"\n                [ngClass]=\"timeEvent.event.cssClass\"\n                [hidden]=\"timeEvent.height === 0 && timeEvent.width === 0\"\n                [style.top.px]=\"timeEvent.top\"\n                [style.height.px]=\"timeEvent.height\"\n                [style.left.%]=\"timeEvent.left\"\n                [style.width.%]=\"timeEvent.width\"\n                mwlResizable\n                [resizeSnapGrid]=\"{\n                  left: dayColumnWidth,\n                  right: dayColumnWidth,\n                  top: eventSnapSize || hourSegmentHeight,\n                  bottom: eventSnapSize || hourSegmentHeight\n                }\"\n                [validateResize]=\"validateResize\"\n                [allowNegativeResizes]=\"true\"\n                (resizeStart)=\"\n                  timeEventResizeStarted(dayColumns, timeEvent, $event)\n                \"\n                (resizing)=\"timeEventResizing(timeEvent, $event)\"\n                (resizeEnd)=\"timeEventResizeEnded(timeEvent)\"\n                mwlDraggable\n                dragActiveClass=\"cal-drag-active\"\n                [dropData]=\"{ event: timeEvent.event, calendarId: calendarId }\"\n                [dragAxis]=\"{\n                  x: timeEvent.event.draggable && timeEventResizes.size === 0,\n                  y: timeEvent.event.draggable && timeEventResizes.size === 0\n                }\"\n                [dragSnapGrid]=\"\n                  snapDraggedEvents\n                    ? {\n                        x: dayColumnWidth,\n                        y: eventSnapSize || hourSegmentHeight\n                      }\n                    : {}\n                \"\n                [touchStartLongPress]=\"{ delay: 300, delta: 30 }\"\n                [ghostDragEnabled]=\"!snapDraggedEvents\"\n                [ghostElementTemplate]=\"weekEventTemplate\"\n                [validateDrag]=\"validateDrag\"\n                (dragStart)=\"dragStarted(dayColumns, event, timeEvent)\"\n                (dragging)=\"dragMove(timeEvent, $event)\"\n                (dragEnd)=\"dragEnded(timeEvent, $event, dayColumnWidth, true)\"\n              >\n                <div\n                  class=\"cal-resize-handle cal-resize-handle-before-start\"\n                  *ngIf=\"\n                    timeEvent.event?.resizable?.beforeStart &&\n                    !timeEvent.startsBeforeDay\n                  \"\n                  mwlResizeHandle\n                  [resizeEdges]=\"{\n                    left: true,\n                    top: true\n                  }\"\n                ></div>\n                <ng-template\n                  [ngTemplateOutlet]=\"weekEventTemplate\"\n                ></ng-template>\n                <ng-template #weekEventTemplate>\n                  <mwl-calendar-week-view-event\n                    [locale]=\"locale\"\n                    [weekEvent]=\"timeEvent\"\n                    [tooltipPlacement]=\"tooltipPlacement\"\n                    [tooltipTemplate]=\"tooltipTemplate\"\n                    [tooltipAppendToBody]=\"tooltipAppendToBody\"\n                    [tooltipDisabled]=\"dragActive || timeEventResizes.size > 0\"\n                    [tooltipDelay]=\"tooltipDelay\"\n                    [customTemplate]=\"eventTemplate\"\n                    [eventTitleTemplate]=\"eventTitleTemplate\"\n                    [eventActionsTemplate]=\"eventActionsTemplate\"\n                    [column]=\"column\"\n                    [daysInWeek]=\"daysInWeek\"\n                    (eventClicked)=\"\n                      eventClicked.emit({\n                        event: timeEvent.event,\n                        sourceEvent: $event.sourceEvent\n                      })\n                    \"\n                  >\n                  </mwl-calendar-week-view-event>\n                </ng-template>\n                <div\n                  class=\"cal-resize-handle cal-resize-handle-after-end\"\n                  *ngIf=\"\n                    timeEvent.event?.resizable?.afterEnd &&\n                    !timeEvent.endsAfterDay\n                  \"\n                  mwlResizeHandle\n                  [resizeEdges]=\"{\n                    right: true,\n                    bottom: true\n                  }\"\n                ></div>\n              </div>\n            </div>\n\n            <div\n              *ngFor=\"\n                let hour of column.hours;\n                trackBy: trackByHour;\n                let odd = odd\n              \"\n              class=\"cal-hour\"\n              [class.cal-hour-odd]=\"odd\"\n            >\n              <mwl-calendar-week-view-hour-segment\n                *ngFor=\"\n                  let segment of hour.segments;\n                  trackBy: trackByHourSegment\n                \"\n                [style.height.px]=\"hourSegmentHeight\"\n                [segment]=\"segment\"\n                [segmentHeight]=\"hourSegmentHeight\"\n                [locale]=\"locale\"\n                [customTemplate]=\"hourSegmentTemplate\"\n                [daysInWeek]=\"daysInWeek\"\n                (mwlClick)=\"\n                  hourSegmentClicked.emit({\n                    date: segment.date,\n                    sourceEvent: $event\n                  })\n                \"\n                [clickListenerDisabled]=\"\n                  hourSegmentClicked.observers.length === 0\n                \"\n                mwlDroppable\n                [dragOverClass]=\"\n                  !dragActive || !snapDraggedEvents ? 'cal-drag-over' : null\n                \"\n                dragActiveClass=\"cal-drag-active\"\n                (drop)=\"eventDropped($event, segment.date, false)\"\n                (dragEnter)=\"dateDragEnter(segment.date)\"\n                [isTimeLabel]=\"daysInWeek === 1\"\n              >\n              </mwl-calendar-week-view-hour-segment>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  "
+        template: "\n    <div class=\"cal-week-view\" role=\"grid\">\n      <mwl-calendar-week-view-header\n        [days]=\"days\"\n        [locale]=\"locale\"\n        [customTemplate]=\"headerTemplate\"\n        (dayHeaderClicked)=\"dayHeaderClicked.emit($event)\"\n        (eventDropped)=\"\n          eventDropped({ dropData: $event }, $event.newStart, true)\n        \"\n        (dragEnter)=\"dateDragEnter($event.date)\"\n      >\n      </mwl-calendar-week-view-header>\n      <div\n        class=\"cal-all-day-events\"\n        #allDayEventsContainer\n        *ngIf=\"view.allDayEventRows.length > 0\"\n        mwlDroppable\n        (dragEnter)=\"dragEnter('allDay')\"\n        (dragLeave)=\"dragLeave('allDay')\"\n      >\n        <div class=\"cal-day-columns\">\n          <div\n            class=\"cal-time-label-column\"\n            [ngTemplateOutlet]=\"allDayEventsLabelTemplate\"\n          ></div>\n          <div\n            class=\"cal-day-column\"\n            *ngFor=\"let day of days; trackBy: trackByWeekDayHeaderDate\"\n            mwlDroppable\n            dragOverClass=\"cal-drag-over\"\n            (drop)=\"eventDropped($event, day.date, true)\"\n            (dragEnter)=\"dateDragEnter(day.date)\"\n          ></div>\n        </div>\n        <div\n          *ngFor=\"let eventRow of view.allDayEventRows; trackBy: trackById\"\n          #eventRowContainer\n          class=\"cal-events-row\"\n        >\n          <div\n            *ngFor=\"\n              let allDayEvent of eventRow.row;\n              trackBy: trackByWeekAllDayEvent\n            \"\n            #event\n            class=\"cal-event-container\"\n            [class.cal-draggable]=\"\n              allDayEvent.event.draggable && allDayEventResizes.size === 0\n            \"\n            [class.cal-starts-within-week]=\"!allDayEvent.startsBeforeWeek\"\n            [class.cal-ends-within-week]=\"!allDayEvent.endsAfterWeek\"\n            [ngClass]=\"allDayEvent.event?.cssClass\"\n            [style.width.%]=\"(100 / days.length) * allDayEvent.span\"\n            [style.marginLeft.%]=\"(100 / days.length) * allDayEvent.offset\"\n            mwlResizable\n            [resizeSnapGrid]=\"{ left: dayColumnWidth, right: dayColumnWidth }\"\n            [validateResize]=\"validateResize\"\n            (resizeStart)=\"\n              allDayEventResizeStarted(eventRowContainer, allDayEvent, $event)\n            \"\n            (resizing)=\"\n              allDayEventResizing(allDayEvent, $event, dayColumnWidth)\n            \"\n            (resizeEnd)=\"allDayEventResizeEnded(allDayEvent)\"\n            mwlDraggable\n            dragActiveClass=\"cal-drag-active\"\n            [dropData]=\"{ event: allDayEvent.event, calendarId: calendarId }\"\n            [dragAxis]=\"{\n              x: allDayEvent.event.draggable && allDayEventResizes.size === 0,\n              y:\n                !snapDraggedEvents &&\n                allDayEvent.event.draggable &&\n                allDayEventResizes.size === 0\n            }\"\n            [dragSnapGrid]=\"snapDraggedEvents ? { x: dayColumnWidth } : {}\"\n            [validateDrag]=\"validateDrag\"\n            (dragStart)=\"dragStarted(eventRowContainer, event)\"\n            (dragging)=\"allDayEventDragMove()\"\n            (dragEnd)=\"dragEnded(allDayEvent, $event, dayColumnWidth)\"\n          >\n            <div\n              class=\"cal-resize-handle cal-resize-handle-before-start\"\n              *ngIf=\"\n                allDayEvent.event?.resizable?.beforeStart &&\n                !allDayEvent.startsBeforeWeek\n              \"\n              mwlResizeHandle\n              [resizeEdges]=\"{ left: true }\"\n            ></div>\n            <mwl-calendar-week-view-event\n              [locale]=\"locale\"\n              [weekEvent]=\"allDayEvent\"\n              [tooltipPlacement]=\"tooltipPlacement\"\n              [tooltipTemplate]=\"tooltipTemplate\"\n              [tooltipAppendToBody]=\"tooltipAppendToBody\"\n              [tooltipDelay]=\"tooltipDelay\"\n              [customTemplate]=\"eventTemplate\"\n              [eventTitleTemplate]=\"eventTitleTemplate\"\n              [eventActionsTemplate]=\"eventActionsTemplate\"\n              [daysInWeek]=\"daysInWeek\"\n              (eventClicked)=\"\n                eventClicked.emit({\n                  event: allDayEvent.event,\n                  sourceEvent: $event.sourceEvent\n                })\n              \"\n            >\n            </mwl-calendar-week-view-event>\n            <div\n              class=\"cal-resize-handle cal-resize-handle-after-end\"\n              *ngIf=\"\n                allDayEvent.event?.resizable?.afterEnd &&\n                !allDayEvent.endsAfterWeek\n              \"\n              mwlResizeHandle\n              [resizeEdges]=\"{ right: true }\"\n            ></div>\n          </div>\n        </div>\n      </div>\n      <div\n        class=\"cal-time-events\"\n        mwlDroppable\n        (dragEnter)=\"dragEnter('time')\"\n        (dragLeave)=\"dragLeave('time')\"\n      >\n        <div\n          class=\"cal-time-label-column\"\n          *ngIf=\"view.hourColumns.length > 0 && daysInWeek !== 1\"\n        >\n          <div\n            *ngFor=\"\n              let hour of view.hourColumns[0].hours;\n              trackBy: trackByHour;\n              let odd = odd\n            \"\n            class=\"cal-hour\"\n            [class.cal-hour-odd]=\"odd\"\n          >\n            <mwl-calendar-week-view-hour-segment\n              *ngFor=\"let segment of hour.segments; trackBy: trackByHourSegment\"\n              [style.height.px]=\"hourSegmentHeight\"\n              [segment]=\"segment\"\n              [segmentHeight]=\"hourSegmentHeight\"\n              [locale]=\"locale\"\n              [customTemplate]=\"hourSegmentTemplate\"\n              [isTimeLabel]=\"true\"\n              [daysInWeek]=\"daysInWeek\"\n            >\n            </mwl-calendar-week-view-hour-segment>\n          </div>\n        </div>\n        <div\n          class=\"cal-day-columns\"\n          [class.cal-resize-active]=\"timeEventResizes.size > 0\"\n          #dayColumns\n        >\n          <div\n            class=\"cal-day-column\"\n            *ngFor=\"let column of view.hourColumns; trackBy: trackByHourColumn\"\n          >\n            <mwl-calendar-week-view-current-time-marker\n              [columnDate]=\"column.date\"\n              [dayStartHour]=\"dayStartHour\"\n              [dayStartMinute]=\"dayStartMinute\"\n              [dayEndHour]=\"dayEndHour\"\n              [dayEndMinute]=\"dayEndMinute\"\n              [hourSegments]=\"hourSegments\"\n              [hourSegmentHeight]=\"hourSegmentHeight\"\n              [customTemplate]=\"currentTimeMarkerTemplate\"\n            ></mwl-calendar-week-view-current-time-marker>\n            <div class=\"cal-events-container\">\n              <div\n                *ngFor=\"\n                  let timeEvent of column.events;\n                  trackBy: trackByWeekTimeEvent\n                \"\n                #event\n                class=\"cal-event-container\"\n                [class.cal-draggable]=\"\n                  timeEvent.event.draggable && timeEventResizes.size === 0\n                \"\n                [class.cal-starts-within-day]=\"!timeEvent.startsBeforeDay\"\n                [class.cal-ends-within-day]=\"!timeEvent.endsAfterDay\"\n                [ngClass]=\"timeEvent.event.cssClass\"\n                [hidden]=\"timeEvent.height === 0 && timeEvent.width === 0\"\n                [style.top.px]=\"timeEvent.top\"\n                [style.height.px]=\"timeEvent.height\"\n                [style.left.%]=\"timeEvent.left\"\n                [style.width.%]=\"timeEvent.width\"\n                mwlResizable\n                [resizeSnapGrid]=\"{\n                  left: dayColumnWidth,\n                  right: dayColumnWidth,\n                  top: eventSnapSize || hourSegmentHeight,\n                  bottom: eventSnapSize || hourSegmentHeight\n                }\"\n                [validateResize]=\"validateResize\"\n                [allowNegativeResizes]=\"true\"\n                (resizeStart)=\"\n                  timeEventResizeStarted(dayColumns, timeEvent, $event)\n                \"\n                (resizing)=\"timeEventResizing(timeEvent, $event)\"\n                (resizeEnd)=\"timeEventResizeEnded(timeEvent)\"\n                mwlDraggable\n                dragActiveClass=\"cal-drag-active\"\n                [dropData]=\"{ event: timeEvent.event, calendarId: calendarId }\"\n                [dragAxis]=\"{\n                  x: timeEvent.event.draggable && timeEventResizes.size === 0,\n                  y: timeEvent.event.draggable && timeEventResizes.size === 0\n                }\"\n                [dragSnapGrid]=\"\n                  snapDraggedEvents\n                    ? {\n                        x: dayColumnWidth,\n                        y: eventSnapSize || hourSegmentHeight\n                      }\n                    : {}\n                \"\n                [ghostDragEnabled]=\"!snapDraggedEvents\"\n                [validateDrag]=\"validateDrag\"\n                (dragStart)=\"dragStarted(dayColumns, event, timeEvent)\"\n                (dragging)=\"dragMove(timeEvent, $event)\"\n                (dragEnd)=\"dragEnded(timeEvent, $event, dayColumnWidth, true)\"\n              >\n                <div\n                  class=\"cal-resize-handle cal-resize-handle-before-start\"\n                  *ngIf=\"\n                    timeEvent.event?.resizable?.beforeStart &&\n                    !timeEvent.startsBeforeDay\n                  \"\n                  mwlResizeHandle\n                  [resizeEdges]=\"{\n                    left: true,\n                    top: true\n                  }\"\n                ></div>\n                <mwl-calendar-week-view-event\n                  [locale]=\"locale\"\n                  [weekEvent]=\"timeEvent\"\n                  [tooltipPlacement]=\"tooltipPlacement\"\n                  [tooltipTemplate]=\"tooltipTemplate\"\n                  [tooltipAppendToBody]=\"tooltipAppendToBody\"\n                  [tooltipDisabled]=\"dragActive || timeEventResizes.size > 0\"\n                  [tooltipDelay]=\"tooltipDelay\"\n                  [customTemplate]=\"eventTemplate\"\n                  [eventTitleTemplate]=\"eventTitleTemplate\"\n                  [eventActionsTemplate]=\"eventActionsTemplate\"\n                  [column]=\"column\"\n                  [daysInWeek]=\"daysInWeek\"\n                  (eventClicked)=\"\n                    eventClicked.emit({\n                      event: timeEvent.event,\n                      sourceEvent: $event.sourceEvent\n                    })\n                  \"\n                >\n                </mwl-calendar-week-view-event>\n                <div\n                  class=\"cal-resize-handle cal-resize-handle-after-end\"\n                  *ngIf=\"\n                    timeEvent.event?.resizable?.afterEnd &&\n                    !timeEvent.endsAfterDay\n                  \"\n                  mwlResizeHandle\n                  [resizeEdges]=\"{\n                    right: true,\n                    bottom: true\n                  }\"\n                ></div>\n              </div>\n            </div>\n\n            <div\n              *ngFor=\"\n                let hour of column.hours;\n                trackBy: trackByHour;\n                let odd = odd\n              \"\n              class=\"cal-hour\"\n              [class.cal-hour-odd]=\"odd\"\n            >\n              <mwl-calendar-week-view-hour-segment\n                *ngFor=\"\n                  let segment of hour.segments;\n                  trackBy: trackByHourSegment\n                \"\n                [style.height.px]=\"hourSegmentHeight\"\n                [segment]=\"segment\"\n                [segmentHeight]=\"hourSegmentHeight\"\n                [locale]=\"locale\"\n                [customTemplate]=\"hourSegmentTemplate\"\n                [daysInWeek]=\"daysInWeek\"\n                (mwlClick)=\"\n                  hourSegmentClicked.emit({\n                    date: segment.date,\n                    sourceEvent: $event\n                  })\n                \"\n                [clickListenerDisabled]=\"\n                  hourSegmentClicked.observers.length === 0\n                \"\n                mwlDroppable\n                [dragOverClass]=\"\n                  !dragActive || !snapDraggedEvents ? 'cal-drag-over' : null\n                \"\n                dragActiveClass=\"cal-drag-active\"\n                (drop)=\"eventDropped($event, segment.date, false)\"\n                (dragEnter)=\"dateDragEnter(segment.date)\"\n                [isTimeLabel]=\"daysInWeek === 1\"\n              >\n              </mwl-calendar-week-view-hour-segment>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  "
       }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_core__WEBPACK_IMPORTED_MODULE_1__["LOCALE_ID"])), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"], CalendarUtils, String, DateAdapter])], CalendarWeekViewComponent);
 
-      var CalendarWeekViewHeaderComponent = /*#__PURE__*/_createClass(function CalendarWeekViewHeaderComponent() {
+      var CalendarWeekViewHeaderComponent = function CalendarWeekViewHeaderComponent() {
         _classCallCheck(this, CalendarWeekViewHeaderComponent);
 
         this.dayHeaderClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.eventDropped = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.dragEnter = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.trackByWeekDayHeaderDate = trackByWeekDayHeaderDate;
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)], CalendarWeekViewHeaderComponent.prototype, "days", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)], CalendarWeekViewHeaderComponent.prototype, "locale", void 0);
@@ -9148,11 +5961,11 @@
         template: "\n    <ng-template\n      #defaultTemplate\n      let-days=\"days\"\n      let-locale=\"locale\"\n      let-dayHeaderClicked=\"dayHeaderClicked\"\n      let-eventDropped=\"eventDropped\"\n      let-trackByWeekDayHeaderDate=\"trackByWeekDayHeaderDate\"\n      let-dragEnter=\"dragEnter\"\n    >\n      <div class=\"cal-day-headers\" role=\"row\">\n        <div\n          class=\"cal-header\"\n          *ngFor=\"let day of days; trackBy: trackByWeekDayHeaderDate\"\n          [class.cal-past]=\"day.isPast\"\n          [class.cal-today]=\"day.isToday\"\n          [class.cal-future]=\"day.isFuture\"\n          [class.cal-weekend]=\"day.isWeekend\"\n          [ngClass]=\"day.cssClass\"\n          (mwlClick)=\"dayHeaderClicked.emit({ day: day, sourceEvent: $event })\"\n          mwlDroppable\n          dragOverClass=\"cal-drag-over\"\n          (drop)=\"\n            eventDropped.emit({\n              event: $event.dropData.event,\n              newStart: day.date\n            })\n          \"\n          (dragEnter)=\"dragEnter.emit({ date: day.date })\"\n          tabindex=\"0\"\n          role=\"columnheader\"\n        >\n          <b>{{ day.date | calendarDate: 'weekViewColumnHeader':locale }}</b\n          ><br />\n          <span>{{\n            day.date | calendarDate: 'weekViewColumnSubHeader':locale\n          }}</span>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        days: days,\n        locale: locale,\n        dayHeaderClicked: dayHeaderClicked,\n        eventDropped: eventDropped,\n        dragEnter: dragEnter,\n        trackByWeekDayHeaderDate: trackByWeekDayHeaderDate\n      }\"\n    >\n    </ng-template>\n  "
       })], CalendarWeekViewHeaderComponent);
 
-      var CalendarWeekViewEventComponent = /*#__PURE__*/_createClass(function CalendarWeekViewEventComponent() {
+      var CalendarWeekViewEventComponent = function CalendarWeekViewEventComponent() {
         _classCallCheck(this, CalendarWeekViewEventComponent);
 
         this.eventClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)], CalendarWeekViewEventComponent.prototype, "locale", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarWeekViewEventComponent.prototype, "weekEvent", void 0);
@@ -9169,12 +5982,12 @@
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarWeekViewEventComponent.prototype, "eventClicked", void 0);
       CalendarWeekViewEventComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'mwl-calendar-week-view-event',
-        template: "\n    <ng-template\n      #defaultTemplate\n      let-weekEvent=\"weekEvent\"\n      let-tooltipPlacement=\"tooltipPlacement\"\n      let-eventClicked=\"eventClicked\"\n      let-tooltipTemplate=\"tooltipTemplate\"\n      let-tooltipAppendToBody=\"tooltipAppendToBody\"\n      let-tooltipDisabled=\"tooltipDisabled\"\n      let-tooltipDelay=\"tooltipDelay\"\n      let-column=\"column\"\n      let-daysInWeek=\"daysInWeek\"\n    >\n      <div\n        class=\"cal-event\"\n        [ngStyle]=\"{\n          backgroundColor: weekEvent.event.color?.secondary,\n          borderColor: weekEvent.event.color?.primary\n        }\"\n        [mwlCalendarTooltip]=\"\n          !tooltipDisabled\n            ? (weekEvent.event.title\n              | calendarEventTitle\n                : (daysInWeek === 1 ? 'dayTooltip' : 'weekTooltip')\n                : weekEvent.tempEvent || weekEvent.event)\n            : ''\n        \"\n        [tooltipPlacement]=\"tooltipPlacement\"\n        [tooltipEvent]=\"weekEvent.tempEvent || weekEvent.event\"\n        [tooltipTemplate]=\"tooltipTemplate\"\n        [tooltipAppendToBody]=\"tooltipAppendToBody\"\n        [tooltipDelay]=\"tooltipDelay\"\n        (mwlClick)=\"eventClicked.emit({ sourceEvent: $event })\"\n        (mwlKeydownEnter)=\"eventClicked.emit({ sourceEvent: $event })\"\n        tabindex=\"0\"\n        role=\"application\"\n        [attr.aria-label]=\"\n          { event: weekEvent.tempEvent || weekEvent.event, locale: locale }\n            | calendarA11y: 'eventDescription'\n        \"\n      >\n        <mwl-calendar-event-actions\n          [event]=\"weekEvent.tempEvent || weekEvent.event\"\n          [customTemplate]=\"eventActionsTemplate\"\n        >\n        </mwl-calendar-event-actions>\n        &ngsp;\n        <mwl-calendar-event-title\n          [event]=\"weekEvent.tempEvent || weekEvent.event\"\n          [customTemplate]=\"eventTitleTemplate\"\n          [view]=\"daysInWeek === 1 ? 'day' : 'week'\"\n        >\n        </mwl-calendar-event-title>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        weekEvent: weekEvent,\n        tooltipPlacement: tooltipPlacement,\n        eventClicked: eventClicked,\n        tooltipTemplate: tooltipTemplate,\n        tooltipAppendToBody: tooltipAppendToBody,\n        tooltipDisabled: tooltipDisabled,\n        tooltipDelay: tooltipDelay,\n        column: column,\n        daysInWeek: daysInWeek\n      }\"\n    >\n    </ng-template>\n  "
+        template: "\n    <ng-template\n      #defaultTemplate\n      let-weekEvent=\"weekEvent\"\n      let-tooltipPlacement=\"tooltipPlacement\"\n      let-eventClicked=\"eventClicked\"\n      let-tooltipTemplate=\"tooltipTemplate\"\n      let-tooltipAppendToBody=\"tooltipAppendToBody\"\n      let-tooltipDisabled=\"tooltipDisabled\"\n      let-tooltipDelay=\"tooltipDelay\"\n      let-column=\"column\"\n      let-daysInWeek=\"daysInWeek\"\n    >\n      <div\n        class=\"cal-event\"\n        [ngStyle]=\"{\n          backgroundColor: weekEvent.event.color?.secondary,\n          borderColor: weekEvent.event.color?.primary\n        }\"\n        [mwlCalendarTooltip]=\"\n          !tooltipDisabled\n            ? (weekEvent.event.title\n              | calendarEventTitle\n                : (daysInWeek === 1 ? 'dayTooltip' : 'weekTooltip')\n                : weekEvent.event)\n            : ''\n        \"\n        [tooltipPlacement]=\"tooltipPlacement\"\n        [tooltipEvent]=\"weekEvent.event\"\n        [tooltipTemplate]=\"tooltipTemplate\"\n        [tooltipAppendToBody]=\"tooltipAppendToBody\"\n        [tooltipDelay]=\"tooltipDelay\"\n        (mwlClick)=\"eventClicked.emit({ sourceEvent: $event })\"\n        (mwlKeydownEnter)=\"eventClicked.emit({ sourceEvent: $event })\"\n        tabindex=\"0\"\n        role=\"application\"\n        [attr.aria-label]=\"\n          { event: weekEvent.event, locale: locale }\n            | calendarA11y: 'eventDescription'\n        \"\n      >\n        <mwl-calendar-event-actions\n          [event]=\"weekEvent.event\"\n          [customTemplate]=\"eventActionsTemplate\"\n        >\n        </mwl-calendar-event-actions>\n        &ngsp;\n        <mwl-calendar-event-title\n          [event]=\"weekEvent.event\"\n          [customTemplate]=\"eventTitleTemplate\"\n          [view]=\"daysInWeek === 1 ? 'day' : 'week'\"\n        >\n        </mwl-calendar-event-title>\n      </div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        weekEvent: weekEvent,\n        tooltipPlacement: tooltipPlacement,\n        eventClicked: eventClicked,\n        tooltipTemplate: tooltipTemplate,\n        tooltipAppendToBody: tooltipAppendToBody,\n        tooltipDisabled: tooltipDisabled,\n        tooltipDelay: tooltipDelay,\n        column: column,\n        daysInWeek: daysInWeek\n      }\"\n    >\n    </ng-template>\n  "
       })], CalendarWeekViewEventComponent);
 
-      var CalendarWeekViewHourSegmentComponent = /*#__PURE__*/_createClass(function CalendarWeekViewHourSegmentComponent() {
+      var CalendarWeekViewHourSegmentComponent = function CalendarWeekViewHourSegmentComponent() {
         _classCallCheck(this, CalendarWeekViewHourSegmentComponent);
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)], CalendarWeekViewHourSegmentComponent.prototype, "segment", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Number)], CalendarWeekViewHourSegmentComponent.prototype, "segmentHeight", void 0);
@@ -9188,26 +6001,23 @@
       })], CalendarWeekViewHourSegmentComponent);
 
       var CalendarWeekViewCurrentTimeMarkerComponent = /*#__PURE__*/function () {
-        function CalendarWeekViewCurrentTimeMarkerComponent(dateAdapter, zone) {
-          var _this21 = this;
+        function CalendarWeekViewCurrentTimeMarkerComponent(dateAdapter) {
+          var _this20 = this;
 
           _classCallCheck(this, CalendarWeekViewCurrentTimeMarkerComponent);
 
           this.dateAdapter = dateAdapter;
-          this.zone = zone;
           this.columnDate$ = new rxjs__WEBPACK_IMPORTED_MODULE_4__["BehaviorSubject"](this.columnDate);
-          this.marker$ = this.zone.onStable.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function () {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["interval"])(60 * 1000);
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["startWith"])(0), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMapTo"])(this.columnDate$), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (columnDate) {
-            var startOfDay = _this21.dateAdapter.setMinutes(_this21.dateAdapter.setHours(columnDate, _this21.dayStartHour), _this21.dayStartMinute);
+          this.marker$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["interval"])(60 * 1000).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["startWith"])(0), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMapTo"])(this.columnDate$), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (columnDate) {
+            var startOfDay = _this20.dateAdapter.setMinutes(_this20.dateAdapter.setHours(columnDate, _this20.dayStartHour), _this20.dayStartMinute);
 
-            var endOfDay = _this21.dateAdapter.setMinutes(_this21.dateAdapter.setHours(columnDate, _this21.dayEndHour), _this21.dayEndMinute);
+            var endOfDay = _this20.dateAdapter.setMinutes(_this20.dateAdapter.setHours(columnDate, _this20.dayEndHour), _this20.dayEndMinute);
 
-            var hourHeightModifier = _this21.hourSegments * _this21.hourSegmentHeight / 60;
+            var hourHeightModifier = _this20.hourSegments * _this20.hourSegmentHeight / 60;
             var now = new Date();
             return {
-              isVisible: _this21.dateAdapter.isSameDay(columnDate, now) && now >= startOfDay && now <= endOfDay,
-              top: _this21.dateAdapter.differenceInMinutes(now, startOfDay) * hourHeightModifier
+              isVisible: _this20.dateAdapter.isSameDay(columnDate, now) && now >= startOfDay && now <= endOfDay,
+              top: _this20.dateAdapter.differenceInMinutes(now, startOfDay) * hourHeightModifier
             };
           }));
         }
@@ -9227,8 +6037,6 @@
       CalendarWeekViewCurrentTimeMarkerComponent.ctorParameters = function () {
         return [{
           type: DateAdapter
-        }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]
         }];
       };
 
@@ -9243,11 +6051,11 @@
       CalendarWeekViewCurrentTimeMarkerComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'mwl-calendar-week-view-current-time-marker',
         template: "\n    <ng-template\n      #defaultTemplate\n      let-columnDate=\"columnDate\"\n      let-dayStartHour=\"dayStartHour\"\n      let-dayStartMinute=\"dayStartMinute\"\n      let-dayEndHour=\"dayEndHour\"\n      let-dayEndMinute=\"dayEndMinute\"\n      let-isVisible=\"isVisible\"\n      let-topPx=\"topPx\"\n    >\n      <div\n        class=\"cal-current-time-marker\"\n        *ngIf=\"isVisible\"\n        [style.top.px]=\"topPx\"\n      ></div>\n    </ng-template>\n    <ng-template\n      [ngTemplateOutlet]=\"customTemplate || defaultTemplate\"\n      [ngTemplateOutletContext]=\"{\n        columnDate: columnDate,\n        dayStartHour: dayStartHour,\n        dayStartMinute: dayStartMinute,\n        dayEndHour: dayEndHour,\n        dayEndMinute: dayEndMinute,\n        isVisible: (marker$ | async)?.isVisible,\n        topPx: (marker$ | async)?.top\n      }\"\n    >\n    </ng-template>\n  "
-      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [DateAdapter, _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])], CalendarWeekViewCurrentTimeMarkerComponent);
+      }), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [DateAdapter])], CalendarWeekViewCurrentTimeMarkerComponent);
 
-      var CalendarWeekModule = /*#__PURE__*/_createClass(function CalendarWeekModule() {
+      var CalendarWeekModule = function CalendarWeekModule() {
         _classCallCheck(this, CalendarWeekModule);
-      });
+      };
 
       CalendarWeekModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], angular_resizable_element__WEBPACK_IMPORTED_MODULE_9__["ResizableModule"], angular_draggable_droppable__WEBPACK_IMPORTED_MODULE_7__["DragAndDropModule"], CalendarCommonModule],
@@ -9265,7 +6073,18 @@
        * ```
        */
 
-      var CalendarDayViewComponent = /*#__PURE__*/_createClass(function CalendarDayViewComponent() {
+      var CalendarDayViewComponent =
+      /**
+       * Shows all events on a given day. Example usage:
+       *
+       * ```typescript
+       * <mwl-calendar-day-view
+       *  [viewDate]="viewDate"
+       *  [events]="events">
+       * </mwl-calendar-day-view>
+       * ```
+       */
+      function CalendarDayViewComponent() {
         _classCallCheck(this, CalendarDayViewComponent);
 
         /**
@@ -9274,7 +6093,7 @@
          */
         this.events = [];
         /**
-         * The number of segments in an hour. Must divide equally into 60.
+         * The number of segments in an hour. Must be <= 6
          */
 
         this.hourSegments = 2;
@@ -9345,7 +6164,7 @@
          */
 
         this.beforeViewRender = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
-      });
+      };
 
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Date)], CalendarDayViewComponent.prototype, "viewDate", void 0);
       Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)], CalendarDayViewComponent.prototype, "events", void 0);
@@ -9378,9 +6197,9 @@
         template: "\n    <mwl-calendar-week-view\n      class=\"cal-day-view\"\n      [daysInWeek]=\"1\"\n      [viewDate]=\"viewDate\"\n      [events]=\"events\"\n      [hourSegments]=\"hourSegments\"\n      [hourSegmentHeight]=\"hourSegmentHeight\"\n      [dayStartHour]=\"dayStartHour\"\n      [dayStartMinute]=\"dayStartMinute\"\n      [dayEndHour]=\"dayEndHour\"\n      [dayEndMinute]=\"dayEndMinute\"\n      [refresh]=\"refresh\"\n      [locale]=\"locale\"\n      [eventSnapSize]=\"eventSnapSize\"\n      [tooltipPlacement]=\"tooltipPlacement\"\n      [tooltipTemplate]=\"tooltipTemplate\"\n      [tooltipAppendToBody]=\"tooltipAppendToBody\"\n      [tooltipDelay]=\"tooltipDelay\"\n      [hourSegmentTemplate]=\"hourSegmentTemplate\"\n      [eventTemplate]=\"eventTemplate\"\n      [eventTitleTemplate]=\"eventTitleTemplate\"\n      [eventActionsTemplate]=\"eventActionsTemplate\"\n      [snapDraggedEvents]=\"snapDraggedEvents\"\n      [allDayEventsLabelTemplate]=\"allDayEventsLabelTemplate\"\n      [currentTimeMarkerTemplate]=\"currentTimeMarkerTemplate\"\n      (eventClicked)=\"eventClicked.emit($event)\"\n      (hourSegmentClicked)=\"hourSegmentClicked.emit($event)\"\n      (eventTimesChanged)=\"eventTimesChanged.emit($event)\"\n      (beforeViewRender)=\"beforeViewRender.emit($event)\"\n    ></mwl-calendar-week-view>\n  "
       })], CalendarDayViewComponent);
 
-      var CalendarDayModule = /*#__PURE__*/_createClass(function CalendarDayModule() {
+      var CalendarDayModule = function CalendarDayModule() {
         _classCallCheck(this, CalendarDayModule);
-      });
+      };
 
       CalendarDayModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], CalendarCommonModule, CalendarWeekModule],
@@ -9440,97 +6259,226 @@
     },
 
     /***/
-    "nFBg":
-    /*!**********************************************************!*\
-      !*** ./node_modules/flatpickr/dist/esm/types/options.js ***!
-      \**********************************************************/
+    "lipz":
+    /*!*********************************************!*\
+      !*** ./node_modules/array-from/polyfill.js ***!
+      \*********************************************/
 
-    /*! exports provided: HOOKS, defaults */
+    /*! no static exports found */
 
     /***/
-    function nFBg(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
+    function lipz(module, exports) {
+      // Production steps of ECMA-262, Edition 6, 22.1.2.1
+      // Reference: http://www.ecma-international.org/ecma-262/6.0/#sec-array.from
+      module.exports = function () {
+        var isCallable = function isCallable(fn) {
+          return typeof fn === 'function';
+        };
 
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
+        var toInteger = function toInteger(value) {
+          var number = Number(value);
+
+          if (isNaN(number)) {
+            return 0;
+          }
+
+          if (number === 0 || !isFinite(number)) {
+            return number;
+          }
+
+          return (number > 0 ? 1 : -1) * Math.floor(Math.abs(number));
+        };
+
+        var maxSafeInteger = Math.pow(2, 53) - 1;
+
+        var toLength = function toLength(value) {
+          var len = toInteger(value);
+          return Math.min(Math.max(len, 0), maxSafeInteger);
+        };
+
+        var iteratorProp = function iteratorProp(value) {
+          if (value != null) {
+            if (['string', 'number', 'boolean', 'symbol'].indexOf(typeof value) > -1) {
+              return Symbol.iterator;
+            } else if (typeof Symbol !== 'undefined' && 'iterator' in Symbol && Symbol.iterator in value) {
+              return Symbol.iterator;
+            } // Support "@@iterator" placeholder, Gecko 27 to Gecko 35
+            else if ('@@iterator' in value) {
+                return '@@iterator';
+              }
+          }
+        };
+
+        var getMethod = function getMethod(O, P) {
+          // Assert: IsPropertyKey(P) is true.
+          if (O != null && P != null) {
+            // Let func be GetV(O, P).
+            var func = O[P]; // ReturnIfAbrupt(func).
+            // If func is either undefined or null, return undefined.
+
+            if (func == null) {
+              return void 0;
+            } // If IsCallable(func) is false, throw a TypeError exception.
 
 
-      __webpack_require__.d(__webpack_exports__, "HOOKS", function () {
-        return HOOKS;
-      });
-      /* harmony export (binding) */
+            if (!isCallable(func)) {
+              throw new TypeError(func + ' is not a function');
+            }
+
+            return func;
+          }
+        };
+
+        var iteratorStep = function iteratorStep(iterator) {
+          // Let result be IteratorNext(iterator).
+          // ReturnIfAbrupt(result).
+          var result = iterator.next(); // Let done be IteratorComplete(result).
+          // ReturnIfAbrupt(done).
+
+          var done = Boolean(result.done); // If done is true, return false.
+
+          if (done) {
+            return false;
+          } // Return result.
 
 
-      __webpack_require__.d(__webpack_exports__, "defaults", function () {
-        return defaults;
-      });
+          return result;
+        }; // The length property of the from method is 1.
 
-      var HOOKS = ["onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange", "onPreCalendarPosition"];
-      var defaults = {
-        _disable: [],
-        allowInput: false,
-        allowInvalidPreload: false,
-        altFormat: "F j, Y",
-        altInput: false,
-        altInputClass: "form-control input",
-        animate: typeof window === "object" && window.navigator.userAgent.indexOf("MSIE") === -1,
-        ariaDateFormat: "F j, Y",
-        autoFillDefaultTime: true,
-        clickOpens: true,
-        closeOnSelect: true,
-        conjunction: ", ",
-        dateFormat: "Y-m-d",
-        defaultHour: 12,
-        defaultMinute: 0,
-        defaultSeconds: 0,
-        disable: [],
-        disableMobile: false,
-        enableSeconds: false,
-        enableTime: false,
-        errorHandler: function errorHandler(err) {
-          return typeof console !== "undefined" && console.warn(err);
-        },
-        getWeek: function getWeek(givenDate) {
-          var date = new Date(givenDate.getTime());
-          date.setHours(0, 0, 0, 0);
-          date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-          var week1 = new Date(date.getFullYear(), 0, 4);
-          return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-        },
-        hourIncrement: 1,
-        ignoredFocusElements: [],
-        inline: false,
-        locale: "default",
-        minuteIncrement: 5,
-        mode: "single",
-        monthSelectorType: "dropdown",
-        nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
-        noCalendar: false,
-        now: new Date(),
-        onChange: [],
-        onClose: [],
-        onDayCreate: [],
-        onDestroy: [],
-        onKeyDown: [],
-        onMonthChange: [],
-        onOpen: [],
-        onParseConfig: [],
-        onReady: [],
-        onValueUpdate: [],
-        onYearChange: [],
-        onPreCalendarPosition: [],
-        plugins: [],
-        position: "auto",
-        positionElement: undefined,
-        prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
-        shorthandCurrentMonth: false,
-        showMonths: 1,
-        "static": false,
-        time_24hr: false,
-        weekNumbers: false,
-        wrap: false
-      };
+
+        return function from(items
+        /*, mapFn, thisArg */
+        ) {
+          'use strict'; // 1. Let C be the this value.
+
+          var C = this; // 2. If mapfn is undefined, let mapping be false.
+
+          var mapFn = arguments.length > 1 ? arguments[1] : void 0;
+          var T;
+
+          if (typeof mapFn !== 'undefined') {
+            // 3. else
+            //   a. If IsCallable(mapfn) is false, throw a TypeError exception.
+            if (!isCallable(mapFn)) {
+              throw new TypeError('Array.from: when provided, the second argument must be a function');
+            } //   b. If thisArg was supplied, let T be thisArg; else let T
+            //      be undefined.
+
+
+            if (arguments.length > 2) {
+              T = arguments[2];
+            } //   c. Let mapping be true (implied by mapFn)
+
+          }
+
+          var A, k; // 4. Let usingIterator be GetMethod(items, @@iterator).
+          // 5. ReturnIfAbrupt(usingIterator).
+
+          var usingIterator = getMethod(items, iteratorProp(items)); // 6. If usingIterator is not undefined, then
+
+          if (usingIterator !== void 0) {
+            // a. If IsConstructor(C) is true, then
+            //   i. Let A be the result of calling the [[Construct]]
+            //      internal method of C with an empty argument list.
+            // b. Else,
+            //   i. Let A be the result of the abstract operation ArrayCreate
+            //      with argument 0.
+            // c. ReturnIfAbrupt(A).
+            A = isCallable(C) ? Object(new C()) : []; // d. Let iterator be GetIterator(items, usingIterator).
+
+            var iterator = usingIterator.call(items); // e. ReturnIfAbrupt(iterator).
+
+            if (iterator == null) {
+              throw new TypeError('Array.from requires an array-like or iterable object');
+            } // f. Let k be 0.
+
+
+            k = 0; // g. Repeat
+
+            var next, nextValue;
+
+            while (true) {
+              // i. Let Pk be ToString(k).
+              // ii. Let next be IteratorStep(iterator).
+              // iii. ReturnIfAbrupt(next).
+              next = iteratorStep(iterator); // iv. If next is false, then
+
+              if (!next) {
+                // 1. Let setStatus be Set(A, "length", k, true).
+                // 2. ReturnIfAbrupt(setStatus).
+                A.length = k; // 3. Return A.
+
+                return A;
+              } // v. Let nextValue be IteratorValue(next).
+              // vi. ReturnIfAbrupt(nextValue)
+
+
+              nextValue = next.value; // vii. If mapping is true, then
+              //   1. Let mappedValue be Call(mapfn, T, «nextValue, k»).
+              //   2. If mappedValue is an abrupt completion, return
+              //      IteratorClose(iterator, mappedValue).
+              //   3. Let mappedValue be mappedValue.[[value]].
+              // viii. Else, let mappedValue be nextValue.
+              // ix.  Let defineStatus be the result of
+              //      CreateDataPropertyOrThrow(A, Pk, mappedValue).
+              // x. [TODO] If defineStatus is an abrupt completion, return
+              //    IteratorClose(iterator, defineStatus).
+
+              if (mapFn) {
+                A[k] = mapFn.call(T, nextValue, k);
+              } else {
+                A[k] = nextValue;
+              } // xi. Increase k by 1.
+
+
+              k++;
+            } // 7. Assert: items is not an Iterable so assume it is
+            //    an array-like object.
+
+          } else {
+            // 8. Let arrayLike be ToObject(items).
+            var arrayLike = Object(items); // 9. ReturnIfAbrupt(items).
+
+            if (items == null) {
+              throw new TypeError('Array.from requires an array-like object - not null or undefined');
+            } // 10. Let len be ToLength(Get(arrayLike, "length")).
+            // 11. ReturnIfAbrupt(len).
+
+
+            var len = toLength(arrayLike.length); // 12. If IsConstructor(C) is true, then
+            //     a. Let A be Construct(C, «len»).
+            // 13. Else
+            //     a. Let A be ArrayCreate(len).
+            // 14. ReturnIfAbrupt(A).
+
+            A = isCallable(C) ? Object(new C(len)) : new Array(len); // 15. Let k be 0.
+
+            k = 0; // 16. Repeat, while k < len… (also steps a - h)
+
+            var kValue;
+
+            while (k < len) {
+              kValue = arrayLike[k];
+
+              if (mapFn) {
+                A[k] = mapFn.call(T, kValue, k);
+              } else {
+                A[k] = kValue;
+              }
+
+              k++;
+            } // 17. Let setStatus be Set(A, "length", len, true).
+            // 18. ReturnIfAbrupt(setStatus).
+
+
+            A.length = len; // 19. Return A.
+          }
+
+          return A;
+        };
+      }();
       /***/
+
     },
 
     /***/
@@ -9539,7 +6487,7 @@
       !*** ./node_modules/angularx-flatpickr/fesm2015/angularx-flatpickr.js ***!
       \************************************************************************/
 
-    /*! exports provided: FlatpickrDefaults, FlatpickrDirective, USER_DEFAULTS, defaultsFactory, FlatpickrModule, ɵa */
+    /*! exports provided: FlatpickrDefaults, USER_DEFAULTS, defaultsFactory, FlatpickrModule, ɵa, ɵb */
 
     /***/
     function nFnn(module, __webpack_exports__, __webpack_require__) {
@@ -9551,12 +6499,6 @@
 
       __webpack_require__.d(__webpack_exports__, "FlatpickrDefaults", function () {
         return FlatpickrDefaults;
-      });
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "FlatpickrDirective", function () {
-        return FlatpickrDirective;
       });
       /* harmony export (binding) */
 
@@ -9582,6 +6524,12 @@
       __webpack_require__.d(__webpack_exports__, "ɵa", function () {
         return FLATPICKR_CONTROL_VALUE_ACCESSOR;
       });
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "ɵb", function () {
+        return FlatpickrDirective;
+      });
       /* harmony import */
 
 
@@ -9599,14 +6547,18 @@
 
       var flatpickr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
       /*! flatpickr */
-      "X2Dv");
+      "zwY0");
+      /* harmony import */
+
+
+      var flatpickr__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flatpickr__WEBPACK_IMPORTED_MODULE_2__);
       /**
        * @fileoverview added by tsickle
        * @suppress {checkTypes} checked by tsc
        */
 
 
-      var FlatpickrDefaults = /*#__PURE__*/_createClass(function FlatpickrDefaults() {
+      var FlatpickrDefaults = function FlatpickrDefaults() {
         _classCallCheck(this, FlatpickrDefaults);
 
         /**
@@ -9662,11 +6614,6 @@
 
         this.defaultMinute = 0;
         /**
-         * Initial value of the seconds element.
-         */
-
-        this.defaultSeconds = 0;
-        /**
          * See <a href="https://chmln.github.io/flatpickr/examples/#disabling-specific-dates">disabling dates</a>.
          */
 
@@ -9677,6 +6624,11 @@
          */
 
         this.disableMobile = false;
+        /**
+         * See <a href="https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few">enabling dates</a>.
+         */
+
+        this.enable = [];
         /**
          * Enables time picker.
          */
@@ -9793,12 +6745,7 @@
          */
 
         this.showMonths = 1;
-        /**
-         * How the month should be displayed in the header of the calendar.
-         */
-
-        this.monthSelectorType = 'static';
-      });
+      };
 
       FlatpickrDefaults.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"]
@@ -9831,27 +6778,6 @@
           this.elm = elm;
           this.defaults = defaults;
           this.renderer = renderer;
-          /**
-           * Object-options that can be user for multiple instances of Flatpickr.
-           * Option from this object is applied only if specific option is not specified.
-           * Example:
-           * ```typescript
-           * options: FlatpickrDefaultsInterface = {
-           *      altFormat: 'd/m/Y',   // will be ignored since altFormat is provided via specific attribute
-           *      altInput: true        // will be used since specific attribute is not provided
-           * };
-           * ```
-           * ```html
-           * <input
-           *   class="form-control"
-           *   type="text"
-           *   mwlFlatpickr
-           *   [options]="options"
-           *   altFormat="d/m/Y">
-           * ```
-           */
-
-          this.options = {};
           /**
            * Gets triggered once the calendar is in a ready state
            */
@@ -9906,7 +6832,7 @@
         _createClass(FlatpickrDirective, [{
           key: "ngAfterViewInit",
           value: function ngAfterViewInit() {
-            var _this22 = this;
+            var _this21 = this;
 
             var
             /** @type {?} */
@@ -9921,7 +6847,6 @@
               dateFormat: this.dateFormat,
               defaultHour: this.defaultHour,
               defaultMinute: this.defaultMinute,
-              defaultSeconds: this.defaultSeconds,
               disable: this.disable,
               disableMobile: this.disableMobile,
               enable: this.enable,
@@ -9942,7 +6867,6 @@
               prevArrow: this.prevArrow,
               shorthandCurrentMonth: this.shorthandCurrentMonth,
               showMonths: this.showMonths,
-              monthSelectorType: this.monthSelectorType,
               "static": this["static"],
               time24hr: this.time24hr,
               weekNumbers: this.weekNumbers,
@@ -9951,56 +6875,56 @@
               plugins: this.plugins,
               locale: this.locale,
               onChange: function onChange(selectedDates, dateString, instance) {
-                _this22.flatpickrChange.emit({
+                _this21.flatpickrChange.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onOpen: function onOpen(selectedDates, dateString, instance) {
-                _this22.flatpickrOpen.emit({
+                _this21.flatpickrOpen.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onClose: function onClose(selectedDates, dateString, instance) {
-                _this22.flatpickrClose.emit({
+                _this21.flatpickrClose.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onMonthChange: function onMonthChange(selectedDates, dateString, instance) {
-                _this22.flatpickrMonthChange.emit({
+                _this21.flatpickrMonthChange.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onYearChange: function onYearChange(selectedDates, dateString, instance) {
-                _this22.flatpickrYearChange.emit({
+                _this21.flatpickrYearChange.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onReady: function onReady(selectedDates, dateString, instance) {
-                _this22.flatpickrReady.emit({
+                _this21.flatpickrReady.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onValueUpdate: function onValueUpdate(selectedDates, dateString, instance) {
-                _this22.flatpickrValueUpdate.emit({
+                _this21.flatpickrValueUpdate.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance
                 });
               },
               onDayCreate: function onDayCreate(selectedDates, dateString, instance, dayElement) {
-                _this22.flatpickrDayCreate.emit({
+                _this21.flatpickrDayCreate.emit({
                   selectedDates: selectedDates,
                   dateString: dateString,
                   instance: instance,
@@ -10010,29 +6934,15 @@
             };
             Object.keys(options).forEach(function (key) {
               if (typeof options[key] === 'undefined') {
-                if (typeof _this22.options[key] !== 'undefined') {
-                  options[key] =
-                  /** @type {?} */
-                  _this22.options[key];
-                } else {
-                  options[key] =
-                  /** @type {?} */
-                  _this22.defaults[key];
-                }
+                options[key] =
+                /** @type {?} */
+                _this21.defaults[key];
               }
             });
-            options.time_24hr = options.time24hr; // workaround bug in flatpickr 4.6 where it doesn't copy the classes across
-            // TODO - remove once fix in https://github.com/flatpickr/flatpickr/issues/1860 is released
-
-            options.altInputClass = (options.altInputClass || '') + ' ' + this.elm.nativeElement.className;
-
-            if (!options.enable) {
-              delete options.enable;
-            }
-
+            options.time_24hr = options.time24hr;
             this.instance =
             /** @type {?} */
-            Object(flatpickr__WEBPACK_IMPORTED_MODULE_2__["default"])(this.elm.nativeElement, options);
+            flatpickr__WEBPACK_IMPORTED_MODULE_2___default()(this.elm.nativeElement, options);
             this.setDisabledState(this.isDisabled);
           }
           /**
@@ -10043,15 +6953,15 @@
         }, {
           key: "ngOnChanges",
           value: function ngOnChanges(changes) {
-            var _this23 = this;
+            var _this22 = this;
 
             if (this.instance) {
               Object.keys(changes).forEach(function (inputKey) {
-                _this23.instance.set(
+                _this22.instance.set(
                 /** @type {?} */
                 inputKey,
                 /** @type {?} */
-                _this23[inputKey]);
+                _this22[inputKey]);
               });
             }
           }
@@ -10062,9 +6972,7 @@
         }, {
           key: "ngOnDestroy",
           value: function ngOnDestroy() {
-            if (this.instance) {
-              this.instance.destroy();
-            }
+            this.instance.destroy();
           }
           /**
            * @param {?} value
@@ -10134,7 +7042,7 @@
         }, {
           key: "inputChanged",
           value: function inputChanged() {
-            var _this24 = this;
+            var _this23 = this;
 
             var
             /** @type {?} */
@@ -10146,14 +7054,14 @@
                   var
                   /** @type {?} */
                   dates = value.split('; ').map(function (str) {
-                    return _this24.instance.parseDate(str, _this24.instance.config.dateFormat, !_this24.instance.config.enableTime);
+                    return _this23.instance.parseDate(str, _this23.instance.config.dateFormat, !_this23.instance.config.enableTime);
                   });
                   this.onChangeFn(dates);
                   break;
 
                 case 'range':
                   var _value$split$map = value.split(this.instance.l10n.rangeSeparator).map(function (str) {
-                    return _this24.instance.parseDate(str, _this24.instance.config.dateFormat, !_this24.instance.config.enableTime);
+                    return _this23.instance.parseDate(str, _this23.instance.config.dateFormat, !_this23.instance.config.enableTime);
                   }),
                       _value$split$map2 = _slicedToArray(_value$split$map, 2),
                       from = _value$split$map2[0],
@@ -10186,8 +7094,7 @@
           host: {
             // tslint:disable-line use-host-property-decorator
             '(blur)': 'onTouchedFn()'
-          },
-          exportAs: 'mwlFlatpickr'
+          }
         }]
       }];
       /** @nocollapse */
@@ -10203,9 +7110,6 @@
       };
 
       FlatpickrDirective.propDecorators = {
-        options: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
-        }],
         altFormat: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }],
@@ -10234,9 +7138,6 @@
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }],
         defaultMinute: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
-        }],
-        defaultSeconds: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }],
         disable: [{
@@ -10320,9 +7221,6 @@
         convertModelValue: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
         }],
-        monthSelectorType: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"]
-        }],
         flatpickrReady: [{
           type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"]
         }],
@@ -10380,12 +7278,12 @@
 
         _createClass(FlatpickrModule, null, [{
           key: "forRoot",
-          value:
+
           /**
            * @param {?=} userDefaults
            * @return {?}
            */
-          function forRoot() {
+          value: function forRoot() {
             var userDefaults = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             return {
               ngModule: FlatpickrModule,
@@ -10420,7 +7318,7 @@
        * @fileoverview added by tsickle
        * @suppress {checkTypes} checked by tsc
        */
-      //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5ndWxhcngtZmxhdHBpY2tyLmpzLm1hcCIsInNvdXJjZXMiOlsibmc6Ly9hbmd1bGFyeC1mbGF0cGlja3IvZmxhdHBpY2tyLWRlZmF1bHRzLnNlcnZpY2UudHMiLCJuZzovL2FuZ3VsYXJ4LWZsYXRwaWNrci9mbGF0cGlja3IuZGlyZWN0aXZlLnRzIiwibmc6Ly9hbmd1bGFyeC1mbGF0cGlja3IvZmxhdHBpY2tyLm1vZHVsZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBJbmplY3RhYmxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbmV4cG9ydCB0eXBlIERpc2FibGVFbmFibGVEYXRlID1cbiAgfCBzdHJpbmdcbiAgfCBEYXRlXG4gIHwgeyBmcm9tOiBEYXRlIHwgc3RyaW5nOyB0bzogRGF0ZSB8IHN0cmluZyB9XG4gIHwgKChkYXRlOiBEYXRlKSA9PiBib29sZWFuKTtcblxuLy8gdHNsaW50OmRpc2FibGUgbm8taW5mZXJyYWJsZS10eXBlc1xuXG5leHBvcnQgaW50ZXJmYWNlIEZsYXRwaWNrckRlZmF1bHRzSW50ZXJmYWNlIHtcbiAgLyoqXG4gICAqIEV4YWN0bHkgdGhlIHNhbWUgYXMgZGF0ZSBmb3JtYXQsIGJ1dCBmb3IgdGhlIGFsdElucHV0IGZpZWxkLlxuICAgKi9cbiAgYWx0Rm9ybWF0Pzogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBcdFNob3cgdGhlIHVzZXIgYSByZWFkYWJsZSBkYXRlIChhcyBwZXIgYWx0Rm9ybWF0KSwgYnV0IHJldHVybiBzb21ldGhpbmcgdG90YWxseSBkaWZmZXJlbnQgdG8gdGhlIHNlcnZlci5cbiAgICovXG4gIGFsdElucHV0PzogYm9vbGVhbjtcblxuICAvKipcbiAgICogVGhpcyBjbGFzcyB3aWxsIGJlIGFkZGVkIHRvIHRoZSBpbnB1dCBlbGVtZW50IGNyZWF0ZWQgYnkgdGhlIGFsdElucHV0IG9wdGlvbi5cbiAgICogTm90ZSB0aGF0IGBhbHRJbnB1dGAgYWxyZWFkeSBpbmhlcml0cyBjbGFzc2VzIGZyb20gdGhlIG9yaWdpbmFsIGlucHV0LlxuICAgKi9cbiAgYWx0SW5wdXRDbGFzcz86IHN0cmluZztcblxuICAvKipcbiAgICogQWxsb3dzIHRoZSB1c2VyIHRvIGVudGVyIGEgZGF0ZSBkaXJlY3RseSBpbnB1dCB0aGUgaW5wdXQgZmllbGQuIEJ5IGRlZmF1bHQsIGRpcmVjdCBlbnRyeSBpcyBkaXNhYmxlZC5cbiAgICovXG4gIGFsbG93SW5wdXQ/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBJbnN0ZWFkIG9mIGBib2R5YCwgYXBwZW5kcyB0aGUgY2FsZW5kYXIgdG8gdGhlIHNwZWNpZmllZCBub2RlIGluc3RlYWQuXG4gICAqL1xuICBhcHBlbmRUbz86IEhUTUxFbGVtZW50O1xuXG4gIC8qKlxuICAgKiBEZWZpbmVzIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGZvcm1hdHRlZCBpbiB0aGUgYXJpYS1sYWJlbCBmb3IgY2FsZW5kYXIgZGF5cywgdXNpbmcgdGhlIHNhbWUgdG9rZW5zIGFzIGRhdGVGb3JtYXQuIElmIHlvdSBjaGFuZ2UgdGhpcywgeW91IHNob3VsZCBjaG9vc2UgYSB2YWx1ZSB0aGF0IHdpbGwgbWFrZSBzZW5zZSBpZiBhIHNjcmVlbiByZWFkZXIgcmVhZHMgaXQgb3V0IGxvdWQuXG4gICAqL1xuICBhcmlhRGF0ZUZvcm1hdD86IHN0cmluZztcblxuICAvKipcbiAgICogV2hldGhlciBjbGlja2luZyBvbiB0aGUgaW5wdXQgc2hvdWxkIG9wZW4gdGhlIHBpY2tlci5cbiAgICogWW91IGNvdWxkIGRpc2FibGUgdGhpcyBpZiB5b3Ugd2lzaCB0byBvcGVuIHRoZSBjYWxlbmRhciBtYW51YWxseSBgd2l0aC5vcGVuKClgLlxuICAgKi9cbiAgY2xpY2tPcGVucz86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEEgc3RyaW5nIG9mIGNoYXJhY3RlcnMgd2hpY2ggYXJlIHVzZWQgdG8gZGVmaW5lIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGRpc3BsYXllZCBpbiB0aGUgaW5wdXQgYm94LlxuICAgKiBUaGUgc3VwcG9ydGVkIGNoYXJhY3RlcnMgYXJlIGRlZmluZWQgaW4gdGhlIHRhYmxlIGJlbG93LlxuICAgKi9cbiAgZGF0ZUZvcm1hdD86IHN0cmluZztcbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIGhvdXIgZWxlbWVudC5cbiAgICovXG4gIGRlZmF1bHRIb3VyPzogbnVtYmVyO1xuICAvKipcbiAgICogSW5pdGlhbCB2YWx1ZSBvZiB0aGUgbWludXRlIGVsZW1lbnQuXG4gICAqL1xuICBkZWZhdWx0TWludXRlPzogbnVtYmVyO1xuICAvKipcbiAgICogSW5pdGlhbCB2YWx1ZSBvZiB0aGUgc2Vjb25kcyBlbGVtZW50LlxuICAgKi9cbiAgZGVmYXVsdFNlY29uZHM/OiBudW1iZXI7XG5cbiAgLyoqXG4gICAqIFNlZSA8YSBocmVmPVwiaHR0cHM6Ly9jaG1sbi5naXRodWIuaW8vZmxhdHBpY2tyL2V4YW1wbGVzLyNkaXNhYmxpbmctc3BlY2lmaWMtZGF0ZXNcIj5kaXNhYmxpbmcgZGF0ZXM8L2E+LlxuICAgKi9cbiAgZGlzYWJsZT86IERpc2FibGVFbmFibGVEYXRlW107XG5cbiAgLyoqXG4gICAqIFNldCBkaXNhYmxlTW9iaWxlIHRvIHRydWUgdG8gYWx3YXlzIHVzZSB0aGUgbm9uLW5hdGl2ZSBwaWNrZXIuXG4gICAqIEJ5IGRlZmF1bHQsIEZsYXRwaWNrciB1dGlsaXplcyBuYXRpdmUgZGF0ZXRpbWUgd2lkZ2V0cyB1bmxlc3MgY2VydGFpbiBvcHRpb25zIChlLmcuIGRpc2FibGUpIGFyZSB1c2VkLlxuICAgKi9cbiAgZGlzYWJsZU1vYmlsZT86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFNlZSA8YSBocmVmPVwiaHR0cHM6Ly9jaG1sbi5naXRodWIuaW8vZmxhdHBpY2tyL2V4YW1wbGVzLyNkaXNhYmxpbmctYWxsLWRhdGVzLWV4Y2VwdC1zZWxlY3QtZmV3XCI+ZW5hYmxpbmcgZGF0ZXM8L2E+LlxuICAgKi9cbiAgZW5hYmxlPzogRGlzYWJsZUVuYWJsZURhdGVbXTtcblxuICAvKipcbiAgICogRW5hYmxlcyB0aW1lIHBpY2tlci5cbiAgICovXG4gIGVuYWJsZVRpbWU/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIHNlY29uZHMgaW4gdGhlIHRpbWUgcGlja2VyLlxuICAgKi9cbiAgZW5hYmxlU2Vjb25kcz86IGJvb2xlYW47XG4gIC8qKlxuICAgKiBBbGxvd3MgdXNpbmcgYSBjdXN0b20gZGF0ZSBmb3JtYXR0aW5nIGZ1bmN0aW9uIGluc3RlYWQgb2YgdGhlIGJ1aWx0LWluIGhhbmRsaW5nIGZvciBkYXRlIGZvcm1hdHMgdXNpbmcgZGF0ZUZvcm1hdCwgYWx0Rm9ybWF0LCBldGMuXG4gICAqL1xuICBmb3JtYXREYXRlPzogKHZhbHVlOiBhbnkpID0+IHN0cmluZztcbiAgLyoqXG4gICAqIEFkanVzdHMgdGhlIHN0ZXAgZm9yIHRoZSBob3VyIGlucHV0IChpbmNsLiBzY3JvbGxpbmcpLlxuICAgKi9cbiAgaG91ckluY3JlbWVudD86IG51bWJlcjtcblxuICAvKipcbiAgICogRGlzcGxheXMgdGhlIGNhbGVuZGFyIGlubGluZS5cbiAgICovXG4gIGlubGluZT86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFRoZSBtYXhpbXVtIGRhdGUgdGhhdCBhIHVzZXIgY2FuIHBpY2sgdG8gKGluY2x1c2l2ZSkuXG4gICAqL1xuICBtYXhEYXRlPzogc3RyaW5nIHwgRGF0ZTtcblxuICAvKipcbiAgICogVGhlIG1pbmltdW0gZGF0ZSB0aGF0IGEgdXNlciBjYW4gc3RhcnQgcGlja2luZyBmcm9tIChpbmNsdXNpdmUpLlxuICAgKi9cbiAgbWluRGF0ZT86IHN0cmluZyB8IERhdGU7XG5cbiAgLyoqXG4gICAqIEFkanVzdHMgdGhlIHN0ZXAgZm9yIHRoZSBtaW51dGUgaW5wdXQgKGluY2wuIHNjcm9sbGluZykuXG4gICAqL1xuICBtaW51dGVJbmNyZW1lbnQ/OiBudW1iZXI7XG5cbiAgLyoqXG4gICAqIFNlbGVjdCBhIHNpbmdsZSBkYXRlLCBtdWx0aXBsZSBkYXRlcyBvciBhIGRhdGUgcmFuZ2UuXG4gICAqL1xuICBtb2RlPzogJ3NpbmdsZScgfCAnbXVsdGlwbGUnIHwgJ3JhbmdlJztcblxuICAvKipcbiAgICogSFRNTCBmb3IgdGhlIGFycm93IGljb24sIHVzZWQgdG8gc3dpdGNoIG1vbnRocy5cbiAgICovXG4gIG5leHRBcnJvdz86IHN0cmluZztcblxuICAvKipcbiAgICogSGlkZXMgdGhlIGRheSBzZWxlY3Rpb24gaW4gY2FsZW5kYXIuIFVzZSBpdCBhbG9uZyB3aXRoIGBlbmFibGVUaW1lYCB0byBjcmVhdGUgYSB0aW1lIHBpY2tlci5cbiAgICovXG4gIG5vQ2FsZW5kYXI/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBQcm92aWRlIGEgZGF0ZSBmb3IgJ3RvZGF5Jywgd2hpY2ggd2lsbCBiZSB1c2VkIGluc3RlYWQgb2YgXCJuZXcgRGF0ZSgpXCJcbiAgICovXG4gIG5vdz86IERhdGUgfCBzdHJpbmcgfCBudW1iZXI7XG5cbiAgLyoqXG4gICAqIEZ1bmN0aW9uIHRoYXQgZXhwZWN0cyBhIGRhdGUgc3RyaW5nIGFuZCBtdXN0IHJldHVybiBhIERhdGUgb2JqZWN0LlxuICAgKi9cbiAgcGFyc2VEYXRlPzogKHN0cjogc3RyaW5nKSA9PiBEYXRlO1xuXG4gIC8qKlxuICAgKiBIVE1MIGZvciB0aGUgbGVmdCBhcnJvdyBpY29uLlxuICAgKi9cbiAgcHJldkFycm93Pzogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBTaG93IHRoZSBtb250aCB1c2luZyB0aGUgc2hvcnRoYW5kIHZlcnNpb24gKGllLCBTZXAgaW5zdGVhZCBvZiBTZXB0ZW1iZXIpLlxuICAgKi9cbiAgc2hvcnRoYW5kQ3VycmVudE1vbnRoPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogUG9zaXRpb24gdGhlIGNhbGVuZGFyIGluc2lkZSB0aGUgd3JhcHBlciBhbmQgbmV4dCB0byB0aGUgaW5wdXQgZWxlbWVudC4gKExlYXZlIGBmYWxzZWAgdW5sZXNzIHlvdSBrbm93IHdoYXQgeW91J3JlIGRvaW5nKS5cbiAgICovXG4gIHN0YXRpYz86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIERpc3BsYXlzIHRpbWUgcGlja2VyIGluIDI0IGhvdXIgbW9kZSB3aXRob3V0IEFNL1BNIHNlbGVjdGlvbiB3aGVuIGVuYWJsZWQuXG4gICAqL1xuICB0aW1lMjRocj86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFdoZW4gdHJ1ZSwgZGF0ZXMgd2lsbCBwYXJzZWQsIGZvcm1hdHRlZCwgYW5kIGRpc3BsYXllZCBpbiBVVEMuXG4gICAqIEl0J3MgcmVjb21tZW5kZWQgdGhhdCBkYXRlIHN0cmluZ3MgY29udGFpbiB0aGUgdGltZXpvbmUsIGJ1dCBub3QgbmVjZXNzYXJ5LlxuICAgKi9cbiAgdXRjPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogRW5hYmxlcyBkaXNwbGF5IG9mIHdlZWsgbnVtYmVycyBpbiBjYWxlbmRhci5cbiAgICovXG4gIHdlZWtOdW1iZXJzPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogWW91IG1heSBvdmVycmlkZSB0aGUgZnVuY3Rpb24gdGhhdCBleHRyYWN0cyB0aGUgd2VlayBudW1iZXJzIGZyb20gYSBEYXRlIGJ5IHN1cHBseWluZyBhIGdldFdlZWsgZnVuY3Rpb24uXG4gICAqIEl0IHRha2VzIGluIGEgZGF0ZSBhcyBhIHBhcmFtZXRlciBhbmQgc2hvdWxkIHJldHVybiBhIGNvcnJlc3BvbmRpbmcgc3RyaW5nIHRoYXQgeW91IHdhbnQgdG8gYXBwZWFyIGxlZnQgb2YgZXZlcnkgd2Vlay5cbiAgICovXG4gIGdldFdlZWs/OiAoZGF0ZTogRGF0ZSkgPT4gc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBDdXN0b20gZWxlbWVudHMgYW5kIGlucHV0IGdyb3Vwcy5cbiAgICovXG4gIHdyYXA/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBBcnJheSBvZiBwbHVnaW4gaW5zdGFuY2VzIHRvIHVzZS5cbiAgICovXG4gIHBsdWdpbnM/OiBhbnlbXTtcblxuICAvKipcbiAgICogVGhlIGxvY2FsZSBvYmplY3Qgb3Igc3RyaW5nIHRvIHVzZSBmb3IgdGhlIGxvY2FsZS5cbiAgICovXG4gIGxvY2FsZT86IG9iamVjdCB8IHN0cmluZztcblxuICAvKipcbiAgICogQXV0byBjb252ZXJ0IHRoZSBuZ01vZGVsIHZhbHVlIGZyb20gYSBzdHJpbmcgdG8gYSBkYXRlIC8gYXJyYXkgb2YgZGF0ZXMgLyBmcm9tIC0gdG8gZGF0ZSBvYmplY3QgZGVwZW5kaW5nIG9uIHRoZSBgbW9kZWBcbiAgICovXG4gIGNvbnZlcnRNb2RlbFZhbHVlPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogVGhlIG51bWJlciBvZiBtb250aHMgc2hvd24uXG4gICAqL1xuICBzaG93TW9udGhzPzogbnVtYmVyO1xuXG4gIC8qKlxuICAgKiBIb3cgdGhlIG1vbnRoIHNob3VsZCBiZSBkaXNwbGF5ZWQgaW4gdGhlIGhlYWRlciBvZiB0aGUgY2FsZW5kYXIuXG4gICAqL1xuICBtb250aFNlbGVjdG9yVHlwZT86ICdzdGF0aWMnIHwgJ2Ryb3Bkb3duJztcbn1cblxuQEluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIEZsYXRwaWNrckRlZmF1bHRzIGltcGxlbWVudHMgRmxhdHBpY2tyRGVmYXVsdHNJbnRlcmZhY2Uge1xuICAvKipcbiAgICogRXhhY3RseSB0aGUgc2FtZSBhcyBkYXRlIGZvcm1hdCwgYnV0IGZvciB0aGUgYWx0SW5wdXQgZmllbGQuXG4gICAqL1xuICBhbHRGb3JtYXQ6IHN0cmluZyA9ICdGIGosIFknO1xuXG4gIC8qKlxuICAgKiBcdFNob3cgdGhlIHVzZXIgYSByZWFkYWJsZSBkYXRlIChhcyBwZXIgYWx0Rm9ybWF0KSwgYnV0IHJldHVybiBzb21ldGhpbmcgdG90YWxseSBkaWZmZXJlbnQgdG8gdGhlIHNlcnZlci5cbiAgICovXG4gIGFsdElucHV0OiBib29sZWFuID0gZmFsc2U7XG5cbiAgLyoqXG4gICAqIFRoaXMgY2xhc3Mgd2lsbCBiZSBhZGRlZCB0byB0aGUgaW5wdXQgZWxlbWVudCBjcmVhdGVkIGJ5IHRoZSBhbHRJbnB1dCBvcHRpb24uXG4gICAqIE5vdGUgdGhhdCBgYWx0SW5wdXRgIGFscmVhZHkgaW5oZXJpdHMgY2xhc3NlcyBmcm9tIHRoZSBvcmlnaW5hbCBpbnB1dC5cbiAgICovXG4gIGFsdElucHV0Q2xhc3M6IHN0cmluZyA9ICcnO1xuXG4gIC8qKlxuICAgKiBBbGxvd3MgdGhlIHVzZXIgdG8gZW50ZXIgYSBkYXRlIGRpcmVjdGx5IGlucHV0IHRoZSBpbnB1dCBmaWVsZC4gQnkgZGVmYXVsdCwgZGlyZWN0IGVudHJ5IGlzIGRpc2FibGVkLlxuICAgKi9cbiAgYWxsb3dJbnB1dDogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBJbnN0ZWFkIG9mIGBib2R5YCwgYXBwZW5kcyB0aGUgY2FsZW5kYXIgdG8gdGhlIHNwZWNpZmllZCBub2RlIGluc3RlYWQuXG4gICAqL1xuICBhcHBlbmRUbzogSFRNTEVsZW1lbnQgPSB1bmRlZmluZWQ7XG5cbiAgLyoqXG4gICAqIERlZmluZXMgaG93IHRoZSBkYXRlIHdpbGwgYmUgZm9ybWF0dGVkIGluIHRoZSBhcmlhLWxhYmVsIGZvciBjYWxlbmRhciBkYXlzLCB1c2luZyB0aGUgc2FtZSB0b2tlbnMgYXMgZGF0ZUZvcm1hdC4gSWYgeW91IGNoYW5nZSB0aGlzLCB5b3Ugc2hvdWxkIGNob29zZSBhIHZhbHVlIHRoYXQgd2lsbCBtYWtlIHNlbnNlIGlmIGEgc2NyZWVuIHJlYWRlciByZWFkcyBpdCBvdXQgbG91ZC5cbiAgICovXG4gIGFyaWFEYXRlRm9ybWF0Pzogc3RyaW5nID0gJ0YgaiwgWSc7XG5cbiAgLyoqXG4gICAqIFdoZXRoZXIgY2xpY2tpbmcgb24gdGhlIGlucHV0IHNob3VsZCBvcGVuIHRoZSBwaWNrZXIuXG4gICAqIFlvdSBjb3VsZCBkaXNhYmxlIHRoaXMgaWYgeW91IHdpc2ggdG8gb3BlbiB0aGUgY2FsZW5kYXIgbWFudWFsbHkgYHdpdGgub3BlbigpYC5cbiAgICovXG4gIGNsaWNrT3BlbnM6IGJvb2xlYW4gPSB0cnVlO1xuXG4gIC8qKlxuICAgKiBBIHN0cmluZyBvZiBjaGFyYWN0ZXJzIHdoaWNoIGFyZSB1c2VkIHRvIGRlZmluZSBob3cgdGhlIGRhdGUgd2lsbCBiZSBkaXNwbGF5ZWQgaW4gdGhlIGlucHV0IGJveC5cbiAgICogVGhlIHN1cHBvcnRlZCBjaGFyYWN0ZXJzIGFyZSBkZWZpbmVkIGluIHRoZSB0YWJsZSBiZWxvdy5cbiAgICovXG4gIGRhdGVGb3JtYXQ6IHN0cmluZyA9ICdZLW0tZCc7XG5cbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIGhvdXIgZWxlbWVudC5cbiAgICovXG4gIGRlZmF1bHRIb3VyPzogbnVtYmVyID0gMTI7XG5cbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIG1pbnV0ZSBlbGVtZW50LlxuICAgKi9cbiAgZGVmYXVsdE1pbnV0ZT86IG51bWJlciA9IDA7XG5cbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIHNlY29uZHMgZWxlbWVudC5cbiAgICovXG4gIGRlZmF1bHRTZWNvbmRzPzogbnVtYmVyID0gMDtcblxuICAvKipcbiAgICogU2VlIDxhIGhyZWY9XCJodHRwczovL2NobWxuLmdpdGh1Yi5pby9mbGF0cGlja3IvZXhhbXBsZXMvI2Rpc2FibGluZy1zcGVjaWZpYy1kYXRlc1wiPmRpc2FibGluZyBkYXRlczwvYT4uXG4gICAqL1xuICBkaXNhYmxlOiBEaXNhYmxlRW5hYmxlRGF0ZVtdID0gW107XG5cbiAgLyoqXG4gICAqIFNldCBkaXNhYmxlTW9iaWxlIHRvIHRydWUgdG8gYWx3YXlzIHVzZSB0aGUgbm9uLW5hdGl2ZSBwaWNrZXIuXG4gICAqIEJ5IGRlZmF1bHQsIEZsYXRwaWNrciB1dGlsaXplcyBuYXRpdmUgZGF0ZXRpbWUgd2lkZ2V0cyB1bmxlc3MgY2VydGFpbiBvcHRpb25zIChlLmcuIGRpc2FibGUpIGFyZSB1c2VkLlxuICAgKi9cbiAgZGlzYWJsZU1vYmlsZTogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBTZWUgPGEgaHJlZj1cImh0dHBzOi8vY2htbG4uZ2l0aHViLmlvL2ZsYXRwaWNrci9leGFtcGxlcy8jZGlzYWJsaW5nLWFsbC1kYXRlcy1leGNlcHQtc2VsZWN0LWZld1wiPmVuYWJsaW5nIGRhdGVzPC9hPi5cbiAgICovXG4gIGVuYWJsZTogRGlzYWJsZUVuYWJsZURhdGVbXTtcblxuICAvKipcbiAgICogRW5hYmxlcyB0aW1lIHBpY2tlci5cbiAgICovXG4gIGVuYWJsZVRpbWU6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogRW5hYmxlcyBzZWNvbmRzIGluIHRoZSB0aW1lIHBpY2tlci5cbiAgICovXG4gIGVuYWJsZVNlY29uZHM6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogQWxsb3dzIHVzaW5nIGEgY3VzdG9tIGRhdGUgZm9ybWF0dGluZyBmdW5jdGlvbiBpbnN0ZWFkIG9mIHRoZSBidWlsdC1pbiBoYW5kbGluZyBmb3IgZGF0ZSBmb3JtYXRzIHVzaW5nIGRhdGVGb3JtYXQsIGFsdEZvcm1hdCwgZXRjLlxuICAgKi9cbiAgZm9ybWF0RGF0ZT86ICh2YWx1ZTogYW55KSA9PiBzdHJpbmcgPSB1bmRlZmluZWQ7XG5cbiAgLyoqXG4gICAqIEFkanVzdHMgdGhlIHN0ZXAgZm9yIHRoZSBob3VyIGlucHV0IChpbmNsLiBzY3JvbGxpbmcpLlxuICAgKi9cbiAgaG91ckluY3JlbWVudDogbnVtYmVyID0gMTtcblxuICAvKipcbiAgICogRGlzcGxheXMgdGhlIGNhbGVuZGFyIGlubGluZS5cbiAgICovXG4gIGlubGluZTogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBUaGUgbWF4aW11bSBkYXRlIHRoYXQgYSB1c2VyIGNhbiBwaWNrIHRvIChpbmNsdXNpdmUpLlxuICAgKi9cbiAgbWF4RGF0ZTogc3RyaW5nIHwgRGF0ZSA9IHVuZGVmaW5lZDtcblxuICAvKipcbiAgICogVGhlIG1pbmltdW0gZGF0ZSB0aGF0IGEgdXNlciBjYW4gc3RhcnQgcGlja2luZyBmcm9tIChpbmNsdXNpdmUpLlxuICAgKi9cbiAgbWluRGF0ZTogc3RyaW5nIHwgRGF0ZSA9IHVuZGVmaW5lZDtcblxuICAvKipcbiAgICogQWRqdXN0cyB0aGUgc3RlcCBmb3IgdGhlIG1pbnV0ZSBpbnB1dCAoaW5jbC4gc2Nyb2xsaW5nKS5cbiAgICovXG4gIG1pbnV0ZUluY3JlbWVudDogbnVtYmVyID0gNTtcblxuICAvKipcbiAgICogU2VsZWN0IGEgc2luZ2xlIGRhdGUsIG11bHRpcGxlIGRhdGVzIG9yIGEgZGF0ZSByYW5nZS5cbiAgICovXG4gIG1vZGU6ICdzaW5nbGUnIHwgJ211bHRpcGxlJyB8ICdyYW5nZScgPSAnc2luZ2xlJztcblxuICAvKipcbiAgICogSFRNTCBmb3IgdGhlIGFycm93IGljb24sIHVzZWQgdG8gc3dpdGNoIG1vbnRocy5cbiAgICovXG4gIG5leHRBcnJvdzogc3RyaW5nID0gJz4nO1xuXG4gIC8qKlxuICAgKiBIaWRlcyB0aGUgZGF5IHNlbGVjdGlvbiBpbiBjYWxlbmRhci4gVXNlIGl0IGFsb25nIHdpdGggYGVuYWJsZVRpbWVgIHRvIGNyZWF0ZSBhIHRpbWUgcGlja2VyLlxuICAgKi9cbiAgbm9DYWxlbmRhcjogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBEZWZhdWx0IG5vdyB0byB0aGUgY3VycmVudCBkYXRlXG4gICAqL1xuICBub3c6IERhdGUgfCBzdHJpbmcgfCBudW1iZXIgPSBuZXcgRGF0ZSgpO1xuXG4gIC8qKlxuICAgKiBGdW5jdGlvbiB0aGF0IGV4cGVjdHMgYSBkYXRlIHN0cmluZyBhbmQgbXVzdCByZXR1cm4gYSBEYXRlIG9iamVjdC5cbiAgICovXG4gIHBhcnNlRGF0ZTogKHN0cjogc3RyaW5nKSA9PiBEYXRlO1xuXG4gIC8qKlxuICAgKiBIVE1MIGZvciB0aGUgbGVmdCBhcnJvdyBpY29uLlxuICAgKi9cbiAgcHJldkFycm93OiBzdHJpbmcgPSAnPCc7XG5cbiAgLyoqXG4gICAqIFNob3cgdGhlIG1vbnRoIHVzaW5nIHRoZSBzaG9ydGhhbmQgdmVyc2lvbiAoaWUsIFNlcCBpbnN0ZWFkIG9mIFNlcHRlbWJlcikuXG4gICAqL1xuICBzaG9ydGhhbmRDdXJyZW50TW9udGg6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogUG9zaXRpb24gdGhlIGNhbGVuZGFyIGluc2lkZSB0aGUgd3JhcHBlciBhbmQgbmV4dCB0byB0aGUgaW5wdXQgZWxlbWVudC4gKExlYXZlIGBmYWxzZWAgdW5sZXNzIHlvdSBrbm93IHdoYXQgeW91J3JlIGRvaW5nKS5cbiAgICovXG4gIHN0YXRpYzogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBEaXNwbGF5cyB0aW1lIHBpY2tlciBpbiAyNCBob3VyIG1vZGUgd2l0aG91dCBBTS9QTSBzZWxlY3Rpb24gd2hlbiBlbmFibGVkLlxuICAgKi9cbiAgdGltZTI0aHI6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogV2hlbiB0cnVlLCBkYXRlcyB3aWxsIHBhcnNlZCwgZm9ybWF0dGVkLCBhbmQgZGlzcGxheWVkIGluIFVUQy5cbiAgICogSXQncyByZWNvbW1lbmRlZCB0aGF0IGRhdGUgc3RyaW5ncyBjb250YWluIHRoZSB0aW1lem9uZSwgYnV0IG5vdCBuZWNlc3NhcnkuXG4gICAqL1xuICB1dGM6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogRW5hYmxlcyBkaXNwbGF5IG9mIHdlZWsgbnVtYmVycyBpbiBjYWxlbmRhci5cbiAgICovXG4gIHdlZWtOdW1iZXJzOiBib29sZWFuID0gZmFsc2U7XG5cbiAgLyoqXG4gICAqIFlvdSBtYXkgb3ZlcnJpZGUgdGhlIGZ1bmN0aW9uIHRoYXQgZXh0cmFjdHMgdGhlIHdlZWsgbnVtYmVycyBmcm9tIGEgRGF0ZSBieSBzdXBwbHlpbmcgYSBnZXRXZWVrIGZ1bmN0aW9uLlxuICAgKiBJdCB0YWtlcyBpbiBhIGRhdGUgYXMgYSBwYXJhbWV0ZXIgYW5kIHNob3VsZCByZXR1cm4gYSBjb3JyZXNwb25kaW5nIHN0cmluZyB0aGF0IHlvdSB3YW50IHRvIGFwcGVhciBsZWZ0IG9mIGV2ZXJ5IHdlZWsuXG4gICAqL1xuICBnZXRXZWVrOiAoZGF0ZTogRGF0ZSkgPT4gc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBDdXN0b20gZWxlbWVudHMgYW5kIGlucHV0IGdyb3Vwcy5cbiAgICovXG4gIHdyYXA6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogQXJyYXkgb2YgcGx1Z2luIGluc3RhbmNlcyB0byB1c2UuXG4gICAqL1xuICBwbHVnaW5zOiBhbnlbXSA9IFtdO1xuXG4gIC8qKlxuICAgKiBUaGUgbG9jYWxlIG9iamVjdCBvciBzdHJpbmcgdG8gdXNlIGZvciB0aGUgbG9jYWxlLlxuICAgKi9cbiAgbG9jYWxlOiBvYmplY3QgfCBzdHJpbmcgPSAnZGVmYXVsdCc7XG5cbiAgLyoqXG4gICAqIEF1dG8gY29udmVydCB0aGUgbmdNb2RlbCB2YWx1ZSBmcm9tIGEgc3RyaW5nIHRvIGEgZGF0ZSAvIGFycmF5IG9mIGRhdGVzIC8gZnJvbSAtIHRvIGRhdGUgb2JqZWN0IGRlcGVuZGluZyBvbiB0aGUgYG1vZGVgXG4gICAqL1xuICBjb252ZXJ0TW9kZWxWYWx1ZTogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBUaGUgbnVtYmVyIG9mIG1vbnRocyBzaG93bi5cbiAgICovXG4gIHNob3dNb250aHM6IG51bWJlciA9IDE7XG5cbiAgLyoqXG4gICAqIEhvdyB0aGUgbW9udGggc2hvdWxkIGJlIGRpc3BsYXllZCBpbiB0aGUgaGVhZGVyIG9mIHRoZSBjYWxlbmRhci5cbiAgICovXG4gIG1vbnRoU2VsZWN0b3JUeXBlOiAnc3RhdGljJyB8ICdkcm9wZG93bicgPSAnc3RhdGljJztcbn1cbiIsImltcG9ydCB7XG4gIERpcmVjdGl2ZSxcbiAgRWxlbWVudFJlZixcbiAgQWZ0ZXJWaWV3SW5pdCxcbiAgSW5wdXQsXG4gIE91dHB1dCxcbiAgRXZlbnRFbWl0dGVyLFxuICBPbkNoYW5nZXMsXG4gIFNpbXBsZUNoYW5nZXMsXG4gIE9uRGVzdHJveSxcbiAgZm9yd2FyZFJlZixcbiAgSG9zdExpc3RlbmVyLFxuICBSZW5kZXJlcjJcbn0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQge1xuICBGbGF0cGlja3JEZWZhdWx0cyxcbiAgRGlzYWJsZUVuYWJsZURhdGUsXG4gIEZsYXRwaWNrckRlZmF1bHRzSW50ZXJmYWNlXG59IGZyb20gJy4vZmxhdHBpY2tyLWRlZmF1bHRzLnNlcnZpY2UnO1xuaW1wb3J0IHsgQ29udHJvbFZhbHVlQWNjZXNzb3IsIE5HX1ZBTFVFX0FDQ0VTU09SIH0gZnJvbSAnQGFuZ3VsYXIvZm9ybXMnO1xuaW1wb3J0IGZsYXRwaWNrciBmcm9tICdmbGF0cGlja3InO1xuXG5leHBvcnQgaW50ZXJmYWNlIEZsYXRQaWNrck91dHB1dE9wdGlvbnMge1xuICBzZWxlY3RlZERhdGVzOiBEYXRlW107XG4gIGRhdGVTdHJpbmc6IHN0cmluZztcbiAgaW5zdGFuY2U6IGFueTtcbn1cblxuZXhwb3J0IGludGVyZmFjZSBGbGF0UGlja3JEYXlDcmVhdGVPdXRwdXRPcHRpb25zXG4gIGV4dGVuZHMgRmxhdFBpY2tyT3V0cHV0T3B0aW9ucyB7XG4gIGRheUVsZW1lbnQ6IEhUTUxFbGVtZW50O1xufVxuXG5leHBvcnQgY29uc3QgRkxBVFBJQ0tSX0NPTlRST0xfVkFMVUVfQUNDRVNTT1I6IGFueSA9IHtcbiAgcHJvdmlkZTogTkdfVkFMVUVfQUNDRVNTT1IsXG4gIHVzZUV4aXN0aW5nOiBmb3J3YXJkUmVmKCgpID0+IEZsYXRwaWNrckRpcmVjdGl2ZSksIC8vdHNsaW50OmRpc2FibGUtbGluZVxuICBtdWx0aTogdHJ1ZVxufTtcblxuQERpcmVjdGl2ZSh7XG4gIHNlbGVjdG9yOiAnW213bEZsYXRwaWNrcl0nLFxuICBwcm92aWRlcnM6IFtGTEFUUElDS1JfQ09OVFJPTF9WQUxVRV9BQ0NFU1NPUl0sXG4gIGhvc3Q6IHtcbiAgICAvLyB0c2xpbnQ6ZGlzYWJsZS1saW5lIHVzZS1ob3N0LXByb3BlcnR5LWRlY29yYXRvclxuICAgICcoYmx1ciknOiAnb25Ub3VjaGVkRm4oKSdcbiAgfSxcbiAgZXhwb3J0QXM6ICdtd2xGbGF0cGlja3InXG59KVxuZXhwb3J0IGNsYXNzIEZsYXRwaWNrckRpcmVjdGl2ZVxuICBpbXBsZW1lbnRzIEFmdGVyVmlld0luaXQsIE9uQ2hhbmdlcywgT25EZXN0cm95LCBDb250cm9sVmFsdWVBY2Nlc3NvciB7XG4gIC8qKlxuICAgKiBPYmplY3Qtb3B0aW9ucyB0aGF0IGNhbiBiZSB1c2VyIGZvciBtdWx0aXBsZSBpbnN0YW5jZXMgb2YgRmxhdHBpY2tyLlxuICAgKiBPcHRpb24gZnJvbSB0aGlzIG9iamVjdCBpcyBhcHBsaWVkIG9ubHkgaWYgc3BlY2lmaWMgb3B0aW9uIGlzIG5vdCBzcGVjaWZpZWQuXG4gICAqIEV4YW1wbGU6XG4gICAqIGBgYHR5cGVzY3JpcHRcbiAgICogb3B0aW9uczogRmxhdHBpY2tyRGVmYXVsdHNJbnRlcmZhY2UgPSB7XG4gICAqICAgICAgYWx0Rm9ybWF0OiAnZC9tL1knLCAgIC8vIHdpbGwgYmUgaWdub3JlZCBzaW5jZSBhbHRGb3JtYXQgaXMgcHJvdmlkZWQgdmlhIHNwZWNpZmljIGF0dHJpYnV0ZVxuICAgKiAgICAgIGFsdElucHV0OiB0cnVlICAgICAgICAvLyB3aWxsIGJlIHVzZWQgc2luY2Ugc3BlY2lmaWMgYXR0cmlidXRlIGlzIG5vdCBwcm92aWRlZFxuICAgKiB9O1xuICAgKiBgYGBcbiAgICogYGBgaHRtbFxuICAgKiA8aW5wdXRcbiAgICogICBjbGFzcz1cImZvcm0tY29udHJvbFwiXG4gICAqICAgdHlwZT1cInRleHRcIlxuICAgKiAgIG13bEZsYXRwaWNrclxuICAgKiAgIFtvcHRpb25zXT1cIm9wdGlvbnNcIlxuICAgKiAgIGFsdEZvcm1hdD1cImQvbS9ZXCI+XG4gICAqIGBgYFxuICAgKi9cbiAgQElucHV0KCkgb3B0aW9uczogRmxhdHBpY2tyRGVmYXVsdHNJbnRlcmZhY2UgPSB7fTtcblxuICAvKipcbiAgICogRXhhY3RseSB0aGUgc2FtZSBhcyBkYXRlIGZvcm1hdCwgYnV0IGZvciB0aGUgYWx0SW5wdXQgZmllbGQuXG4gICAqL1xuICBASW5wdXQoKSBhbHRGb3JtYXQ6IHN0cmluZztcblxuICAvKipcbiAgICogXHRTaG93IHRoZSB1c2VyIGEgcmVhZGFibGUgZGF0ZSAoYXMgcGVyIGFsdEZvcm1hdCksIGJ1dCByZXR1cm4gc29tZXRoaW5nIHRvdGFsbHkgZGlmZmVyZW50IHRvIHRoZSBzZXJ2ZXIuXG4gICAqL1xuICBASW5wdXQoKSBhbHRJbnB1dDogYm9vbGVhbjtcblxuICAvKipcbiAgICogVGhpcyBjbGFzcyB3aWxsIGJlIGFkZGVkIHRvIHRoZSBpbnB1dCBlbGVtZW50IGNyZWF0ZWQgYnkgdGhlIGFsdElucHV0IG9wdGlvbi5cbiAgICogTm90ZSB0aGF0IGBhbHRJbnB1dGAgYWxyZWFkeSBpbmhlcml0cyBjbGFzc2VzIGZyb20gdGhlIG9yaWdpbmFsIGlucHV0LlxuICAgKi9cbiAgQElucHV0KCkgYWx0SW5wdXRDbGFzczogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBBbGxvd3MgdGhlIHVzZXIgdG8gZW50ZXIgYSBkYXRlIGRpcmVjdGx5IGlucHV0IHRoZSBpbnB1dCBmaWVsZC4gQnkgZGVmYXVsdCwgZGlyZWN0IGVudHJ5IGlzIGRpc2FibGVkLlxuICAgKi9cbiAgQElucHV0KCkgYWxsb3dJbnB1dDogYm9vbGVhbjtcblxuICAvKipcbiAgICogSW5zdGVhZCBvZiBgYm9keWAsIGFwcGVuZHMgdGhlIGNhbGVuZGFyIHRvIHRoZSBzcGVjaWZpZWQgbm9kZSBpbnN0ZWFkLlxuICAgKi9cbiAgQElucHV0KCkgYXBwZW5kVG86IEhUTUxFbGVtZW50O1xuXG4gIC8qKlxuICAgKiBEZWZpbmVzIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGZvcm1hdHRlZCBpbiB0aGUgYXJpYS1sYWJlbCBmb3IgY2FsZW5kYXIgZGF5cywgdXNpbmcgdGhlIHNhbWUgdG9rZW5zIGFzIGRhdGVGb3JtYXQuIElmIHlvdSBjaGFuZ2UgdGhpcywgeW91IHNob3VsZCBjaG9vc2UgYSB2YWx1ZSB0aGF0IHdpbGwgbWFrZSBzZW5zZSBpZiBhIHNjcmVlbiByZWFkZXIgcmVhZHMgaXQgb3V0IGxvdWQuXG4gICAqL1xuICBASW5wdXQoKSBhcmlhRGF0ZUZvcm1hdD86IHN0cmluZztcblxuICAvKipcbiAgICogV2hldGhlciBjbGlja2luZyBvbiB0aGUgaW5wdXQgc2hvdWxkIG9wZW4gdGhlIHBpY2tlci5cbiAgICogWW91IGNvdWxkIGRpc2FibGUgdGhpcyBpZiB5b3Ugd2lzaCB0byBvcGVuIHRoZSBjYWxlbmRhciBtYW51YWxseSBgd2l0aC5vcGVuKClgLlxuICAgKi9cbiAgQElucHV0KCkgY2xpY2tPcGVuczogYm9vbGVhbjtcblxuICAvKipcbiAgICogQSBzdHJpbmcgb2YgY2hhcmFjdGVycyB3aGljaCBhcmUgdXNlZCB0byBkZWZpbmUgaG93IHRoZSBkYXRlIHdpbGwgYmUgZGlzcGxheWVkIGluIHRoZSBpbnB1dCBib3guXG4gICAqIFRoZSBzdXBwb3J0ZWQgY2hhcmFjdGVycyBhcmUgZGVmaW5lZCBpbiB0aGUgdGFibGUgYmVsb3cuXG4gICAqL1xuICBASW5wdXQoKSBkYXRlRm9ybWF0OiBzdHJpbmc7XG5cbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIGhvdXIgZWxlbWVudC5cbiAgICovXG4gIEBJbnB1dCgpIGRlZmF1bHRIb3VyPzogbnVtYmVyO1xuICAvKipcbiAgICogSW5pdGlhbCB2YWx1ZSBvZiB0aGUgbWludXRlIGVsZW1lbnQuXG4gICAqL1xuICBASW5wdXQoKSBkZWZhdWx0TWludXRlPzogbnVtYmVyO1xuXG4gIC8qKlxuICAgKiBJbml0aWFsIHZhbHVlIG9mIHRoZSBzZWNvbmRzIGVsZW1lbnQuXG4gICAqL1xuICBASW5wdXQoKSBkZWZhdWx0U2Vjb25kcz86IG51bWJlcjtcblxuICAvKipcbiAgICogU2VlIDxhIGhyZWY9XCJodHRwczovL2NobWxuLmdpdGh1Yi5pby9mbGF0cGlja3IvZXhhbXBsZXMvI2Rpc2FibGluZy1zcGVjaWZpYy1kYXRlc1wiPmRpc2FibGluZyBkYXRlczwvYT4uXG4gICAqL1xuICBASW5wdXQoKSBkaXNhYmxlOiBEaXNhYmxlRW5hYmxlRGF0ZVtdO1xuXG4gIC8qKlxuICAgKiBTZXQgZGlzYWJsZU1vYmlsZSB0byB0cnVlIHRvIGFsd2F5cyB1c2UgdGhlIG5vbi1uYXRpdmUgcGlja2VyLlxuICAgKiBCeSBkZWZhdWx0LCBGbGF0cGlja3IgdXRpbGl6ZXMgbmF0aXZlIGRhdGV0aW1lIHdpZGdldHMgdW5sZXNzIGNlcnRhaW4gb3B0aW9ucyAoZS5nLiBkaXNhYmxlKSBhcmUgdXNlZC5cbiAgICovXG4gIEBJbnB1dCgpIGRpc2FibGVNb2JpbGU6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFNlZSA8YSBocmVmPVwiaHR0cHM6Ly9jaG1sbi5naXRodWIuaW8vZmxhdHBpY2tyL2V4YW1wbGVzLyNkaXNhYmxpbmctYWxsLWRhdGVzLWV4Y2VwdC1zZWxlY3QtZmV3XCI+ZW5hYmxpbmcgZGF0ZXM8L2E+LlxuICAgKi9cbiAgQElucHV0KCkgZW5hYmxlOiBEaXNhYmxlRW5hYmxlRGF0ZVtdO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIHRpbWUgcGlja2VyLlxuICAgKi9cbiAgQElucHV0KCkgZW5hYmxlVGltZTogYm9vbGVhbjtcblxuICAvKipcbiAgICogRW5hYmxlcyBzZWNvbmRzIGluIHRoZSB0aW1lIHBpY2tlci5cbiAgICovXG4gIEBJbnB1dCgpIGVuYWJsZVNlY29uZHM6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEFsbG93cyB1c2luZyBhIGN1c3RvbSBkYXRlIGZvcm1hdHRpbmcgZnVuY3Rpb24gaW5zdGVhZCBvZiB0aGUgYnVpbHQtaW4gaGFuZGxpbmcgZm9yIGRhdGUgZm9ybWF0cyB1c2luZyBkYXRlRm9ybWF0LCBhbHRGb3JtYXQsIGV0Yy5cbiAgICovXG4gIEBJbnB1dCgpIGZvcm1hdERhdGU/OiAodmFsdWU6IGFueSkgPT4gc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBBZGp1c3RzIHRoZSBzdGVwIGZvciB0aGUgaG91ciBpbnB1dCAoaW5jbC4gc2Nyb2xsaW5nKS5cbiAgICovXG4gIEBJbnB1dCgpIGhvdXJJbmNyZW1lbnQ6IG51bWJlcjtcblxuICAvKipcbiAgICogRGlzcGxheXMgdGhlIGNhbGVuZGFyIGlubGluZS5cbiAgICovXG4gIEBJbnB1dCgpIGlubGluZTogYm9vbGVhbjtcblxuICAvKipcbiAgICogVGhlIG1heGltdW0gZGF0ZSB0aGF0IGEgdXNlciBjYW4gcGljayB0byAoaW5jbHVzaXZlKS5cbiAgICovXG4gIEBJbnB1dCgpIG1heERhdGU6IHN0cmluZyB8IERhdGU7XG5cbiAgLyoqXG4gICAqIFRoZSBtaW5pbXVtIGRhdGUgdGhhdCBhIHVzZXIgY2FuIHN0YXJ0IHBpY2tpbmcgZnJvbSAoaW5jbHVzaXZlKS5cbiAgICovXG4gIEBJbnB1dCgpIG1pbkRhdGU6IHN0cmluZyB8IERhdGU7XG5cbiAgLyoqXG4gICAqIEFkanVzdHMgdGhlIHN0ZXAgZm9yIHRoZSBtaW51dGUgaW5wdXQgKGluY2wuIHNjcm9sbGluZykuXG4gICAqL1xuICBASW5wdXQoKSBtaW51dGVJbmNyZW1lbnQ6IG51bWJlcjtcblxuICAvKipcbiAgICogU2VsZWN0IGEgc2luZ2xlIGRhdGUsIG11bHRpcGxlIGRhdGVzIG9yIGEgZGF0ZSByYW5nZS5cbiAgICovXG4gIEBJbnB1dCgpIG1vZGU6ICdzaW5nbGUnIHwgJ211bHRpcGxlJyB8ICdyYW5nZSc7XG5cbiAgLyoqXG4gICAqIEhUTUwgZm9yIHRoZSBhcnJvdyBpY29uLCB1c2VkIHRvIHN3aXRjaCBtb250aHMuXG4gICAqL1xuICBASW5wdXQoKSBuZXh0QXJyb3c6IHN0cmluZztcblxuICAvKipcbiAgICogSGlkZXMgdGhlIGRheSBzZWxlY3Rpb24gaW4gY2FsZW5kYXIuIFVzZSBpdCBhbG9uZyB3aXRoIGBlbmFibGVUaW1lYCB0byBjcmVhdGUgYSB0aW1lIHBpY2tlci5cbiAgICovXG4gIEBJbnB1dCgpIG5vQ2FsZW5kYXI6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFByb3ZpZGUgYSBkYXRlIGZvciAndG9kYXknLCB3aGljaCB3aWxsIGJlIHVzZWQgaW5zdGVhZCBvZiBcIm5ldyBEYXRlKClcIlxuICAgKi9cbiAgQElucHV0KCkgbm93PzogRGF0ZSB8IHN0cmluZyB8IG51bWJlcjtcblxuICAvKipcbiAgICogRnVuY3Rpb24gdGhhdCBleHBlY3RzIGEgZGF0ZSBzdHJpbmcgYW5kIG11c3QgcmV0dXJuIGEgRGF0ZSBvYmplY3QuXG4gICAqL1xuICBASW5wdXQoKSBwYXJzZURhdGU6IChzdHI6IHN0cmluZykgPT4gRGF0ZTtcblxuICAvKipcbiAgICogSFRNTCBmb3IgdGhlIGxlZnQgYXJyb3cgaWNvbi5cbiAgICovXG4gIEBJbnB1dCgpIHByZXZBcnJvdzogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBTaG93IHRoZSBtb250aCB1c2luZyB0aGUgc2hvcnRoYW5kIHZlcnNpb24gKGllLCBTZXAgaW5zdGVhZCBvZiBTZXB0ZW1iZXIpLlxuICAgKi9cbiAgQElucHV0KCkgc2hvcnRoYW5kQ3VycmVudE1vbnRoOiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBUaGUgbnVtYmVyIG9mIG1vbnRocyBzaG93bi5cbiAgICovXG4gIEBJbnB1dCgpIHNob3dNb250aHM6IG51bWJlcjtcblxuICAvKipcbiAgICogUG9zaXRpb24gdGhlIGNhbGVuZGFyIGluc2lkZSB0aGUgd3JhcHBlciBhbmQgbmV4dCB0byB0aGUgaW5wdXQgZWxlbWVudC4gKExlYXZlIGBmYWxzZWAgdW5sZXNzIHlvdSBrbm93IHdoYXQgeW91J3JlIGRvaW5nKS5cbiAgICovXG4gIEBJbnB1dCgpIHN0YXRpYzogYm9vbGVhbjtcblxuICAvKipcbiAgICogRGlzcGxheXMgdGltZSBwaWNrZXIgaW4gMjQgaG91ciBtb2RlIHdpdGhvdXQgQU0vUE0gc2VsZWN0aW9uIHdoZW4gZW5hYmxlZC5cbiAgICovXG4gIEBJbnB1dCgpIHRpbWUyNGhyOiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIGRpc3BsYXkgb2Ygd2VlayBudW1iZXJzIGluIGNhbGVuZGFyLlxuICAgKi9cbiAgQElucHV0KCkgd2Vla051bWJlcnM6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFlvdSBtYXkgb3ZlcnJpZGUgdGhlIGZ1bmN0aW9uIHRoYXQgZXh0cmFjdHMgdGhlIHdlZWsgbnVtYmVycyBmcm9tIGEgRGF0ZSBieSBzdXBwbHlpbmcgYSBnZXRXZWVrIGZ1bmN0aW9uLlxuICAgKiBJdCB0YWtlcyBpbiBhIGRhdGUgYXMgYSBwYXJhbWV0ZXIgYW5kIHNob3VsZCByZXR1cm4gYSBjb3JyZXNwb25kaW5nIHN0cmluZyB0aGF0IHlvdSB3YW50IHRvIGFwcGVhciBsZWZ0IG9mIGV2ZXJ5IHdlZWsuXG4gICAqL1xuICBASW5wdXQoKSBnZXRXZWVrOiAoZGF0ZTogRGF0ZSkgPT4gc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBDdXN0b20gZWxlbWVudHMgYW5kIGlucHV0IGdyb3Vwcy5cbiAgICovXG4gIEBJbnB1dCgpIHdyYXA6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEFycmF5IG9mIHBsdWdpbiBpbnN0YW5jZXMgdG8gdXNlLlxuICAgKi9cbiAgQElucHV0KCkgcGx1Z2luczogYW55W107XG5cbiAgLyoqXG4gICAqIFRoZSBsb2NhbGUgb2JqZWN0IG9yIHN0cmluZyB0byB1c2UgZm9yIHRoZSBsb2NhbGUuXG4gICAqL1xuICBASW5wdXQoKSBsb2NhbGU6IG9iamVjdCB8IHN0cmluZztcblxuICAvKipcbiAgICogQXV0byBjb252ZXJ0IHRoZSBuZ01vZGVsIHZhbHVlIGZyb20gYSBzdHJpbmcgdG8gYSBkYXRlIC8gYXJyYXkgb2YgZGF0ZXMgLyBmcm9tIC0gdG8gZGF0ZSBvYmplY3QgZGVwZW5kaW5nIG9uIHRoZSBgbW9kZWBcbiAgICovXG4gIEBJbnB1dCgpIGNvbnZlcnRNb2RlbFZhbHVlOiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBIb3cgdGhlIG1vbnRoIHNob3VsZCBiZSBkaXNwbGF5ZWQgaW4gdGhlIGhlYWRlciBvZiB0aGUgY2FsZW5kYXIuXG4gICAqL1xuICBASW5wdXQoKSBtb250aFNlbGVjdG9yVHlwZTogJ3N0YXRpYycgfCAnZHJvcGRvd24nO1xuXG4gIC8qKlxuICAgKiBHZXRzIHRyaWdnZXJlZCBvbmNlIHRoZSBjYWxlbmRhciBpcyBpbiBhIHJlYWR5IHN0YXRlXG4gICAqL1xuICBAT3V0cHV0KClcbiAgZmxhdHBpY2tyUmVhZHk6IEV2ZW50RW1pdHRlcjxGbGF0UGlja3JPdXRwdXRPcHRpb25zPiA9IG5ldyBFdmVudEVtaXR0ZXIoKTtcblxuICAvKipcbiAgICogR2V0cyB0cmlnZ2VyZWQgd2hlbiB0aGUgdXNlciBzZWxlY3RzIGEgZGF0ZSwgb3IgY2hhbmdlcyB0aGUgdGltZSBvbiBhIHNlbGVjdGVkIGRhdGUuXG4gICAqL1xuICBAT3V0cHV0KClcbiAgZmxhdHBpY2tyQ2hhbmdlOiBFdmVudEVtaXR0ZXI8RmxhdFBpY2tyT3V0cHV0T3B0aW9ucz4gPSBuZXcgRXZlbnRFbWl0dGVyKCk7XG5cbiAgLyoqXG4gICAqIEdldHMgdHJpZ2dlcmVkIHdoZW4gdGhlIGlucHV0IHZhbHVlIGlzIHVwZGF0ZWQgd2l0aCBhIG5ldyBkYXRlIHN0cmluZy5cbiAgICovXG4gIEBPdXRwdXQoKVxuICBmbGF0cGlja3JWYWx1ZVVwZGF0ZTogRXZlbnRFbWl0dGVyPFxuICAgIEZsYXRQaWNrck91dHB1dE9wdGlvbnNcbiAgPiA9IG5ldyBFdmVudEVtaXR0ZXIoKTtcblxuICAvKipcbiAgICogR2V0cyB0cmlnZ2VyZWQgd2hlbiB0aGUgY2FsZW5kYXIgaXMgb3BlbmVkLlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrck9wZW46IEV2ZW50RW1pdHRlcjxGbGF0UGlja3JPdXRwdXRPcHRpb25zPiA9IG5ldyBFdmVudEVtaXR0ZXIoKTtcblxuICAvKipcbiAgICogR2V0cyB0cmlnZ2VyZWQgd2hlbiB0aGUgY2FsZW5kYXIgaXMgY2xvc2VkLlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrckNsb3NlOiBFdmVudEVtaXR0ZXI8RmxhdFBpY2tyT3V0cHV0T3B0aW9ucz4gPSBuZXcgRXZlbnRFbWl0dGVyKCk7XG5cbiAgLyoqXG4gICAqIEdldHMgdHJpZ2dlcmVkIHdoZW4gdGhlIG1vbnRoIGlzIGNoYW5nZWQsIGVpdGhlciBieSB0aGUgdXNlciBvciBwcm9ncmFtbWF0aWNhbGx5LlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrck1vbnRoQ2hhbmdlOiBFdmVudEVtaXR0ZXI8XG4gICAgRmxhdFBpY2tyT3V0cHV0T3B0aW9uc1xuICA+ID0gbmV3IEV2ZW50RW1pdHRlcigpO1xuXG4gIC8qKlxuICAgKiBHZXRzIHRyaWdnZXJlZCB3aGVuIHRoZSB5ZWFyIGlzIGNoYW5nZWQsIGVpdGhlciBieSB0aGUgdXNlciBvciBwcm9ncmFtbWF0aWNhbGx5LlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrclllYXJDaGFuZ2U6IEV2ZW50RW1pdHRlcjxcbiAgICBGbGF0UGlja3JPdXRwdXRPcHRpb25zXG4gID4gPSBuZXcgRXZlbnRFbWl0dGVyKCk7XG5cbiAgLyoqXG4gICAqIFRha2UgZnVsbCBjb250cm9sIG9mIGV2ZXJ5IGRhdGUgY2VsbCB3aXRoIHRoaXMgb3V0cHV0XG4gICAqL1xuICBAT3V0cHV0KClcbiAgZmxhdHBpY2tyRGF5Q3JlYXRlOiBFdmVudEVtaXR0ZXI8XG4gICAgRmxhdFBpY2tyRGF5Q3JlYXRlT3V0cHV0T3B0aW9uc1xuICA+ID0gbmV3IEV2ZW50RW1pdHRlcigpO1xuXG4gIC8qKlxuICAgKiBUaGUgZmxhdHBpY2tyIGluc3RhbmNlIHdoZXJlIHlvdSBjYW4gY2FsbCBtZXRob2RzIGxpa2UgdG9nZ2xlKCksIG9wZW4oKSwgY2xvc2UoKSBldGNcbiAgICovXG4gIGluc3RhbmNlOiBmbGF0cGlja3IuSW5zdGFuY2U7XG5cbiAgcHJpdmF0ZSBpc0Rpc2FibGVkID0gZmFsc2U7XG4gIHByaXZhdGUgaW5pdGlhbFZhbHVlOiBhbnk7XG5cbiAgb25DaGFuZ2VGbjogKHZhbHVlOiBhbnkpID0+IHZvaWQgPSAoKSA9PiB7fTsgLy8gdHNsaW50OmRpc2FibGUtbGluZVxuXG4gIG9uVG91Y2hlZEZuID0gKCkgPT4ge307XG5cbiAgY29uc3RydWN0b3IoXG4gICAgcHJpdmF0ZSBlbG06IEVsZW1lbnRSZWYsXG4gICAgcHJpdmF0ZSBkZWZhdWx0czogRmxhdHBpY2tyRGVmYXVsdHMsXG4gICAgcHJpdmF0ZSByZW5kZXJlcjogUmVuZGVyZXIyXG4gICkge31cblxuICBuZ0FmdGVyVmlld0luaXQoKTogdm9pZCB7XG4gICAgY29uc3Qgb3B0aW9uczogYW55ID0ge1xuICAgICAgYWx0Rm9ybWF0OiB0aGlzLmFsdEZvcm1hdCxcbiAgICAgIGFsdElucHV0OiB0aGlzLmFsdElucHV0LFxuICAgICAgYWx0SW5wdXRDbGFzczogdGhpcy5hbHRJbnB1dENsYXNzLFxuICAgICAgYWxsb3dJbnB1dDogdGhpcy5hbGxvd0lucHV0LFxuICAgICAgYXBwZW5kVG86IHRoaXMuYXBwZW5kVG8sXG4gICAgICBhcmlhRGF0ZUZvcm1hdDogdGhpcy5hcmlhRGF0ZUZvcm1hdCxcbiAgICAgIGNsaWNrT3BlbnM6IHRoaXMuY2xpY2tPcGVucyxcbiAgICAgIGRhdGVGb3JtYXQ6IHRoaXMuZGF0ZUZvcm1hdCxcbiAgICAgIGRlZmF1bHRIb3VyOiB0aGlzLmRlZmF1bHRIb3VyLFxuICAgICAgZGVmYXVsdE1pbnV0ZTogdGhpcy5kZWZhdWx0TWludXRlLFxuICAgICAgZGVmYXVsdFNlY29uZHM6IHRoaXMuZGVmYXVsdFNlY29uZHMsXG4gICAgICBkaXNhYmxlOiB0aGlzLmRpc2FibGUsXG4gICAgICBkaXNhYmxlTW9iaWxlOiB0aGlzLmRpc2FibGVNb2JpbGUsXG4gICAgICBlbmFibGU6IHRoaXMuZW5hYmxlLFxuICAgICAgZW5hYmxlVGltZTogdGhpcy5lbmFibGVUaW1lLFxuICAgICAgZW5hYmxlU2Vjb25kczogdGhpcy5lbmFibGVTZWNvbmRzLFxuICAgICAgZm9ybWF0RGF0ZTogdGhpcy5mb3JtYXREYXRlLFxuICAgICAgaG91ckluY3JlbWVudDogdGhpcy5ob3VySW5jcmVtZW50LFxuICAgICAgZGVmYXVsdERhdGU6IHRoaXMuaW5pdGlhbFZhbHVlLFxuICAgICAgaW5saW5lOiB0aGlzLmlubGluZSxcbiAgICAgIG1heERhdGU6IHRoaXMubWF4RGF0ZSxcbiAgICAgIG1pbkRhdGU6IHRoaXMubWluRGF0ZSxcbiAgICAgIG1pbnV0ZUluY3JlbWVudDogdGhpcy5taW51dGVJbmNyZW1lbnQsXG4gICAgICBtb2RlOiB0aGlzLm1vZGUsXG4gICAgICBuZXh0QXJyb3c6IHRoaXMubmV4dEFycm93LFxuICAgICAgbm9DYWxlbmRhcjogdGhpcy5ub0NhbGVuZGFyLFxuICAgICAgbm93OiB0aGlzLm5vdyxcbiAgICAgIHBhcnNlRGF0ZTogdGhpcy5wYXJzZURhdGUsXG4gICAgICBwcmV2QXJyb3c6IHRoaXMucHJldkFycm93LFxuICAgICAgc2hvcnRoYW5kQ3VycmVudE1vbnRoOiB0aGlzLnNob3J0aGFuZEN1cnJlbnRNb250aCxcbiAgICAgIHNob3dNb250aHM6IHRoaXMuc2hvd01vbnRocyxcbiAgICAgIG1vbnRoU2VsZWN0b3JUeXBlOiB0aGlzLm1vbnRoU2VsZWN0b3JUeXBlLFxuICAgICAgc3RhdGljOiB0aGlzLnN0YXRpYyxcbiAgICAgIHRpbWUyNGhyOiB0aGlzLnRpbWUyNGhyLFxuICAgICAgd2Vla051bWJlcnM6IHRoaXMud2Vla051bWJlcnMsXG4gICAgICBnZXRXZWVrOiB0aGlzLmdldFdlZWssXG4gICAgICB3cmFwOiB0aGlzLndyYXAsXG4gICAgICBwbHVnaW5zOiB0aGlzLnBsdWdpbnMsXG4gICAgICBsb2NhbGU6IHRoaXMubG9jYWxlLFxuICAgICAgb25DaGFuZ2U6IChzZWxlY3RlZERhdGVzOiBEYXRlW10sIGRhdGVTdHJpbmc6IHN0cmluZywgaW5zdGFuY2U6IGFueSkgPT4ge1xuICAgICAgICB0aGlzLmZsYXRwaWNrckNoYW5nZS5lbWl0KHsgc2VsZWN0ZWREYXRlcywgZGF0ZVN0cmluZywgaW5zdGFuY2UgfSk7XG4gICAgICB9LFxuICAgICAgb25PcGVuOiAoc2VsZWN0ZWREYXRlczogRGF0ZVtdLCBkYXRlU3RyaW5nOiBzdHJpbmcsIGluc3RhbmNlOiBhbnkpID0+IHtcbiAgICAgICAgdGhpcy5mbGF0cGlja3JPcGVuLmVtaXQoeyBzZWxlY3RlZERhdGVzLCBkYXRlU3RyaW5nLCBpbnN0YW5jZSB9KTtcbiAgICAgIH0sXG4gICAgICBvbkNsb3NlOiAoc2VsZWN0ZWREYXRlczogRGF0ZVtdLCBkYXRlU3RyaW5nOiBzdHJpbmcsIGluc3RhbmNlOiBhbnkpID0+IHtcbiAgICAgICAgdGhpcy5mbGF0cGlja3JDbG9zZS5lbWl0KHsgc2VsZWN0ZWREYXRlcywgZGF0ZVN0cmluZywgaW5zdGFuY2UgfSk7XG4gICAgICB9LFxuICAgICAgb25Nb250aENoYW5nZTogKFxuICAgICAgICBzZWxlY3RlZERhdGVzOiBEYXRlW10sXG4gICAgICAgIGRhdGVTdHJpbmc6IHN0cmluZyxcbiAgICAgICAgaW5zdGFuY2U6IGFueVxuICAgICAgKSA9PiB7XG4gICAgICAgIHRoaXMuZmxhdHBpY2tyTW9udGhDaGFuZ2UuZW1pdCh7IHNlbGVjdGVkRGF0ZXMsIGRhdGVTdHJpbmcsIGluc3RhbmNlIH0pO1xuICAgICAgfSxcbiAgICAgIG9uWWVhckNoYW5nZTogKFxuICAgICAgICBzZWxlY3RlZERhdGVzOiBEYXRlW10sXG4gICAgICAgIGRhdGVTdHJpbmc6IHN0cmluZyxcbiAgICAgICAgaW5zdGFuY2U6IGFueVxuICAgICAgKSA9PiB7XG4gICAgICAgIHRoaXMuZmxhdHBpY2tyWWVhckNoYW5nZS5lbWl0KHsgc2VsZWN0ZWREYXRlcywgZGF0ZVN0cmluZywgaW5zdGFuY2UgfSk7XG4gICAgICB9LFxuICAgICAgb25SZWFkeTogKHNlbGVjdGVkRGF0ZXM6IERhdGVbXSwgZGF0ZVN0cmluZzogc3RyaW5nLCBpbnN0YW5jZTogYW55KSA9PiB7XG4gICAgICAgIHRoaXMuZmxhdHBpY2tyUmVhZHkuZW1pdCh7IHNlbGVjdGVkRGF0ZXMsIGRhdGVTdHJpbmcsIGluc3RhbmNlIH0pO1xuICAgICAgfSxcbiAgICAgIG9uVmFsdWVVcGRhdGU6IChcbiAgICAgICAgc2VsZWN0ZWREYXRlczogRGF0ZVtdLFxuICAgICAgICBkYXRlU3RyaW5nOiBzdHJpbmcsXG4gICAgICAgIGluc3RhbmNlOiBhbnlcbiAgICAgICkgPT4ge1xuICAgICAgICB0aGlzLmZsYXRwaWNrclZhbHVlVXBkYXRlLmVtaXQoeyBzZWxlY3RlZERhdGVzLCBkYXRlU3RyaW5nLCBpbnN0YW5jZSB9KTtcbiAgICAgIH0sXG4gICAgICBvbkRheUNyZWF0ZTogKFxuICAgICAgICBzZWxlY3RlZERhdGVzOiBEYXRlW10sXG4gICAgICAgIGRhdGVTdHJpbmc6IHN0cmluZyxcbiAgICAgICAgaW5zdGFuY2U6IGFueSxcbiAgICAgICAgZGF5RWxlbWVudDogSFRNTEVsZW1lbnRcbiAgICAgICkgPT4ge1xuICAgICAgICB0aGlzLmZsYXRwaWNrckRheUNyZWF0ZS5lbWl0KHtcbiAgICAgICAgICBzZWxlY3RlZERhdGVzLFxuICAgICAgICAgIGRhdGVTdHJpbmcsXG4gICAgICAgICAgaW5zdGFuY2UsXG4gICAgICAgICAgZGF5RWxlbWVudFxuICAgICAgICB9KTtcbiAgICAgIH1cbiAgICB9O1xuXG4gICAgT2JqZWN0LmtleXMob3B0aW9ucykuZm9yRWFjaChrZXkgPT4ge1xuICAgICAgaWYgKHR5cGVvZiBvcHRpb25zW2tleV0gPT09ICd1bmRlZmluZWQnKSB7XG4gICAgICAgIGlmICh0eXBlb2YgdGhpcy5vcHRpb25zW2tleV0gIT09ICd1bmRlZmluZWQnKSB7XG4gICAgICAgICAgb3B0aW9uc1trZXldID0gKHRoaXMub3B0aW9ucyBhcyBhbnkpW2tleV07XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgb3B0aW9uc1trZXldID0gKHRoaXMuZGVmYXVsdHMgYXMgYW55KVtrZXldO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfSk7XG4gICAgb3B0aW9ucy50aW1lXzI0aHIgPSBvcHRpb25zLnRpbWUyNGhyO1xuXG4gICAgLy8gd29ya2Fyb3VuZCBidWcgaW4gZmxhdHBpY2tyIDQuNiB3aGVyZSBpdCBkb2Vzbid0IGNvcHkgdGhlIGNsYXNzZXMgYWNyb3NzXG4gICAgLy8gVE9ETyAtIHJlbW92ZSBvbmNlIGZpeCBpbiBodHRwczovL2dpdGh1Yi5jb20vZmxhdHBpY2tyL2ZsYXRwaWNrci9pc3N1ZXMvMTg2MCBpcyByZWxlYXNlZFxuICAgIG9wdGlvbnMuYWx0SW5wdXRDbGFzcyA9XG4gICAgICAob3B0aW9ucy5hbHRJbnB1dENsYXNzIHx8ICcnKSArICcgJyArIHRoaXMuZWxtLm5hdGl2ZUVsZW1lbnQuY2xhc3NOYW1lO1xuXG4gICAgaWYgKCFvcHRpb25zLmVuYWJsZSkge1xuICAgICAgZGVsZXRlIG9wdGlvbnMuZW5hYmxlO1xuICAgIH1cblxuICAgIHRoaXMuaW5zdGFuY2UgPSBmbGF0cGlja3IoXG4gICAgICB0aGlzLmVsbS5uYXRpdmVFbGVtZW50LFxuICAgICAgb3B0aW9uc1xuICAgICkgYXMgZmxhdHBpY2tyLkluc3RhbmNlO1xuICAgIHRoaXMuc2V0RGlzYWJsZWRTdGF0ZSh0aGlzLmlzRGlzYWJsZWQpO1xuICB9XG5cbiAgbmdPbkNoYW5nZXMoY2hhbmdlczogU2ltcGxlQ2hhbmdlcyk6IHZvaWQge1xuICAgIGlmICh0aGlzLmluc3RhbmNlKSB7XG4gICAgICBPYmplY3Qua2V5cyhjaGFuZ2VzKS5mb3JFYWNoKGlucHV0S2V5ID0+IHtcbiAgICAgICAgdGhpcy5pbnN0YW5jZS5zZXQoaW5wdXRLZXkgYXMgYW55LCAodGhpcyBhcyBhbnkpW2lucHV0S2V5XSk7XG4gICAgICB9KTtcbiAgICB9XG4gIH1cblxuICBuZ09uRGVzdHJveSgpOiB2b2lkIHtcbiAgICBpZiAodGhpcy5pbnN0YW5jZSkge1xuICAgICAgdGhpcy5pbnN0YW5jZS5kZXN0cm95KCk7XG4gICAgfVxuICB9XG5cbiAgd3JpdGVWYWx1ZSh2YWx1ZTogYW55KTogdm9pZCB7XG4gICAgbGV0IGNvbnZlcnRlZFZhbHVlOiBhbnkgPSB2YWx1ZTtcbiAgICBpZiAodGhpcy5jb252ZXJ0TW9kZWxWYWx1ZSAmJiB0aGlzLm1vZGUgPT09ICdyYW5nZScgJiYgdmFsdWUpIHtcbiAgICAgIGNvbnZlcnRlZFZhbHVlID0gW3ZhbHVlLmZyb20sIHZhbHVlLnRvXTtcbiAgICB9XG5cbiAgICBpZiAodGhpcy5pbnN0YW5jZSkge1xuICAgICAgdGhpcy5pbnN0YW5jZS5zZXREYXRlKGNvbnZlcnRlZFZhbHVlKTtcbiAgICB9IGVsc2Uge1xuICAgICAgLy8gZmxhdHBpY2tyIGhhc24ndCBiZWVuIGluaXRpYWxpc2VkIHlldCwgc3RvcmUgdGhlIHZhbHVlIGZvciBsYXRlciB1c2VcbiAgICAgIHRoaXMuaW5pdGlhbFZhbHVlID0gY29udmVydGVkVmFsdWU7XG4gICAgfVxuICB9XG5cbiAgcmVnaXN0ZXJPbkNoYW5nZShmbjogYW55KTogdm9pZCB7XG4gICAgdGhpcy5vbkNoYW5nZUZuID0gZm47XG4gIH1cblxuICByZWdpc3Rlck9uVG91Y2hlZChmbjogKCkgPT4gdm9pZCk6IHZvaWQge1xuICAgIHRoaXMub25Ub3VjaGVkRm4gPSBmbjtcbiAgfVxuXG4gIHNldERpc2FibGVkU3RhdGUoaXNEaXNhYmxlZDogYm9vbGVhbik6IHZvaWQge1xuICAgIHRoaXMuaXNEaXNhYmxlZCA9IGlzRGlzYWJsZWQ7XG4gICAgaWYgKHRoaXMuaW5zdGFuY2UpIHtcbiAgICAgIGlmICh0aGlzLmlzRGlzYWJsZWQpIHtcbiAgICAgICAgdGhpcy5yZW5kZXJlci5zZXRQcm9wZXJ0eSh0aGlzLmluc3RhbmNlLl9pbnB1dCwgJ2Rpc2FibGVkJywgJ2Rpc2FibGVkJyk7XG4gICAgICB9IGVsc2Uge1xuICAgICAgICB0aGlzLnJlbmRlcmVyLnJlbW92ZUF0dHJpYnV0ZSh0aGlzLmluc3RhbmNlLl9pbnB1dCwgJ2Rpc2FibGVkJyk7XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgQEhvc3RMaXN0ZW5lcignaW5wdXQnKVxuICBpbnB1dENoYW5nZWQoKTogdm9pZCB7XG4gICAgY29uc3QgdmFsdWU6IHN0cmluZyA9IHRoaXMuZWxtLm5hdGl2ZUVsZW1lbnQudmFsdWU7XG4gICAgaWYgKHRoaXMuY29udmVydE1vZGVsVmFsdWUgJiYgdHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJykge1xuICAgICAgc3dpdGNoICh0aGlzLm1vZGUpIHtcbiAgICAgICAgY2FzZSAnbXVsdGlwbGUnOlxuICAgICAgICAgIGNvbnN0IGRhdGVzOiBEYXRlW10gPSB2YWx1ZVxuICAgICAgICAgICAgLnNwbGl0KCc7ICcpXG4gICAgICAgICAgICAubWFwKHN0ciA9PlxuICAgICAgICAgICAgICB0aGlzLmluc3RhbmNlLnBhcnNlRGF0ZShcbiAgICAgICAgICAgICAgICBzdHIsXG4gICAgICAgICAgICAgICAgdGhpcy5pbnN0YW5jZS5jb25maWcuZGF0ZUZvcm1hdCxcbiAgICAgICAgICAgICAgICAhdGhpcy5pbnN0YW5jZS5jb25maWcuZW5hYmxlVGltZVxuICAgICAgICAgICAgICApXG4gICAgICAgICAgICApO1xuICAgICAgICAgIHRoaXMub25DaGFuZ2VGbihkYXRlcyk7XG4gICAgICAgICAgYnJlYWs7XG5cbiAgICAgICAgY2FzZSAncmFuZ2UnOlxuICAgICAgICAgIGNvbnN0IFtmcm9tLCB0b10gPSB2YWx1ZVxuICAgICAgICAgICAgLnNwbGl0KHRoaXMuaW5zdGFuY2UubDEwbi5yYW5nZVNlcGFyYXRvcilcbiAgICAgICAgICAgIC5tYXAoc3RyID0+XG4gICAgICAgICAgICAgIHRoaXMuaW5zdGFuY2UucGFyc2VEYXRlKFxuICAgICAgICAgICAgICAgIHN0cixcbiAgICAgICAgICAgICAgICB0aGlzLmluc3RhbmNlLmNvbmZpZy5kYXRlRm9ybWF0LFxuICAgICAgICAgICAgICAgICF0aGlzLmluc3RhbmNlLmNvbmZpZy5lbmFibGVUaW1lXG4gICAgICAgICAgICAgIClcbiAgICAgICAgICAgICk7XG4gICAgICAgICAgdGhpcy5vbkNoYW5nZUZuKHsgZnJvbSwgdG8gfSk7XG4gICAgICAgICAgYnJlYWs7XG5cbiAgICAgICAgY2FzZSAnc2luZ2xlJzpcbiAgICAgICAgZGVmYXVsdDpcbiAgICAgICAgICB0aGlzLm9uQ2hhbmdlRm4oXG4gICAgICAgICAgICB0aGlzLmluc3RhbmNlLnBhcnNlRGF0ZShcbiAgICAgICAgICAgICAgdmFsdWUsXG4gICAgICAgICAgICAgIHRoaXMuaW5zdGFuY2UuY29uZmlnLmRhdGVGb3JtYXQsXG4gICAgICAgICAgICAgICF0aGlzLmluc3RhbmNlLmNvbmZpZy5lbmFibGVUaW1lXG4gICAgICAgICAgICApXG4gICAgICAgICAgKTtcbiAgICAgIH1cbiAgICB9IGVsc2Uge1xuICAgICAgdGhpcy5vbkNoYW5nZUZuKHZhbHVlKTtcbiAgICB9XG4gIH1cbn1cbiIsImltcG9ydCB7XG4gIE5nTW9kdWxlLFxuICBNb2R1bGVXaXRoUHJvdmlkZXJzLFxuICBJbmplY3Rpb25Ub2tlbixcbiAgUHJvdmlkZXJcbn0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQgeyBGbGF0cGlja3JEaXJlY3RpdmUgfSBmcm9tICcuL2ZsYXRwaWNrci5kaXJlY3RpdmUnO1xuaW1wb3J0IHtcbiAgRmxhdHBpY2tyRGVmYXVsdHMsXG4gIEZsYXRwaWNrckRlZmF1bHRzSW50ZXJmYWNlXG59IGZyb20gJy4vZmxhdHBpY2tyLWRlZmF1bHRzLnNlcnZpY2UnO1xuXG5leHBvcnQgY29uc3QgVVNFUl9ERUZBVUxUUyA9IG5ldyBJbmplY3Rpb25Ub2tlbignZmxhdHBpY2tyIGRlZmF1bHRzJyk7XG5cbmV4cG9ydCBmdW5jdGlvbiBkZWZhdWx0c0ZhY3RvcnkoXG4gIHVzZXJEZWZhdWx0czogRmxhdHBpY2tyRGVmYXVsdHNJbnRlcmZhY2Vcbik6IEZsYXRwaWNrckRlZmF1bHRzIHtcbiAgY29uc3QgZGVmYXVsdHM6IEZsYXRwaWNrckRlZmF1bHRzID0gbmV3IEZsYXRwaWNrckRlZmF1bHRzKCk7XG4gIE9iamVjdC5hc3NpZ24oZGVmYXVsdHMsIHVzZXJEZWZhdWx0cyk7XG4gIHJldHVybiBkZWZhdWx0cztcbn1cblxuQE5nTW9kdWxlKHtcbiAgZGVjbGFyYXRpb25zOiBbRmxhdHBpY2tyRGlyZWN0aXZlXSxcbiAgZXhwb3J0czogW0ZsYXRwaWNrckRpcmVjdGl2ZV1cbn0pXG5leHBvcnQgY2xhc3MgRmxhdHBpY2tyTW9kdWxlIHtcbiAgc3RhdGljIGZvclJvb3QoXG4gICAgdXNlckRlZmF1bHRzOiBGbGF0cGlja3JEZWZhdWx0c0ludGVyZmFjZSA9IHt9XG4gICk6IE1vZHVsZVdpdGhQcm92aWRlcnMge1xuICAgIHJldHVybiB7XG4gICAgICBuZ01vZHVsZTogRmxhdHBpY2tyTW9kdWxlLFxuICAgICAgcHJvdmlkZXJzOiBbXG4gICAgICAgIHtcbiAgICAgICAgICBwcm92aWRlOiBVU0VSX0RFRkFVTFRTLFxuICAgICAgICAgIHVzZVZhbHVlOiB1c2VyRGVmYXVsdHNcbiAgICAgICAgfSxcbiAgICAgICAge1xuICAgICAgICAgIHByb3ZpZGU6IEZsYXRwaWNrckRlZmF1bHRzLFxuICAgICAgICAgIHVzZUZhY3Rvcnk6IGRlZmF1bHRzRmFjdG9yeSxcbiAgICAgICAgICBkZXBzOiBbVVNFUl9ERUZBVUxUU11cbiAgICAgICAgfVxuICAgICAgXVxuICAgIH07XG4gIH1cbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUFBOzs7Ozt5QkEwTnNCLFFBQVE7Ozs7d0JBS1IsS0FBSzs7Ozs7NkJBTUQsRUFBRTs7OzswQkFLSixLQUFLOzs7O3dCQUtILFNBQVM7Ozs7OEJBS1AsUUFBUTs7Ozs7MEJBTVosSUFBSTs7Ozs7MEJBTUwsT0FBTzs7OzsyQkFLTCxFQUFFOzs7OzZCQUtBLENBQUM7Ozs7OEJBS0EsQ0FBQzs7Ozt1QkFLSSxFQUFFOzs7Ozs2QkFNUixLQUFLOzs7OzBCQVVSLEtBQUs7Ozs7NkJBS0YsS0FBSzs7OzswQkFLUSxTQUFTOzs7OzZCQUt2QixDQUFDOzs7O3NCQUtQLEtBQUs7Ozs7dUJBS0UsU0FBUzs7Ozt1QkFLVCxTQUFTOzs7OytCQUtSLENBQUM7Ozs7b0JBS2EsUUFBUTs7Ozt5QkFLNUIsR0FBRzs7OzswQkFLRCxLQUFLOzs7O21CQUtHLElBQUksSUFBSSxFQUFFOzs7O3lCQVVwQixHQUFHOzs7O3FDQUtVLEtBQUs7Ozs7c0JBS3BCLEtBQUs7Ozs7d0JBS0gsS0FBSzs7Ozs7bUJBTVYsS0FBSzs7OzsyQkFLRyxLQUFLOzs7O29CQVdaLEtBQUs7Ozs7dUJBS0osRUFBRTs7OztzQkFLTyxTQUFTOzs7O2lDQUtOLEtBQUs7Ozs7MEJBS2IsQ0FBQzs7OztpQ0FLcUIsUUFBUTs7OztZQTlNcEQsVUFBVTs7Ozs7OztBQ3JOWCx1QkFpQ2EsZ0NBQWdDLEdBQVE7SUFDbkQsT0FBTyxFQUFFLGlCQUFpQjtJQUMxQixXQUFXLEVBQUUsVUFBVSxDQUFDLE1BQU0sa0JBQWtCLENBQUM7O0lBQ2pELEtBQUssRUFBRSxJQUFJO0NBQ1osQ0FBQztBQVdGOzs7Ozs7SUFrU0UsWUFDVSxLQUNBLFVBQ0E7UUFGQSxRQUFHLEdBQUgsR0FBRztRQUNILGFBQVEsR0FBUixRQUFRO1FBQ1IsYUFBUSxHQUFSLFFBQVE7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O3VCQWhSNkIsRUFBRTs7Ozs4QkE2TU0sSUFBSSxZQUFZLEVBQUU7Ozs7K0JBTWpCLElBQUksWUFBWSxFQUFFOzs7O29DQVF0RSxJQUFJLFlBQVksRUFBRTs7Ozs2QkFNZ0MsSUFBSSxZQUFZLEVBQUU7Ozs7OEJBTWpCLElBQUksWUFBWSxFQUFFOzs7O29DQVFyRSxJQUFJLFlBQVksRUFBRTs7OzttQ0FRbEIsSUFBSSxZQUFZLEVBQUU7Ozs7a0NBUWxCLElBQUksWUFBWSxFQUFFOzBCQU9ELEtBQUs7MEJBR1MsU0FBUTsyQkFFN0IsU0FBUTtLQU1sQjs7OztJQUVKLGVBQWU7UUFDYix1QkFBTSxPQUFPLEdBQVE7WUFDbkIsU0FBUyxFQUFFLElBQUksQ0FBQyxTQUFTO1lBQ3pCLFFBQVEsRUFBRSxJQUFJLENBQUMsUUFBUTtZQUN2QixhQUFhLEVBQUUsSUFBSSxDQUFDLGFBQWE7WUFDakMsVUFBVSxFQUFFLElBQUksQ0FBQyxVQUFVO1lBQzNCLFFBQVEsRUFBRSxJQUFJLENBQUMsUUFBUTtZQUN2QixjQUFjLEVBQUUsSUFBSSxDQUFDLGNBQWM7WUFDbkMsVUFBVSxFQUFFLElBQUksQ0FBQyxVQUFVO1lBQzNCLFVBQVUsRUFBRSxJQUFJLENBQUMsVUFBVTtZQUMzQixXQUFXLEVBQUUsSUFBSSxDQUFDLFdBQVc7WUFDN0IsYUFBYSxFQUFFLElBQUksQ0FBQyxhQUFhO1lBQ2pDLGNBQWMsRUFBRSxJQUFJLENBQUMsY0FBYztZQUNuQyxPQUFPLEVBQUUsSUFBSSxDQUFDLE9BQU87WUFDckIsYUFBYSxFQUFFLElBQUksQ0FBQyxhQUFhO1lBQ2pDLE1BQU0sRUFBRSxJQUFJLENBQUMsTUFBTTtZQUNuQixVQUFVLEVBQUUsSUFBSSxDQUFDLFVBQVU7WUFDM0IsYUFBYSxFQUFFLElBQUksQ0FBQyxhQUFhO1lBQ2pDLFVBQVUsRUFBRSxJQUFJLENBQUMsVUFBVTtZQUMzQixhQUFhLEVBQUUsSUFBSSxDQUFDLGFBQWE7WUFDakMsV0FBVyxFQUFFLElBQUksQ0FBQyxZQUFZO1lBQzlCLE1BQU0sRUFBRSxJQUFJLENBQUMsTUFBTTtZQUNuQixPQUFPLEVBQUUsSUFBSSxDQUFDLE9BQU87WUFDckIsT0FBTyxFQUFFLElBQUksQ0FBQyxPQUFPO1lBQ3JCLGVBQWUsRUFBRSxJQUFJLENBQUMsZUFBZTtZQUNyQyxJQUFJLEVBQUUsSUFBSSxDQUFDLElBQUk7WUFDZixTQUFTLEVBQUUsSUFBSSxDQUFDLFNBQVM7WUFDekIsVUFBVSxFQUFFLElBQUksQ0FBQyxVQUFVO1lBQzNCLEdBQUcsRUFBRSxJQUFJLENBQUMsR0FBRztZQUNiLFNBQVMsRUFBRSxJQUFJLENBQUMsU0FBUztZQUN6QixTQUFTLEVBQUUsSUFBSSxDQUFDLFNBQVM7WUFDekIscUJBQXFCLEVBQUUsSUFBSSxDQUFDLHFCQUFxQjtZQUNqRCxVQUFVLEVBQUUsSUFBSSxDQUFDLFVBQVU7WUFDM0IsaUJBQWlCLEVBQUUsSUFBSSxDQUFDLGlCQUFpQjtZQUN6QyxNQUFNLEVBQUUsSUFBSSxDQUFDLE1BQU07WUFDbkIsUUFBUSxFQUFFLElBQUksQ0FBQyxRQUFRO1lBQ3ZCLFdBQVcsRUFBRSxJQUFJLENBQUMsV0FBVztZQUM3QixPQUFPLEVBQUUsSUFBSSxDQUFDLE9BQU87WUFDckIsSUFBSSxFQUFFLElBQUksQ0FBQyxJQUFJO1lBQ2YsT0FBTyxFQUFFLElBQUksQ0FBQyxPQUFPO1lBQ3JCLE1BQU0sRUFBRSxJQUFJLENBQUMsTUFBTTtZQUNuQixRQUFRLEVBQUUsQ0FBQyxhQUFxQixFQUFFLFVBQWtCLEVBQUUsUUFBYTtnQkFDakUsSUFBSSxDQUFDLGVBQWUsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDcEU7WUFDRCxNQUFNLEVBQUUsQ0FBQyxhQUFxQixFQUFFLFVBQWtCLEVBQUUsUUFBYTtnQkFDL0QsSUFBSSxDQUFDLGFBQWEsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDbEU7WUFDRCxPQUFPLEVBQUUsQ0FBQyxhQUFxQixFQUFFLFVBQWtCLEVBQUUsUUFBYTtnQkFDaEUsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDbkU7WUFDRCxhQUFhLEVBQUUsQ0FDYixhQUFxQixFQUNyQixVQUFrQixFQUNsQixRQUFhO2dCQUViLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDekU7WUFDRCxZQUFZLEVBQUUsQ0FDWixhQUFxQixFQUNyQixVQUFrQixFQUNsQixRQUFhO2dCQUViLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDeEU7WUFDRCxPQUFPLEVBQUUsQ0FBQyxhQUFxQixFQUFFLFVBQWtCLEVBQUUsUUFBYTtnQkFDaEUsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDbkU7WUFDRCxhQUFhLEVBQUUsQ0FDYixhQUFxQixFQUNyQixVQUFrQixFQUNsQixRQUFhO2dCQUViLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxJQUFJLENBQUMsRUFBRSxhQUFhLEVBQUUsVUFBVSxFQUFFLFFBQVEsRUFBRSxDQUFDLENBQUM7YUFDekU7WUFDRCxXQUFXLEVBQUUsQ0FDWCxhQUFxQixFQUNyQixVQUFrQixFQUNsQixRQUFhLEVBQ2IsVUFBdUI7Z0JBRXZCLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxJQUFJLENBQUM7b0JBQzNCLGFBQWE7b0JBQ2IsVUFBVTtvQkFDVixRQUFRO29CQUNSLFVBQVU7aUJBQ1gsQ0FBQyxDQUFDO2FBQ0o7U0FDRixDQUFDO1FBRUYsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxPQUFPLENBQUMsR0FBRztZQUM5QixJQUFJLE9BQU8sT0FBTyxDQUFDLEdBQUcsQ0FBQyxLQUFLLFdBQVcsRUFBRTtnQkFDdkMsSUFBSSxPQUFPLElBQUksQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLEtBQUssV0FBVyxFQUFFO29CQUM1QyxPQUFPLENBQUMsR0FBRyxDQUFDLEdBQUcsbUJBQUMsSUFBSSxDQUFDLE9BQWMsR0FBRSxHQUFHLENBQUMsQ0FBQztpQkFDM0M7cUJBQU07b0JBQ0wsT0FBTyxDQUFDLEdBQUcsQ0FBQyxHQUFHLG1CQUFDLElBQUksQ0FBQyxRQUFlLEdBQUUsR0FBRyxDQUFDLENBQUM7aUJBQzVDO2FBQ0Y7U0FDRixDQUFDLENBQUM7UUFDSCxPQUFPLENBQUMsU0FBUyxHQUFHLE9BQU8sQ0FBQyxRQUFRLENBQUM7OztRQUlyQyxPQUFPLENBQUMsYUFBYTtZQUNuQixDQUFDLE9BQU8sQ0FBQyxhQUFhLElBQUksRUFBRSxJQUFJLEdBQUcsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLGFBQWEsQ0FBQyxTQUFTLENBQUM7UUFFekUsSUFBSSxDQUFDLE9BQU8sQ0FBQyxNQUFNLEVBQUU7WUFDbkIsT0FBTyxPQUFPLENBQUMsTUFBTSxDQUFDO1NBQ3ZCO1FBRUQsSUFBSSxDQUFDLFFBQVEscUJBQUcsU0FBUyxDQUN2QixJQUFJLENBQUMsR0FBRyxDQUFDLGFBQWEsRUFDdEIsT0FBTyxDQUNjLENBQUEsQ0FBQztRQUN4QixJQUFJLENBQUMsZ0JBQWdCLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFDO0tBQ3hDOzs7OztJQUVELFdBQVcsQ0FBQyxPQUFzQjtRQUNoQyxJQUFJLElBQUksQ0FBQyxRQUFRLEVBQUU7WUFDakIsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxPQUFPLENBQUMsUUFBUTtnQkFDbkMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxHQUFHLG1CQUFDLFFBQWUsR0FBRSxtQkFBQyxJQUFXLEdBQUUsUUFBUSxDQUFDLENBQUMsQ0FBQzthQUM3RCxDQUFDLENBQUM7U0FDSjtLQUNGOzs7O0lBRUQsV0FBVztRQUNULElBQUksSUFBSSxDQUFDLFFBQVEsRUFBRTtZQUNqQixJQUFJLENBQUMsUUFBUSxDQUFDLE9BQU8sRUFBRSxDQUFDO1NBQ3pCO0tBQ0Y7Ozs7O0lBRUQsVUFBVSxDQUFDLEtBQVU7UUFDbkIscUJBQUksY0FBYyxHQUFRLEtBQUssQ0FBQztRQUNoQyxJQUFJLElBQUksQ0FBQyxpQkFBaUIsSUFBSSxJQUFJLENBQUMsSUFBSSxLQUFLLE9BQU8sSUFBSSxLQUFLLEVBQUU7WUFDNUQsY0FBYyxHQUFHLENBQUMsS0FBSyxDQUFDLElBQUksRUFBRSxLQUFLLENBQUMsRUFBRSxDQUFDLENBQUM7U0FDekM7UUFFRCxJQUFJLElBQUksQ0FBQyxRQUFRLEVBQUU7WUFDakIsSUFBSSxDQUFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsY0FBYyxDQUFDLENBQUM7U0FDdkM7YUFBTTs7WUFFTCxJQUFJLENBQUMsWUFBWSxHQUFHLGNBQWMsQ0FBQztTQUNwQztLQUNGOzs7OztJQUVELGdCQUFnQixDQUFDLEVBQU87UUFDdEIsSUFBSSxDQUFDLFVBQVUsR0FBRyxFQUFFLENBQUM7S0FDdEI7Ozs7O0lBRUQsaUJBQWlCLENBQUMsRUFBYztRQUM5QixJQUFJLENBQUMsV0FBVyxHQUFHLEVBQUUsQ0FBQztLQUN2Qjs7Ozs7SUFFRCxnQkFBZ0IsQ0FBQyxVQUFtQjtRQUNsQyxJQUFJLENBQUMsVUFBVSxHQUFHLFVBQVUsQ0FBQztRQUM3QixJQUFJLElBQUksQ0FBQyxRQUFRLEVBQUU7WUFDakIsSUFBSSxJQUFJLENBQUMsVUFBVSxFQUFFO2dCQUNuQixJQUFJLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLE1BQU0sRUFBRSxVQUFVLEVBQUUsVUFBVSxDQUFDLENBQUM7YUFDekU7aUJBQU07Z0JBQ0wsSUFBSSxDQUFDLFFBQVEsQ0FBQyxlQUFlLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLEVBQUUsVUFBVSxDQUFDLENBQUM7YUFDakU7U0FDRjtLQUNGOzs7O0lBR0QsWUFBWTtRQUNWLHVCQUFNLEtBQUssR0FBVyxJQUFJLENBQUMsR0FBRyxDQUFDLGFBQWEsQ0FBQyxLQUFLLENBQUM7UUFDbkQsSUFBSSxJQUFJLENBQUMsaUJBQWlCLElBQUksT0FBTyxLQUFLLEtBQUssUUFBUSxFQUFFO1lBQ3ZELFFBQVEsSUFBSSxDQUFDLElBQUk7Z0JBQ2YsS0FBSyxVQUFVO29CQUNiLHVCQUFNLEtBQUssR0FBVyxLQUFLO3lCQUN4QixLQUFLLENBQUMsSUFBSSxDQUFDO3lCQUNYLEdBQUcsQ0FBQyxHQUFHLElBQ04sSUFBSSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQ3JCLEdBQUcsRUFDSCxJQUFJLENBQUMsUUFBUSxDQUFDLE1BQU0sQ0FBQyxVQUFVLEVBQy9CLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsVUFBVSxDQUNqQyxDQUNGLENBQUM7b0JBQ0osSUFBSSxDQUFDLFVBQVUsQ0FBQyxLQUFLLENBQUMsQ0FBQztvQkFDdkIsTUFBTTtnQkFFUixLQUFLLE9BQU87b0JBQ1YsTUFBTSxDQUFDLElBQUksRUFBRSxFQUFFLENBQUMsR0FBRyxLQUFLO3lCQUNyQixLQUFLLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsY0FBYyxDQUFDO3lCQUN4QyxHQUFHLENBQUMsR0FBRyxJQUNOLElBQUksQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUNyQixHQUFHLEVBQ0gsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsVUFBVSxFQUMvQixDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FDakMsQ0FDRixDQUFDO29CQUNKLElBQUksQ0FBQyxVQUFVLENBQUMsRUFBRSxJQUFJLEVBQUUsRUFBRSxFQUFFLENBQUMsQ0FBQztvQkFDOUIsTUFBTTtnQkFFUixLQUFLLFFBQVEsQ0FBQztnQkFDZDtvQkFDRSxJQUFJLENBQUMsVUFBVSxDQUNiLElBQUksQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUNyQixLQUFLLEVBQ0wsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsVUFBVSxFQUMvQixDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FDakMsQ0FDRixDQUFDO2FBQ0w7U0FDRjthQUFNO1lBQ0wsSUFBSSxDQUFDLFVBQVUsQ0FBQyxLQUFLLENBQUMsQ0FBQztTQUN4QjtLQUNGOzs7WUFoZ0JGLFNBQVMsU0FBQztnQkFDVCxRQUFRLEVBQUUsZ0JBQWdCO2dCQUMxQixTQUFTLEVBQUUsQ0FBQyxnQ0FBZ0MsQ0FBQztnQkFDN0MsSUFBSSxFQUFFOztvQkFFSixRQUFRLEVBQUUsZUFBZTtpQkFDMUI7Z0JBQ0QsUUFBUSxFQUFFLGNBQWM7YUFDekI7Ozs7WUE3Q0MsVUFBVTtZQWFWLGlCQUFpQjtZQUhqQixTQUFTOzs7c0JBeURSLEtBQUs7d0JBS0wsS0FBSzt1QkFLTCxLQUFLOzRCQU1MLEtBQUs7eUJBS0wsS0FBSzt1QkFLTCxLQUFLOzZCQUtMLEtBQUs7eUJBTUwsS0FBSzt5QkFNTCxLQUFLOzBCQUtMLEtBQUs7NEJBSUwsS0FBSzs2QkFLTCxLQUFLO3NCQUtMLEtBQUs7NEJBTUwsS0FBSztxQkFLTCxLQUFLO3lCQUtMLEtBQUs7NEJBS0wsS0FBSzt5QkFLTCxLQUFLOzRCQUtMLEtBQUs7cUJBS0wsS0FBSztzQkFLTCxLQUFLO3NCQUtMLEtBQUs7OEJBS0wsS0FBSzttQkFLTCxLQUFLO3dCQUtMLEtBQUs7eUJBS0wsS0FBSztrQkFLTCxLQUFLO3dCQUtMLEtBQUs7d0JBS0wsS0FBSztvQ0FLTCxLQUFLO3lCQUtMLEtBQUs7cUJBS0wsS0FBSzt1QkFLTCxLQUFLOzBCQUtMLEtBQUs7c0JBTUwsS0FBSzttQkFLTCxLQUFLO3NCQUtMLEtBQUs7cUJBS0wsS0FBSztnQ0FLTCxLQUFLO2dDQUtMLEtBQUs7NkJBS0wsTUFBTTs4QkFNTixNQUFNO21DQU1OLE1BQU07NEJBUU4sTUFBTTs2QkFNTixNQUFNO21DQU1OLE1BQU07a0NBUU4sTUFBTTtpQ0FRTixNQUFNOzJCQTBMTixZQUFZLFNBQUMsT0FBTzs7Ozs7OztBQzNmdkIsdUJBWWEsYUFBYSxHQUFHLElBQUksY0FBYyxDQUFDLG9CQUFvQixDQUFDLENBQUM7Ozs7O0FBRXRFLHlCQUNFLFlBQXdDO0lBRXhDLHVCQUFNLFFBQVEsR0FBc0IsSUFBSSxpQkFBaUIsRUFBRSxDQUFDO0lBQzVELE1BQU0sQ0FBQyxNQUFNLENBQUMsUUFBUSxFQUFFLFlBQVksQ0FBQyxDQUFDO0lBQ3RDLE9BQU8sUUFBUSxDQUFDO0NBQ2pCO0FBTUQ7Ozs7O0lBQ0UsT0FBTyxPQUFPLENBQ1osZUFBMkMsRUFBRTtRQUU3QyxPQUFPO1lBQ0wsUUFBUSxFQUFFLGVBQWU7WUFDekIsU0FBUyxFQUFFO2dCQUNUO29CQUNFLE9BQU8sRUFBRSxhQUFhO29CQUN0QixRQUFRLEVBQUUsWUFBWTtpQkFDdkI7Z0JBQ0Q7b0JBQ0UsT0FBTyxFQUFFLGlCQUFpQjtvQkFDMUIsVUFBVSxFQUFFLGVBQWU7b0JBQzNCLElBQUksRUFBRSxDQUFDLGFBQWEsQ0FBQztpQkFDdEI7YUFDRjtTQUNGLENBQUM7S0FDSDs7O1lBdEJGLFFBQVEsU0FBQztnQkFDUixZQUFZLEVBQUUsQ0FBQyxrQkFBa0IsQ0FBQztnQkFDbEMsT0FBTyxFQUFFLENBQUMsa0JBQWtCLENBQUM7YUFDOUI7Ozs7Ozs7Ozs7Ozs7OzsifQ==
+      //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5ndWxhcngtZmxhdHBpY2tyLmpzLm1hcCIsInNvdXJjZXMiOlsibmc6Ly9hbmd1bGFyeC1mbGF0cGlja3IvZmxhdHBpY2tyLWRlZmF1bHRzLnNlcnZpY2UudHMiLCJuZzovL2FuZ3VsYXJ4LWZsYXRwaWNrci9mbGF0cGlja3IuZGlyZWN0aXZlLnRzIiwibmc6Ly9hbmd1bGFyeC1mbGF0cGlja3IvZmxhdHBpY2tyLm1vZHVsZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBJbmplY3RhYmxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbmV4cG9ydCB0eXBlIERpc2FibGVFbmFibGVEYXRlID1cbiAgfCBzdHJpbmdcbiAgfCBEYXRlXG4gIHwgeyBmcm9tOiBEYXRlIHwgc3RyaW5nOyB0bzogRGF0ZSB8IHN0cmluZyB9XG4gIHwgKChkYXRlOiBEYXRlKSA9PiBib29sZWFuKTtcblxuLy8gdHNsaW50OmRpc2FibGUgbm8taW5mZXJyYWJsZS10eXBlc1xuXG5leHBvcnQgaW50ZXJmYWNlIEZsYXRwaWNrckRlZmF1bHRzSW50ZXJmYWNlIHtcbiAgLyoqXG4gICAqIEV4YWN0bHkgdGhlIHNhbWUgYXMgZGF0ZSBmb3JtYXQsIGJ1dCBmb3IgdGhlIGFsdElucHV0IGZpZWxkLlxuICAgKi9cbiAgYWx0Rm9ybWF0Pzogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBcdFNob3cgdGhlIHVzZXIgYSByZWFkYWJsZSBkYXRlIChhcyBwZXIgYWx0Rm9ybWF0KSwgYnV0IHJldHVybiBzb21ldGhpbmcgdG90YWxseSBkaWZmZXJlbnQgdG8gdGhlIHNlcnZlci5cbiAgICovXG4gIGFsdElucHV0PzogYm9vbGVhbjtcblxuICAvKipcbiAgICogVGhpcyBjbGFzcyB3aWxsIGJlIGFkZGVkIHRvIHRoZSBpbnB1dCBlbGVtZW50IGNyZWF0ZWQgYnkgdGhlIGFsdElucHV0IG9wdGlvbi5cbiAgICogTm90ZSB0aGF0IGBhbHRJbnB1dGAgYWxyZWFkeSBpbmhlcml0cyBjbGFzc2VzIGZyb20gdGhlIG9yaWdpbmFsIGlucHV0LlxuICAgKi9cbiAgYWx0SW5wdXRDbGFzcz86IHN0cmluZztcblxuICAvKipcbiAgICogQWxsb3dzIHRoZSB1c2VyIHRvIGVudGVyIGEgZGF0ZSBkaXJlY3RseSBpbnB1dCB0aGUgaW5wdXQgZmllbGQuIEJ5IGRlZmF1bHQsIGRpcmVjdCBlbnRyeSBpcyBkaXNhYmxlZC5cbiAgICovXG4gIGFsbG93SW5wdXQ/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBJbnN0ZWFkIG9mIGBib2R5YCwgYXBwZW5kcyB0aGUgY2FsZW5kYXIgdG8gdGhlIHNwZWNpZmllZCBub2RlIGluc3RlYWQuXG4gICAqL1xuICBhcHBlbmRUbz86IEhUTUxFbGVtZW50O1xuXG4gIC8qKlxuICAgKiBEZWZpbmVzIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGZvcm1hdHRlZCBpbiB0aGUgYXJpYS1sYWJlbCBmb3IgY2FsZW5kYXIgZGF5cywgdXNpbmcgdGhlIHNhbWUgdG9rZW5zIGFzIGRhdGVGb3JtYXQuIElmIHlvdSBjaGFuZ2UgdGhpcywgeW91IHNob3VsZCBjaG9vc2UgYSB2YWx1ZSB0aGF0IHdpbGwgbWFrZSBzZW5zZSBpZiBhIHNjcmVlbiByZWFkZXIgcmVhZHMgaXQgb3V0IGxvdWQuXG4gICAqL1xuICBhcmlhRGF0ZUZvcm1hdD86IHN0cmluZztcblxuICAvKipcbiAgICogV2hldGhlciBjbGlja2luZyBvbiB0aGUgaW5wdXQgc2hvdWxkIG9wZW4gdGhlIHBpY2tlci5cbiAgICogWW91IGNvdWxkIGRpc2FibGUgdGhpcyBpZiB5b3Ugd2lzaCB0byBvcGVuIHRoZSBjYWxlbmRhciBtYW51YWxseSBgd2l0aC5vcGVuKClgLlxuICAgKi9cbiAgY2xpY2tPcGVucz86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEEgc3RyaW5nIG9mIGNoYXJhY3RlcnMgd2hpY2ggYXJlIHVzZWQgdG8gZGVmaW5lIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGRpc3BsYXllZCBpbiB0aGUgaW5wdXQgYm94LlxuICAgKiBUaGUgc3VwcG9ydGVkIGNoYXJhY3RlcnMgYXJlIGRlZmluZWQgaW4gdGhlIHRhYmxlIGJlbG93LlxuICAgKi9cbiAgZGF0ZUZvcm1hdD86IHN0cmluZztcbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIGhvdXIgZWxlbWVudC5cbiAgICovXG4gIGRlZmF1bHRIb3VyPzogbnVtYmVyO1xuICAvKipcbiAgICogSW5pdGlhbCB2YWx1ZSBvZiB0aGUgbWludXRlIGVsZW1lbnQuXG4gICAqL1xuICBkZWZhdWx0TWludXRlPzogbnVtYmVyO1xuXG4gIC8qKlxuICAgKiBTZWUgPGEgaHJlZj1cImh0dHBzOi8vY2htbG4uZ2l0aHViLmlvL2ZsYXRwaWNrci9leGFtcGxlcy8jZGlzYWJsaW5nLXNwZWNpZmljLWRhdGVzXCI+ZGlzYWJsaW5nIGRhdGVzPC9hPi5cbiAgICovXG4gIGRpc2FibGU/OiBEaXNhYmxlRW5hYmxlRGF0ZVtdO1xuXG4gIC8qKlxuICAgKiBTZXQgZGlzYWJsZU1vYmlsZSB0byB0cnVlIHRvIGFsd2F5cyB1c2UgdGhlIG5vbi1uYXRpdmUgcGlja2VyLlxuICAgKiBCeSBkZWZhdWx0LCBGbGF0cGlja3IgdXRpbGl6ZXMgbmF0aXZlIGRhdGV0aW1lIHdpZGdldHMgdW5sZXNzIGNlcnRhaW4gb3B0aW9ucyAoZS5nLiBkaXNhYmxlKSBhcmUgdXNlZC5cbiAgICovXG4gIGRpc2FibGVNb2JpbGU/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBTZWUgPGEgaHJlZj1cImh0dHBzOi8vY2htbG4uZ2l0aHViLmlvL2ZsYXRwaWNrci9leGFtcGxlcy8jZGlzYWJsaW5nLWFsbC1kYXRlcy1leGNlcHQtc2VsZWN0LWZld1wiPmVuYWJsaW5nIGRhdGVzPC9hPi5cbiAgICovXG4gIGVuYWJsZT86IERpc2FibGVFbmFibGVEYXRlW107XG5cbiAgLyoqXG4gICAqIEVuYWJsZXMgdGltZSBwaWNrZXIuXG4gICAqL1xuICBlbmFibGVUaW1lPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogRW5hYmxlcyBzZWNvbmRzIGluIHRoZSB0aW1lIHBpY2tlci5cbiAgICovXG4gIGVuYWJsZVNlY29uZHM/OiBib29sZWFuO1xuICAvKipcbiAgICogQWxsb3dzIHVzaW5nIGEgY3VzdG9tIGRhdGUgZm9ybWF0dGluZyBmdW5jdGlvbiBpbnN0ZWFkIG9mIHRoZSBidWlsdC1pbiBoYW5kbGluZyBmb3IgZGF0ZSBmb3JtYXRzIHVzaW5nIGRhdGVGb3JtYXQsIGFsdEZvcm1hdCwgZXRjLlxuICAgKi9cbiAgZm9ybWF0RGF0ZT86ICh2YWx1ZTogYW55KSA9PiBzdHJpbmc7XG4gIC8qKlxuICAgKiBBZGp1c3RzIHRoZSBzdGVwIGZvciB0aGUgaG91ciBpbnB1dCAoaW5jbC4gc2Nyb2xsaW5nKS5cbiAgICovXG4gIGhvdXJJbmNyZW1lbnQ/OiBudW1iZXI7XG5cbiAgLyoqXG4gICAqIERpc3BsYXlzIHRoZSBjYWxlbmRhciBpbmxpbmUuXG4gICAqL1xuICBpbmxpbmU/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBUaGUgbWF4aW11bSBkYXRlIHRoYXQgYSB1c2VyIGNhbiBwaWNrIHRvIChpbmNsdXNpdmUpLlxuICAgKi9cbiAgbWF4RGF0ZT86IHN0cmluZyB8IERhdGU7XG5cbiAgLyoqXG4gICAqIFRoZSBtaW5pbXVtIGRhdGUgdGhhdCBhIHVzZXIgY2FuIHN0YXJ0IHBpY2tpbmcgZnJvbSAoaW5jbHVzaXZlKS5cbiAgICovXG4gIG1pbkRhdGU/OiBzdHJpbmcgfCBEYXRlO1xuXG4gIC8qKlxuICAgKiBBZGp1c3RzIHRoZSBzdGVwIGZvciB0aGUgbWludXRlIGlucHV0IChpbmNsLiBzY3JvbGxpbmcpLlxuICAgKi9cbiAgbWludXRlSW5jcmVtZW50PzogbnVtYmVyO1xuXG4gIC8qKlxuICAgKiBTZWxlY3QgYSBzaW5nbGUgZGF0ZSwgbXVsdGlwbGUgZGF0ZXMgb3IgYSBkYXRlIHJhbmdlLlxuICAgKi9cbiAgbW9kZT86ICdzaW5nbGUnIHwgJ211bHRpcGxlJyB8ICdyYW5nZSc7XG5cbiAgLyoqXG4gICAqIEhUTUwgZm9yIHRoZSBhcnJvdyBpY29uLCB1c2VkIHRvIHN3aXRjaCBtb250aHMuXG4gICAqL1xuICBuZXh0QXJyb3c/OiBzdHJpbmc7XG5cbiAgLyoqXG4gICAqIEhpZGVzIHRoZSBkYXkgc2VsZWN0aW9uIGluIGNhbGVuZGFyLiBVc2UgaXQgYWxvbmcgd2l0aCBgZW5hYmxlVGltZWAgdG8gY3JlYXRlIGEgdGltZSBwaWNrZXIuXG4gICAqL1xuICBub0NhbGVuZGFyPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogUHJvdmlkZSBhIGRhdGUgZm9yICd0b2RheScsIHdoaWNoIHdpbGwgYmUgdXNlZCBpbnN0ZWFkIG9mIFwibmV3IERhdGUoKVwiXG4gICAqL1xuICBub3c/OiBEYXRlIHwgc3RyaW5nIHwgbnVtYmVyO1xuXG4gIC8qKlxuICAgKiBGdW5jdGlvbiB0aGF0IGV4cGVjdHMgYSBkYXRlIHN0cmluZyBhbmQgbXVzdCByZXR1cm4gYSBEYXRlIG9iamVjdC5cbiAgICovXG4gIHBhcnNlRGF0ZT86IChzdHI6IHN0cmluZykgPT4gRGF0ZTtcblxuICAvKipcbiAgICogSFRNTCBmb3IgdGhlIGxlZnQgYXJyb3cgaWNvbi5cbiAgICovXG4gIHByZXZBcnJvdz86IHN0cmluZztcblxuICAvKipcbiAgICogU2hvdyB0aGUgbW9udGggdXNpbmcgdGhlIHNob3J0aGFuZCB2ZXJzaW9uIChpZSwgU2VwIGluc3RlYWQgb2YgU2VwdGVtYmVyKS5cbiAgICovXG4gIHNob3J0aGFuZEN1cnJlbnRNb250aD86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFBvc2l0aW9uIHRoZSBjYWxlbmRhciBpbnNpZGUgdGhlIHdyYXBwZXIgYW5kIG5leHQgdG8gdGhlIGlucHV0IGVsZW1lbnQuIChMZWF2ZSBgZmFsc2VgIHVubGVzcyB5b3Uga25vdyB3aGF0IHlvdSdyZSBkb2luZykuXG4gICAqL1xuICBzdGF0aWM/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBEaXNwbGF5cyB0aW1lIHBpY2tlciBpbiAyNCBob3VyIG1vZGUgd2l0aG91dCBBTS9QTSBzZWxlY3Rpb24gd2hlbiBlbmFibGVkLlxuICAgKi9cbiAgdGltZTI0aHI/OiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBXaGVuIHRydWUsIGRhdGVzIHdpbGwgcGFyc2VkLCBmb3JtYXR0ZWQsIGFuZCBkaXNwbGF5ZWQgaW4gVVRDLlxuICAgKiBJdCdzIHJlY29tbWVuZGVkIHRoYXQgZGF0ZSBzdHJpbmdzIGNvbnRhaW4gdGhlIHRpbWV6b25lLCBidXQgbm90IG5lY2Vzc2FyeS5cbiAgICovXG4gIHV0Yz86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEVuYWJsZXMgZGlzcGxheSBvZiB3ZWVrIG51bWJlcnMgaW4gY2FsZW5kYXIuXG4gICAqL1xuICB3ZWVrTnVtYmVycz86IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFlvdSBtYXkgb3ZlcnJpZGUgdGhlIGZ1bmN0aW9uIHRoYXQgZXh0cmFjdHMgdGhlIHdlZWsgbnVtYmVycyBmcm9tIGEgRGF0ZSBieSBzdXBwbHlpbmcgYSBnZXRXZWVrIGZ1bmN0aW9uLlxuICAgKiBJdCB0YWtlcyBpbiBhIGRhdGUgYXMgYSBwYXJhbWV0ZXIgYW5kIHNob3VsZCByZXR1cm4gYSBjb3JyZXNwb25kaW5nIHN0cmluZyB0aGF0IHlvdSB3YW50IHRvIGFwcGVhciBsZWZ0IG9mIGV2ZXJ5IHdlZWsuXG4gICAqL1xuICBnZXRXZWVrPzogKGRhdGU6IERhdGUpID0+IHN0cmluZztcblxuICAvKipcbiAgICogQ3VzdG9tIGVsZW1lbnRzIGFuZCBpbnB1dCBncm91cHMuXG4gICAqL1xuICB3cmFwPzogYm9vbGVhbjtcblxuICAvKipcbiAgICogQXJyYXkgb2YgcGx1Z2luIGluc3RhbmNlcyB0byB1c2UuXG4gICAqL1xuICBwbHVnaW5zPzogYW55W107XG5cbiAgLyoqXG4gICAqIFRoZSBsb2NhbGUgb2JqZWN0IG9yIHN0cmluZyB0byB1c2UgZm9yIHRoZSBsb2NhbGUuXG4gICAqL1xuICBsb2NhbGU/OiBvYmplY3QgfCBzdHJpbmc7XG5cbiAgLyoqXG4gICAqIEF1dG8gY29udmVydCB0aGUgbmdNb2RlbCB2YWx1ZSBmcm9tIGEgc3RyaW5nIHRvIGEgZGF0ZSAvIGFycmF5IG9mIGRhdGVzIC8gZnJvbSAtIHRvIGRhdGUgb2JqZWN0IGRlcGVuZGluZyBvbiB0aGUgYG1vZGVgXG4gICAqL1xuICBjb252ZXJ0TW9kZWxWYWx1ZT86IGJvb2xlYW47XG4gIFxuICAvKipcbiAgICogVGhlIG51bWJlciBvZiBtb250aHMgc2hvd24uXG4gICAqL1xuICBzaG93TW9udGhzPzogbnVtYmVyO1xufVxuXG5ASW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgRmxhdHBpY2tyRGVmYXVsdHMgaW1wbGVtZW50cyBGbGF0cGlja3JEZWZhdWx0c0ludGVyZmFjZSB7XG4gIC8qKlxuICAgKiBFeGFjdGx5IHRoZSBzYW1lIGFzIGRhdGUgZm9ybWF0LCBidXQgZm9yIHRoZSBhbHRJbnB1dCBmaWVsZC5cbiAgICovXG4gIGFsdEZvcm1hdDogc3RyaW5nID0gJ0YgaiwgWSc7XG5cbiAgLyoqXG4gICAqIFx0U2hvdyB0aGUgdXNlciBhIHJlYWRhYmxlIGRhdGUgKGFzIHBlciBhbHRGb3JtYXQpLCBidXQgcmV0dXJuIHNvbWV0aGluZyB0b3RhbGx5IGRpZmZlcmVudCB0byB0aGUgc2VydmVyLlxuICAgKi9cbiAgYWx0SW5wdXQ6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogVGhpcyBjbGFzcyB3aWxsIGJlIGFkZGVkIHRvIHRoZSBpbnB1dCBlbGVtZW50IGNyZWF0ZWQgYnkgdGhlIGFsdElucHV0IG9wdGlvbi5cbiAgICogTm90ZSB0aGF0IGBhbHRJbnB1dGAgYWxyZWFkeSBpbmhlcml0cyBjbGFzc2VzIGZyb20gdGhlIG9yaWdpbmFsIGlucHV0LlxuICAgKi9cbiAgYWx0SW5wdXRDbGFzczogc3RyaW5nID0gJyc7XG5cbiAgLyoqXG4gICAqIEFsbG93cyB0aGUgdXNlciB0byBlbnRlciBhIGRhdGUgZGlyZWN0bHkgaW5wdXQgdGhlIGlucHV0IGZpZWxkLiBCeSBkZWZhdWx0LCBkaXJlY3QgZW50cnkgaXMgZGlzYWJsZWQuXG4gICAqL1xuICBhbGxvd0lucHV0OiBib29sZWFuID0gZmFsc2U7XG5cbiAgLyoqXG4gICAqIEluc3RlYWQgb2YgYGJvZHlgLCBhcHBlbmRzIHRoZSBjYWxlbmRhciB0byB0aGUgc3BlY2lmaWVkIG5vZGUgaW5zdGVhZC5cbiAgICovXG4gIGFwcGVuZFRvOiBIVE1MRWxlbWVudCA9IHVuZGVmaW5lZDtcblxuICAvKipcbiAgICogRGVmaW5lcyBob3cgdGhlIGRhdGUgd2lsbCBiZSBmb3JtYXR0ZWQgaW4gdGhlIGFyaWEtbGFiZWwgZm9yIGNhbGVuZGFyIGRheXMsIHVzaW5nIHRoZSBzYW1lIHRva2VucyBhcyBkYXRlRm9ybWF0LiBJZiB5b3UgY2hhbmdlIHRoaXMsIHlvdSBzaG91bGQgY2hvb3NlIGEgdmFsdWUgdGhhdCB3aWxsIG1ha2Ugc2Vuc2UgaWYgYSBzY3JlZW4gcmVhZGVyIHJlYWRzIGl0IG91dCBsb3VkLlxuICAgKi9cbiAgYXJpYURhdGVGb3JtYXQ/OiBzdHJpbmcgPSAnRiBqLCBZJztcblxuICAvKipcbiAgICogV2hldGhlciBjbGlja2luZyBvbiB0aGUgaW5wdXQgc2hvdWxkIG9wZW4gdGhlIHBpY2tlci5cbiAgICogWW91IGNvdWxkIGRpc2FibGUgdGhpcyBpZiB5b3Ugd2lzaCB0byBvcGVuIHRoZSBjYWxlbmRhciBtYW51YWxseSBgd2l0aC5vcGVuKClgLlxuICAgKi9cbiAgY2xpY2tPcGVuczogYm9vbGVhbiA9IHRydWU7XG5cbiAgLyoqXG4gICAqIEEgc3RyaW5nIG9mIGNoYXJhY3RlcnMgd2hpY2ggYXJlIHVzZWQgdG8gZGVmaW5lIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGRpc3BsYXllZCBpbiB0aGUgaW5wdXQgYm94LlxuICAgKiBUaGUgc3VwcG9ydGVkIGNoYXJhY3RlcnMgYXJlIGRlZmluZWQgaW4gdGhlIHRhYmxlIGJlbG93LlxuICAgKi9cbiAgZGF0ZUZvcm1hdDogc3RyaW5nID0gJ1ktbS1kJztcblxuICAvKipcbiAgICogSW5pdGlhbCB2YWx1ZSBvZiB0aGUgaG91ciBlbGVtZW50LlxuICAgKi9cbiAgZGVmYXVsdEhvdXI/OiBudW1iZXIgPSAxMjtcblxuICAvKipcbiAgICogSW5pdGlhbCB2YWx1ZSBvZiB0aGUgbWludXRlIGVsZW1lbnQuXG4gICAqL1xuICBkZWZhdWx0TWludXRlPzogbnVtYmVyID0gMDtcblxuICAvKipcbiAgICogU2VlIDxhIGhyZWY9XCJodHRwczovL2NobWxuLmdpdGh1Yi5pby9mbGF0cGlja3IvZXhhbXBsZXMvI2Rpc2FibGluZy1zcGVjaWZpYy1kYXRlc1wiPmRpc2FibGluZyBkYXRlczwvYT4uXG4gICAqL1xuICBkaXNhYmxlOiBEaXNhYmxlRW5hYmxlRGF0ZVtdID0gW107XG5cbiAgLyoqXG4gICAqIFNldCBkaXNhYmxlTW9iaWxlIHRvIHRydWUgdG8gYWx3YXlzIHVzZSB0aGUgbm9uLW5hdGl2ZSBwaWNrZXIuXG4gICAqIEJ5IGRlZmF1bHQsIEZsYXRwaWNrciB1dGlsaXplcyBuYXRpdmUgZGF0ZXRpbWUgd2lkZ2V0cyB1bmxlc3MgY2VydGFpbiBvcHRpb25zIChlLmcuIGRpc2FibGUpIGFyZSB1c2VkLlxuICAgKi9cbiAgZGlzYWJsZU1vYmlsZTogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBTZWUgPGEgaHJlZj1cImh0dHBzOi8vY2htbG4uZ2l0aHViLmlvL2ZsYXRwaWNrci9leGFtcGxlcy8jZGlzYWJsaW5nLWFsbC1kYXRlcy1leGNlcHQtc2VsZWN0LWZld1wiPmVuYWJsaW5nIGRhdGVzPC9hPi5cbiAgICovXG4gIGVuYWJsZTogRGlzYWJsZUVuYWJsZURhdGVbXSA9IFtdO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIHRpbWUgcGlja2VyLlxuICAgKi9cbiAgZW5hYmxlVGltZTogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIHNlY29uZHMgaW4gdGhlIHRpbWUgcGlja2VyLlxuICAgKi9cbiAgZW5hYmxlU2Vjb25kczogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBBbGxvd3MgdXNpbmcgYSBjdXN0b20gZGF0ZSBmb3JtYXR0aW5nIGZ1bmN0aW9uIGluc3RlYWQgb2YgdGhlIGJ1aWx0LWluIGhhbmRsaW5nIGZvciBkYXRlIGZvcm1hdHMgdXNpbmcgZGF0ZUZvcm1hdCwgYWx0Rm9ybWF0LCBldGMuXG4gICAqL1xuICBmb3JtYXREYXRlPzogKHZhbHVlOiBhbnkpID0+IHN0cmluZyA9IHVuZGVmaW5lZDtcblxuICAvKipcbiAgICogQWRqdXN0cyB0aGUgc3RlcCBmb3IgdGhlIGhvdXIgaW5wdXQgKGluY2wuIHNjcm9sbGluZykuXG4gICAqL1xuICBob3VySW5jcmVtZW50OiBudW1iZXIgPSAxO1xuXG4gIC8qKlxuICAgKiBEaXNwbGF5cyB0aGUgY2FsZW5kYXIgaW5saW5lLlxuICAgKi9cbiAgaW5saW5lOiBib29sZWFuID0gZmFsc2U7XG5cbiAgLyoqXG4gICAqIFRoZSBtYXhpbXVtIGRhdGUgdGhhdCBhIHVzZXIgY2FuIHBpY2sgdG8gKGluY2x1c2l2ZSkuXG4gICAqL1xuICBtYXhEYXRlOiBzdHJpbmcgfCBEYXRlID0gdW5kZWZpbmVkO1xuXG4gIC8qKlxuICAgKiBUaGUgbWluaW11bSBkYXRlIHRoYXQgYSB1c2VyIGNhbiBzdGFydCBwaWNraW5nIGZyb20gKGluY2x1c2l2ZSkuXG4gICAqL1xuICBtaW5EYXRlOiBzdHJpbmcgfCBEYXRlID0gdW5kZWZpbmVkO1xuXG4gIC8qKlxuICAgKiBBZGp1c3RzIHRoZSBzdGVwIGZvciB0aGUgbWludXRlIGlucHV0IChpbmNsLiBzY3JvbGxpbmcpLlxuICAgKi9cbiAgbWludXRlSW5jcmVtZW50OiBudW1iZXIgPSA1O1xuXG4gIC8qKlxuICAgKiBTZWxlY3QgYSBzaW5nbGUgZGF0ZSwgbXVsdGlwbGUgZGF0ZXMgb3IgYSBkYXRlIHJhbmdlLlxuICAgKi9cbiAgbW9kZTogJ3NpbmdsZScgfCAnbXVsdGlwbGUnIHwgJ3JhbmdlJyA9ICdzaW5nbGUnO1xuXG4gIC8qKlxuICAgKiBIVE1MIGZvciB0aGUgYXJyb3cgaWNvbiwgdXNlZCB0byBzd2l0Y2ggbW9udGhzLlxuICAgKi9cbiAgbmV4dEFycm93OiBzdHJpbmcgPSAnPic7XG5cbiAgLyoqXG4gICAqIEhpZGVzIHRoZSBkYXkgc2VsZWN0aW9uIGluIGNhbGVuZGFyLiBVc2UgaXQgYWxvbmcgd2l0aCBgZW5hYmxlVGltZWAgdG8gY3JlYXRlIGEgdGltZSBwaWNrZXIuXG4gICAqL1xuICBub0NhbGVuZGFyOiBib29sZWFuID0gZmFsc2U7XG5cbiAgLyoqXG4gICAqIERlZmF1bHQgbm93IHRvIHRoZSBjdXJyZW50IGRhdGVcbiAgICovXG4gIG5vdzogRGF0ZSB8IHN0cmluZyB8IG51bWJlciA9IG5ldyBEYXRlKCk7XG5cbiAgLyoqXG4gICAqIEZ1bmN0aW9uIHRoYXQgZXhwZWN0cyBhIGRhdGUgc3RyaW5nIGFuZCBtdXN0IHJldHVybiBhIERhdGUgb2JqZWN0LlxuICAgKi9cbiAgcGFyc2VEYXRlOiAoc3RyOiBzdHJpbmcpID0+IERhdGU7XG5cbiAgLyoqXG4gICAqIEhUTUwgZm9yIHRoZSBsZWZ0IGFycm93IGljb24uXG4gICAqL1xuICBwcmV2QXJyb3c6IHN0cmluZyA9ICc8JztcblxuICAvKipcbiAgICogU2hvdyB0aGUgbW9udGggdXNpbmcgdGhlIHNob3J0aGFuZCB2ZXJzaW9uIChpZSwgU2VwIGluc3RlYWQgb2YgU2VwdGVtYmVyKS5cbiAgICovXG4gIHNob3J0aGFuZEN1cnJlbnRNb250aDogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBQb3NpdGlvbiB0aGUgY2FsZW5kYXIgaW5zaWRlIHRoZSB3cmFwcGVyIGFuZCBuZXh0IHRvIHRoZSBpbnB1dCBlbGVtZW50LiAoTGVhdmUgYGZhbHNlYCB1bmxlc3MgeW91IGtub3cgd2hhdCB5b3UncmUgZG9pbmcpLlxuICAgKi9cbiAgc3RhdGljOiBib29sZWFuID0gZmFsc2U7XG5cbiAgLyoqXG4gICAqIERpc3BsYXlzIHRpbWUgcGlja2VyIGluIDI0IGhvdXIgbW9kZSB3aXRob3V0IEFNL1BNIHNlbGVjdGlvbiB3aGVuIGVuYWJsZWQuXG4gICAqL1xuICB0aW1lMjRocjogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBXaGVuIHRydWUsIGRhdGVzIHdpbGwgcGFyc2VkLCBmb3JtYXR0ZWQsIGFuZCBkaXNwbGF5ZWQgaW4gVVRDLlxuICAgKiBJdCdzIHJlY29tbWVuZGVkIHRoYXQgZGF0ZSBzdHJpbmdzIGNvbnRhaW4gdGhlIHRpbWV6b25lLCBidXQgbm90IG5lY2Vzc2FyeS5cbiAgICovXG4gIHV0YzogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIGRpc3BsYXkgb2Ygd2VlayBudW1iZXJzIGluIGNhbGVuZGFyLlxuICAgKi9cbiAgd2Vla051bWJlcnM6IGJvb2xlYW4gPSBmYWxzZTtcblxuICAvKipcbiAgICogWW91IG1heSBvdmVycmlkZSB0aGUgZnVuY3Rpb24gdGhhdCBleHRyYWN0cyB0aGUgd2VlayBudW1iZXJzIGZyb20gYSBEYXRlIGJ5IHN1cHBseWluZyBhIGdldFdlZWsgZnVuY3Rpb24uXG4gICAqIEl0IHRha2VzIGluIGEgZGF0ZSBhcyBhIHBhcmFtZXRlciBhbmQgc2hvdWxkIHJldHVybiBhIGNvcnJlc3BvbmRpbmcgc3RyaW5nIHRoYXQgeW91IHdhbnQgdG8gYXBwZWFyIGxlZnQgb2YgZXZlcnkgd2Vlay5cbiAgICovXG4gIGdldFdlZWs6IChkYXRlOiBEYXRlKSA9PiBzdHJpbmc7XG5cbiAgLyoqXG4gICAqIEN1c3RvbSBlbGVtZW50cyBhbmQgaW5wdXQgZ3JvdXBzLlxuICAgKi9cbiAgd3JhcDogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBBcnJheSBvZiBwbHVnaW4gaW5zdGFuY2VzIHRvIHVzZS5cbiAgICovXG4gIHBsdWdpbnM6IGFueVtdID0gW107XG5cbiAgLyoqXG4gICAqIFRoZSBsb2NhbGUgb2JqZWN0IG9yIHN0cmluZyB0byB1c2UgZm9yIHRoZSBsb2NhbGUuXG4gICAqL1xuICBsb2NhbGU6IG9iamVjdCB8IHN0cmluZyA9ICdkZWZhdWx0JztcblxuICAvKipcbiAgICogQXV0byBjb252ZXJ0IHRoZSBuZ01vZGVsIHZhbHVlIGZyb20gYSBzdHJpbmcgdG8gYSBkYXRlIC8gYXJyYXkgb2YgZGF0ZXMgLyBmcm9tIC0gdG8gZGF0ZSBvYmplY3QgZGVwZW5kaW5nIG9uIHRoZSBgbW9kZWBcbiAgICovXG4gIGNvbnZlcnRNb2RlbFZhbHVlOiBib29sZWFuID0gZmFsc2U7XG4gIFxuICAvKipcbiAgICogVGhlIG51bWJlciBvZiBtb250aHMgc2hvd24uXG4gICAqL1xuICBzaG93TW9udGhzOiBudW1iZXIgPSAxO1xufVxuIiwiaW1wb3J0IHtcbiAgRGlyZWN0aXZlLFxuICBFbGVtZW50UmVmLFxuICBBZnRlclZpZXdJbml0LFxuICBJbnB1dCxcbiAgT3V0cHV0LFxuICBFdmVudEVtaXR0ZXIsXG4gIE9uQ2hhbmdlcyxcbiAgU2ltcGxlQ2hhbmdlcyxcbiAgT25EZXN0cm95LFxuICBmb3J3YXJkUmVmLFxuICBIb3N0TGlzdGVuZXIsXG4gIFJlbmRlcmVyMlxufSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7XG4gIEZsYXRwaWNrckRlZmF1bHRzLFxuICBEaXNhYmxlRW5hYmxlRGF0ZVxufSBmcm9tICcuL2ZsYXRwaWNrci1kZWZhdWx0cy5zZXJ2aWNlJztcbmltcG9ydCB7IENvbnRyb2xWYWx1ZUFjY2Vzc29yLCBOR19WQUxVRV9BQ0NFU1NPUiB9IGZyb20gJ0Bhbmd1bGFyL2Zvcm1zJztcbmltcG9ydCBmbGF0cGlja3IgZnJvbSAnZmxhdHBpY2tyJztcblxuZXhwb3J0IGludGVyZmFjZSBGbGF0UGlja3JPdXRwdXRPcHRpb25zIHtcbiAgc2VsZWN0ZWREYXRlczogRGF0ZVtdO1xuICBkYXRlU3RyaW5nOiBzdHJpbmc7XG4gIGluc3RhbmNlOiBhbnk7XG59XG5cbmV4cG9ydCBpbnRlcmZhY2UgRmxhdFBpY2tyRGF5Q3JlYXRlT3V0cHV0T3B0aW9uc1xuICBleHRlbmRzIEZsYXRQaWNrck91dHB1dE9wdGlvbnMge1xuICBkYXlFbGVtZW50OiBIVE1MRWxlbWVudDtcbn1cblxuZXhwb3J0IGNvbnN0IEZMQVRQSUNLUl9DT05UUk9MX1ZBTFVFX0FDQ0VTU09SOiBhbnkgPSB7XG4gIHByb3ZpZGU6IE5HX1ZBTFVFX0FDQ0VTU09SLFxuICB1c2VFeGlzdGluZzogZm9yd2FyZFJlZigoKSA9PiBGbGF0cGlja3JEaXJlY3RpdmUpLCAvL3RzbGludDpkaXNhYmxlLWxpbmVcbiAgbXVsdGk6IHRydWVcbn07XG5cbkBEaXJlY3RpdmUoe1xuICBzZWxlY3RvcjogJ1ttd2xGbGF0cGlja3JdJyxcbiAgcHJvdmlkZXJzOiBbRkxBVFBJQ0tSX0NPTlRST0xfVkFMVUVfQUNDRVNTT1JdLFxuICBob3N0OiB7XG4gICAgLy8gdHNsaW50OmRpc2FibGUtbGluZSB1c2UtaG9zdC1wcm9wZXJ0eS1kZWNvcmF0b3JcbiAgICAnKGJsdXIpJzogJ29uVG91Y2hlZEZuKCknXG4gIH1cbn0pXG5leHBvcnQgY2xhc3MgRmxhdHBpY2tyRGlyZWN0aXZlXG4gIGltcGxlbWVudHMgQWZ0ZXJWaWV3SW5pdCwgT25DaGFuZ2VzLCBPbkRlc3Ryb3ksIENvbnRyb2xWYWx1ZUFjY2Vzc29yIHtcbiAgLyoqXG4gICAqIEV4YWN0bHkgdGhlIHNhbWUgYXMgZGF0ZSBmb3JtYXQsIGJ1dCBmb3IgdGhlIGFsdElucHV0IGZpZWxkLlxuICAgKi9cbiAgQElucHV0KCkgYWx0Rm9ybWF0OiBzdHJpbmc7XG5cbiAgLyoqXG4gICAqIFx0U2hvdyB0aGUgdXNlciBhIHJlYWRhYmxlIGRhdGUgKGFzIHBlciBhbHRGb3JtYXQpLCBidXQgcmV0dXJuIHNvbWV0aGluZyB0b3RhbGx5IGRpZmZlcmVudCB0byB0aGUgc2VydmVyLlxuICAgKi9cbiAgQElucHV0KCkgYWx0SW5wdXQ6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFRoaXMgY2xhc3Mgd2lsbCBiZSBhZGRlZCB0byB0aGUgaW5wdXQgZWxlbWVudCBjcmVhdGVkIGJ5IHRoZSBhbHRJbnB1dCBvcHRpb24uXG4gICAqIE5vdGUgdGhhdCBgYWx0SW5wdXRgIGFscmVhZHkgaW5oZXJpdHMgY2xhc3NlcyBmcm9tIHRoZSBvcmlnaW5hbCBpbnB1dC5cbiAgICovXG4gIEBJbnB1dCgpIGFsdElucHV0Q2xhc3M6IHN0cmluZztcblxuICAvKipcbiAgICogQWxsb3dzIHRoZSB1c2VyIHRvIGVudGVyIGEgZGF0ZSBkaXJlY3RseSBpbnB1dCB0aGUgaW5wdXQgZmllbGQuIEJ5IGRlZmF1bHQsIGRpcmVjdCBlbnRyeSBpcyBkaXNhYmxlZC5cbiAgICovXG4gIEBJbnB1dCgpIGFsbG93SW5wdXQ6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEluc3RlYWQgb2YgYGJvZHlgLCBhcHBlbmRzIHRoZSBjYWxlbmRhciB0byB0aGUgc3BlY2lmaWVkIG5vZGUgaW5zdGVhZC5cbiAgICovXG4gIEBJbnB1dCgpIGFwcGVuZFRvOiBIVE1MRWxlbWVudDtcblxuICAvKipcbiAgICogRGVmaW5lcyBob3cgdGhlIGRhdGUgd2lsbCBiZSBmb3JtYXR0ZWQgaW4gdGhlIGFyaWEtbGFiZWwgZm9yIGNhbGVuZGFyIGRheXMsIHVzaW5nIHRoZSBzYW1lIHRva2VucyBhcyBkYXRlRm9ybWF0LiBJZiB5b3UgY2hhbmdlIHRoaXMsIHlvdSBzaG91bGQgY2hvb3NlIGEgdmFsdWUgdGhhdCB3aWxsIG1ha2Ugc2Vuc2UgaWYgYSBzY3JlZW4gcmVhZGVyIHJlYWRzIGl0IG91dCBsb3VkLlxuICAgKi9cbiAgQElucHV0KCkgYXJpYURhdGVGb3JtYXQ/OiBzdHJpbmc7XG5cbiAgLyoqXG4gICAqIFdoZXRoZXIgY2xpY2tpbmcgb24gdGhlIGlucHV0IHNob3VsZCBvcGVuIHRoZSBwaWNrZXIuXG4gICAqIFlvdSBjb3VsZCBkaXNhYmxlIHRoaXMgaWYgeW91IHdpc2ggdG8gb3BlbiB0aGUgY2FsZW5kYXIgbWFudWFsbHkgYHdpdGgub3BlbigpYC5cbiAgICovXG4gIEBJbnB1dCgpIGNsaWNrT3BlbnM6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEEgc3RyaW5nIG9mIGNoYXJhY3RlcnMgd2hpY2ggYXJlIHVzZWQgdG8gZGVmaW5lIGhvdyB0aGUgZGF0ZSB3aWxsIGJlIGRpc3BsYXllZCBpbiB0aGUgaW5wdXQgYm94LlxuICAgKiBUaGUgc3VwcG9ydGVkIGNoYXJhY3RlcnMgYXJlIGRlZmluZWQgaW4gdGhlIHRhYmxlIGJlbG93LlxuICAgKi9cbiAgQElucHV0KCkgZGF0ZUZvcm1hdDogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBJbml0aWFsIHZhbHVlIG9mIHRoZSBob3VyIGVsZW1lbnQuXG4gICAqL1xuICBASW5wdXQoKSBkZWZhdWx0SG91cj86IG51bWJlcjtcbiAgLyoqXG4gICAqIEluaXRpYWwgdmFsdWUgb2YgdGhlIG1pbnV0ZSBlbGVtZW50LlxuICAgKi9cbiAgQElucHV0KCkgZGVmYXVsdE1pbnV0ZT86IG51bWJlcjtcblxuICAvKipcbiAgICogU2VlIDxhIGhyZWY9XCJodHRwczovL2NobWxuLmdpdGh1Yi5pby9mbGF0cGlja3IvZXhhbXBsZXMvI2Rpc2FibGluZy1zcGVjaWZpYy1kYXRlc1wiPmRpc2FibGluZyBkYXRlczwvYT4uXG4gICAqL1xuICBASW5wdXQoKSBkaXNhYmxlOiBEaXNhYmxlRW5hYmxlRGF0ZVtdO1xuXG4gIC8qKlxuICAgKiBTZXQgZGlzYWJsZU1vYmlsZSB0byB0cnVlIHRvIGFsd2F5cyB1c2UgdGhlIG5vbi1uYXRpdmUgcGlja2VyLlxuICAgKiBCeSBkZWZhdWx0LCBGbGF0cGlja3IgdXRpbGl6ZXMgbmF0aXZlIGRhdGV0aW1lIHdpZGdldHMgdW5sZXNzIGNlcnRhaW4gb3B0aW9ucyAoZS5nLiBkaXNhYmxlKSBhcmUgdXNlZC5cbiAgICovXG4gIEBJbnB1dCgpIGRpc2FibGVNb2JpbGU6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFNlZSA8YSBocmVmPVwiaHR0cHM6Ly9jaG1sbi5naXRodWIuaW8vZmxhdHBpY2tyL2V4YW1wbGVzLyNkaXNhYmxpbmctYWxsLWRhdGVzLWV4Y2VwdC1zZWxlY3QtZmV3XCI+ZW5hYmxpbmcgZGF0ZXM8L2E+LlxuICAgKi9cbiAgQElucHV0KCkgZW5hYmxlOiBEaXNhYmxlRW5hYmxlRGF0ZVtdO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIHRpbWUgcGlja2VyLlxuICAgKi9cbiAgQElucHV0KCkgZW5hYmxlVGltZTogYm9vbGVhbjtcblxuICAvKipcbiAgICogRW5hYmxlcyBzZWNvbmRzIGluIHRoZSB0aW1lIHBpY2tlci5cbiAgICovXG4gIEBJbnB1dCgpIGVuYWJsZVNlY29uZHM6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEFsbG93cyB1c2luZyBhIGN1c3RvbSBkYXRlIGZvcm1hdHRpbmcgZnVuY3Rpb24gaW5zdGVhZCBvZiB0aGUgYnVpbHQtaW4gaGFuZGxpbmcgZm9yIGRhdGUgZm9ybWF0cyB1c2luZyBkYXRlRm9ybWF0LCBhbHRGb3JtYXQsIGV0Yy5cbiAgICovXG4gIEBJbnB1dCgpIGZvcm1hdERhdGU/OiAodmFsdWU6IGFueSkgPT4gc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBBZGp1c3RzIHRoZSBzdGVwIGZvciB0aGUgaG91ciBpbnB1dCAoaW5jbC4gc2Nyb2xsaW5nKS5cbiAgICovXG4gIEBJbnB1dCgpIGhvdXJJbmNyZW1lbnQ6IG51bWJlcjtcblxuICAvKipcbiAgICogRGlzcGxheXMgdGhlIGNhbGVuZGFyIGlubGluZS5cbiAgICovXG4gIEBJbnB1dCgpIGlubGluZTogYm9vbGVhbjtcblxuICAvKipcbiAgICogVGhlIG1heGltdW0gZGF0ZSB0aGF0IGEgdXNlciBjYW4gcGljayB0byAoaW5jbHVzaXZlKS5cbiAgICovXG4gIEBJbnB1dCgpIG1heERhdGU6IHN0cmluZyB8IERhdGU7XG5cbiAgLyoqXG4gICAqIFRoZSBtaW5pbXVtIGRhdGUgdGhhdCBhIHVzZXIgY2FuIHN0YXJ0IHBpY2tpbmcgZnJvbSAoaW5jbHVzaXZlKS5cbiAgICovXG4gIEBJbnB1dCgpIG1pbkRhdGU6IHN0cmluZyB8IERhdGU7XG5cbiAgLyoqXG4gICAqIEFkanVzdHMgdGhlIHN0ZXAgZm9yIHRoZSBtaW51dGUgaW5wdXQgKGluY2wuIHNjcm9sbGluZykuXG4gICAqL1xuICBASW5wdXQoKSBtaW51dGVJbmNyZW1lbnQ6IG51bWJlcjtcblxuICAvKipcbiAgICogU2VsZWN0IGEgc2luZ2xlIGRhdGUsIG11bHRpcGxlIGRhdGVzIG9yIGEgZGF0ZSByYW5nZS5cbiAgICovXG4gIEBJbnB1dCgpIG1vZGU6ICdzaW5nbGUnIHwgJ211bHRpcGxlJyB8ICdyYW5nZSc7XG5cbiAgLyoqXG4gICAqIEhUTUwgZm9yIHRoZSBhcnJvdyBpY29uLCB1c2VkIHRvIHN3aXRjaCBtb250aHMuXG4gICAqL1xuICBASW5wdXQoKSBuZXh0QXJyb3c6IHN0cmluZztcblxuICAvKipcbiAgICogSGlkZXMgdGhlIGRheSBzZWxlY3Rpb24gaW4gY2FsZW5kYXIuIFVzZSBpdCBhbG9uZyB3aXRoIGBlbmFibGVUaW1lYCB0byBjcmVhdGUgYSB0aW1lIHBpY2tlci5cbiAgICovXG4gIEBJbnB1dCgpIG5vQ2FsZW5kYXI6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFByb3ZpZGUgYSBkYXRlIGZvciAndG9kYXknLCB3aGljaCB3aWxsIGJlIHVzZWQgaW5zdGVhZCBvZiBcIm5ldyBEYXRlKClcIlxuICAgKi9cbiAgQElucHV0KCkgbm93PzogRGF0ZSB8IHN0cmluZyB8IG51bWJlcjtcblxuICAvKipcbiAgICogRnVuY3Rpb24gdGhhdCBleHBlY3RzIGEgZGF0ZSBzdHJpbmcgYW5kIG11c3QgcmV0dXJuIGEgRGF0ZSBvYmplY3QuXG4gICAqL1xuICBASW5wdXQoKSBwYXJzZURhdGU6IChzdHI6IHN0cmluZykgPT4gRGF0ZTtcblxuICAvKipcbiAgICogSFRNTCBmb3IgdGhlIGxlZnQgYXJyb3cgaWNvbi5cbiAgICovXG4gIEBJbnB1dCgpIHByZXZBcnJvdzogc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBTaG93IHRoZSBtb250aCB1c2luZyB0aGUgc2hvcnRoYW5kIHZlcnNpb24gKGllLCBTZXAgaW5zdGVhZCBvZiBTZXB0ZW1iZXIpLlxuICAgKi9cbiAgQElucHV0KCkgc2hvcnRoYW5kQ3VycmVudE1vbnRoOiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBUaGUgbnVtYmVyIG9mIG1vbnRocyBzaG93bi5cbiAgICovXG4gIEBJbnB1dCgpIHNob3dNb250aHM6IG51bWJlcjtcblxuICAvKipcbiAgICogUG9zaXRpb24gdGhlIGNhbGVuZGFyIGluc2lkZSB0aGUgd3JhcHBlciBhbmQgbmV4dCB0byB0aGUgaW5wdXQgZWxlbWVudC4gKExlYXZlIGBmYWxzZWAgdW5sZXNzIHlvdSBrbm93IHdoYXQgeW91J3JlIGRvaW5nKS5cbiAgICovXG4gIEBJbnB1dCgpIHN0YXRpYzogYm9vbGVhbjtcblxuICAvKipcbiAgICogRGlzcGxheXMgdGltZSBwaWNrZXIgaW4gMjQgaG91ciBtb2RlIHdpdGhvdXQgQU0vUE0gc2VsZWN0aW9uIHdoZW4gZW5hYmxlZC5cbiAgICovXG4gIEBJbnB1dCgpIHRpbWUyNGhyOiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBFbmFibGVzIGRpc3BsYXkgb2Ygd2VlayBudW1iZXJzIGluIGNhbGVuZGFyLlxuICAgKi9cbiAgQElucHV0KCkgd2Vla051bWJlcnM6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIFlvdSBtYXkgb3ZlcnJpZGUgdGhlIGZ1bmN0aW9uIHRoYXQgZXh0cmFjdHMgdGhlIHdlZWsgbnVtYmVycyBmcm9tIGEgRGF0ZSBieSBzdXBwbHlpbmcgYSBnZXRXZWVrIGZ1bmN0aW9uLlxuICAgKiBJdCB0YWtlcyBpbiBhIGRhdGUgYXMgYSBwYXJhbWV0ZXIgYW5kIHNob3VsZCByZXR1cm4gYSBjb3JyZXNwb25kaW5nIHN0cmluZyB0aGF0IHlvdSB3YW50IHRvIGFwcGVhciBsZWZ0IG9mIGV2ZXJ5IHdlZWsuXG4gICAqL1xuICBASW5wdXQoKSBnZXRXZWVrOiAoZGF0ZTogRGF0ZSkgPT4gc3RyaW5nO1xuXG4gIC8qKlxuICAgKiBDdXN0b20gZWxlbWVudHMgYW5kIGlucHV0IGdyb3Vwcy5cbiAgICovXG4gIEBJbnB1dCgpIHdyYXA6IGJvb2xlYW47XG5cbiAgLyoqXG4gICAqIEFycmF5IG9mIHBsdWdpbiBpbnN0YW5jZXMgdG8gdXNlLlxuICAgKi9cbiAgQElucHV0KCkgcGx1Z2luczogYW55W107XG5cbiAgLyoqXG4gICAqIFRoZSBsb2NhbGUgb2JqZWN0IG9yIHN0cmluZyB0byB1c2UgZm9yIHRoZSBsb2NhbGUuXG4gICAqL1xuICBASW5wdXQoKSBsb2NhbGU6IG9iamVjdCB8IHN0cmluZztcblxuICAvKipcbiAgICogQXV0byBjb252ZXJ0IHRoZSBuZ01vZGVsIHZhbHVlIGZyb20gYSBzdHJpbmcgdG8gYSBkYXRlIC8gYXJyYXkgb2YgZGF0ZXMgLyBmcm9tIC0gdG8gZGF0ZSBvYmplY3QgZGVwZW5kaW5nIG9uIHRoZSBgbW9kZWBcbiAgICovXG4gIEBJbnB1dCgpIGNvbnZlcnRNb2RlbFZhbHVlOiBib29sZWFuO1xuXG4gIC8qKlxuICAgKiBHZXRzIHRyaWdnZXJlZCBvbmNlIHRoZSBjYWxlbmRhciBpcyBpbiBhIHJlYWR5IHN0YXRlXG4gICAqL1xuICBAT3V0cHV0KClcbiAgZmxhdHBpY2tyUmVhZHk6IEV2ZW50RW1pdHRlcjxGbGF0UGlja3JPdXRwdXRPcHRpb25zPiA9IG5ldyBFdmVudEVtaXR0ZXIoKTtcblxuICAvKipcbiAgICogR2V0cyB0cmlnZ2VyZWQgd2hlbiB0aGUgdXNlciBzZWxlY3RzIGEgZGF0ZSwgb3IgY2hhbmdlcyB0aGUgdGltZSBvbiBhIHNlbGVjdGVkIGRhdGUuXG4gICAqL1xuICBAT3V0cHV0KClcbiAgZmxhdHBpY2tyQ2hhbmdlOiBFdmVudEVtaXR0ZXI8RmxhdFBpY2tyT3V0cHV0T3B0aW9ucz4gPSBuZXcgRXZlbnRFbWl0dGVyKCk7XG5cbiAgLyoqXG4gICAqIEdldHMgdHJpZ2dlcmVkIHdoZW4gdGhlIGlucHV0IHZhbHVlIGlzIHVwZGF0ZWQgd2l0aCBhIG5ldyBkYXRlIHN0cmluZy5cbiAgICovXG4gIEBPdXRwdXQoKVxuICBmbGF0cGlja3JWYWx1ZVVwZGF0ZTogRXZlbnRFbWl0dGVyPFxuICAgIEZsYXRQaWNrck91dHB1dE9wdGlvbnNcbiAgPiA9IG5ldyBFdmVudEVtaXR0ZXIoKTtcblxuICAvKipcbiAgICogR2V0cyB0cmlnZ2VyZWQgd2hlbiB0aGUgY2FsZW5kYXIgaXMgb3BlbmVkLlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrck9wZW46IEV2ZW50RW1pdHRlcjxGbGF0UGlja3JPdXRwdXRPcHRpb25zPiA9IG5ldyBFdmVudEVtaXR0ZXIoKTtcblxuICAvKipcbiAgICogR2V0cyB0cmlnZ2VyZWQgd2hlbiB0aGUgY2FsZW5kYXIgaXMgY2xvc2VkLlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrckNsb3NlOiBFdmVudEVtaXR0ZXI8RmxhdFBpY2tyT3V0cHV0T3B0aW9ucz4gPSBuZXcgRXZlbnRFbWl0dGVyKCk7XG5cbiAgLyoqXG4gICAqIEdldHMgdHJpZ2dlcmVkIHdoZW4gdGhlIG1vbnRoIGlzIGNoYW5nZWQsIGVpdGhlciBieSB0aGUgdXNlciBvciBwcm9ncmFtbWF0aWNhbGx5LlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrck1vbnRoQ2hhbmdlOiBFdmVudEVtaXR0ZXI8XG4gICAgRmxhdFBpY2tyT3V0cHV0T3B0aW9uc1xuICA+ID0gbmV3IEV2ZW50RW1pdHRlcigpO1xuXG4gIC8qKlxuICAgKiBHZXRzIHRyaWdnZXJlZCB3aGVuIHRoZSB5ZWFyIGlzIGNoYW5nZWQsIGVpdGhlciBieSB0aGUgdXNlciBvciBwcm9ncmFtbWF0aWNhbGx5LlxuICAgKi9cbiAgQE91dHB1dCgpXG4gIGZsYXRwaWNrclllYXJDaGFuZ2U6IEV2ZW50RW1pdHRlcjxcbiAgICBGbGF0UGlja3JPdXRwdXRPcHRpb25zXG4gID4gPSBuZXcgRXZlbnRFbWl0dGVyKCk7XG5cbiAgLyoqXG4gICAqIFRha2UgZnVsbCBjb250cm9sIG9mIGV2ZXJ5IGRhdGUgY2VsbCB3aXRoIHRoaXMgb3V0cHV0XG4gICAqL1xuICBAT3V0cHV0KClcbiAgZmxhdHBpY2tyRGF5Q3JlYXRlOiBFdmVudEVtaXR0ZXI8XG4gICAgRmxhdFBpY2tyRGF5Q3JlYXRlT3V0cHV0T3B0aW9uc1xuICA+ID0gbmV3IEV2ZW50RW1pdHRlcigpO1xuXG4gIHByaXZhdGUgaW5zdGFuY2U6IGZsYXRwaWNrci5JbnN0YW5jZTtcbiAgcHJpdmF0ZSBpc0Rpc2FibGVkID0gZmFsc2U7XG4gIHByaXZhdGUgaW5pdGlhbFZhbHVlOiBhbnk7XG5cbiAgb25DaGFuZ2VGbjogKHZhbHVlOiBhbnkpID0+IHZvaWQgPSAoKSA9PiB7fTsgLy8gdHNsaW50OmRpc2FibGUtbGluZVxuXG4gIG9uVG91Y2hlZEZuID0gKCkgPT4ge307XG5cbiAgY29uc3RydWN0b3IoXG4gICAgcHJpdmF0ZSBlbG06IEVsZW1lbnRSZWYsXG4gICAgcHJpdmF0ZSBkZWZhdWx0czogRmxhdHBpY2tyRGVmYXVsdHMsXG4gICAgcHJpdmF0ZSByZW5kZXJlcjogUmVuZGVyZXIyXG4gICkge31cblxuICBuZ0FmdGVyVmlld0luaXQoKTogdm9pZCB7XG4gICAgY29uc3Qgb3B0aW9uczogYW55ID0ge1xuICAgICAgYWx0Rm9ybWF0OiB0aGlzLmFsdEZvcm1hdCxcbiAgICAgIGFsdElucHV0OiB0aGlzLmFsdElucHV0LFxuICAgICAgYWx0SW5wdXRDbGFzczogdGhpcy5hbHRJbnB1dENsYXNzLFxuICAgICAgYWxsb3dJbnB1dDogdGhpcy5hbGxvd0lucHV0LFxuICAgICAgYXBwZW5kVG86IHRoaXMuYXBwZW5kVG8sXG4gICAgICBhcmlhRGF0ZUZvcm1hdDogdGhpcy5hcmlhRGF0ZUZvcm1hdCxcbiAgICAgIGNsaWNrT3BlbnM6IHRoaXMuY2xpY2tPcGVucyxcbiAgICAgIGRhdGVGb3JtYXQ6IHRoaXMuZGF0ZUZvcm1hdCxcbiAgICAgIGRlZmF1bHRIb3VyOiB0aGlzLmRlZmF1bHRIb3VyLFxuICAgICAgZGVmYXVsdE1pbnV0ZTogdGhpcy5kZWZhdWx0TWludXRlLFxuICAgICAgZGlzYWJsZTogdGhpcy5kaXNhYmxlLFxuICAgICAgZGlzYWJsZU1vYmlsZTogdGhpcy5kaXNhYmxlTW9iaWxlLFxuICAgICAgZW5hYmxlOiB0aGlzLmVuYWJsZSxcbiAgICAgIGVuYWJsZVRpbWU6IHRoaXMuZW5hYmxlVGltZSxcbiAgICAgIGVuYWJsZVNlY29uZHM6IHRoaXMuZW5hYmxlU2Vjb25kcyxcbiAgICAgIGZvcm1hdERhdGU6IHRoaXMuZm9ybWF0RGF0ZSxcbiAgICAgIGhvdXJJbmNyZW1lbnQ6IHRoaXMuaG91ckluY3JlbWVudCxcbiAgICAgIGRlZmF1bHREYXRlOiB0aGlzLmluaXRpYWxWYWx1ZSxcbiAgICAgIGlubGluZTogdGhpcy5pbmxpbmUsXG4gICAgICBtYXhEYXRlOiB0aGlzLm1heERhdGUsXG4gICAgICBtaW5EYXRlOiB0aGlzLm1pbkRhdGUsXG4gICAgICBtaW51dGVJbmNyZW1lbnQ6IHRoaXMubWludXRlSW5jcmVtZW50LFxuICAgICAgbW9kZTogdGhpcy5tb2RlLFxuICAgICAgbmV4dEFycm93OiB0aGlzLm5leHRBcnJvdyxcbiAgICAgIG5vQ2FsZW5kYXI6IHRoaXMubm9DYWxlbmRhcixcbiAgICAgIG5vdzogdGhpcy5ub3csXG4gICAgICBwYXJzZURhdGU6IHRoaXMucGFyc2VEYXRlLFxuICAgICAgcHJldkFycm93OiB0aGlzLnByZXZBcnJvdyxcbiAgICAgIHNob3J0aGFuZEN1cnJlbnRNb250aDogdGhpcy5zaG9ydGhhbmRDdXJyZW50TW9udGgsXG4gICAgICBzaG93TW9udGhzOiB0aGlzLnNob3dNb250aHMsXG4gICAgICBzdGF0aWM6IHRoaXMuc3RhdGljLFxuICAgICAgdGltZTI0aHI6IHRoaXMudGltZTI0aHIsXG4gICAgICB3ZWVrTnVtYmVyczogdGhpcy53ZWVrTnVtYmVycyxcbiAgICAgIGdldFdlZWs6IHRoaXMuZ2V0V2VlayxcbiAgICAgIHdyYXA6IHRoaXMud3JhcCxcbiAgICAgIHBsdWdpbnM6IHRoaXMucGx1Z2lucyxcbiAgICAgIGxvY2FsZTogdGhpcy5sb2NhbGUsXG4gICAgICBvbkNoYW5nZTogKHNlbGVjdGVkRGF0ZXM6IERhdGVbXSwgZGF0ZVN0cmluZzogc3RyaW5nLCBpbnN0YW5jZTogYW55KSA9PiB7XG4gICAgICAgIHRoaXMuZmxhdHBpY2tyQ2hhbmdlLmVtaXQoeyBzZWxlY3RlZERhdGVzLCBkYXRlU3RyaW5nLCBpbnN0YW5jZSB9KTtcbiAgICAgIH0sXG4gICAgICBvbk9wZW46IChzZWxlY3RlZERhdGVzOiBEYXRlW10sIGRhdGVTdHJpbmc6IHN0cmluZywgaW5zdGFuY2U6IGFueSkgPT4ge1xuICAgICAgICB0aGlzLmZsYXRwaWNrck9wZW4uZW1pdCh7IHNlbGVjdGVkRGF0ZXMsIGRhdGVTdHJpbmcsIGluc3RhbmNlIH0pO1xuICAgICAgfSxcbiAgICAgIG9uQ2xvc2U6IChzZWxlY3RlZERhdGVzOiBEYXRlW10sIGRhdGVTdHJpbmc6IHN0cmluZywgaW5zdGFuY2U6IGFueSkgPT4ge1xuICAgICAgICB0aGlzLmZsYXRwaWNrckNsb3NlLmVtaXQoeyBzZWxlY3RlZERhdGVzLCBkYXRlU3RyaW5nLCBpbnN0YW5jZSB9KTtcbiAgICAgIH0sXG4gICAgICBvbk1vbnRoQ2hhbmdlOiAoXG4gICAgICAgIHNlbGVjdGVkRGF0ZXM6IERhdGVbXSxcbiAgICAgICAgZGF0ZVN0cmluZzogc3RyaW5nLFxuICAgICAgICBpbnN0YW5jZTogYW55XG4gICAgICApID0+IHtcbiAgICAgICAgdGhpcy5mbGF0cGlja3JNb250aENoYW5nZS5lbWl0KHsgc2VsZWN0ZWREYXRlcywgZGF0ZVN0cmluZywgaW5zdGFuY2UgfSk7XG4gICAgICB9LFxuICAgICAgb25ZZWFyQ2hhbmdlOiAoXG4gICAgICAgIHNlbGVjdGVkRGF0ZXM6IERhdGVbXSxcbiAgICAgICAgZGF0ZVN0cmluZzogc3RyaW5nLFxuICAgICAgICBpbnN0YW5jZTogYW55XG4gICAgICApID0+IHtcbiAgICAgICAgdGhpcy5mbGF0cGlja3JZZWFyQ2hhbmdlLmVtaXQoeyBzZWxlY3RlZERhdGVzLCBkYXRlU3RyaW5nLCBpbnN0YW5jZSB9KTtcbiAgICAgIH0sXG4gICAgICBvblJlYWR5OiAoc2VsZWN0ZWREYXRlczogRGF0ZVtdLCBkYXRlU3RyaW5nOiBzdHJpbmcsIGluc3RhbmNlOiBhbnkpID0+IHtcbiAgICAgICAgdGhpcy5mbGF0cGlja3JSZWFkeS5lbWl0KHsgc2VsZWN0ZWREYXRlcywgZGF0ZVN0cmluZywgaW5zdGFuY2UgfSk7XG4gICAgICB9LFxuICAgICAgb25WYWx1ZVVwZGF0ZTogKFxuICAgICAgICBzZWxlY3RlZERhdGVzOiBEYXRlW10sXG4gICAgICAgIGRhdGVTdHJpbmc6IHN0cmluZyxcbiAgICAgICAgaW5zdGFuY2U6IGFueVxuICAgICAgKSA9PiB7XG4gICAgICAgIHRoaXMuZmxhdHBpY2tyVmFsdWVVcGRhdGUuZW1pdCh7IHNlbGVjdGVkRGF0ZXMsIGRhdGVTdHJpbmcsIGluc3RhbmNlIH0pO1xuICAgICAgfSxcbiAgICAgIG9uRGF5Q3JlYXRlOiAoXG4gICAgICAgIHNlbGVjdGVkRGF0ZXM6IERhdGVbXSxcbiAgICAgICAgZGF0ZVN0cmluZzogc3RyaW5nLFxuICAgICAgICBpbnN0YW5jZTogYW55LFxuICAgICAgICBkYXlFbGVtZW50OiBIVE1MRWxlbWVudFxuICAgICAgKSA9PiB7XG4gICAgICAgIHRoaXMuZmxhdHBpY2tyRGF5Q3JlYXRlLmVtaXQoe1xuICAgICAgICAgIHNlbGVjdGVkRGF0ZXMsXG4gICAgICAgICAgZGF0ZVN0cmluZyxcbiAgICAgICAgICBpbnN0YW5jZSxcbiAgICAgICAgICBkYXlFbGVtZW50XG4gICAgICAgIH0pO1xuICAgICAgfVxuICAgIH07XG5cbiAgICBPYmplY3Qua2V5cyhvcHRpb25zKS5mb3JFYWNoKGtleSA9PiB7XG4gICAgICBpZiAodHlwZW9mIG9wdGlvbnNba2V5XSA9PT0gJ3VuZGVmaW5lZCcpIHtcbiAgICAgICAgb3B0aW9uc1trZXldID0gKHRoaXMuZGVmYXVsdHMgYXMgYW55KVtrZXldO1xuICAgICAgfVxuICAgIH0pO1xuICAgIG9wdGlvbnMudGltZV8yNGhyID0gb3B0aW9ucy50aW1lMjRocjtcbiAgICB0aGlzLmluc3RhbmNlID0gZmxhdHBpY2tyKFxuICAgICAgdGhpcy5lbG0ubmF0aXZlRWxlbWVudCxcbiAgICAgIG9wdGlvbnNcbiAgICApIGFzIGZsYXRwaWNrci5JbnN0YW5jZTtcbiAgICB0aGlzLnNldERpc2FibGVkU3RhdGUodGhpcy5pc0Rpc2FibGVkKTtcbiAgfVxuXG4gIG5nT25DaGFuZ2VzKGNoYW5nZXM6IFNpbXBsZUNoYW5nZXMpOiB2b2lkIHtcbiAgICBpZiAodGhpcy5pbnN0YW5jZSkge1xuICAgICAgT2JqZWN0LmtleXMoY2hhbmdlcykuZm9yRWFjaChpbnB1dEtleSA9PiB7XG4gICAgICAgIHRoaXMuaW5zdGFuY2Uuc2V0KGlucHV0S2V5IGFzIGFueSwgKHRoaXMgYXMgYW55KVtpbnB1dEtleV0pO1xuICAgICAgfSk7XG4gICAgfVxuICB9XG5cbiAgbmdPbkRlc3Ryb3koKTogdm9pZCB7XG4gICAgdGhpcy5pbnN0YW5jZS5kZXN0cm95KCk7XG4gIH1cblxuICB3cml0ZVZhbHVlKHZhbHVlOiBhbnkpOiB2b2lkIHtcbiAgICBsZXQgY29udmVydGVkVmFsdWU6IGFueSA9IHZhbHVlO1xuICAgIGlmICh0aGlzLmNvbnZlcnRNb2RlbFZhbHVlICYmIHRoaXMubW9kZSA9PT0gJ3JhbmdlJyAmJiB2YWx1ZSkge1xuICAgICAgY29udmVydGVkVmFsdWUgPSBbdmFsdWUuZnJvbSwgdmFsdWUudG9dO1xuICAgIH1cblxuICAgIGlmICh0aGlzLmluc3RhbmNlKSB7XG4gICAgICB0aGlzLmluc3RhbmNlLnNldERhdGUoY29udmVydGVkVmFsdWUpO1xuICAgIH0gZWxzZSB7XG4gICAgICAvLyBmbGF0cGlja3IgaGFzbid0IGJlZW4gaW5pdGlhbGlzZWQgeWV0LCBzdG9yZSB0aGUgdmFsdWUgZm9yIGxhdGVyIHVzZVxuICAgICAgdGhpcy5pbml0aWFsVmFsdWUgPSBjb252ZXJ0ZWRWYWx1ZTtcbiAgICB9XG4gIH1cblxuICByZWdpc3Rlck9uQ2hhbmdlKGZuOiBhbnkpOiB2b2lkIHtcbiAgICB0aGlzLm9uQ2hhbmdlRm4gPSBmbjtcbiAgfVxuXG4gIHJlZ2lzdGVyT25Ub3VjaGVkKGZuOiAoKSA9PiB2b2lkKTogdm9pZCB7XG4gICAgdGhpcy5vblRvdWNoZWRGbiA9IGZuO1xuICB9XG5cbiAgc2V0RGlzYWJsZWRTdGF0ZShpc0Rpc2FibGVkOiBib29sZWFuKTogdm9pZCB7XG4gICAgdGhpcy5pc0Rpc2FibGVkID0gaXNEaXNhYmxlZDtcbiAgICBpZiAodGhpcy5pbnN0YW5jZSkge1xuICAgICAgaWYgKHRoaXMuaXNEaXNhYmxlZCkge1xuICAgICAgICB0aGlzLnJlbmRlcmVyLnNldFByb3BlcnR5KHRoaXMuaW5zdGFuY2UuX2lucHV0LCAnZGlzYWJsZWQnLCAnZGlzYWJsZWQnKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHRoaXMucmVuZGVyZXIucmVtb3ZlQXR0cmlidXRlKHRoaXMuaW5zdGFuY2UuX2lucHV0LCAnZGlzYWJsZWQnKTtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICBASG9zdExpc3RlbmVyKCdpbnB1dCcpXG4gIGlucHV0Q2hhbmdlZCgpOiB2b2lkIHtcbiAgICBjb25zdCB2YWx1ZTogc3RyaW5nID0gdGhpcy5lbG0ubmF0aXZlRWxlbWVudC52YWx1ZTtcbiAgICBpZiAodGhpcy5jb252ZXJ0TW9kZWxWYWx1ZSAmJiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnKSB7XG4gICAgICBzd2l0Y2ggKHRoaXMubW9kZSkge1xuICAgICAgICBjYXNlICdtdWx0aXBsZSc6XG4gICAgICAgICAgY29uc3QgZGF0ZXM6IERhdGVbXSA9IHZhbHVlXG4gICAgICAgICAgICAuc3BsaXQoJzsgJylcbiAgICAgICAgICAgIC5tYXAoc3RyID0+XG4gICAgICAgICAgICAgIHRoaXMuaW5zdGFuY2UucGFyc2VEYXRlKFxuICAgICAgICAgICAgICAgIHN0cixcbiAgICAgICAgICAgICAgICB0aGlzLmluc3RhbmNlLmNvbmZpZy5kYXRlRm9ybWF0LFxuICAgICAgICAgICAgICAgICF0aGlzLmluc3RhbmNlLmNvbmZpZy5lbmFibGVUaW1lXG4gICAgICAgICAgICAgIClcbiAgICAgICAgICAgICk7XG4gICAgICAgICAgdGhpcy5vbkNoYW5nZUZuKGRhdGVzKTtcbiAgICAgICAgICBicmVhaztcblxuICAgICAgICBjYXNlICdyYW5nZSc6XG4gICAgICAgICAgY29uc3QgW2Zyb20sIHRvXSA9IHZhbHVlXG4gICAgICAgICAgICAuc3BsaXQodGhpcy5pbnN0YW5jZS5sMTBuLnJhbmdlU2VwYXJhdG9yKVxuICAgICAgICAgICAgLm1hcChzdHIgPT5cbiAgICAgICAgICAgICAgdGhpcy5pbnN0YW5jZS5wYXJzZURhdGUoXG4gICAgICAgICAgICAgICAgc3RyLFxuICAgICAgICAgICAgICAgIHRoaXMuaW5zdGFuY2UuY29uZmlnLmRhdGVGb3JtYXQsXG4gICAgICAgICAgICAgICAgIXRoaXMuaW5zdGFuY2UuY29uZmlnLmVuYWJsZVRpbWVcbiAgICAgICAgICAgICAgKVxuICAgICAgICAgICAgKTtcbiAgICAgICAgICB0aGlzLm9uQ2hhbmdlRm4oeyBmcm9tLCB0byB9KTtcbiAgICAgICAgICBicmVhaztcblxuICAgICAgICBjYXNlICdzaW5nbGUnOlxuICAgICAgICBkZWZhdWx0OlxuICAgICAgICAgIHRoaXMub25DaGFuZ2VGbihcbiAgICAgICAgICAgIHRoaXMuaW5zdGFuY2UucGFyc2VEYXRlKFxuICAgICAgICAgICAgICB2YWx1ZSxcbiAgICAgICAgICAgICAgdGhpcy5pbnN0YW5jZS5jb25maWcuZGF0ZUZvcm1hdCxcbiAgICAgICAgICAgICAgIXRoaXMuaW5zdGFuY2UuY29uZmlnLmVuYWJsZVRpbWVcbiAgICAgICAgICAgIClcbiAgICAgICAgICApO1xuICAgICAgfVxuICAgIH0gZWxzZSB7XG4gICAgICB0aGlzLm9uQ2hhbmdlRm4odmFsdWUpO1xuICAgIH1cbiAgfVxufVxuIiwiaW1wb3J0IHtcbiAgTmdNb2R1bGUsXG4gIE1vZHVsZVdpdGhQcm92aWRlcnMsXG4gIEluamVjdGlvblRva2VuLFxuICBQcm92aWRlclxufSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7IEZsYXRwaWNrckRpcmVjdGl2ZSB9IGZyb20gJy4vZmxhdHBpY2tyLmRpcmVjdGl2ZSc7XG5pbXBvcnQge1xuICBGbGF0cGlja3JEZWZhdWx0cyxcbiAgRmxhdHBpY2tyRGVmYXVsdHNJbnRlcmZhY2Vcbn0gZnJvbSAnLi9mbGF0cGlja3ItZGVmYXVsdHMuc2VydmljZSc7XG5cbmV4cG9ydCBjb25zdCBVU0VSX0RFRkFVTFRTID0gbmV3IEluamVjdGlvblRva2VuKCdmbGF0cGlja3IgZGVmYXVsdHMnKTtcblxuZXhwb3J0IGZ1bmN0aW9uIGRlZmF1bHRzRmFjdG9yeShcbiAgdXNlckRlZmF1bHRzOiBGbGF0cGlja3JEZWZhdWx0c0ludGVyZmFjZVxuKTogRmxhdHBpY2tyRGVmYXVsdHMge1xuICBjb25zdCBkZWZhdWx0czogRmxhdHBpY2tyRGVmYXVsdHMgPSBuZXcgRmxhdHBpY2tyRGVmYXVsdHMoKTtcbiAgT2JqZWN0LmFzc2lnbihkZWZhdWx0cywgdXNlckRlZmF1bHRzKTtcbiAgcmV0dXJuIGRlZmF1bHRzO1xufVxuXG5ATmdNb2R1bGUoe1xuICBkZWNsYXJhdGlvbnM6IFtGbGF0cGlja3JEaXJlY3RpdmVdLFxuICBleHBvcnRzOiBbRmxhdHBpY2tyRGlyZWN0aXZlXVxufSlcbmV4cG9ydCBjbGFzcyBGbGF0cGlja3JNb2R1bGUge1xuICBzdGF0aWMgZm9yUm9vdChcbiAgICB1c2VyRGVmYXVsdHM6IEZsYXRwaWNrckRlZmF1bHRzSW50ZXJmYWNlID0ge31cbiAgKTogTW9kdWxlV2l0aFByb3ZpZGVycyB7XG4gICAgcmV0dXJuIHtcbiAgICAgIG5nTW9kdWxlOiBGbGF0cGlja3JNb2R1bGUsXG4gICAgICBwcm92aWRlcnM6IFtcbiAgICAgICAge1xuICAgICAgICAgIHByb3ZpZGU6IFVTRVJfREVGQVVMVFMsXG4gICAgICAgICAgdXNlVmFsdWU6IHVzZXJEZWZhdWx0c1xuICAgICAgICB9LFxuICAgICAgICB7XG4gICAgICAgICAgcHJvdmlkZTogRmxhdHBpY2tyRGVmYXVsdHMsXG4gICAgICAgICAgdXNlRmFjdG9yeTogZGVmYXVsdHNGYWN0b3J5LFxuICAgICAgICAgIGRlcHM6IFtVU0VSX0RFRkFVTFRTXVxuICAgICAgICB9XG4gICAgICBdXG4gICAgfTtcbiAgfVxufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7O0FBQUE7Ozs7O3lCQWlOc0IsUUFBUTs7Ozt3QkFLUixLQUFLOzs7Ozs2QkFNRCxFQUFFOzs7OzBCQUtKLEtBQUs7Ozs7d0JBS0gsU0FBUzs7Ozs4QkFLUCxRQUFROzs7OzswQkFNWixJQUFJOzs7OzswQkFNTCxPQUFPOzs7OzJCQUtMLEVBQUU7Ozs7NkJBS0EsQ0FBQzs7Ozt1QkFLSyxFQUFFOzs7Ozs2QkFNUixLQUFLOzs7O3NCQUtBLEVBQUU7Ozs7MEJBS1YsS0FBSzs7Ozs2QkFLRixLQUFLOzs7OzBCQUtRLFNBQVM7Ozs7NkJBS3ZCLENBQUM7Ozs7c0JBS1AsS0FBSzs7Ozt1QkFLRSxTQUFTOzs7O3VCQUtULFNBQVM7Ozs7K0JBS1IsQ0FBQzs7OztvQkFLYSxRQUFROzs7O3lCQUs1QixHQUFHOzs7OzBCQUtELEtBQUs7Ozs7bUJBS0csSUFBSSxJQUFJLEVBQUU7Ozs7eUJBVXBCLEdBQUc7Ozs7cUNBS1UsS0FBSzs7OztzQkFLcEIsS0FBSzs7Ozt3QkFLSCxLQUFLOzs7OzttQkFNVixLQUFLOzs7OzJCQUtHLEtBQUs7Ozs7b0JBV1osS0FBSzs7Ozt1QkFLSixFQUFFOzs7O3NCQUtPLFNBQVM7Ozs7aUNBS04sS0FBSzs7OzswQkFLYixDQUFDOzs7O1lBcE12QixVQUFVOzs7Ozs7O0FDNU1YLHVCQWdDYSxnQ0FBZ0MsR0FBUTtJQUNuRCxPQUFPLEVBQUUsaUJBQWlCO0lBQzFCLFdBQVcsRUFBRSxVQUFVLENBQUMsTUFBTSxrQkFBa0IsQ0FBQzs7SUFDakQsS0FBSyxFQUFFLElBQUk7Q0FDWixDQUFDO0FBVUY7Ozs7OztJQStQRSxZQUNVLEtBQ0EsVUFDQTtRQUZBLFFBQUcsR0FBSCxHQUFHO1FBQ0gsYUFBUSxHQUFSLFFBQVE7UUFDUixhQUFRLEdBQVIsUUFBUTs7Ozs4QkEvRHFDLElBQUksWUFBWSxFQUFFOzs7OytCQU1qQixJQUFJLFlBQVksRUFBRTs7OztvQ0FRdEUsSUFBSSxZQUFZLEVBQUU7Ozs7NkJBTWdDLElBQUksWUFBWSxFQUFFOzs7OzhCQU1qQixJQUFJLFlBQVksRUFBRTs7OztvQ0FRckUsSUFBSSxZQUFZLEVBQUU7Ozs7bUNBUWxCLElBQUksWUFBWSxFQUFFOzs7O2tDQVFsQixJQUFJLFlBQVksRUFBRTswQkFHRCxLQUFLOzBCQUdTLFNBQVE7MkJBRTdCLFNBQVE7S0FNbEI7Ozs7SUFFSixlQUFlO1FBQ2IsdUJBQU0sT0FBTyxHQUFRO1lBQ25CLFNBQVMsRUFBRSxJQUFJLENBQUMsU0FBUztZQUN6QixRQUFRLEVBQUUsSUFBSSxDQUFDLFFBQVE7WUFDdkIsYUFBYSxFQUFFLElBQUksQ0FBQyxhQUFhO1lBQ2pDLFVBQVUsRUFBRSxJQUFJLENBQUMsVUFBVTtZQUMzQixRQUFRLEVBQUUsSUFBSSxDQUFDLFFBQVE7WUFDdkIsY0FBYyxFQUFFLElBQUksQ0FBQyxjQUFjO1lBQ25DLFVBQVUsRUFBRSxJQUFJLENBQUMsVUFBVTtZQUMzQixVQUFVLEVBQUUsSUFBSSxDQUFDLFVBQVU7WUFDM0IsV0FBVyxFQUFFLElBQUksQ0FBQyxXQUFXO1lBQzdCLGFBQWEsRUFBRSxJQUFJLENBQUMsYUFBYTtZQUNqQyxPQUFPLEVBQUUsSUFBSSxDQUFDLE9BQU87WUFDckIsYUFBYSxFQUFFLElBQUksQ0FBQyxhQUFhO1lBQ2pDLE1BQU0sRUFBRSxJQUFJLENBQUMsTUFBTTtZQUNuQixVQUFVLEVBQUUsSUFBSSxDQUFDLFVBQVU7WUFDM0IsYUFBYSxFQUFFLElBQUksQ0FBQyxhQUFhO1lBQ2pDLFVBQVUsRUFBRSxJQUFJLENBQUMsVUFBVTtZQUMzQixhQUFhLEVBQUUsSUFBSSxDQUFDLGFBQWE7WUFDakMsV0FBVyxFQUFFLElBQUksQ0FBQyxZQUFZO1lBQzlCLE1BQU0sRUFBRSxJQUFJLENBQUMsTUFBTTtZQUNuQixPQUFPLEVBQUUsSUFBSSxDQUFDLE9BQU87WUFDckIsT0FBTyxFQUFFLElBQUksQ0FBQyxPQUFPO1lBQ3JCLGVBQWUsRUFBRSxJQUFJLENBQUMsZUFBZTtZQUNyQyxJQUFJLEVBQUUsSUFBSSxDQUFDLElBQUk7WUFDZixTQUFTLEVBQUUsSUFBSSxDQUFDLFNBQVM7WUFDekIsVUFBVSxFQUFFLElBQUksQ0FBQyxVQUFVO1lBQzNCLEdBQUcsRUFBRSxJQUFJLENBQUMsR0FBRztZQUNiLFNBQVMsRUFBRSxJQUFJLENBQUMsU0FBUztZQUN6QixTQUFTLEVBQUUsSUFBSSxDQUFDLFNBQVM7WUFDekIscUJBQXFCLEVBQUUsSUFBSSxDQUFDLHFCQUFxQjtZQUNqRCxVQUFVLEVBQUUsSUFBSSxDQUFDLFVBQVU7WUFDM0IsTUFBTSxFQUFFLElBQUksQ0FBQyxNQUFNO1lBQ25CLFFBQVEsRUFBRSxJQUFJLENBQUMsUUFBUTtZQUN2QixXQUFXLEVBQUUsSUFBSSxDQUFDLFdBQVc7WUFDN0IsT0FBTyxFQUFFLElBQUksQ0FBQyxPQUFPO1lBQ3JCLElBQUksRUFBRSxJQUFJLENBQUMsSUFBSTtZQUNmLE9BQU8sRUFBRSxJQUFJLENBQUMsT0FBTztZQUNyQixNQUFNLEVBQUUsSUFBSSxDQUFDLE1BQU07WUFDbkIsUUFBUSxFQUFFLENBQUMsYUFBcUIsRUFBRSxVQUFrQixFQUFFLFFBQWE7Z0JBQ2pFLElBQUksQ0FBQyxlQUFlLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ3BFO1lBQ0QsTUFBTSxFQUFFLENBQUMsYUFBcUIsRUFBRSxVQUFrQixFQUFFLFFBQWE7Z0JBQy9ELElBQUksQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ2xFO1lBQ0QsT0FBTyxFQUFFLENBQUMsYUFBcUIsRUFBRSxVQUFrQixFQUFFLFFBQWE7Z0JBQ2hFLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ25FO1lBQ0QsYUFBYSxFQUFFLENBQ2IsYUFBcUIsRUFDckIsVUFBa0IsRUFDbEIsUUFBYTtnQkFFYixJQUFJLENBQUMsb0JBQW9CLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ3pFO1lBQ0QsWUFBWSxFQUFFLENBQ1osYUFBcUIsRUFDckIsVUFBa0IsRUFDbEIsUUFBYTtnQkFFYixJQUFJLENBQUMsbUJBQW1CLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ3hFO1lBQ0QsT0FBTyxFQUFFLENBQUMsYUFBcUIsRUFBRSxVQUFrQixFQUFFLFFBQWE7Z0JBQ2hFLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ25FO1lBQ0QsYUFBYSxFQUFFLENBQ2IsYUFBcUIsRUFDckIsVUFBa0IsRUFDbEIsUUFBYTtnQkFFYixJQUFJLENBQUMsb0JBQW9CLENBQUMsSUFBSSxDQUFDLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFDO2FBQ3pFO1lBQ0QsV0FBVyxFQUFFLENBQ1gsYUFBcUIsRUFDckIsVUFBa0IsRUFDbEIsUUFBYSxFQUNiLFVBQXVCO2dCQUV2QixJQUFJLENBQUMsa0JBQWtCLENBQUMsSUFBSSxDQUFDO29CQUMzQixhQUFhO29CQUNiLFVBQVU7b0JBQ1YsUUFBUTtvQkFDUixVQUFVO2lCQUNYLENBQUMsQ0FBQzthQUNKO1NBQ0YsQ0FBQztRQUVGLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUMsT0FBTyxDQUFDLEdBQUc7WUFDOUIsSUFBSSxPQUFPLE9BQU8sQ0FBQyxHQUFHLENBQUMsS0FBSyxXQUFXLEVBQUU7Z0JBQ3ZDLE9BQU8sQ0FBQyxHQUFHLENBQUMsR0FBRyxtQkFBQyxJQUFJLENBQUMsUUFBZSxHQUFFLEdBQUcsQ0FBQyxDQUFDO2FBQzVDO1NBQ0YsQ0FBQyxDQUFDO1FBQ0gsT0FBTyxDQUFDLFNBQVMsR0FBRyxPQUFPLENBQUMsUUFBUSxDQUFDO1FBQ3JDLElBQUksQ0FBQyxRQUFRLHFCQUFHLFNBQVMsQ0FDdkIsSUFBSSxDQUFDLEdBQUcsQ0FBQyxhQUFhLEVBQ3RCLE9BQU8sQ0FDYyxDQUFBLENBQUM7UUFDeEIsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQztLQUN4Qzs7Ozs7SUFFRCxXQUFXLENBQUMsT0FBc0I7UUFDaEMsSUFBSSxJQUFJLENBQUMsUUFBUSxFQUFFO1lBQ2pCLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUMsT0FBTyxDQUFDLFFBQVE7Z0JBQ25DLElBQUksQ0FBQyxRQUFRLENBQUMsR0FBRyxtQkFBQyxRQUFlLEdBQUUsbUJBQUMsSUFBVyxHQUFFLFFBQVEsQ0FBQyxDQUFDLENBQUM7YUFDN0QsQ0FBQyxDQUFDO1NBQ0o7S0FDRjs7OztJQUVELFdBQVc7UUFDVCxJQUFJLENBQUMsUUFBUSxDQUFDLE9BQU8sRUFBRSxDQUFDO0tBQ3pCOzs7OztJQUVELFVBQVUsQ0FBQyxLQUFVO1FBQ25CLHFCQUFJLGNBQWMsR0FBUSxLQUFLLENBQUM7UUFDaEMsSUFBSSxJQUFJLENBQUMsaUJBQWlCLElBQUksSUFBSSxDQUFDLElBQUksS0FBSyxPQUFPLElBQUksS0FBSyxFQUFFO1lBQzVELGNBQWMsR0FBRyxDQUFDLEtBQUssQ0FBQyxJQUFJLEVBQUUsS0FBSyxDQUFDLEVBQUUsQ0FBQyxDQUFDO1NBQ3pDO1FBRUQsSUFBSSxJQUFJLENBQUMsUUFBUSxFQUFFO1lBQ2pCLElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxDQUFDLGNBQWMsQ0FBQyxDQUFDO1NBQ3ZDO2FBQU07O1lBRUwsSUFBSSxDQUFDLFlBQVksR0FBRyxjQUFjLENBQUM7U0FDcEM7S0FDRjs7Ozs7SUFFRCxnQkFBZ0IsQ0FBQyxFQUFPO1FBQ3RCLElBQUksQ0FBQyxVQUFVLEdBQUcsRUFBRSxDQUFDO0tBQ3RCOzs7OztJQUVELGlCQUFpQixDQUFDLEVBQWM7UUFDOUIsSUFBSSxDQUFDLFdBQVcsR0FBRyxFQUFFLENBQUM7S0FDdkI7Ozs7O0lBRUQsZ0JBQWdCLENBQUMsVUFBbUI7UUFDbEMsSUFBSSxDQUFDLFVBQVUsR0FBRyxVQUFVLENBQUM7UUFDN0IsSUFBSSxJQUFJLENBQUMsUUFBUSxFQUFFO1lBQ2pCLElBQUksSUFBSSxDQUFDLFVBQVUsRUFBRTtnQkFDbkIsSUFBSSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLEVBQUUsVUFBVSxFQUFFLFVBQVUsQ0FBQyxDQUFDO2FBQ3pFO2lCQUFNO2dCQUNMLElBQUksQ0FBQyxRQUFRLENBQUMsZUFBZSxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxFQUFFLFVBQVUsQ0FBQyxDQUFDO2FBQ2pFO1NBQ0Y7S0FDRjs7OztJQUdELFlBQVk7UUFDVix1QkFBTSxLQUFLLEdBQVcsSUFBSSxDQUFDLEdBQUcsQ0FBQyxhQUFhLENBQUMsS0FBSyxDQUFDO1FBQ25ELElBQUksSUFBSSxDQUFDLGlCQUFpQixJQUFJLE9BQU8sS0FBSyxLQUFLLFFBQVEsRUFBRTtZQUN2RCxRQUFRLElBQUksQ0FBQyxJQUFJO2dCQUNmLEtBQUssVUFBVTtvQkFDYix1QkFBTSxLQUFLLEdBQVcsS0FBSzt5QkFDeEIsS0FBSyxDQUFDLElBQUksQ0FBQzt5QkFDWCxHQUFHLENBQUMsR0FBRyxJQUNOLElBQUksQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUNyQixHQUFHLEVBQ0gsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsVUFBVSxFQUMvQixDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FDakMsQ0FDRixDQUFDO29CQUNKLElBQUksQ0FBQyxVQUFVLENBQUMsS0FBSyxDQUFDLENBQUM7b0JBQ3ZCLE1BQU07Z0JBRVIsS0FBSyxPQUFPO29CQUNWLE1BQU0sQ0FBQyxJQUFJLEVBQUUsRUFBRSxDQUFDLEdBQUcsS0FBSzt5QkFDckIsS0FBSyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLGNBQWMsQ0FBQzt5QkFDeEMsR0FBRyxDQUFDLEdBQUcsSUFDTixJQUFJLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FDckIsR0FBRyxFQUNILElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLFVBQVUsRUFDL0IsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLE1BQU0sQ0FBQyxVQUFVLENBQ2pDLENBQ0YsQ0FBQztvQkFDSixJQUFJLENBQUMsVUFBVSxDQUFDLEVBQUUsSUFBSSxFQUFFLEVBQUUsRUFBRSxDQUFDLENBQUM7b0JBQzlCLE1BQU07Z0JBRVIsS0FBSyxRQUFRLENBQUM7Z0JBQ2Q7b0JBQ0UsSUFBSSxDQUFDLFVBQVUsQ0FDYixJQUFJLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FDckIsS0FBSyxFQUNMLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLFVBQVUsRUFDL0IsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLE1BQU0sQ0FBQyxVQUFVLENBQ2pDLENBQ0YsQ0FBQzthQUNMO1NBQ0Y7YUFBTTtZQUNMLElBQUksQ0FBQyxVQUFVLENBQUMsS0FBSyxDQUFDLENBQUM7U0FDeEI7S0FDRjs7O1lBMWNGLFNBQVMsU0FBQztnQkFDVCxRQUFRLEVBQUUsZ0JBQWdCO2dCQUMxQixTQUFTLEVBQUUsQ0FBQyxnQ0FBZ0MsQ0FBQztnQkFDN0MsSUFBSSxFQUFFOztvQkFFSixRQUFRLEVBQUUsZUFBZTtpQkFDMUI7YUFDRjs7OztZQTNDQyxVQUFVO1lBYVYsaUJBQWlCO1lBSGpCLFNBQVM7Ozt3QkF1Q1IsS0FBSzt1QkFLTCxLQUFLOzRCQU1MLEtBQUs7eUJBS0wsS0FBSzt1QkFLTCxLQUFLOzZCQUtMLEtBQUs7eUJBTUwsS0FBSzt5QkFNTCxLQUFLOzBCQUtMLEtBQUs7NEJBSUwsS0FBSztzQkFLTCxLQUFLOzRCQU1MLEtBQUs7cUJBS0wsS0FBSzt5QkFLTCxLQUFLOzRCQUtMLEtBQUs7eUJBS0wsS0FBSzs0QkFLTCxLQUFLO3FCQUtMLEtBQUs7c0JBS0wsS0FBSztzQkFLTCxLQUFLOzhCQUtMLEtBQUs7bUJBS0wsS0FBSzt3QkFLTCxLQUFLO3lCQUtMLEtBQUs7a0JBS0wsS0FBSzt3QkFLTCxLQUFLO3dCQUtMLEtBQUs7b0NBS0wsS0FBSzt5QkFLTCxLQUFLO3FCQUtMLEtBQUs7dUJBS0wsS0FBSzswQkFLTCxLQUFLO3NCQU1MLEtBQUs7bUJBS0wsS0FBSztzQkFLTCxLQUFLO3FCQUtMLEtBQUs7Z0NBS0wsS0FBSzs2QkFLTCxNQUFNOzhCQU1OLE1BQU07bUNBTU4sTUFBTTs0QkFRTixNQUFNOzZCQU1OLE1BQU07bUNBTU4sTUFBTTtrQ0FRTixNQUFNO2lDQVFOLE1BQU07MkJBb0tOLFlBQVksU0FBQyxPQUFPOzs7Ozs7O0FDcGN2Qix1QkFZYSxhQUFhLEdBQUcsSUFBSSxjQUFjLENBQUMsb0JBQW9CLENBQUMsQ0FBQzs7Ozs7QUFFdEUseUJBQ0UsWUFBd0M7SUFFeEMsdUJBQU0sUUFBUSxHQUFzQixJQUFJLGlCQUFpQixFQUFFLENBQUM7SUFDNUQsTUFBTSxDQUFDLE1BQU0sQ0FBQyxRQUFRLEVBQUUsWUFBWSxDQUFDLENBQUM7SUFDdEMsT0FBTyxRQUFRLENBQUM7Q0FDakI7QUFNRDs7Ozs7SUFDRSxPQUFPLE9BQU8sQ0FDWixlQUEyQyxFQUFFO1FBRTdDLE9BQU87WUFDTCxRQUFRLEVBQUUsZUFBZTtZQUN6QixTQUFTLEVBQUU7Z0JBQ1Q7b0JBQ0UsT0FBTyxFQUFFLGFBQWE7b0JBQ3RCLFFBQVEsRUFBRSxZQUFZO2lCQUN2QjtnQkFDRDtvQkFDRSxPQUFPLEVBQUUsaUJBQWlCO29CQUMxQixVQUFVLEVBQUUsZUFBZTtvQkFDM0IsSUFBSSxFQUFFLENBQUMsYUFBYSxDQUFDO2lCQUN0QjthQUNGO1NBQ0YsQ0FBQztLQUNIOzs7WUF0QkYsUUFBUSxTQUFDO2dCQUNSLFlBQVksRUFBRSxDQUFDLGtCQUFrQixDQUFDO2dCQUNsQyxPQUFPLEVBQUUsQ0FBQyxrQkFBa0IsQ0FBQzthQUM5Qjs7Ozs7Ozs7Ozs7Ozs7OyJ9
 
       /***/
     },
@@ -10431,7 +7329,7 @@
       !*** ./node_modules/calendar-utils/calendar-utils.js ***!
       \*******************************************************/
 
-    /*! exports provided: DAYS_OF_WEEK, SECONDS_IN_DAY, getEventsInPeriod, getWeekViewHeader, getDifferenceInDaysWithExclusions, getAllDayWeekEvents, getWeekView, getMonthView, EventValidationErrorMessage, validateEvents */
+    /*! exports provided: DAYS_OF_WEEK, SECONDS_IN_DAY, getEventsInPeriod, getWeekViewHeader, getDifferenceInDaysWithExclusions, getWeekView, getMonthView, EventValidationErrorMessage, validateEvents */
 
     /***/
     function r5Jv(module, __webpack_exports__, __webpack_require__) {
@@ -10471,12 +7369,6 @@
       /* harmony export (binding) */
 
 
-      __webpack_require__.d(__webpack_exports__, "getAllDayWeekEvents", function () {
-        return getAllDayWeekEvents;
-      });
-      /* harmony export (binding) */
-
-
       __webpack_require__.d(__webpack_exports__, "getWeekView", function () {
         return getWeekView;
       });
@@ -10504,21 +7396,15 @@
           for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
 
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+            for (var p in s) {
+              if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+            }
           }
 
           return t;
         };
 
         return __assign.apply(this, arguments);
-      };
-
-      var __spreadArrays = undefined && undefined.__spreadArrays || function () {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-
-        for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
-
-        return r;
       };
 
       var DAYS_OF_WEEK;
@@ -10802,18 +7688,13 @@
       }
 
       function getAllDayWeekEvents(dateAdapter, _a) {
-        var _b = _a.events,
-            events = _b === void 0 ? [] : _b,
-            _c = _a.excluded,
-            excluded = _c === void 0 ? [] : _c,
-            _d = _a.precision,
-            precision = _d === void 0 ? 'days' : _d,
-            _e = _a.absolutePositionedEvents,
-            absolutePositionedEvents = _e === void 0 ? false : _e,
+        var events = _a.events,
+            excluded = _a.excluded,
+            precision = _a.precision,
+            absolutePositionedEvents = _a.absolutePositionedEvents,
             viewStart = _a.viewStart,
-            viewEnd = _a.viewEnd;
-        viewStart = dateAdapter.startOfDay(viewStart);
-        viewEnd = dateAdapter.endOfDay(viewEnd);
+            viewEnd = _a.viewEnd,
+            eventsInPeriod = _a.eventsInPeriod;
         var differenceInSeconds = dateAdapter.differenceInSeconds,
             differenceInDays = dateAdapter.differenceInDays;
         var maxRange = getDifferenceInDaysWithExclusions(dateAdapter, {
@@ -10822,7 +7703,7 @@
           excluded: excluded
         });
         var totalDaysInView = differenceInDays(viewEnd, viewStart) + 1;
-        var eventsMapped = events.filter(function (event) {
+        var eventsMapped = eventsInPeriod.filter(function (event) {
           return event.allDay;
         }).map(function (event) {
           var offset = getWeekViewEventOffset(dateAdapter, {
@@ -10884,9 +7765,7 @@
                 return true;
               }
             });
-
-            var weekEvents = __spreadArrays([event], otherRowEvents);
-
+            var weekEvents = [event].concat(otherRowEvents);
             var id = weekEvents.filter(function (weekEvent) {
               return weekEvent.event.id;
             }).map(function (weekEvent) {
@@ -10906,7 +7785,6 @@
         var events = _a.events,
             viewDate = _a.viewDate,
             hourSegments = _a.hourSegments,
-            hourDuration = _a.hourDuration,
             dayStart = _a.dayStart,
             dayEnd = _a.dayEnd,
             weekStartsOn = _a.weekStartsOn,
@@ -10914,12 +7792,10 @@
             weekendDays = _a.weekendDays,
             segmentHeight = _a.segmentHeight,
             viewStart = _a.viewStart,
-            viewEnd = _a.viewEnd,
-            minimumEventHeight = _a.minimumEventHeight;
+            viewEnd = _a.viewEnd;
         var dayViewHourGrid = getDayViewHourGrid(dateAdapter, {
           viewDate: viewDate,
           hourSegments: hourSegments,
-          hourDuration: hourDuration,
           dayStart: dayStart,
           dayEnd: dayEnd
         });
@@ -10943,18 +7819,16 @@
             dayStart: dayStart,
             dayEnd: dayEnd,
             segmentHeight: segmentHeight,
-            eventWidth: 1,
-            hourDuration: hourDuration,
-            minimumEventHeight: minimumEventHeight
+            eventWidth: 1
           });
           var hours = dayViewHourGrid.map(function (hour) {
             var segments = hour.segments.map(function (segment) {
               var date = setMinutes(setHours(day.date, getHours(segment.date)), getMinutes(segment.date));
-              return __assign(__assign({}, segment), {
+              return __assign({}, segment, {
                 date: date
               });
             });
-            return __assign(__assign({}, hour), {
+            return __assign({}, hour, {
               segments: segments
             });
           });
@@ -10979,7 +7853,7 @@
           var mappedEvents = dayView.events.map(function (event) {
             var columnCount = getColumnCount(dayView.events, getOverLappingWeekViewEvents(dayView.events, event.top, event.top + event.height));
             var width = 100 / columnCount;
-            return __assign(__assign({}, event), {
+            return __assign({}, event, {
               left: event.left * width,
               width: width
             });
@@ -10993,7 +7867,7 @@
               }), event.top, event.top + event.height);
 
               if (overLappingEvents.length > 0) {
-                return __assign(__assign({}, event), {
+                return __assign({}, event, {
                   width: Math.min.apply(Math, overLappingEvents.map(function (otherEvent) {
                     return otherEvent.left;
                   })) - event.left
@@ -11018,12 +7892,10 @@
             _e = _a.absolutePositionedEvents,
             absolutePositionedEvents = _e === void 0 ? false : _e,
             hourSegments = _a.hourSegments,
-            hourDuration = _a.hourDuration,
             dayStart = _a.dayStart,
             dayEnd = _a.dayEnd,
             weekendDays = _a.weekendDays,
             segmentHeight = _a.segmentHeight,
-            minimumEventHeight = _a.minimumEventHeight,
             _f = _a.viewStart,
             viewStart = _f === void 0 ? dateAdapter.startOfWeek(viewDate, {
           weekStartsOn: weekStartsOn
@@ -11056,12 +7928,13 @@
         });
         return {
           allDayEventRows: getAllDayWeekEvents(dateAdapter, {
-            events: eventsInPeriod,
+            events: events,
             excluded: excluded,
             precision: precision,
             absolutePositionedEvents: absolutePositionedEvents,
             viewStart: viewStart,
-            viewEnd: viewEnd
+            viewEnd: viewEnd,
+            eventsInPeriod: eventsInPeriod
           }),
           period: {
             events: eventsInPeriod,
@@ -11072,7 +7945,6 @@
             events: events,
             viewDate: viewDate,
             hourSegments: hourSegments,
-            hourDuration: hourDuration,
             dayStart: dayStart,
             dayEnd: dayEnd,
             weekStartsOn: weekStartsOn,
@@ -11080,8 +7952,7 @@
             weekendDays: weekendDays,
             segmentHeight: segmentHeight,
             viewStart: viewStart,
-            viewEnd: viewEnd,
-            minimumEventHeight: minimumEventHeight
+            viewEnd: viewEnd
           })
         };
       }
@@ -11175,11 +8046,11 @@
           for (var i = 0; i < initialViewDays.length; i += totalDaysVisibleInWeek) {
             var row = initialViewDays.slice(i, i + totalDaysVisibleInWeek);
             var isRowInMonth = row.some(function (day) {
-              return viewStart <= day.date && day.date < viewEnd;
+              return getMonth(day.date) === getMonth(viewDate);
             });
 
             if (isRowInMonth) {
-              days = __spreadArrays(days, row);
+              days = days.concat(row);
             }
           }
         } else {
@@ -11229,9 +8100,7 @@
             dayStart = _a.dayStart,
             dayEnd = _a.dayEnd,
             eventWidth = _a.eventWidth,
-            segmentHeight = _a.segmentHeight,
-            hourDuration = _a.hourDuration,
-            minimumEventHeight = _a.minimumEventHeight;
+            segmentHeight = _a.segmentHeight;
         var setMinutes = dateAdapter.setMinutes,
             setHours = dateAdapter.setHours,
             startOfDay = dateAdapter.startOfDay,
@@ -11240,7 +8109,6 @@
             differenceInMinutes = dateAdapter.differenceInMinutes;
         var startOfView = setMinutes(setHours(startOfDay(viewDate), sanitiseHours(dayStart.hour)), sanitiseMinutes(dayStart.minute));
         var endOfView = setMinutes(setHours(startOfMinute(endOfDay(viewDate)), sanitiseHours(dayEnd.hour)), sanitiseMinutes(dayEnd.minute));
-        endOfView.setSeconds(59, 999);
         var previousDayEvents = [];
         var eventsInPeriod = getEventsInPeriod(dateAdapter, {
           events: events.filter(function (event) {
@@ -11256,7 +8124,7 @@
           var eventEnd = event.end || eventStart;
           var startsBeforeDay = eventStart < startOfView;
           var endsAfterDay = eventEnd > endOfView;
-          var hourHeightModifier = hourSegments * segmentHeight / (hourDuration || MINUTES_IN_HOUR);
+          var hourHeightModifier = hourSegments * segmentHeight / MINUTES_IN_HOUR;
           var top = 0;
 
           if (eventStart > startOfView) {
@@ -11268,11 +8136,9 @@
           }
 
           top *= hourHeightModifier;
-          top = Math.floor(top);
           var startDate = startsBeforeDay ? startOfView : eventStart;
           var endDate = endsAfterDay ? endOfView : eventEnd;
-          var timezoneOffset = startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
-          var height = differenceInMinutes(endDate, startDate) + timezoneOffset;
+          var height = differenceInMinutes(endDate, startDate);
 
           if (!event.end) {
             height = segmentHeight;
@@ -11280,11 +8146,6 @@
             height *= hourHeightModifier;
           }
 
-          if (minimumEventHeight && height < minimumEventHeight) {
-            height = minimumEventHeight;
-          }
-
-          height = Math.floor(height);
           var bottom = top + height;
           var overlappingPreviousEvents = getOverLappingWeekViewEvents(previousDayEvents, top, bottom);
           var left = 0;
@@ -11340,7 +8201,6 @@
       function getDayViewHourGrid(dateAdapter, _a) {
         var viewDate = _a.viewDate,
             hourSegments = _a.hourSegments,
-            hourDuration = _a.hourDuration,
             dayStart = _a.dayStart,
             dayEnd = _a.dayEnd;
         var setMinutes = dateAdapter.setMinutes,
@@ -11354,7 +8214,7 @@
         var hours = [];
         var startOfView = setMinutes(setHours(startOfDay(viewDate), sanitiseHours(dayStart.hour)), sanitiseMinutes(dayStart.minute));
         var endOfView = setMinutes(setHours(startOfMinute(endOfDay(viewDate)), sanitiseHours(dayEnd.hour)), sanitiseMinutes(dayEnd.minute));
-        var segmentDuration = (hourDuration || MINUTES_IN_HOUR) / hourSegments;
+        var segmentDuration = MINUTES_IN_HOUR / hourSegments;
         var startOfViewDay = startOfDay(viewDate);
         var endOfViewDay = endOfDay(viewDate);
 
@@ -11373,13 +8233,11 @@
           };
         }
 
-        var dayDuration = hourDuration ? HOURS_IN_DAY * 60 / hourDuration : MINUTES_IN_HOUR;
-
-        for (var i = 0; i < dayDuration; i++) {
+        for (var i = 0; i < HOURS_IN_DAY; i++) {
           var segments = [];
 
           for (var j = 0; j < hourSegments; j++) {
-            var date = addMinutes(addMinutes(startOfView, i * (hourDuration || MINUTES_IN_HOUR)), j * segmentDuration);
+            var date = addMinutes(addHours(startOfViewDay, i), j * segmentDuration);
 
             if (date >= startOfView && date < endOfView) {
               segments.push({
@@ -11448,6 +8306,589 @@
     },
 
     /***/
+    "rJ3z":
+    /*!******************************************************!*\
+      !*** ./node_modules/dom-autoscroller/dist/bundle.js ***!
+      \******************************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function rJ3z(module, exports, __webpack_require__) {
+      "use strict";
+
+      function _interopDefault(ex) {
+        return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+      }
+
+      var typeFunc = __webpack_require__(
+      /*! type-func */
+      "OJSY");
+
+      var animationFramePolyfill = __webpack_require__(
+      /*! animation-frame-polyfill */
+      "c/fO");
+
+      var domSet = __webpack_require__(
+      /*! dom-set */
+      "VJNc");
+
+      var domPlane = __webpack_require__(
+      /*! dom-plane */
+      "PTRy");
+
+      var mousemoveDispatcher = _interopDefault(__webpack_require__(
+      /*! dom-mousemove-dispatcher */
+      "uzHG"));
+
+      function AutoScroller(elements, options) {
+        if (options === void 0) options = {};
+        var self = this;
+        var maxSpeed = 4,
+            scrolling = false;
+        this.margin = options.margin || -1; //this.scrolling = false;
+
+        this.scrollWhenOutside = options.scrollWhenOutside || false;
+        var point = {},
+            pointCB = domPlane.createPointCB(point),
+            dispatcher = mousemoveDispatcher(),
+            down = false;
+        window.addEventListener('mousemove', pointCB, false);
+        window.addEventListener('touchmove', pointCB, false);
+
+        if (!isNaN(options.maxSpeed)) {
+          maxSpeed = options.maxSpeed;
+        }
+
+        this.autoScroll = typeFunc["boolean"](options.autoScroll);
+        this.syncMove = typeFunc["boolean"](options.syncMove, false);
+
+        this.destroy = function (forceCleanAnimation) {
+          window.removeEventListener('mousemove', pointCB, false);
+          window.removeEventListener('touchmove', pointCB, false);
+          window.removeEventListener('mousedown', onDown, false);
+          window.removeEventListener('touchstart', onDown, false);
+          window.removeEventListener('mouseup', onUp, false);
+          window.removeEventListener('touchend', onUp, false);
+          window.removeEventListener('pointerup', onUp, false);
+          window.removeEventListener('mouseleave', onMouseOut, false);
+          window.removeEventListener('mousemove', onMove, false);
+          window.removeEventListener('touchmove', onMove, false);
+          window.removeEventListener('scroll', setScroll, true);
+          elements = [];
+
+          if (forceCleanAnimation) {
+            cleanAnimation();
+          }
+        };
+
+        this.add = function () {
+          var element = [],
+              len = arguments.length;
+
+          while (len--) {
+            element[len] = arguments[len];
+          }
+
+          domSet.addElements.apply(void 0, [elements].concat(element));
+          return this;
+        };
+
+        this.remove = function () {
+          var element = [],
+              len = arguments.length;
+
+          while (len--) {
+            element[len] = arguments[len];
+          }
+
+          return domSet.removeElements.apply(void 0, [elements].concat(element));
+        };
+
+        var hasWindow = null,
+            windowAnimationFrame;
+
+        if (Object.prototype.toString.call(elements) !== '[object Array]') {
+          elements = [elements];
+        }
+
+        (function (temp) {
+          elements = [];
+          temp.forEach(function (element) {
+            if (element === window) {
+              hasWindow = window;
+            } else {
+              self.add(element);
+            }
+          });
+        })(elements);
+
+        Object.defineProperties(this, {
+          down: {
+            get: function get() {
+              return down;
+            }
+          },
+          maxSpeed: {
+            get: function get() {
+              return maxSpeed;
+            }
+          },
+          point: {
+            get: function get() {
+              return point;
+            }
+          },
+          scrolling: {
+            get: function get() {
+              return scrolling;
+            }
+          }
+        });
+        var n = 0,
+            current = null,
+            animationFrame;
+        window.addEventListener('mousedown', onDown, false);
+        window.addEventListener('touchstart', onDown, false);
+        window.addEventListener('mouseup', onUp, false);
+        window.addEventListener('touchend', onUp, false);
+        /*
+        IE does not trigger mouseup event when scrolling.
+        It is a known issue that Microsoft won't fix.
+        https://connect.microsoft.com/IE/feedback/details/783058/scrollbar-trigger-mousedown-but-not-mouseup
+        IE supports pointer events instead
+        */
+
+        window.addEventListener('pointerup', onUp, false);
+        window.addEventListener('mousemove', onMove, false);
+        window.addEventListener('touchmove', onMove, false);
+        window.addEventListener('mouseleave', onMouseOut, false);
+        window.addEventListener('scroll', setScroll, true);
+
+        function setScroll(e) {
+          for (var i = 0; i < elements.length; i++) {
+            if (elements[i] === e.target) {
+              scrolling = true;
+              break;
+            }
+          }
+
+          if (scrolling) {
+            animationFramePolyfill.requestAnimationFrame(function () {
+              return scrolling = false;
+            });
+          }
+        }
+
+        function onDown() {
+          down = true;
+        }
+
+        function onUp() {
+          down = false;
+          cleanAnimation();
+        }
+
+        function cleanAnimation() {
+          animationFramePolyfill.cancelAnimationFrame(animationFrame);
+          animationFramePolyfill.cancelAnimationFrame(windowAnimationFrame);
+        }
+
+        function onMouseOut() {
+          down = false;
+        }
+
+        function getTarget(target) {
+          if (!target) {
+            return null;
+          }
+
+          if (current === target) {
+            return target;
+          }
+
+          if (domSet.hasElement(elements, target)) {
+            return target;
+          }
+
+          while (target = target.parentNode) {
+            if (domSet.hasElement(elements, target)) {
+              return target;
+            }
+          }
+
+          return null;
+        }
+
+        function getElementUnderPoint() {
+          var underPoint = null;
+
+          for (var i = 0; i < elements.length; i++) {
+            if (inside(point, elements[i])) {
+              underPoint = elements[i];
+            }
+          }
+
+          return underPoint;
+        }
+
+        function onMove(event) {
+          if (!self.autoScroll()) {
+            return;
+          }
+
+          if (event['dispatched']) {
+            return;
+          }
+
+          var target = event.target,
+              body = document.body;
+
+          if (current && !inside(point, current)) {
+            if (!self.scrollWhenOutside) {
+              current = null;
+            }
+          }
+
+          if (target && target.parentNode === body) {
+            //The special condition to improve speed.
+            target = getElementUnderPoint();
+          } else {
+            target = getTarget(target);
+
+            if (!target) {
+              target = getElementUnderPoint();
+            }
+          }
+
+          if (target && target !== current) {
+            current = target;
+          }
+
+          if (hasWindow) {
+            animationFramePolyfill.cancelAnimationFrame(windowAnimationFrame);
+            windowAnimationFrame = animationFramePolyfill.requestAnimationFrame(scrollWindow);
+          }
+
+          if (!current) {
+            return;
+          }
+
+          animationFramePolyfill.cancelAnimationFrame(animationFrame);
+          animationFrame = animationFramePolyfill.requestAnimationFrame(scrollTick);
+        }
+
+        function scrollWindow() {
+          autoScroll(hasWindow);
+          animationFramePolyfill.cancelAnimationFrame(windowAnimationFrame);
+          windowAnimationFrame = animationFramePolyfill.requestAnimationFrame(scrollWindow);
+        }
+
+        function scrollTick() {
+          if (!current) {
+            return;
+          }
+
+          autoScroll(current);
+          animationFramePolyfill.cancelAnimationFrame(animationFrame);
+          animationFrame = animationFramePolyfill.requestAnimationFrame(scrollTick);
+        }
+
+        function autoScroll(el) {
+          var rect = domPlane.getClientRect(el),
+              scrollx,
+              scrolly;
+
+          if (point.x < rect.left + self.margin) {
+            scrollx = Math.floor(Math.max(-1, (point.x - rect.left) / self.margin - 1) * self.maxSpeed);
+          } else if (point.x > rect.right - self.margin) {
+            scrollx = Math.ceil(Math.min(1, (point.x - rect.right) / self.margin + 1) * self.maxSpeed);
+          } else {
+            scrollx = 0;
+          }
+
+          if (point.y < rect.top + self.margin) {
+            scrolly = Math.floor(Math.max(-1, (point.y - rect.top) / self.margin - 1) * self.maxSpeed);
+          } else if (point.y > rect.bottom - self.margin) {
+            scrolly = Math.ceil(Math.min(1, (point.y - rect.bottom) / self.margin + 1) * self.maxSpeed);
+          } else {
+            scrolly = 0;
+          }
+
+          if (self.syncMove()) {
+            /*
+            Notes about mousemove event dispatch.
+            screen(X/Y) should need to be updated.
+            Some other properties might need to be set.
+            Keep the syncMove option default false until all inconsistencies are taken care of.
+            */
+            dispatcher.dispatch(el, {
+              pageX: point.pageX + scrollx,
+              pageY: point.pageY + scrolly,
+              clientX: point.x + scrollx,
+              clientY: point.y + scrolly
+            });
+          }
+
+          setTimeout(function () {
+            if (scrolly) {
+              scrollY(el, scrolly);
+            }
+
+            if (scrollx) {
+              scrollX(el, scrollx);
+            }
+          });
+        }
+
+        function scrollY(el, amount) {
+          if (el === window) {
+            window.scrollTo(el.pageXOffset, el.pageYOffset + amount);
+          } else {
+            el.scrollTop += amount;
+          }
+        }
+
+        function scrollX(el, amount) {
+          if (el === window) {
+            window.scrollTo(el.pageXOffset + amount, el.pageYOffset);
+          } else {
+            el.scrollLeft += amount;
+          }
+        }
+      }
+
+      function AutoScrollerFactory(element, options) {
+        return new AutoScroller(element, options);
+      }
+
+      function inside(point, el, rect) {
+        if (!rect) {
+          return domPlane.pointInside(point, el);
+        } else {
+          return point.y > rect.top && point.y < rect.bottom && point.x > rect.left && point.x < rect.right;
+        }
+      }
+      /*
+      git remote add origin https://github.com/hollowdoor/dom_autoscroller.git
+      git push -u origin master
+      */
+
+
+      module.exports = AutoScrollerFactory; //# sourceMappingURL=bundle.js.map
+
+      /***/
+    },
+
+    /***/
+    "uMIJ":
+    /*!******************************************!*\
+      !*** ./node_modules/array-from/index.js ***!
+      \******************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function uMIJ(module, exports, __webpack_require__) {
+      module.exports = typeof Array.from === 'function' ? Array.from : __webpack_require__(
+      /*! ./polyfill */
+      "lipz");
+      /***/
+    },
+
+    /***/
+    "uzHG":
+    /*!**************************************************************!*\
+      !*** ./node_modules/dom-mousemove-dispatcher/dist/bundle.js ***!
+      \**************************************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function uzHG(module, exports, __webpack_require__) {
+      "use strict";
+
+      var objectCreate = void 0;
+
+      if (typeof Object.create != 'function') {
+        objectCreate = function (undefined) {
+          var Temp = function Temp() {};
+
+          return function (prototype, propertiesObject) {
+            if (prototype !== Object(prototype) && prototype !== null) {
+              throw TypeError('Argument must be an object, or null');
+            }
+
+            Temp.prototype = prototype || {};
+            var result = new Temp();
+            Temp.prototype = null;
+
+            if (propertiesObject !== undefined) {
+              Object.defineProperties(result, propertiesObject);
+            } // to imitate the case of Object.create(null)
+
+
+            if (prototype === null) {
+              result.__proto__ = null;
+            }
+
+            return result;
+          };
+        }();
+      } else {
+        objectCreate = Object.create;
+      }
+
+      var objectCreate$1 = objectCreate;
+      var mouseEventProps = ['altKey', 'button', 'buttons', 'clientX', 'clientY', 'ctrlKey', 'metaKey', 'movementX', 'movementY', 'offsetX', 'offsetY', 'pageX', 'pageY', 'region', 'relatedTarget', 'screenX', 'screenY', 'shiftKey', 'which', 'x', 'y'];
+
+      function createDispatcher(element) {
+        var defaultSettings = {
+          screenX: 0,
+          screenY: 0,
+          clientX: 0,
+          clientY: 0,
+          ctrlKey: false,
+          shiftKey: false,
+          altKey: false,
+          metaKey: false,
+          button: 0,
+          buttons: 1,
+          relatedTarget: null,
+          region: null
+        };
+
+        if (element !== undefined) {
+          element.addEventListener('mousemove', onMove);
+        }
+
+        function onMove(e) {
+          for (var i = 0; i < mouseEventProps.length; i++) {
+            defaultSettings[mouseEventProps[i]] = e[mouseEventProps[i]];
+          }
+        }
+
+        var dispatch = function () {
+          if (MouseEvent) {
+            return function m1(element, initMove, data) {
+              var evt = new MouseEvent('mousemove', createMoveInit(defaultSettings, initMove)); //evt.dispatched = 'mousemove';
+
+              setSpecial(evt, data);
+              return element.dispatchEvent(evt);
+            };
+          } else if (typeof document.createEvent === 'function') {
+            return function m2(element, initMove, data) {
+              var settings = createMoveInit(defaultSettings, initMove);
+              var evt = document.createEvent('MouseEvents');
+              evt.initMouseEvent("mousemove", true, //can bubble
+              true, //cancelable
+              window, //view
+              0, //detail
+              settings.screenX, //0, //screenX
+              settings.screenY, //0, //screenY
+              settings.clientX, //80, //clientX
+              settings.clientY, //20, //clientY
+              settings.ctrlKey, //false, //ctrlKey
+              settings.altKey, //false, //altKey
+              settings.shiftKey, //false, //shiftKey
+              settings.metaKey, //false, //metaKey
+              settings.button, //0, //button
+              settings.relatedTarget //null //relatedTarget
+              ); //evt.dispatched = 'mousemove';
+
+              setSpecial(evt, data);
+              return element.dispatchEvent(evt);
+            };
+          } else if (typeof document.createEventObject === 'function') {
+            return function m3(element, initMove, data) {
+              var evt = document.createEventObject();
+              var settings = createMoveInit(defaultSettings, initMove);
+
+              for (var name in settings) {
+                evt[name] = settings[name];
+              } //evt.dispatched = 'mousemove';
+
+
+              setSpecial(evt, data);
+              return element.dispatchEvent(evt);
+            };
+          }
+        }();
+
+        function destroy() {
+          if (element) element.removeEventListener('mousemove', onMove, false);
+          defaultSettings = null;
+        }
+
+        return {
+          destroy: destroy,
+          dispatch: dispatch
+        };
+      }
+
+      function createMoveInit(defaultSettings, initMove) {
+        initMove = initMove || {};
+        var settings = objectCreate$1(defaultSettings);
+
+        for (var i = 0; i < mouseEventProps.length; i++) {
+          if (initMove[mouseEventProps[i]] !== undefined) settings[mouseEventProps[i]] = initMove[mouseEventProps[i]];
+        }
+
+        return settings;
+      }
+
+      function setSpecial(e, data) {
+        console.log('data ', data);
+        e.data = data || {};
+        e.dispatched = 'mousemove';
+      }
+      /*
+      http://marcgrabanski.com/simulating-mouse-click-events-in-javascript/
+      */
+
+
+      module.exports = createDispatcher; //# sourceMappingURL=bundle.js.map
+
+      /***/
+    },
+
+    /***/
+    "xijO":
+    /*!************************************************!*\
+      !*** ./node_modules/iselement/module/index.js ***!
+      \************************************************/
+
+    /*! exports provided: default */
+
+    /***/
+    function xijO(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+
+      var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+        return typeof obj;
+      } : function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+      };
+      /**
+       * Returns `true` if provided input is Element.
+       * @name isElement
+       * @param {*} [input]
+       * @returns {boolean}
+       */
+
+      /* harmony default export */
+
+
+      __webpack_exports__["default"] = function (input) {
+        return input != null && (typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object' && input.nodeType === 1 && _typeof(input.style) === 'object' && _typeof(input.ownerDocument) === 'object';
+      };
+      /***/
+
+    },
+
+    /***/
     "yotz":
     /*!**************************************************************************************!*\
       !*** ./node_modules/angular-resizable-element/fesm2015/angular-resizable-element.js ***!
@@ -11487,40 +8928,21 @@
       /* harmony import */
 
 
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! @angular/core */
-      "8Y7J");
-      /* harmony import */
-
-
-      var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
       /*! rxjs */
       "qCKp");
       /* harmony import */
 
 
-      var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
       /*! rxjs/operators */
       "kU1M");
-      /**
-       * @fileoverview added by tsickle
-       * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-       */
-
-      /**
-       * @hidden
-       * @type {?}
-       */
+      /* harmony import */
 
 
-      var IS_TOUCH_DEVICE = function () {
-        // In case we're in Node.js environment.
-        if (typeof window === 'undefined') {
-          return false;
-        } else {
-          return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-        }
-      }();
+      var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! @angular/core */
+      "8Y7J");
       /**
        * @fileoverview added by tsickle
        * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
@@ -11607,8 +9029,8 @@
         });
 
         if (transform && transform.includes('translate')) {
-          translateX = transform.replace(/.*translate3?d?\((-?[0-9]*)px, (-?[0-9]*)px.*/, '$1');
-          translateY = transform.replace(/.*translate3?d?\((-?[0-9]*)px, (-?[0-9]*)px.*/, '$2');
+          translateX = transform.replace(/.*translate\((.*)px, (.*)px\).*/, '$1');
+          translateY = transform.replace(/.*translate\((.*)px, (.*)px\).*/, '$2');
         }
 
         if (ghostElementPositioning === 'absolute') {
@@ -11790,11 +9212,6 @@
        *   [enableGhostResize]="true">
        * </div>
        * ```
-       * Or in case they are sibling elements:
-       * ```html
-       * <div mwlResizable #resizableElement="mwlResizable"></div>
-       * <div mwlResizeHandle [resizableContainer]="resizableElement" [resizeEdges]="{bottom: true, right: true}"></div>
-       * ```
        */
 
       var ResizableDirective = /*#__PURE__*/function () {
@@ -11860,34 +9277,34 @@
            * Called when the mouse is pressed and a resize event is about to begin. `$event` is a `ResizeEvent` object.
            */
 
-          this.resizeStart = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+          this.resizeStart = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
           /**
            * Called as the mouse is dragged after a resize event has begun. `$event` is a `ResizeEvent` object.
            */
 
-          this.resizing = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+          this.resizing = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
           /**
            * Called after the mouse is released after a resize event. `$event` is a `ResizeEvent` object.
            */
 
-          this.resizeEnd = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+          this.resizeEnd = new _angular_core__WEBPACK_IMPORTED_MODULE_3__["EventEmitter"]();
           /**
            * @hidden
            */
 
-          this.mouseup = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+          this.mouseup = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
           /**
            * @hidden
            */
 
-          this.mousedown = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+          this.mousedown = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
           /**
            * @hidden
            */
 
-          this.mousemove = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
-          this.destroy$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
-          this.resizeEdges$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+          this.mousemove = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+          this.destroy$ = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+          this.resizeEdges$ = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
           this.pointerEventListeners = PointerEventListeners.getInstance(renderer, zone);
         }
         /**
@@ -11899,26 +9316,22 @@
         _createClass(ResizableDirective, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this25 = this;
+            var _this24 = this;
 
             /** @type {?} */
-            var mousedown$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"])(this.pointerEventListeners.pointerDown, this.mousedown);
+            var mousedown$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["merge"])(this.pointerEventListeners.pointerDown, this.mousedown);
             /** @type {?} */
 
-            var mousemove$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"])(this.pointerEventListeners.pointerMove, this.mousemove).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(function (_ref56) {
+            var mousemove$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["merge"])(this.pointerEventListeners.pointerMove, this.mousemove).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])(function (_ref56) {
               var event = _ref56.event;
 
               if (currentResize) {
-                try {
-                  event.preventDefault();
-                } catch (e) {// just adding try-catch not to see errors in console if there is a passive listener for same event somewhere
-                  // browser does nothing except of writing errors to console
-                }
+                event.preventDefault();
               }
-            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["share"])());
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["share"])());
             /** @type {?} */
 
-            var mouseup$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"])(this.pointerEventListeners.pointerUp, this.mouseup);
+            var mouseup$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["merge"])(this.pointerEventListeners.pointerUp, this.mouseup);
             /** @type {?} */
 
             var currentResize;
@@ -11926,25 +9339,25 @@
 
             var removeGhostElement = function removeGhostElement() {
               if (currentResize && currentResize.clonedNode) {
-                _this25.elm.nativeElement.parentElement.removeChild(currentResize.clonedNode);
+                _this24.elm.nativeElement.parentElement.removeChild(currentResize.clonedNode);
 
-                _this25.renderer.setStyle(_this25.elm.nativeElement, 'visibility', 'inherit');
+                _this24.renderer.setStyle(_this24.elm.nativeElement, 'visibility', 'inherit');
               }
             };
             /** @type {?} */
 
 
             var getResizeCursors = function getResizeCursors() {
-              return Object.assign({}, DEFAULT_RESIZE_CURSORS, _this25.resizeCursors);
+              return Object.assign({}, DEFAULT_RESIZE_CURSORS, _this24.resizeCursors);
             };
 
-            this.resizeEdges$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["startWith"])(this.resizeEdges), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () {
-              return _this25.resizeEdges && Object.keys(_this25.resizeEdges).some(function (edge) {
-                return !!_this25.resizeEdges[edge];
+            this.resizeEdges$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["startWith"])(this.resizeEdges), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function () {
+              return _this24.resizeEdges && Object.keys(_this24.resizeEdges).some(function (edge) {
+                return !!_this24.resizeEdges[edge];
               });
-            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (legacyResizeEdgesEnabled) {
-              return legacyResizeEdgesEnabled ? mousemove$ : rxjs__WEBPACK_IMPORTED_MODULE_2__["EMPTY"];
-            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["auditTime"])(this.mouseMoveThrottleMS), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.destroy$)).subscribe(function (_ref57) {
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["switchMap"])(function (legacyResizeEdgesEnabled) {
+              return legacyResizeEdgesEnabled ? mousemove$ : rxjs__WEBPACK_IMPORTED_MODULE_1__["EMPTY"];
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["auditTime"])(this.mouseMoveThrottleMS), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["takeUntil"])(this.destroy$)).subscribe(function (_ref57) {
               var clientX = _ref57.clientX,
                   clientY = _ref57.clientY;
 
@@ -11952,9 +9365,9 @@
               var resizeEdges = getResizeEdges({
                 clientX: clientX,
                 clientY: clientY,
-                elm: _this25.elm,
-                allowedEdges: _this25.resizeEdges,
-                cursorPrecision: _this25.resizeCursorPrecision
+                elm: _this24.elm,
+                allowedEdges: _this24.resizeEdges,
+                cursorPrecision: _this24.resizeCursorPrecision
               });
               /** @type {?} */
 
@@ -11964,20 +9377,20 @@
                 /** @type {?} */
                 var cursor = getResizeCursor(resizeEdges, resizeCursors);
 
-                _this25.renderer.setStyle(_this25.elm.nativeElement, 'cursor', cursor);
+                _this24.renderer.setStyle(_this24.elm.nativeElement, 'cursor', cursor);
               }
 
-              _this25.setElementClass(_this25.elm, RESIZE_LEFT_HOVER_CLASS, resizeEdges.left === true);
+              _this24.setElementClass(_this24.elm, RESIZE_LEFT_HOVER_CLASS, resizeEdges.left === true);
 
-              _this25.setElementClass(_this25.elm, RESIZE_RIGHT_HOVER_CLASS, resizeEdges.right === true);
+              _this24.setElementClass(_this24.elm, RESIZE_RIGHT_HOVER_CLASS, resizeEdges.right === true);
 
-              _this25.setElementClass(_this25.elm, RESIZE_TOP_HOVER_CLASS, resizeEdges.top === true);
+              _this24.setElementClass(_this24.elm, RESIZE_TOP_HOVER_CLASS, resizeEdges.top === true);
 
-              _this25.setElementClass(_this25.elm, RESIZE_BOTTOM_HOVER_CLASS, resizeEdges.bottom === true);
+              _this24.setElementClass(_this24.elm, RESIZE_BOTTOM_HOVER_CLASS, resizeEdges.bottom === true);
             });
             /** @type {?} */
 
-            var mousedrag = mousedown$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["mergeMap"])(function (startCoords) {
+            var mousedrag = mousedown$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["mergeMap"])(function (startCoords) {
               /**
                * @param {?} moveCoords
                * @return {?}
@@ -11999,16 +9412,16 @@
                 };
 
                 if (currentResize) {
-                  if (_this25.resizeSnapGrid.left && currentResize.edges.left) {
-                    snapGrid.x = +_this25.resizeSnapGrid.left;
-                  } else if (_this25.resizeSnapGrid.right && currentResize.edges.right) {
-                    snapGrid.x = +_this25.resizeSnapGrid.right;
+                  if (_this24.resizeSnapGrid.left && currentResize.edges.left) {
+                    snapGrid.x = +_this24.resizeSnapGrid.left;
+                  } else if (_this24.resizeSnapGrid.right && currentResize.edges.right) {
+                    snapGrid.x = +_this24.resizeSnapGrid.right;
                   }
 
-                  if (_this25.resizeSnapGrid.top && currentResize.edges.top) {
-                    snapGrid.y = +_this25.resizeSnapGrid.top;
-                  } else if (_this25.resizeSnapGrid.bottom && currentResize.edges.bottom) {
-                    snapGrid.y = +_this25.resizeSnapGrid.bottom;
+                  if (_this24.resizeSnapGrid.top && currentResize.edges.top) {
+                    snapGrid.y = +_this24.resizeSnapGrid.top;
+                  } else if (_this24.resizeSnapGrid.bottom && currentResize.edges.bottom) {
+                    snapGrid.y = +_this24.resizeSnapGrid.bottom;
                   }
                 }
 
@@ -12030,15 +9443,15 @@
 
               return (
                 /** @type {?} */
-                Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"])(mousemove$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (coords) {
+                Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["merge"])(mousemove$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["take"])(1)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (coords) {
                   return [, coords];
-                })), mousemove$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["pairwise"])())).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (_ref58) {
+                })), mousemove$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["pairwise"])())).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (_ref58) {
                   var _ref59 = _slicedToArray(_ref58, 2),
                       previousCoords = _ref59[0],
                       newCoords = _ref59[1];
 
                   return [previousCoords ? getDiff(previousCoords) : previousCoords, getDiff(newCoords)];
-                })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (_ref60) {
+                })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["filter"])(function (_ref60) {
                   var _ref61 = _slicedToArray(_ref60, 2),
                       previousCoords = _ref61[0],
                       newCoords = _ref61[1];
@@ -12057,7 +9470,7 @@
 
                   var newGrid = getGrid(newCoords, snapGrid);
                   return previousGrid.x !== newGrid.x || previousGrid.y !== newGrid.y;
-                })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (_ref62) {
+                })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (_ref62) {
                   var _ref63 = _slicedToArray(_ref62, 2),
                       newCoords = _ref63[1];
 
@@ -12067,12 +9480,12 @@
                     clientX: Math.round(newCoords.clientX / snapGrid.x) * snapGrid.x,
                     clientY: Math.round(newCoords.clientY / snapGrid.y) * snapGrid.y
                   };
-                })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"])(mouseup$, mousedown$)))
+                })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["takeUntil"])(Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["merge"])(mouseup$, mousedown$)))
               );
-            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function () {
+            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["filter"])(function () {
               return !!currentResize;
             }));
-            mousedrag.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (_ref64) {
+            mousedrag.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (_ref64) {
               var clientX = _ref64.clientX,
                   clientY = _ref64.clientY;
               return getNewBoundingRectangle(
@@ -12080,10 +9493,10 @@
               currentResize.startingRect,
               /** @type {?} */
               currentResize.edges, clientX, clientY);
-            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (newBoundingRect) {
-              return _this25.allowNegativeResizes || !!(newBoundingRect.height && newBoundingRect.width && newBoundingRect.height > 0 && newBoundingRect.width > 0);
-            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (newBoundingRect) {
-              return _this25.validateResize ? _this25.validateResize({
+            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["filter"])(function (newBoundingRect) {
+              return _this24.allowNegativeResizes || !!(newBoundingRect.height && newBoundingRect.width && newBoundingRect.height > 0 && newBoundingRect.width > 0);
+            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["filter"])(function (newBoundingRect) {
+              return _this24.validateResize ? _this24.validateResize({
                 rectangle: newBoundingRect,
                 edges: getEdgesDiff({
                   edges:
@@ -12095,58 +9508,56 @@
                   newRectangle: newBoundingRect
                 })
               }) : true;
-            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.destroy$)).subscribe(function (newBoundingRect) {
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["takeUntil"])(this.destroy$)).subscribe(function (newBoundingRect) {
               if (currentResize && currentResize.clonedNode) {
-                _this25.renderer.setStyle(currentResize.clonedNode, 'height', "".concat(newBoundingRect.height, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'height', "".concat(newBoundingRect.height, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'width', "".concat(newBoundingRect.width, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'width', "".concat(newBoundingRect.width, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'top', "".concat(newBoundingRect.top, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'top', "".concat(newBoundingRect.top, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'left', "".concat(newBoundingRect.left, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'left', "".concat(newBoundingRect.left, "px"));
               }
 
-              if (_this25.resizing.observers.length > 0) {
-                _this25.zone.run(function () {
-                  _this25.resizing.emit({
-                    edges: getEdgesDiff({
-                      edges:
-                      /** @type {?} */
-                      currentResize.edges,
-                      initialRectangle:
-                      /** @type {?} */
-                      currentResize.startingRect,
-                      newRectangle: newBoundingRect
-                    }),
-                    rectangle: newBoundingRect
-                  });
+              _this24.zone.run(function () {
+                _this24.resizing.emit({
+                  edges: getEdgesDiff({
+                    edges:
+                    /** @type {?} */
+                    currentResize.edges,
+                    initialRectangle:
+                    /** @type {?} */
+                    currentResize.startingRect,
+                    newRectangle: newBoundingRect
+                  }),
+                  rectangle: newBoundingRect
                 });
-              }
+              });
 
               /** @type {?} */
               currentResize.currentRect = newBoundingRect;
             });
-            mousedown$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (_ref65) {
+            mousedown$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (_ref65) {
               var clientX = _ref65.clientX,
                   clientY = _ref65.clientY,
                   edges = _ref65.edges;
               return edges || getResizeEdges({
                 clientX: clientX,
                 clientY: clientY,
-                elm: _this25.elm,
-                allowedEdges: _this25.resizeEdges,
-                cursorPrecision: _this25.resizeCursorPrecision
+                elm: _this24.elm,
+                allowedEdges: _this24.resizeEdges,
+                cursorPrecision: _this24.resizeCursorPrecision
               });
-            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (edges) {
+            })).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["filter"])(function (edges) {
               return Object.keys(edges).length > 0;
-            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.destroy$)).subscribe(function (edges) {
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["takeUntil"])(this.destroy$)).subscribe(function (edges) {
               if (currentResize) {
                 removeGhostElement();
               }
               /** @type {?} */
 
 
-              var startingRect = getElementRect(_this25.elm, _this25.ghostElementPositioning);
+              var startingRect = getElementRect(_this24.elm, _this24.ghostElementPositioning);
               currentResize = {
                 edges: edges,
                 startingRect: startingRect,
@@ -12159,30 +9570,30 @@
 
               var cursor = getResizeCursor(currentResize.edges, resizeCursors);
 
-              _this25.renderer.setStyle(document.body, 'cursor', cursor);
+              _this24.renderer.setStyle(document.body, 'cursor', cursor);
 
-              _this25.setElementClass(_this25.elm, RESIZE_ACTIVE_CLASS, true);
+              _this24.setElementClass(_this24.elm, RESIZE_ACTIVE_CLASS, true);
 
-              if (_this25.enableGhostResize) {
-                currentResize.clonedNode = _this25.elm.nativeElement.cloneNode(true);
+              if (_this24.enableGhostResize) {
+                currentResize.clonedNode = _this24.elm.nativeElement.cloneNode(true);
 
-                _this25.elm.nativeElement.parentElement.appendChild(currentResize.clonedNode);
+                _this24.elm.nativeElement.parentElement.appendChild(currentResize.clonedNode);
 
-                _this25.renderer.setStyle(_this25.elm.nativeElement, 'visibility', 'hidden');
+                _this24.renderer.setStyle(_this24.elm.nativeElement, 'visibility', 'hidden');
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'position', _this25.ghostElementPositioning);
+                _this24.renderer.setStyle(currentResize.clonedNode, 'position', _this24.ghostElementPositioning);
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'left', "".concat(currentResize.startingRect.left, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'left', "".concat(currentResize.startingRect.left, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'top', "".concat(currentResize.startingRect.top, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'top', "".concat(currentResize.startingRect.top, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'height', "".concat(currentResize.startingRect.height, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'height', "".concat(currentResize.startingRect.height, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'width', "".concat(currentResize.startingRect.width, "px"));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'width', "".concat(currentResize.startingRect.width, "px"));
 
-                _this25.renderer.setStyle(currentResize.clonedNode, 'cursor', getResizeCursor(currentResize.edges, resizeCursors));
+                _this24.renderer.setStyle(currentResize.clonedNode, 'cursor', getResizeCursor(currentResize.edges, resizeCursors));
 
-                _this25.renderer.addClass(currentResize.clonedNode, RESIZE_GHOST_ELEMENT_CLASS);
+                _this24.renderer.addClass(currentResize.clonedNode, RESIZE_GHOST_ELEMENT_CLASS);
 
                 /** @type {?} */
                 currentResize.clonedNode.scrollTop =
@@ -12195,47 +9606,43 @@
                 currentResize.startingRect.scrollLeft;
               }
 
-              if (_this25.resizeStart.observers.length > 0) {
-                _this25.zone.run(function () {
-                  _this25.resizeStart.emit({
-                    edges: getEdgesDiff({
-                      edges: edges,
-                      initialRectangle: startingRect,
-                      newRectangle: startingRect
-                    }),
-                    rectangle: getNewBoundingRectangle(startingRect, {}, 0, 0)
-                  });
+              _this24.zone.run(function () {
+                _this24.resizeStart.emit({
+                  edges: getEdgesDiff({
+                    edges: edges,
+                    initialRectangle: startingRect,
+                    newRectangle: startingRect
+                  }),
+                  rectangle: getNewBoundingRectangle(startingRect, {}, 0, 0)
                 });
-              }
+              });
             });
-            mouseup$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.destroy$)).subscribe(function () {
+            mouseup$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["takeUntil"])(this.destroy$)).subscribe(function () {
               if (currentResize) {
-                _this25.renderer.removeClass(_this25.elm.nativeElement, RESIZE_ACTIVE_CLASS);
+                _this24.renderer.removeClass(_this24.elm.nativeElement, RESIZE_ACTIVE_CLASS);
 
-                _this25.renderer.setStyle(document.body, 'cursor', '');
+                _this24.renderer.setStyle(document.body, 'cursor', '');
 
-                _this25.renderer.setStyle(_this25.elm.nativeElement, 'cursor', '');
+                _this24.renderer.setStyle(_this24.elm.nativeElement, 'cursor', '');
 
-                if (_this25.resizeEnd.observers.length > 0) {
-                  _this25.zone.run(function () {
-                    _this25.resizeEnd.emit({
-                      edges: getEdgesDiff({
-                        edges:
-                        /** @type {?} */
-                        currentResize.edges,
-                        initialRectangle:
-                        /** @type {?} */
-                        currentResize.startingRect,
-                        newRectangle:
-                        /** @type {?} */
-                        currentResize.currentRect
-                      }),
-                      rectangle:
+                _this24.zone.run(function () {
+                  _this24.resizeEnd.emit({
+                    edges: getEdgesDiff({
+                      edges:
+                      /** @type {?} */
+                      currentResize.edges,
+                      initialRectangle:
+                      /** @type {?} */
+                      currentResize.startingRect,
+                      newRectangle:
                       /** @type {?} */
                       currentResize.currentRect
-                    });
+                    }),
+                    rectangle:
+                    /** @type {?} */
+                    currentResize.currentRect
                   });
-                }
+                });
 
                 removeGhostElement();
                 currentResize = null;
@@ -12297,10 +9704,9 @@
       }();
 
       ResizableDirective.decorators = [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Directive"],
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Directive"],
         args: [{
-          selector: '[mwlResizable]',
-          exportAs: 'mwlResizable'
+          selector: '[mwlResizable]'
         }]
       }];
       /** @nocollapse */
@@ -12309,66 +9715,85 @@
         return [{
           type: undefined,
           decorators: [{
-            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"],
-            args: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["PLATFORM_ID"]]
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Inject"],
+            args: [_angular_core__WEBPACK_IMPORTED_MODULE_3__["PLATFORM_ID"]]
           }]
         }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Renderer2"]
         }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ElementRef"]
         }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgZone"]
         }];
       };
 
       ResizableDirective.propDecorators = {
         validateResize: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         resizeEdges: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         enableGhostResize: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         resizeSnapGrid: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         resizeCursors: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         resizeCursorPrecision: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         ghostElementPositioning: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         allowNegativeResizes: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         mouseMoveThrottleMS: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
         resizeStart: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"]
         }],
         resizing: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"]
         }],
         resizeEnd: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Output"]
         }]
       };
 
       var PointerEventListeners = /*#__PURE__*/function () {
-        /**
-         * @param {?} renderer
-         * @param {?} zone
-         */
+        _createClass(PointerEventListeners, null, [{
+          key: "getInstance",
+          // tslint:disable-line
+
+          /**
+           * @param {?} renderer
+           * @param {?} zone
+           * @return {?}
+           */
+          value: function getInstance(renderer, zone) {
+            if (!PointerEventListeners.instance) {
+              PointerEventListeners.instance = new PointerEventListeners(renderer, zone);
+            }
+
+            return PointerEventListeners.instance;
+          }
+          /**
+           * @param {?} renderer
+           * @param {?} zone
+           */
+
+        }]);
+
         function PointerEventListeners(renderer, zone) {
           _classCallCheck(this, PointerEventListeners);
 
-          this.pointerDown = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+          this.pointerDown = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
             /** @type {?} */
             var unsubscribeMouseDown;
             /** @type {?} */
@@ -12382,27 +9807,20 @@
                   event: event
                 });
               });
-
-              if (IS_TOUCH_DEVICE) {
-                unsubscribeTouchStart = renderer.listen('document', 'touchstart', function (event) {
-                  observer.next({
-                    clientX: event.touches[0].clientX,
-                    clientY: event.touches[0].clientY,
-                    event: event
-                  });
+              unsubscribeTouchStart = renderer.listen('document', 'touchstart', function (event) {
+                observer.next({
+                  clientX: event.touches[0].clientX,
+                  clientY: event.touches[0].clientY,
+                  event: event
                 });
-              }
+              });
             });
             return function () {
               unsubscribeMouseDown();
-
-              if (IS_TOUCH_DEVICE) {
-                /** @type {?} */
-                unsubscribeTouchStart();
-              }
+              unsubscribeTouchStart();
             };
-          }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["share"])());
-          this.pointerMove = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+          }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["share"])());
+          this.pointerMove = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
             /** @type {?} */
             var unsubscribeMouseMove;
             /** @type {?} */
@@ -12416,27 +9834,20 @@
                   event: event
                 });
               });
-
-              if (IS_TOUCH_DEVICE) {
-                unsubscribeTouchMove = renderer.listen('document', 'touchmove', function (event) {
-                  observer.next({
-                    clientX: event.targetTouches[0].clientX,
-                    clientY: event.targetTouches[0].clientY,
-                    event: event
-                  });
+              unsubscribeTouchMove = renderer.listen('document', 'touchmove', function (event) {
+                observer.next({
+                  clientX: event.targetTouches[0].clientX,
+                  clientY: event.targetTouches[0].clientY,
+                  event: event
                 });
-              }
+              });
             });
             return function () {
               unsubscribeMouseMove();
-
-              if (IS_TOUCH_DEVICE) {
-                /** @type {?} */
-                unsubscribeTouchMove();
-              }
+              unsubscribeTouchMove();
             };
-          }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["share"])());
-          this.pointerUp = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+          }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["share"])());
+          this.pointerUp = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
             /** @type {?} */
             var unsubscribeMouseUp;
             /** @type {?} */
@@ -12453,55 +9864,28 @@
                   event: event
                 });
               });
-
-              if (IS_TOUCH_DEVICE) {
-                unsubscribeTouchEnd = renderer.listen('document', 'touchend', function (event) {
-                  observer.next({
-                    clientX: event.changedTouches[0].clientX,
-                    clientY: event.changedTouches[0].clientY,
-                    event: event
-                  });
+              unsubscribeTouchEnd = renderer.listen('document', 'touchend', function (event) {
+                observer.next({
+                  clientX: event.changedTouches[0].clientX,
+                  clientY: event.changedTouches[0].clientY,
+                  event: event
                 });
-                unsubscribeTouchCancel = renderer.listen('document', 'touchcancel', function (event) {
-                  observer.next({
-                    clientX: event.changedTouches[0].clientX,
-                    clientY: event.changedTouches[0].clientY,
-                    event: event
-                  });
+              });
+              unsubscribeTouchCancel = renderer.listen('document', 'touchcancel', function (event) {
+                observer.next({
+                  clientX: event.changedTouches[0].clientX,
+                  clientY: event.changedTouches[0].clientY,
+                  event: event
                 });
-              }
+              });
             });
             return function () {
               unsubscribeMouseUp();
-
-              if (IS_TOUCH_DEVICE) {
-                /** @type {?} */
-                unsubscribeTouchEnd();
-
-                /** @type {?} */
-                unsubscribeTouchCancel();
-              }
+              unsubscribeTouchEnd();
+              unsubscribeTouchCancel();
             };
-          }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["share"])());
+          }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["share"])());
         }
-
-        _createClass(PointerEventListeners, null, [{
-          key: "getInstance",
-          value: // tslint:disable-line
-
-          /**
-           * @param {?} renderer
-           * @param {?} zone
-           * @return {?}
-           */
-          function getInstance(renderer, zone) {
-            if (!PointerEventListeners.instance) {
-              PointerEventListeners.instance = new PointerEventListeners(renderer, zone);
-            }
-
-            return PointerEventListeners.instance;
-          }
-        }]);
 
         return PointerEventListeners;
       }();
@@ -12520,11 +9904,6 @@
        *   <div mwlResizeHandle [resizeEdges]="{bottom: true, right: true}"></div>
        * </div>
        * ```
-       * Or in case they are sibling elements:
-       * ```html
-       * <div mwlResizable #resizableElement="mwlResizable"></div>
-       * <div mwlResizeHandle [resizableContainer]="resizableElement" [resizeEdges]="{bottom: true, right: true}"></div>
-       * ```
        */
 
 
@@ -12533,22 +9912,21 @@
          * @param {?} renderer
          * @param {?} element
          * @param {?} zone
-         * @param {?} resizableDirective
+         * @param {?} resizable
          */
-        function ResizeHandleDirective(renderer, element, zone, resizableDirective) {
+        function ResizeHandleDirective(renderer, element, zone, resizable) {
           _classCallCheck(this, ResizeHandleDirective);
 
           this.renderer = renderer;
           this.element = element;
           this.zone = zone;
-          this.resizableDirective = resizableDirective;
+          this.resizable = resizable;
           /**
            * The `Edges` object that contains the edges of the parent element that dragging the handle will trigger a resize on
            */
 
           this.resizeEdges = {};
           this.eventListeners = {};
-          this.destroy$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
         }
         /**
          * @return {?}
@@ -12556,38 +9934,8 @@
 
 
         _createClass(ResizeHandleDirective, [{
-          key: "ngOnInit",
-          value: function ngOnInit() {
-            var _this26 = this;
-
-            this.zone.runOutsideAngular(function () {
-              _this26.listenOnTheHost('mousedown').subscribe(function (event) {
-                _this26.onMousedown(event, event.clientX, event.clientY);
-              });
-
-              _this26.listenOnTheHost('mouseup').subscribe(function (event) {
-                _this26.onMouseup(event.clientX, event.clientY);
-              });
-
-              if (IS_TOUCH_DEVICE) {
-                _this26.listenOnTheHost('touchstart').subscribe(function (event) {
-                  _this26.onMousedown(event, event.touches[0].clientX, event.touches[0].clientY);
-                });
-
-                Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"])(_this26.listenOnTheHost('touchend'), _this26.listenOnTheHost('touchcancel')).subscribe(function (event) {
-                  _this26.onMouseup(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-                });
-              }
-            });
-          }
-          /**
-           * @return {?}
-           */
-
-        }, {
           key: "ngOnDestroy",
           value: function ngOnDestroy() {
-            this.destroy$.next();
             this.unsubscribeEventListeners();
           }
           /**
@@ -12601,26 +9949,27 @@
         }, {
           key: "onMousedown",
           value: function onMousedown(event, clientX, clientY) {
-            var _this27 = this;
+            var _this25 = this;
 
             event.preventDefault();
+            this.zone.runOutsideAngular(function () {
+              if (!_this25.eventListeners.touchmove) {
+                _this25.eventListeners.touchmove = _this25.renderer.listen(_this25.element.nativeElement, 'touchmove', function (touchMoveEvent) {
+                  _this25.onMousemove(touchMoveEvent, touchMoveEvent.targetTouches[0].clientX, touchMoveEvent.targetTouches[0].clientY);
+                });
+              }
 
-            if (!this.eventListeners.touchmove) {
-              this.eventListeners.touchmove = this.renderer.listen(this.element.nativeElement, 'touchmove', function (touchMoveEvent) {
-                _this27.onMousemove(touchMoveEvent, touchMoveEvent.targetTouches[0].clientX, touchMoveEvent.targetTouches[0].clientY);
+              if (!_this25.eventListeners.mousemove) {
+                _this25.eventListeners.mousemove = _this25.renderer.listen(_this25.element.nativeElement, 'mousemove', function (mouseMoveEvent) {
+                  _this25.onMousemove(mouseMoveEvent, mouseMoveEvent.clientX, mouseMoveEvent.clientY);
+                });
+              }
+
+              _this25.resizable.mousedown.next({
+                clientX: clientX,
+                clientY: clientY,
+                edges: _this25.resizeEdges
               });
-            }
-
-            if (!this.eventListeners.mousemove) {
-              this.eventListeners.mousemove = this.renderer.listen(this.element.nativeElement, 'mousemove', function (mouseMoveEvent) {
-                _this27.onMousemove(mouseMoveEvent, mouseMoveEvent.clientX, mouseMoveEvent.clientY);
-              });
-            }
-
-            this.resizable.mousedown.next({
-              clientX: clientX,
-              clientY: clientY,
-              edges: this.resizeEdges
             });
           }
           /**
@@ -12633,23 +9982,17 @@
         }, {
           key: "onMouseup",
           value: function onMouseup(clientX, clientY) {
-            this.unsubscribeEventListeners();
-            this.resizable.mouseup.next({
-              clientX: clientX,
-              clientY: clientY,
-              edges: this.resizeEdges
+            var _this26 = this;
+
+            this.zone.runOutsideAngular(function () {
+              _this26.unsubscribeEventListeners();
+
+              _this26.resizable.mouseup.next({
+                clientX: clientX,
+                clientY: clientY,
+                edges: _this26.resizeEdges
+              });
             });
-          } // directive might be passed from DI or as an input
-
-          /**
-           * @private
-           * @return {?}
-           */
-
-        }, {
-          key: "resizable",
-          get: function get() {
-            return this.resizableDirective || this.resizableContainer;
           }
           /**
            * @private
@@ -12677,26 +10020,14 @@
         }, {
           key: "unsubscribeEventListeners",
           value: function unsubscribeEventListeners() {
-            var _this28 = this;
+            var _this27 = this;
 
             Object.keys(this.eventListeners).forEach(function (type) {
               /** @type {?} */
-              _this28.eventListeners[type]();
+              _this27.eventListeners[type]();
 
-              delete _this28.eventListeners[type];
+              delete _this27.eventListeners[type];
             });
-          }
-          /**
-           * @private
-           * @template T
-           * @param {?} eventName
-           * @return {?}
-           */
-
-        }, {
-          key: "listenOnTheHost",
-          value: function listenOnTheHost(eventName) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["fromEvent"])(this.element.nativeElement, eventName).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.destroy$));
           }
         }]);
 
@@ -12704,7 +10035,7 @@
       }();
 
       ResizeHandleDirective.decorators = [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Directive"],
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Directive"],
         args: [{
           selector: '[mwlResizeHandle]'
         }]
@@ -12713,25 +10044,36 @@
 
       ResizeHandleDirective.ctorParameters = function () {
         return [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Renderer2"]
         }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ElementRef"]
         }, {
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgZone"]
         }, {
-          type: ResizableDirective,
-          decorators: [{
-            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Optional"]
-          }]
+          type: ResizableDirective
         }];
       };
 
       ResizeHandleDirective.propDecorators = {
         resizeEdges: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"]
         }],
-        resizableContainer: [{
-          type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        onMousedown: [{
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["HostListener"],
+          args: ['touchstart', ['$event', '$event.touches[0].clientX', '$event.touches[0].clientY']]
+        }, {
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["HostListener"],
+          args: ['mousedown', ['$event', '$event.clientX', '$event.clientY']]
+        }],
+        onMouseup: [{
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["HostListener"],
+          args: ['touchend', ['$event.changedTouches[0].clientX', '$event.changedTouches[0].clientY']]
+        }, {
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["HostListener"],
+          args: ['touchcancel', ['$event.changedTouches[0].clientX', '$event.changedTouches[0].clientY']]
+        }, {
+          type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["HostListener"],
+          args: ['mouseup', ['$event.clientX', '$event.clientY']]
         }]
       };
       /**
@@ -12739,12 +10081,12 @@
        * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
        */
 
-      var ResizableModule = /*#__PURE__*/_createClass(function ResizableModule() {
+      var ResizableModule = function ResizableModule() {
         _classCallCheck(this, ResizableModule);
-      });
+      };
 
       ResizableModule.decorators = [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"],
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"],
         args: [{
           declarations: [ResizableDirective, ResizeHandleDirective],
           exports: [ResizableDirective, ResizeHandleDirective]
@@ -12762,6 +10104,2590 @@
       //# sourceMappingURL=angular-resizable-element.js.map
 
       /***/
+    },
+
+    /***/
+    "zwY0":
+    /*!**************************************************!*\
+      !*** ./node_modules/flatpickr/dist/flatpickr.js ***!
+      \**************************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function zwY0(module, exports, __webpack_require__) {
+      /* flatpickr v4.6.3, @license MIT */
+      (function (global, factory) {
+        true ? module.exports = factory() : undefined;
+      })(this, function () {
+        'use strict';
+        /*! *****************************************************************************
+        Copyright (c) Microsoft Corporation. All rights reserved.
+        Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+        this file except in compliance with the License. You may obtain a copy of the
+        License at http://www.apache.org/licenses/LICENSE-2.0
+          THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+        KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+        WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+        MERCHANTABLITY OR NON-INFRINGEMENT.
+          See the Apache Version 2.0 License for specific language governing permissions
+        and limitations under the License.
+        ***************************************************************************** */
+
+        var _assign = function __assign() {
+          _assign = Object.assign || function __assign(t) {
+            for (var s, i = 1, n = arguments.length; i < n; i++) {
+              s = arguments[i];
+
+              for (var p in s) {
+                if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+              }
+            }
+
+            return t;
+          };
+
+          return _assign.apply(this, arguments);
+        };
+
+        var HOOKS = ["onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange", "onPreCalendarPosition"];
+        var defaults = {
+          _disable: [],
+          _enable: [],
+          allowInput: false,
+          altFormat: "F j, Y",
+          altInput: false,
+          altInputClass: "form-control input",
+          animate: typeof window === "object" && window.navigator.userAgent.indexOf("MSIE") === -1,
+          ariaDateFormat: "F j, Y",
+          clickOpens: true,
+          closeOnSelect: true,
+          conjunction: ", ",
+          dateFormat: "Y-m-d",
+          defaultHour: 12,
+          defaultMinute: 0,
+          defaultSeconds: 0,
+          disable: [],
+          disableMobile: false,
+          enable: [],
+          enableSeconds: false,
+          enableTime: false,
+          errorHandler: function errorHandler(err) {
+            return typeof console !== "undefined" && console.warn(err);
+          },
+          getWeek: function getWeek(givenDate) {
+            var date = new Date(givenDate.getTime());
+            date.setHours(0, 0, 0, 0); // Thursday in current week decides the year.
+
+            date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7); // January 4 is always in week 1.
+
+            var week1 = new Date(date.getFullYear(), 0, 4); // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+
+            return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+          },
+          hourIncrement: 1,
+          ignoredFocusElements: [],
+          inline: false,
+          locale: "default",
+          minuteIncrement: 5,
+          mode: "single",
+          monthSelectorType: "dropdown",
+          nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+          noCalendar: false,
+          now: new Date(),
+          onChange: [],
+          onClose: [],
+          onDayCreate: [],
+          onDestroy: [],
+          onKeyDown: [],
+          onMonthChange: [],
+          onOpen: [],
+          onParseConfig: [],
+          onReady: [],
+          onValueUpdate: [],
+          onYearChange: [],
+          onPreCalendarPosition: [],
+          plugins: [],
+          position: "auto",
+          positionElement: undefined,
+          prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+          shorthandCurrentMonth: false,
+          showMonths: 1,
+          "static": false,
+          time_24hr: false,
+          weekNumbers: false,
+          wrap: false
+        };
+        var english = {
+          weekdays: {
+            shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+          },
+          months: {
+            shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+          },
+          daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+          firstDayOfWeek: 0,
+          ordinal: function ordinal(nth) {
+            var s = nth % 100;
+            if (s > 3 && s < 21) return "th";
+
+            switch (s % 10) {
+              case 1:
+                return "st";
+
+              case 2:
+                return "nd";
+
+              case 3:
+                return "rd";
+
+              default:
+                return "th";
+            }
+          },
+          rangeSeparator: " to ",
+          weekAbbreviation: "Wk",
+          scrollTitle: "Scroll to increment",
+          toggleTitle: "Click to toggle",
+          amPM: ["AM", "PM"],
+          yearAriaLabel: "Year",
+          hourAriaLabel: "Hour",
+          minuteAriaLabel: "Minute",
+          time_24hr: false
+        };
+
+        var pad = function pad(number) {
+          return ("0" + number).slice(-2);
+        };
+
+        var _int = function _int(bool) {
+          return bool === true ? 1 : 0;
+        };
+        /* istanbul ignore next */
+
+
+        function debounce(func, wait, immediate) {
+          if (immediate === void 0) {
+            immediate = false;
+          }
+
+          var timeout;
+          return function () {
+            var context = this,
+                args = arguments;
+            timeout !== null && clearTimeout(timeout);
+            timeout = window.setTimeout(function () {
+              timeout = null;
+              if (!immediate) func.apply(context, args);
+            }, wait);
+            if (immediate && !timeout) func.apply(context, args);
+          };
+        }
+
+        var arrayify = function arrayify(obj) {
+          return obj instanceof Array ? obj : [obj];
+        };
+
+        function toggleClass(elem, className, bool) {
+          if (bool === true) return elem.classList.add(className);
+          elem.classList.remove(className);
+        }
+
+        function createElement(tag, className, content) {
+          var e = window.document.createElement(tag);
+          className = className || "";
+          content = content || "";
+          e.className = className;
+          if (content !== undefined) e.textContent = content;
+          return e;
+        }
+
+        function clearNode(node) {
+          while (node.firstChild) {
+            node.removeChild(node.firstChild);
+          }
+        }
+
+        function findParent(node, condition) {
+          if (condition(node)) return node;else if (node.parentNode) return findParent(node.parentNode, condition);
+          return undefined; // nothing found
+        }
+
+        function createNumberInput(inputClassName, opts) {
+          var wrapper = createElement("div", "numInputWrapper"),
+              numInput = createElement("input", "numInput " + inputClassName),
+              arrowUp = createElement("span", "arrowUp"),
+              arrowDown = createElement("span", "arrowDown");
+
+          if (navigator.userAgent.indexOf("MSIE 9.0") === -1) {
+            numInput.type = "number";
+          } else {
+            numInput.type = "text";
+            numInput.pattern = "\\d*";
+          }
+
+          if (opts !== undefined) for (var key in opts) {
+            numInput.setAttribute(key, opts[key]);
+          }
+          wrapper.appendChild(numInput);
+          wrapper.appendChild(arrowUp);
+          wrapper.appendChild(arrowDown);
+          return wrapper;
+        }
+
+        function getEventTarget(event) {
+          if (typeof event.composedPath === "function") {
+            var path = event.composedPath();
+            return path[0];
+          }
+
+          return event.target;
+        }
+
+        var doNothing = function doNothing() {
+          return undefined;
+        };
+
+        var monthToStr = function monthToStr(monthNumber, shorthand, locale) {
+          return locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
+        };
+
+        var revFormat = {
+          D: doNothing,
+          F: function F(dateObj, monthName, locale) {
+            dateObj.setMonth(locale.months.longhand.indexOf(monthName));
+          },
+          G: function G(dateObj, hour) {
+            dateObj.setHours(parseFloat(hour));
+          },
+          H: function H(dateObj, hour) {
+            dateObj.setHours(parseFloat(hour));
+          },
+          J: function J(dateObj, day) {
+            dateObj.setDate(parseFloat(day));
+          },
+          K: function K(dateObj, amPM, locale) {
+            dateObj.setHours(dateObj.getHours() % 12 + 12 * _int(new RegExp(locale.amPM[1], "i").test(amPM)));
+          },
+          M: function M(dateObj, shortMonth, locale) {
+            dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
+          },
+          S: function S(dateObj, seconds) {
+            dateObj.setSeconds(parseFloat(seconds));
+          },
+          U: function U(_, unixSeconds) {
+            return new Date(parseFloat(unixSeconds) * 1000);
+          },
+          W: function W(dateObj, weekNum, locale) {
+            var weekNumber = parseInt(weekNum);
+            var date = new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0);
+            date.setDate(date.getDate() - date.getDay() + locale.firstDayOfWeek);
+            return date;
+          },
+          Y: function Y(dateObj, year) {
+            dateObj.setFullYear(parseFloat(year));
+          },
+          Z: function Z(_, ISODate) {
+            return new Date(ISODate);
+          },
+          d: function d(dateObj, day) {
+            dateObj.setDate(parseFloat(day));
+          },
+          h: function h(dateObj, hour) {
+            dateObj.setHours(parseFloat(hour));
+          },
+          i: function i(dateObj, minutes) {
+            dateObj.setMinutes(parseFloat(minutes));
+          },
+          j: function j(dateObj, day) {
+            dateObj.setDate(parseFloat(day));
+          },
+          l: doNothing,
+          m: function m(dateObj, month) {
+            dateObj.setMonth(parseFloat(month) - 1);
+          },
+          n: function n(dateObj, month) {
+            dateObj.setMonth(parseFloat(month) - 1);
+          },
+          s: function s(dateObj, seconds) {
+            dateObj.setSeconds(parseFloat(seconds));
+          },
+          u: function u(_, unixMillSeconds) {
+            return new Date(parseFloat(unixMillSeconds));
+          },
+          w: doNothing,
+          y: function y(dateObj, year) {
+            dateObj.setFullYear(2000 + parseFloat(year));
+          }
+        };
+        var tokenRegex = {
+          D: "(\\w+)",
+          F: "(\\w+)",
+          G: "(\\d\\d|\\d)",
+          H: "(\\d\\d|\\d)",
+          J: "(\\d\\d|\\d)\\w+",
+          K: "",
+          M: "(\\w+)",
+          S: "(\\d\\d|\\d)",
+          U: "(.+)",
+          W: "(\\d\\d|\\d)",
+          Y: "(\\d{4})",
+          Z: "(.+)",
+          d: "(\\d\\d|\\d)",
+          h: "(\\d\\d|\\d)",
+          i: "(\\d\\d|\\d)",
+          j: "(\\d\\d|\\d)",
+          l: "(\\w+)",
+          m: "(\\d\\d|\\d)",
+          n: "(\\d\\d|\\d)",
+          s: "(\\d\\d|\\d)",
+          u: "(.+)",
+          w: "(\\d\\d|\\d)",
+          y: "(\\d{2})"
+        };
+        var formats = {
+          // get the date in UTC
+          Z: function Z(date) {
+            return date.toISOString();
+          },
+          // weekday name, short, e.g. Thu
+          D: function D(date, locale, options) {
+            return locale.weekdays.shorthand[formats.w(date, locale, options)];
+          },
+          // full month name e.g. January
+          F: function F(date, locale, options) {
+            return monthToStr(formats.n(date, locale, options) - 1, false, locale);
+          },
+          // padded hour 1-12
+          G: function G(date, locale, options) {
+            return pad(formats.h(date, locale, options));
+          },
+          // hours with leading zero e.g. 03
+          H: function H(date) {
+            return pad(date.getHours());
+          },
+          // day (1-30) with ordinal suffix e.g. 1st, 2nd
+          J: function J(date, locale) {
+            return locale.ordinal !== undefined ? date.getDate() + locale.ordinal(date.getDate()) : date.getDate();
+          },
+          // AM/PM
+          K: function K(date, locale) {
+            return locale.amPM[_int(date.getHours() > 11)];
+          },
+          // shorthand month e.g. Jan, Sep, Oct, etc
+          M: function M(date, locale) {
+            return monthToStr(date.getMonth(), true, locale);
+          },
+          // seconds 00-59
+          S: function S(date) {
+            return pad(date.getSeconds());
+          },
+          // unix timestamp
+          U: function U(date) {
+            return date.getTime() / 1000;
+          },
+          W: function W(date, _, options) {
+            return options.getWeek(date);
+          },
+          // full year e.g. 2016
+          Y: function Y(date) {
+            return date.getFullYear();
+          },
+          // day in month, padded (01-30)
+          d: function d(date) {
+            return pad(date.getDate());
+          },
+          // hour from 1-12 (am/pm)
+          h: function h(date) {
+            return date.getHours() % 12 ? date.getHours() % 12 : 12;
+          },
+          // minutes, padded with leading zero e.g. 09
+          i: function i(date) {
+            return pad(date.getMinutes());
+          },
+          // day in month (1-30)
+          j: function j(date) {
+            return date.getDate();
+          },
+          // weekday name, full, e.g. Thursday
+          l: function l(date, locale) {
+            return locale.weekdays.longhand[date.getDay()];
+          },
+          // padded month number (01-12)
+          m: function m(date) {
+            return pad(date.getMonth() + 1);
+          },
+          // the month number (1-12)
+          n: function n(date) {
+            return date.getMonth() + 1;
+          },
+          // seconds 0-59
+          s: function s(date) {
+            return date.getSeconds();
+          },
+          // Unix Milliseconds
+          u: function u(date) {
+            return date.getTime();
+          },
+          // number of the day of the week
+          w: function w(date) {
+            return date.getDay();
+          },
+          // last two digits of year e.g. 16 for 2016
+          y: function y(date) {
+            return String(date.getFullYear()).substring(2);
+          }
+        };
+
+        var createDateFormatter = function createDateFormatter(_a) {
+          var _b = _a.config,
+              config = _b === void 0 ? defaults : _b,
+              _c = _a.l10n,
+              l10n = _c === void 0 ? english : _c;
+          return function (dateObj, frmt, overrideLocale) {
+            var locale = overrideLocale || l10n;
+
+            if (config.formatDate !== undefined) {
+              return config.formatDate(dateObj, frmt, locale);
+            }
+
+            return frmt.split("").map(function (c, i, arr) {
+              return formats[c] && arr[i - 1] !== "\\" ? formats[c](dateObj, locale, config) : c !== "\\" ? c : "";
+            }).join("");
+          };
+        };
+
+        var createDateParser = function createDateParser(_a) {
+          var _b = _a.config,
+              config = _b === void 0 ? defaults : _b,
+              _c = _a.l10n,
+              l10n = _c === void 0 ? english : _c;
+          return function (date, givenFormat, timeless, customLocale) {
+            if (date !== 0 && !date) return undefined;
+            var locale = customLocale || l10n;
+            var parsedDate;
+            var dateOrig = date;
+            if (date instanceof Date) parsedDate = new Date(date.getTime());else if (typeof date !== "string" && date.toFixed !== undefined // timestamp
+            ) // create a copy
+              parsedDate = new Date(date);else if (typeof date === "string") {
+              // date string
+              var format = givenFormat || (config || defaults).dateFormat;
+              var datestr = String(date).trim();
+
+              if (datestr === "today") {
+                parsedDate = new Date();
+                timeless = true;
+              } else if (/Z$/.test(datestr) || /GMT$/.test(datestr) // datestrings w/ timezone
+              ) parsedDate = new Date(date);else if (config && config.parseDate) parsedDate = config.parseDate(date, format);else {
+                parsedDate = !config || !config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
+                var matched = void 0,
+                    ops = [];
+
+                for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+                  var token_1 = format[i];
+                  var isBackSlash = token_1 === "\\";
+                  var escaped = format[i - 1] === "\\" || isBackSlash;
+
+                  if (tokenRegex[token_1] && !escaped) {
+                    regexStr += tokenRegex[token_1];
+                    var match = new RegExp(regexStr).exec(date);
+
+                    if (match && (matched = true)) {
+                      ops[token_1 !== "Y" ? "push" : "unshift"]({
+                        fn: revFormat[token_1],
+                        val: match[++matchIndex]
+                      });
+                    }
+                  } else if (!isBackSlash) regexStr += "."; // don't really care
+
+
+                  ops.forEach(function (_a) {
+                    var fn = _a.fn,
+                        val = _a.val;
+                    return parsedDate = fn(parsedDate, val, locale) || parsedDate;
+                  });
+                }
+
+                parsedDate = matched ? parsedDate : undefined;
+              }
+            }
+            /* istanbul ignore next */
+
+            if (!(parsedDate instanceof Date && !isNaN(parsedDate.getTime()))) {
+              config.errorHandler(new Error("Invalid date provided: " + dateOrig));
+              return undefined;
+            }
+
+            if (timeless === true) parsedDate.setHours(0, 0, 0, 0);
+            return parsedDate;
+          };
+        };
+        /**
+         * Compute the difference in dates, measured in ms
+         */
+
+
+        function compareDates(date1, date2, timeless) {
+          if (timeless === void 0) {
+            timeless = true;
+          }
+
+          if (timeless !== false) {
+            return new Date(date1.getTime()).setHours(0, 0, 0, 0) - new Date(date2.getTime()).setHours(0, 0, 0, 0);
+          }
+
+          return date1.getTime() - date2.getTime();
+        }
+
+        var isBetween = function isBetween(ts, ts1, ts2) {
+          return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
+        };
+
+        var duration = {
+          DAY: 86400000
+        };
+
+        if (typeof Object.assign !== "function") {
+          Object.assign = function (target) {
+            var args = [];
+
+            for (var _i = 1; _i < arguments.length; _i++) {
+              args[_i - 1] = arguments[_i];
+            }
+
+            if (!target) {
+              throw TypeError("Cannot convert undefined or null to object");
+            }
+
+            var _loop_1 = function _loop_1(source) {
+              if (source) {
+                Object.keys(source).forEach(function (key) {
+                  return target[key] = source[key];
+                });
+              }
+            };
+
+            for (var _a = 0, args_1 = args; _a < args_1.length; _a++) {
+              var source = args_1[_a];
+
+              _loop_1(source);
+            }
+
+            return target;
+          };
+        }
+
+        var DEBOUNCED_CHANGE_MS = 300;
+
+        function FlatpickrInstance(element, instanceConfig) {
+          var self = {
+            config: _assign({}, defaults, flatpickr.defaultConfig),
+            l10n: english
+          };
+          self.parseDate = createDateParser({
+            config: self.config,
+            l10n: self.l10n
+          });
+          self._handlers = [];
+          self.pluginElements = [];
+          self.loadedPlugins = [];
+          self._bind = bind;
+          self._setHoursFromDate = setHoursFromDate;
+          self._positionCalendar = positionCalendar;
+          self.changeMonth = changeMonth;
+          self.changeYear = changeYear;
+          self.clear = clear;
+          self.close = close;
+          self._createElement = createElement;
+          self.destroy = destroy;
+          self.isEnabled = isEnabled;
+          self.jumpToDate = jumpToDate;
+          self.open = open;
+          self.redraw = redraw;
+          self.set = set;
+          self.setDate = setDate;
+          self.toggle = toggle;
+
+          function setupHelperFunctions() {
+            self.utils = {
+              getDaysInMonth: function getDaysInMonth(month, yr) {
+                if (month === void 0) {
+                  month = self.currentMonth;
+                }
+
+                if (yr === void 0) {
+                  yr = self.currentYear;
+                }
+
+                if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
+                return self.l10n.daysInMonth[month];
+              }
+            };
+          }
+
+          function init() {
+            self.element = self.input = element;
+            self.isOpen = false;
+            parseConfig();
+            setupLocale();
+            setupInputs();
+            setupDates();
+            setupHelperFunctions();
+            if (!self.isMobile) build();
+            bindEvents();
+
+            if (self.selectedDates.length || self.config.noCalendar) {
+              if (self.config.enableTime) {
+                setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : undefined);
+              }
+
+              updateValue(false);
+            }
+
+            setCalendarWidth();
+            self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
+            var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            /* TODO: investigate this further
+                       Currently, there is weird positioning behavior in safari causing pages
+              to scroll up. https://github.com/chmln/flatpickr/issues/563
+                       However, most browsers are not Safari and positioning is expensive when used
+              in scale. https://github.com/chmln/flatpickr/issues/1096
+            */
+
+            if (!self.isMobile && isSafari) {
+              positionCalendar();
+            }
+
+            triggerEvent("onReady");
+          }
+
+          function bindToInstance(fn) {
+            return fn.bind(self);
+          }
+
+          function setCalendarWidth() {
+            var config = self.config;
+            if (config.weekNumbers === false && config.showMonths === 1) return;else if (config.noCalendar !== true) {
+              window.requestAnimationFrame(function () {
+                if (self.calendarContainer !== undefined) {
+                  self.calendarContainer.style.visibility = "hidden";
+                  self.calendarContainer.style.display = "block";
+                }
+
+                if (self.daysContainer !== undefined) {
+                  var daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
+                  self.daysContainer.style.width = daysWidth + "px";
+                  self.calendarContainer.style.width = daysWidth + (self.weekWrapper !== undefined ? self.weekWrapper.offsetWidth : 0) + "px";
+                  self.calendarContainer.style.removeProperty("visibility");
+                  self.calendarContainer.style.removeProperty("display");
+                }
+              });
+            }
+          }
+          /**
+           * The handler for all events targeting the time inputs
+           */
+
+
+          function updateTime(e) {
+            if (self.selectedDates.length === 0) {
+              setDefaultTime();
+            }
+
+            if (e !== undefined && e.type !== "blur") {
+              timeWrapper(e);
+            }
+
+            var prevValue = self._input.value;
+            setHoursFromInputs();
+            updateValue();
+
+            if (self._input.value !== prevValue) {
+              self._debouncedChange();
+            }
+          }
+
+          function ampm2military(hour, amPM) {
+            return hour % 12 + 12 * _int(amPM === self.l10n.amPM[1]);
+          }
+
+          function military2ampm(hour) {
+            switch (hour % 24) {
+              case 0:
+              case 12:
+                return 12;
+
+              default:
+                return hour % 12;
+            }
+          }
+          /**
+           * Syncs the selected date object time with user's time input
+           */
+
+
+          function setHoursFromInputs() {
+            if (self.hourElement === undefined || self.minuteElement === undefined) return;
+            var hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24,
+                minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
+                seconds = self.secondElement !== undefined ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
+
+            if (self.amPM !== undefined) {
+              hours = ampm2military(hours, self.amPM.textContent);
+            }
+
+            var limitMinHours = self.config.minTime !== undefined || self.config.minDate && self.minDateHasTime && self.latestSelectedDateObj && compareDates(self.latestSelectedDateObj, self.config.minDate, true) === 0;
+            var limitMaxHours = self.config.maxTime !== undefined || self.config.maxDate && self.maxDateHasTime && self.latestSelectedDateObj && compareDates(self.latestSelectedDateObj, self.config.maxDate, true) === 0;
+
+            if (limitMaxHours) {
+              var maxTime = self.config.maxTime !== undefined ? self.config.maxTime : self.config.maxDate;
+              hours = Math.min(hours, maxTime.getHours());
+              if (hours === maxTime.getHours()) minutes = Math.min(minutes, maxTime.getMinutes());
+              if (minutes === maxTime.getMinutes()) seconds = Math.min(seconds, maxTime.getSeconds());
+            }
+
+            if (limitMinHours) {
+              var minTime = self.config.minTime !== undefined ? self.config.minTime : self.config.minDate;
+              hours = Math.max(hours, minTime.getHours());
+              if (hours === minTime.getHours()) minutes = Math.max(minutes, minTime.getMinutes());
+              if (minutes === minTime.getMinutes()) seconds = Math.max(seconds, minTime.getSeconds());
+            }
+
+            setHours(hours, minutes, seconds);
+          }
+          /**
+           * Syncs time input values with a date
+           */
+
+
+          function setHoursFromDate(dateObj) {
+            var date = dateObj || self.latestSelectedDateObj;
+            if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
+          }
+
+          function setDefaultHours() {
+            var hours = self.config.defaultHour;
+            var minutes = self.config.defaultMinute;
+            var seconds = self.config.defaultSeconds;
+
+            if (self.config.minDate !== undefined) {
+              var minHr = self.config.minDate.getHours();
+              var minMinutes = self.config.minDate.getMinutes();
+              hours = Math.max(hours, minHr);
+              if (hours === minHr) minutes = Math.max(minMinutes, minutes);
+              if (hours === minHr && minutes === minMinutes) seconds = self.config.minDate.getSeconds();
+            }
+
+            if (self.config.maxDate !== undefined) {
+              var maxHr = self.config.maxDate.getHours();
+              var maxMinutes = self.config.maxDate.getMinutes();
+              hours = Math.min(hours, maxHr);
+              if (hours === maxHr) minutes = Math.min(maxMinutes, minutes);
+              if (hours === maxHr && minutes === maxMinutes) seconds = self.config.maxDate.getSeconds();
+            }
+
+            setHours(hours, minutes, seconds);
+          }
+          /**
+           * Sets the hours, minutes, and optionally seconds
+           * of the latest selected date object and the
+           * corresponding time inputs
+           * @param {Number} hours the hour. whether its military
+           *                 or am-pm gets inferred from config
+           * @param {Number} minutes the minutes
+           * @param {Number} seconds the seconds (optional)
+           */
+
+
+          function setHours(hours, minutes, seconds) {
+            if (self.latestSelectedDateObj !== undefined) {
+              self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
+            }
+
+            if (!self.hourElement || !self.minuteElement || self.isMobile) return;
+            self.hourElement.value = pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * _int(hours % 12 === 0) : hours);
+            self.minuteElement.value = pad(minutes);
+            if (self.amPM !== undefined) self.amPM.textContent = self.l10n.amPM[_int(hours >= 12)];
+            if (self.secondElement !== undefined) self.secondElement.value = pad(seconds);
+          }
+          /**
+           * Handles the year input and incrementing events
+           * @param {Event} event the keyup or increment event
+           */
+
+
+          function onYearInput(event) {
+            var year = parseInt(event.target.value) + (event.delta || 0);
+
+            if (year / 1000 > 1 || event.key === "Enter" && !/[^\d]/.test(year.toString())) {
+              changeYear(year);
+            }
+          }
+          /**
+           * Essentially addEventListener + tracking
+           * @param {Element} element the element to addEventListener to
+           * @param {String} event the event name
+           * @param {Function} handler the event handler
+           */
+
+
+          function bind(element, event, handler, options) {
+            if (event instanceof Array) return event.forEach(function (ev) {
+              return bind(element, ev, handler, options);
+            });
+            if (element instanceof Array) return element.forEach(function (el) {
+              return bind(el, event, handler, options);
+            });
+            element.addEventListener(event, handler, options);
+
+            self._handlers.push({
+              element: element,
+              event: event,
+              handler: handler,
+              options: options
+            });
+          }
+          /**
+           * A mousedown handler which mimics click.
+           * Minimizes latency, since we don't need to wait for mouseup in most cases.
+           * Also, avoids handling right clicks.
+           *
+           * @param {Function} handler the event handler
+           */
+
+
+          function onClick(handler) {
+            return function (evt) {
+              evt.which === 1 && handler(evt);
+            };
+          }
+
+          function triggerChange() {
+            triggerEvent("onChange");
+          }
+          /**
+           * Adds all the necessary event listeners
+           */
+
+
+          function bindEvents() {
+            if (self.config.wrap) {
+              ["open", "close", "toggle", "clear"].forEach(function (evt) {
+                Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
+                  return bind(el, "click", self[evt]);
+                });
+              });
+            }
+
+            if (self.isMobile) {
+              setupMobile();
+              return;
+            }
+
+            var debouncedResize = debounce(onResize, 50);
+            self._debouncedChange = debounce(triggerChange, DEBOUNCED_CHANGE_MS);
+            if (self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) bind(self.daysContainer, "mouseover", function (e) {
+              if (self.config.mode === "range") onMouseOver(e.target);
+            });
+            bind(window.document.body, "keydown", onKeyDown);
+            if (!self.config.inline && !self.config["static"]) bind(window, "resize", debouncedResize);
+            if (window.ontouchstart !== undefined) bind(window.document, "touchstart", documentClick);else bind(window.document, "mousedown", onClick(documentClick));
+            bind(window.document, "focus", documentClick, {
+              capture: true
+            });
+
+            if (self.config.clickOpens === true) {
+              bind(self._input, "focus", self.open);
+              bind(self._input, "mousedown", onClick(self.open));
+            }
+
+            if (self.daysContainer !== undefined) {
+              bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
+              bind(self.monthNav, ["keyup", "increment"], onYearInput);
+              bind(self.daysContainer, "mousedown", onClick(selectDate));
+            }
+
+            if (self.timeContainer !== undefined && self.minuteElement !== undefined && self.hourElement !== undefined) {
+              var selText = function selText(e) {
+                return e.target.select();
+              };
+
+              bind(self.timeContainer, ["increment"], updateTime);
+              bind(self.timeContainer, "blur", updateTime, {
+                capture: true
+              });
+              bind(self.timeContainer, "mousedown", onClick(timeIncrement));
+              bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
+              if (self.secondElement !== undefined) bind(self.secondElement, "focus", function () {
+                return self.secondElement && self.secondElement.select();
+              });
+
+              if (self.amPM !== undefined) {
+                bind(self.amPM, "mousedown", onClick(function (e) {
+                  updateTime(e);
+                  triggerChange();
+                }));
+              }
+            }
+          }
+          /**
+           * Set the calendar view to a particular date.
+           * @param {Date} jumpDate the date to set the view to
+           * @param {boolean} triggerChange if change events should be triggered
+           */
+
+
+          function jumpToDate(jumpDate, triggerChange) {
+            var jumpTo = jumpDate !== undefined ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate && self.config.minDate > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate < self.now ? self.config.maxDate : self.now);
+            var oldYear = self.currentYear;
+            var oldMonth = self.currentMonth;
+
+            try {
+              if (jumpTo !== undefined) {
+                self.currentYear = jumpTo.getFullYear();
+                self.currentMonth = jumpTo.getMonth();
+              }
+            } catch (e) {
+              /* istanbul ignore next */
+              e.message = "Invalid date supplied: " + jumpTo;
+              self.config.errorHandler(e);
+            }
+
+            if (triggerChange && self.currentYear !== oldYear) {
+              triggerEvent("onYearChange");
+              buildMonthSwitch();
+            }
+
+            if (triggerChange && (self.currentYear !== oldYear || self.currentMonth !== oldMonth)) {
+              triggerEvent("onMonthChange");
+            }
+
+            self.redraw();
+          }
+          /**
+           * The up/down arrow handler for time inputs
+           * @param {Event} e the click event
+           */
+
+
+          function timeIncrement(e) {
+            if (~e.target.className.indexOf("arrow")) incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
+          }
+          /**
+           * Increments/decrements the value of input associ-
+           * ated with the up/down arrow by dispatching an
+           * "increment" event on the input.
+           *
+           * @param {Event} e the click event
+           * @param {Number} delta the diff (usually 1 or -1)
+           * @param {Element} inputElem the input element
+           */
+
+
+          function incrementNumInput(e, delta, inputElem) {
+            var target = e && e.target;
+            var input = inputElem || target && target.parentNode && target.parentNode.firstChild;
+            var event = createEvent("increment");
+            event.delta = delta;
+            input && input.dispatchEvent(event);
+          }
+
+          function build() {
+            var fragment = window.document.createDocumentFragment();
+            self.calendarContainer = createElement("div", "flatpickr-calendar");
+            self.calendarContainer.tabIndex = -1;
+
+            if (!self.config.noCalendar) {
+              fragment.appendChild(buildMonthNav());
+              self.innerContainer = createElement("div", "flatpickr-innerContainer");
+
+              if (self.config.weekNumbers) {
+                var _a = buildWeeks(),
+                    weekWrapper = _a.weekWrapper,
+                    weekNumbers = _a.weekNumbers;
+
+                self.innerContainer.appendChild(weekWrapper);
+                self.weekNumbers = weekNumbers;
+                self.weekWrapper = weekWrapper;
+              }
+
+              self.rContainer = createElement("div", "flatpickr-rContainer");
+              self.rContainer.appendChild(buildWeekdays());
+
+              if (!self.daysContainer) {
+                self.daysContainer = createElement("div", "flatpickr-days");
+                self.daysContainer.tabIndex = -1;
+              }
+
+              buildDays();
+              self.rContainer.appendChild(self.daysContainer);
+              self.innerContainer.appendChild(self.rContainer);
+              fragment.appendChild(self.innerContainer);
+            }
+
+            if (self.config.enableTime) {
+              fragment.appendChild(buildTime());
+            }
+
+            toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
+            toggleClass(self.calendarContainer, "animate", self.config.animate === true);
+            toggleClass(self.calendarContainer, "multiMonth", self.config.showMonths > 1);
+            self.calendarContainer.appendChild(fragment);
+            var customAppend = self.config.appendTo !== undefined && self.config.appendTo.nodeType !== undefined;
+
+            if (self.config.inline || self.config["static"]) {
+              self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
+
+              if (self.config.inline) {
+                if (!customAppend && self.element.parentNode) self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);else if (self.config.appendTo !== undefined) self.config.appendTo.appendChild(self.calendarContainer);
+              }
+
+              if (self.config["static"]) {
+                var wrapper = createElement("div", "flatpickr-wrapper");
+                if (self.element.parentNode) self.element.parentNode.insertBefore(wrapper, self.element);
+                wrapper.appendChild(self.element);
+                if (self.altInput) wrapper.appendChild(self.altInput);
+                wrapper.appendChild(self.calendarContainer);
+              }
+            }
+
+            if (!self.config["static"] && !self.config.inline) (self.config.appendTo !== undefined ? self.config.appendTo : window.document.body).appendChild(self.calendarContainer);
+          }
+
+          function createDay(className, date, dayNumber, i) {
+            var dateIsEnabled = isEnabled(date, true),
+                dayElement = createElement("span", "flatpickr-day " + className, date.getDate().toString());
+            dayElement.dateObj = date;
+            dayElement.$i = i;
+            dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
+
+            if (className.indexOf("hidden") === -1 && compareDates(date, self.now) === 0) {
+              self.todayDateElem = dayElement;
+              dayElement.classList.add("today");
+              dayElement.setAttribute("aria-current", "date");
+            }
+
+            if (dateIsEnabled) {
+              dayElement.tabIndex = -1;
+
+              if (isDateSelected(date)) {
+                dayElement.classList.add("selected");
+                self.selectedDateElem = dayElement;
+
+                if (self.config.mode === "range") {
+                  toggleClass(dayElement, "startRange", self.selectedDates[0] && compareDates(date, self.selectedDates[0], true) === 0);
+                  toggleClass(dayElement, "endRange", self.selectedDates[1] && compareDates(date, self.selectedDates[1], true) === 0);
+                  if (className === "nextMonthDay") dayElement.classList.add("inRange");
+                }
+              }
+            } else {
+              dayElement.classList.add("flatpickr-disabled");
+            }
+
+            if (self.config.mode === "range") {
+              if (isDateInRange(date) && !isDateSelected(date)) dayElement.classList.add("inRange");
+            }
+
+            if (self.weekNumbers && self.config.showMonths === 1 && className !== "prevMonthDay" && dayNumber % 7 === 1) {
+              self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='flatpickr-day'>" + self.config.getWeek(date) + "</span>");
+            }
+
+            triggerEvent("onDayCreate", dayElement);
+            return dayElement;
+          }
+
+          function focusOnDayElem(targetNode) {
+            targetNode.focus();
+            if (self.config.mode === "range") onMouseOver(targetNode);
+          }
+
+          function getFirstAvailableDay(delta) {
+            var startMonth = delta > 0 ? 0 : self.config.showMonths - 1;
+            var endMonth = delta > 0 ? self.config.showMonths : -1;
+
+            for (var m = startMonth; m != endMonth; m += delta) {
+              var month = self.daysContainer.children[m];
+              var startIndex = delta > 0 ? 0 : month.children.length - 1;
+              var endIndex = delta > 0 ? month.children.length : -1;
+
+              for (var i = startIndex; i != endIndex; i += delta) {
+                var c = month.children[i];
+                if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj)) return c;
+              }
+            }
+
+            return undefined;
+          }
+
+          function getNextAvailableDay(current, delta) {
+            var givenMonth = current.className.indexOf("Month") === -1 ? current.dateObj.getMonth() : self.currentMonth;
+            var endMonth = delta > 0 ? self.config.showMonths : -1;
+            var loopDelta = delta > 0 ? 1 : -1;
+
+            for (var m = givenMonth - self.currentMonth; m != endMonth; m += loopDelta) {
+              var month = self.daysContainer.children[m];
+              var startIndex = givenMonth - self.currentMonth === m ? current.$i + delta : delta < 0 ? month.children.length - 1 : 0;
+              var numMonthDays = month.children.length;
+
+              for (var i = startIndex; i >= 0 && i < numMonthDays && i != (delta > 0 ? numMonthDays : -1); i += loopDelta) {
+                var c = month.children[i];
+                if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj) && Math.abs(current.$i - i) >= Math.abs(delta)) return focusOnDayElem(c);
+              }
+            }
+
+            self.changeMonth(loopDelta);
+            focusOnDay(getFirstAvailableDay(loopDelta), 0);
+            return undefined;
+          }
+
+          function focusOnDay(current, offset) {
+            var dayFocused = isInView(document.activeElement || document.body);
+            var startElem = current !== undefined ? current : dayFocused ? document.activeElement : self.selectedDateElem !== undefined && isInView(self.selectedDateElem) ? self.selectedDateElem : self.todayDateElem !== undefined && isInView(self.todayDateElem) ? self.todayDateElem : getFirstAvailableDay(offset > 0 ? 1 : -1);
+            if (startElem === undefined) return self._input.focus();
+            if (!dayFocused) return focusOnDayElem(startElem);
+            getNextAvailableDay(startElem, offset);
+          }
+
+          function buildMonthDays(year, month) {
+            var firstOfMonth = (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
+            var prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
+            var daysInMonth = self.utils.getDaysInMonth(month),
+                days = window.document.createDocumentFragment(),
+                isMultiMonth = self.config.showMonths > 1,
+                prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
+                nextMonthDayClass = isMultiMonth ? "nextMonthDay hidden" : "nextMonthDay";
+            var dayNumber = prevMonthDays + 1 - firstOfMonth,
+                dayIndex = 0; // prepend days from the ending of previous month
+
+            for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
+              days.appendChild(createDay(prevMonthDayClass, new Date(year, month - 1, dayNumber), dayNumber, dayIndex));
+            } // Start at 1 since there is no 0th day
+
+
+            for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
+              days.appendChild(createDay("", new Date(year, month, dayNumber), dayNumber, dayIndex));
+            } // append days from the next month
+
+
+            for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth && (self.config.showMonths === 1 || dayIndex % 7 !== 0); dayNum++, dayIndex++) {
+              days.appendChild(createDay(nextMonthDayClass, new Date(year, month + 1, dayNum % daysInMonth), dayNum, dayIndex));
+            } //updateNavigationCurrentMonth();
+
+
+            var dayContainer = createElement("div", "dayContainer");
+            dayContainer.appendChild(days);
+            return dayContainer;
+          }
+
+          function buildDays() {
+            if (self.daysContainer === undefined) {
+              return;
+            }
+
+            clearNode(self.daysContainer); // TODO: week numbers for each month
+
+            if (self.weekNumbers) clearNode(self.weekNumbers);
+            var frag = document.createDocumentFragment();
+
+            for (var i = 0; i < self.config.showMonths; i++) {
+              var d = new Date(self.currentYear, self.currentMonth, 1);
+              d.setMonth(self.currentMonth + i);
+              frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
+            }
+
+            self.daysContainer.appendChild(frag);
+            self.days = self.daysContainer.firstChild;
+
+            if (self.config.mode === "range" && self.selectedDates.length === 1) {
+              onMouseOver();
+            }
+          }
+
+          function buildMonthSwitch() {
+            if (self.config.showMonths > 1 || self.config.monthSelectorType !== "dropdown") return;
+
+            var shouldBuildMonth = function shouldBuildMonth(month) {
+              if (self.config.minDate !== undefined && self.currentYear === self.config.minDate.getFullYear() && month < self.config.minDate.getMonth()) {
+                return false;
+              }
+
+              return !(self.config.maxDate !== undefined && self.currentYear === self.config.maxDate.getFullYear() && month > self.config.maxDate.getMonth());
+            };
+
+            self.monthsDropdownContainer.tabIndex = -1;
+            self.monthsDropdownContainer.innerHTML = "";
+
+            for (var i = 0; i < 12; i++) {
+              if (!shouldBuildMonth(i)) continue;
+              var month = createElement("option", "flatpickr-monthDropdown-month");
+              month.value = new Date(self.currentYear, i).getMonth().toString();
+              month.textContent = monthToStr(i, self.config.shorthandCurrentMonth, self.l10n);
+              month.tabIndex = -1;
+
+              if (self.currentMonth === i) {
+                month.selected = true;
+              }
+
+              self.monthsDropdownContainer.appendChild(month);
+            }
+          }
+
+          function buildMonth() {
+            var container = createElement("div", "flatpickr-month");
+            var monthNavFragment = window.document.createDocumentFragment();
+            var monthElement;
+
+            if (self.config.showMonths > 1 || self.config.monthSelectorType === "static") {
+              monthElement = createElement("span", "cur-month");
+            } else {
+              self.monthsDropdownContainer = createElement("select", "flatpickr-monthDropdown-months");
+              bind(self.monthsDropdownContainer, "change", function (e) {
+                var target = e.target;
+                var selectedMonth = parseInt(target.value, 10);
+                self.changeMonth(selectedMonth - self.currentMonth);
+                triggerEvent("onMonthChange");
+              });
+              buildMonthSwitch();
+              monthElement = self.monthsDropdownContainer;
+            }
+
+            var yearInput = createNumberInput("cur-year", {
+              tabindex: "-1"
+            });
+            var yearElement = yearInput.getElementsByTagName("input")[0];
+            yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
+
+            if (self.config.minDate) {
+              yearElement.setAttribute("min", self.config.minDate.getFullYear().toString());
+            }
+
+            if (self.config.maxDate) {
+              yearElement.setAttribute("max", self.config.maxDate.getFullYear().toString());
+              yearElement.disabled = !!self.config.minDate && self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+            }
+
+            var currentMonth = createElement("div", "flatpickr-current-month");
+            currentMonth.appendChild(monthElement);
+            currentMonth.appendChild(yearInput);
+            monthNavFragment.appendChild(currentMonth);
+            container.appendChild(monthNavFragment);
+            return {
+              container: container,
+              yearElement: yearElement,
+              monthElement: monthElement
+            };
+          }
+
+          function buildMonths() {
+            clearNode(self.monthNav);
+            self.monthNav.appendChild(self.prevMonthNav);
+
+            if (self.config.showMonths) {
+              self.yearElements = [];
+              self.monthElements = [];
+            }
+
+            for (var m = self.config.showMonths; m--;) {
+              var month = buildMonth();
+              self.yearElements.push(month.yearElement);
+              self.monthElements.push(month.monthElement);
+              self.monthNav.appendChild(month.container);
+            }
+
+            self.monthNav.appendChild(self.nextMonthNav);
+          }
+
+          function buildMonthNav() {
+            self.monthNav = createElement("div", "flatpickr-months");
+            self.yearElements = [];
+            self.monthElements = [];
+            self.prevMonthNav = createElement("span", "flatpickr-prev-month");
+            self.prevMonthNav.innerHTML = self.config.prevArrow;
+            self.nextMonthNav = createElement("span", "flatpickr-next-month");
+            self.nextMonthNav.innerHTML = self.config.nextArrow;
+            buildMonths();
+            Object.defineProperty(self, "_hidePrevMonthArrow", {
+              get: function get() {
+                return self.__hidePrevMonthArrow;
+              },
+              set: function set(bool) {
+                if (self.__hidePrevMonthArrow !== bool) {
+                  toggleClass(self.prevMonthNav, "flatpickr-disabled", bool);
+                  self.__hidePrevMonthArrow = bool;
+                }
+              }
+            });
+            Object.defineProperty(self, "_hideNextMonthArrow", {
+              get: function get() {
+                return self.__hideNextMonthArrow;
+              },
+              set: function set(bool) {
+                if (self.__hideNextMonthArrow !== bool) {
+                  toggleClass(self.nextMonthNav, "flatpickr-disabled", bool);
+                  self.__hideNextMonthArrow = bool;
+                }
+              }
+            });
+            self.currentYearElement = self.yearElements[0];
+            updateNavigationCurrentMonth();
+            return self.monthNav;
+          }
+
+          function buildTime() {
+            self.calendarContainer.classList.add("hasTime");
+            if (self.config.noCalendar) self.calendarContainer.classList.add("noCalendar");
+            self.timeContainer = createElement("div", "flatpickr-time");
+            self.timeContainer.tabIndex = -1;
+            var separator = createElement("span", "flatpickr-time-separator", ":");
+            var hourInput = createNumberInput("flatpickr-hour", {
+              "aria-label": self.l10n.hourAriaLabel
+            });
+            self.hourElement = hourInput.getElementsByTagName("input")[0];
+            var minuteInput = createNumberInput("flatpickr-minute", {
+              "aria-label": self.l10n.minuteAriaLabel
+            });
+            self.minuteElement = minuteInput.getElementsByTagName("input")[0];
+            self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
+            self.hourElement.value = pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.time_24hr ? self.config.defaultHour : military2ampm(self.config.defaultHour));
+            self.minuteElement.value = pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getMinutes() : self.config.defaultMinute);
+            self.hourElement.setAttribute("step", self.config.hourIncrement.toString());
+            self.minuteElement.setAttribute("step", self.config.minuteIncrement.toString());
+            self.hourElement.setAttribute("min", self.config.time_24hr ? "0" : "1");
+            self.hourElement.setAttribute("max", self.config.time_24hr ? "23" : "12");
+            self.minuteElement.setAttribute("min", "0");
+            self.minuteElement.setAttribute("max", "59");
+            self.timeContainer.appendChild(hourInput);
+            self.timeContainer.appendChild(separator);
+            self.timeContainer.appendChild(minuteInput);
+            if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
+
+            if (self.config.enableSeconds) {
+              self.timeContainer.classList.add("hasSeconds");
+              var secondInput = createNumberInput("flatpickr-second");
+              self.secondElement = secondInput.getElementsByTagName("input")[0];
+              self.secondElement.value = pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getSeconds() : self.config.defaultSeconds);
+              self.secondElement.setAttribute("step", self.minuteElement.getAttribute("step"));
+              self.secondElement.setAttribute("min", "0");
+              self.secondElement.setAttribute("max", "59");
+              self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
+              self.timeContainer.appendChild(secondInput);
+            }
+
+            if (!self.config.time_24hr) {
+              // add self.amPM if appropriate
+              self.amPM = createElement("span", "flatpickr-am-pm", self.l10n.amPM[_int((self.latestSelectedDateObj ? self.hourElement.value : self.config.defaultHour) > 11)]);
+              self.amPM.title = self.l10n.toggleTitle;
+              self.amPM.tabIndex = -1;
+              self.timeContainer.appendChild(self.amPM);
+            }
+
+            return self.timeContainer;
+          }
+
+          function buildWeekdays() {
+            if (!self.weekdayContainer) self.weekdayContainer = createElement("div", "flatpickr-weekdays");else clearNode(self.weekdayContainer);
+
+            for (var i = self.config.showMonths; i--;) {
+              var container = createElement("div", "flatpickr-weekdaycontainer");
+              self.weekdayContainer.appendChild(container);
+            }
+
+            updateWeekdays();
+            return self.weekdayContainer;
+          }
+
+          function updateWeekdays() {
+            if (!self.weekdayContainer) {
+              return;
+            }
+
+            var firstDayOfWeek = self.l10n.firstDayOfWeek;
+            var weekdays = self.l10n.weekdays.shorthand.slice();
+
+            if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
+              weekdays = weekdays.splice(firstDayOfWeek, weekdays.length).concat(weekdays.splice(0, firstDayOfWeek));
+            }
+
+            for (var i = self.config.showMonths; i--;) {
+              self.weekdayContainer.children[i].innerHTML = "\n      <span class='flatpickr-weekday'>\n        " + weekdays.join("</span><span class='flatpickr-weekday'>") + "\n      </span>\n      ";
+            }
+          }
+          /* istanbul ignore next */
+
+
+          function buildWeeks() {
+            self.calendarContainer.classList.add("hasWeeks");
+            var weekWrapper = createElement("div", "flatpickr-weekwrapper");
+            weekWrapper.appendChild(createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
+            var weekNumbers = createElement("div", "flatpickr-weeks");
+            weekWrapper.appendChild(weekNumbers);
+            return {
+              weekWrapper: weekWrapper,
+              weekNumbers: weekNumbers
+            };
+          }
+
+          function changeMonth(value, isOffset) {
+            if (isOffset === void 0) {
+              isOffset = true;
+            }
+
+            var delta = isOffset ? value : value - self.currentMonth;
+            if (delta < 0 && self._hidePrevMonthArrow === true || delta > 0 && self._hideNextMonthArrow === true) return;
+            self.currentMonth += delta;
+
+            if (self.currentMonth < 0 || self.currentMonth > 11) {
+              self.currentYear += self.currentMonth > 11 ? 1 : -1;
+              self.currentMonth = (self.currentMonth + 12) % 12;
+              triggerEvent("onYearChange");
+              buildMonthSwitch();
+            }
+
+            buildDays();
+            triggerEvent("onMonthChange");
+            updateNavigationCurrentMonth();
+          }
+
+          function clear(triggerChangeEvent, toInitial) {
+            if (triggerChangeEvent === void 0) {
+              triggerChangeEvent = true;
+            }
+
+            if (toInitial === void 0) {
+              toInitial = true;
+            }
+
+            self.input.value = "";
+            if (self.altInput !== undefined) self.altInput.value = "";
+            if (self.mobileInput !== undefined) self.mobileInput.value = "";
+            self.selectedDates = [];
+            self.latestSelectedDateObj = undefined;
+
+            if (toInitial === true) {
+              self.currentYear = self._initialDate.getFullYear();
+              self.currentMonth = self._initialDate.getMonth();
+            }
+
+            self.showTimeInput = false;
+
+            if (self.config.enableTime === true) {
+              setDefaultHours();
+            }
+
+            self.redraw();
+            if (triggerChangeEvent) // triggerChangeEvent is true (default) or an Event
+              triggerEvent("onChange");
+          }
+
+          function close() {
+            self.isOpen = false;
+
+            if (!self.isMobile) {
+              if (self.calendarContainer !== undefined) {
+                self.calendarContainer.classList.remove("open");
+              }
+
+              if (self._input !== undefined) {
+                self._input.classList.remove("active");
+              }
+            }
+
+            triggerEvent("onClose");
+          }
+
+          function destroy() {
+            if (self.config !== undefined) triggerEvent("onDestroy");
+
+            for (var i = self._handlers.length; i--;) {
+              var h = self._handlers[i];
+              h.element.removeEventListener(h.event, h.handler, h.options);
+            }
+
+            self._handlers = [];
+
+            if (self.mobileInput) {
+              if (self.mobileInput.parentNode) self.mobileInput.parentNode.removeChild(self.mobileInput);
+              self.mobileInput = undefined;
+            } else if (self.calendarContainer && self.calendarContainer.parentNode) {
+              if (self.config["static"] && self.calendarContainer.parentNode) {
+                var wrapper = self.calendarContainer.parentNode;
+                wrapper.lastChild && wrapper.removeChild(wrapper.lastChild);
+
+                if (wrapper.parentNode) {
+                  while (wrapper.firstChild) {
+                    wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+                  }
+
+                  wrapper.parentNode.removeChild(wrapper);
+                }
+              } else self.calendarContainer.parentNode.removeChild(self.calendarContainer);
+            }
+
+            if (self.altInput) {
+              self.input.type = "text";
+              if (self.altInput.parentNode) self.altInput.parentNode.removeChild(self.altInput);
+              delete self.altInput;
+            }
+
+            if (self.input) {
+              self.input.type = self.input._type;
+              self.input.classList.remove("flatpickr-input");
+              self.input.removeAttribute("readonly");
+              self.input.value = "";
+            }
+
+            ["_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow", "__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem", "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input", "_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem", "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav", "monthsDropdownContainer", "currentMonthElement", "currentYearElement", "navigationCurrentMonth", "selectedDateElem", "config"].forEach(function (k) {
+              try {
+                delete self[k];
+              } catch (_) {}
+            });
+          }
+
+          function isCalendarElem(elem) {
+            if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
+            return self.calendarContainer.contains(elem);
+          }
+
+          function documentClick(e) {
+            if (self.isOpen && !self.config.inline) {
+              var eventTarget_1 = getEventTarget(e);
+              var isCalendarElement = isCalendarElem(eventTarget_1);
+              var isInput = eventTarget_1 === self.input || eventTarget_1 === self.altInput || self.element.contains(eventTarget_1) || // web components
+              // e.path is not present in all browsers. circumventing typechecks
+              e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
+              var lostFocus = e.type === "blur" ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement && !isCalendarElem(e.relatedTarget);
+              var isIgnored = !self.config.ignoredFocusElements.some(function (elem) {
+                return elem.contains(eventTarget_1);
+              });
+
+              if (lostFocus && isIgnored) {
+                if (self.timeContainer !== undefined && self.minuteElement !== undefined && self.hourElement !== undefined) {
+                  updateTime();
+                }
+
+                self.close();
+
+                if (self.config.mode === "range" && self.selectedDates.length === 1) {
+                  self.clear(false);
+                  self.redraw();
+                }
+              }
+            }
+          }
+
+          function changeYear(newYear) {
+            if (!newYear || self.config.minDate && newYear < self.config.minDate.getFullYear() || self.config.maxDate && newYear > self.config.maxDate.getFullYear()) return;
+            var newYearNum = newYear,
+                isNewYear = self.currentYear !== newYearNum;
+            self.currentYear = newYearNum || self.currentYear;
+
+            if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear()) {
+              self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
+            } else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
+              self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
+            }
+
+            if (isNewYear) {
+              self.redraw();
+              triggerEvent("onYearChange");
+              buildMonthSwitch();
+            }
+          }
+
+          function isEnabled(date, timeless) {
+            if (timeless === void 0) {
+              timeless = true;
+            }
+
+            var dateToCheck = self.parseDate(date, undefined, timeless); // timeless
+
+            if (self.config.minDate && dateToCheck && compareDates(dateToCheck, self.config.minDate, timeless !== undefined ? timeless : !self.minDateHasTime) < 0 || self.config.maxDate && dateToCheck && compareDates(dateToCheck, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0) return false;
+            if (self.config.enable.length === 0 && self.config.disable.length === 0) return true;
+            if (dateToCheck === undefined) return false;
+            var bool = self.config.enable.length > 0,
+                array = bool ? self.config.enable : self.config.disable;
+
+            for (var i = 0, d = void 0; i < array.length; i++) {
+              d = array[i];
+              if (typeof d === "function" && d(dateToCheck) // disabled by function
+              ) return bool;else if (d instanceof Date && dateToCheck !== undefined && d.getTime() === dateToCheck.getTime()) // disabled by date
+                return bool;else if (typeof d === "string" && dateToCheck !== undefined) {
+                // disabled by date string
+                var parsed = self.parseDate(d, undefined, true);
+                return parsed && parsed.getTime() === dateToCheck.getTime() ? bool : !bool;
+              } else if ( // disabled by range
+              typeof d === "object" && dateToCheck !== undefined && d.from && d.to && dateToCheck.getTime() >= d.from.getTime() && dateToCheck.getTime() <= d.to.getTime()) return bool;
+            }
+
+            return !bool;
+          }
+
+          function isInView(elem) {
+            if (self.daysContainer !== undefined) return elem.className.indexOf("hidden") === -1 && self.daysContainer.contains(elem);
+            return false;
+          }
+
+          function onKeyDown(e) {
+            // e.key                      e.keyCode
+            // "Backspace"                        8
+            // "Tab"                              9
+            // "Enter"                           13
+            // "Escape"     (IE "Esc")           27
+            // "ArrowLeft"  (IE "Left")          37
+            // "ArrowUp"    (IE "Up")            38
+            // "ArrowRight" (IE "Right")         39
+            // "ArrowDown"  (IE "Down")          40
+            // "Delete"     (IE "Del")           46
+            var isInput = e.target === self._input;
+            var allowInput = self.config.allowInput;
+            var allowKeydown = self.isOpen && (!allowInput || !isInput);
+            var allowInlineKeydown = self.config.inline && isInput && !allowInput;
+
+            if (e.keyCode === 13 && isInput) {
+              if (allowInput) {
+                self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
+                return e.target.blur();
+              } else {
+                self.open();
+              }
+            } else if (isCalendarElem(e.target) || allowKeydown || allowInlineKeydown) {
+              var isTimeObj = !!self.timeContainer && self.timeContainer.contains(e.target);
+
+              switch (e.keyCode) {
+                case 13:
+                  if (isTimeObj) {
+                    e.preventDefault();
+                    updateTime();
+                    focusAndClose();
+                  } else selectDate(e);
+
+                  break;
+
+                case 27:
+                  // escape
+                  e.preventDefault();
+                  focusAndClose();
+                  break;
+
+                case 8:
+                case 46:
+                  if (isInput && !self.config.allowInput) {
+                    e.preventDefault();
+                    self.clear();
+                  }
+
+                  break;
+
+                case 37:
+                case 39:
+                  if (!isTimeObj && !isInput) {
+                    e.preventDefault();
+
+                    if (self.daysContainer !== undefined && (allowInput === false || document.activeElement && isInView(document.activeElement))) {
+                      var delta_1 = e.keyCode === 39 ? 1 : -1;
+                      if (!e.ctrlKey) focusOnDay(undefined, delta_1);else {
+                        e.stopPropagation();
+                        changeMonth(delta_1);
+                        focusOnDay(getFirstAvailableDay(1), 0);
+                      }
+                    }
+                  } else if (self.hourElement) self.hourElement.focus();
+
+                  break;
+
+                case 38:
+                case 40:
+                  e.preventDefault();
+                  var delta = e.keyCode === 40 ? 1 : -1;
+
+                  if (self.daysContainer && e.target.$i !== undefined || e.target === self.input || e.target === self.altInput) {
+                    if (e.ctrlKey) {
+                      e.stopPropagation();
+                      changeYear(self.currentYear - delta);
+                      focusOnDay(getFirstAvailableDay(1), 0);
+                    } else if (!isTimeObj) focusOnDay(undefined, delta * 7);
+                  } else if (e.target === self.currentYearElement) {
+                    changeYear(self.currentYear - delta);
+                  } else if (self.config.enableTime) {
+                    if (!isTimeObj && self.hourElement) self.hourElement.focus();
+                    updateTime(e);
+
+                    self._debouncedChange();
+                  }
+
+                  break;
+
+                case 9:
+                  if (isTimeObj) {
+                    var elems = [self.hourElement, self.minuteElement, self.secondElement, self.amPM].concat(self.pluginElements).filter(function (x) {
+                      return x;
+                    });
+                    var i = elems.indexOf(e.target);
+
+                    if (i !== -1) {
+                      var target = elems[i + (e.shiftKey ? -1 : 1)];
+                      e.preventDefault();
+
+                      (target || self._input).focus();
+                    }
+                  } else if (!self.config.noCalendar && self.daysContainer && self.daysContainer.contains(e.target) && e.shiftKey) {
+                    e.preventDefault();
+
+                    self._input.focus();
+                  }
+
+                  break;
+
+                default:
+                  break;
+              }
+            }
+
+            if (self.amPM !== undefined && e.target === self.amPM) {
+              switch (e.key) {
+                case self.l10n.amPM[0].charAt(0):
+                case self.l10n.amPM[0].charAt(0).toLowerCase():
+                  self.amPM.textContent = self.l10n.amPM[0];
+                  setHoursFromInputs();
+                  updateValue();
+                  break;
+
+                case self.l10n.amPM[1].charAt(0):
+                case self.l10n.amPM[1].charAt(0).toLowerCase():
+                  self.amPM.textContent = self.l10n.amPM[1];
+                  setHoursFromInputs();
+                  updateValue();
+                  break;
+              }
+            }
+
+            if (isInput || isCalendarElem(e.target)) {
+              triggerEvent("onKeyDown", e);
+            }
+          }
+
+          function onMouseOver(elem) {
+            if (self.selectedDates.length !== 1 || elem && (!elem.classList.contains("flatpickr-day") || elem.classList.contains("flatpickr-disabled"))) return;
+            var hoverDate = elem ? elem.dateObj.getTime() : self.days.firstElementChild.dateObj.getTime(),
+                initialDate = self.parseDate(self.selectedDates[0], undefined, true).getTime(),
+                rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
+                rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime());
+            var containsDisabled = false;
+            var minRange = 0,
+                maxRange = 0;
+
+            for (var t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
+              if (!isEnabled(new Date(t), true)) {
+                containsDisabled = containsDisabled || t > rangeStartDate && t < rangeEndDate;
+                if (t < initialDate && (!minRange || t > minRange)) minRange = t;else if (t > initialDate && (!maxRange || t < maxRange)) maxRange = t;
+              }
+            }
+
+            for (var m = 0; m < self.config.showMonths; m++) {
+              var month = self.daysContainer.children[m];
+
+              var _loop_1 = function _loop_1(i, l) {
+                var dayElem = month.children[i],
+                    date = dayElem.dateObj;
+                var timestamp = date.getTime();
+                var outOfRange = minRange > 0 && timestamp < minRange || maxRange > 0 && timestamp > maxRange;
+
+                if (outOfRange) {
+                  dayElem.classList.add("notAllowed");
+                  ["inRange", "startRange", "endRange"].forEach(function (c) {
+                    dayElem.classList.remove(c);
+                  });
+                  return "continue";
+                } else if (containsDisabled && !outOfRange) return "continue";
+
+                ["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
+                  dayElem.classList.remove(c);
+                });
+
+                if (elem !== undefined) {
+                  elem.classList.add(hoverDate <= self.selectedDates[0].getTime() ? "startRange" : "endRange");
+                  if (initialDate < hoverDate && timestamp === initialDate) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate) dayElem.classList.add("endRange");
+                  if (timestamp >= minRange && (maxRange === 0 || timestamp <= maxRange) && isBetween(timestamp, initialDate, hoverDate)) dayElem.classList.add("inRange");
+                }
+              };
+
+              for (var i = 0, l = month.children.length; i < l; i++) {
+                _loop_1(i, l);
+              }
+            }
+          }
+
+          function onResize() {
+            if (self.isOpen && !self.config["static"] && !self.config.inline) positionCalendar();
+          }
+
+          function setDefaultTime() {
+            self.setDate(self.config.minDate !== undefined ? new Date(self.config.minDate.getTime()) : new Date(), true);
+            setDefaultHours();
+            updateValue();
+          }
+
+          function open(e, positionElement) {
+            if (positionElement === void 0) {
+              positionElement = self._positionElement;
+            }
+
+            if (self.isMobile === true) {
+              if (e) {
+                e.preventDefault();
+                e.target && e.target.blur();
+              }
+
+              if (self.mobileInput !== undefined) {
+                self.mobileInput.focus();
+                self.mobileInput.click();
+              }
+
+              triggerEvent("onOpen");
+              return;
+            }
+
+            if (self._input.disabled || self.config.inline) return;
+            var wasOpen = self.isOpen;
+            self.isOpen = true;
+
+            if (!wasOpen) {
+              self.calendarContainer.classList.add("open");
+
+              self._input.classList.add("active");
+
+              triggerEvent("onOpen");
+              positionCalendar(positionElement);
+            }
+
+            if (self.config.enableTime === true && self.config.noCalendar === true) {
+              if (self.selectedDates.length === 0) {
+                setDefaultTime();
+              }
+
+              if (self.config.allowInput === false && (e === undefined || !self.timeContainer.contains(e.relatedTarget))) {
+                setTimeout(function () {
+                  return self.hourElement.select();
+                }, 50);
+              }
+            }
+          }
+
+          function minMaxDateSetter(type) {
+            return function (date) {
+              var dateObj = self.config["_" + type + "Date"] = self.parseDate(date, self.config.dateFormat);
+              var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
+
+              if (dateObj !== undefined) {
+                self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] = dateObj.getHours() > 0 || dateObj.getMinutes() > 0 || dateObj.getSeconds() > 0;
+              }
+
+              if (self.selectedDates) {
+                self.selectedDates = self.selectedDates.filter(function (d) {
+                  return isEnabled(d);
+                });
+                if (!self.selectedDates.length && type === "min") setHoursFromDate(dateObj);
+                updateValue();
+              }
+
+              if (self.daysContainer) {
+                redraw();
+                if (dateObj !== undefined) self.currentYearElement[type] = dateObj.getFullYear().toString();else self.currentYearElement.removeAttribute(type);
+                self.currentYearElement.disabled = !!inverseDateObj && dateObj !== undefined && inverseDateObj.getFullYear() === dateObj.getFullYear();
+              }
+            };
+          }
+
+          function parseConfig() {
+            var boolOpts = ["wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
+
+            var userConfig = _assign({}, instanceConfig, JSON.parse(JSON.stringify(element.dataset || {})));
+
+            var formats = {};
+            self.config.parseDate = userConfig.parseDate;
+            self.config.formatDate = userConfig.formatDate;
+            Object.defineProperty(self.config, "enable", {
+              get: function get() {
+                return self.config._enable;
+              },
+              set: function set(dates) {
+                self.config._enable = parseDateRules(dates);
+              }
+            });
+            Object.defineProperty(self.config, "disable", {
+              get: function get() {
+                return self.config._disable;
+              },
+              set: function set(dates) {
+                self.config._disable = parseDateRules(dates);
+              }
+            });
+            var timeMode = userConfig.mode === "time";
+
+            if (!userConfig.dateFormat && (userConfig.enableTime || timeMode)) {
+              var defaultDateFormat = flatpickr.defaultConfig.dateFormat || defaults.dateFormat;
+              formats.dateFormat = userConfig.noCalendar || timeMode ? "H:i" + (userConfig.enableSeconds ? ":S" : "") : defaultDateFormat + " H:i" + (userConfig.enableSeconds ? ":S" : "");
+            }
+
+            if (userConfig.altInput && (userConfig.enableTime || timeMode) && !userConfig.altFormat) {
+              var defaultAltFormat = flatpickr.defaultConfig.altFormat || defaults.altFormat;
+              formats.altFormat = userConfig.noCalendar || timeMode ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K") : defaultAltFormat + (" h:i" + (userConfig.enableSeconds ? ":S" : "") + " K");
+            }
+
+            if (!userConfig.altInputClass) {
+              self.config.altInputClass = self.input.className + " " + self.config.altInputClass;
+            }
+
+            Object.defineProperty(self.config, "minDate", {
+              get: function get() {
+                return self.config._minDate;
+              },
+              set: minMaxDateSetter("min")
+            });
+            Object.defineProperty(self.config, "maxDate", {
+              get: function get() {
+                return self.config._maxDate;
+              },
+              set: minMaxDateSetter("max")
+            });
+
+            var minMaxTimeSetter = function minMaxTimeSetter(type) {
+              return function (val) {
+                self.config[type === "min" ? "_minTime" : "_maxTime"] = self.parseDate(val, "H:i:S");
+              };
+            };
+
+            Object.defineProperty(self.config, "minTime", {
+              get: function get() {
+                return self.config._minTime;
+              },
+              set: minMaxTimeSetter("min")
+            });
+            Object.defineProperty(self.config, "maxTime", {
+              get: function get() {
+                return self.config._maxTime;
+              },
+              set: minMaxTimeSetter("max")
+            });
+
+            if (userConfig.mode === "time") {
+              self.config.noCalendar = true;
+              self.config.enableTime = true;
+            }
+
+            Object.assign(self.config, formats, userConfig);
+
+            for (var i = 0; i < boolOpts.length; i++) {
+              self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
+            }
+
+            HOOKS.filter(function (hook) {
+              return self.config[hook] !== undefined;
+            }).forEach(function (hook) {
+              self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
+            });
+            self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            for (var i = 0; i < self.config.plugins.length; i++) {
+              var pluginConf = self.config.plugins[i](self) || {};
+
+              for (var key in pluginConf) {
+                if (HOOKS.indexOf(key) > -1) {
+                  self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
+                } else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
+              }
+            }
+
+            triggerEvent("onParseConfig");
+          }
+
+          function setupLocale() {
+            if (typeof self.config.locale !== "object" && typeof flatpickr.l10ns[self.config.locale] === "undefined") self.config.errorHandler(new Error("flatpickr: invalid locale " + self.config.locale));
+            self.l10n = _assign({}, flatpickr.l10ns["default"], typeof self.config.locale === "object" ? self.config.locale : self.config.locale !== "default" ? flatpickr.l10ns[self.config.locale] : undefined);
+            tokenRegex.K = "(" + self.l10n.amPM[0] + "|" + self.l10n.amPM[1] + "|" + self.l10n.amPM[0].toLowerCase() + "|" + self.l10n.amPM[1].toLowerCase() + ")";
+
+            var userConfig = _assign({}, instanceConfig, JSON.parse(JSON.stringify(element.dataset || {})));
+
+            if (userConfig.time_24hr === undefined && flatpickr.defaultConfig.time_24hr === undefined) {
+              self.config.time_24hr = self.l10n.time_24hr;
+            }
+
+            self.formatDate = createDateFormatter(self);
+            self.parseDate = createDateParser({
+              config: self.config,
+              l10n: self.l10n
+            });
+          }
+
+          function positionCalendar(customPositionElement) {
+            if (self.calendarContainer === undefined) return;
+            triggerEvent("onPreCalendarPosition");
+            var positionElement = customPositionElement || self._positionElement;
+            var calendarHeight = Array.prototype.reduce.call(self.calendarContainer.children, function (acc, child) {
+              return acc + child.offsetHeight;
+            }, 0),
+                calendarWidth = self.calendarContainer.offsetWidth,
+                configPos = self.config.position.split(" "),
+                configPosVertical = configPos[0],
+                configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
+                inputBounds = positionElement.getBoundingClientRect(),
+                distanceFromBottom = window.innerHeight - inputBounds.bottom,
+                showOnTop = configPosVertical === "above" || configPosVertical !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
+            var top = window.pageYOffset + inputBounds.top + (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
+            toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
+            toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
+            if (self.config.inline) return;
+            var left = window.pageXOffset + inputBounds.left - (configPosHorizontal != null && configPosHorizontal === "center" ? (calendarWidth - inputBounds.width) / 2 : 0);
+            var right = window.document.body.offsetWidth - (window.pageXOffset + inputBounds.right);
+            var rightMost = left + calendarWidth > window.document.body.offsetWidth;
+            var centerMost = right + calendarWidth > window.document.body.offsetWidth;
+            toggleClass(self.calendarContainer, "rightMost", rightMost);
+            if (self.config["static"]) return;
+            self.calendarContainer.style.top = top + "px";
+
+            if (!rightMost) {
+              self.calendarContainer.style.left = left + "px";
+              self.calendarContainer.style.right = "auto";
+            } else if (!centerMost) {
+              self.calendarContainer.style.left = "auto";
+              self.calendarContainer.style.right = right + "px";
+            } else {
+              var doc = document.styleSheets[0]; // some testing environments don't have css support
+
+              if (doc === undefined) return;
+              var bodyWidth = window.document.body.offsetWidth;
+              var centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
+              var centerBefore = ".flatpickr-calendar.centerMost:before";
+              var centerAfter = ".flatpickr-calendar.centerMost:after";
+              var centerIndex = doc.cssRules.length;
+              var centerStyle = "{left:" + inputBounds.left + "px;right:auto;}";
+              toggleClass(self.calendarContainer, "rightMost", false);
+              toggleClass(self.calendarContainer, "centerMost", true);
+              doc.insertRule(centerBefore + "," + centerAfter + centerStyle, centerIndex);
+              self.calendarContainer.style.left = centerLeft + "px";
+              self.calendarContainer.style.right = "auto";
+            }
+          }
+
+          function redraw() {
+            if (self.config.noCalendar || self.isMobile) return;
+            updateNavigationCurrentMonth();
+            buildDays();
+          }
+
+          function focusAndClose() {
+            self._input.focus();
+
+            if (window.navigator.userAgent.indexOf("MSIE") !== -1 || navigator.msMaxTouchPoints !== undefined) {
+              // hack - bugs in the way IE handles focus keeps the calendar open
+              setTimeout(self.close, 0);
+            } else {
+              self.close();
+            }
+          }
+
+          function selectDate(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var isSelectable = function isSelectable(day) {
+              return day.classList && day.classList.contains("flatpickr-day") && !day.classList.contains("flatpickr-disabled") && !day.classList.contains("notAllowed");
+            };
+
+            var t = findParent(e.target, isSelectable);
+            if (t === undefined) return;
+            var target = t;
+            var selectedDate = self.latestSelectedDateObj = new Date(target.dateObj.getTime());
+            var shouldChangeMonth = (selectedDate.getMonth() < self.currentMonth || selectedDate.getMonth() > self.currentMonth + self.config.showMonths - 1) && self.config.mode !== "range";
+            self.selectedDateElem = target;
+            if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
+              var selectedIndex = isDateSelected(selectedDate);
+              if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);else self.selectedDates.push(selectedDate);
+            } else if (self.config.mode === "range") {
+              if (self.selectedDates.length === 2) {
+                self.clear(false, false);
+              }
+
+              self.latestSelectedDateObj = selectedDate;
+              self.selectedDates.push(selectedDate); // unless selecting same date twice, sort ascendingly
+
+              if (compareDates(selectedDate, self.selectedDates[0], true) !== 0) self.selectedDates.sort(function (a, b) {
+                return a.getTime() - b.getTime();
+              });
+            }
+            setHoursFromInputs();
+
+            if (shouldChangeMonth) {
+              var isNewYear = self.currentYear !== selectedDate.getFullYear();
+              self.currentYear = selectedDate.getFullYear();
+              self.currentMonth = selectedDate.getMonth();
+
+              if (isNewYear) {
+                triggerEvent("onYearChange");
+                buildMonthSwitch();
+              }
+
+              triggerEvent("onMonthChange");
+            }
+
+            updateNavigationCurrentMonth();
+            buildDays();
+            updateValue();
+            if (self.config.enableTime) setTimeout(function () {
+              return self.showTimeInput = true;
+            }, 50); // maintain focus
+
+            if (!shouldChangeMonth && self.config.mode !== "range" && self.config.showMonths === 1) focusOnDayElem(target);else if (self.selectedDateElem !== undefined && self.hourElement === undefined) {
+              self.selectedDateElem && self.selectedDateElem.focus();
+            }
+            if (self.hourElement !== undefined) self.hourElement !== undefined && self.hourElement.focus();
+
+            if (self.config.closeOnSelect) {
+              var single = self.config.mode === "single" && !self.config.enableTime;
+              var range = self.config.mode === "range" && self.selectedDates.length === 2 && !self.config.enableTime;
+
+              if (single || range) {
+                focusAndClose();
+              }
+            }
+
+            triggerChange();
+          }
+
+          var CALLBACKS = {
+            locale: [setupLocale, updateWeekdays],
+            showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
+            minDate: [jumpToDate],
+            maxDate: [jumpToDate]
+          };
+
+          function set(option, value) {
+            if (option !== null && typeof option === "object") {
+              Object.assign(self.config, option);
+
+              for (var key in option) {
+                if (CALLBACKS[key] !== undefined) CALLBACKS[key].forEach(function (x) {
+                  return x();
+                });
+              }
+            } else {
+              self.config[option] = value;
+              if (CALLBACKS[option] !== undefined) CALLBACKS[option].forEach(function (x) {
+                return x();
+              });else if (HOOKS.indexOf(option) > -1) self.config[option] = arrayify(value);
+            }
+
+            self.redraw();
+            updateValue(false);
+          }
+
+          function setSelectedDate(inputDate, format) {
+            var dates = [];
+            if (inputDate instanceof Array) dates = inputDate.map(function (d) {
+              return self.parseDate(d, format);
+            });else if (inputDate instanceof Date || typeof inputDate === "number") dates = [self.parseDate(inputDate, format)];else if (typeof inputDate === "string") {
+              switch (self.config.mode) {
+                case "single":
+                case "time":
+                  dates = [self.parseDate(inputDate, format)];
+                  break;
+
+                case "multiple":
+                  dates = inputDate.split(self.config.conjunction).map(function (date) {
+                    return self.parseDate(date, format);
+                  });
+                  break;
+
+                case "range":
+                  dates = inputDate.split(self.l10n.rangeSeparator).map(function (date) {
+                    return self.parseDate(date, format);
+                  });
+                  break;
+
+                default:
+                  break;
+              }
+            } else self.config.errorHandler(new Error("Invalid date supplied: " + JSON.stringify(inputDate)));
+            self.selectedDates = dates.filter(function (d) {
+              return d instanceof Date && isEnabled(d, false);
+            });
+            if (self.config.mode === "range") self.selectedDates.sort(function (a, b) {
+              return a.getTime() - b.getTime();
+            });
+          }
+
+          function setDate(date, triggerChange, format) {
+            if (triggerChange === void 0) {
+              triggerChange = false;
+            }
+
+            if (format === void 0) {
+              format = self.config.dateFormat;
+            }
+
+            if (date !== 0 && !date || date instanceof Array && date.length === 0) return self.clear(triggerChange);
+            setSelectedDate(date, format);
+            self.showTimeInput = self.selectedDates.length > 0;
+            self.latestSelectedDateObj = self.selectedDates[self.selectedDates.length - 1];
+            self.redraw();
+            jumpToDate();
+            setHoursFromDate();
+
+            if (self.selectedDates.length === 0) {
+              self.clear(false);
+            }
+
+            updateValue(triggerChange);
+            if (triggerChange) triggerEvent("onChange");
+          }
+
+          function parseDateRules(arr) {
+            return arr.slice().map(function (rule) {
+              if (typeof rule === "string" || typeof rule === "number" || rule instanceof Date) {
+                return self.parseDate(rule, undefined, true);
+              } else if (rule && typeof rule === "object" && rule.from && rule.to) return {
+                from: self.parseDate(rule.from, undefined),
+                to: self.parseDate(rule.to, undefined)
+              };
+
+              return rule;
+            }).filter(function (x) {
+              return x;
+            }); // remove falsy values
+          }
+
+          function setupDates() {
+            self.selectedDates = [];
+            self.now = self.parseDate(self.config.now) || new Date(); // Workaround IE11 setting placeholder as the input's value
+
+            var preloadedDate = self.config.defaultDate || ((self.input.nodeName === "INPUT" || self.input.nodeName === "TEXTAREA") && self.input.placeholder && self.input.value === self.input.placeholder ? null : self.input.value);
+            if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
+            self._initialDate = self.selectedDates.length > 0 ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now.getTime() ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now.getTime() ? self.config.maxDate : self.now;
+            self.currentYear = self._initialDate.getFullYear();
+            self.currentMonth = self._initialDate.getMonth();
+            if (self.selectedDates.length > 0) self.latestSelectedDateObj = self.selectedDates[0];
+            if (self.config.minTime !== undefined) self.config.minTime = self.parseDate(self.config.minTime, "H:i");
+            if (self.config.maxTime !== undefined) self.config.maxTime = self.parseDate(self.config.maxTime, "H:i");
+            self.minDateHasTime = !!self.config.minDate && (self.config.minDate.getHours() > 0 || self.config.minDate.getMinutes() > 0 || self.config.minDate.getSeconds() > 0);
+            self.maxDateHasTime = !!self.config.maxDate && (self.config.maxDate.getHours() > 0 || self.config.maxDate.getMinutes() > 0 || self.config.maxDate.getSeconds() > 0);
+            Object.defineProperty(self, "showTimeInput", {
+              get: function get() {
+                return self._showTimeInput;
+              },
+              set: function set(bool) {
+                self._showTimeInput = bool;
+                if (self.calendarContainer) toggleClass(self.calendarContainer, "showTimeInput", bool);
+                self.isOpen && positionCalendar();
+              }
+            });
+          }
+
+          function setupInputs() {
+            self.input = self.config.wrap ? element.querySelector("[data-input]") : element;
+            /* istanbul ignore next */
+
+            if (!self.input) {
+              self.config.errorHandler(new Error("Invalid input element specified"));
+              return;
+            } // hack: store previous type to restore it after destroy()
+
+
+            self.input._type = self.input.type;
+            self.input.type = "text";
+            self.input.classList.add("flatpickr-input");
+            self._input = self.input;
+
+            if (self.config.altInput) {
+              // replicate self.element
+              self.altInput = createElement(self.input.nodeName, self.config.altInputClass);
+              self._input = self.altInput;
+              self.altInput.placeholder = self.input.placeholder;
+              self.altInput.disabled = self.input.disabled;
+              self.altInput.required = self.input.required;
+              self.altInput.tabIndex = self.input.tabIndex;
+              self.altInput.type = "text";
+              self.input.setAttribute("type", "hidden");
+              if (!self.config["static"] && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+            }
+
+            if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
+            self._positionElement = self.config.positionElement || self._input;
+          }
+
+          function setupMobile() {
+            var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
+            self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
+            self.mobileInput.step = self.input.getAttribute("step") || "any";
+            self.mobileInput.tabIndex = 1;
+            self.mobileInput.type = inputType;
+            self.mobileInput.disabled = self.input.disabled;
+            self.mobileInput.required = self.input.required;
+            self.mobileInput.placeholder = self.input.placeholder;
+            self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" : inputType === "date" ? "Y-m-d" : "H:i:S";
+
+            if (self.selectedDates.length > 0) {
+              self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
+            }
+
+            if (self.config.minDate) self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
+            if (self.config.maxDate) self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
+            self.input.type = "hidden";
+            if (self.altInput !== undefined) self.altInput.type = "hidden";
+
+            try {
+              if (self.input.parentNode) self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
+            } catch (_a) {}
+
+            bind(self.mobileInput, "change", function (e) {
+              self.setDate(e.target.value, false, self.mobileFormatStr);
+              triggerEvent("onChange");
+              triggerEvent("onClose");
+            });
+          }
+
+          function toggle(e) {
+            if (self.isOpen === true) return self.close();
+            self.open(e);
+          }
+
+          function triggerEvent(event, data) {
+            // If the instance has been destroyed already, all hooks have been removed
+            if (self.config === undefined) return;
+            var hooks = self.config[event];
+
+            if (hooks !== undefined && hooks.length > 0) {
+              for (var i = 0; hooks[i] && i < hooks.length; i++) {
+                hooks[i](self.selectedDates, self.input.value, self, data);
+              }
+            }
+
+            if (event === "onChange") {
+              self.input.dispatchEvent(createEvent("change")); // many front-end frameworks bind to the input event
+
+              self.input.dispatchEvent(createEvent("input"));
+            }
+          }
+
+          function createEvent(name) {
+            var e = document.createEvent("Event");
+            e.initEvent(name, true, true);
+            return e;
+          }
+
+          function isDateSelected(date) {
+            for (var i = 0; i < self.selectedDates.length; i++) {
+              if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
+            }
+
+            return false;
+          }
+
+          function isDateInRange(date) {
+            if (self.config.mode !== "range" || self.selectedDates.length < 2) return false;
+            return compareDates(date, self.selectedDates[0]) >= 0 && compareDates(date, self.selectedDates[1]) <= 0;
+          }
+
+          function updateNavigationCurrentMonth() {
+            if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
+            self.yearElements.forEach(function (yearElement, i) {
+              var d = new Date(self.currentYear, self.currentMonth, 1);
+              d.setMonth(self.currentMonth + i);
+
+              if (self.config.showMonths > 1 || self.config.monthSelectorType === "static") {
+                self.monthElements[i].textContent = monthToStr(d.getMonth(), self.config.shorthandCurrentMonth, self.l10n) + " ";
+              } else {
+                self.monthsDropdownContainer.value = d.getMonth().toString();
+              }
+
+              yearElement.value = d.getFullYear().toString();
+            });
+            self._hidePrevMonthArrow = self.config.minDate !== undefined && (self.currentYear === self.config.minDate.getFullYear() ? self.currentMonth <= self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear());
+            self._hideNextMonthArrow = self.config.maxDate !== undefined && (self.currentYear === self.config.maxDate.getFullYear() ? self.currentMonth + 1 > self.config.maxDate.getMonth() : self.currentYear > self.config.maxDate.getFullYear());
+          }
+
+          function getDateStr(format) {
+            return self.selectedDates.map(function (dObj) {
+              return self.formatDate(dObj, format);
+            }).filter(function (d, i, arr) {
+              return self.config.mode !== "range" || self.config.enableTime || arr.indexOf(d) === i;
+            }).join(self.config.mode !== "range" ? self.config.conjunction : self.l10n.rangeSeparator);
+          }
+          /**
+           * Updates the values of inputs associated with the calendar
+           */
+
+
+          function updateValue(triggerChange) {
+            if (triggerChange === void 0) {
+              triggerChange = true;
+            }
+
+            if (self.mobileInput !== undefined && self.mobileFormatStr) {
+              self.mobileInput.value = self.latestSelectedDateObj !== undefined ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
+            }
+
+            self.input.value = getDateStr(self.config.dateFormat);
+
+            if (self.altInput !== undefined) {
+              self.altInput.value = getDateStr(self.config.altFormat);
+            }
+
+            if (triggerChange !== false) triggerEvent("onValueUpdate");
+          }
+
+          function onMonthNavClick(e) {
+            var isPrevMonth = self.prevMonthNav.contains(e.target);
+            var isNextMonth = self.nextMonthNav.contains(e.target);
+
+            if (isPrevMonth || isNextMonth) {
+              changeMonth(isPrevMonth ? -1 : 1);
+            } else if (self.yearElements.indexOf(e.target) >= 0) {
+              e.target.select();
+            } else if (e.target.classList.contains("arrowUp")) {
+              self.changeYear(self.currentYear + 1);
+            } else if (e.target.classList.contains("arrowDown")) {
+              self.changeYear(self.currentYear - 1);
+            }
+          }
+
+          function timeWrapper(e) {
+            e.preventDefault();
+            var isKeyDown = e.type === "keydown",
+                input = e.target;
+
+            if (self.amPM !== undefined && e.target === self.amPM) {
+              self.amPM.textContent = self.l10n.amPM[_int(self.amPM.textContent === self.l10n.amPM[0])];
+            }
+
+            var min = parseFloat(input.getAttribute("min")),
+                max = parseFloat(input.getAttribute("max")),
+                step = parseFloat(input.getAttribute("step")),
+                curValue = parseInt(input.value, 10),
+                delta = e.delta || (isKeyDown ? e.which === 38 ? 1 : -1 : 0);
+            var newValue = curValue + step * delta;
+
+            if (typeof input.value !== "undefined" && input.value.length === 2) {
+              var isHourElem = input === self.hourElement,
+                  isMinuteElem = input === self.minuteElement;
+
+              if (newValue < min) {
+                newValue = max + newValue + _int(!isHourElem) + (_int(isHourElem) && _int(!self.amPM));
+                if (isMinuteElem) incrementNumInput(undefined, -1, self.hourElement);
+              } else if (newValue > max) {
+                newValue = input === self.hourElement ? newValue - max - _int(!self.amPM) : min;
+                if (isMinuteElem) incrementNumInput(undefined, 1, self.hourElement);
+              }
+
+              if (self.amPM && isHourElem && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) {
+                self.amPM.textContent = self.l10n.amPM[_int(self.amPM.textContent === self.l10n.amPM[0])];
+              }
+
+              input.value = pad(newValue);
+            }
+          }
+
+          init();
+          return self;
+        }
+        /* istanbul ignore next */
+
+
+        function _flatpickr(nodeList, config) {
+          // static list
+          var nodes = Array.prototype.slice.call(nodeList).filter(function (x) {
+            return x instanceof HTMLElement;
+          });
+          var instances = [];
+
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+
+            try {
+              if (node.getAttribute("data-fp-omit") !== null) continue;
+
+              if (node._flatpickr !== undefined) {
+                node._flatpickr.destroy();
+
+                node._flatpickr = undefined;
+              }
+
+              node._flatpickr = FlatpickrInstance(node, config || {});
+              instances.push(node._flatpickr);
+            } catch (e) {
+              console.error(e);
+            }
+          }
+
+          return instances.length === 1 ? instances[0] : instances;
+        }
+        /* istanbul ignore next */
+
+
+        if (typeof HTMLElement !== "undefined" && typeof HTMLCollection !== "undefined" && typeof NodeList !== "undefined") {
+          // browser env
+          HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
+            return _flatpickr(this, config);
+          };
+
+          HTMLElement.prototype.flatpickr = function (config) {
+            return _flatpickr([this], config);
+          };
+        }
+        /* istanbul ignore next */
+
+
+        var flatpickr = function flatpickr(selector, config) {
+          if (typeof selector === "string") {
+            return _flatpickr(window.document.querySelectorAll(selector), config);
+          } else if (selector instanceof Node) {
+            return _flatpickr([selector], config);
+          } else {
+            return _flatpickr(selector, config);
+          }
+        };
+        /* istanbul ignore next */
+
+
+        flatpickr.defaultConfig = {};
+        flatpickr.l10ns = {
+          en: _assign({}, english),
+          "default": _assign({}, english)
+        };
+
+        flatpickr.localize = function (l10n) {
+          flatpickr.l10ns["default"] = _assign({}, flatpickr.l10ns["default"], l10n);
+        };
+
+        flatpickr.setDefaults = function (config) {
+          flatpickr.defaultConfig = _assign({}, flatpickr.defaultConfig, config);
+        };
+
+        flatpickr.parseDate = createDateParser({});
+        flatpickr.formatDate = createDateFormatter({});
+        flatpickr.compareDates = compareDates;
+        /* istanbul ignore next */
+
+        if (typeof jQuery !== "undefined" && typeof jQuery.fn !== "undefined") {
+          jQuery.fn.flatpickr = function (config) {
+            return _flatpickr(this, config);
+          };
+        } // eslint-disable-next-line @typescript-eslint/camelcase
+
+
+        Date.prototype.fp_incr = function (days) {
+          return new Date(this.getFullYear(), this.getMonth(), this.getDate() + (typeof days === "string" ? parseInt(days, 10) : days));
+        };
+
+        if (typeof window !== "undefined") {
+          window.flatpickr = flatpickr;
+        }
+
+        return flatpickr;
+      });
+      /***/
+
     }
   }]);
 })();

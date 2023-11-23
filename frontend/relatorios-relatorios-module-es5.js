@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -97,9 +93,9 @@
         component: _amb_amb_component__WEBPACK_IMPORTED_MODULE_1__["LogisticaRelatoriosAmbComponent"]
       }];
 
-      var LogisticaRelatoriosRoutingModule = /*#__PURE__*/_createClass(function LogisticaRelatoriosRoutingModule() {
+      var LogisticaRelatoriosRoutingModule = function LogisticaRelatoriosRoutingModule() {
         _classCallCheck(this, LogisticaRelatoriosRoutingModule);
-      });
+      };
 
       LogisticaRelatoriosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterModule"].forChild(routes)],
@@ -729,9 +725,9 @@
       // Components
 
 
-      var FinanceiroRelatoriosModule = /*#__PURE__*/_createClass(function FinanceiroRelatoriosModule() {
+      var FinanceiroRelatoriosModule = function FinanceiroRelatoriosModule() {
         _classCallCheck(this, FinanceiroRelatoriosModule);
-      });
+      };
 
       FinanceiroRelatoriosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_relatorios_component__WEBPACK_IMPORTED_MODULE_6__["FinanceiroRelatoriosComponent"]],
@@ -947,9 +943,9 @@
       // Components
 
 
-      var ComercialRelatoriosModule = /*#__PURE__*/_createClass(function ComercialRelatoriosModule() {
+      var ComercialRelatoriosModule = function ComercialRelatoriosModule() {
         _classCallCheck(this, ComercialRelatoriosModule);
-      });
+      };
 
       ComercialRelatoriosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_relatorios_component__WEBPACK_IMPORTED_MODULE_6__["ComercialRelatoriosComponent"]],
@@ -1862,9 +1858,9 @@
       // ng-select
 
 
-      var LogisticaRelatoriosModule = /*#__PURE__*/_createClass(function LogisticaRelatoriosModule() {
+      var LogisticaRelatoriosModule = function LogisticaRelatoriosModule() {
         _classCallCheck(this, LogisticaRelatoriosModule);
-      });
+      };
 
       LogisticaRelatoriosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_relatorios_component__WEBPACK_IMPORTED_MODULE_17__["LogisticaRelatoriosComponent"], _romaneios_romaneios_component__WEBPACK_IMPORTED_MODULE_18__["LogisticaRelatoriosRomaneiosComponent"], _amb_amb_component__WEBPACK_IMPORTED_MODULE_20__["LogisticaRelatoriosAmbComponent"]],
@@ -2249,7 +2245,7 @@
             loadChildren: function loadChildren() {
               return Promise.all(
               /*! import() | comissoes-representantes-comissoes-representantes-module */
-              [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("comissoes-representantes-comissoes-representantes-module")]).then(__webpack_require__.bind(null,
+              [__webpack_require__.e("default~akna-akna-module~auditoria-auditoria-module~auditoria-estoque-auditoria-estoque-module~autor~6c5c7b7d"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~234d8aea"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("comissoes-representantes-comissoes-representantes-module")]).then(__webpack_require__.bind(null,
               /*! ./comissoes-representantes/comissoes-representantes.module */
               "rT92")).then(function (m) {
                 return m.ComercialRelatoriosComissoesRepresentantesModule;
@@ -2259,9 +2255,9 @@
         }]
       }];
 
-      var ComercialRelatoriosRoutingModule = /*#__PURE__*/_createClass(function ComercialRelatoriosRoutingModule() {
+      var ComercialRelatoriosRoutingModule = function ComercialRelatoriosRoutingModule() {
         _classCallCheck(this, ComercialRelatoriosRoutingModule);
-      });
+      };
 
       ComercialRelatoriosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -2320,9 +2316,9 @@
       /*! ./relatorios.component */
       "JS3+");
 
-      var FiscalRelatoriosModule = /*#__PURE__*/_createClass(function FiscalRelatoriosModule() {
+      var FiscalRelatoriosModule = function FiscalRelatoriosModule() {
         _classCallCheck(this, FiscalRelatoriosModule);
-      });
+      };
 
       FiscalRelatoriosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_relatorios_component__WEBPACK_IMPORTED_MODULE_4__["FiscalRelatoriosComponent"]],
@@ -2395,9 +2391,9 @@
         }]
       }];
 
-      var FinanceiroRelatoriosRoutingModule = /*#__PURE__*/_createClass(function FinanceiroRelatoriosRoutingModule() {
+      var FinanceiroRelatoriosRoutingModule = function FinanceiroRelatoriosRoutingModule() {
         _classCallCheck(this, FinanceiroRelatoriosRoutingModule);
-      });
+      };
 
       FinanceiroRelatoriosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -2548,9 +2544,9 @@
         }
       }];
 
-      var FiscalRelatoriosRoutingModule = /*#__PURE__*/_createClass(function FiscalRelatoriosRoutingModule() {
+      var FiscalRelatoriosRoutingModule = function FiscalRelatoriosRoutingModule() {
         _classCallCheck(this, FiscalRelatoriosRoutingModule);
-      });
+      };
 
       FiscalRelatoriosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

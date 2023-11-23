@@ -2595,9 +2595,6 @@ __webpack_require__.r(__webpack_exports__);
     // used for separating decimals, and which for thousands.
     "_decimalSeparator": ",",
     "_thousandSeparator": ".",
-    // Position of the percent sign in numbers
-    "_percentPrefix": null,
-    "_percentSuffix": "%",
     // Default date formats for various periods.
     // 
     // This should reflect official or de facto formatting universally accepted
@@ -2709,7 +2706,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Various chart controls.
     // Shown as a tooltip on zoom out button.
-    "Zoom Out": "Reduzir Zoom",
+    "Zoom Out": "Aumentar Zoom",
     // Timeline buttons
     "Play": "Play",
     "Stop": "Parar",
@@ -2799,9 +2796,9 @@ __webpack_require__.r(__webpack_exports__);
     "Use up and down arrows to move selection": "Use as setas para cima ou para baixo para mover a seleção",
     "Use up and down arrows to move lower selection": "Use as setas para cima ou para baixo para mover a seleção de baixo",
     "Use up and down arrows to move upper selection": "Use as setas para cima ou para baixo para mover a seleção de cima",
-    "From %1 to %2": "De %1 até %2",
+    "From %1 to %2": "De %1 para %2",
     "From %1": "De %1",
-    "To %1": "Até %1",
+    "To %1": "Para %1",
     // Data loader-related.
     "No parser available for file: %1": "Não há um interpretador para este arquivo: %1",
     "Error parsing file: %1": "Erro analizando o arquivo: %1",
@@ -3399,10 +3396,13 @@ ComercialGestaoAssociacoesCoordenadoresEscritoriosService = Object(tslib__WEBPAC
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OrderModule", function() { return OrderModule; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OrderPipe", function() { return OrderPipe; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "8Y7J");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "UWrc");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "8Y7J");
 
 
-class OrderPipe {
+
+var OrderPipe_1;
+let OrderPipe = OrderPipe_1 = class OrderPipe {
     /**
      * Check if a value is a string
      *
@@ -3418,10 +3418,10 @@ class OrderPipe {
      * @param b
      */
     static caseInsensitiveSort(a, b) {
-        if (OrderPipe.isString(a) && OrderPipe.isString(b)) {
+        if (OrderPipe_1.isString(a) && OrderPipe_1.isString(b)) {
             return a.localeCompare(b);
         }
-        return OrderPipe.defaultCompare(a, b);
+        return OrderPipe_1.defaultCompare(a, b);
     }
     /**
      * Default compare method
@@ -3430,12 +3430,6 @@ class OrderPipe {
      * @param b
      */
     static defaultCompare(a, b) {
-        if (a && a instanceof Date) {
-            a = a.getTime();
-        }
-        if (b && b instanceof Date) {
-            b = b.getTime();
-        }
         if (a === b) {
             return 0;
         }
@@ -3501,7 +3495,7 @@ class OrderPipe {
             return value;
         }
         if (Array.isArray(expression)) {
-            return this.multiExpressionTransform(value, expression.slice(), reverse, isCaseInsensitive, comparator);
+            return this.multiExpressionTransform(value, expression, reverse, isCaseInsensitive, comparator);
         }
         if (Array.isArray(value)) {
             return this.sortArray(value.slice(), expression, reverse, isCaseInsensitive, comparator);
@@ -3512,19 +3506,19 @@ class OrderPipe {
         return value;
     }
     /**
-     * Sort array, returns sorted array
+     * Sort array
      *
-     * @param array
+     * @param value
      * @param expression
      * @param reverse
      * @param isCaseInsensitive
      * @param comparator
-     * @returns {Type[]}
+     * @returns {any[]}
      */
-    sortArray(array, expression, reverse, isCaseInsensitive, comparator) {
+    sortArray(value, expression, reverse, isCaseInsensitive, comparator) {
         const isDeepLink = expression && expression.indexOf(".") !== -1;
         if (isDeepLink) {
-            expression = OrderPipe.parseExpression(expression);
+            expression = OrderPipe_1.parseExpression(expression);
         }
         let compareFn;
         if (comparator && typeof comparator === "function") {
@@ -3532,10 +3526,10 @@ class OrderPipe {
         }
         else {
             compareFn = isCaseInsensitive
-                ? OrderPipe.caseInsensitiveSort
-                : OrderPipe.defaultCompare;
+                ? OrderPipe_1.caseInsensitiveSort
+                : OrderPipe_1.defaultCompare;
         }
-        const sortedArray = array.sort((a, b) => {
+        const array = value.sort((a, b) => {
             if (!expression) {
                 return compareFn(a, b);
             }
@@ -3545,12 +3539,12 @@ class OrderPipe {
                 }
                 return compareFn(a, b);
             }
-            return compareFn(OrderPipe.getValue(a, expression), OrderPipe.getValue(b, expression));
+            return compareFn(OrderPipe_1.getValue(a, expression), OrderPipe_1.getValue(b, expression));
         });
         if (reverse) {
-            return sortedArray.reverse();
+            return array.reverse();
         }
-        return sortedArray;
+        return array;
     }
     /**
      * Transform Object
@@ -3563,18 +3557,18 @@ class OrderPipe {
      * @returns {any[]}
      */
     transformObject(value, expression, reverse, isCaseInsensitive, comparator) {
-        const parsedExpression = OrderPipe.parseExpression(expression);
+        const parsedExpression = OrderPipe_1.parseExpression(expression);
         let lastPredicate = parsedExpression.pop();
-        let oldValue = OrderPipe.getValue(value, parsedExpression);
+        let oldValue = OrderPipe_1.getValue(value, parsedExpression);
         if (!Array.isArray(oldValue)) {
             parsedExpression.push(lastPredicate);
             lastPredicate = null;
-            oldValue = OrderPipe.getValue(value, parsedExpression);
+            oldValue = OrderPipe_1.getValue(value, parsedExpression);
         }
         if (!oldValue) {
             return value;
         }
-        OrderPipe.setValue(value, this.transform(oldValue, lastPredicate, reverse, isCaseInsensitive), parsedExpression);
+        OrderPipe_1.setValue(value, this.transform(oldValue, lastPredicate, reverse, isCaseInsensitive), parsedExpression);
         return value;
     }
     /**
@@ -3592,30 +3586,23 @@ class OrderPipe {
             return this.transform(result, expression, reverse, isCaseInsensitive, comparator);
         }, value);
     }
-}
-OrderPipe.decorators = [
-    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Pipe"], args: [{
-                name: "orderBy",
-                pure: false,
-            },] }
-];
+};
+OrderPipe = OrderPipe_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Pipe"])({
+        name: "orderBy",
+        pure: false
+    })
+], OrderPipe);
 
-/**
- * Created by vadimdez on 20/01/2017.
- */
-class OrderModule {
-}
-OrderModule.decorators = [
-    { type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"], args: [{
-                declarations: [OrderPipe],
-                exports: [OrderPipe],
-                providers: [OrderPipe]
-            },] }
-];
-
-/**
- * Generated bundle index. Do not edit.
- */
+let OrderModule = class OrderModule {
+};
+OrderModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+        declarations: [OrderPipe],
+        exports: [OrderPipe],
+        providers: [OrderPipe]
+    })
+], OrderModule);
 
 
 //# sourceMappingURL=ngx-order-pipe.js.map

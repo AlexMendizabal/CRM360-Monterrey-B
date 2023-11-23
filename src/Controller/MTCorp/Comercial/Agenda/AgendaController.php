@@ -42,7 +42,7 @@ class AgendaController extends AbstractController
      * @return JsonResponse
      */
     public function getAcessos(Connection $connection, Request $request)
-    {
+    {  
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 

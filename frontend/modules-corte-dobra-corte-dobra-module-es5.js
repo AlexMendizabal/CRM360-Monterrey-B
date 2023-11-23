@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["modules-corte-dobra-corte-dobra-module"], {
     /***/
@@ -1310,9 +1306,9 @@
         }]
       }];
 
-      var CorteDobraRoutingModule = /*#__PURE__*/_createClass(function CorteDobraRoutingModule() {
+      var CorteDobraRoutingModule = function CorteDobraRoutingModule() {
         _classCallCheck(this, CorteDobraRoutingModule);
-      });
+      };
 
       CorteDobraRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -1664,9 +1660,9 @@
       // Counto
 
 
-      var CorteDobraModule = /*#__PURE__*/_createClass(function CorteDobraModule() {
+      var CorteDobraModule = function CorteDobraModule() {
         _classCallCheck(this, CorteDobraModule);
-      });
+      };
 
       CorteDobraModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [_corte_dobra_component__WEBPACK_IMPORTED_MODULE_16__["CorteDobraComponent"], _home_home_component__WEBPACK_IMPORTED_MODULE_17__["CorteDobraHomeComponent"]],
@@ -2587,9 +2583,9 @@
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_2__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_8___default.a); // Counto
 
-      var CorteDobraDashboardModule = /*#__PURE__*/_createClass(function CorteDobraDashboardModule() {
+      var CorteDobraDashboardModule = function CorteDobraDashboardModule() {
         _classCallCheck(this, CorteDobraDashboardModule);
-      });
+      };
 
       CorteDobraDashboardModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_dashboard_component__WEBPACK_IMPORTED_MODULE_11__["CorteDobraDashboardComponent"], _filtro_filtro_component__WEBPACK_IMPORTED_MODULE_15__["CorteDobraDashboardFiltroComponent"], _analitico_analitico_component__WEBPACK_IMPORTED_MODULE_12__["CorteDobraDashboardAnaliticoComponent"], _registro_ocorrencia_registro_ocorrencia_component__WEBPACK_IMPORTED_MODULE_19__["CorteDobraDashboardRegistroOcorrenciaComponent"], _transporte_transporte_component__WEBPACK_IMPORTED_MODULE_20__["CorteDobraDashboardTransporteComponent"], _entrada_pedidos_entrada_pedidos_component__WEBPACK_IMPORTED_MODULE_13__["CorteDobraDashboardEntradaPedidosComponent"], _pedidos_pedidos_component__WEBPACK_IMPORTED_MODULE_16__["CorteDobraDashboardPedidosComponent"], _faturamento_faturamento_component__WEBPACK_IMPORTED_MODULE_14__["CorteDobraDashboardFaturamentoComponent"], _producao_producao_component__WEBPACK_IMPORTED_MODULE_18__["CorteDobraDashboardProducaoComponent"], _planilhado_planilhado_component__WEBPACK_IMPORTED_MODULE_17__["CorteDobraDashboardPlanilhadoComponent"]],

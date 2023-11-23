@@ -262,11 +262,11 @@ const routes = [
     },
     {
         path: 'gestao-carteira',
-        loadChildren: () => Promise.all(/*! import() | gestao-carteira-gestao-carteira-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("common"), __webpack_require__.e("gestao-carteira-gestao-carteira-module")]).then(__webpack_require__.bind(null, /*! ./gestao-carteira/gestao-carteira.module */ "EDwh")).then((m) => m.LogisticaDashboardsGestaoCarteiraModule)
+        loadChildren: () => Promise.all(/*! import() | gestao-carteira-gestao-carteira-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("common"), __webpack_require__.e("gestao-carteira-gestao-carteira-module")]).then(__webpack_require__.bind(null, /*! ./gestao-carteira/gestao-carteira.module */ "EDwh")).then((m) => m.LogisticaDashboardsGestaoCarteiraModule)
     },
     {
         path: 'faturamento-financeiro',
-        loadChildren: () => Promise.all(/*! import() | faturamento-financeiro-faturamento-financeiro-module */[__webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("common"), __webpack_require__.e("faturamento-financeiro-faturamento-financeiro-module")]).then(__webpack_require__.bind(null, /*! ./faturamento-financeiro/faturamento-financeiro.module */ "MBRL")).then((m) => m.LogisticaDashboardsFaturamentoFinanceiroModule)
+        loadChildren: () => Promise.all(/*! import() | faturamento-financeiro-faturamento-financeiro-module */[__webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("default~agenda-agenda-module~analise-compras-multi-visoes-analise-compras-multi-visoes-module~autori~ef3ccf04"), __webpack_require__.e("common"), __webpack_require__.e("faturamento-financeiro-faturamento-financeiro-module")]).then(__webpack_require__.bind(null, /*! ./faturamento-financeiro/faturamento-financeiro.module */ "MBRL")).then((m) => m.LogisticaDashboardsFaturamentoFinanceiroModule)
     },
     {
         path: 'analise-frete',

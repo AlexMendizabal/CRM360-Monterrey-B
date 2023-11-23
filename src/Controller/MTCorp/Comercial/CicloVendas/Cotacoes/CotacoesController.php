@@ -84,18 +84,15 @@ class CotacoesController extends AbstractController
     public function getVerificarOferta(Connection $connection, Request $request, $idContato)
     {
         try {
-                $res =  $connection->query("SELECT TOP 1 id_cliente as codCliente
+            $res =  $connection->query("SELECT TOP 1 id_cliente as codCliente
                                     from TB_Oferta 
                                   where id_cliente = {$idContato}")->fetch();
-                
-                if($res['codCliente']>0)
-                {   
-                    return FunctionsController::Retorno(true, 'Tiene Oferta Registrada', $res, Response::HTTP_OK);
-                }
-                  
-                    return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
-                
-            
+
+            if ($res['codCliente'] > 0) {
+                return FunctionsController::Retorno(true, 'Tiene Oferta Registrada', $res, Response::HTTP_OK);
+            }
+
+            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
         } catch (DBALException $e) {
             return FunctionsController::Retorno(
                 false,
@@ -327,21 +324,23 @@ class CotacoesController extends AbstractController
                 $bindings['id_vendedor'] = $codVendedor;
             }
 
-            $query = "SELECT OFE.id AS id_oferta, OFE.codigo_oferta as codigo_oferta, OFE.fecha_creacion as fecha_oferta, OFE.fecha_inicial AS fecha_inicial, OFE.fecha_final AS fecha_final,
+            $query = "SELECT OFE.id AS id_oferta, 
+            OFE.codigo_oferta as codigo_oferta, 
+            OFE.fecha_creacion as fecha_oferta, 
+            OFE.fecha_inicial AS fecha_inicial, 
+            OFE.fecha_final AS fecha_final,
+            CLIE.id_cliente as id_cliente,
             CLIE.prim_nome as cliente, CONCAT( VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS vendedor,
             OFE.monto_total as monto_total, OFE.monto_total_bruto as monto_total_bruto, LP.id as id_lista, LP.nombre_lista as lista_precio,
             OFE.descuento_total as descuento, OFE.cantidad_total as cantidad, UNI.NOMBRE_UNI as unidad, OFE.peso_total as peso_total, ME.id AS id_entrega,
             ME.nombre_modo_entrega as modo_entrega, OFE.estado_oferta as id_estado_oferta, 
-            CASE
-                    WHEN OFE.estado_oferta = 0 THEN 'BORRADOR'
-                    WHEN OFE.estado_oferta = 1 THEN 'VENTA' 
-            ELSE 'RECHAZADO'
-            END AS estado_oferta, LP.nombre_lista AS nombre_lista
+            CO.descripcion as nombre_lista, OFE.descripcion as descripcion
              
             FROM TB_OFERTA OFE INNER JOIN MTCORP_MODU_CLIE_BASE CLIE on OFE.id_cliente = CLIE.id_cliente 
             INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID INNER JOIN TB_MONEDA MONEDA ON OFE.id_moneda = MONEDA.id
             INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id INNER JOIN UNIDADES UNI ON OFE.id_unidad = UNI.ID
-            INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id";
+            INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+            INNER JOIN tb_cierre_oferta CO ON OFE.estado_oferta = CO.id";
 
             if (!empty($conditions)) {
                 $conditionString = implode(' AND ', $conditions);
@@ -512,10 +511,11 @@ class CotacoesController extends AbstractController
                 OFE.longitud AS longitud,
                 OFE.codigo_oferta AS codigo_oferta,
                 OFE.peso_total AS peso_total,
+                OFE.estado_oferta as estado_of,
                 CASE
-                    WHEN  OFE.estado_oferta = 0 THEN 'Borrador'
-                    WHEN  OFE.estado_oferta = 1 THEN 'Venta'
-                    WHEN  OFE.estado_oferta = 2 THEN 'Rechazado'
+                    WHEN  OFE.estado_oferta = 1 THEN 'Borrador'
+                    WHEN  OFE.estado_oferta = 2 THEN 'Venta'
+                    WHEN  OFE.estado_oferta = 3 THEN 'Rechazado'
                 END AS estado_oferta,
                 CLIE.prim_nome AS nombre_cliente,
                 CLIE.id_cliente AS id_cliente,
@@ -904,11 +904,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
-
-
             $params = json_decode($request->getContent(), true);
-
             $nrPedido = $params['nrPedido'];
             $codEmpresa = $params['codEmpresa'];
             $codDeposito = $params['codDeposito'];
@@ -2470,8 +2466,8 @@ class CotacoesController extends AbstractController
      * @return JsonResponse
      */
     public function saveCotizacion(Connection $connection, Request $request)
-    {
-        $borrador = 0;
+    {   
+        $borrador = 1;
         $dolar = 1;
         $boliviano = 2;
         $id_iva = 1;
@@ -2485,7 +2481,6 @@ class CotacoesController extends AbstractController
         $direccion_contacto = '';
         try {
             $params = json_decode($request->getContent(), true);
-
             /* Dados de cotizacion */
             /*  $nombre_oferta = isset($params['nombre_oferta']) ? $params['nombre_oferta'] : null; */
             $monto_total = isset($params['monto_total']) ? $params['monto_total'] : null;
@@ -2503,8 +2498,8 @@ class CotacoesController extends AbstractController
             /*  $id_unidad = isset($params['id_unidad']) ? $params['id_unidad'] : null; */
             //$id_almacen = isset($params['id_almacen']) ? $params['id_almacen'] : null;
             $codigo_oferta = isset($params['codigo_oferta']) ? $params['codigo_oferta'] : null;
-            $fecha_final = isset($params['fecha_final']) ? $params['fecha_final'] : null;
-            $fecha_inicial = isset($params['fecha_inicial']) ? $params['fecha_inicial'] : null;
+            $fecha_final = isset($params['fecha_final']) ? date('Y-m-d', strtotime($params['fecha_final'])) : null;
+            $fecha_inicial = isset($params['fecha_inicial']) ? date('Y-m-d', strtotime($params['fecha_inicial'])) : null;
             $latitud = isset($params['latitud']) ? $params['latitud'] : null;
             $longitud = isset($params['longitud']) ? $params['longitud'] : null;
             $id_persona_contacto = isset($params['id_persona_contacto']) ? $params['id_persona_contacto'] : null;
@@ -2524,7 +2519,6 @@ class CotacoesController extends AbstractController
             $fecha_inicial_format = date('Y-m-d H:i:s', strtotime($fecha_inicial));
             $fecha_final_format = date('Y-m-d H:i:s', strtotime($fecha_final));
             //$fecha_inicial_format = date( 'Y-m-d H:i:s', strtotime($fecha_inicial));
-
 
             if (
                 isset($nit_factura) && $nit_factura !== null ||
@@ -2722,7 +2716,7 @@ class CotacoesController extends AbstractController
                 if ($datos_contacto !== false) {
                     $nombre_contacto = $datos_contacto[0]['ds_cont'];
                     //$direccion_contacto = $datos_contacto[0]['direccion_contacto'];
-                }
+                }   
 
                 if ($latitud !== null &&  $longitud !== null) {
                     $geolocalizacion = $latitud . ', ' . $longitud;
@@ -2744,11 +2738,28 @@ class CotacoesController extends AbstractController
                     'porc_descuento' => null,
                     'direccion' => $direccion_entrega,
                     'geolocalizacion' => $geolocalizacion,
-                    'detalle_pedido' => $detallePedido
+                    'detalle_pedido' => $detallePedido,
+                    'autorizacion' =>[]
                 ]);
 
-                /* if (isset($arrayMaterial)) {
-                    //dd('insercion');
+                $autorizacion = 1;
+                foreach ($carrinho as $item) {
+                    $percentualDesc = $item['percentualDesc'];
+                    $permitido = $item['descuento_permitido'];
+                    if($percentualDesc > $permitido){
+                        $autorizacion = 2;
+                        break;
+                    }
+                }   
+                    
+                $query ="UPDATE TB_OFERTA set autorizacion = :autorizacion WHERE id = :id";
+                $stmtAuriza = $connection->prepare($query);
+                $stmtAuriza->bindValue(':autorizacion', $autorizacion);
+                $stmtAuriza->bindValue(':id', $id_oferta);
+                $stmtAuriza->execute();
+                
+                if (isset($arrayMaterial) && $autorizacion == 1) {
+
                     $helper->guardarOfertaSap($arrayMaterial);
                     if ($helper == true) {
                         $message = array(
@@ -2765,7 +2776,8 @@ class CotacoesController extends AbstractController
                             'estado' => false
                         );
                     }
-                } */
+                }
+               
                 $message = array(
                     'responseCode' => 200,
                     'result' => 'Oferta agregada exitosamente',
@@ -2984,14 +2996,14 @@ class CotacoesController extends AbstractController
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 
             $res = $connection->query("
-        EXEC PRC_PEDI_ANEX_CADA
-          @ID_PARA = 1,
-          @NR_PEDI = {$codCotacao},
-          @DS_ANEX = '{$descAnexo}',
-          @URL_ANEX = '{$linkAnexo}',
-          @EXTE_ANEX = 'JPEG',
-          @ID_USUA = {$matricula};
-      ")->fetchAll();
+                    EXEC PRC_PEDI_ANEX_CADA
+                    @ID_PARA = 1,
+                    @NR_PEDI = {$codCotacao},
+                    @DS_ANEX = '{$descAnexo}',
+                    @URL_ANEX = '{$linkAnexo}',
+                    @EXTE_ANEX = 'JPEG',
+                    @ID_USUA = {$matricula};
+                ")->fetchAll();
 
             if (isset($res[0]['codAnexo'])) {
                 return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -3024,11 +3036,11 @@ class CotacoesController extends AbstractController
             if (isset($params['codAnexo'])) $codAnexo = $params['codAnexo'];
 
             $res = $connection->query("
-        EXECUTE [dbo].[PRC_PEDI_ANEX_CADA] 
-          @ID_PARA = 3
-          ,@ID_ANEX = {$codAnexo}
-          ,@ID_USUA = {$infoUsuario->matricula}
-      ")->fetchAll();
+                EXECUTE [dbo].[PRC_PEDI_ANEX_CADA] 
+                @ID_PARA = 3
+                ,@ID_ANEX = {$codAnexo}
+                ,@ID_USUA = {$infoUsuario->matricula}
+            ")->fetchAll();
 
             if (isset($res[0]['codAnexo']) && $res[0]['codAnexo'] == $codAnexo) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -3176,9 +3188,81 @@ class CotacoesController extends AbstractController
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
-    */
-    public function getCierreOferta()
+     */
+    public function getCierreOferta(Connection $connection)
     {
-        $query = $connection->query();
+        try {
+            $res = $connection->query("SELECT * FROM tb_cierre_oferta Where tipo_estado = 1")->fetchAll();
+            $message = [
+                'responseCode' => 200, // No Content
+                'result' => $res,
+                'estado' => true
+            ];
+        } catch (DBALException  $e) {
+            $message = [
+                'responseCode' => 500, // Internal Server Error
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'estado' => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/post_cierre",
+     *  name="comercial.ciclo-vendas-cotacoes-post_cierre",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function putModificarOferata(Connection $connection, Request $request)
+    {
+        try {
+            $params = json_decode($request->getContent(), true);
+            $estado_oferta = $params['estadoOfert'];
+            $descripcion = $params['descripcion'];
+            $id_oferta = $params['id_oferta'];
+
+            $qr = $connection->query("SELECT TOP 1 estado_oferta FROM TB_OFERTA WHERE ID = {$id_oferta}");
+            $row = $qr->fetch();
+            $estado  = $row['estado_oferta'];
+
+            if ($estado == 1 && !empty($estado_oferta) && !empty($descripcion) && !empty($id_oferta)) {
+                $query = "UPDATE TB_OFERTA SET descripcion = :descripcion, estado_oferta = :estado_oferta WHERE id = :id_oferta";
+                $stmt = $connection->prepare($query);
+                $stmt->BindValue(':id_oferta', (int)$id_oferta);
+                $stmt->BindValue(':descripcion', $descripcion);
+                $stmt->BindValue(':estado_oferta', (int)$estado_oferta);
+                $stmt->execute();
+
+                $message = [
+                    'responseCode' => 200,
+                    'message' => 'Se cambio el estado',
+                    'success' => TRUE
+                ];
+            } else {
+                $message = [
+                    'responseCode' => 204,
+                    'message' => 'Oferta esta Cerrada',
+                    'success' => false
+                ];
+            }
+        } catch (DBALException  $e) {
+            $message = [
+                'responseCode' => 500,
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'success' => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 }

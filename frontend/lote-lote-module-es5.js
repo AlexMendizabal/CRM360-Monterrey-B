@@ -1,12 +1,4 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["lote-lote-module"], {
@@ -86,7 +78,11 @@
 
       var angular_calendar_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
       /*! angular-calendar/date-adapters/date-fns */
-      "L/mj");
+      "1BeU");
+      /* harmony import */
+
+
+      var angular_calendar_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(angular_calendar_date_adapters_date_fns__WEBPACK_IMPORTED_MODULE_8__);
       /* harmony import */
 
 
@@ -165,9 +161,9 @@
       import { ComercialAgendaDetalhesComponent } from './detalhes/detalhes.component';
       import { ComercialAgendaFormularioComponent } from './formulario/formulario.component'; */
 
-      var ComercialLoteModule = /*#__PURE__*/_createClass(function ComercialLoteModule() {
+      var ComercialLoteModule = function ComercialLoteModule() {
         _classCallCheck(this, ComercialLoteModule);
-      });
+      };
 
       ComercialLoteModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_ruta_ruta_component__WEBPACK_IMPORTED_MODULE_19__["ComercialLoteRutaComponent"]],
@@ -252,9 +248,9 @@
         component: src_app_core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_4__["NotFoundComponent"]
       }];
 
-      var ComercialRoutingLoteModule = /*#__PURE__*/_createClass(function ComercialRoutingLoteModule() {
+      var ComercialRoutingLoteModule = function ComercialRoutingLoteModule() {
         _classCallCheck(this, ComercialRoutingLoteModule);
-      });
+      };
 
       ComercialRoutingLoteModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

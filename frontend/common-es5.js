@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["common"], {
     /***/
@@ -712,12 +708,12 @@
 
         _createClass(FilterPipe, [{
           key: "filterByString",
-          value:
+
           /**
            * @param {?} filter
            * @return {?}
            */
-          function filterByString(filter) {
+          value: function filterByString(filter) {
             if (filter) {
               filter = filter.toLowerCase();
             }
@@ -885,13 +881,13 @@
           }
         }], [{
           key: "isFoundOnWalking",
-          value:
+
           /**
            * @param {?} value
            * @param {?} key
            * @return {?}
            */
-          function isFoundOnWalking(value, key) {
+          value: function isFoundOnWalking(value, key) {
             var
             /** @type {?} */
             walker = value;
@@ -954,9 +950,9 @@
        */
 
 
-      var FilterPipeModule = /*#__PURE__*/_createClass(function FilterPipeModule() {
+      var FilterPipeModule = function FilterPipeModule() {
         _classCallCheck(this, FilterPipeModule);
-      });
+      };
 
       FilterPipeModule.decorators = [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"],
@@ -4037,9 +4033,6 @@
         // used for separating decimals, and which for thousands.
         "_decimalSeparator": ",",
         "_thousandSeparator": ".",
-        // Position of the percent sign in numbers
-        "_percentPrefix": null,
-        "_percentSuffix": "%",
         // Default date formats for various periods.
         // 
         // This should reflect official or de facto formatting universally accepted
@@ -4151,7 +4144,7 @@
         },
         // Various chart controls.
         // Shown as a tooltip on zoom out button.
-        "Zoom Out": "Reduzir Zoom",
+        "Zoom Out": "Aumentar Zoom",
         // Timeline buttons
         "Play": "Play",
         "Stop": "Parar",
@@ -4241,9 +4234,9 @@
         "Use up and down arrows to move selection": "Use as setas para cima ou para baixo para mover a seleção",
         "Use up and down arrows to move lower selection": "Use as setas para cima ou para baixo para mover a seleção de baixo",
         "Use up and down arrows to move upper selection": "Use as setas para cima ou para baixo para mover a seleção de cima",
-        "From %1 to %2": "De %1 até %2",
+        "From %1 to %2": "De %1 para %2",
         "From %1": "De %1",
-        "To %1": "Até %1",
+        "To %1": "Para %1",
         // Data loader-related.
         "No parser available for file: %1": "Não há um interpretador para este arquivo: %1",
         "Error parsing file: %1": "Erro analizando o arquivo: %1",
@@ -5076,11 +5069,19 @@
       /* harmony import */
 
 
-      var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "UWrc");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
       /*! @angular/core */
       "8Y7J");
 
-      var OrderPipe = /*#__PURE__*/function () {
+      var OrderPipe_1;
+
+      var OrderPipe = OrderPipe_1 = /*#__PURE__*/function () {
         function OrderPipe() {
           _classCallCheck(this, OrderPipe);
         }
@@ -5096,7 +5097,7 @@
             }
 
             if (Array.isArray(expression)) {
-              return this.multiExpressionTransform(value, expression.slice(), reverse, isCaseInsensitive, comparator);
+              return this.multiExpressionTransform(value, expression, reverse, isCaseInsensitive, comparator);
             }
 
             if (Array.isArray(value)) {
@@ -5110,23 +5111,23 @@
             return value;
           }
           /**
-           * Sort array, returns sorted array
+           * Sort array
            *
-           * @param array
+           * @param value
            * @param expression
            * @param reverse
            * @param isCaseInsensitive
            * @param comparator
-           * @returns {Type[]}
+           * @returns {any[]}
            */
 
         }, {
           key: "sortArray",
-          value: function sortArray(array, expression, reverse, isCaseInsensitive, comparator) {
+          value: function sortArray(value, expression, reverse, isCaseInsensitive, comparator) {
             var isDeepLink = expression && expression.indexOf(".") !== -1;
 
             if (isDeepLink) {
-              expression = OrderPipe.parseExpression(expression);
+              expression = OrderPipe_1.parseExpression(expression);
             }
 
             var compareFn;
@@ -5134,10 +5135,10 @@
             if (comparator && typeof comparator === "function") {
               compareFn = comparator;
             } else {
-              compareFn = isCaseInsensitive ? OrderPipe.caseInsensitiveSort : OrderPipe.defaultCompare;
+              compareFn = isCaseInsensitive ? OrderPipe_1.caseInsensitiveSort : OrderPipe_1.defaultCompare;
             }
 
-            var sortedArray = array.sort(function (a, b) {
+            var array = value.sort(function (a, b) {
               if (!expression) {
                 return compareFn(a, b);
               }
@@ -5150,14 +5151,14 @@
                 return compareFn(a, b);
               }
 
-              return compareFn(OrderPipe.getValue(a, expression), OrderPipe.getValue(b, expression));
+              return compareFn(OrderPipe_1.getValue(a, expression), OrderPipe_1.getValue(b, expression));
             });
 
             if (reverse) {
-              return sortedArray.reverse();
+              return array.reverse();
             }
 
-            return sortedArray;
+            return array;
           }
           /**
            * Transform Object
@@ -5173,21 +5174,21 @@
         }, {
           key: "transformObject",
           value: function transformObject(value, expression, reverse, isCaseInsensitive, comparator) {
-            var parsedExpression = OrderPipe.parseExpression(expression);
+            var parsedExpression = OrderPipe_1.parseExpression(expression);
             var lastPredicate = parsedExpression.pop();
-            var oldValue = OrderPipe.getValue(value, parsedExpression);
+            var oldValue = OrderPipe_1.getValue(value, parsedExpression);
 
             if (!Array.isArray(oldValue)) {
               parsedExpression.push(lastPredicate);
               lastPredicate = null;
-              oldValue = OrderPipe.getValue(value, parsedExpression);
+              oldValue = OrderPipe_1.getValue(value, parsedExpression);
             }
 
             if (!oldValue) {
               return value;
             }
 
-            OrderPipe.setValue(value, this.transform(oldValue, lastPredicate, reverse, isCaseInsensitive), parsedExpression);
+            OrderPipe_1.setValue(value, this.transform(oldValue, lastPredicate, reverse, isCaseInsensitive), parsedExpression);
             return value;
           }
           /**
@@ -5214,13 +5215,13 @@
           }
         }], [{
           key: "isString",
-          value:
+
           /**
            * Check if a value is a string
            *
            * @param value
            */
-          function isString(value) {
+          value: function isString(value) {
             return typeof value === "string" || value instanceof String;
           }
           /**
@@ -5233,11 +5234,11 @@
         }, {
           key: "caseInsensitiveSort",
           value: function caseInsensitiveSort(a, b) {
-            if (OrderPipe.isString(a) && OrderPipe.isString(b)) {
+            if (OrderPipe_1.isString(a) && OrderPipe_1.isString(b)) {
               return a.localeCompare(b);
             }
 
-            return OrderPipe.defaultCompare(a, b);
+            return OrderPipe_1.defaultCompare(a, b);
           }
           /**
            * Default compare method
@@ -5249,14 +5250,6 @@
         }, {
           key: "defaultCompare",
           value: function defaultCompare(a, b) {
-            if (a && a instanceof Date) {
-              a = a.getTime();
-            }
-
-            if (b && b instanceof Date) {
-              b = b.getTime();
-            }
-
             if (a === b) {
               return 0;
             }
@@ -5339,33 +5332,20 @@
         return OrderPipe;
       }();
 
-      OrderPipe.decorators = [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Pipe"],
-        args: [{
-          name: "orderBy",
-          pure: false
-        }]
-      }];
-      /**
-       * Created by vadimdez on 20/01/2017.
-       */
+      OrderPipe = OrderPipe_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Pipe"])({
+        name: "orderBy",
+        pure: false
+      })], OrderPipe);
 
-      var OrderModule = /*#__PURE__*/_createClass(function OrderModule() {
+      var OrderModule = function OrderModule() {
         _classCallCheck(this, OrderModule);
-      });
+      };
 
-      OrderModule.decorators = [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"],
-        args: [{
-          declarations: [OrderPipe],
-          exports: [OrderPipe],
-          providers: [OrderPipe]
-        }]
-      }];
-      /**
-       * Generated bundle index. Do not edit.
-       */
-      //# sourceMappingURL=ngx-order-pipe.js.map
+      OrderModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+        declarations: [OrderPipe],
+        exports: [OrderPipe],
+        providers: [OrderPipe]
+      })], OrderModule); //# sourceMappingURL=ngx-order-pipe.js.map
 
       /***/
     },
@@ -6320,9 +6300,9 @@
       // Components
 
 
-      var NotFoundModule = /*#__PURE__*/_createClass(function NotFoundModule() {
+      var NotFoundModule = function NotFoundModule() {
         _classCallCheck(this, NotFoundModule);
-      });
+      };
 
       NotFoundModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_not_found_component__WEBPACK_IMPORTED_MODULE_4__["NotFoundComponent"]],

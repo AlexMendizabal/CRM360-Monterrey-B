@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -122,9 +118,9 @@
       /*! ./integracao-pedidos.component */
       "ZxEz");
 
-      var AbastecimentoMonitoresIntegracaoPedidosModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresIntegracaoPedidosModule() {
+      var AbastecimentoMonitoresIntegracaoPedidosModule = function AbastecimentoMonitoresIntegracaoPedidosModule() {
         _classCallCheck(this, AbastecimentoMonitoresIntegracaoPedidosModule);
-      });
+      };
 
       AbastecimentoMonitoresIntegracaoPedidosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_integracao_pedidos_component__WEBPACK_IMPORTED_MODULE_11__["AbastecimentoMonitoresIntegracaoPedidosComponent"]],
@@ -492,9 +488,9 @@
         component: _integracao_pedidos_component__WEBPACK_IMPORTED_MODULE_3__["AbastecimentoMonitoresIntegracaoPedidosComponent"]
       }];
 
-      var AbastecimentoMonitoresIntegracaoPedidosRoutingModule = /*#__PURE__*/_createClass(function AbastecimentoMonitoresIntegracaoPedidosRoutingModule() {
+      var AbastecimentoMonitoresIntegracaoPedidosRoutingModule = function AbastecimentoMonitoresIntegracaoPedidosRoutingModule() {
         _classCallCheck(this, AbastecimentoMonitoresIntegracaoPedidosRoutingModule);
-      });
+      };
 
       AbastecimentoMonitoresIntegracaoPedidosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -1608,9 +1604,9 @@
         component: _core_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_3__["NotFoundComponent"]
       }];
 
-      var ComercialIntegracoesDagdaIntegracaoPedidosRoutingModule = /*#__PURE__*/_createClass(function ComercialIntegracoesDagdaIntegracaoPedidosRoutingModule() {
+      var ComercialIntegracoesDagdaIntegracaoPedidosRoutingModule = function ComercialIntegracoesDagdaIntegracaoPedidosRoutingModule() {
         _classCallCheck(this, ComercialIntegracoesDagdaIntegracaoPedidosRoutingModule);
-      });
+      };
 
       ComercialIntegracoesDagdaIntegracaoPedidosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
@@ -2870,9 +2866,9 @@
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_6__["registerLocaleData"])(_angular_common_locales_pt__WEBPACK_IMPORTED_MODULE_7___default.a, 'pt'); //import { ComercialCadastrosPedidosTemplatesModule } from '../../../cadastros/pedidos/templates/templates.module';
 
-      var ComercialIntegracoesDagdaIntegracaoPedidosModule = /*#__PURE__*/_createClass(function ComercialIntegracoesDagdaIntegracaoPedidosModule() {
+      var ComercialIntegracoesDagdaIntegracaoPedidosModule = function ComercialIntegracoesDagdaIntegracaoPedidosModule() {
         _classCallCheck(this, ComercialIntegracoesDagdaIntegracaoPedidosModule);
-      });
+      };
 
       ComercialIntegracoesDagdaIntegracaoPedidosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_8__["NgModule"])({
         declarations: [_lista_lista_component__WEBPACK_IMPORTED_MODULE_1__["ComercialIntegracoesDagdaIntegracaoPedidosListaComponent"]],

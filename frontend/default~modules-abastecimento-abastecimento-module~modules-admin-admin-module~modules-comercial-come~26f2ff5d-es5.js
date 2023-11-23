@@ -1,13 +1,9 @@
 (function () {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~modules-abastecimento-abastecimento-module~modules-admin-admin-module~modules-comercial-come~26f2ff5d"], {
     /***/
@@ -745,9 +741,9 @@
         suppressScrollX: true
       };
 
-      var ModuleWrapperModule = /*#__PURE__*/_createClass(function ModuleWrapperModule() {
+      var ModuleWrapperModule = function ModuleWrapperModule() {
         _classCallCheck(this, ModuleWrapperModule);
-      });
+      };
 
       ModuleWrapperModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_module_wrapper_component__WEBPACK_IMPORTED_MODULE_8__["ModuleWrapperComponent"], _sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_9__["SidebarComponent"], _body_body_component__WEBPACK_IMPORTED_MODULE_10__["BodyComponent"]],
@@ -3467,8 +3463,8 @@
 
       __webpack_require__.r(__webpack_exports__);
       /*!
-       * perfect-scrollbar v1.5.3
-       * Copyright 2021 Hyunje Jun, MDBootstrap and Contributors
+       * perfect-scrollbar v1.5.0
+       * Copyright 2020 Hyunje Jun, MDBootstrap and Contributors
        * Licensed under MIT
        */
 
@@ -3764,8 +3760,8 @@
         var element = i.element;
         var roundedScrollTop = Math.floor(element.scrollTop);
         var rect = element.getBoundingClientRect();
-        i.containerWidth = Math.round(rect.width);
-        i.containerHeight = Math.round(rect.height);
+        i.containerWidth = Math.ceil(rect.width);
+        i.containerHeight = Math.ceil(rect.height);
         i.contentWidth = element.scrollWidth;
         i.contentHeight = element.scrollHeight;
 
@@ -3948,10 +3944,7 @@
           addScrollingClass(i, y);
           updateGeometry(i);
           e.stopPropagation();
-
-          if (e.type.startsWith('touch') && e.changedTouches.length > 1) {
-            e.preventDefault();
-          }
+          e.preventDefault();
         }
 
         function mouseUpHandler() {
@@ -4198,10 +4191,10 @@
           if (deltaX !== deltaX && deltaY !== deltaY
           /* NaN checks */
           ) {
-            // IE in some mouse drivers
-            deltaX = 0;
-            deltaY = e.wheelDelta;
-          }
+              // IE in some mouse drivers
+              deltaX = 0;
+              deltaY = e.wheelDelta;
+            }
 
           if (e.shiftKey) {
             // reverse axis with shift key
@@ -4478,11 +4471,6 @@
               }
 
               if (Math.abs(speed.x) < 0.01 && Math.abs(speed.y) < 0.01) {
-                clearInterval(easingLoop);
-                return;
-              }
-
-              if (!i.element) {
                 clearInterval(easingLoop);
                 return;
               }

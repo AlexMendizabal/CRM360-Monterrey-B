@@ -1,11 +1,7 @@
 (function () {
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-  function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-
-  function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -149,9 +145,9 @@
       // Services
 
 
-      var ComercialKanbanPedidosModule = /*#__PURE__*/_createClass(function ComercialKanbanPedidosModule() {
+      var ComercialKanbanPedidosModule = function ComercialKanbanPedidosModule() {
         _classCallCheck(this, ComercialKanbanPedidosModule);
-      });
+      };
 
       ComercialKanbanPedidosModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_lista_lista_component__WEBPACK_IMPORTED_MODULE_15__["ComercialKanbanPedidosListaComponent"]],
@@ -768,20 +764,20 @@
                     _this4.form.controls.codGerencia.updateValueAndValidity();
                   } else if (_this4.profile.vendedor === true // this.profile.hasVinculoOperadores === true
                   ) {
-                    _this4.viewVendedor == true;
+                      _this4.viewVendedor == true;
 
-                    _this4.getVinculoOperadores();
+                      _this4.getVinculoOperadores();
 
-                    _this4.form.controls.codVendedor.setValue(parseInt(_this4.user.info.idVendedor));
+                      _this4.form.controls.codVendedor.setValue(parseInt(_this4.user.info.idVendedor));
 
-                    _this4.form.controls.codVendedor.updateValueAndValidity();
+                      _this4.form.controls.codVendedor.updateValueAndValidity();
 
-                    _this4.form.controls.codGerencia.setValue('');
+                      _this4.form.controls.codGerencia.setValue('');
 
-                    _this4.form.controls.codGerencia.updateValueAndValidity();
+                      _this4.form.controls.codGerencia.updateValueAndValidity();
 
-                    _this4.showDashboard = true;
-                  } else {
+                      _this4.showDashboard = true;
+                    } else {
                     _this4.showPermissionDenied = true;
                   }
                 } else {
@@ -1178,9 +1174,9 @@
         }]
       }];
 
-      var ComercialKanbanPedidosRoutingModule = /*#__PURE__*/_createClass(function ComercialKanbanPedidosRoutingModule() {
+      var ComercialKanbanPedidosRoutingModule = function ComercialKanbanPedidosRoutingModule() {
         _classCallCheck(this, ComercialKanbanPedidosRoutingModule);
-      });
+      };
 
       ComercialKanbanPedidosRoutingModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],

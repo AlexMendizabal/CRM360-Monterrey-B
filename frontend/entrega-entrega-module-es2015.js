@@ -300,7 +300,7 @@ const routes = [
     },
     {
         path: 'romaneios',
-        loadChildren: () => Promise.all(/*! import() | romaneios-romaneios-module */[__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null, /*! ./romaneios/romaneios.module */ "ZD/H")).then(m => m.LogisticaEntregaRomaneiosModule)
+        loadChildren: () => Promise.all(/*! import() | romaneios-romaneios-module */[__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~234d8aea"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("romaneios-romaneios-module")]).then(__webpack_require__.bind(null, /*! ./romaneios/romaneios.module */ "ZD/H")).then(m => m.LogisticaEntregaRomaneiosModule)
     },
     {
         path: 'controle-entregas',
@@ -308,11 +308,11 @@ const routes = [
     },
     {
         path: 'desmembramento',
-        loadChildren: () => Promise.all(/*! import() | desmembramento-desmembramento-module */[__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null, /*! ./desmembramento/desmembramento.module */ "9bwc")).then(m => m.LogisticaEntregaDesmembramentoModule)
+        loadChildren: () => Promise.all(/*! import() | desmembramento-desmembramento-module */[__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~234d8aea"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("common"), __webpack_require__.e("desmembramento-desmembramento-module")]).then(__webpack_require__.bind(null, /*! ./desmembramento/desmembramento.module */ "9bwc")).then(m => m.LogisticaEntregaDesmembramentoModule)
     },
     {
         path: 'monitores',
-        loadChildren: () => Promise.all(/*! import() | monitores-monitores-module */[__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null, /*! ./monitores/monitores.module */ "D14F")).then(m => m.LogisticaEntregaMonitoresModule)
+        loadChildren: () => Promise.all(/*! import() | monitores-monitores-module */[__webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~0ee1e4a1"), __webpack_require__.e("default~agenda-agenda-module~akna-akna-module~arcelor-mittal-arcelor-mittal-module~auditoria-auditor~7358378f"), __webpack_require__.e("default~agenda-agenda-module~amarracao-materiais-amarracao-materiais-module~autorizaciones-autorizac~9c38e2af"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~59659725"), __webpack_require__.e("default~akna-akna-module~associacoes-associacoes-module~auditoria-auditoria-module~autorizaciones-au~e05aab93"), __webpack_require__.e("common"), __webpack_require__.e("monitores-monitores-module")]).then(__webpack_require__.bind(null, /*! ./monitores/monitores.module */ "D14F")).then(m => m.LogisticaEntregaMonitoresModule)
     },
     {
         path: '**',

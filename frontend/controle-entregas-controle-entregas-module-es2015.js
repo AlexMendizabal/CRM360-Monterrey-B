@@ -196,6 +196,16 @@ let ComercialVendedoresService = class ComercialVendedoresService {
             .get(`${this.API}/rubros`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
     }
+    getVendedorSucursal(id_vendedor) {
+        return this.http
+            .get(`${this.API}/datosvendedor/${id_vendedor}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
+    getSucursalVendedor(id_sucursal) {
+        return this.http
+            .get(`${this.API_CADASTROS}/datossucursal/${id_sucursal}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["retry"])(2));
+    }
 };
 ComercialVendedoresService.ctorParameters = () => [
     { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }

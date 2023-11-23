@@ -245,7 +245,7 @@ const routes = [
     },
     {
         path: 'agendamentos',
-        loadChildren: () => Promise.all(/*! import() | agendamentos-agendamentos-module */[__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("default~agendamentos-agendamentos-module~associacao-etapas-associacao-etapas-module~checklist-checkl~6711bf61"), __webpack_require__.e("default~agendamentos-agendamentos-module~veiculos-veiculos-module"), __webpack_require__.e("common"), __webpack_require__.e("agendamentos-agendamentos-module")]).then(__webpack_require__.bind(null, /*! ./agendamentos/agendamentos.module */ "JZwn")).then((m) => m.LogisticaYmsAgendamentosModule),
+        loadChildren: () => Promise.all(/*! import() | agendamentos-agendamentos-module */[__webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~234d8aea"), __webpack_require__.e("default~agendamentos-agendamentos-module~autorizaciones-autorizaciones-module~clientes-clientes-modu~ae31dadb"), __webpack_require__.e("default~agendamentos-agendamentos-module~associacao-etapas-associacao-etapas-module~checklist-checkl~6711bf61"), __webpack_require__.e("default~agendamentos-agendamentos-module~veiculos-veiculos-module"), __webpack_require__.e("common"), __webpack_require__.e("agendamentos-agendamentos-module")]).then(__webpack_require__.bind(null, /*! ./agendamentos/agendamentos.module */ "JZwn")).then((m) => m.LogisticaYmsAgendamentosModule),
     },
     {
         path: 'associacao-etapas',
