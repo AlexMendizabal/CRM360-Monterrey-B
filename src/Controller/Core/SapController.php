@@ -681,17 +681,31 @@ class SapController extends AbstractController
 
             if ($respuestaClient['estado'] == true) {
                 //Actualizar ubicaciones
-                $traerUbicaciones = $helper->traerDireccionCliente();
-                $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
-                if ($borrarUbicaciones !== false) {
-                    foreach ($data['ubicacion'] as &$ubicacion) {
-                        $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
-                        $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
-                        $ubicacion['ciudad'] = $buscarCiudad['sigla'];  // Corregido el uso de 'sigla' a 'ciudad'
-                        $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
-                        $ubicacion['id_cliente'] = $data['id_cliente'];
-                        $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
-                        //$respuestaDirect = $helper->direccionCliente($connection, $ubicacion);
+                $traerUbicaciones = $helper->traerDireccionCliente($connection, $data['id_cliente']);
+                if ($traerUbicaciones !== false) {
+                    $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
+                    if ($borrarUbicaciones !== false) {
+                        if (count($data['ubicacion']) > 0) {
+                            foreach ($data['ubicacion'] as &$ubicacion) {
+                                $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
+                                $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
+                                $ubicacion['ciudad'] = $buscarCiudad['sigla'];
+                                $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
+                                $ubicacion['id_cliente'] = $data['id_cliente'];
+                                $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
+                            }
+                        }
+                    }
+                } else {
+                    if (count($data['ubicacion']) > 0) {
+                        foreach ($data['ubicacion'] as &$ubicacion) {
+                            $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
+                            $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
+                            $ubicacion['ciudad'] = $buscarCiudad['sigla'];
+                            $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
+                            $ubicacion['id_cliente'] = $data['id_cliente'];
+                            $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
+                        }
                     }
                 }
                 $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
