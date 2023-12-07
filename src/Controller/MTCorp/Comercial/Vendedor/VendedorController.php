@@ -176,7 +176,7 @@ class VendedorController extends AbstractController
     public function getVendedores(Connection $connection, Request $request){
         try {
               $query = "SELECT ID, CONCAT(NM_VEND,' ', NM_RAZA_SOCI) AS nombre 
-                        FROM TB_VEND";
+                        FROM TB_VEND ORDER BY nombre asc";
   
               $stmt = $connection->prepare($query);
               $stmt->execute();
@@ -298,9 +298,8 @@ class VendedorController extends AbstractController
 
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
-
-            if ($infoUsuario->matricula != 1) {
-
+            if ($infoUsuario->matricula != 1) 
+            {
                 $idVendedor = $infoUsuario->idVendedor;
 
                 $res = $connection->query("
@@ -311,6 +310,8 @@ class VendedorController extends AbstractController
                     ,@ID_SITU = '{$situacao}'
                     ,@ID_DEBU = 0
             ")->fetchAll();
+
+           
             } else {
                 $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]
@@ -321,7 +322,45 @@ class VendedorController extends AbstractController
             //dd($res);
             }
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
-
+                foreach($res as $re)
+                {   
+                    if(empty($re[ "nombre_factura"]))
+                    {
+                        $nombre =$re["razaoSocial"];
+                    }
+                    else
+                    {
+                        $nombre =$re["nombre_factura"];
+                    }
+                    $resp[] = [
+                            "codCliente" => $re["codCliente"],
+                            "codigo_cliente" => $re["codigo_cliente"],
+                            "codRazaoSocial" => $re["codRazaoSocial"],
+                            "razaoSocial" => $re["razaoSocial"],
+                            "nomeCliente" => $re["nomeCliente"],
+                            "tipoCliente" => $re["tipoCliente"],
+                            "nombreTipo" => $re["nombreTipo"],
+                            "nombreDepartamento" => $re["nombreDepartamento"],
+                            "id_departamento_lista" => $re["id_departamento_lista"],
+                            "uf" => $re["uf"],
+                            "lista" => $re["lista"],
+                            "id_lista_precio" => $re["id_lista_precio"],
+                            "id_vendedor" => $re["id_vendedor"],
+                            "nomeSituacao" => $re["nomeSituacao"],
+                            "cobrancaSomenteCarteira" => $re["cobrancaSomenteCarteira"],
+                            "direccion" => $re["direccion"],
+                            "latitud" => $re["latitud"],
+                            "longitud" => $re["longitud"],
+                            "correo_electronico" => $re["correo_electronico"],
+                            "telefono" => $re["telefono"],
+                            "celular" => $re["celular"],
+                            "codigo_rubro" => $re["codigo_rubro"],
+                            "nit" => $re["nit"],
+                            "nombre_factura" => $nombre,
+                            "carnet" => $re["carnet"]
+                    ];
+                }
+                $res = $resp;
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
 
@@ -390,6 +429,7 @@ class VendedorController extends AbstractController
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             //dd($infoUsuario);
+
             if ($infoUsuario->idVendedor != 64 && $infoUsuario->idVendedor != 88) {
                 $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
                         from TB_VEND where id = :id_vendedor";

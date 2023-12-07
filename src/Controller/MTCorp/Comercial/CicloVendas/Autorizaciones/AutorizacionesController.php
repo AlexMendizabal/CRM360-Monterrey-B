@@ -11,11 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\ParameterType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Services\Helper;
-use Doctrine\DBAL\ParameterType;
+
 
 use PDO;
 
@@ -46,17 +47,17 @@ class AutorizacionesController extends AbstractController
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
         $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : null;
         $estado = 10;
-        $autorizacion = 4;
+        $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
         $respt =  $helper->actualizaOfertaA($connection, $autorizacion, $id_oferta);
-
+     
         try {
-           
             $data_insert = [
                 'id_oferta' => (int)$id_oferta,
                 'fecha_solicitud' => $fecha_solicitud,
                 'descripcion_vend' => $descripcion_vend,
                 'estado' => $estado
             ];
+            dd();
             $affectedRows = $connection->insert('tb_autorizaciones', $data_insert);
      
             if(!empty($affectedRows) && $affectedRows > 0) 
@@ -90,7 +91,6 @@ class AutorizacionesController extends AbstractController
 
     public function autorizacion_estado_sap($helper, $connection, $id_oferta)
     {
-
         $obtenerOferta = $helper->buscarOferta($connection, $id_oferta);
         $resultSet = $connection->executeQuery('SELECT 
                     TBU.NM_COMP_RAZA_SOCI AS nombres,
@@ -152,13 +152,14 @@ class AutorizacionesController extends AbstractController
 
         try {
             $rsp = $helper->guardarOfertaSap($arrayMaterial);
-
+            
             $message = array(
                 'responseCode' => 200,
                 'result' => 'Oferta agregada exitosamente',
                 'id_oferta' => $id_oferta,
                 'estado' => true
             );
+
         } catch (\Throwable $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
@@ -280,133 +281,136 @@ class AutorizacionesController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route(
-     *   "/comercial/ciclo-vendas/autorizaciones/get_autorizaciones",
-     *   name="Autorizaciones",
-     *   methods={"GET"}
-     * )
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getAutorizaciones(Connection $connection, Request $request)
-    {
-        try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $id_usuario = $infoUsuario->id;
+        /**
+         * @Route(
+         *   "/comercial/ciclo-vendas/autorizaciones/get_autorizaciones",
+         *   name="Autorizaciones",
+         *   methods={"GET"}
+         * )
+         * @param Connection $connection
+         * @param Request $request
+         * @return JsonResponse
+         */
+        public function getAutorizaciones(Connection $connection, Request $request)
+        {
+            try {
+                $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+                $id_usuario = $infoUsuario->id;
+                $idVend =  $infoUsuario->idVendedor;
 
-            $params = $request->query->all();
-            $cargo = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
+                $params = $request->query->all();
+                $cargo = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
 
-            if ($cargo == 'GERENTE' || $cargo == 'SUBGERENTE' || $cargo == 'SUPERVISOR' || $cargo ==  'ADMINISTRADOR' || $cargo == 'PROMOTOR') {
-                //filtaspo
-                $orderBy = 'id_oferta';
-                $orderType = 'DESC';
-                $dataInicial = isset($params['dataInicial']) ? (strtotime($params['dataInicial']) ? date('Y/m/d H:i:s', strtotime($params['dataInicial'])) : '') : '';
-                $dataFinal = isset($params['dataFinal']) ? (strtotime($params['dataFinal']) ? date('Y/m/d H:i:s', strtotime($params['dataFinal'])) : '') : '';
-                $estado_oferta = isset($params['estado_oferta']) ? $params['estado_oferta'] : 1;
-                $nrPedido = isset($params['nrPedido']) ? $params['nrPedido'] :  $message = '';
-                $codVendedor = isset($params['codVendedor']) ? $params['codVendedor'] : '';
-                $orderType = isset($params['orderType']) ? $params['orderType'] : 'se requiere dato';
-                $pagina = isset($params['pagina']) ? $params['pagina'] : $message = '';
-                $registros = isset($params['registros']) ?   $params['registros'] :    $message = '';
+                if ($cargo == 'GERENTE' || $cargo == 'SUBGERENTE' || $cargo == 'SUPERVISOR' || $cargo ==  'ADMINISTRADOR' || $cargo == 'PROMOTOR') {
+                    //filtaspo
+                    $orderBy = 'id_oferta';
+                    $orderType = 'DESC';
+                    $dataInicial = isset($params['dataInicial']) ? (strtotime($params['dataInicial']) ? date('Y/m/d H:i:s', strtotime($params['dataInicial'])) : '') : '';
+                    $dataFinal = isset($params['dataFinal']) ? (strtotime($params['dataFinal']) ? date('Y/m/d H:i:s', strtotime($params['dataFinal'])) : '') : '';
+                    $estado_oferta = isset($params['estado_oferta']) ? $params['estado_oferta'] : 1;
+                    //$nrPedido = isset($params['nrPedido']) ? $params['nrPedido'] :  $message = '';
+                    $codVendedor = isset($params['codVendedor']) ? $params['codVendedor'] : $idVend;
+                    $orderType = isset($params['orderType']) ? $params['orderType'] : 'se requiere dato';
+                    $pagina = isset($params['pagina']) ? $params['pagina'] : $message = '';
+                    $registros = isset($params['registros']) ?   $params['registros'] :    $message = '';
 
-                if ($estado_oferta != 'T') {
-                    $conditions[] = " tb_autorizaciones.estado  = :estado_oferta";
-                    $bindings['estado_oferta'] = (int)$estado_oferta;
+                    if ($estado_oferta != 'T') {
+                        $conditions[] = " tb_autorizaciones.estado  = :estado_oferta";
+                        $bindings['estado_oferta'] = (int)$estado_oferta;
+                    }
+                    /* Fecha inicial */
+                    $order = $orderBy . ' ' . $orderType;
+                    
+                    /* Fecha Inicial */
+                    if (!empty($dataInicial)  && !empty($dataFinal)) {
+                        $conditions[] = "tb_autorizaciones.fecha_solicitud between :fecha_solicitud and :fecha_gestion";
+                        $bindings['fecha_solicitud'] = $dataInicial;
+                        $bindings['fecha_gestion'] = $dataFinal;
+                    }
+
+                    /* Número de pedido */
+                    if (!empty($nrPedido)) {
+                        $conditions[] = "TB_OFERTA.codigo_oferta LIKE :nro_pedido";
+                        $bindings['nro_pedido'] = '%' . $nrPedido . '%';
+                    } 
+
+                    /* Vendedor */
+                    if (!empty($codVendedor)) {
+                        $conditions[] = "TB_VEND.ID = :codVendedor";
+                        $bindings['codVendedor'] = $codVendedor;
+                    } else if ($cargo == 'PROMOTOR') {
+                        $conditions[] = "TB_VEND.ID = :idVendedorPromotor";
+                        $bindings['idVendedorPromotor'] = $idVend;
+                    }
+                    
+                    $query = "SELECT DISTINCT TB_OFERTA.id AS id_oferta,
+                                MTCORP_MODU_CLIE_BASE.codigo_cliente AS id_cliente, 
+                                prim_nome AS nombre_cliente, 
+                                nombre_oferta AS nombre_oferta,
+                                monto_total AS monto_total, 
+                                monto_total_bruto AS monto_total_bruto, 
+                                descuento_total AS descuento_total, 
+                                peso_total AS peso_total,
+                                cantidad_total AS cantidad_total , 
+                                fecha_creacion AS fecha_creacion, 
+                                codigo_oferta AS codigo_oferta,
+                                TB_AUTORIZACIONES.id AS id_autorizacion, 
+                                tb_autorizaciones.fecha_solicitud AS fecha_solicitud, 
+                                tb_autorizaciones.fecha_gestion AS fecha_gestion, 
+                                TB_AUTORIZACIONES.id_usuario AS id_usuario, 
+                                TB_OFERTA.id_vendedor AS id_vendedor, TB_VEND.NM_VEND,
+                                tb_autorizaciones.estado AS id_estado_auto,
+                                (select descripcion from tb_cierre_oferta where id = tb_autorizaciones.estado) AS estado_oferta
+                                FROM TB_OFERTA
+                                JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta
+                                LEFT JOIN tb_detalle_auto ON tb_detalle_auto.id_autorizacion = TB_OFERTA.id
+                                LEFT JOIN MTCORP_MODU_CLIE_BASE ON  MTCORP_MODU_CLIE_BASE.id_cliente = TB_OFERTA.id_cliente
+                                LEFT JOIN TB_CORE_USUA ON TB_CORE_USUA.ID = tb_autorizaciones.id_usuario
+                                LEFT JOIN TB_VEND ON TB_VEND.ID = TB_OFERTA.id_vendedor";
+                    if (!empty($conditions)) {
+                        $conditionString = implode(' AND ', $conditions);
+                        $query .= " WHERE $conditionString";
+                    }
+
+                    if (count($params) > 0) {
+                        $query .= " ORDER BY TB_OFERTA.id DESC";    //en vez del 1000 antes iba :registros  
+                    } else {
+                        $query .= " ORDER BY TB_OFERTA.id DESC";
+                    }
+
+                    $stmt = $connection->prepare($query);
+                    $stmt->execute($bindings);
+                    $res = $stmt->fetchAll();
+                    //dd($res);
+
+                    if (count($res) > 0) {
+                        $message = array(
+                            'responseCode' => 200,
+                            'data' => $res,
+                            'success' => true
+                        );
+                    } else {
+                        $message = array(
+                            'responseCode' => 204,
+                            'mensagem' => "No hay datos relacionado al valor introducido",
+                            'success' => false
+                        );
+                    }
+                    $response = new JsonResponse($message);
+                    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+                    return $response;
                 }
-
-                /* Fecha inicial */
-                $order = $orderBy . ' ' . $orderType;
-                /* Fecha Inicial */
-                if (!empty($dataInicial)  && !empty($dataFinal)) {
-
-                    $conditions[] = "tb_autorizaciones.fecha_solicitud between :fecha_solicitud and :fecha_gestion";
-                    $bindings['fecha_solicitud'] = $dataInicial;
-                    $bindings['fecha_gestion'] = $dataFinal;
-                }
-
-                /* Número de pedido */
-                if (!empty($nrPedido)) {
-                    $conditions[] = "TB_OFERTA.codigo_oferta LIKE :nro_pedido";
-                    $bindings['nro_pedido'] = '%' . $nrPedido . '%';
-                }
-
-                /* Vendedor */
-                if (!empty($codVendedor)) {
-                    $conditions[] = "TB_VEND.ID = :codVendedor";
-                    $bindings['codVendedor'] = $codVendedor;
-                }
-
-                $query = "SELECT DISTINCT TB_OFERTA.id AS id_oferta,
-                            MTCORP_MODU_CLIE_BASE.codigo_cliente AS id_cliente, 
-                            prim_nome AS nombre_cliente, 
-                            nombre_oferta AS nombre_oferta,
-                            monto_total AS monto_total, 
-                            monto_total_bruto AS monto_total_bruto, 
-                            descuento_total AS descuento_total, 
-                            peso_total AS peso_total,
-                            cantidad_total AS cantidad_total , 
-                            fecha_creacion AS fecha_creacion, 
-                            codigo_oferta AS codigo_oferta,
-                            TB_AUTORIZACIONES.id AS id_autorizacion, 
-                            tb_autorizaciones.fecha_solicitud AS fecha_solicitud, 
-                            tb_autorizaciones.fecha_gestion AS fecha_gestion, 
-                            TB_AUTORIZACIONES.id_usuario AS id_usuario, 
-                            TB_OFERTA.id_vendedor AS id_vendedor, TB_VEND.NM_VEND,
-                            tb_autorizaciones.estado AS id_estado_auto,
-                            (select descripcion from tb_cierre_oferta where id = tb_autorizaciones.estado) AS estado_oferta
-                            FROM TB_OFERTA
-                            JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta
-                            LEFT JOIN tb_detalle_auto ON tb_detalle_auto.id_autorizacion = TB_OFERTA.id
-                            LEFT JOIN MTCORP_MODU_CLIE_BASE ON  MTCORP_MODU_CLIE_BASE.id_cliente = TB_OFERTA.id_cliente
-                            LEFT JOIN TB_CORE_USUA ON TB_CORE_USUA.ID = tb_autorizaciones.id_usuario
-                            LEFT JOIN TB_VEND ON TB_VEND.ID = TB_OFERTA.id_vendedor";
-
-                if (!empty($conditions)) {
-                    $conditionString = implode(' AND ', $conditions);
-                    $query .= " WHERE $conditionString";
-                }
-                if (count($params) > 0) {
-                    $query .= " ORDER BY TB_OFERTA.id DESC";   ///en vez del 1000 antes iba :registros  
-                } else {
-                    $query .= " ORDER BY TB_OFERTA.id DESC";
-                }
-
-                $stmt = $connection->prepare($query);
-                $stmt->execute($bindings);
-                $res = $stmt->fetchAll();
-            
-                if (count($res) > 0) {
-                    $message = array(
-                        'responseCode' => 200,
-                        'data' => $res,
-                        'success' => true
-                    );
-                } else {
-                    $message = array(
-                        'responseCode' => 204,
-                        'mensagem' => "No hay datos relacionado al valor introducido",
-                        'success' => false
-                    );
-                }
+            } catch (\Throwable $e) {
+                $message = array(
+                    'responseCode' => 204,
+                    'mensagem' => $e->getMessage(),
+                    'success' => false
+                );
             }
-
             $response = new JsonResponse($message);
             $response->setEncodingOptions(JSON_NUMERIC_CHECK);
             return $response;
-        } catch (\Throwable $e) {
-            $message = array(
-                'responseCode' => 204,
-                'mensagem' => $e->getMessage(),
-                'success' => false
-            );
         }
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
 
     /**
      * @Route(

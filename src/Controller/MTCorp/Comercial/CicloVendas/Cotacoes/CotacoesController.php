@@ -9,13 +9,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\ParameterType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 use App\Services\Helper;
-use Doctrine\DBAL\DBALException;
+
 
 /**
  * Class CotacoesController
@@ -254,15 +256,13 @@ class CotacoesController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
 
-            $tipoData = 1;
             $dataInicial = NULL;
             $dataFinal = NULL;
             $codSituacao = 0;
             $nrPedido = NULL;
             $codEmpresa = NULL;
             $codDeposito = NULL;
-            $cliente = NULL;
-            $codVendedor = NULL;
+         
             $orderBy = 'nrPedido';
             $orderType = 'DESC';
             $pagina = NULL;
@@ -273,92 +273,111 @@ class CotacoesController extends AbstractController
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
             if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
             if (isset($params['nrPedido'])) $nrPedido = $params['nrPedido'];
-            /* if (isset($params['cliente'])) $cliente = $params['cliente']; */
-            if (isset($params['codVendedor'])) $codVendedor = $params['codVendedor'];
+            if (isset($params['cliente'])) $cliente = $params['cliente'];
+            if (isset($params['codVendedor'])) $codVendedor  = $params['codVendedor'];
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
             if (isset($params['pagina'])) $pagina = $params['pagina'];
             if (isset($params['registros'])) $registros = $params['registros'];
-
+          
             /* Fecha inicial */
             $order = $orderBy . ' ' . $orderType;
             /* Fecha Inicial */
-            if (!empty($dataInicial) && $dataInicial !== 'null') {
-                $dataInicialTimestamp = strtotime($dataInicial);
-                if ($dataInicialTimestamp !== false) {
+            if (!empty($dataInicial)) {
                     $conditions[] = "OFE.fecha_inicial >= :fecha_inicial";
-                    $bindings['fecha_inicial'] = date('Y-m-d', $dataInicialTimestamp);
-                }
+                    $bindings['fecha_inicial'] = date('Y-m-d', strtotime($dataInicial));
             }
 
             /* Fecha Final */
-            if (!empty($dataFinal) && $dataFinal !== 'null') {
-                $dataFinalTimestamp = strtotime($dataFinal);
-                if ($dataFinalTimestamp !== false) {
+            if (!empty($dataFinal)) {
                     $conditions[] = "OFE.fecha_final  <= :fecha_final";
-                    $bindings['fecha_final'] = date('Y-m-d', $dataFinalTimestamp);
-                }
+                    $bindings['fecha_final'] = date('Y-m-d', strtotime($dataFinal));
             }
 
             /* Situacion pedido */
-            if (!empty($codSituacao) && $codSituacao !== 'null' && $codSituacao > 0) {
-                $conditions[] = "OFE.estado_oferta = :estado_oferta";
+            if (!empty($codSituacao)) {
+                $conditions[] = " OFE.estado_oferta = :estado_oferta";
                 $bindings['estado_oferta'] = $codSituacao;
             }
 
             /* Número de pedido */
-            if (!empty($nrPedido) && $nrPedido !== 'null') {
-                $conditions[] = "OFE.codigo_oferta LIKE :nro_pedido";
+            /* if (!empty($nrPedido)) {
+                $conditions[] = " OFE.codigo_oferta LIKE :nro_pedido";
                 $bindings['nro_pedido'] = '%' . $nrPedido . '%';
-            }
-
-            /* Cliente */
-            /*   if (!empty($cliente) && $cliente !== 'null') {
-                $conditions[] = "MATE.CODIGOMATERIAL LIKE :codigo_material";
-                $bindings['codigo_material'] = '%' . $cliente . '%';
             } */
 
+            /* Cliente */
+           
             /* Vendedor */
-            if (!empty($codVendedor) && $codVendedor !== 'null') {
-                $conditions[] = "OFE.id_vendedor = :id_vendedor";
+            if (!empty($codVendedor)) {
+                $conditions[] = " OFE.id_vendedor = :id_vendedor";
                 $bindings['id_vendedor'] = $codVendedor;
             }
+           
+            $queryOferta = $connection->CreateQueryBuilder();
+	        $queryOferta ->select(
+			    'OFE.id as id_oferta', 
+			    'OFE.codigo_oferta as codigo_oferta', 
+			    'OFE.fecha_creacion as fecha_oferta',
+			    'OFE.fecha_inicial', 
+			    'OFE.fecha_final',
+			    'CLIE.id_cliente', 
+			    'CLIE.prim_nome',
+			    'OFE.monto_total',
+			    'OFE.monto_total_bruto', 
+			    'LP.id', 			
+			    'LP.nombre_lista', 
+			    'OFE.descuento_total', 
+			    'OFE.cantidad_total', 			
+			    'UNI.NOMBRE_UNI', 
+			    'OFE.peso_total',
+			    'ME.id', 
+                'OFE.descripcion as descripcionofe', 
+			    'ME.nombre_modo_entrega', 			
+			    'OFE.estado_oferta', 
+                'OFE.tipo_estado', 
+                'OFE.autorizacion', 
+			    'CO.descripcion as descripcion_cierre', 
+			    'CO.descripcion',
+                "CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre",
+                )
+	            ->from('TB_OFERTA', 'OFE')
+	            ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
+   	            ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
+	            ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
+	            ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
+	            ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
+	            ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
+	            ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta= CO.id')
+	            ->where('1 = 1');
+                if (!empty($dataInicial)) {
+                    $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
+                    $queryOferta->setParameter('fecha_inicial', date('Y-m-d', strtotime($dataInicial)));
+                }
+                if (!empty($dataFinal)) {
+                    $queryOferta->andWhere('OFE.fecha_final <= :fecha_final');
+                    $queryOferta->setParameter('fecha_final', date('Y-m-d', strtotime($dataFinal)));
+                }
+                if (!empty($cliente)) {
+                    $queryOferta->andWhere('CLIE.id_cliente = :id_cliente');
+                    $queryOferta->setParameter('id_cliente', $cliente);
+                }
+                if (!empty($codVendedor)) {
+                    $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
+                    $queryOferta->setParameter('id_vendedor', $codVendedor);
+                } 
+              
 
-            $query = "SELECT OFE.id AS id_oferta, 
-            OFE.codigo_oferta as codigo_oferta, 
-            OFE.fecha_creacion as fecha_oferta, 
-            OFE.fecha_inicial AS fecha_inicial, 
-            OFE.fecha_final AS fecha_final,
-            CLIE.id_cliente as id_cliente,
-            CLIE.prim_nome as cliente, CONCAT( VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS vendedor,
-            OFE.monto_total as monto_total, OFE.monto_total_bruto as monto_total_bruto, LP.id as id_lista, LP.nombre_lista as lista_precio,
-            OFE.descuento_total as descuento, OFE.cantidad_total as cantidad, UNI.NOMBRE_UNI as unidad, OFE.peso_total as peso_total, ME.id AS id_entrega,
-            ME.nombre_modo_entrega as modo_entrega, OFE.estado_oferta as id_estado_oferta, 
-            CO.descripcion as nombre_lista, OFE.descripcion as descripcion
-             
-            FROM TB_OFERTA OFE INNER JOIN MTCORP_MODU_CLIE_BASE CLIE on OFE.id_cliente = CLIE.id_cliente 
-            INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID INNER JOIN TB_MONEDA MONEDA ON OFE.id_moneda = MONEDA.id
-            INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id INNER JOIN UNIDADES UNI ON OFE.id_unidad = UNI.ID
-            INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
-            INNER JOIN tb_cierre_oferta CO ON OFE.estado_oferta = CO.id";
+                $stmt = $queryOferta->execute();
+                $res = $stmt->fetchAllAssociative();
 
-            if (!empty($conditions)) {
-                $conditionString = implode(' AND ', $conditions);
-                $query .= " WHERE $conditionString";
-            }
-
-            if (count($params) > 0) {
-                $query .= " ORDER BY OFE.id DESC
-                OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
-            } else {
-                $query .= " ORDER BY OFE.id DESC
-                OFFSET 0 ROWS FETCH NEXT 1000 ROWS ONLY";
-            }
-
-            $stmt = $connection->prepare($query);
-            $stmt->execute($bindings);
-            $res = $stmt->fetchAll();
-
+                //$res = $stmt->fetchAllAssociative();
+            //dd($conditions);
+            
+            //$stmt = $connection->prepare($query);
+            //$stmt->executeQuery($bindings);
+            //dd($stmt);
+            
             if (count($res) > 0) {
                 $message = array(
                     'responseCode' => 200,
@@ -488,7 +507,6 @@ class CotacoesController extends AbstractController
      */
     public function getDetalleOferta(Connection $connection, Request $request)
     {
-        //dd($request);
         try {
             $arrFinal = array();
             $params = $request->query->all();
@@ -511,12 +529,9 @@ class CotacoesController extends AbstractController
                 OFE.longitud AS longitud,
                 OFE.codigo_oferta AS codigo_oferta,
                 OFE.peso_total AS peso_total,
-                OFE.estado_oferta as estado_of,
-                CASE
-                    WHEN  OFE.estado_oferta = 1 THEN 'Borrador'
-                    WHEN  OFE.estado_oferta = 2 THEN 'Venta'
-                    WHEN  OFE.estado_oferta = 3 THEN 'Rechazado'
-                END AS estado_oferta,
+                OFE.tipo_estado,
+                OFE.estado_oferta,
+                OFE.descripcion,
                 CLIE.prim_nome AS nombre_cliente,
                 CLIE.id_cliente AS id_cliente,
                 CLIE.codigo_cliente AS codigo_cliente,
@@ -530,20 +545,32 @@ class CotacoesController extends AbstractController
                     left JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
                     INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
                     left JOIN TB_CLIE_CONT CONT ON OFE.id_persona_contacto = CONT.id_cont
+                    left JOIN tb_cierre_oferta CO ON OFE.tipo_estado = CO.id
                 WHERE  OFE.id = :id_oferta";
             $stmt1 = $connection->prepare($query_oferta);
             $stmt1->bindValue(':id_oferta', $tipoData);
             $stmt1->execute();
             $res1 = $stmt1->fetchAll();
-            //dd($res1);
+
             if (count($res1) > 0) {
                 $arrFinal['oferta'] = $res1;
+
                 $query =
-                    "SELECT OD.id, MATE.ID_CODIGOMATERIAL as id_material,  OFE.id as id_oferta, MATE.CODIGOMATERIAL as codigo_material, MATE.DESCRICAO as nombre_material,
-                    UNI.SIGLAS_UNI as unidad, PM.precio as precio,  OD.cantidad as cantidad,  OD.subtotal_bruto AS total_bruto, od.descuento as precio_descuento,
+                    "SELECT 
+                    OD.id, MATE.ID_CODIGOMATERIAL as id_material, 
+                    OFE.id as id_oferta, 
+                    MATE.CODIGOMATERIAL as codigo_material,
+                    MATE.DESCRICAO as nombre_material,
+                    UNI.SIGLAS_UNI as unidad,
+                    PM.precio as precio, 
+                    OD.cantidad as cantidad,
+                    OD.subtotal_bruto AS total_bruto,
+                    od.descuento as precio_descuento,
                     od.subtotal as subtotal,
-                    DEPO.CODIGO_ALMACEN as nombre_almacen, MONE.nombre_moneda as nombre_moneda
-                FROM TB_MATE MATE INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_material = MATE.ID_CODIGOMATERIAL 
+                    DEPO.CODIGO_ALMACEN as nombre_almacen,
+                    MONE.nombre_moneda as nombre_moneda
+                FROM TB_MATE MATE 
+                    INNER JOIN TB_OFERTA_DETALLE OD ON OD.id_material = MATE.ID_CODIGOMATERIAL 
                     INNER JOIN TB_OFERTA OFE ON OFE.id = OD.id_oferta
                     INNER JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad
                     INNER JOIN TB_LISTA_PRECIO LP ON LP.id = OFE.id_lista_precio 
@@ -552,12 +579,10 @@ class CotacoesController extends AbstractController
                     INNER JOIN TB_MONEDA MONE ON MONE.id = OFE.id_moneda 
                 WHERE MATE.ID_CODIGOMATERIAL = PM.id_material AND OFE.id = :id_oferta";
 
-
                 $stmt = $connection->prepare($query);
                 $stmt->bindValue(':id_oferta', $tipoData);
                 $stmt->execute();
                 $res = $stmt->fetchAll();
-                /* dd($res); */
 
                 if (count($res) > 0) {
                     $arrFinal['analitico'] = $res;
@@ -2293,8 +2318,7 @@ class CotacoesController extends AbstractController
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-        }
+       }
     }
 
     /**
@@ -2466,343 +2490,119 @@ class CotacoesController extends AbstractController
      * @return JsonResponse
      */
     public function saveCotizacion(Connection $connection, Request $request)
+    {
+        /* "autorizacion", estado como se encuentre la oferta si es 1 tiene autorizacion y 2 no tiene autorizacion
+        "estado_oferta",  el estado de la oferta borrador, pendiente borrador y cerrado
+        "tipo_estado" tiene el estado de cierre*/
+        $helper = new Helper();
+        $data = json_decode($request->getContent(), true);
+
+        $resp = $this->insertaOferta($connection, $data);
+        $data_oferta = json_decode($resp->getContent(), true);
+        $id_oferta = $data_oferta['data'];
+        
+        if ($data_oferta['success']) {
+            foreach ($data['carrinho'] as $items) {
+                $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
+            }
+            
+            //$repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+           // $data_sap = json_decode($repSap->getContent(), true);
+            
+            return FunctionsController::Retorno(true, "Registro correctamente", null, Response::HTTP_OK);
+
+        } else {
+            
+            return FunctionsController::Retorno(false, "No Registro Correctamente", null, Response::HTTP_OK);
+            
+        }   
+    }
+
+    public function insertaOferta($connection, $data)
     {   
-        $borrador = 1;
-        $dolar = 1;
-        $boliviano = 2;
-        $id_iva = 1;
-        $kilogramo = 9;
-        $arrayMaterial = array();
-        $carrito = array();
-        $detallePedido = array();
-        $codigo_cliente = '';
-        $codigo_vendedor = '';
-        $nombre_contacto = '';
-        $direccion_contacto = '';
+        $data_oferta['id_forma_pago'] = !empty($data['id_forma_pago']) ? $data['id_forma_pago'] : $data_error['id_forma_pago'] = 'es necesario';
+        $data_oferta['id_lista_precio'] = !empty($data['id_lista_precio']) ? $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
+        $data_oferta['id_modo_entrega'] = !empty($data['id_modo_entrega']) ? $data['id_modo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
+        $data_oferta['id_moneda'] = 1;
+        $data_oferta['id_iva'] = 1;
+        $data_oferta['id_cliente'] = !empty($data['id_cliente']) ? $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
+        $data_oferta['id_vendedor'] = !empty($data['id_vendedor']) ? $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
+        $data_oferta['id_persona_contacto'] = !empty($data['id_persona_contacto']) ? $data['id_persona_contacto'] : $data_error['persona_contacto'] = 'es necesario';
+        $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
+        $data_oferta['fecha_final'] = !empty($data['fecha_final']) ? date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
+        $data_oferta['fecha_inicial'] = !empty($data['fecha_inicial']) ? date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
+        $data_oferta['monto_total'] = !empty($data['monto_total']) ? $data['monto_total'] : $data_error['monto_total'] = 'es necesario';
+        $data_oferta['monto_total_bruto'] = !empty($data['monto_total_bruto']) ? $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es necesario';
+        $data_oferta['peso_total'] = !empty($data['peso_total']) ? $data['peso_total'] : $data_error['peso_total'] = 'es necesario';
+        $data_oferta['cantidad_total'] = !empty($data['cantidad_total']) ? $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
+
+        if (!empty($data['direccion'])) {
+            $data_oferta['latitud'] = !empty($data['latitud']) ? $data['latitud'] : $data_error['latitud'] = 'es necesario';
+            $data_oferta['longitud'] = !empty($data['longitud']) ? $data['longitud'] : $data_error['longitud'] = 'es necesario';
+            $data_oferta['direccion'] = !empty($data['direccion']) ? $data['direccion'] : $data_error['direccion'] = 'es necesario';
+        }
+        if (!empty($data['observacion'])) {
+            $data_oferta['observacion'] = $data['observacion'];
+        }
+        $data_oferta['estado_oferta'] = 1;
+        $data_oferta['tipo_estado'] = 14;
+
+        //dd($data_oferta, $data_error);
         try {
-            $params = json_decode($request->getContent(), true);
-            /* Dados de cotizacion */
-            /*  $nombre_oferta = isset($params['nombre_oferta']) ? $params['nombre_oferta'] : null; */
-            $monto_total = isset($params['monto_total']) ? $params['monto_total'] : null;
-            $monto_total_bruto = isset($params['monto_total_bruto']) ? $params['monto_total_bruto'] : null;
-            $peso_total = isset($params['peso_total']) ? $params['peso_total'] : null;
-            $descuento_total = isset($params['descuento_total']) ? $params['descuento_total'] : null;
-            $cantidad_total = isset($params['cantidad_total']) ? $params['cantidad_total'] : null;
-            $fecha_creacion = date('Y-m-d H:i:s');
-            $id_forma_pago = isset($params['id_forma_pago']) ? $params['id_forma_pago'] : null;
-            $id_lista_precio = isset($params['id_lista_precio']) ? $params['id_lista_precio'] : null;
-            $id_modo_entrega = isset($params['id_modo_entrega']) ? $params['id_modo_entrega'] : null;
-            $id_moneda = $dolar;
-            $id_cliente = isset($params['id_cliente']) ? $params['id_cliente'] : null;
-            $id_vendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : null;
-            /*  $id_unidad = isset($params['id_unidad']) ? $params['id_unidad'] : null; */
-            //$id_almacen = isset($params['id_almacen']) ? $params['id_almacen'] : null;
-            $codigo_oferta = isset($params['codigo_oferta']) ? $params['codigo_oferta'] : null;
-            $fecha_final = isset($params['fecha_final']) ? date('Y-m-d', strtotime($params['fecha_final'])) : null;
-            $fecha_inicial = isset($params['fecha_inicial']) ? date('Y-m-d', strtotime($params['fecha_inicial'])) : null;
-            $latitud = isset($params['latitud']) ? $params['latitud'] : null;
-            $longitud = isset($params['longitud']) ? $params['longitud'] : null;
-            $id_persona_contacto = isset($params['id_persona_contacto']) ? $params['id_persona_contacto'] : null;
-            $autorizacion = isset($params['autorizacion']) ? $params['autorizacion'] : null;
-            $observacion = isset($params['observacion']) ? $params['observacion'] : null;
-            $nombre_factura = isset($params['nombre_factura']) ? $params['nombre_factura'] : null;
-            $nit_factura = isset($params['nit_factura']) ? $params['nit_factura'] : null;
-            //$direccion_envio = isset($params['direccion_envio']) ? $params['direccion_envio'] : null;
-            $direccion_entrega = isset($params['direccion_entrega']) ? $params['direccion_entrega'] : null;
-            $correo_electronico = isset($params['correo_electronico']) ? $params['correo_electronico'] : null;
-            $celular = isset($params['celular']) ? $params['celular'] : null;
-            $telefono = isset($params['telefono']) ? $params['telefono'] : null;
-            $carnet_cliente = isset($params['carnet_cliente']) ? $params['carnet_cliente'] : null;
-            $geolocalizacion = null;
-            $helper = new Helper();
-
-            $fecha_inicial_format = date('Y-m-d H:i:s', strtotime($fecha_inicial));
-            $fecha_final_format = date('Y-m-d H:i:s', strtotime($fecha_final));
-            //$fecha_inicial_format = date( 'Y-m-d H:i:s', strtotime($fecha_inicial));
-
-            if (
-                isset($nit_factura) && $nit_factura !== null ||
-                isset($nombre_factura) && $nombre_factura !== null ||
-                isset($correo_electronico) && $correo_electronico !== null ||
-                isset($celular) && $celular !== null ||
-                isset($telefono) && $telefono !== null
-            ) {
-                $dataCliente = array(
-                    "id_cliente" => $id_cliente,
-                    "carnet" => $carnet_cliente,
-                    "nit" => $nit_factura,
-                    "celular" => $celular,
-                    "telefono" => $telefono,
-                    "email" => $correo_electronico,
-                    "nombre_factura" => $nombre_factura
-                );
-                $actualizar_cliente = $helper->updateClient($connection, $dataCliente);
-            }
-
-
-            $dato_entrega = '';
-            if ($id_modo_entrega == 0) {
-                $dato_entrega = 'N';
-            } else if ($id_modo_entrega == 1) {
-                $dato_entrega = 'D';
-            } else if ($id_modo_entrega == 2) {
-                $dato_entrega = 'R';
-            }
-
-            /* dd($latitud); */
-
-            $estado_oferta = $borrador;
-
-            $queryCabecera = "INSERT INTO TB_OFERTA (
-                monto_total,
-                monto_total_bruto,
-                peso_total,
-                descuento_total,
-                cantidad_total,
-                fecha_creacion,
-                id_forma_pago,
-                id_lista_precio,
-                id_modo_entrega,
-                id_moneda,
-                id_iva,
-                id_cliente,
-                id_vendedor,
-                codigo_oferta,
-                fecha_final,
-                fecha_inicial,
-                latitud,
-                longitud,
-                estado_oferta,
-                id_persona_contacto, 
-                id_unidad,
-                observacion,
-                direccion
-            )
-            VALUES (
-                :monto_total,
-                :monto_total_bruto,
-                :peso_total,
-                :descuento_total,
-                :cantidad_total,
-                :fecha_creacion, 
-                :id_forma_pago,
-                :id_lista_precio,
-                :id_modo_entrega,
-                :id_moneda,
-                :id_iva,
-                :id_cliente,
-                :id_vendedor,
-                :codigo_de_oferta,
-                :fecha_final,
-                :fecha_inicial,  
-                :latitud,
-                :longitud,
-                :estado_oferta,
-                :id_persona_contacto,
-                :id_unidad,
-                :observacion,
-                :direccion
-            );";
-
-            // Preparar y ejecutar la consulta
-            $id_persona_contacto_value = $id_persona_contacto ?? null;
-            $codigo_oferta_value = $codigo_oferta ?? null;
-            $autorizacion_value = $autorizacion ?? null;
-            $observacion_value = $observacion ?? null;
-
-            $stmt = $connection->prepare($queryCabecera);
-            //dd($direccion_entrega);
-            $stmt->execute([
-                'monto_total' => $monto_total,
-                'monto_total_bruto' => $monto_total_bruto,
-                'peso_total' => $peso_total,
-                'descuento_total' => $descuento_total,
-                'cantidad_total' => $cantidad_total,
-                'fecha_creacion' =>  $fecha_creacion,
-                'id_forma_pago' => (int)$id_forma_pago,
-                'id_lista_precio' => (int)$id_lista_precio,
-                'id_modo_entrega' => $id_modo_entrega,
-                'id_moneda' => (int)$id_moneda,
-                'id_iva' => (int)$id_iva,
-                'id_cliente' => (int)$id_cliente,
-                'id_vendedor' => (int)$id_vendedor,
-                'codigo_de_oferta' => $codigo_oferta_value,
-                'fecha_inicial'  => $fecha_inicial,
-                'fecha_final' => $fecha_final,
-                'latitud' => $latitud,
-                'longitud' => $longitud,
-                'estado_oferta' => $estado_oferta,
-                'id_persona_contacto' => (int)$id_persona_contacto_value,
-                'id_unidad' => $kilogramo,
-                'observacion' => $observacion_value,
-                'direccion' => $direccion_entrega
-            ]);
-
-            /* dd($observacion_value);  */
-            $carrinho = $params['carrinho'];
-            //dd($carrinho);
+            $oferata = $connection->insert('TB_OFERTA', $data_oferta);
             $id_oferta = $connection->lastInsertId();
-            if ($id_oferta > 0) {
-                //dd($id_oferta);
-                foreach ($carrinho as $item) {
-                    $id_material = $item['codMaterial'];
-                    $id_presentacion = $item['id_presentacion'];
-                    $id_unidad = $item['id_unidad'];
-                    $cantidad = $item['qtdeItem'];
-                    $descuento = $item['valorDesc'];
-                    $subtotal_bruto = $item['valorTotalBruto'];
-                    $subtotal = $item['valorTotal'];
-                    $id_almacen_carrito = $item['id_almacen_carrito'];
-                    $percentualDesc = $item['percentualDesc'];
-                    $permitido = $item['descuento_permitido'];
-
-                    $query_detalle = "INSERT INTO TB_OFERTA_DETALLE (
-                    id_oferta, id_material, id_almacen_carrito, id_presentacion, id_unidad,cantidad,descuento,subtotal_bruto, subtotal, percentualDesc, descuento_permitido)
-                    VALUES (
-                        :id_oferta, 
-                        :id_material, 
-                        :id_almacen_carrito, 
-                        :id_presentacion, 
-                        :id_unidad, 
-                        :cantidad, 
-                        :descuento, 
-                        :subtotal_bruto, 
-                        :subtotal,
-                        :percentualDesc,
-                        :descuento_permitido
-                         )";
-                    $stmt = $connection->prepare($query_detalle);
-                    $stmt->execute([
-                        'id_oferta' => $id_oferta,
-                        'id_material' => $id_material,
-                        'id_almacen_carrito' => $id_almacen_carrito,
-                        'id_presentacion' => $id_presentacion,
-                        'id_unidad' => $id_unidad,
-                        'cantidad' => $cantidad,
-                        'descuento' => $descuento,
-                        'subtotal_bruto' => $subtotal_bruto,
-                        'subtotal' => $subtotal,
-                        'percentualDesc' => $percentualDesc,
-                        'descuento_permitido' => $permitido
-                    ]);
-
-                    $carrito  = array(
-                        [
-                            'item_code' => $item['codItemPedidoCliente'],
-                            'cantidad' => $cantidad,
-                            "porc_descuento" =>  $item['percentualDesc'],
-                            "unidad" => $item['unidade'],
-                            "precio" => $subtotal,
-                            "almacen" => $item['codDeposito'],
-                            "cortes" => null,
-                            'modo_entrega' => $dato_entrega
-                        ]
-                    );
-                    $detallePedido[] = $carrito[0];
-                }
-
-                $datos_cliente = $helper->traerCliente($connection, $id_cliente);
-                if ($datos_cliente !== false) {
-                    $codigo_cliente = $datos_cliente[0]['codigo_cliente'];
-                }
-                $datos_vendedor = $helper->traerVendedorSap($connection, $id_vendedor);
-                //dd($datos_vendedor);
-                if ($datos_vendedor !== false) {
-                    $codigo_vendedor = $datos_vendedor[0]['codigo_sap'];
-                }
-                //dd($codigo_vendedor);
-                $datos_contacto = $helper->traerContacto($connection, $id_persona_contacto);
-                //dd($datos_contacto);
-                if ($datos_contacto !== false) {
-                    $nombre_contacto = $datos_contacto[0]['ds_cont'];
-                    //$direccion_contacto = $datos_contacto[0]['direccion_contacto'];
-                }   
-
-                if ($latitud !== null &&  $longitud !== null) {
-                    $geolocalizacion = $latitud . ', ' . $longitud;
-                } else {
-                    $geolocalizacion = null;
-                }
-                //dd($codigo_vendedor);
-                $arrayMaterial = ([
-                    'fecha_creacion' => $fecha_inicial,
-                    'fecha_validez' => $fecha_final,
-                    'card_code' =>  $codigo_cliente,
-                    'observaciones' => $observacion_value,
-                    'total_documento' => $monto_total,
-                    'nombre_factura' => $nombre_factura,
-                    'ejecutivo_ventas' => $codigo_vendedor,
-                    'nit_factura' => $nit_factura,
-                    'tipo_entrega' => $id_modo_entrega,
-                    'codigo_direccion' => $nombre_contacto,
-                    'porc_descuento' => null,
-                    'direccion' => $direccion_entrega,
-                    'geolocalizacion' => $geolocalizacion,
-                    'detalle_pedido' => $detallePedido,
-                    'autorizacion' =>[]
-                ]);
-
-                $autorizacion = 1;
-                foreach ($carrinho as $item) {
-                    $percentualDesc = $item['percentualDesc'];
-                    $permitido = $item['descuento_permitido'];
-                    if($percentualDesc > $permitido){
-                        $autorizacion = 2;
-                        break;
-                    }
-                }   
-                    
-                $query ="UPDATE TB_OFERTA set autorizacion = :autorizacion WHERE id = :id";
-                $stmtAuriza = $connection->prepare($query);
-                $stmtAuriza->bindValue(':autorizacion', $autorizacion);
-                $stmtAuriza->bindValue(':id', $id_oferta);
-                $stmtAuriza->execute();
-                
-                if (isset($arrayMaterial) && $autorizacion == 1) {
-
-                    $helper->guardarOfertaSap($arrayMaterial);
-                    if ($helper == true) {
-                        $message = array(
-                            'responseCode' => 200,
-                            'result' => 'Oferta agregada exitosamente',
-                            'id_oferta' => $id_oferta,
-                            'estado' => true
-                        );
-                    } else {
-                        $message = array(
-                            'responseCode' => 204,
-                            'result' => 'Oferta no enviada a SAP',
-                            'id_oferta' => $id_oferta,
-                            'estado' => false
-                        );
-                    }
-                }
-               
-                $message = array(
-                    'responseCode' => 200,
-                    'result' => 'Oferta agregada exitosamente',
-                    'id_oferta' => $id_oferta,
-                    'estado' => true
-                );
-            } else {
-                $message = array(
-                    'responseCode' => 204,
-                    'result' => 'Error al insertar la oferta',
-                    'id_oferta' => null,
-                    'estado' => false
-                );
-            }
-        } catch (\Throwable $e) {
             $message = array(
-                'responseCode' => 204,
-                'result' => $e->getMessage(),
-                'id_oferta' => null,
-                'estado' => false
+                "responseCode" => 200,
+                "message" => "Registro correctamente",
+                "success" => true,
+                "data" => $id_oferta
+            );
+        } catch (\Throwable $e) {
+
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'success' => false
             );
         }
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
+        return new JsonResponse($message);
+    }
+
+
+    public function insertItemsOferta($connection, $data, $id_oferta)
+    {       
+        $data_items['id_oferta'] = (int)$id_oferta;
+        !empty($data['codMaterial']) ? $data_items['id_material'] = $data['codMaterial'] : $data_error['codMaterial'] = 'es necesario';
+        !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
+        //$data_items['id_presentacion'] = !empty($data['codDeposito']) ? $data['codDeposito'] : $data_error['codDeposito'] = 'es necesario';
+         !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
+         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
+        
+        if (!empty($data['percentualDesc'])) {
+           // $data_items['descuento'] = !empty($data['descuento']) ? $data['descuento'] : $data_error['descuento'] = 'es necesario';
+            !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
+             !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
+        }
+        !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
+        !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
+
+        try  {
+            //dd($data_items, $data_error);
+            $data_detalle = $connection->insert('TB_OFERTA_DETALLE', $data_items);
+            
+            $message = array(
+                "responseCode" => 200,
+                "message" => "Registro correctamente",
+                "success" => true
+            );
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'success' => false
+            );
+        }
+        return new JsonResponse($message);
     }
 
 
@@ -3234,7 +3034,7 @@ class CotacoesController extends AbstractController
             $estado  = $row['estado_oferta'];
 
             if ($estado == 1 && !empty($estado_oferta) && !empty($descripcion) && !empty($id_oferta)) {
-                $query = "UPDATE TB_OFERTA SET descripcion = :descripcion, estado_oferta = :estado_oferta WHERE id = :id_oferta";
+                $query = "UPDATE TB_OFERTA SET descripcion = :descripcion, estado_oferta = :estado_oferta , tipo_estado = 13 WHERE id = :id_oferta";
                 $stmt = $connection->prepare($query);
                 $stmt->BindValue(':id_oferta', (int)$id_oferta);
                 $stmt->BindValue(':descripcion', $descripcion);

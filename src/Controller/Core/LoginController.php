@@ -30,7 +30,6 @@ class LoginController extends AbstractController
                 $dadosValidos = true;
                 $msgErro = '';
                 $data = json_decode($request->getContent(), true);
-            
                 if (!isset($data['nr_matr_usua']) || !is_numeric($data['nr_matr_usua'])) {
                     $msgErro = 'Informe a matrícula do usuário!';
                     $dadosValidos = false;

@@ -489,8 +489,9 @@ class DashboardVendedorController extends AbstractController
         $curMonth = date('n');
         $currYear = date('Y');
 
-        $firstDate = DateController::getPrimeiroDiaMes($curMonth, $currYear);
-        $lastDate = DateController::getUltimoDiaMes($curMonth, $currYear);
+        $firstDate = date('Y-m-d', strtotime('first day of ' . $currYear . '-' . $curMonth));
+        $lastDate = date('Y-m-d', strtotime('last day of ' . $currYear . '-' . $curMonth));
+        
 
         $concentracaoCorrente = $connection->query(
           "
@@ -508,8 +509,8 @@ class DashboardVendedorController extends AbstractController
           $currYear = $currYear - 1;
         }
 
-        $firstDate = DateController::getPrimeiroDiaMes($pastMonth, $currYear);
-        $lastDate = DateController::getUltimoDiaMes($pastMonth, $currYear);
+        $firstDate = date('Y-m-d', strtotime('first day of ' . $currYear . '-' . $curMonth));
+        $lastDate = date('Y-m-d', strtotime('last day of ' . $currYear . '-' . $curMonth));
 
         $concentracaoPassado = $connection->query(
           "
