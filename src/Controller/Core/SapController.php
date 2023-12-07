@@ -693,10 +693,11 @@ class SapController extends AbstractController
                         //$respuestaDirect = $helper->direccionCliente($connection, $ubicacion);
                     }
                 }
-                $borrarContactos = $helper->borrarContactos($connection, , $data['id_cliente']);
+                $borrarContactos = $helper->borrarContactos($connection, $data['id_cliente']);
                 if($borrarContactos !== false){
                     foreach ($data['contactos'] as &$contactos) {
                         $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                        dd($insertarContactos);
                     }
 
                 }
