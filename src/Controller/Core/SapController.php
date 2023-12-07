@@ -682,9 +682,9 @@ class SapController extends AbstractController
             if ($respuestaClient['estado'] == true) {
                 //Actualizar ubicaciones
                 $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
-                if($borrarUbicaciones !== false){
+                if ($borrarUbicaciones !== false) {
                     foreach ($data['ubicacion'] as &$ubicacion) {
-                        $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);                
+                        $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
                         $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
                         $ubicacion['ciudad'] = $buscarCiudad['sigla'];  // Corregido el uso de 'sigla' a 'ciudad'
                         $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
@@ -693,19 +693,19 @@ class SapController extends AbstractController
                         //$respuestaDirect = $helper->direccionCliente($connection, $ubicacion);
                     }
                 }
-                $borrarContactos = $helper->borrarContactos($connection, $data['id_cliente']);
-                if($borrarContactos !== false){
+                $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
+                if ($traerContactos !== false) {
+                    $borrarContactos = $helper->borrarContactos($connection, (int)$data['id_cliente']);
+                    if ($borrarContactos !== false) {
+                        foreach ($data['contactos'] as &$contactos) {
+                            $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                        }
+                    }
+                } else {
                     foreach ($data['contactos'] as &$contactos) {
                         $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
-                        dd($insertarContactos);
                     }
-
                 }
-                //Actualizar Contactos
-
-               /*  $sap = $helper->actualiza_client($connection, $data['id_cliente']); */
-
-                /* $helper = new Helper(); */
                 $data_sap = array();
                 $id_setor_actividade  = isset($data['id_rubro']) ? $data['id_rubro'] : 0;
                 $rubro2 = $helper->buscarRubro($connection, (int)$id_setor_actividade);
@@ -723,9 +723,9 @@ class SapController extends AbstractController
                     $tipo_cliente = $traerTipoCliente['nombre_tipo'];
                 }
 
-                $buscarCiudad = $helper->buscarCiudad2($connection, $data['ubicacion'][0]['id_ciudad']);                
+                $buscarCiudad = $helper->buscarCiudad2($connection, $data['ubicacion'][0]['id_ciudad']);
                 $sigla_ciudad = $buscarCiudad['sigla'];
-          
+
 
                 $data_sap = ([
                     'codigo_cliente' => $data['codigo_cliente'],
@@ -763,7 +763,7 @@ class SapController extends AbstractController
                             "detalle" => 'Actualizado en local, SAP: ' . $resp_sap['data'],
                         ];
                     }
-                }else{
+                } else {
                     $message = [
                         "response" => 200,
                         "estado" => true,
