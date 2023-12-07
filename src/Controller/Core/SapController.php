@@ -681,6 +681,7 @@ class SapController extends AbstractController
 
             if ($respuestaClient['estado'] == true) {
                 //Actualizar ubicaciones
+                $traerUbicaciones = $helper->traerDireccionCliente();
                 $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
                 if ($borrarUbicaciones !== false) {
                     foreach ($data['ubicacion'] as &$ubicacion) {
@@ -697,13 +698,17 @@ class SapController extends AbstractController
                 if ($traerContactos !== false) {
                     $borrarContactos = $helper->borrarContactos($connection, (int)$data['id_cliente']);
                     if ($borrarContactos !== false) {
-                        foreach ($data['contactos'] as &$contactos) {
-                            $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                        if (count($data['contactos']) > 0) {
+                            foreach ($data['contactos'] as &$contactos) {
+                                $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                            }
                         }
                     }
                 } else {
-                    foreach ($data['contactos'] as &$contactos) {
-                        $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                    if (count($data['contactos']) > 0) {
+                        foreach ($data['contactos'] as &$contactos) {
+                            $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                        }
                     }
                 }
                 $data_sap = array();
