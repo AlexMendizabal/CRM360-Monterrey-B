@@ -2163,7 +2163,7 @@ class Helper
         
         if(empty($data_almacen['codigo_almacen']))
         {
-            dd($data);
+            
             if (!empty($data['ciudad'])) {
                 $data_almacen['id_ciudad'] = $this->buscarCiudad2($connection, $data['ciudad']);
             } else {
@@ -2174,6 +2174,7 @@ class Helper
             } else {
                 isset($data['id_departamento']) ?  $data_almacen['id_departamento'] = $data['id_departamento'] : $data_error['departamento'] = 'es requerido';
             }
+            dd($data_almacen);
         }
 
 
@@ -2823,7 +2824,7 @@ class Helper
     {
         $url = $this->url_sap . $ruta;
         $data = json_encode($data);
-        //print_r($data);
+        print_r($data);
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -2845,7 +2846,7 @@ class Helper
         /* Decodificar respuesta */
         $responseData = json_decode($response, true);
 
-        //dd($responseData); 
+        dd($responseData); 
         return $responseData;
 
         /*  if ($responseData['CodigoRespuesta'] == 200) {
@@ -3772,7 +3773,7 @@ public function borrarUbicacionesId($connection, $id)
             ];
         } else {
 
-            $mensaje = 'Error campos faltantes ';
+            $mensaje = 'Error al registrar en SAP,  ';
             foreach($respuesta['Campos'] as $dato){
                 //dd($dato);
                 $mensaje .= $dato . ', ';
