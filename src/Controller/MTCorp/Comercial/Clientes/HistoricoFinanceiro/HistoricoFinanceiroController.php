@@ -60,7 +60,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $clientesExp = explode(',', $clientes);
     $totalAtraso = 0;
-
+   
     if (count($clientesExp) > 0) {
       for ($i=0; $i < count($clientesExp); $i++) {
         $res = $connection->query(
@@ -70,7 +70,7 @@ class HistoricoFinanceiroController extends AbstractController
             @ID_PARAM = 1
           "
         )->fetchAll();
-
+          
         $totalAtraso += $res[0]['VALOR'];
       }
     }
@@ -160,7 +160,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $clientesExp = explode(',', $clientes);
     $duplicatasVencer = 0;
-
+    
     if (count($clientesExp) > 0) {
       for ($i=0; $i < count($clientesExp); $i++) {
         $res = $connection->query(
@@ -174,7 +174,7 @@ class HistoricoFinanceiroController extends AbstractController
         $duplicatasVencer += $res[0]['VALOR'];
       }
     }
-
+    
     return $duplicatasVencer;
   }
 
@@ -192,13 +192,13 @@ class HistoricoFinanceiroController extends AbstractController
             @ID_PARAM = 1
           "
         )->fetchAll();
-
-        if (count($res) > 0) {
+       
+        if (count($res) > 0) { 
           $notasDebito += $res[0]['total'];
         }
       }
     }
-
+   
     return $notasDebito;
   }
 

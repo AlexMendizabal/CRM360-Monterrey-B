@@ -284,6 +284,51 @@ class SapController extends AbstractController
 
     /**
      * @Route(
+     *  "/sap/verificar_conexion_sap",
+     *  name="sap.verificar_conexion_sap",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function verificaConectionSAp(Connection $connection)
+    {
+        try {
+            $helper = new Helper();
+            $ruta = '/VerificarConectividad';
+            $data = array(
+                'Usuario' => 'crm360',
+                'Password' => 'M1ddlewareCRM360$/'
+            );
+            $respuesta = $helper->conexionSap($ruta, $data);
+            if (empty($respuesta['CodigoRespuesta'])) {
+                return new JsonResponse([
+                    'response' => 200,
+                    'success' => true,
+                    'message' => $respuesta['Mensaje']
+                ]);
+            } else {
+                $message = array(
+                    'response' => 204,
+                    'success' => false,
+                    'message' => $respuesta['Mensaje']
+                );
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'response' => 400,
+                'success' => false,
+                'message' => $respuesta['Mensaje'],
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
      *  "/sap/agregar_item",
      *  name="sap.agregar_item",
      *  methods={"POST"}
@@ -296,7 +341,7 @@ class SapController extends AbstractController
             $helper = new Helper();
             $jsonData = $request->getContent();
             $data = json_decode($jsonData, true);
-
+           
             $item_code = $data['itemCode'];
             $item_name = $data['itemName'];
             $familia = $data['familia'];
@@ -309,9 +354,8 @@ class SapController extends AbstractController
             $id_linea = null;
             $arrayMaterial = array();
 
-            if (
-                isset($item_code) && $item_code != null  &&  isset($item_name)  && $item_name != null && isset($linea) && $linea != null
-                && isset($unidad)  && $unidad != null && isset($peso) && $peso != null && isset($estado) && $estado != null
+            if (isset($item_code) && $item_code != null && isset($item_name) && $item_name != null && isset($linea) && $linea != null
+                && isset($unidad) && $unidad != null && isset($peso) && $peso != null && isset($estado) && $estado != null
             ) {
                 //Helper buscar unidad de acuerdo a la abreviatura
                 $buscar_unidad = $helper->buscarUnidad($connection, $unidad);
@@ -327,7 +371,6 @@ class SapController extends AbstractController
                     $dato_unidad = $connection->insert('UNIDADES', $unidad);
                     $id_unidad = $connection->lastInsertId();
                 }
-
                 //Helper para buscar familia
                 $buscar_familia = $helper->buscarFamilia($connection, $familia);
                 if (!empty($buscar_familia) and  $buscar_familia != false) {
@@ -335,7 +378,6 @@ class SapController extends AbstractController
                 } else {
                     $id_familia = $helper->insertFamilia($connection, $familia);
                 }
-
                 //Helper para buscar Grupo
                 $buscar_grupo = $helper->buscarGrupLinea($connection, $grupo);
 
@@ -350,9 +392,8 @@ class SapController extends AbstractController
                         }
                     }
                 } else {
-                    $id_grupo = $helper->insertGrupo($connection,  $grupo, $id_familia);
+                    $id_grupo = $helper->insertGrupo($connection, $grupo, $id_familia);
                 }
-
                 //Helper buscar sublinea de acuerdo a la abreviatura
                 $buscar_clase = $helper->buscarLinea($connection, $linea);
                 if ($buscar_clase != false and !empty($buscar_clase)) {
@@ -372,23 +413,22 @@ class SapController extends AbstractController
                 }
 
                 $buscar_item =  $helper->buscarItem($connection,  $item_code);
-
-
-                if ($buscar_item !== false) {
+                
+                if (!empty($buscar_item)) {
                     $arrayMaterial = ([
-                        'id_material' => $buscar_item['ID_CODIGOMATERIAL'],
+                        'id_material' => (int)$buscar_item[0]['ID_CODIGOMATERIAL'],
                         'itemCode' => $item_code,
                         'itemName' => $item_name,
-                        'id_linea' => $id_linea,
+                        'id_linea' => (int)$id_linea,
                         'unidad' => $codigo_unidad,
-                        'id_unidad' => $id_unidad,
+                        'id_unidad' => (int)$id_unidad,
                         'peso' => $peso,
                         'estado' => $estado,
                     ]);
                     //Helper actualizar item
                     $actualizar_material = $helper->actualizarItem($connection, $arrayMaterial);
 
-                    if ($actualizar_material !== false) {
+                    if (!empty($actualizar_material)) {
                         $message = array(
                             'response' => 200,
                             'estado' => true,
@@ -412,10 +452,10 @@ class SapController extends AbstractController
                         'peso' => $peso,
                         'estado' => $estado,
                     ]);
-
                     //Helper insertar item
                     $insertarMaterial = $helper->insertarItem($connection, $arrayMaterial);
-                    if ($insertarMaterial !== false) {
+                    dd($insertarMaterial);
+                    if (!empty($insertarMaterial)) {
                         $message = array(
                             'response' => 200,
                             'estado' => true,
@@ -459,7 +499,6 @@ class SapController extends AbstractController
      */
     public function actualizarItem(Connection $connection, Request $request)
     {
-
         $jsonData = $request->getContent();
         $data = json_decode($jsonData, true);
         $item_code = $data['itemCode'];
@@ -579,48 +618,334 @@ class SapController extends AbstractController
     {
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        // Insertar el cliente
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
-        $insertCliente = $helper->insertClient($connection, $data);
-        //dd($insertCliente);
+        $verificarCliente = $helper->verificarCliente($connection, $data['codigo_cliente']);
+        /*  $arrayUbicacion = [];
+        $arrayContacto = [];
+ */
+        $ubClie = [];
+        $contacto = [];
+        if ($verificarCliente !== false) {
+            $message = [
+                //"response" => 204,
+                "CodigoRespuesta" => 204,
+                "Estado" => false,
+                "Mensaje" => 'Error, el codigo_cliente ya fue registrado'
+            ];
+        } else {
+
+            $insertCliente = $helper->insertClient($connection, $data);
+            //dd
+
+            if ($insertCliente['codigoRespuesta'] == 200) {
+                $id_cliente = $insertCliente['data']['cliente'];
+                $codigo_cliente = $insertCliente['data']['codigo_cliente'];
+                foreach ($data['ubicacion'] as $value) {
+                    $ubClie[] = $helper->insertUbClient($connection, $value, $id_cliente, $codigo_cliente);
+                }
+                $estadoEnTodasUbClie = false;
+                $estadoEnTodosContClie = false;
 
 
-        if ($insertCliente['codigoRespuesta'] == 200) {
-            $id_cliente = $insertCliente['data']['cliente'];
-            $codigo_cliente = $insertCliente['data']['codigo_cliente'];
-            // Insertar ubicaciones
+                foreach ($ubClie as $value) {
+                    if (isset($value['estado'])) {
+                        $estadoEnTodasUbClie = true;
+                        break;
+                    } else {
+                        $estadoEnTodasUbClie = false;
+                    }
+                }
+
+                if ($estadoEnTodasUbClie) {
+                    $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
+                    if ($traerContactos !== false) {
+                        $traerMedioContacto = $helper->traerMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                        if ($traerMedioContacto !== false) {
+                            $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                        }
+                        $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
+                    }
+                    foreach ($ubClie as $value) {
+                        $borrarUbicaciones = $helper->borrarUbicaciones($connection, $value['id_ubicacion']);
+                    }
+                    $borrarCliente = $helper->borrarClientes($connection, $id_cliente);
+
+                    if ($borrarCliente !== false) {
+                        $message = [
+                            "CodigoRespuesta" => 204,
+                            "Estado" => false,
+                            "Mensaje" => $ubClie,
+                        ];
+                    }
+                } else {
+                    foreach ($data['contactos'] as $value) {
+                        $contacto[] = $helper->insertContacto($connection, $value, $id_cliente);
+                    }
+
+                    foreach ($contacto as $value) {
+                        if (isset($value['estado'])) {
+                            $estadoEnTodosContClie = true;
+                            break;
+                        } else {
+                            $estadoEnTodosContClie = false;
+                        }
+                    }
+
+                    if ($estadoEnTodosContClie) {
+                        $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
+                        if ($traerContactos !== false) {
+                            $traerMedioContacto = $helper->traerMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                            if ($traerMedioContacto !== false) {
+                                $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                            }
+                            $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
+                        }
+                        $borrarCliente = $helper->borrarClientes($connection, $id_cliente);
+                        //dd($borrarCliente);
+
+                        if ($borrarCliente !== false) {
+                            $message = [
+                                "CodigoRespuesta" => 204,
+                                "Estado" => false,
+                                "Mensaje" => $contacto,
+                            ];
+                        }
+                    } else {
+                        $insertCliente['data']['ciudad'] = $ubClie[0]['ciudad'];
+
+
+                        $data_cliente = [
+                            "codigo_cliente" => $codigo_cliente,
+                            "id_cliente" => $id_cliente,
+                            "nombres" => $insertCliente['data']['nombres'],
+                            "carnet" => $insertCliente['data']['nit'],
+                            "telefono" => $insertCliente['data']['telefono'],
+                            "celular" => $insertCliente['data']['celular'],
+                            "nit" => $insertCliente['data']['nit'],
+                            "razon_social" => $insertCliente['data']['razonSocial'],
+                            "rubro" => $insertCliente['data']['rubro'],
+                            "id_vendedor" => $insertCliente['data']['sap_vendedor'],
+                            "tipo_cliente" => $insertCliente['data']['tipo_cliente'],
+                            "tipo_persona" => $insertCliente['data']['tipo_persona'],
+                            "ciudad" => $ubClie[0]['ciudad_sigla'],
+                            "condicion_pago" => "Contado",
+                            "nombre_factura" => $insertCliente['data']['nombre_factura'],
+                            "ubicacion" => $ubClie,
+                            "contactos" => $contacto
+                        ];
+                        //dd($ubClie);
+                        if (isset($ubClie)   &&   isset($contacto)) {
+                            if ($swSap === true) {
+
+                                $required_fields = [
+                                    "id_cliente",
+                                    "nombres",
+                                    "carnet",
+                                    "telefono",
+                                    /* "celular", */
+                                    "nit",
+                                    "razon_social",
+                                    /* "rubro", */
+                                    "id_vendedor",
+                                    "tipo_persona",
+                                    "ciudad",
+                                    /* "nombre_factura", */
+                                    "ubicacion",
+                                    /* "contactos" */
+                                ];
+
+                                $missing_fields = [];
+                                foreach ($required_fields as $field) {
+                                    if (!array_key_exists($field, $data_cliente) || empty($data_cliente[$field])) {
+                                        $missing_fields[] = $field;
+                                    }
+                                }
+                                if (!empty($missing_fields)) {
+                                    $traerUbicaciones = $helper->traerDireccionCliente($connection, $id_cliente);
+                                    if ($traerUbicaciones !== false) {
+                                        $eliminarDireccion = $helper->borrarUbicaciones($connection, $id_cliente);
+                                        if ($eliminarDireccion !== false) {
+                                            $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
+                                            if ($traerContactos !== false) {
+                                                $traerMedioContacto = $helper->traerMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                                if ($traerMedioContacto !== false) {
+                                                    $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                                }
+                                                $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
+                                                //dd($borrarContactos);
+                                            }
+                                        }
+                                    } else {
+                                        $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
+                                        if ($traerContactos !== false) {
+                                            $traerMedioContacto = $helper->traerMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                            if ($traerMedioContacto !== false) {
+                                                $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                            }
+                                            $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
+                                        }
+                                    }
+                                    $eliminarClientes = $helper->borrarClientes($connection, $id_cliente);
+                                    if ($eliminarClientes !== false) {
+                                        $message = [
+                                            "CodigoRespuesta" => 204,
+                                            "Estado" => false,
+                                            "Mensaje" => "Campos faltantes: " . implode(', ', $missing_fields),
+                                        ];
+                                    }
+                                } else {
+                                    $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
+                                    //dd($resp_sap);
+                                    if (isset($resp_sap['response']) && isset($resp_sap['detalle']) && $resp_sap['response'] == 200) {
+                                        $message = [
+                                            "CodigoRespuesta" => 200,
+                                            "Estado" => true,
+                                            "Mensaje" => "Se registro correctamente",
+                                        ];
+                                    } else {
+                                        $traerUbicaciones = $helper->traerDireccionCliente($connection, $id_cliente);
+                                        if ($traerUbicaciones !== false) {
+                                            $eliminarDireccion = $helper->borrarUbicaciones($connection, $id_cliente);
+                                            if ($eliminarDireccion !== false) {
+                                                $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
+                                                if ($traerContactos !== false) {
+                                                    $traerMedioContacto = $helper->traerMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                                    if ($traerMedioContacto !== false) {
+                                                        $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                                    }
+                                                    $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
+                                                    //dd($borrarContactos);
+                                                }
+                                            }
+                                        } else {
+                                            $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
+                                            if ($traerContactos !== false) {
+                                                $traerMedioContacto = $helper->traerMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                                if ($traerMedioContacto !== false) {
+                                                    $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
+                                                }
+                                                $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
+                                            }
+                                        }
+                                        $eliminarClientes = $helper->borrarClientes($connection, $id_cliente);
+                                        if ($eliminarClientes !== false) {
+                                            $message = [
+                                                "CodigoRespuesta" => 204,
+                                                "Estado" => true,
+                                                "Mensaje" => 'SAP: ' . $resp_sap['data'],
+                                            ];
+                                        }
+                                    }
+                                }
+                            } else {
+                                $message = [
+                                    "CodigoRespuesta" => 200,
+                                    "Estado" => true,
+                                    "Mensaje" => "Registrado exitosamente en CRM360"
+                                ];
+                            }
+                        } else {
+                            $message = [
+                                "CodigoRespuesta" => 204,
+                                "Estado" => false,
+                                "Mensaje" => "Son obligatorios los datos de contacto y direccion"
+                            ];
+                        }
+                    }
+                }
+            } else {
+                $message = [
+                    "CodigoRespuesta" => 204,
+                    "Estado" => false,
+                    "Mensaje" => $insertCliente['detalles']
+                ];
+            }
+        }
+        $response = new JsonResponse($message);
+        return $response;
+    }
+
+
+
+    /**
+     * @Route(
+     *  "/sap/cliente_insert2",
+     *  name="sap.cliente_insert2",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sapInsertCliente2(Connection $connection, Request $request)
+    {
+        $helper = new Helper();
+        $data = json_decode($request->getContent(), true);
+        $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
+        $id_vendedor_sap = 0;
+        $rubro = '';
+        $array_ubicaciones = array();
+        $array_contactos = array();
+        //dd($data);
+
+        if ($swSap == true) {
+
+            $traerCodigoVendedor = $helper->traerVendedorSap($connection, $data['id_vendedor']);
+            if ($traerCodigoVendedor !== false) {
+                $id_vendedor_sap = $traerCodigoVendedor[0]['codigo_sap'];
+            }
+
+            $id_setor_actividade  = isset($data['id_rubro']) ? $data['id_rubro'] : 0;
+            $rubro2 = $helper->buscarRubro($connection, $id_setor_actividade);
+            if ($rubro2 !== false) {
+                $rubro = $rubro2[0]['descricao'];
+            }
+
+            //$id_ciudad = isset($data['id_ciudad']) ? $data['id_ciudad'] :  0;
+            $buscarCiudad = $helper->buscarCiudad2($connection, $data['ubicacion'][0]['id_ciudad']);
+            $ciudad = $buscarCiudad['nombre_ciudad'];
+            $sigla_ciudad = $buscarCiudad['sigla'];
+
             foreach ($data['ubicacion'] as $value) {
-                $ubClie[] = $helper->insertUbClient($connection, $value, $id_cliente, $codigo_cliente);
-            }
+                $buscarCiudad = $helper->buscarCiudad2($connection, (int)$value['id_ciudad']);
+                $ciudad_nombre = $buscarCiudad['nombre_ciudad'];
+                $ciudad_sigla = $buscarCiudad['sigla'];
 
-            // Insertar contactos
-            foreach ($data['contactos'] as $value) {
-                $contacto[] = $helper->insertContacto($connection, $value, $id_cliente);
+                $array_ubicaciones[] = ([
+                    "ubicacion" => $value['ubicacion'],
+                    "id_cliente" => '',
+                    "direccion" => $value['direccion'],
+                    "latitud" => $value['latitud'],
+                    "longitud" => $value['longitud'],
+                    "ciudad" => $ciudad_nombre,
+                    "ciudad_sigla" => $ciudad_sigla
+                ]);
             }
-            $insertCliente['data']['ciudad'] = $ubClie[0]['ciudad'];
 
             $data_cliente = [
-                "codigo_cliente" => $codigo_cliente,
-                "id_cliente" => $id_cliente,
-                "nombres" => $insertCliente['data']['nombres'],
-                "carnet" => $insertCliente['data']['nit'],
-                "telefono" => $insertCliente['data']['telefono'],
-                "celular" => $insertCliente['data']['celular'],
-                "nit" => $insertCliente['data']['nit'],
-                "razon_social" => $insertCliente['data']['razonSocial'],
-                "rubro" => $insertCliente['data']['rubro'],
-                "id_vendedor" => $insertCliente['data']['sap_vendedor'],
-                "tipo_cliente" => $insertCliente['data']['tipo_cliente'],
-                "tipo_persona" => $insertCliente['data']['tipo_persona'],
-                "ciudad" => $ubClie[0]['ciudad_sigla'],
+                "codigo_cliente" => '',
+                "id_cliente" => '',
+                "nombres" => $data['nombres'],
+                "carnet" => $data['cnpj_cpf'],
+                "telefono" => $data['telefono'],
+                "celular" => $data['celular'],
+                "nit" => $data['nit'],
+                "razon_social" => $data['razonSocial'],
+                "rubro" => $rubro,
+                "id_vendedor" =>  $id_vendedor_sap,
+                "tipo_cliente" => $data['id_tipo_cliente'],
+                "tipo_persona" => $data['tipo_persona'],
+                "ciudad" => $sigla_ciudad,
                 "condicion_pago" => "Contado",
-                "nombre_factura" => $insertCliente['data']['nombre_factura'],
-                "ubicacion" => $ubClie,
-                "contactos" => $contacto
+                "nombre_factura" => $data['nombre_factura'],
+                "ubicacion" => $array_ubicaciones,
+                "contactos" => $data['contactos']
             ];
-            if ($swSap == true && count($ubClie) > 0 &&   count($contacto) > 0) {
-                $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
-                if ($resp_sap['response'] == 200) {
+
+            $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
+            if ($resp_sap['response'] == 200) {
+                $insertarCliente = $this->insertarClienteData($connection,  $data);
+                if ($insertarCliente !== false) {
                     $message = [
                         "response" => 200,
                         "estado" => true,
@@ -629,34 +954,61 @@ class SapController extends AbstractController
                 } else {
                     $message = [
                         "response" => 204,
-                        "estado" => true,
-                        "detalle" => 'Registrado en local, SAP: ' . $resp_sap['data'],
+                        "estado" => false,
+                        "detalle" => 'SAP: registrado, error al registrar en CRM',
                     ];
                 }
-                //dd($resp_sap);
+            } else {
+                $message = [
+                    "response" => 204,
+                    "estado" => true,
+                    "detalle" => 'SAP: ' . $resp_sap['data'],
+                ];
+            }
+        } else {
+            $insertarCliente = $this->insertarClienteData($connection,  $data);
+            if ($insertarCliente !== false) {
+                $message = [
+                    "response" => 200,
+                    "estado" => true,
+                    "detalle" => "Se registro correctamente",
+                ];
             } else {
                 $message = [
                     "response" => 204,
                     "estado" => false,
-                    "detalle" => "Son obligatorios los datos de contacto y direccion"
+                    "detalle" => "Error al registrar los datos",
                 ];
             }
-        } else {
-            $message = [
-                "response" => 204,
-                "estado" => false,
-                "detalle" => "No se registró el cliente"
-            ];
         }
         $response = new JsonResponse($message);
         return $response;
     }
 
+    public function insertarClienteData($connection, $data)
+    {
+        $helper = new Helper();
+        $insertCliente = $helper->insertClient($connection, $data);
+        if ($insertCliente['codigoRespuesta'] == 200) {
+            $id_cliente = $insertCliente['data']['cliente'];
+            $codigo_cliente = $insertCliente['data']['codigo_cliente'];
+            foreach ($data['ubicacion'] as $value) {
+                $ubClie[] = $helper->insertarUbicacionCliente($connection, $value, $id_cliente, $codigo_cliente);
+            }
+            foreach ($data['contactos'] as $value) {
+                $contacto[] = $helper->insertContacto($connection, $value, $id_cliente);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * @Route(
-     *  "/sap/cliente_update",
-     *  name="sap.cliente_update",
+     *  "/sap/cliente_updateSap",
+     *  name="sap.cliente_updateSap",
      *  methods={"POST"}
      * )
      * @param Connection $connection
@@ -669,12 +1021,14 @@ class SapController extends AbstractController
         //dd($data);
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
+        $array_ubicaciones_respaldo = array();
+        $array_contactos_respaldo = array();
 
         if (filter_var($data['id_cliente'], FILTER_VALIDATE_INT) == false) {
             $message = [
-                "codigoRespuesta" => 204,
-                "estado" => false,
-                "detalle" => 'el ID debe ser numerico'
+                "CodigoRespuesta" => 204,
+                "Estado" => false,
+                "Mensaje" => 'el ID debe ser numerico'
             ];
         } else {
             $respuestaClient = $helper->updateClient($connection, $data);
@@ -683,6 +1037,15 @@ class SapController extends AbstractController
                 //Actualizar ubicaciones
                 $traerUbicaciones = $helper->traerDireccionCliente($connection, $data['id_cliente']);
                 if ($traerUbicaciones !== false) {
+                    foreach ($traerUbicaciones as $ubicacion) {
+                        $array_ubicaciones_respaldo[] = ([
+                            'ubicacion' => $ubicacion['ubicacion'],
+                            'direccion' => $ubicacion['logradouro'],
+                            'latitud' => $ubicacion['latitude'],
+                            'longitud' => $ubicacion['longitude'],
+                            'id_ciudad' => (int)$ubicacion['id_ciudad']
+                        ]);
+                    }
                     $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
                     if ($borrarUbicaciones !== false) {
                         if (count($data['ubicacion']) > 0) {
@@ -700,16 +1063,48 @@ class SapController extends AbstractController
                     if (count($data['ubicacion']) > 0) {
                         foreach ($data['ubicacion'] as &$ubicacion) {
                             $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
-                            $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
-                            $ubicacion['ciudad'] = $buscarCiudad['sigla'];
+                            /* $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
+                                $ubicacion['ciudad'] = $buscarCiudad['sigla']; */
                             $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
                             $ubicacion['id_cliente'] = $data['id_cliente'];
+                            ///dd($ubicacion);
                             $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
                         }
                     }
                 }
                 $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
+                //dd($traerContactos);
                 if ($traerContactos !== false) {
+                    foreach ($traerContactos as $contacto) {
+                        $partes = explode(' ', $contacto['ds_cont']);
+
+                        if (isset($partes[0]) && is_string($partes[0])) {
+                            $nombre = trim($partes[0]);
+                        }
+
+                        if (isset($partes[1]) && is_string($partes[1])) {
+                            $apellido_paterno = trim($partes[1]);
+                        }
+
+                        if (isset($partes[2]) && is_string($partes[2])) {
+                            $apellido_materno = trim($partes[2]);
+                        }
+                        $traerMedioContactos = $helper->traerMedioContacto($connection, (int)$contacto['id_cont']);
+                        if (count($traerMedioContactos) > 0) {
+                            $array_contactos_respaldo[] = ([
+                                'contacto' => $contacto['contacto'],
+                                'nombres_contacto' => $nombre,
+                                'apellido_contacto' => $apellido_paterno,
+                                'apellido2_contacto' => $apellido_materno,
+                                'telefono_contacto' => $traerMedioContactos['telefono'],
+                                'celular_contacto' => $traerMedioContactos['celular'],
+                                'direccion_contacto' => $contacto['direccion'],
+                                'latitude_contacto' => $contacto['latitude'],
+                                'longitude_contacto' => $contacto['longitud']
+                            ]);
+                        }
+                        $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$contacto['id_cont']);
+                    }
                     $borrarContactos = $helper->borrarContactos($connection, (int)$data['id_cliente']);
                     if ($borrarContactos !== false) {
                         if (count($data['contactos']) > 0) {
@@ -742,7 +1137,7 @@ class SapController extends AbstractController
                     $tipo_cliente = $traerTipoCliente['nombre_tipo'];
                 }
 
-                $buscarCiudad = $helper->buscarCiudad2($connection, $data['ubicacion'][0]['id_ciudad']);
+                $buscarCiudad = $helper->buscarCiudad2($connection, (int)$data['ubicacion'][0]['id_ciudad']);
                 $sigla_ciudad = $buscarCiudad['sigla'];
 
 
@@ -771,30 +1166,47 @@ class SapController extends AbstractController
                     //dd($resp_sap); 
                     if ($resp_sap['response'] == 200) {
                         $message = [
-                            "response" => 200,
-                            "estado" => true,
-                            "detalle" => "Se registro correctamente",
+                            "CodigoRespuesta" => 200,
+                            "Estado" => true,
+                            "Mensaje" => "Se registro correctamente",
                         ];
                     } else {
+                        $traerUbicaciones = $helper->traerDireccionCliente($connection, $data['id_cliente']);
+                        //dd($traerUbicaciones);
+                        if (count($traerUbicaciones) > 0) {
+                            $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
+                        }
+                        dd($array_ubicaciones_respaldo);
+                        $insertarUbicaciones = $helper->insertUbClient($connection, $array_ubicaciones_respaldo, $data['id_cliente'],  $data['codigo_cliente']);
+
+                        $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
+                        if (count($traerContactos) > 0) {
+                            foreach ($traerContactos as $contacto) {
+                                $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$contacto['id_cont']);
+                            }
+                            $borrarContactos = $helper->borrarContactos($connection, (int)$data['id_cliente']);
+                        }
+                        $insertarContactos = $helper->insertContacto($connection, $array_contactos_respaldo, $data['id_cliente']);
+
                         $message = [
-                            "response" => 204,
-                            "estado" => true,
-                            "detalle" => 'Actualizado en local, SAP: ' . $resp_sap['data'],
+                            "CodigoRespuesta" => 204,
+                            "Estado" => true,
+                            "Mensaje" => 'SAP: ' . $resp_sap['data'],
                         ];
                     }
                 } else {
                     $message = [
-                        "response" => 200,
-                        "estado" => true,
-                        "detalle" => "Se modificó Cliente: " . $respuestaClient['estado'] . ", Direccion: " . $respuestaDirect['estado'] . ", Contacto: " . $respuestaContacto['estado'],
-                        "response_sap" => $sap
+                        "CodigoRespuesta" => 200,
+                        "Estado" => true,
+                        "Mensaje" => "No se actualizo el registro en SAP",
                     ];
                 }
             } else {
                 $message = [
-                    "response" => 500,
-                    "estado" => false,
-                    "detalle" => "Error: Alguna de las variables no está inicializada correctamente."
+                    "CodigoRespuesta" => 204,
+                    "Estado" => false,
+                    "Mensaje" => "Alguna de las variables no se inicializó correctamente",
+
                 ];
             }
         }
@@ -802,6 +1214,319 @@ class SapController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
+    }
+
+
+
+
+    /**
+     * @Route(
+     *  "/sap/cliente_update",
+     *  name="sap.cliente_update",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+
+    public function sapUpdateClienteSap(Connection $connection, Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        /* dd($data); */
+        $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
+        $helper = new Helper();
+
+        $data_sap = array();
+        $id_setor_actividade  = isset($data['id_rubro']) ? $data['id_rubro'] : 0;
+        $rubro2 = $helper->buscarRubro($connection, (int)$id_setor_actividade);
+        $rubro = $rubro2[0]['descricao'];
+
+        $traerCodigoVendedor = $helper->traerVendedorSap($connection, $data['id_vendedor']);
+        if ($traerCodigoVendedor !== false) {
+            $id_vendedor_sap = $traerCodigoVendedor[0]['codigo_sap'];
+        }
+
+        if (!isset($data['codigo_cliente'])) {
+            $message = [
+                "CodigoRespuesta" => 204,
+                "Estado" => false,
+                "Mensaje" => "El codigo de cliente es un campo obligatorio",
+            ];
+        }
+
+        //dd($data['tipo_cliente']);
+        if (isset($data['id_tipo_cliente'])) {
+            $traerTipoCliente = $helper->buscarTipoCliente($connection, $data['id_tipo_cliente']);
+            if ($traerTipoCliente !== false) {
+                $tipo_cliente = $traerTipoCliente['nombre_tipo'];
+            }
+        }
+
+        $buscarCiudad = $helper->buscarCiudad2($connection, (int)$data['ubicacion'][0]['id_ciudad']);
+        $sigla_ciudad = $buscarCiudad['sigla'];
+
+
+        $buscarRubro = $helper->buscarRubro($connection, $data['rubro']);
+        if ($buscarRubro !== false) {
+            $id_rubro = $buscarRubro[0]['id_cnae'];
+            $data['id_rubro'] = $id_rubro;
+        }
+
+        $buscarTipoPersona = [
+            'Sociedades' => 'S',
+            'Privado' => 'P',
+            'Gobierno' => 'G',
+            'Empleado' => 'E',
+        ];
+        //dd($buscarTipoPersona[$data['tipo_persona']]);
+        $id_tipo_persona  = isset($data['tipo_persona']) ? $buscarTipoPersona[$data['tipo_persona']] : null;
+        $data['id_tipo_persona'] = $id_tipo_persona;
+
+        if (isset($data['tipo_cliente'])) {
+            $buscarTipoCliente = $helper->buscarTipoCliente($connection, $data['tipo_cliente']);
+            $id_tipo_cliente = (int)$buscarTipoCliente['id'];
+            //dd($buscarTipoCliente);
+            $data['id_tipo_cliente'] = $id_tipo_cliente;
+        }
+
+        $arrayUbicacion = [];
+        $arrayContacto = [];
+
+        $arrayUbicacion = $data['ubicacion'];
+
+        foreach ($arrayUbicacion as &$ubicacion) {
+            $buscarCiudad = $helper->buscarCiudad2($connection, (int)$ubicacion['id_ciudad']);
+            if ($buscarCiudad !== false) {
+                $ubicacion['ciudad'] = $buscarCiudad['sigla'];
+            } else {
+                $ubicacion['ciudad'] = '';
+            }
+        }
+        
+
+        unset($ubicacion);        
+        $arrayContacto = $data['contactos'];
+        
+        $data_sap = ([
+            'codigo_cliente' => $data['codigo_cliente'],
+            'id_cliente' => $data['id_cliente'],
+            'nombres' => $data['nombres'],
+            'carnet' => $data['ci'],
+            'telefono' => $data['telefono'],
+            'celular' => $data['celular'],
+            'nit' => $data['nit'],
+            'razon_social' => $data['razon_social'],
+            'rubro' => $rubro,
+            'id_vendedor' =>  $id_vendedor_sap,
+            'tipo_cliente' => $tipo_cliente,
+            'tipo_persona' => $data['tipo_persona'],
+            'ciudad' => $sigla_ciudad,
+            'condicion_pago' => 'Contado',
+            'nombre_factura' =>  $data['nombre_factura'],
+            'ubicacion' => $arrayUbicacion,
+            'contactos' => $arrayContacto,
+            'id_estado' => $data['id_estado'],
+        ]);
+
+        if ($swSap === true) {
+           
+            $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
+            if ($resp_sap['estado'] == true) {
+
+                $actualizarLocal = $this->actualizarClienteLocal($connection, $data, $helper);
+                if ($actualizarLocal['estado'] == true) {
+                    $message = [
+                        "CodigoRespuesta" => 200,
+                        "Estado" => true,
+                        "Mensaje" => 'SAP: ' . $mensaje = $resp_sap['data'],
+                    ];
+                } else {
+                    $message = [
+                        "CodigoRespuesta" => 204,
+                        "Estado" => false,
+                        "Mensaje" => $actualizarLocal['detalle'],
+                    ];
+                }
+            } else {
+                $message = [
+                    "CodigoRespuesta" => 204,
+                    "Estado" => false,
+                    "Mensaje" => 'SAP: ' . $mensaje = $resp_sap['data'],
+                ];
+            }
+        } else {
+
+            $actualizarLocal = $this->actualizarClienteLocal($connection, $data, $helper);
+            if ($actualizarLocal['Estado'] == true) {
+                $message = [
+                    "CodigoRespuesta" => 200,
+                    "Estado" => true,
+                    "Mensaje" => 'Actualizado correctamente en CRM360.',
+                ];
+            } else {
+                $message = [
+                    "CodigoRespuesta" => 204,
+                    "Estado" => false,
+                    "Mensaje" => $actualizarLocal['Mensaje'],
+                ];
+            }
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    public function actualizarClienteLocal($connection, $data, $helper)
+    {
+        //dd('aqui');
+        $respuesta = array();
+        $id_cliente = '';
+        if (isset($data['id_cliente'])) {
+            $id_cliente = (int)$data['id_cliente'];
+        } else if ($data['codigo_cliente']) {
+            $id_cliente = $data['codigo_cliente'];
+        }
+        $traerCliente = $helper->traerCliente($connection, $id_cliente);
+        if ($traerCliente !== false) {
+            $data['id_cliente'] = $traerCliente[0]['id_cliente'];
+        }
+        $respuestaClient = $helper->updateClient($connection, $data);
+        if ($respuestaClient['Estado'] === true) {
+            //Actualizar ubicaciones
+            /* dd($data['id_cliente']); */
+            //dd('aqui');
+            if (count($data) > 0) {
+                $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
+                //dd($traerUbicaciones);
+                if ($traerUbicaciones !== false) {
+                    $swRover = false;
+                    foreach ($traerUbicaciones as $ubicacion) {
+                        $array_ubicaciones_respaldo[] = [
+                            'id' => (int)$ubicacion['id_endereco'],
+                            'ubicacion' => $ubicacion['ubicacion'],
+                            'direccion' => $ubicacion['logradouro'],
+                            'latitud' => $ubicacion['latitude'],
+                            'longitud' => $ubicacion['longitude'],
+                            'id_ciudad' => (int)$ubicacion['id_ciudad']
+                        ];
+                    }
+
+                    //dd($array_ubicaciones_respaldo);
+                    /* $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$data['id_cliente']);
+                    if ($borrarUbicaciones === true) {
+*/
+                    foreach ($data['ubicacion'] as &$ubicacion) {
+                        $buscarCiudad = $helper->buscarCiudadAbreviatura($connection, $ubicacion['ciudad']);
+                        //dd($buscarCiudad);
+                        $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
+                        $ubicacion['ciudad'] = $buscarCiudad['sigla'];
+                        $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
+                        $ubicacion['id_cliente'] = $data['id_cliente'];
+                        //dd($ubicacion);
+                        //dd($ubicacion);
+                        $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
+                        if ($insertarUbicaciones == false) {
+                            $swRover = true;
+                            break;
+                        }
+                        /*   } */
+
+                        if ($swRover === true) {
+                            $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
+                            if ($traerUbicaciones !== false) {
+                                $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$data['id_cliente']);
+                            }
+                            //dd($borrarUbicaciones);
+                            foreach ($array_ubicaciones_respaldo as $array) {
+                                $insertarUbicaciones = $helper->insertUbClient($connection, $array, $data['id_cliente'],  $data['codigo_cliente']);
+                            }
+                        } else {
+                            foreach ($array_ubicaciones_respaldo as $ubicacion) {
+                                $borrarUbicaciones = $helper->borrarUbicacionesId($connection, $ubicacion['id']);
+                                //dd($borrarUbicaciones);
+                            }
+                        }
+                    }
+                } else {
+                    //dd('aqui2');
+                    if (count($data['ubicacion']) > 0) {
+                        foreach ($data['ubicacion'] as &$ubicacion) {
+                            $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
+                            /* $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
+                            $ubicacion['ciudad'] = $buscarCiudad['sigla']; */
+                            $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
+                            $ubicacion['id_cliente'] = $data['id_cliente'];
+                            //dd($data);
+                            $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
+                            //dd($insertarUbicaciones);
+                            if ($insertarUbicaciones['estado'] === false) {
+                                $respuesta = ([
+                                    'CodigoRespuesta' => 204,
+                                    'Estado' => false,
+                                    'Mensaje' => $insertarUbicaciones['detalle']
+                                ]);
+                                return $respuesta;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
+            //dd($traerContactos);
+            if ($traerContactos !== false) {
+                foreach ($traerContactos as $contacto) {
+                    $partes = explode(' ', $contacto['ds_cont']);
+
+                    if (isset($partes[0]) && is_string($partes[0])) {
+                        $nombre = trim($partes[0]);
+                    }
+
+                    if (isset($partes[1]) && is_string($partes[1])) {
+                        $apellido_paterno = trim($partes[1]);
+                    }
+
+                    if (isset($partes[2]) && is_string($partes[2])) {
+                        $apellido_materno = trim($partes[2]);
+                    }
+                    $traerMedioContactos = $helper->traerMedioContacto($connection, (int)$contacto['id_cont']);
+                    if (count($traerMedioContactos) > 0) {
+                        $array_contactos_respaldo[] = ([
+                            'contacto' => $contacto['contacto'],
+                            'nombres_contacto' => $nombre,
+                            'apellido_contacto' => $apellido_paterno,
+                            'apellido2_contacto' => $apellido_materno,
+                            'telefono_contacto' => $traerMedioContactos['telefono'],
+                            'celular_contacto' => $traerMedioContactos['celular'],
+                            'direccion_contacto' => $contacto['direccion'],
+                            'latitude_contacto' => $contacto['latitude'],
+                            'longitude_contacto' => $contacto['longitud']
+                        ]);
+                    }
+                    $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$contacto['id_cont']);
+                }
+                $borrarContactos = $helper->borrarContactos($connection, (int)$data['id_cliente']);
+                if ($borrarContactos !== false) {
+                    if (count($data['contactos']) > 0) {
+                        foreach ($data['contactos'] as &$contactos) {
+                            $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                        }
+                    }
+                }
+            } else {
+                if (count($data['contactos']) > 0) {
+                    foreach ($data['contactos'] as &$contactos) {
+                        $insertarContactos = $helper->insertContacto($connection, $contactos, $data['id_cliente']);
+                    }
+                }
+            }
+            return $respuestaClient;
+        } else {
+            return $respuestaClient;
+        }
     }
 
 
@@ -817,14 +1542,21 @@ class SapController extends AbstractController
     {
         $helper = new Helper();
         try {
-
             $data = json_decode($request->getContent(), true);
-
-            $codigo_almacen = isset($data['codigo_almacen']) ?  $message = $helper->insertAlmacen($connection, $data) :  $message = [
-                "response" => 500,
-                "estado" => false,
-                "detalle" => 'Es nesesario el codigo de almacen',
-            ];
+            
+            if(!empty($data['codigo_almacen']))
+            {
+                $message = $helper->insertAlmacen($connection, $data);
+            }
+            else
+            {
+                $message = [
+                    "response" => 500,
+                    "estado" => false,
+                    "detalle" => 'Es nesesario el codigo de almacen',
+                ];
+            }
+             
         } catch (\Throwable $e) {
             $message = [
                 "response" => 401,
@@ -851,11 +1583,18 @@ class SapController extends AbstractController
         $helper = new Helper();
         try {
             $data = json_decode($request->getContent(), true);
-            $codigo_almacen = isset($data['codigo_almacen']) ?  $message = $helper->actualizaAlmacen($connection, $data) :  $message = [
-                "response" => 500,
-                "estado" => false,
-                "detalle" => 'Es nesesario el codigo de almacen',
-            ];
+            if(!empty($data['codigo_almacen']))
+            {
+                $message = $helper->actualizaAlmacen($connection, $data); 
+            }
+             else
+             {
+                $message = [ 
+                            "response" => 500,
+                            "estado" => false,
+                            "detalle" => 'Es nesesario el codigo de almacen',
+                        ];
+            }
         } catch (\Throwable $e) {
             $message = [
                 "response" => 401,
@@ -877,7 +1616,8 @@ class SapController extends AbstractController
      * )
      * @return JsonResponse
      */
-    function insertPrecios(Connection $connection, Request $request)
+    function 
+    insertPrecios(Connection $connection, Request $request)
     {
         try {
             $helper = new Helper();
@@ -914,13 +1654,40 @@ class SapController extends AbstractController
         try {
             $helper = new Helper();
             $data = json_decode($request->getContent(), true);
-            $cod_mate = isset($data['cod_mate']) ? $data['cod_mate'] :  $message = [
-                "response" => 500,
-                "estado" => false,
-                "detalle" => "Es  necesario el codigo de material"
-            ];
 
-            $message = $helper->actualizarPrecios($connection, $data);
+            if (!empty($data['cod_mate'])) {
+                $material = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$data['cod_mate']]);
+
+                if (!empty($material)) {
+                    $id_lista = $helper->buscarListaPrecio($connection, $data['lista']);
+                    if (!empty($id_lista)) {
+                        $prec_material = $connection->fetchOne('SELECT id FROM TB_PRECIO_MATERIAL WHERE cod_mate = ? and id_lista = ?', [$data['cod_mate'], $id_lista]);
+                        if (!empty($prec_material)) {
+                            $message = $helper->actualizarPrecios($connection, $data, $prec_material, $id_lista);
+                        } else {
+                            $message = $helper->insertPrecios($connection, $data,  $id_lista, $material);
+                        }
+                    } else {
+                        $message = [
+                            "response" => 204,
+                            "estado" => false,
+                            "detalle" => "No existe Lista de precio"
+                        ];
+                    }
+                } else {
+                    $message = [
+                        "response" => 204,
+                        "estado" => false,
+                        "detalle" => "No existe Material"
+                    ];
+                }
+            } else {
+                $message = [
+                    "response" => 500,
+                    "estado" => false,
+                    "detalle" => "Es  necesario el codigo de material"
+                ];
+            }
         } catch (\Throwable $e) {
             $message = [
                 "response" => 401,

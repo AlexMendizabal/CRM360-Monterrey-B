@@ -85,13 +85,13 @@ class DashboardVendedorController extends AbstractController
           $currYear = date('Y');
           $pastYear = date('Y', strtotime('-1 year'));
   
-          $firstDateCorrentePassado = DateController::getPrimeiroDiaMes($currMonth, $pastYear);
+          $firstDateCorrentePassado = DateController::getPrimeiroDiaMes($currMonth, $pastYear); 
           $lastDateCorrentePassado = DateController::getUltimoDiaMes($currMonth, $pastYear);
-  
+          
           $firstDateCorrentePresente = DateController::getPrimeiroDiaMes($currMonth, $currYear);
-          $lastDateCorrentePresente = date('d/m/Y');
-
-          $faturasCorrentePassado = $connection->query(
+          $lastDateCorrentePresente = date('Y/m/d');
+          
+          $faturasCorrentePassado = $connection->query( 
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
                 @DT_INIC = '{$firstDateCorrentePassado}',
@@ -101,7 +101,7 @@ class DashboardVendedorController extends AbstractController
                 @ID_PARA = '1'
             "
           )->fetchAll();
-
+          
           $faturasCorrentePresente = $connection->query(
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
@@ -111,12 +111,12 @@ class DashboardVendedorController extends AbstractController
                 @ID_ESCR = '{$idEscritorio}',
                 @ID_PARA = '1'
             "
-          )->fetchAll();
-  
+          )->fetchAll();     
+          
           if ((count($faturasCorrentePassado) > 0) && (count($faturasCorrentePresente) > 0)) {
             $totalPassado = 0;
             $totalPresente = 0;
-
+            
             for ($i=0; $i < count($faturasCorrentePassado); $i++) {
               if (isset($faturasCorrentePassado[$i]['TON'])) {
                 $totalPassado += $faturasCorrentePassado[$i]['TON'];
@@ -129,8 +129,8 @@ class DashboardVendedorController extends AbstractController
               
               /* Armazena os dados caso a data seja válida */
               // if (checkdate(intval($dateExp[1]), intval($dateExp[0]), intval($dateExp[2])) == 1) {
-                $arrFaturasCorrente[$i]['data'] = $date;
-                $arrFaturasCorrente[$i]['passado'] = $totalPassado;
+                $arrFaturasCorrente[$i]['DATA'] = $date; 
+                $arrFaturasCorrente[$i]['passado'] = $totalPassado; 
               // }
             }
 
@@ -141,15 +141,15 @@ class DashboardVendedorController extends AbstractController
               }
 
               if (isset($faturasCorrentePresente[$i]['DATA'])) {
-                $arrFaturasCorrente[$i]['presente'] = $totalPresente;
+                $arrFaturasCorrente[$i]['presente'] = $totalPresente; 
               }
             }
-
+            
             for ($i=0; $i < count($arrFaturasCorrente); $i++) {
               
               if ($i >= (count($faturasCorrentePresente) - 1)) {
                 if ($i == (count($faturasCorrentePresente) - 1)) {
-                  $projecaoVal = $totalPresente;
+                  $projecaoVal = $totalPresente; 
                 } else {
                   $projecaoVal += $totalPresente / count($faturasCorrentePresente);
                 }
@@ -173,10 +173,10 @@ class DashboardVendedorController extends AbstractController
 
           $passadoFirstDate = DateController::getPrimeiroDiaMes($pastMonth, $pastYear);
           $passadoLastDate  = DateController::getUltimoDiaMes($pastMonth, $pastYear);
-  
+          
           $correnteFirstDate = DateController::getPrimeiroDiaMes($pastMonth, $currYear);
           $correnteLastDate = DateController::getUltimoDiaMes($pastMonth, $currYear);
-  
+         
           $faturasPassadoPassado = $connection->query(
 
             "
@@ -188,7 +188,7 @@ class DashboardVendedorController extends AbstractController
                 @ID_PARA = '1'
             "
           )->fetchAll();
-  
+          
           $faturasPassadoPresente = $connection->query(
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
@@ -199,8 +199,8 @@ class DashboardVendedorController extends AbstractController
                 @ID_PARA = '1'
             "
           )->fetchAll();
-
-  
+          
+          
           if ((count($faturasPassadoPassado) > 0) && (count($faturasPassadoPresente) > 0)) {
             $totalPassado = 0;
             $totalPresente = 0;
@@ -208,13 +208,13 @@ class DashboardVendedorController extends AbstractController
             for ($i=0; $i < count($faturasPassadoPassado); $i++) {
               $totalPassado += $faturasPassadoPassado[$i]['TON'];
               
-              $date = substr($faturasPassadoPassado[$i]['DATA'], 0, 5);
+              $date = substr($faturasPassadoPassado[$i]['DATA'], 0, 5); 
               //  . '/' . $currYear;
               // $dateExp = explode('/', $date);
               // $date = $dateExp[2] . '-' . $dateExp[1] . '-' . $dateExp[0];
   
-              $arrFaturasPassado[$i]['data'] = $date;
-              $arrFaturasPassado[$i]['passado'] = $totalPassado;
+              $arrFaturasPassado[$i]['DATA'] = $date;
+              $arrFaturasPassado[$i]['TON'] = $totalPassado;
             }
 
             for ($i=0; $i < count($faturasPassadoPresente); $i++) {
@@ -227,7 +227,7 @@ class DashboardVendedorController extends AbstractController
           } else {
             $arrFaturasPassado = array();
           }
-  
+          
           if ((empty($arrFaturasCorrente)) && empty($arrFaturasPassado)) {
             $message = array('responseCode' => 204);
           } else {
@@ -261,7 +261,7 @@ class DashboardVendedorController extends AbstractController
           'message' => $e->getMessage()
         );
       }
-
+      
       $response = new JsonResponse($message);
       $response->setEncodingOptions(JSON_NUMERIC_CHECK);
       return $response;
@@ -338,7 +338,7 @@ class DashboardVendedorController extends AbstractController
             "
           )->fetchAll();
 
-          
+         
   
           if (count($linhasCorrente) > 0) {
             $arrLinhasCorrente = array();
@@ -778,7 +778,7 @@ class DashboardVendedorController extends AbstractController
    * @return JsonResponse
    */
   public function getCarteiraClientes(Connection $connection, Request $request, $idEscritorio, $idVendedor)
-  {
+  { 
     if ($request->isMethod('GET')) {
       try {
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -825,7 +825,7 @@ class DashboardVendedorController extends AbstractController
               @IDESCRITORIO = '{$idEscritorio}'
             "
           )->fetchAll();
-  
+          dd($res);
           if (count($res) > 0) {
             $ativos = new \stdClass;
             $ativos->tipo = 'Ativos';

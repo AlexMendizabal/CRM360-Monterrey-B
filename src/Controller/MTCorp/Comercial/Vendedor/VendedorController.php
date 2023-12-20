@@ -116,7 +116,7 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     ///////////////////////////MÉTODO ORIGINAL DE getVendedores////////////////////////////
-   /*  public function getVendedores(Connection $connection, Request $request)
+    /*  public function getVendedores(Connection $connection, Request $request)
     {
         // dd('vendedor'); 
         try {
@@ -172,40 +172,41 @@ class VendedorController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     } */
- 
-    public function getVendedores(Connection $connection, Request $request){
+
+    public function getVendedores(Connection $connection, Request $request)
+    {
         try {
-              $query = "SELECT ID, CONCAT(NM_VEND,' ', NM_RAZA_SOCI) AS nombre 
+            $query = "SELECT ID, CONCAT(NM_VEND,' ', NM_RAZA_SOCI) AS nombre 
                         FROM TB_VEND ORDER BY nombre asc";
-  
-              $stmt = $connection->prepare($query);
-              $stmt->execute();
-              $res = $stmt->fetchAll();
-               // dd($res);
-              if (count($res) > 0) {
-                  $message = array(
-                      "responseCode" => 200,
-                      "data" => $res,
-                      "success" => true
-                  );
-              } else {
-                  $message = array(
-                      "responseCode" => 204,
-                      "message" => "No existe el vendedor",
-                      "success" => false
-                  );  
-              }
+
+            $stmt = $connection->prepare($query);
+            $stmt->execute();
+            $res = $stmt->fetchAll();
+            // dd($res);
+            if (count($res) > 0) {
+                $message = array(
+                    "responseCode" => 200,
+                    "data" => $res,
+                    "success" => true
+                );
+            } else {
+                $message = array(
+                    "responseCode" => 204,
+                    "message" => "No existe el vendedor",
+                    "success" => false
+                );
+            }
         } catch (\Throwable $th) {
-          $message = array(
-              "responseCode" => 400,
-              "message" => $th->getMessage(),
-              "success" => false
-          );
+            $message = array(
+                "responseCode" => 400,
+                "message" => $th->getMessage(),
+                "success" => false
+            );
         }
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;  
-      }
+        return $response;
+    }
 
     /**
      * @Route(
@@ -298,8 +299,7 @@ class VendedorController extends AbstractController
 
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
-            if ($infoUsuario->matricula != 1) 
-            {
+            if ($infoUsuario->matricula != 1) {
                 $idVendedor = $infoUsuario->idVendedor;
 
                 $res = $connection->query("
@@ -309,9 +309,7 @@ class VendedorController extends AbstractController
                     ,@NM_CLIE = '{$cliente}'
                     ,@ID_SITU = '{$situacao}'
                     ,@ID_DEBU = 0
-            ")->fetchAll();
-
-           
+            ")->fetchAll();dd($res);
             } else {
                 $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]
@@ -319,45 +317,41 @@ class VendedorController extends AbstractController
                     ,@NM_CLIE = '{$cliente}'
                     ,@ID_SITU = '{$situacao}'
             ")->fetchAll();
-            //dd($res);
+                
             }
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
-                foreach($res as $re)
-                {   
-                    if(empty($re[ "nombre_factura"]))
-                    {
-                        $nombre =$re["razaoSocial"];
-                    }
-                    else
-                    {
-                        $nombre =$re["nombre_factura"];
+                foreach ($res as $re) {
+                    if (empty($re["nombre_factura"])) {
+                        $nombre = $re["razaoSocial"];
+                    } else {
+                        $nombre = $re["nombre_factura"];
                     }
                     $resp[] = [
-                            "codCliente" => $re["codCliente"],
-                            "codigo_cliente" => $re["codigo_cliente"],
-                            "codRazaoSocial" => $re["codRazaoSocial"],
-                            "razaoSocial" => $re["razaoSocial"],
-                            "nomeCliente" => $re["nomeCliente"],
-                            "tipoCliente" => $re["tipoCliente"],
-                            "nombreTipo" => $re["nombreTipo"],
-                            "nombreDepartamento" => $re["nombreDepartamento"],
-                            "id_departamento_lista" => $re["id_departamento_lista"],
-                            "uf" => $re["uf"],
-                            "lista" => $re["lista"],
-                            "id_lista_precio" => $re["id_lista_precio"],
-                            "id_vendedor" => $re["id_vendedor"],
-                            "nomeSituacao" => $re["nomeSituacao"],
-                            "cobrancaSomenteCarteira" => $re["cobrancaSomenteCarteira"],
-                            "direccion" => $re["direccion"],
-                            "latitud" => $re["latitud"],
-                            "longitud" => $re["longitud"],
-                            "correo_electronico" => $re["correo_electronico"],
-                            "telefono" => $re["telefono"],
-                            "celular" => $re["celular"],
-                            "codigo_rubro" => $re["codigo_rubro"],
-                            "nit" => $re["nit"],
-                            "nombre_factura" => $nombre,
-                            "carnet" => $re["carnet"]
+                        "codCliente" => $re["codCliente"],
+                        "codigo_cliente" => $re["codigo_cliente"],
+                        "codRazaoSocial" => $re["codRazaoSocial"],
+                        "razaoSocial" => $re["razaoSocial"],
+                        "nomeCliente" => $re["nomeCliente"],
+                        "tipoCliente" => $re["tipoCliente"],
+                        "nombreTipo" => $re["nombreTipo"],
+                        "nombreDepartamento" => $re["nombreDepartamento"],
+                        "id_departamento_lista" => $re["id_departamento_lista"],
+                        "uf" => $re["uf"],
+                        "lista" => $re["lista"],
+                        "id_lista_precio" => $re["id_lista_precio"],
+                        "id_vendedor" => $re["id_vendedor"],
+                        "nomeSituacao" => $re["nomeSituacao"],
+                        "cobrancaSomenteCarteira" => $re["cobrancaSomenteCarteira"],
+                        "direccion" => $re["direccion"],
+                        "latitud" => $re["latitud"],
+                        "longitud" => $re["longitud"],
+                        "correo_electronico" => $re["correo_electronico"],
+                        "telefono" => $re["telefono"],
+                        "celular" => $re["celular"],
+                        "codigo_rubro" => $re["codigo_rubro"],
+                        "nit" => $re["nit"],
+                        "nombre_factura" => $nombre,
+                        "carnet" => $re["carnet"]
                     ];
                 }
                 $res = $resp;
@@ -482,16 +476,11 @@ class VendedorController extends AbstractController
             INNER JOIN TB_CIUDAD CIU ON ESCR.id_ciudad = CIU.id
             INNER JOIN TB_DEPARTAMENTO DEP ON DEP.id = CIU.id_departamento
             INNER JOIN TB_LISTA_PRECIO LP ON LP.id_departamento = DEP.id
-            WHERE VEND.ID = :id_vendedor
-            
-            ";
+            WHERE VEND.ID = :id_vendedor";
             $statement = $connection->prepare($query);
             $statement->bindValue('id_vendedor', $id_vendedor);
-            $statement->execute();
-            
-
-            $res = $statement->fetchAll();
-            
+            $resp = $statement->executeQuery();
+            $res = $resp->fetchAllAssociative();
             if (count($res) > 0) {
                 $message = [
                     'responseCode' => 200,
@@ -500,7 +489,7 @@ class VendedorController extends AbstractController
                 ];
             } else {
                 $message = [
-                    'responseCode' => 204,                                                                                                                                                                                                                                                                                                                                                                                                                          
+                    'responseCode' => 204,
                     'estado' => false,
                     'detalle' => null
                 ];
@@ -617,7 +606,7 @@ class VendedorController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    
+
 
     public function todosVendedores($connection)
     {
@@ -643,7 +632,7 @@ class VendedorController extends AbstractController
         return $arrayVendedores;
     }
 
-    
+
     /**
      * @Route(
      *  "/comercial/vendedor/datosvendedor/{id}",
@@ -653,22 +642,20 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     public function getVend(Connection $connection, $id)
-    {   
+    {
         $FunctionsController = new FunctionsController();
         try {
             $query = "SELECT * FROM TB_VEND WHERE ID = :id";
             $stmt = $connection->prepare($query);
-            $stmt->bindValue(':id', $id); 
+            $stmt->bindValue(':id', $id);
             $stmt->execute();
             $res = $stmt->fetch();
-            
+
             return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
+        } catch (\PDOException $e) {
+            return $FunctionsController->Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        catch (\PDOException $e) 
-        {
-        return $FunctionsController->Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-        }
-    }   
+    }
 
     /**
      * @Route(
@@ -718,13 +705,13 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     public function getRubros(Connection $connection, Request $request)
-    { 
+    {
         try {
             $rubro_activo = 1;
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $query = "SELECT * from  MTCORP_BASE_CNAE WHERE id_situ = :rubro_activo";
-            
+
             $statement = $connection->prepare($query);
             $statement->bindValue('rubro_activo', $rubro_activo);
             $statement->execute();
@@ -769,7 +756,7 @@ class VendedorController extends AbstractController
             $helper = new Helper();
             $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
-            $id_vendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor ;
+            $id_vendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
             $array_vendedor = array();
 
             $latitud = 0;
@@ -781,32 +768,47 @@ class VendedorController extends AbstractController
 
                 switch ($vendedor['id_ciudad']) {
                     case 1:
-                        //Santa Cruz
-                        $latitud = -17.78629;
-                        $longitud = -63.18117;
-                        break;
-                    case 2:
                         //La paz
                         $latitud = -16.504691;
                         $longitud = -68.126613;
                         break;
+                    case 2:
+                        //El alto
+                        $latitud = -16.504691;
+                        $longitud = -68.126613;
                     case 3:
+                        //Santa Cruz
+                        $latitud = -17.78629;
+                        $longitud = -63.18117;
+                        break;
+                    case 4:
                         //Chuquisaca
                         $latitud = -19.042450;
                         $longitud = -65.253178;
                         break;
-                    case 4:
+                    case 5:
                         //Beni
-                        $latitud = -14.834296;
+                        $latitud = -14.826312;
                         $longitud = -64.902406;
                         break;
-                    case 5:
-                        //Potosi
-                        $latitud = -19.573114;
-                        $longitud = -65.754816;
-                        break;
+                        
                     case 6:
                         //Tarija
+                        $latitud = -21.531525;
+                        $longitud = -64.739782;
+                        break;
+                    case 7:
+                        //Trinidad
+                        $latitud = -14.826312;
+                        $longitud = 64.892884;
+                        break;
+                    case 8:
+                        //Sucre
+                        $latitud = -19.042450;
+                        $longitud = -65.253178;
+                        break;
+                    case 9:
+                        //Potosí
                         $latitud = -21.531525;
                         $longitud = -64.739782;
                         break;

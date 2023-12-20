@@ -33,14 +33,14 @@ class EscritoriosController extends AbstractController
     {
         try {
             $params = $request->query->all();
-            
+           
             $nomeEscritorio = null;
             $codEmpresa = 0;
             $codSituacao = 0;
-            $orderBy = 'nomeEscritorio';
+            $orderBy = 'codEscritorio';
             $orderType = 'ASC';
             
-            if (isset($params['nomeEscritorio'])) $nomeEscritorio = $params['nomeEscritorio'];
+            //if (isset($params['nomeEscritorio'])) $nomeEscritorio = $params['nomeEscritorio'];
             if (isset($params['codEmpresa'])) $codEmpresa = $params['codEmpresa'];
             if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
@@ -48,7 +48,7 @@ class EscritoriosController extends AbstractController
 
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_ESCR_CONS]
-                    @NM_ESCR = '{$nomeEscritorio}'
+                     @NM_ESCR = '{$nomeEscritorio}'
                     ,@ID_EMPR = '{$codEmpresa}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ORDE_BY = '{$orderBy}'

@@ -42,14 +42,15 @@ class AutorizacionesController extends AbstractController
     {   
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
+        
         $id_oferta = isset($data['id_oferta']) ? $data['id_oferta'] : null;
         $id_usuario =  0;
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
         $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : null;
         $estado = 10;
         $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
-        $respt =  $helper->actualizaOfertaA($connection, $autorizacion, $id_oferta);
-     
+        $respt = $helper->actualizaOfertaA($connection, $id_oferta);
+        
         try {
             $data_insert = [
                 'id_oferta' => (int)$id_oferta,
@@ -57,13 +58,11 @@ class AutorizacionesController extends AbstractController
                 'descripcion_vend' => $descripcion_vend,
                 'estado' => $estado
             ];
-            dd();
             $affectedRows = $connection->insert('tb_autorizaciones', $data_insert);
      
             if(!empty($affectedRows) && $affectedRows > 0) 
             {
                 //$resp =  $this->enviarcorreo($connection, $helper, $id_oferta);
-         
                 $message = array(
                     'responseCode' => 200,
                     'message' => 'Registrao correctamente',
@@ -151,14 +150,11 @@ class AutorizacionesController extends AbstractController
         ]);
 
         try {
-            $rsp = $helper->guardarOfertaSap($arrayMaterial);
-            
-            $message = array(
-                'responseCode' => 200,
-                'result' => 'Oferta agregada exitosamente',
-                'id_oferta' => $id_oferta,
-                'estado' => true
-            );
+
+            $ruta = "/crearProforma";
+            $rsp = $helper->insertarServicio($ruta, $arrayMaterial);
+           
+           
 
         } catch (\Throwable $e) {
             $message = array(
@@ -553,7 +549,6 @@ class AutorizacionesController extends AbstractController
         try {
             if ($resultSet !== 'PROMOTOR' && $resultSet !== 'VENDEDOR' && !empty($resultSet)) 
             {
-              
                 if ($estado == 10) {
                     $message = array(
                         "responseCode" => 204,
@@ -576,6 +571,7 @@ class AutorizacionesController extends AbstractController
 
                     $respMd = $statement->rowCount();
 
+                    
                     if ($respMd > 0) {
 
                         $query2 = "INSERT INTO tb_detalle_auto (id_autorizacion, id_usuario, fecha_solicitud, desc_vendedor) VALUES (:id_autorizacion, :id_usuario, :fecha_solicitud, :desc_vendedor);";
@@ -587,15 +583,28 @@ class AutorizacionesController extends AbstractController
                         $stmt2->execute();
                         $id_autorizacion = $connection->lastInsertId();
 
-                        $resp = $this->autorizacion_estado_sap($helper, $connection, $id_oferta);
-                        
-                        $message = array(
-                            "responseCode" => 200,
-                            "message" => "Registro correctamente",
-                            "success" => true,
-                            "response" => $resp
-                        );
-
+                        if($estado == 12)
+                        {
+                            $affectedRows = $connection->update('TB_OFERTA', ['tipo_estado' => 1, 'estado_oferta' => 14 ], ['id' => $id_oferta]);
+                            $resp = $helper->autorizacion_estado_sap($connection, $id_oferta);
+                            
+                            $message = array(
+                                "responseCode" => 200,
+                                "message" => "Registro correctamente",
+                                "success" => true,
+                                "response" => $resp
+                            );
+                        }
+                        else
+                        {
+                            $affectedRows = $connection->update('TB_OFERTA', ['tipo_estado' => 13, 'estado_oferta' => 11 ], ['id' => $id_oferta]);
+                            $message = array(
+                                "responseCode" => 200,
+                                "message" => "Registro correctamente",
+                                "success" => true,
+                            );
+                        }
+                      
                         // $this->correoAutorizaciones($nombre_vendedor, $correo_auorizador, $correo_vendedor, $descripcion_usua, $estado);
                     }
                 }

@@ -335,7 +335,6 @@ class EstoqueController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
               /*   $params = $request->query->all();
-              
                 $id_material = $params['id_material'] ?? '';
                 $id_lista_precio = $params['id_lista'] ?? '';
                 $registros = $params['registros'] ?? '';
@@ -343,32 +342,25 @@ class EstoqueController extends AbstractController
                 //dd($infoUsuario);
                 $conditions = [];
                 $bindings = [];
-
                 if (!empty($id_material) && $id_material !== 'null' && $id_material > 0) {
                     $conditions[] = "MATE.ID_CODIGOMATERIAL = :id_material";
                     $bindings['id_material'] = $id_material;
                 }
-
                 if (!empty($id_lista_precio) && $id_lista_precio !== 'null' && $id_lista_precio > 0) {
                     $conditions[] = "LP.id = :id_lista";
                     $bindings['id_lista'] = $id_lista_precio;
                 }
-
                 if (!empty($vendedor) && $vendedor !== 'null' && $vendedor > 0) {
                     $conditions[] = "AV.id_vendedor = :id_vendedor";
                     $bindings['id_vendedor'] = $vendedor;
                 }
-
                 $conditions[] = 'DEP.id = LP.id_departamento';
-                
                 $query = "SELECT MATE.ID_CODIGOMATERIAL as id_material, PM.id as id_precio_material, MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
                 DEPO.ID AS id_almacen, PM.peso AS peso, UNI.id as id_unidad,
                 UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
                 SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
 				BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-                
                 FROM TB_MATE MATE 
-
                 LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
                 LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
 				LEFT JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
@@ -402,8 +394,6 @@ class EstoqueController extends AbstractController
             $estado_material = 1;
             $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
 
-        
-         
                $query = "SELECT
                distinct 
                MATE.ID_CODIGOMATERIAL as id_material, 
@@ -434,7 +424,8 @@ class EstoqueController extends AbstractController
 
                 where AV.id_vendedor = :id_vendedor 
                 AND LP.id = :id_lista_precio
-                and MATE.ID_CODIGOMATERIAL = :CODIGOMATERIAL 
+                and MATE.ID_CODIGOMATERIAL = :CODIGOMATERIAL
+                AND DEPO.CODIGO_ALMACEN NOT LIKE '%00' 
                 order by DEPO.ID asc";
 
             $buscar_material = $connection->prepare($query);
@@ -443,7 +434,7 @@ class EstoqueController extends AbstractController
             $buscar_material->bindValue('CODIGOMATERIAL',  $id_material );
             $buscar_material->execute();
             $res = $buscar_material->fetchAll();
-              
+            
                 if (count($res) > 0) {
                     $message = array(
                         'responseCode' => 200,
@@ -532,8 +523,10 @@ class EstoqueController extends AbstractController
 
                 if (!empty($conditions)) {
                     $conditionString = implode(' AND ', $conditions);
-                    $query .= " WHERE $conditionString";
-                }
+                    $query .= " WHERE $conditionString AND DEPO.CODIGO_ALMACEN NOT LIKE '%00'";
+                } else {
+                    $query .= " WHERE DEPO.CODIGO_ALMACEN NOT LIKE '%00'";
+}
 
                 $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
                 OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";

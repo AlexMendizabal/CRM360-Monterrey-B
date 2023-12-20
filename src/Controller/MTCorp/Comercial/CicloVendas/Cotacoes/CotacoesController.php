@@ -86,22 +86,18 @@ class CotacoesController extends AbstractController
     public function getVerificarOferta(Connection $connection, Request $request, $idContato)
     {
         try {
-            $res =  $connection->query("SELECT TOP 1 id_cliente as codCliente
-                                    from TB_Oferta 
-                                  where id_cliente = {$idContato}")->fetch();
-
-            if ($res['codCliente'] > 0) {
+            $res = $connection->fetchOne('SELECT TOP 1 id_cliente as codCliente from TB_Oferta where id_cliente = ? and tipo_estado = 14', [$idContato]);
+           
+            if (!empty($res['codCliente']) && $res['codCliente'] >=1) {
                 return FunctionsController::Retorno(true, 'Tiene Oferta Registrada', $res, Response::HTTP_OK);
             }
-
-            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+            else
+            {
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+            }
+        
         } catch (DBALException $e) {
-            return FunctionsController::Retorno(
-                false,
-                'Erro ao retornar dados.',
-                $e->getMessage(),
-                Response::HTTP_BAD_REQUEST
-            );
+            return FunctionsController::Retorno(false,'Error al retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -2492,7 +2488,7 @@ class CotacoesController extends AbstractController
     public function saveCotizacion(Connection $connection, Request $request)
     {
         /* "autorizacion", estado como se encuentre la oferta si es 1 tiene autorizacion y 2 no tiene autorizacion
-        "estado_oferta",  el estado de la oferta borrador, pendiente borrador y cerrado
+        "estado_oferta",  el estado de la oferta borrador, pendiente  y cerrado
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
@@ -2504,53 +2500,104 @@ class CotacoesController extends AbstractController
         if ($data_oferta['success']) {
             foreach ($data['carrinho'] as $items) {
                 $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
+                $data_detalleoferta = json_decode($data_detalle->getContent(), true);
             }
-            
-            //$repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
-           // $data_sap = json_decode($repSap->getContent(), true);
-            
-            return FunctionsController::Retorno(true, "Registro correctamente", null, Response::HTTP_OK);
-
+            if($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200)
+            { 
+                if($data_detalleoferta['autorizacion'] == 1)
+                {
+                    $message = [
+                        "responseCode" => 200,
+                        "message" => 'Registro Correctamente',
+                        "success" => true
+                     ];
+                }
+                else
+                {
+                    $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+                    $sapresp = json_decode($repSap->getContent(), true);
+                 
+                    if($sapresp['success'] == true)
+                    {   
+                        //cambia el estado si envio a sap 1 
+                        $connection->update('TB_OFERTA', ['envio_sap' => 1], ['id' => $id_oferta]);
+                        $message = [
+                            "responseCode" => 200,
+                            "message" => 'Registro Correctamente',
+                            "success" => true,
+                            "data_sap" => $sapresp
+                        ];
+                    }
+                    else
+                    {
+                        //sino envio al sap 2
+                        
+                        $sap = $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => $id_oferta]);
+                        dd($sap);
+                        $message = [
+                                "responseCode" => 200,
+                                "message" => 'Registro Correctamente',
+                                "success" => true,
+                                "data_sap" => 'no se registro en el sap'
+                        ];
+                    }
+                }
+            }
+            else
+            {
+                $connection->rollback();
+                $message = [
+                        "responseCode" => 500,
+                        "message" => 'No registro',
+                        "success" => false
+                ];
+            }
         } else {
-            
-            return FunctionsController::Retorno(false, "No Registro Correctamente", null, Response::HTTP_OK);
-            
-        }   
+                $message = [
+                    "responseCode" => 204,
+                    "message" => 'Registro Correctamente',
+                    "success" => false
+            ];
+        }  
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response; 
     }
 
     public function insertaOferta($connection, $data)
     {   
-        $data_oferta['id_forma_pago'] = !empty($data['id_forma_pago']) ? $data['id_forma_pago'] : $data_error['id_forma_pago'] = 'es necesario';
-        $data_oferta['id_lista_precio'] = !empty($data['id_lista_precio']) ? $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
-        $data_oferta['id_modo_entrega'] = !empty($data['id_modo_entrega']) ? $data['id_modo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
+        !empty($data['id_forma_pago']) ?  $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
+        !empty($data['id_lista_precio']) ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
+        !empty($data['id_modo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['id_modo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
         $data_oferta['id_moneda'] = 1;
         $data_oferta['id_iva'] = 1;
-        $data_oferta['id_cliente'] = !empty($data['id_cliente']) ? $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
-        $data_oferta['id_vendedor'] = !empty($data['id_vendedor']) ? $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
-        $data_oferta['id_persona_contacto'] = !empty($data['id_persona_contacto']) ? $data['id_persona_contacto'] : $data_error['persona_contacto'] = 'es necesario';
+        !empty($data['id_cliente']) ?  $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
+        !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
+        !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : $data_oferta['id_persona_contacto'] = null;
         $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
-        $data_oferta['fecha_final'] = !empty($data['fecha_final']) ? date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
-        $data_oferta['fecha_inicial'] = !empty($data['fecha_inicial']) ? date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
-        $data_oferta['monto_total'] = !empty($data['monto_total']) ? $data['monto_total'] : $data_error['monto_total'] = 'es necesario';
-        $data_oferta['monto_total_bruto'] = !empty($data['monto_total_bruto']) ? $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es necesario';
-        $data_oferta['peso_total'] = !empty($data['peso_total']) ? $data['peso_total'] : $data_error['peso_total'] = 'es necesario';
-        $data_oferta['cantidad_total'] = !empty($data['cantidad_total']) ? $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
+        !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
+        !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
+        !empty($data['monto_total']) ? $data_oferta['monto_total'] = $data['monto_total'] : $data_error['monto_total'] = 'es necesario';
+        !empty($data['monto_total_bruto']) ? $data_oferta['monto_total_bruto'] = $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es necesario';
+        !empty($data['peso_total']) ? $data_oferta['peso_total'] = $data['peso_total'] : $data_error['peso_total'] = 'es necesario';
+        !empty($data['cantidad_total']) ?  $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
 
         if (!empty($data['direccion'])) {
-            $data_oferta['latitud'] = !empty($data['latitud']) ? $data['latitud'] : $data_error['latitud'] = 'es necesario';
-            $data_oferta['longitud'] = !empty($data['longitud']) ? $data['longitud'] : $data_error['longitud'] = 'es necesario';
-            $data_oferta['direccion'] = !empty($data['direccion']) ? $data['direccion'] : $data_error['direccion'] = 'es necesario';
+            !empty($data['latitud']) ? $data_oferta['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es necesario';
+            !empty($data['longitud']) ? $data_oferta['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es necesario';
+            !empty($data['direccion']) ? $data_oferta['direccion'] = $data['direccion'] : $data_error['direccion'] = 'es necesario';
         }
         if (!empty($data['observacion'])) {
             $data_oferta['observacion'] = $data['observacion'];
         }
         $data_oferta['estado_oferta'] = 1;
         $data_oferta['tipo_estado'] = 14;
-
-        //dd($data_oferta, $data_error);
+        
         try {
             $oferata = $connection->insert('TB_OFERTA', $data_oferta);
+
             $id_oferta = $connection->lastInsertId();
+         
             $message = array(
                 "responseCode" => 200,
                 "message" => "Registro correctamente",
@@ -2568,9 +2615,9 @@ class CotacoesController extends AbstractController
         return new JsonResponse($message);
     }
 
-
     public function insertItemsOferta($connection, $data, $id_oferta)
     {       
+        $autorizacion = 0;  
         $data_items['id_oferta'] = (int)$id_oferta;
         !empty($data['codMaterial']) ? $data_items['id_material'] = $data['codMaterial'] : $data_error['codMaterial'] = 'es necesario';
         !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
@@ -2581,7 +2628,8 @@ class CotacoesController extends AbstractController
         if (!empty($data['percentualDesc'])) {
            // $data_items['descuento'] = !empty($data['descuento']) ? $data['descuento'] : $data_error['descuento'] = 'es necesario';
             !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
-             !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
+            !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
+            $autorizacion = 1;
         }
         !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
         !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
@@ -2589,12 +2637,23 @@ class CotacoesController extends AbstractController
         try  {
             //dd($data_items, $data_error);
             $data_detalle = $connection->insert('TB_OFERTA_DETALLE', $data_items);
-            
-            $message = array(
+            if($autorizacion == 1)
+            {
+                $message = array(
+                    "responseCode" => 200,
+                    "message" => "Registro correctamente",
+                    "success" => true,
+                    "autorizacion" => 1
+                );
+            }
+            else
+            {   $message = array(
                 "responseCode" => 200,
                 "message" => "Registro correctamente",
                 "success" => true
             );
+        }
+         
         } catch (\Throwable $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
@@ -2681,6 +2740,31 @@ class CotacoesController extends AbstractController
         }
     }
 
+     /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/enviar_sap",
+     *  name="comercial.ciclo-vendas-cotacoes-sap",
+     *  methods={"POST"},
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function oferta_sap(Connection $connection, Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $id_oferta = $data['id_oferta'];
+        $helper = new Helper();
+        try
+        {
+            $resp = $helper->autorizacion_estado_sap($connection, $id_oferta);
+            $sapresp = json_decode($resp->getContent(), true);
+            return FunctionsController::Retorno(true, null, $sapresp, Response::HTTP_OK);
+        }
+        catch (\Throwable $e) {
+            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
     /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/progresso/{codCotacao}/{codEmpresa}",
@@ -3041,6 +3125,14 @@ class CotacoesController extends AbstractController
                 $stmt->BindValue(':estado_oferta', (int)$estado_oferta);
                 $stmt->execute();
 
+                $qr = $connection->query("SELECT TOP 1 autorizacion FROM TB_OFERTA WHERE ID = {$id_oferta}");
+                $row = $qr->fetch();
+            
+                if($row['autorizacion'] == 1)
+                {
+                    $connection->update('TB_autorizaciones', ['estado' => 13], ['id_oferta' => $id_oferta]);
+                }
+                         
                 $message = [
                     'responseCode' => 200,
                     'message' => 'Se cambio el estado',

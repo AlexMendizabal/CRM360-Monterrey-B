@@ -71,6 +71,10 @@ class PesquisaController extends AbstractController
     public function getClientes(Connection $connection, Request $request)
     {
         try {
+            //dd('aqui');
+
+            
+            
 
             $params = $request->query->all();
             $usuario = new usuarioController();
@@ -79,7 +83,9 @@ class PesquisaController extends AbstractController
             $helper = new Helper();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
             $resLista = array();
-            
+
+/*             $borrarClientes = $helper->borrarClientesLocales($connection);
+ */            
 
             $buscarPor = '';
             $pesquisa = '';
@@ -145,7 +151,7 @@ class PesquisaController extends AbstractController
 
             if(count($resListaSr) > 0){
                 $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
-            }
+            } 
 
             
             //dd($resLista);
@@ -507,7 +513,7 @@ class PesquisaController extends AbstractController
             $id_cliente = isset($codCliente) ? $codCliente : null;
             $helper = new Helper();
             if ($id_cliente !== 0) {
-                $datos_cliente = $helper->obtenerCliente($connection, $id_cliente);
+                $datos_cliente = $helper->obtenerCliente($connection, (int)$id_cliente);
                 if ($datos_cliente !== false) {
                     $message = array(
                         'responseCode' => 200,

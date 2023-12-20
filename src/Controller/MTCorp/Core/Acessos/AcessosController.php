@@ -23,6 +23,7 @@ class AcessosController
      */
     public function gravarLogAcessos(Request $request, Connection $connection): JsonResponse
     {
+        
         try {
 
             $params = json_decode($request->getContent());

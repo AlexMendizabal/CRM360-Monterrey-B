@@ -30,6 +30,7 @@ class LoginController extends AbstractController
                 $dadosValidos = true;
                 $msgErro = '';
                 $data = json_decode($request->getContent(), true);
+               
                 if (!isset($data['nr_matr_usua']) || !is_numeric($data['nr_matr_usua'])) {
                     $msgErro = 'Informe a matrícula do usuário!';
                     $dadosValidos = false;
@@ -55,16 +56,16 @@ class LoginController extends AbstractController
                     @NR_MATR		=	BIGINT - Número da matrícula do usuário - (obrigatório)
                 */
 
-                $sql =
-                    "
+                $sql = "
                     EXECUTE [dbo].[PRC_CORE_USUA_AUTE] 
                      @NR_MATR = ?
                 ";
+                
                 $stmt = $connection->prepare($sql);
                 $stmt->bindValue(1, $nrMatrUsua);
-                $stmt->execute();
+                $stmt->executeQuery();
                 $usuario = $stmt->fetchAll();
-
+             
                 if(count($usuario) > 0){
                    
                     $datos = [];

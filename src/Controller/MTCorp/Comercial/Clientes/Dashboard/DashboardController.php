@@ -30,6 +30,7 @@ class DashboardController extends AbstractController
    */
   public function getFaturamentoGrafico(Connection $connection, Request $request, $codCliente)
   {
+    
     if ($request->isMethod('GET')) {
       try {
         $res = $connection->query(
@@ -51,7 +52,7 @@ class DashboardController extends AbstractController
               );
             }
           }
-
+          
           if (isset($faturamento) && (count($faturamento) > 0)){
             $message = array(
               'responseCode' => 200,
@@ -90,9 +91,9 @@ class DashboardController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
         $anoAnterior = date('Y') - 1;
-        $dataInicial = '01/01/' . $anoAnterior;
-        $dataFinal = date('d/m/Y');
-
+        $dataInicial = $anoAnterior .'/01/01' ;
+        $dataFinal = date('Y/m/d');
+        
         $res = $connection->query(
           "
             EXEC [PRC_CLIE_FATU_LINHA]
@@ -101,7 +102,7 @@ class DashboardController extends AbstractController
             @ID_CLIENTE = {$codCliente}
           "
         )->fetchAll();
-
+       
         if (count($res) > 0) {
           $faturamento = new \stdClass;
           $faturamento->analitico = array();
@@ -160,7 +161,7 @@ class DashboardController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
         $anoAnterior = date('Y') - 1;
-        $dataInicial = '01/01/' . $anoAnterior;
+        $dataInicial = $anoAnterior .'/01/01';
 
         $res = $connection->query(
           "
@@ -247,7 +248,6 @@ class DashboardController extends AbstractController
           );
           $faturamento->mesInicial = DateController::mexExtenso(1);
           $faturamento->mesFinal = DateController::mexExtenso(date('m'));
-
           for ($i=0; $i < count($res); $i++) {
             if ($res[$i]['linha'] <> 'Total') {
               $faturamento->analitico[] = array(
@@ -262,7 +262,6 @@ class DashboardController extends AbstractController
               $faturamento->total['percentual'] = $res[$i]['percentualTon'];
             }
           }
-
           $message = array(
             'responseCode' => 200,
             'result' => $faturamento
@@ -277,7 +276,7 @@ class DashboardController extends AbstractController
           'message' => $e->getMessage()
         );
       }
-
+      
       $response = new JsonResponse($message);
       $response->setEncodingOptions(JSON_NUMERIC_CHECK);
       return $response;
@@ -324,14 +323,14 @@ class DashboardController extends AbstractController
             "
           )->fetchAll();
 
-          if (count($resSituacao) > 0) {
-            $situacaoCliente = $resSituacao[0]['SITUACAO'];
+          if (count($res) > 0) {
+            $situacaoCliente = $res[0]['descripcion'];
           } else {
-            $situacaoCliente = 'Ativo';
+            $situacaoCliente = 'ABIERTO';
           }
-
+          
           $coresGrafico = array(
-            'Potenci' => array(
+            'ABIERTO' => array(
               0 => '#6BC3D1',
               1 => '#17A2B8',
               2 => '#0F6876',
@@ -344,7 +343,7 @@ class DashboardController extends AbstractController
               9 => '#AADDE5',
               10 => '#E9F6F8'
             ),
-            'Ativo' => array(
+            'CERRADO' => array(
               0 => '#4DCC71',
               1 => '#344C3B',
               2 => '#3A9955',
@@ -357,7 +356,7 @@ class DashboardController extends AbstractController
               9 => '#58E881',
               10 => '#2E7A44'
             ),
-            'Arquivo' => array(
+            'PRECIO' => array(
               0 => '#5A5A5A',
               1 => '#383838',
               2 => '#858585',
@@ -370,7 +369,7 @@ class DashboardController extends AbstractController
               9 => '#707070',
               10 => '#454545'
             ),
-            'Inativo' => array(
+            'STOCK' => array(
               0 => '#FF3226',
               1 => '#FF7A73',
               2 => '#7F1913',
@@ -389,7 +388,7 @@ class DashboardController extends AbstractController
             $propostas[] = array(
               'quantidade' => $res[$i]['quantidade'],
               'toneladas' => $res[$i]['toneladas'],
-              'descricao' => $res[$i]['descricao'],
+              'descricao' => $res[$i]['descripcion'],
               'cor' => $coresGrafico[$situacaoCliente][$i]
             );
           }
@@ -441,7 +440,7 @@ class DashboardController extends AbstractController
             'toneladas' => 0,
             'quantidade' => 0
           );
-
+          
           for ($i=0; $i < count($res); $i++) {
             $propostas->total['toneladas'] += $res[$i]['toneladas'];
             $propostas->total['quantidade'] += $res[$i]['quantidade'];
@@ -451,7 +450,7 @@ class DashboardController extends AbstractController
             $percentual = ($res[$i]['toneladas'] / $propostas->total['toneladas']) * 100;
 
             $propostas->analitico[] = array(
-              'descricao' => $res[$i]['descricao'],
+              'descricao' => $res[$i]['descripcion'],
               'toneladas' => $res[$i]['toneladas'],
               'quantidade' => $res[$i]['quantidade'],
               'percentual' => $percentual
@@ -492,7 +491,7 @@ class DashboardController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
         $duplicatasAtraso = HistoricoFinanceiroController::totalAtraso($connection, $codCliente);
-
+        
         $data['valor'] = $duplicatasAtraso;
 
         $message = array(
@@ -539,7 +538,7 @@ class DashboardController extends AbstractController
       }
 
       $response = new JsonResponse($message);
-      $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+      $response->setEncodingOptions(JSON_NUMERIC_CHECK); 
       return $response;
     }
   }
@@ -563,25 +562,25 @@ class DashboardController extends AbstractController
             @ID_CLIENTE = '{$codCliente}'
           "
         )->fetchAll();
-
+       
         $limiteCredito = count($res) > 0 ? $res[0]['limiteCredito'] : 0 ;
         $historicoFinanceiro = new HistoricoFinanceiroController();
         $totalAtraso = $historicoFinanceiro->totalAtraso($connection, $codCliente);
-        $notasPromissorias = $historicoFinanceiro->notasPromissorias($connection, $codCliente);
-        $duplicatasVencer = $historicoFinanceiro->duplicatasVencer($connection, $codCliente);
+        // $notasPromissorias = $historicoFinanceiro->notasPromissorias($connection, $codCliente);
+        // $duplicatasVencer = $historicoFinanceiro->duplicatasVencer($connection, $codCliente);dd($duplicatasVencer);
         $notasDebito = $historicoFinanceiro->notasDebito($connection, $codCliente);
-        $corteDobra = $historicoFinanceiro->corteDobra($connection, $codCliente);
-        $reservaBobinas = $historicoFinanceiro->reservaBobinas($connection, $codCliente);
+        // $corteDobra = $historicoFinanceiro->corteDobra($connection, $codCliente);
+        // $reservaBobinas = $historicoFinanceiro->reservaBobinas($connection, $codCliente);
 
         $creditoDisponivel = new \stdClass;
         $creditoDisponivel->valor = $limiteCredito
-                                    - $duplicatasVencer
+                                    // - $duplicatasVencer
                                     - $notasDebito
-                                    - $notasPromissorias
-                                    - $totalAtraso
-                                    - $corteDobra
-                                    - $reservaBobinas;
-        
+                                    // - $notasPromissorias
+                                    - $totalAtraso;
+                                    // - $corteDobra
+                                    // - $reservaBobinas;
+                                             
         $message = array(
           'responseCode' => 200,
           'result' => $creditoDisponivel
@@ -592,9 +591,9 @@ class DashboardController extends AbstractController
           'message' => $e->getMessage()
         );
       }
-
+      
       $response = new JsonResponse($message);
-      $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+      $response->setEncodingOptions(JSON_NUMERIC_CHECK); 
       return $response;
     }
   }
@@ -655,16 +654,23 @@ class DashboardController extends AbstractController
    */
   public function getUltimaCompra(Connection $connection, Request $request, $codCliente)
   {
+    
     if ($request->isMethod('GET')) {
       try {
         $res = $connection->query(
-          "
-            EXEC [PRC_CLIE_GRUP_CONS]
-            @ID_CLIENTE = '{$codCliente}',
-            @ID_PARAM = 2
-          "
-        )->fetchAll();
 
+           "
+           SELECT CONVERT(DATE, MAX(fecha_creacion)) AS ultimaCompraGrupo
+           FROM tb_oferta
+           WHERE id_cliente = '{$codCliente}'
+           "
+          //  "
+          //    EXEC [PRC_CLIE_GRUP_CONS]
+          //    @ID_CLIENTE = '{$codCliente}',
+          //    @ID_PARAM = 2
+          //  "
+        )->fetchAll();
+         
         if (count($res) > 0) {
           $ultimaCompra = new \stdClass;
           $ultimaCompra->data = $res[0]['ultimaCompraGrupo'];
@@ -700,6 +706,7 @@ class DashboardController extends AbstractController
    */
   public function getUltimosPrecos(Connection $connection, Request $request, $codCliente)
   {
+    
     if ($request->isMethod('GET')) {
       try {
         $res = $connection->query(
@@ -728,9 +735,9 @@ class DashboardController extends AbstractController
           'message' => $e->getMessage()
         );
       }
-
+       
       $response = new JsonResponse($message);
-      $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+      $response->setEncodingOptions(JSON_NUMERIC_CHECK); 
       return $response;
     }
   }

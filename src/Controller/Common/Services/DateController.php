@@ -17,7 +17,7 @@ class DateController extends AbstractController
     if ($mes < 10)
       $mes = '0' . $mes;
 
-    return '01/' . $mes . '/' . $ano;
+      return $ano . '-' . $mes . '-01';
   }
 
   public function getUltimoDiaMes($mes, $ano)
@@ -27,7 +27,7 @@ class DateController extends AbstractController
     if ($mes < 10)
       $mes = '0' . $mes;
 
-    $data = $dia . '/' . $mes . '/' . $ano;
+    $data = $ano . '/' . $mes . '/' . $dia;
 
     return $data;
   }
@@ -51,18 +51,18 @@ class DateController extends AbstractController
   public function mexExtenso($mes)
   {
     switch ($mes) {
-      case 1: $mes = "Janeiro"; break;
-      case 2: $mes = "Fevereiro"; break;
-      case 3: $mes = "Março"; break;
+      case 1: $mes = "Enero"; break;
+      case 2: $mes = "Febrero"; break;
+      case 3: $mes = "Marzo"; break;
       case 4: $mes = "Abril"; break;
-      case 5: $mes = "Maio"; break;
-      case 6: $mes = "Junho"; break;
-      case 7: $mes = "Julho"; break;
+      case 5: $mes = "Mayo"; break;
+      case 6: $mes = "Junio"; break;
+      case 7: $mes = "Julop"; break;
       case 8: $mes = "Agosto"; break;
-      case 9: $mes = "Setembro"; break;
-      case 10: $mes = "Outubro"; break;
-      case 11: $mes = "Novembro"; break;
-      case 12: $mes = "Dezembro"; break;
+      case 9: $mes = "Septiembre"; break;
+      case 10: $mes = "Octubre"; break;
+      case 11: $mes = "Noviembre"; break;
+      case 12: $mes = "Diciembre"; break;
     }
 
     return $mes;

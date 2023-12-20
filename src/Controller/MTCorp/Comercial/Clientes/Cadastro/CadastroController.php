@@ -702,9 +702,27 @@ class CadastroController extends AbstractController
    */
   public function getEnderecos(Connection $connection, Request $request, $codCliente)
   {
-    try {
-      $params = $request->query->all();
 
+    $params = $request->query->all();
+    isset($params['localEntrega']) ? $id_cliente = $params['localEntrega'] : null;
+    try
+    {
+      
+    $result = $connection->fetchAllAssociative('SELECT id_endereco as id, logradouro as enderecos FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$id_cliente]);
+
+    if (isset($result) && !empty($result)) 
+    {
+      return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
+    } else {
+        return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+    }
+
+    } catch (DBALException $e) {
+        return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+    }
+
+   /*  try {
+     
       // 1: Endereço principal
       // 2: Endereço de cobrança
       // 3: Endereço de entrega
@@ -874,7 +892,7 @@ class CadastroController extends AbstractController
       }
     } catch (DBALException $e) {
       return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-    }
+    } */
   }
 
   private function verificaEnderecosAguardandoAprovacao($connection, $codCliente){
@@ -1515,7 +1533,7 @@ class CadastroController extends AbstractController
    * @return JsonResponse
    */
   public function getContatos(Connection $connection, Request $request, $codCliente)
-  {
+  { 
     try {
 
         $res = $connection->query("
@@ -1599,12 +1617,11 @@ class CadastroController extends AbstractController
   public function getContato(Connection $connection, Request $request, $codCliente, $idContato)
   {
     try {
-      $res = $connection->query("
-          EXEC [PRC_CLIE_CONT_CONS]
-            @ID_CLIE = '{$codCliente}',
-            @ID_SEQU_CONT = '{$idContato}' 
-      ")->fetchAll();
-
+          $res = $connection->query("
+              EXEC [PRC_CLIE_CONT_CONS]
+                @ID_CLIE = '{$idContato}',
+                @ID_SEQU_CONT =  '{$codCliente}'
+          ")->fetchAll();
 
       if (count($res) > 0) {
 
