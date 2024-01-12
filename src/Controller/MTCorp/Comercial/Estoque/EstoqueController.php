@@ -16,6 +16,8 @@ use App\Controller\Common\UsuarioController;
 use PDO;
 use App\Services\Helper;
 
+
+
 /**
  * Class EstoqueController
  * @package App\Controller\MTCorp\Comercial\Estoque
@@ -94,7 +96,12 @@ class EstoqueController extends AbstractController
             );
         }
     }
+    private $helper;
 
+    public function __construct()
+    {
+        $this->helper = new Helper();
+    }
     /**
      * @Route(
      *  "/comercial/materiales",
@@ -393,40 +400,39 @@ class EstoqueController extends AbstractController
             $registros = $params['registros'] ?? '';
             $estado_material = 1;
             $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
-
-               $query = "SELECT
+               $query = "	SELECT
                distinct 
-               MATE.ID_CODIGOMATERIAL as id_material, 
-               PM.id as id_precio_material,
-               MATE.CODIGOMATERIAL AS codigo_material, 
-               MATE.DESCRICAO AS nombre_material, 
-               DEPO.CODIGO_ALMACEN AS nombre_almacen,
-               DEPO.ID AS id_almacen, 
-               PM.peso AS peso,
-               UNI.id as id_unidad,
-               UNI.NOMBRE_UNI AS unidad,
-               MATDEP.cantidad AS cantidad, 
-               PM.precio as precio, 
-               0.00 as descuento, 
-               PM.precio AS precio_neto, (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
-               MONE.nombre_moneda,
-               'A' AS codigo_situacion,
-               MATE.largo_material as largo_material
-               FROM 
-               TB_ALMACEN_VENDEDOR as AV
-               inner join TB_DEPO_FISI_ESTO as DEPO ON DEPO.ID = AV.id_almacen
-               inner JOIN TB_MATERIAL_DEPOSITO as MATDEP ON MATDEP.id_deposito = DEPO.ID
-               inner join TB_MATE as MATE ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
-               INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
-               INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-               INNER JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-               inner join TB_LISTA_PRECIO LP On LP.id = PM.id_lista
-
-                where AV.id_vendedor = :id_vendedor 
-                AND LP.id = :id_lista_precio
-                and MATE.ID_CODIGOMATERIAL = :CODIGOMATERIAL
-                AND DEPO.CODIGO_ALMACEN NOT LIKE '%00' 
-                order by DEPO.ID asc";
+              MAT.ID_CODIGOMATERIAL as id_material, 
+              PM.id as id_precio_material,
+              MAT.CODIGOMATERIAL AS codigo_material, 
+              MAT.DESCRICAO AS nombre_material, 
+              DEPO.CODIGO_ALMACEN AS nombre_almacen,
+              DEPO.ID AS id_almacen, 
+              PM.peso AS peso,
+              UNI.id as id_unidad,
+              UNI.NOMBRE_UNI AS unidad,
+              MTD.cantidad AS cantidad, 
+              PM.precio as precio, 
+              0.00 as descuento, 
+              PM.precio AS precio_neto, (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
+              MONE.nombre_moneda,
+              'A' AS codigo_situacion,
+              MAT.largo_material as largo_material
+               from TB_VEND VEND
+                 inner join tb_Escr as SCL on SCL.id = VEND.ID_ESCR
+                 inner join tb_ciudad as CD on CD.iD = SCL.id_ciudad
+                 inner join TB_DEPO_FISI_ESTO as DEPO on DEPO.id_ciudad = CD.id
+                 inner join TB_MATERIAL_DEPOSITO as MTD on MTD.id_deposito = DEPO.CODIGO_ALMACEN
+                 inner join tb_mate as MAT on MAT.CODIGOMATERIAL = MTD.mate_sap
+                 inner join TB_PRECIO_MATERIAL as PM on PM.cod_mate = MAT.CODIGOMATERIAL
+                 INNER JOIN UNIDADES as UNI ON UNI.ID = MAT.UNIDADE
+                 INNER JOIN TB_MONEDA as MONE ON MONE.id = PM.id_moneda
+                 inner join TB_LISTA_PRECIO as LP On LP.id = PM.id_lista
+               where VEND.id = :id_vendedor
+               AND LP.id = :id_lista_precio
+               and DEPO.estado_mostrar = 1
+               and MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
+               order by DEPO.ID asc";
 
             $buscar_material = $connection->prepare($query);
             $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
@@ -506,14 +512,13 @@ class EstoqueController extends AbstractController
                 UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
                 SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
 				BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-
                 
                 FROM TB_MATE MATE 
-                LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
+                LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
                 LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
 				LEFT JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
 				LEFT JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
-                LEFT JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
+                LEFT JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
                 LEFT JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
                 LEFT JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
                 LEFT JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
@@ -530,6 +535,7 @@ class EstoqueController extends AbstractController
 
                 $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
                 OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
+
                 $stmt = $connection->prepare($query);
                 $stmt->execute($bindings);
                 $res = $stmt->fetchAll();
@@ -1192,9 +1198,9 @@ class EstoqueController extends AbstractController
             if (($codMaterial != '' && $codMaterial != 0)) {
                 $query = "SELECT 
                             OFE.id as id_oferta,
-                            OFE.id as codigo_oferta, 
+                            OFE.codigo_oferta as codigo_oferta, 
                             OFE.fecha_creacion AS fecha_oferta, 
-                            OFE.nombre_oferta, concat (CLIE.prim_nome + ' ', 
+                            OFE.nombre_oferta, concat (CLIE.prim_nome + ' / ', 
                             CLIE.segu_nome) as cliente,concat(VEND.NM_VEND + ' ',  
                             VEND.NM_RAZA_SOCI) AS vendedor,  OD.cantidad as cantidad, 
                             MATE.ID_CODIGOMATERIAL as id_material, 
@@ -1273,11 +1279,66 @@ class EstoqueController extends AbstractController
      * @return JsonResponse
      */
     public function getEstoqueAlmacen(Connection $connection, Request $request, $codMaterial)
-    {
-        try {
-            if ($codMaterial != '' && $codMaterial != 0) {
-                $estoqueAlmacen = $connection->query(
-                    "SELECT 
+    { 
+     try {
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $idVendedor = $infoUsuario->idVendedor;
+
+        if ($codMaterial != '' && $codMaterial != 0) {
+            $params = $request->query->all();
+
+            $nombre_lista_precio = $params['nombre_lista'] ?? '';
+            $codigo_almacen = $params['codigo_almacen'] ?? '';
+            $nombre_almacen = $params['nombre_almacen'] ?? '';
+            $id_lista_precio = $params['id_lista_precio'] ?? '';
+
+            $conditions = [];
+            $bindings = [];
+
+            // Condiciones comunes para todos los casos
+            $conditions[] = " MATE.ID_CODIGOMATERIAL = :id_material";
+            $bindings['id_material'] = $codMaterial;
+
+            // Si el idVendedor es 88, usar el parámetro id_lista_precio
+            if ($idVendedor == 88 && !empty($id_lista_precio)) {
+                $conditions[] = " LP.id = :id_lista";
+                $bindings['id_lista'] = (int) $id_lista_precio;
+            } elseif ($idVendedor != 88) {
+                // Si el idVendedor es diferente a 88, buscar la lista del vendedor
+                $id_lista_precio = $connection->fetchOne('select TB_lista_precio.id as id_lista_precio
+                    from 
+                    TB_VEND
+                    inner join tb_escr on tb_escr.id = tb_vend.id_escr
+                    inner join tb_ciudad on tb_ciudad.id = tb_escr.id_ciudad
+                    inner join tb_departamento on tb_departamento.id = id_departamento
+                    inner join TB_lista_precio on TB_lista_precio.id_departamento = tb_departamento.id 
+                    where tb_vend.id =  ?', [$idVendedor]);
+
+                if (!empty($id_lista_precio)) {
+                    $conditions[] = " LP.id = :id_lista";
+                    $bindings['id_lista'] = (int) $id_lista_precio;
+                }
+            }
+
+            // Agregar condiciones según la presencia de valores
+            if (!empty($nombre_lista_precio)) {
+                $conditions[] = " LP.nombre_lista = :nombre_lista";
+                $bindings['nombre_lista'] = $nombre_lista_precio;
+            }
+
+            if (!empty($codigo_almacen)) {
+                $conditions[] = " DEPO.codigo_almacen LIKE :codigo_almacen";
+                $bindings['codigo_almacen'] = '%' . $codigo_almacen . '%';
+            }
+
+            if (!empty($nombre_almacen)) {
+                $conditions[] = " DEPO.nombre_deposito LIKE :nombre_almacen";
+                $bindings['nombre_almacen'] = '%' . $nombre_almacen . '%';
+            }
+
+            // Construir la consulta SQL dinámicamente
+            $query = "
+                SELECT DISTINCT
                     CLASE.descricao as familia,
                     LINEA.descricao AS grupo,
                     SUB.NM_SUB_LINH as linea,
@@ -1287,45 +1348,95 @@ class EstoqueController extends AbstractController
                     MAT_DEP.cantidad as cantidad, 
                     UNI.SIGLAS_UNI AS sigla,
                     DEPO.codigo_almacen as codigo_almacen, 
-                    DEPO.nombre_deposito as nombre_almacen
-                    FROM TB_MATE MATE
-                    INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
-                    INNER JOIN MTCORP_BASE_LINHAS LINEA ON SUB.ID_CLASE = LINEA.id_linha
-                    INNER JOIN MTCORP_BASE_LINHAS_CLASSE CLASE ON CLASE.id_classe = LINEA.id_classe
-                    INNER JOIN TB_MATERIAL_DEPOSITO MAT_DEP ON MAT_DEP.id_material = MATE.ID_CODIGOMATERIAL
-                    INNER JOIN TB_DEPOSITO DEPO ON DEPO.id = MAT_DEP.id_deposito
-                    INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-				WHERE MATE.ID_CODIGOMATERIAL = {$codMaterial}
-                ")->fetchAll();
+                    DEPO.nombre_deposito as nombre_almacen,
+                    LP.nombre_lista as lista,
+                    PM.precio as precio
+                FROM TB_MATE MATE
+                INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
+                INNER JOIN MTCORP_BASE_LINHAS LINEA ON SUB.ID_CLASE = LINEA.id_linha
+                INNER JOIN MTCORP_BASE_LINHAS_CLASSE CLASE ON CLASE.id_classe = LINEA.id_classe
+                INNER JOIN TB_MATERIAL_DEPOSITO MAT_DEP ON MAT_DEP.mate_sap = MATE.CODIGOMATERIAL
+                INNER JOIN TB_DEPOSITO DEPO ON DEPO.codigo_almacen = MAT_DEP.id_deposito
+                INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
+                INNER JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
+                INNER JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
+                WHERE " . implode(' AND ', $conditions) . "
+                    AND DEPO.codigo_almacen NOT LIKE '%00'
+                    AND LP.id NOT IN (8, 9, 10)
+            ";
 
-                if (count($estoqueAlmacen) > 0) {
+            $bindings['codMaterial'] = $codMaterial;
 
-                    $message = array(
-                        'responseCode' => 200,
-                        'result' => $estoqueAlmacen
-                    );
-                } else {
-                    $message = array(
-                        'responseCode' => 204,
-                        'result' => 'No es posible localizar datos'
-                    );
+            $result = $connection->executeQuery($query, $bindings)->fetchAll();
+
+
+
+
+        if (!empty($result)) {
+            $message = [
+                'responseCode' => 200,
+                'result' => $result,
+            ];
+           } else {
+            $message = [
+                'responseCode' => 204,
+                        'result' => 'No es posible localizar datos',
+                    ];
                 }
             } else {
-                $message = array(
+                $message = [
                     'responseCode' => 204,
-                    'result' => 'Manda ID material'
-                );
+                    'result' => 'ID Material necesario',
+                ];
             }
         } catch (DBALException $e) {
-            $message = array(
+            $message = [
                 'responseCode' => $e->getCode(),
                 'message' => $e->getMessage(),
-                'errors' => 404
-            );
+                'errors' => 404,
+            ];
         }
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
-    }
+
+        }
+
+        
+    /**
+     * @Route(
+     *  "/comercial/estoque/lista-precio",
+     *  name="comercial.estoque.lista_precio",
+     *  methods={"GET"},
+     * )
+     * @return JsonResponse
+     */
+    public function traerLista(Connection $connection, Request $request)
+    {
+        try {
+            $nombre_lista = $request->query->get('nombre_lista'); 
+    
+            $listas_precios = $this->helper->buscarListaPrecio($connection, $nombre_lista);
+    
+            $message = [
+                "response" => 200,
+                "estado" => true,
+                "listas_precios" => $listas_precios !== false ? $listas_precios : null, // Asigna $listas_precios solo si no es false
+            ];
+        } catch (\Throwable $e) {
+            $message = [
+                "response" => 401,
+                "estado" => false,
+                "detalle" => $e->getMessage()
+            ];
+        }
+    
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
 }
+
+}
+
+   

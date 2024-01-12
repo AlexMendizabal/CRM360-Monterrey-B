@@ -115,98 +115,77 @@ class VendedorController extends AbstractController
      * )
      * @return JsonResponse
      */
-    ///////////////////////////MÉTODO ORIGINAL DE getVendedores////////////////////////////
-    /*  public function getVendedores(Connection $connection, Request $request)
-    {
-        // dd('vendedor'); 
-        try {
-            $usuarioController = new UsuarioController();
-            $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            // dd($infoUsuario); 
-            $id_usuario = $infoUsuario->id;
-            // dd($id_usuario);
-            if ($id_usuario  == 1) {
-                $res = $connection->query("
-                    EXEC [PRC_COME_VEND_ESCR_CONS]
-                        @ESCRITORIO = '',
-                        @SITUACAO = '1'
-                ")->fetchAll();
-            } else {
-                $res = $connection->query("
-                EXEC [PRC_COME_VEND_ESCR_CONS1]
-                    @ESCRITORIO = '',
-                    @SITUACAO = '1',
-                    @IDVEN = '$id_usuario'
-            ")->fetchAll();
-            }
-
-                     //dd($res);
- 
-            if (count($res) > 0) {
-                for ($i = 0; $i < count($res); $i++) {
-                    $vendedores[] = array(
-                        'id' => $res[$i]['id'],
-                        'idEscritorio' => $res[$i]['id_escritorio'],
-                        'nome' => trim($res[$i]['nome'])
-                    );
-                }
-                //                dd($vendedores);
- 
-                array_multisort(array_column($vendedores, 'nome'), SORT_ASC, $vendedores);
-
-                $message = array(
-                    'responseCode' => 200,
-                    'result' => $vendedores
-                );
-            } else {
-                $message = array('responseCode' => 204);
-            }
-        } catch (DBALException $e) {
-            $message = array(
-                'responseCode' => $e->getCode(),
-                'message' => $e->getMessage()
-            );
-        }
-
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    } */
-
     public function getVendedores(Connection $connection, Request $request)
     {
         try {
-            $query = "SELECT ID, CONCAT(NM_VEND,' ', NM_RAZA_SOCI) AS nombre 
-                        FROM TB_VEND ORDER BY nombre asc";
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $id_vendedor = $infoUsuario->idVendedor;
+            $helper = new Helper();
+            $id_usuario = 0;
+
+            $traerVendedor = $helper->traerVendedorId($connection, $id_vendedor);
+            if ($traerVendedor !== false) {
+                $id_usuario = $traerVendedor[0]['ID_USUA'];
+            }
+
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
+            $cargo = $buscarUsuario['NM_CARG_FUNC'];
+        
+
+            switch ($cargo) {
+                case 'PROMOTOR':
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
+                          FROM TB_VEND 
+                          WHERE ID = :id";
+                    break;
+
+                default:
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
+                          FROM TB_VEND 
+                          ORDER BY nombre ASC";
+                    break;
+            }
 
             $stmt = $connection->prepare($query);
+            if ($cargo == 'PROMOTOR') {
+                $stmt->bindValue(':id',  $id_vendedor);
+            }
+
             $stmt->execute();
             $res = $stmt->fetchAll();
-            // dd($res);
+        
+
             if (count($res) > 0) {
-                $message = array(
+                $message = [
                     "responseCode" => 200,
                     "data" => $res,
                     "success" => true
-                );
+                ];
             } else {
-                $message = array(
+                $message = [
                     "responseCode" => 204,
                     "message" => "No existe el vendedor",
                     "success" => false
-                );
+                ];
             }
-        } catch (\Throwable $th) {
-            $message = array(
-                "responseCode" => 400,
-                "message" => $th->getMessage(),
+        } catch (\PDOException $pdoException) {
+            $message = [
+                "responseCode" => $pdoException->getCode(),
+                "message" => $pdoException->getMessage(),
                 "success" => false
-            );
+            ];
+        } catch (\Exception $exception) {
+            $message = [
+                "responseCode" => $exception->getCode(),
+                "message" => $exception->getMessage(),
+                "success" => false
+            ];
         }
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
+        return $response;    }
+
 
     /**
      * @Route(
@@ -221,7 +200,7 @@ class VendedorController extends AbstractController
     public function getClientesCarteira(Connection $connection, Request $request)
     {
         try {
-
+            $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $matricula = $acessoClientes ? 0 : $infoUsuario->matricula;
@@ -229,7 +208,9 @@ class VendedorController extends AbstractController
             $situacao = $request->query->get("situacao");
 
             $idVendedor = '';
-            if ($infoUsuario->matricula != 1) {
+
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+            if ($infoUsuario->matricula != 1 && $buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
                 $idVendedor = $infoUsuario->idVendedor;
                 $res = $connection->query("
                 EXECUTE [PCR_CLIE_CONS3]
@@ -242,7 +223,7 @@ class VendedorController extends AbstractController
                 /* dd($res); */
             } else {
                 //dd($request);
-                if ($request->query->get("idVendedor") == '') {
+                if ($request->query->get("idVendedor") == '' && $buscarUsuario['NM_CARG_FUNC'] != 'PROMOTOR') {
                     $res = $connection->query("
                         EXECUTE [PRC_CLIE_CONS]
                             @ID_PARAM = 6                        
@@ -299,26 +280,14 @@ class VendedorController extends AbstractController
 
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
-            if ($infoUsuario->matricula != 1) {
-                $idVendedor = $infoUsuario->idVendedor;
 
-                $res = $connection->query("
-                EXECUTE [PCR_CLIE_CONS4]
-                    @ID_PARAM = 6
-                    ,@NR_MATR = {$idVendedor}
-                    ,@NM_CLIE = '{$cliente}'
-                    ,@ID_SITU = '{$situacao}'
-                    ,@ID_DEBU = 0
-            ")->fetchAll();dd($res);
-            } else {
-                $res = $connection->query("
+            $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]
                     @ID_PARAM = 6
                     ,@NM_CLIE = '{$cliente}'
                     ,@ID_SITU = '{$situacao}'
             ")->fetchAll();
-                
-            }
+
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                 foreach ($res as $re) {
                     if (empty($re["nombre_factura"])) {
@@ -381,7 +350,6 @@ class VendedorController extends AbstractController
      */
     public function getlistaprecio(Connection $connection, Request $request)
     {
-
         try {
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
@@ -791,7 +759,7 @@ class VendedorController extends AbstractController
                         $latitud = -14.826312;
                         $longitud = -64.902406;
                         break;
-                        
+
                     case 6:
                         //Tarija
                         $latitud = -21.531525;
@@ -853,3 +821,62 @@ class VendedorController extends AbstractController
         return $response;
     }
 }
+
+
+ ///////////////////////////MÉTODO ORIGINAL DE getVendedores////////////////////////////
+    /*  public function getVendedores(Connection $connection, Request $request)
+    {
+        // dd('vendedor'); 
+        try {
+            $usuarioController = new UsuarioController();
+            $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            // dd($infoUsuario); 
+            $id_usuario = $infoUsuario->id;
+            // dd($id_usuario);
+            if ($id_usuario  == 1) {
+                $res = $connection->query("
+                    EXEC [PRC_COME_VEND_ESCR_CONS]
+                        @ESCRITORIO = '',
+                        @SITUACAO = '1'
+                ")->fetchAll();
+            } else {
+                $res = $connection->query("
+                EXEC [PRC_COME_VEND_ESCR_CONS1]
+                    @ESCRITORIO = '',
+                    @SITUACAO = '1',
+                    @IDVEN = '$id_usuario'
+            ")->fetchAll();
+            }
+
+                     //dd($res);
+ 
+            if (count($res) > 0) {
+                for ($i = 0; $i < count($res); $i++) {
+                    $vendedores[] = array(
+                        'id' => $res[$i]['id'],
+                        'idEscritorio' => $res[$i]['id_escritorio'],
+                        'nome' => trim($res[$i]['nome'])
+                    );
+                }
+                //                dd($vendedores);
+ 
+                array_multisort(array_column($vendedores, 'nome'), SORT_ASC, $vendedores);
+
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $vendedores
+                );
+            } else {
+                $message = array('responseCode' => 204);
+            }
+        } catch (DBALException $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    } */

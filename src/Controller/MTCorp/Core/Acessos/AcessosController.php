@@ -29,11 +29,9 @@ class AcessosController
             $params = json_decode($request->getContent());
 
             $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
             $idUsuario      = $infoUsuario->id;
             $matricula      = $infoUsuario->matricula;
             $ip             = UsuarioController::ipUsuario();
-
             $dsRota         = isset($params->dsRota)        ? $params->dsRota       : '';
             $queryString    = '';
             $idAtividade    = isset($params->idAtividade)   ? $params->idAtividade  : '';

@@ -242,4 +242,51 @@ class PreCadastroController extends AbstractController
     $response->setEncodingOptions(JSON_NUMERIC_CHECK);
     return $response;
   }
+
+
+   /**
+   * @Route(
+   *  "/comercial/clientes/tipo_persona",
+   *  name="comercial.clientes-tipo-persona",
+   *  methods={"GET"}
+   * )
+   * @param Connection $connection
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function obtenerTiposPersonas(Connection $connection, Request $request)
+  {
+     try {
+      //dd($helper);
+      $tipo_persona = $connection->fetchAllAssociative('SELECT * FROM TB_CLIE_TIPO_PERSONA');
+      //dd($tipo_persona);
+      if ($tipo_persona !== false) {
+        $message = array(
+          'responseCode' => 200,
+          'estado' => true,
+          'detalle' => 'Datos obtenidos exitosamente',
+          'result' => $tipo_persona
+          /* 'estado' => true */
+        );
+      } else {
+        $message = array(
+          'responseCode' => 204,
+          'estado' => false,
+          'detalle' => 'Error al obtener los datos',
+          'result' => null
+          /* 'estado' => true */
+        );
+      }
+    } catch (DBALException $e) {
+      $message = array(
+        'responseCode' => 204,
+        'estado' => false,
+        'detalle' => $e->getMessage(),
+        'result' => null
+      );
+    }
+    $response = new JsonResponse($message);
+    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+    return $response;
+  }
 }

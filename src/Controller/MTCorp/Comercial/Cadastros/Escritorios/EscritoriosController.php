@@ -30,7 +30,7 @@ class EscritoriosController extends AbstractController
      * @return 
      */
     public function getListaEscritorios(Connection $connection, Request $request)
-    {
+    { 
         try {
             $params = $request->query->all();
            

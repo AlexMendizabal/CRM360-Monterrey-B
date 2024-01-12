@@ -618,7 +618,7 @@ class DashboardVendedorController extends AbstractController
               @IDESCRITORIO = '{$idEscritorio}'
             "
           )->fetchAll();
-               dd($metasCorrente);
+              
         
           if (count($metasCorrente) > 0) {
             $arrMetasCorrente = array(
@@ -825,7 +825,7 @@ class DashboardVendedorController extends AbstractController
               @IDESCRITORIO = '{$idEscritorio}'
             "
           )->fetchAll();
-          dd($res);
+         
           if (count($res) > 0) {
             $ativos = new \stdClass;
             $ativos->tipo = 'Ativos';
@@ -1338,7 +1338,7 @@ class DashboardVendedorController extends AbstractController
    * @return JsonResponse
    */
   public function getComissaoRepresentante(Connection $connection, Request $request, $idVendedor)
-    {
+    {dd($request);
         try {
 
             $res = $connection->query("
@@ -1353,6 +1353,7 @@ class DashboardVendedorController extends AbstractController
                   );
                }
             }
+            
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $resLoop, Response::HTTP_OK);

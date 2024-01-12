@@ -24,10 +24,7 @@ class AtividadesController
      */
     public function index(Connection $connection, Request $request): JsonResponse
     {
-       
-
         try {
-
             $id                     = $request->query->get("id");
             $matricula              = $request->query->get("matricula");
             $submoduloId            = $request->query->get("submoduloId");
@@ -72,7 +69,6 @@ class AtividadesController
                     ,@IN_PAGI           = :inPagina
                     ,@IN_TT_REGI        = :inTotalRegistros
             SQL;
-
             $stmt = $connection->prepare($query);
             
             $stmt->bindValue(":id",                     $id);
@@ -95,19 +91,16 @@ class AtividadesController
             $stmt->bindValue(":orderType",              $orderType);
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       "0");
-            
             $stmt->execute();
-
             $response = $stmt->fetchAllAssociative();
-            
-            /* dd($response); */
+
+           
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
-
             $stmt->execute();
 
             $total = $stmt->fetchOne();
-
+         
             if(!is_array($response))
                 throw new \Exception($response);
                

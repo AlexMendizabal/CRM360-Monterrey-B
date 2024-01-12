@@ -70,6 +70,12 @@ class CrossSellController extends AbstractController
       }
     }
 
+    public function buscaIDmate($connection, $data)
+     {
+        $codMaterial =  $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$data]);
+        return $codMaterial;
+     }
+
     /**
      * @Route(
      *  "/comercial/cadastros/materiais/cross-sell/lista-materiais",
@@ -84,11 +90,11 @@ class CrossSellController extends AbstractController
     {
       try {
         $params = $request->query->all();
-
         $codMaterial = NULL;
+        if (isset($params['codMaterial']));
 
-        if (isset($params['codMaterial'])) $codMaterial = $params['codMaterial'];
-
+        $codMaterial = $this->buscaIDmate($connection, $params["codMaterial"]);
+               
         $res = $connection->query("
           EXEC PRC_CROS_SELL_CONS
             @ID_PARA = 3,
@@ -233,15 +239,16 @@ class CrossSellController extends AbstractController
       try {
         $params = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-        
-        $codMaterial = $params['codMaterial'];
+
+        !empty($params['codMaterial']) ?  $codMaterial = $this->buscaIDmate($connection, $params["codMaterial"]) : null;
+
         $codSituacao = $params['codSituacao'];
         $assocMateriais = $params['assocMateriais'];
 
         $materiais = array();
 
         for ($i=0; $i < count($assocMateriais); $i++) {
-            $materiais[] = $assocMateriais[$i]['codMaterial'];
+            $materiais[] = $this->buscaIDmate($connection, $assocMateriais[$i]['codMaterial']);
         }
 
         $materiais = implode(',', $materiais);
@@ -280,16 +287,16 @@ class CrossSellController extends AbstractController
       try {
         $params = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-        
+            
         $codCrossSell = $params['codCrossSell'];
-        $codMaterial = $params['codMaterial'];
+        !empty($params['codMaterial']) ?  $codMaterial = $this->buscaIDmate($connection, $params["codMaterial"]) : null;
         $codSituacao = $params['codSituacao'];
         $assocMateriais = $params['assocMateriais'];
 
         $materiais = array();
 
         for ($i=0; $i < count($assocMateriais); $i++) {
-            $materiais[] = $assocMateriais[$i]['codMaterial'];
+            $materiais[] = $this->buscaIDmate($connection, $assocMateriais[$i]['codMaterial']);
         }
 
         $materiais = implode(',', $materiais);

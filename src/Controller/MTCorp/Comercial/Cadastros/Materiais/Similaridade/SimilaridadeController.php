@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\ParameterType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -100,8 +102,7 @@ class SimilaridadeController extends AbstractController
             @ID_PARA = 2
             ,@ID_SIMI_MATE = {$codSimilaridade}
         ")->fetchAll();
-
-        if (count($res) > 0) {
+      if (count($res) > 0) {
             return $res;
         } else {
             return [];
@@ -150,24 +151,70 @@ class SimilaridadeController extends AbstractController
      * )
      * @return JsonResponse
      */
-    public function postSimilaridade(Connection $connection, Request $request)
+     public function postSimilaridade(Connection $connection, Request $request)
+     {
+        $params = json_decode($request->getContent(), true);
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+        $data_similar["ID_MATE"] = (int)$this->buscaIDmate($connection, $params["codMaterial"]);
+        !empty($params['nomeMaterial']) ? $data_similar["DS_MATE"] = $params['nomeMaterial'] : $data_error['nomeMaterial'] = 'es requerido';
+        !empty($params['codSituacao']) ? $data_similar["IN_SITU"] = (int)$params['codSituacao'] : $data_error['codSituacao'] = 'es requerido';
+        $data_similar["DT_CADA"] = date("Y-m-d");
+        $data_similar["ID_USUA"] = (int)$infoUsuario->matricula;
+        !empty($params['codMaterial']) ? $data_similar["COD_MATE"] = $params['codMaterial']: $data_error['codigo material'] = 'es requerido';
+        !empty($params['assocMateriais']) ? $assocMateriais = $params['assocMateriais'] : $data_error['assocMateriais'] = 'es requerido';
+        try {
+            $resp = $connection->insert('TB_SIMI_MATE', $data_similar);
+            $ID_SIMI_MATE = $connection->lastInsertId();
+           if(!empty($resp)) {
+                foreach($assocMateriais as $materialasocido)
+                {
+                    $id_mate = $this->buscaIDmate($connection, $materialasocido["codMaterial"]);
+                    $data_asociado['ID_SIMI_MATE'] = (int)$ID_SIMI_MATE;
+                    $data_asociado['ID_MATE'] = (int)$id_mate;
+                    $data_asociado['COD_MATE'] = $materialasocido["codMaterial"];
+                    $resp2 = $connection->insert('TB_SIMI_MATE_ASSO', $data_asociado);
+                   
+                }
+                if(!empty($resp2))
+                {
+                    return FunctionsController::Retorno(true, 'Registro completado con éxitoo.', null, Response::HTTP_OK);
+                } else {
+                    return FunctionsController::Retorno(false, 'No se realizó el registro.', $data_error, Response::HTTP_OK);
+                }
+            } else {
+                return FunctionsController::Retorno(false, 'No se realizó el registro.', $data_error, Response::HTTP_OK);
+            }
+        } catch (\Throwable $e) {
+            return FunctionsController::Retorno(false, 'Error al registrarse.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+     }
+
+
+     public function buscaIDmate($connection, $data)
+     {
+        $codMaterial =  $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$data]);
+        return $codMaterial;
+     }
+  /*   public function postSimilaridade(Connection $connection, Request $request)
     {
       try {
         $params = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-        
-        $codMaterial = $params['codMaterial'];
+
+        $codMaterial =  $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$params['codMaterial']]);
         $nomeMaterial = $params['nomeMaterial'];
         $codSituacao = $params['codSituacao'];
         $assocMateriais = $params['assocMateriais'];
+        $codigoMaterial = $params['codMaterial'];
         $materiais = array();
 
         for ($i=0; $i < count($assocMateriais); $i++) {
-            $materiais[] = $assocMateriais[$i]['codMaterial'];
+            $materiais[] = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$assocMateriais[$i]['codMaterial']]);
         }
-
+      
         $materiais = implode(',', $materiais);
-        
+       
         $res = $connection->query("
             EXEC [PRC_SIMI_MATE_CADA]
               @ID_PARA        = 1
@@ -176,19 +223,20 @@ class SimilaridadeController extends AbstractController
               ,@ID_MATE_ASSO  = '{$materiais}'
               ,@IN_SITU       = {$codSituacao}
               ,@ID_USUA       = {$infoUsuario->matricula}
+              ,@COD_MATE      = {$codigoMaterial}
         ")->fetchAll();
 
         if (isset($res[0]['codSimilaridade'])) {
-            return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
+            return FunctionsController::Retorno(true, 'Registro completado con éxitoo.', null, Response::HTTP_OK);
         } else if (count($res) > 0 && isset($res[0]['message'])) {
             return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
+            return FunctionsController::Retorno(false, 'No se realizó el registro.', null, Response::HTTP_OK);
         }
       } catch (\Throwable $e) {
-        return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(false, 'Error al registrarse.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
       }
-    }
+    } */
 
     /**
      * @Route(
@@ -203,8 +251,33 @@ class SimilaridadeController extends AbstractController
         try {
             $params = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+          
+            !empty($params['codSituacao']) ? $data_similar["IN_SITU"] = (int)$params['codSituacao'] : $data_error['codSituacao'] = 'es requerido';
+            $data_similar["DT_CADA"] = date("Y-m-d");
+            $data_similar["ID_USUA"] = (int)$infoUsuario->matricula;
+            !empty($params['assocMateriais']) ? $assocMateriais = $params['assocMateriais'] : $data_error['assocMateriais'] = 'es requerido';
+            !empty($params['codSimilaridade']) ? $codSimilaridade = $params['codSimilaridade'] :$data_error['codSimilaridade'] ='es requerido'; 
 
-            $codSimilaridade = $params['codSimilaridade'];
+            $resp = $connection->update('TB_SIMI_MATE', $data_similar, ['ID' => (int)$codSimilaridade]);
+          
+           if(!empty($resp)) {
+                foreach($assocMateriais as $materialasocido)
+                {
+                    $id_mate = $this->buscaIDmate($connection, $materialasocido["codMaterial"]);
+                    $data_asociado['ID_MATE'] = (int)$id_mate;
+                    $data_asociado['COD_MATE'] = $materialasocido["codMaterial"];
+                    $resp2 = $connection->update('TB_SIMI_MATE_ASSO', $data_asociado,['ID_SIMI_MATE' => (int)$codSimilaridade]);
+                }
+                if(!empty($resp2))
+                {
+                    return FunctionsController::Retorno(true, 'Registro completado con éxitoo.', null, Response::HTTP_OK);
+                } else {
+                    return FunctionsController::Retorno(false, 'No se realizó el registro.', $data_error, Response::HTTP_OK);
+                }
+            } else {
+                return FunctionsController::Retorno(false, 'No se realizó el registro.', $data_error, Response::HTTP_OK);
+            }
+          /*   $codSimilaridade = $params['codSimilaridade'];
             $codMaterial = $params['codMaterial'];
             $nomeMaterial = $params['nomeMaterial'];
             $codSituacao = $params['codSituacao'];
@@ -227,7 +300,7 @@ class SimilaridadeController extends AbstractController
                     ,@IN_SITU = {$codSituacao}
                     ,@ID_USUA = {$infoUsuario->matricula}
             ")->fetchAll();
-
+ */
             if (isset($res[0]['codSimilaridade']) && $res[0]['codSimilaridade'] == $codSimilaridade) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {

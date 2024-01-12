@@ -471,6 +471,7 @@ class TidSoftwareController extends AbstractController
   {
     if ($request->isMethod('GET')) {
       try {
+       
         /* $res = $connection->query(
           "
             SELECT

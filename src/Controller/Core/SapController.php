@@ -341,7 +341,7 @@ class SapController extends AbstractController
             $helper = new Helper();
             $jsonData = $request->getContent();
             $data = json_decode($jsonData, true);
-           
+
             $item_code = $data['itemCode'];
             $item_name = $data['itemName'];
             $familia = $data['familia'];
@@ -354,7 +354,8 @@ class SapController extends AbstractController
             $id_linea = null;
             $arrayMaterial = array();
 
-            if (isset($item_code) && $item_code != null && isset($item_name) && $item_name != null && isset($linea) && $linea != null
+            if (
+                isset($item_code) && $item_code != null && isset($item_name) && $item_name != null && isset($linea) && $linea != null
                 && isset($unidad) && $unidad != null && isset($peso) && $peso != null && isset($estado) && $estado != null
             ) {
                 //Helper buscar unidad de acuerdo a la abreviatura
@@ -413,7 +414,7 @@ class SapController extends AbstractController
                 }
 
                 $buscar_item =  $helper->buscarItem($connection,  $item_code);
-                
+
                 if (!empty($buscar_item)) {
                     $arrayMaterial = ([
                         'id_material' => (int)$buscar_item[0]['ID_CODIGOMATERIAL'],
@@ -616,6 +617,7 @@ class SapController extends AbstractController
      */
     public function sapInsertCliente(Connection $connection, Request $request)
     {
+
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
@@ -634,9 +636,9 @@ class SapController extends AbstractController
             ];
         } else {
 
+            /*             dd($insertCliente);
+ */
             $insertCliente = $helper->insertClient($connection, $data);
-            //dd
-
             if ($insertCliente['codigoRespuesta'] == 200) {
                 $id_cliente = $insertCliente['data']['cliente'];
                 $codigo_cliente = $insertCliente['data']['codigo_cliente'];
@@ -666,9 +668,9 @@ class SapController extends AbstractController
                         $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
                     }
                     foreach ($ubClie as $value) {
-                        $borrarUbicaciones = $helper->borrarUbicaciones($connection, $value['id_ubicacion']);
+                        $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$value['id_ubicacion']);
                     }
-                    $borrarCliente = $helper->borrarClientes($connection, $id_cliente);
+                    $borrarCliente = $helper->borrarClientes($connection, (int)$id_cliente);
 
                     if ($borrarCliente !== false) {
                         $message = [
@@ -700,7 +702,7 @@ class SapController extends AbstractController
                             }
                             $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
                         }
-                        $borrarCliente = $helper->borrarClientes($connection, $id_cliente);
+                        $borrarCliente = $helper->borrarClientes($connection, (int)$id_cliente);
                         //dd($borrarCliente);
 
                         if ($borrarCliente !== false) {
@@ -785,7 +787,7 @@ class SapController extends AbstractController
                                             $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
                                         }
                                     }
-                                    $eliminarClientes = $helper->borrarClientes($connection, $id_cliente);
+                                    $eliminarClientes = $helper->borrarClientes($connection, (int)$id_cliente);
                                     if ($eliminarClientes !== false) {
                                         $message = [
                                             "CodigoRespuesta" => 204,
@@ -803,9 +805,10 @@ class SapController extends AbstractController
                                             "Mensaje" => "Se registro correctamente",
                                         ];
                                     } else {
-                                        $traerUbicaciones = $helper->traerDireccionCliente($connection, $id_cliente);
+                                        //dd('aqui');
+                                        $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$id_cliente);
                                         if ($traerUbicaciones !== false) {
-                                            $eliminarDireccion = $helper->borrarUbicaciones($connection, $id_cliente);
+                                            $eliminarDireccion = $helper->borrarUbicaciones($connection, (int)$id_cliente);
                                             if ($eliminarDireccion !== false) {
                                                 $traerContactos =  $helper->traerContactoCliente($connection, (int)$id_cliente);
                                                 if ($traerContactos !== false) {
@@ -827,14 +830,15 @@ class SapController extends AbstractController
                                                 $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
                                             }
                                         }
-                                        $eliminarClientes = $helper->borrarClientes($connection, $id_cliente);
-                                        if ($eliminarClientes !== false) {
-                                            $message = [
-                                                "CodigoRespuesta" => 204,
-                                                "Estado" => true,
-                                                "Mensaje" => 'SAP: ' . $resp_sap['data'],
-                                            ];
-                                        }
+                                        //dd((int)$id_cliente);
+                                        $eliminarClientes = $helper->borrarClientes($connection, (int)$id_cliente);
+                                        //if ($eliminarClientes !== false) {
+                                        $message = [
+                                            "CodigoRespuesta" => 204,
+                                            "Estado" => true,
+                                            "Mensaje" => 'SAP: ' . $resp_sap['data'],
+                                        ];
+                                        //}
                                     }
                                 }
                             } else {
@@ -1304,11 +1308,11 @@ class SapController extends AbstractController
                 $ubicacion['ciudad'] = '';
             }
         }
-        
 
-        unset($ubicacion);        
+
+        unset($ubicacion);
         $arrayContacto = $data['contactos'];
-        
+
         $data_sap = ([
             'codigo_cliente' => $data['codigo_cliente'],
             'id_cliente' => $data['id_cliente'],
@@ -1329,14 +1333,18 @@ class SapController extends AbstractController
             'contactos' => $arrayContacto,
             'id_estado' => $data['id_estado'],
         ]);
+        //dd($data_sap);
 
         if ($swSap === true) {
-           
-            $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
-            if ($resp_sap['estado'] == true) {
 
+            $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
+            //dd($resp_sap['response']);
+            if ($resp_sap['response'] == 200) {
+
+                /* dd($data); */
                 $actualizarLocal = $this->actualizarClienteLocal($connection, $data, $helper);
-                if ($actualizarLocal['estado'] == true) {
+                //dd($actualizarLocal);
+                if ($actualizarLocal['Estado'] == true) {
                     $message = [
                         "CodigoRespuesta" => 200,
                         "Estado" => true,
@@ -1346,7 +1354,7 @@ class SapController extends AbstractController
                     $message = [
                         "CodigoRespuesta" => 204,
                         "Estado" => false,
-                        "Mensaje" => $actualizarLocal['detalle'],
+                        "Mensaje" => $actualizarLocal['Mensaje'],
                     ];
                 }
             } else {
@@ -1357,6 +1365,12 @@ class SapController extends AbstractController
                 ];
             }
         } else {
+
+            if (!isset($data['local'])) {
+                $id_vendedor = $helper->traerVendedor($connection, $data['id_vendedor']);
+                $data['id_vendedor'] = (int)$id_vendedor;
+            }
+            //dd($data);
 
             $actualizarLocal = $this->actualizarClienteLocal($connection, $data, $helper);
             if ($actualizarLocal['Estado'] == true) {
@@ -1392,6 +1406,9 @@ class SapController extends AbstractController
         $traerCliente = $helper->traerCliente($connection, $id_cliente);
         if ($traerCliente !== false) {
             $data['id_cliente'] = $traerCliente[0]['id_cliente'];
+        }
+        if (isset($data['ubicacion'][0]['id_ciudad'])) {
+            $data['id_ciudad'] = $data['ubicacion'][0]['id_ciudad'];
         }
         $respuestaClient = $helper->updateClient($connection, $data);
         if ($respuestaClient['Estado'] === true) {
@@ -1523,6 +1540,7 @@ class SapController extends AbstractController
                     }
                 }
             }
+            /* dd($respuestaClient); */
             return $respuestaClient;
         } else {
             return $respuestaClient;
@@ -1543,25 +1561,20 @@ class SapController extends AbstractController
         $helper = new Helper();
         try {
             $data = json_decode($request->getContent(), true);
-            
-            if(!empty($data['codigo_almacen']))
-            {
+            if (!empty($data['codigo_almacen'])) {
                 $message = $helper->insertAlmacen($connection, $data);
-            }
-            else
-            {
+            } else {
                 $message = [
-                    "response" => 500,
-                    "estado" => false,
-                    "detalle" => 'Es nesesario el codigo de almacen',
+                    "CodigoRespuesta" => 204,
+                    "Estado" => false,
+                    "Mensaje" => 'Error, el codigo_almacen no puede ser vacio'
                 ];
             }
-             
         } catch (\Throwable $e) {
             $message = [
-                "response" => 401,
-                "estado" => false,
-                "detalle" => $e->getMessage()
+                "CodigoRespuesta" => 401,
+                "Estado" => false,
+                "Mensaje" => $e->getMessage()
             ];
         }
 
@@ -1583,17 +1596,14 @@ class SapController extends AbstractController
         $helper = new Helper();
         try {
             $data = json_decode($request->getContent(), true);
-            if(!empty($data['codigo_almacen']))
-            {
-                $message = $helper->actualizaAlmacen($connection, $data); 
-            }
-             else
-             {
-                $message = [ 
-                            "response" => 500,
-                            "estado" => false,
-                            "detalle" => 'Es nesesario el codigo de almacen',
-                        ];
+            if (!empty($data['codigo_almacen'])) {
+                $message = $helper->actualizaAlmacen($connection, $data);
+            } else {
+                $message = [
+                    "response" => 500,
+                    "estado" => false,
+                    "detalle" => 'Es nesesario el codigo de almacen',
+                ];
             }
         } catch (\Throwable $e) {
             $message = [
@@ -1616,7 +1626,7 @@ class SapController extends AbstractController
      * )
      * @return JsonResponse
      */
-    function 
+    function
     insertPrecios(Connection $connection, Request $request)
     {
         try {
@@ -1816,7 +1826,13 @@ class SapController extends AbstractController
     public function insertUsuario(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
+
         $helper = new Helper();
+        !empty($data['sucursal']) ? $data['sucursal'] : $data_error['sucursal'] = 'es requerido';
+        !empty($data['carnet']) ? $data['carnet'] : $data_error['carnet'] = 'es requerido';
+        !empty($data['nombreUsuario']) ? $data['nombreUsuario'] : $data_error['nombreUsuario'] = 'es requerido';
+        !empty($data['codigo_sap']) ? $data['codigo_sap'] : $data_error['codigo_sap'] = 'es requerido';
+
         isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
         $data_ejecutivo['TP_PESS'] = 'F';
         $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
@@ -1824,52 +1840,73 @@ class SapController extends AbstractController
         $data_ejecutivo['NM_CARG_FUNC'] = 'PROMOTOR';
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
-
         $data_ejecutivo['DS_SENh'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
+
         try {
-            if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
-                $busca_matricula = $connection->fetchOne('SELECT id FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
-                if (empty($busca_matricula)) {
-                    $data_ejecutivo['NR_MATR'] = $data['codigo_sap'];
-                    $resp_usuario = $connection->insert('TB_CORE_USUA', $data_ejecutivo);
-
-                    if (!empty($resp_usuario)) {
-                        $id_usuario = $connection->lastInsertId();
-                        $resultPermiso = $helper->asignarPermisos($connection, $id_usuario);
-
-                        $respVend = $helper->insertVendedor($connection, $data, $id_usuario);
-
-                        if ($respVend['response'] == 200) {
-                            $message = array(
-                                'response' => 200,
-                                'estado' => true,
-                                'detalle' => 'Se registro!'
-                            );
+            if (empty($data_error)) {
+                if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
+                    $busca_matricula = $connection->fetchOne('SELECT id FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
+                    if (empty($busca_matricula)) {
+                        $id_sucursal = $connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
+                        if (!empty($id_sucursal)) {
+                            $data_ejecutivo['NR_MATR'] = $data['codigo_sap'];
+                            $resp_usuario = $connection->insert('TB_CORE_USUA', $data_ejecutivo);
+                            $id_usuario = $connection->lastInsertId();
+                            if (!empty($resp_usuario)) {
+                                $resultPermiso = $helper->asignarPermisos($connection, $id_usuario);
+                                if ($resultPermiso['codigoRespuesta'] != 200) {
+                                    $connection->rollBack();
+                                    $message = array(
+                                        'response' => 204,
+                                        'estado' => false,
+                                        'detalle' => 'No se registro',
+                                        'error' => $data_error
+                                    );
+                                }
+                                $respVend = $helper->insertVendedor($connection, $data, $id_usuario, $id_sucursal);
+                                if ($respVend['response'] != 200) {
+                                    $connection->rollBack();
+                                    $message = array(
+                                        'response' => 204,
+                                        'estado' => false,
+                                        'detalle' => 'No se registro',
+                                        'error' => $data_error
+                                    );
+                                }
+                                if ($resultPermiso['codigoRespuesta'] == 200 && $respVend['response'] == 200) {
+                                    $message = array(
+                                        'response' => 200,
+                                        'estado' => true,
+                                        'detalle' => 'Se registro'
+                                    );
+                                }
+                            } else {
+                                $message = array(
+                                    'response' => 204,
+                                    'estado' => false,
+                                    'detalle' => 'No se registro',
+                                    'error' => $data_error
+                                );
+                            }
                         } else {
+                            $data_error['codigo_sap'] = 'No Existe la sucursal';
                             $message = array(
                                 'response' => 204,
                                 'estado' => false,
-                                'detalle' => 'No se registro!'
+                                'detalle' => 'No se registro',
+                                'error' => $data_error
                             );
                         }
                     } else {
-                        $message = array(
-                            'response' => 204,
-                            'estado' => false,
-                            'detalle' => 'No se registro',
-                            'error' => $data_error
-                        );
+                        $helper->updateUsuario($connection, $data);
+                        $message = $helper->updateVendedor($connection, $data);
                     }
                 } else {
-                    $resp = $helper->updateVendedor($connection, $data);
-                    if ($resp['response'] == true); {
-                        $res = $helper->updateUsuario($connection, $data);
-                        $message = array(
-                            'response' => 200,
-                            'estado' => true,
-                            'detalle' => 'Se Actualizo!'
-                        );
-                    }
+                    $message = array(
+                        'response' => 204,
+                        'estado' => false,
+                        'error' => "Es requerido el codigo sap"
+                    );
                 }
             } else {
                 $message = array(

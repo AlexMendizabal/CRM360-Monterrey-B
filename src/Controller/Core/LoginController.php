@@ -65,9 +65,8 @@ class LoginController extends AbstractController
                 $stmt->bindValue(1, $nrMatrUsua);
                 $stmt->executeQuery();
                 $usuario = $stmt->fetchAll();
-             
+                //dd($usuario);
                 if(count($usuario) > 0){
-                   
                     $datos = [];
                     $modulo_principal = [];
                     $devolverArray = '';
@@ -76,7 +75,6 @@ class LoginController extends AbstractController
                         "nome" => $usuario[0]['NM_MODU'],
                         "rota" => $usuario[0]['DS_ROTA'],
                     );
-                  
                     $datos = array(
                         "id" => $usuario[0]['ID'],
                         "matricula" => $usuario[0]['ID'],
@@ -84,11 +82,10 @@ class LoginController extends AbstractController
                         "idEscritorio" => $usuario[0]['ID_ESCR'],
                         "nomeCompleto"  => $usuario[0]['NM_COMP_RAZA_SOCI'],
                         "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
+                        "nomeCargo" =>$usuario[0]['NM_CARG_FUNC'],
                         "moduloPrincipal" => $modulo_principal    
                     );
-                
                     $devolverArray =  base64_encode(json_encode($datos));
-                    
                 }
                
             } catch (DBALException $e) {
@@ -117,6 +114,7 @@ class LoginController extends AbstractController
                             'matricula' => $usuario[0]['NR_MATR'],
                             'func_nome' => $usuario[0]['NM_COMP_RAZA_SOCI'],
                             'nome_abreviado' => $usuario[0]['NM_APEL_FANT'],
+                            "nome_cargo" =>$usuario[0]['NM_CARG_FUNC'],
                             'foto' => $usuario[0]['NM_FOTO'],
                             'id_modulo_home' => $usuario[0]['ID_MODU'],
                             'versao_mtcorp' => 2,

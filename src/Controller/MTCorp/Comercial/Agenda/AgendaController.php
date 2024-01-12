@@ -47,7 +47,7 @@ class AgendaController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $simuladorVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
-
+            //dd($simuladorVendas);
             $res = array(
                 array(
                     'simuladorVendas' => $simuladorVendas
@@ -156,6 +156,7 @@ class AgendaController extends AbstractController
                 'message' => $e->getMessage()
             ];
         }
+        //dd($message);
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);

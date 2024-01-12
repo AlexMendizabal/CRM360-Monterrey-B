@@ -34,8 +34,7 @@ class RutaController extends AbstractController
      * @return JsonResponse
      */
     public function getClientes(Connection $connection, Request $request): JsonResponse
-    {
-
+    { 
         try {
             $params = $request->query->all();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -50,7 +49,7 @@ class RutaController extends AbstractController
                 @ID_ESTADO = :idEstado,
                 @ID_SUCURSAL = :idSucursal,
                 @FECHA_ACTUAL = :fechaActual
-            ");
+                ");
                 $stmt->bindValue(':idVendedor', (int)$idVendedor, PDO::PARAM_INT);
                 $stmt->bindValue(':idEstado', (int)$idEstado, PDO::PARAM_INT);
                 $stmt->bindValue(':idSucursal', (int)$idSucursal, PDO::PARAM_INT);

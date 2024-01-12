@@ -72,10 +72,6 @@ class PesquisaController extends AbstractController
     {
         try {
             //dd('aqui');
-
-            
-            
-
             $params = $request->query->all();
             $usuario = new usuarioController();
             $vendedor =  new VendedorController();
@@ -83,9 +79,7 @@ class PesquisaController extends AbstractController
             $helper = new Helper();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
             $resLista = array();
-
-/*             $borrarClientes = $helper->borrarClientesLocales($connection);
- */            
+            //$borrarClientes = $helper->borrarClientesLocales($connection);
 
             $buscarPor = '';
             $pesquisa = '';
@@ -100,12 +94,14 @@ class PesquisaController extends AbstractController
             $orderBy = 'codCliente';
             $orderType = 'desc';
 
-            //dd('aqui');
+
 
             if (isset($params['pesquisa']) && $params['pesquisa'] != 'null' && $params['pesquisa'] != null) {
                 $pesquisa = $params['pesquisa'];
             }
             if (isset($params['buscarPor'])) $buscarPor = $params['buscarPor'];
+            if (isset($params['vendedor'])) $id_vendedor = (int)$params['vendedor'];
+
             if (isset($params['situacao'])) $situacao = $params['situacao'];
             if (isset($params['setorAtividade'])) $setorAtividade = $params['setorAtividade'];
             if (isset($params['tipoPessoa'])) $tipoPessoa = $params['tipoPessoa'];
@@ -118,23 +114,35 @@ class PesquisaController extends AbstractController
             if (isset($params['orderType'])) $orderType = $params['orderType'];
 
             $order = $orderBy . ' ' . $orderType;
-            if (empty($infoUsuario->idVendedor)) {
-                $idVendedor = $vendedor->idVendedor($connection, $infoUsuario);
+            /* if (empty($infoUsuario->idVendedor)) {
+                $idVendedor = (int)$vendedor->idVendedor($connection, $infoUsuario);
             } else {
-                $idVendedor = $infoUsuario->idVendedor;
-            }
+                $idVendedor = (int)$infoUsuario->idVendedor;
+            } */
+            //dd($idVendedor);
 
-            if ($carteira == 'S') {
+            /*  if ($carteira == 'S') {
                 $carteiraParam = ", @ID_VEND = '{$idVendedor}'";
             } else {
                 $carteiraParam = '';
+            } */
+            /*   dd('aqui'); */
+
+
+            if ($id_vendedor == 0) {
+                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+                if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+                    $id_vendedor =  (int)$infoUsuario->idVendedor;
+                }
             }
 
-           /*   dd('aqui'); */ 
+            //dd($id_vendedor);
+
             $resListaSr = $connection->query(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 1, 
+                    @ID_VEND = '{$id_vendedor}',
                     @ID_LOCA = '{$buscarPor}',
                     @ID_WHER = '{$pesquisa}',
                     @ID_SITU = '{$situacao}',
@@ -149,17 +157,19 @@ class PesquisaController extends AbstractController
                 " . $carteiraParam
             )->fetchAll();
 
-            if(count($resListaSr) > 0){
+            //dd($resListaSr);
+            if (count($resListaSr) > 0) {
                 $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
-            } 
+            }
 
-            
+
             //dd($resLista);
 
             $resStatus = $connection->query(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 0, 
+                    @ID_VEND = '{$id_vendedor}',
                     @ID_LOCA = '{$buscarPor}', 
                     @ID_WHER = '{$pesquisa}',
                     @ID_SITU = '{$situacao}',
@@ -173,7 +183,7 @@ class PesquisaController extends AbstractController
                     @DS_ORDE = '{$order}'
                     " . $carteiraParam
             )->fetchAll();
-
+            //dd($resStatus);
             if (count($resLista) > 0 && count($resStatus) > 0) {
                 $usuariosLiberados = $comercial->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
                 $idVendedores = $vendedor->vinculoOperadores($connection, $infoUsuario);
@@ -216,7 +226,7 @@ class PesquisaController extends AbstractController
         return $response;
     }
 
-     /**
+    /**
      * @Route(
      *  "/comercial/clientes/pesquisa/lista_api",
      *  name="comercial.clientes_api",
@@ -275,7 +285,7 @@ class PesquisaController extends AbstractController
                 $carteiraParam = '';
             }
 
-           /*   dd('aqui'); */ 
+            /*   dd('aqui'); */
             $resLista = $connection->query(
                 "
                 EXEC [PRC_CLIE_CONS] 
@@ -542,6 +552,65 @@ class PesquisaController extends AbstractController
         return $response;
     }
 
+    /**
+     * @Route(
+     *  "/comercial/clientes/pesquisa/verificaoferta/{codCliente}",
+     *  name="comercial.clientes-pesquisa-verificaoferta",
+     *  methods={"GET"},
+     *  requirements={"codCliente"="\d+"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @param $codCliente
+     * @return JsonResponse
+     */
+    public function verificaOferta(Connection $connection, Request $request, $codCliente)
+    {
+        try {
+            // Consulta para verificar si el cliente tiene una oferta abierta
+            $sql = "SELECT COUNT(*) as oferta_count FROM tb_oferta 
+            INNER JOIN MTCORP_MODU_CLIE_BASE CLI ON CLI.id_cliente = tb_oferta.id_cliente
+            WHERE tb_oferta.id_cliente = :id_cliente 
+            AND tb_oferta.estado_oferta = 10 
+            AND tb_oferta.tipo_estado = 14";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(":id_cliente", $codCliente);
+            $stmt->execute();
+            $result = $stmt->fetch();
+
+            // Devolver true si hay ofertas y false si no hay
+            $tieneOferta = $result['oferta_count'] > 0;
+
+            if (!empty($result)) {
+                $message = [
+                    'responseCode' => 200,
+                    'result' => $tieneOferta,
+                    'estado' => true,
+                ];
+            } else {
+                $message = [
+                    'responseCode' => 204,
+                    'result' => null,
+                    'estado' => false,
+                ];
+            }
+        } catch (DBALException $e) {
+            $message = [
+                'responseCode' => 204,
+                'result' => 'Error al verificar la oferta',
+                'message' => $e->getMessage(),
+                'estado' => false,
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+
 
     /**
      * @Route(
@@ -589,7 +658,7 @@ class PesquisaController extends AbstractController
         return $response;
     }
 
-            /**
+    /**
      * @Route(
      *  "/comercial/vendedor/buscador-clientes",
      *  name="comercial.vendedor-buscador-clientes",
@@ -609,7 +678,7 @@ class PesquisaController extends AbstractController
                     @id_vendedor = '{$infoUsuario->idVendedor}',
                     @nombre_cliente ='{$nombre_cliente}'
             ")->fetchAll();
-              
+
             if (count($res) > 0) {
                 $clientes = array();
 
@@ -624,7 +693,7 @@ class PesquisaController extends AbstractController
 
 
 
-                   // $vendedores[$i]['idEscritorio'] = $res[$i]['codEscritorio'];
+                    // $vendedores[$i]['idEscritorio'] = $res[$i]['codEscritorio'];
                 }
 
                 $message = array(
@@ -727,8 +796,8 @@ class PesquisaController extends AbstractController
      * @return JsonResponse
      */
     public function sapUpdateClient(Connection $connection, Request $request)
-    { 
-        
+    {
+
         $requestData = $request->getContent();
         $data = json_decode($request->getContent(), true);
         $helper = new Helper();
@@ -751,7 +820,7 @@ class PesquisaController extends AbstractController
     {
         $requestData = $request->getContent();
         $data = json_decode($request->getContent(), true);
-        
+
         // Obtener $id_cliente y $codigo_cliente desde la solicitud o alguna otra fuente
         $id_cliente = $data['id_cliente']; // Supongamos que el ID del cliente está en los datos
         $codigo_cliente = $data['codigo_cliente']; // Supongamos que el código del cliente está en los datos
@@ -761,5 +830,4 @@ class PesquisaController extends AbstractController
         $response = new JsonResponse($respuesta);
         return $response;
     }
-
 }

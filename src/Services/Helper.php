@@ -15,6 +15,10 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\ArrayParameterType;
 use Symfony\Component\Serializer\Serializer\DateTimeNormalizer;
+use DateTime;
+
+date_default_timezone_set("America/la_paz");
+
 
 class Helper
 {
@@ -234,7 +238,11 @@ class Helper
     public function insertClient($connection, $data)
     {
         try {
-            $helper = new Helper();
+            /* $buscarCliente = $this->obtenerUltimoCliente($connection);
+            dd($ultimoId); */
+            //dd($this->obtenerUltimoCliente($connection));
+
+            //$helper = new Helper();
             if (isset($data['nombres'])) {
                 $nombres = $data['nombres'];
             } else {
@@ -289,7 +297,7 @@ class Helper
             $codigo_cliente = isset($data['codigo_cliente']) ? $data['codigo_cliente'] : null;
             $email  = isset($data['email']) ? $data['email'] : null;
             $nombre_factura = isset($data['nombre_factura']) ? $data['nombre_factura'] :  null;
-            $id_tipo_cliente = isset($data['id_tipo_cliente']) ? $data['id_tipo_cliente'] : 0;
+            $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 0;
             if (empty($sap_vendedor)) {
                 $vendedor = isset($data['id_vendedor']) ? $data['id_vendedor'] : null;
             } else {
@@ -300,7 +308,7 @@ class Helper
                 $camposFaltantes[] = 'vendedor';
             }
 
-            $traerCodigoVendedor = $helper->traerVendedorSap($connection, $vendedor);
+            $traerCodigoVendedor = $this->traerVendedorSap($connection, $vendedor);
 
             if ($traerCodigoVendedor !== false) {
                 $id_vendedor_sap = $traerCodigoVendedor[0]['codigo_sap'];
@@ -341,8 +349,9 @@ class Helper
                 
                dd($respCLi); */
 
+               //dd($id_tipo_cliente);
 
-                $quereClient = "INSERT INTO MTCORP_MODU_CLIE_BASE(
+                $queryClient = "INSERT INTO MTCORP_MODU_CLIE_BASE(
                     prim_nome, 
                     segu_nome, 
                     cnpj_cpf, 
@@ -364,12 +373,13 @@ class Helper
                     id_rubro, 
                     nit
                     )
-                                        VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,:tipo_persona,:telefono,:celular,:id_tipo_cliente,:email,
-                                        :nombre_factura,:id_rubro, :nit)";
+                                        VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,
+                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :nit)";
 
                 //$connection->beginTransaction();
                 //dd($telefono);
-                $stmt = $connection->prepare($quereClient);
+                
+                $stmt = $connection->prepare($queryClient);
                 $stmt->bindValue(":nombres", $nombres);
                 $stmt->bindValue(":segu_nome", $segu_nome);
                 $stmt->bindValue(":cnpj_cpf", $cnpj_cpf);
@@ -391,8 +401,9 @@ class Helper
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
                 $stmt->bindValue(":nit", $nit);
                 $stmt->execute();
-
+                //dd( $stmt->fetchColumn());
                 $id_cliente = $connection->lastInsertId();
+                //dd($id_cliente);
 
                 if ($id_cliente > 0) {
                     $message = [
@@ -411,7 +422,8 @@ class Helper
                             "sap_vendedor" =>  (int)$id_vendedor_sap,
                             "rubro" => $rubro,
                             "tipo_persona" => $tipo_persona,
-                            "nombre_factura" => $nombre_factura
+                            "nombre_factura" => $nombre_factura,
+                            "id_tipo_cliente" => $id_tipo_cliente
                         ]
                     ];
                 } else {
@@ -429,7 +441,7 @@ class Helper
                 ];
             }
         } catch (\Throwable $th) {
-            // $connection->rollback();
+            //$connection->rollback();
             $message  = array(
                 "codigoRespuesta" => 500,
                 "estado" => false,
@@ -438,16 +450,36 @@ class Helper
         }
         return $message;
     }
+
+    public function obtenerUltimoCliente($connection)
+    {
+        try {
+            $query = "SELECT TOP 1 * FROM MTCORP_MODU_CLIE_BASE ORDER BY id_cliente DESC";
+            $stmt = $connection->prepare($query);
+            $stmt->execute();
+            $obtenerCliente = $stmt->fetch();
+
+            return $obtenerCliente;
+        } catch (\Exception $e) {
+
+            return null;
+        }
+    }
+
     public function insertarSapCliente($connection, $data)
     {
         $ruta = '/crearCliente';
         $respuesta = $this->conexionSap($ruta, $data);
+
+
 
         if ($respuesta['CodigoRespuesta'] == 200) {
             $codigo_cliente_sap = $respuesta['Mensaje'];
             $data_codigo['codigo_cliente'] = $codigo_cliente_sap;
             $data_codigo['id_cliente'] = $data['id_cliente'];
             $data_codigo['interno'] = 1;
+            $data_codigo['local'] = 1;
+            $data_codigo['id_tipo_cliente'] = 0;
 
             $actualizarCliente = $this->updateClient($connection, $data_codigo);
             $message = [
@@ -457,20 +489,31 @@ class Helper
                 "data" => $data['codigo_cliente'],
             ];
         } else {
+            $mensaje = 'Error al registrar en SAP,  ';
+            if (isset($respuesta['Campos'])) {
+                foreach ($respuesta['Campos'] as $dato) {
+                    //dd($dato);
+                    $mensaje .= $dato . ', ';
+                }
+            }
+
             $message = [
                 "response" => 204,
                 "estado" => false,
                 "detalle" => "Error de registro en Sap",
-                "data" => $respuesta['Mensaje'] . $respuesta['Campos']
+                "data" =>  $mensaje . $respuesta['Mensaje']
             ];
         }
+        //dd($message);
         return $message;
     }
     public function insertUbClient($connection, $data = [], $id_cliente, $codigo_cliente)
     {
+        //dd('aqui');
+
         $camposFaltantes = array();
         $ciudad = isset($data['ciudad']) ? strtoupper($data['ciudad']) : null;
-        $id_ciudad = isset($data['id_ciudad']) ? $data['id_ciudad'] :  0;
+        $id_ciudad = isset($data['id_ciudad']) ? (int)$data['id_ciudad'] :  0;
 
 
         if (!empty($data['ubicacion'])) {
@@ -487,23 +530,25 @@ class Helper
  */
         if (!empty($data['latitud'])) {
             $latitud =  $data['latitud'];
-        } /* else {
-            $camposFaltantes[] = 'latitud';
-        } */
+        } else {
+            /*  $camposFaltantes[] = 'latitud'; */
+            $latitud = 0;
+        }
 
         if (!empty($data['longitud'])) {
             $longitud =  $data['longitud'];
-        } /* else {
-            $camposFaltantes[] = 'longitud';
-        } */
+        } else {
+            $longitud =  0;
+            //$camposFaltantes[] = 'longitud';
+        }
 
         if ($ciudad != 0 || $ciudad != null) {
             $ciudad = $data['ciudad'];
             $buscarCiudad = $this->buscarCiudad2($connection, $ciudad);
             $id_ciudad = $buscarCiudad['id'];
         } else {
-            $id_ciudad = isset($data['id_ciudad']) ? $data['id_ciudad'] :  0;
-            $buscarCiudad = $this->buscarCiudad2($connection, $data['id_ciudad']);
+            $id_ciudad = isset($data['id_ciudad']) ? (int)$data['id_ciudad'] :  0;
+            $buscarCiudad = $this->buscarCiudad2($connection, (int)$data['id_ciudad']);
             $ciudad = $buscarCiudad['nombre_ciudad'];
         }
         $sigla_ciudad = $buscarCiudad['sigla'];
@@ -757,13 +802,12 @@ class Helper
         return $res;
     }
 
-    public function insertVendedor($connection, $data, $id_usuario)
+    public function insertVendedor($connection, $data, $id_usuario, $id_sucursal)
     {
         $fechaActual = new \DateTime();
         $fechaFormateada = $fechaActual->format('Y-m-d');
+        $data_vendedor['ID_ESCR'] = $id_sucursal;
 
-        isset($data['sucursal']) ?  $data['sucursal'] : $data_error['sucursal'] = 'es requerido';
-        $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE codigo_almacen = ?', [$data['sucursal']]);
         if (!empty($data_vendedor['ID_ESCR'])) {
             isset($data['nombreUsuario']) ? $nombres = $data['nombreUsuario'] : $data_error['nombre'] = 'es requerido';
             $partes = explode(' ', $nombres);
@@ -782,7 +826,8 @@ class Helper
             isset($data['codigo_sap']) ? $data_vendedor['codigo_sap'] = (int)$data['codigo_sap'] : $data_error['codigo_sap'] = 'es requerido';
             try {
                 $resp =  $connection->insert('TB_VEND', $data_vendedor);
-                if (empty($resp)) {
+
+                if (!empty($resp)) {
                     $message = array(
                         'response' => 200,
                         'estado' => true,
@@ -799,7 +844,7 @@ class Helper
                 $message = array(
                     'codigoRespuesta' => 401,
                     'estado' => false,
-                    'detalle' => $th->getMessage(),
+                    'detalle' => $data_error,
                 );
             }
         } else {
@@ -814,7 +859,8 @@ class Helper
 
     public function updateVendedor($connection, $data)
     {
-        $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE codigo_almacen = ?', [$data['sucursal']]);
+        $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
+
         if (!empty($data_vendedor['ID_ESCR'])) {
             $fechaActual = new \DateTime();
             $fechaFormateada = $fechaActual->format('Y-m-d');
@@ -841,15 +887,19 @@ class Helper
                     'message' => 'Se actualizo!',
                 );
             } else {
-                $message = array(
-                    'response' => 204,
-                    'estado' => false,
-                    'message' => 'No se actualizo!',
-                );
+                $data_vendedor['id_usua'] = (int)$connection->fetchOne('SELECT id FROM tb_core_usua WHERE nr_matr = ?', [$data['codigo_sap']]);
+                $message =  $this->insertVendedor($connection, $data, $data_vendedor['id_usua'],  $data_vendedor['ID_ESCR'],);
             }
+        } else {
+            $message = array(
+                'response' => 204,
+                'estado' => false,
+                'message' => 'no existe la sucursal',
+            );
         }
         return $message;
     }
+
     public function updateUsuario($connection, $data)
     {
         $data_usuario['id_usua'] = (int)$connection->fetchOne('SELECT ID FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
@@ -879,6 +929,7 @@ class Helper
         }
         return $message;
     }
+
     function obtenerValorActualDeVendedor($connection, $id_cliente)
     {
         $query = "SELECT id_vendedor FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = :id_cliente";
@@ -988,7 +1039,7 @@ class Helper
             $camposFaltantes[] = 'codigo_cliente';
         }
 
-        if (!empty($data['ciudad'])) {
+        if (!empty($data['ciudad']) || !empty($data['id_ciudad'])) {
             //$cliente['codigo_cliente'] = $data['codigo_cliente'];
         } else {
             $camposFaltantes[] = 'ciudad';
@@ -1482,36 +1533,34 @@ class Helper
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio)
     {
         $query = "SELECT DISTINCT
-        MATE.ID_CODIGOMATERIAL as id_material, PM.id as id_precio_material, MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
+                MATE.ID_CODIGOMATERIAL as id_material,
+                PM.id as id_precio_material, 
+                MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
                 DEPO.ID AS id_almacen, PM.peso AS peso, UNI.id as id_unidad,
                 UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
                 SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
                 BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-                
-                FROM TB_MATE MATE 
-        
-                LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
-                LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
-                LEFT JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
-                LEFT JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
-                LEFT JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
-                LEFT JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
-                LEFT JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-                LEFT JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-                LEFT JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
-                LEFT JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
-                LEFT JOIN TB_ALMACEN_VENDEDOR AV ON DEPO.id = AV.id_almacen
-
-        WHERE ID_CODIGOMATERIAL IN (SELECT MATREL.id_material FROM TB_MATERIALES_RELACIONADOS MATREL
-        WHERE MATREL.id_filtro_material = :id_material AND MATREL.estado = :estado_material)
-        AND AV.id_vendedor = :id_vendedor
+         FROM TB_MATE MATE 
+                inner JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
+				inner JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MATDEP.id_deposito
+				inner JOIN TB_CIUDAD  CIU ON depo.id_ciudad = CIU.id
+				inner JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = CIU.id
+                inner JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
+				inner JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
+				inner JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
+                inner JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
+                inner JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
+                inner JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
+        WHERE ID_CODIGOMATERIAL IN (select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
+                                    inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
+                                    where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material)
         AND LP.id = :id_lista_precio
-        AND MATDEP.ID_UNIDAD = UNI.ID";
+        AND MATDEP.ID_UNIDAD = UNI.ID
+        order by MATE.id_CODIGOMATERIAL asc";
 
         $buscar_material = $connection->prepare($query);
         $buscar_material->bindValue('id_material', $codMaterial);
         $buscar_material->bindValue('estado_material', $estado_material);
-        $buscar_material->bindValue('id_vendedor', $id_vendedor);
         $buscar_material->bindValue('id_lista_precio', $id_lista_precio);
 
         $buscar_material->execute();
@@ -1692,15 +1741,30 @@ class Helper
 
     public function buscarListaPrecio($connection, $nombre_lista = null)
     {
-        $resp = $connection->query("select top 1 id from TB_LISTA_PRECIO where nombre_lista like '{$nombre_lista}'")->fetch();
-        $id_lista = $resp['id'];
-
-        if (!empty($id_lista)) {
-            return $id_lista;
+        if (empty($nombre_lista)) {
+            // Si $nombre_lista está vacío, obtén todos los IDs y nombres de las listas de precios
+            $resp = $connection->query("SELECT id, nombre_lista FROM TB_LISTA_PRECIO")->fetchAll();
+            $listas_precios = [];
+            foreach ($resp as $item) {
+                $listas_precios[] = [
+                    'id' => $item['id'],
+                    'nombre_lista' => $item['nombre_lista'],
+                ];
+            }
+            return $listas_precios;
         } else {
-            return false;
+            // Si $nombre_lista no está vacío, obtén la lista de precio específica
+            $resp = $connection->query("SELECT TOP 1 id, nombre_lista FROM TB_LISTA_PRECIO WHERE nombre_lista LIKE '{$nombre_lista}'")->fetch();
+            $id_lista = $resp['id'];
+
+            if (!empty($id_lista)) {
+                return [['id' => $id_lista, 'nombre_lista' => $resp['nombre_lista']]];
+            } else {
+                return false;
+            }
         }
     }
+
 
     public function buscarFamilia($connection, $data)
     {
@@ -1859,8 +1923,7 @@ class Helper
                     ];
                     $resp = $connection->insert('tb_core_usua_perf', $datos_permisos);
                 }
-
-                if ($$resp > 0) {
+                if (!empty($resp)) {
                     $message = array(
                         'codigoRespuesta' => 200,
                         'estado' => true,
@@ -2017,7 +2080,7 @@ class Helper
     public function actualizarItem($connection, $arrayItem)
     {
         $updateParts = [];
-       
+
         if (isset($arrayItem)) {
             $item_code = $arrayItem['itemCode'];
             $id_material = $arrayItem['id_material'];
@@ -2092,54 +2155,40 @@ class Helper
     public function insertarItem($connection, $arrayItem)
     {
         if (isset($arrayItem)) {
-            
+
             if (!empty($arrayItem['itemCode'])) {
                 $valores['CODIGOMATERIAL'] = $arrayItem['itemCode'];
-            }
-            else
-            {
+            } else {
                 $error['codigo material'] = 'El codigo material es requerido';
             }
             if (!empty($arrayItem['itemName'])) {
                 $valores['DESCRICAO'] = $arrayItem['itemName'];
-            }
-            else
-            {
+            } else {
                 $error['itemName'] = 'nombre el del item es requerido';
             }
             if (!empty($arrayItem['id_unidad'])) {
                 $valores['UNIDADE'] = $arrayItem['id_unidad'];
-            }
-            else
-            {
+            } else {
                 $error['unidad'] = 'la unidad es requerido';
             }
             if (!empty($arrayItem['peso'])) {
                 $valores['PESOESPECIFICO'] = $arrayItem['peso'];
-            }
-            else
-            {
+            } else {
                 $error['peso'] = 'El peso es requerido';
             }
             if (!empty($arrayItem['clase'])) {
                 $valores['CODIGOCLASSESAP'] = $arrayItem['clase'];
-            }
-            else
-            {
+            } else {
                 $error['clas'] = 'es requerido';
             }
             if (!empty($arrayItem['id_linea'])) {
                 $valores['CODIGOCLASSE'] = (int)$arrayItem['id_linea'];
-            }
-            else
-            {
+            } else {
                 $error['lina'] = 'es requerido';
             }
             if (!empty($arrayItem['estado'])) {
                 $valores['SITUACAO'] = $arrayItem['estado'];
-            }
-            else
-            {
+            } else {
                 $error['estado'] = 'es requerido';
             }
             $data_mate = $connection->insert('TB_MATE', $valores);
@@ -2147,9 +2196,9 @@ class Helper
             if ($data_mate > 0) {
                 return true;
             } else {
-                return $data = [ 
+                return $data = [
                     'success' => true,
-                    'data'=>$error
+                    'data' => $error
                 ];
             }
         } else {
@@ -2159,251 +2208,198 @@ class Helper
 
     public function insertAlmacen($connection, $data)
     {
-        $data_almacen['codigo_almacen'] = $this->buscarAlmacen($connection, $data['codigo_almacen'], null);
-        
-        if(empty($data_almacen['codigo_almacen']))
-        {
-            
-            if (!empty($data['ciudad'])) {
-                $data_almacen['id_ciudad'] = $this->buscarCiudad2($connection, $data['ciudad']);
-            } else {
-                isset($data['id_ciudad']) ?  $data_almacen['id_ciudad'] = $data['id_ciudad'] : $data_error['ciudad'] = 'es requerido';
-            }
-            if (!empty($data['departamento'])) {
-                $data_almacen['id_departamento'] = $this->buscarCiudad2($connection, $data['departamento']);
-            } else {
-                isset($data['id_departamento']) ?  $data_almacen['id_departamento'] = $data['id_departamento'] : $data_error['departamento'] = 'es requerido';
-            }
-            dd($data_almacen);
-        }
+        $dataCodigo['codigo_almacen'] = $this->buscarAlmacen($connection, $data['codigo_almacen'], null);
+        if (empty($dataCodigo['codigo_almacen'])) {
+            !empty($data['codigo_almacen']) ? $data_almacen['CODIGO_ALMACEN'] = $data['codigo_almacen'] : $data_error['codigo_almacen'] = 'es requerido';
+            !empty($data['nombre_almacen']) ? $data_almacen['NOMBRE_DEPOSITO'] = $data['nombre_almacen'] : $data_error['nombre_almacen'] = 'es requerido';
 
-
-        /* if (empty($data_almacen['codigo'])) {
-            $data_almacen['codigo_almacen'] =  $data['codigo_almacen'];
             if (!empty($data['grupo'])) {
-                $data_almacen['id_grupo'] = $this->buscargrupo($connection, $data['grupo']);
+                (int)$data_almacen['id_grupo'] = $this->buscargrupo($connection, $data['grupo']);
             } else {
-                isset($data['id_grupo']) ?  $data_almacen['id_grupo'] = $data['id_grupo'] : $data_error['grupo'] = 'es requerido';
+                isset($data['id_grupo']) ?  $data_almacen['id_grupo'] = $data['id_grupo'] : null;
             }
 
             if (!empty($data['ciudad_2'])) {
-                $data_almacen['id_ciudad_2'] = $this->buscarCiudad2($connection, $data['ciudad_2']);
+                (int)$data_almacen['id_ciudad_2'] = $this->buscarCiudad2($connection, $data['ciudad_2']);
             } else {
-                isset($data['id_ciudad_2']) ?  $data_almacen['id_ciudad_2'] = $data['id_ciudad_2'] : $data_error['ciudad_2'] = 'es requerido';
+                isset($data['id_ciudad_2']) ?  $data_almacen['id_ciudad_2'] = $data['id_ciudad_2'] : null;
             }
 
             if (!empty($data['ciudad_3'])) {
                 $data_almacen['id_ciudad_3'] = $this->buscarCiudad2($connection, $data['ciudad_3']);
             } else {
-                isset($data['id_ciudad_3']) ?  $data_almacen['id_ciudad_3'] = $data['id_ciudad_3'] : $data_error['ciudad_3'] = 'es requerido';
+                isset($data['id_ciudad_3']) ?  $data_almacen['id_ciudad_3'] = $data['id_ciudad_3'] : null;
             }
 
-           
+            if (!empty($data['ciudad'])) {
+                $data_almacen['id_ciudad'] =  (int)$this->buscarCiudad2($connection, strtoupper($data['ciudad']));
+            } else {
+                isset($data['id_ciudad']) ? $data_almacen['id_ciudad'] = $data['id_ciudad'] : null;
+            }
 
             if (!empty($data['sucursal'])) {
-                $data_almacen['SUCURSAL_ID'] = $this->buscarEscritorio($connection, $data['sucursal']);
+                $data_almacen['SUCURSAL_ID'] = (int)$this->buscarEscritorio($connection, $data['sucursal']);
             } else {
                 !empty($data['id_sucursal']) ?  $data_almacen['SUCURSAL_ID'] = $data['id_sucursal'] : $data_error['sucursal'] = 'es requerido';
             }
 
             if (!empty($data['id_tipo'])) {
-                $data_almacen['id_tipo'] = $this->buscarTipo($connection, $data['tipo']);
+                (int)$data_almacen['id_tipo'] = $this->buscarTipo($connection, $data['tipo']);
             } else {
                 isset($data['id_tipo']) ? $data_almacen['id_tipo'] = $data['id_tipo'] : null;
             }
             if (!empty($data['region'])) {
-                $data_almacen['id_region'] = $this->buscarRegion($connection, $data['region']);
+                (int)$data_almacen['id_region'] = $this->buscarRegion($connection, $data['region']);
             } else {
-                !empty($data['id_region']) ?  $data_almacen['id_region'] = $data['id_region'] : $data_error['region'] = 'es requerido';
+                !empty($data['id_region']) ?  $data_almacen['id_region'] = $data['id_region'] : null;
             }
             if (!empty($data['zona'])) {
-                $data_almacen['id_zona'] = $this->buscarZona($connection, $data['zona']);
+                (int)$data_almacen['id_zona'] = $this->buscarZona($connection, $data['zona']);
             } else {
-                !empty($data['id_zona']) ?  $data_almacen['id_zona'] = $data['id_zona'] : $data_error['zona'] = 'es requerido';
+                !empty($data['id_zona']) ?  $data_almacen['id_zona'] = $data['id_zona'] : null;
             }
 
-            if ($data['estado_deposito'] == 'A') {
-                $data_almacen_id = 1;
-            } else {
-                $data_almacen_id = 0;
-            }
-            isset($data['est_dep']) ?   $data_almacen['est_dep'] = $data['est_dep'] : null;
-            isset($data['desc']) ? $data_almacen['desc'] = $data['desc'] : null;
-            !empty($data['nombre_almacen']) ? $data_almacen['nombre_deposito'] = $data['nombre_almacen'] : $data_error['nombre_almacen'] = 'es requerido';
             !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es requerido';
             !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es requerido';
-            !empty($data['descricao']) ?  $data_almacen['descricao'] = $data['descricao'] : $data_error['descripción'] = 'es requerido';
-            !empty($data['estado_deposito']) ?  $data_almacen['estado_deposito'] =  $data_almacen_id : $data_error['estado_deposito'] = 'es requerido';
+
+            if ($data['estado_deposito'] == 'A') {
+                $data_almacen['ESTADO_DEPOSITO'] = 1;
+            } else {
+                $data_almacen['ESTADO_DEPOSITO'] = 0;
+            }
+            !empty($data['calle']) ? $data_almacen['calle'] = $data['calle'] : $data_error['calle'] = 'es requerido';
+            !empty($data['encargado']) ?  $data_almacen['encargado'] = strtoupper($data['encargado']) : null;
+            if (!empty($data['departamento'])) {
+                $data_almacen['id_departamento'] = (int)$connection->fetchOne('SELECT id FROM TB_DEPARTAMENTO WHERE nombre_dep = ?', [strtoupper($data['departamento'])]);
+            } else {
+                isset($data['id_departamento']) ?  $data_almacen['id_departamento'] = $data['id_departamento'] : $data_error['departamento'] = 'es requerido';
+            }
 
             if (empty($data_error)) {
-
                 $connection->insert('TB_DEPO_FISI_ESTO', $data_almacen);
-
                 $message = [
-                    'response' => 200,
-                    'success' => true,
-                    'data' => $data_almacen
+                    "CodigoRespuesta" => 200,
+                    "Estado" => true,
                 ];
             } else {
                 $message = [
-                    'response' => 204,
-                    'success' => false,
-                    'error' => $data_error
+                    'CodigoRespuesta' => 204,
+                    'Estado' => false,
+                    'Mensaje' => $data_error
                 ];
             }
+        } else {
+            $message = $this->actualizaAlmacen($connection, $data);
         }
-
-        return $message; */
+        return $message;
     }
 
-    public function actualizaAlmacen($connection, $data = [])
+    public function actualizaAlmacen($connection, $data)
     {
+
+        if (!empty($data['codigo_almacen'])) {
+            $almacen = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE CODIGO_ALMACEN = ?', [$data['codigo_almacen']]);
+            $data_id_almacen = (int)$almacen;
+            !empty($data['nombre_almacen']) ? $data_almacen['NOMBRE_DEPOSITO'] = $data['nombre_almacen'] : null;
+
+            if (!empty($data['grupo'])) {
+                (int)$data_almacen['id_grupo'] = $this->buscargrupo($connection, $data['grupo']);
+            } else {
+                isset($data['id_grupo']) ?  $data_almacen['id_grupo'] = $data['id_grupo'] : null;
+            }
+
+            if (!empty($data['ciudad_2'])) {
+                (int)$data_almacen['id_ciudad_2'] = $this->buscarCiudad2($connection, $data['ciudad_2']);
+            } else {
+                isset($data['id_ciudad_2']) ?  $data_almacen['id_ciudad_2'] = $data['id_ciudad_2'] : null;
+            }
+
+            if (!empty($data['ciudad_3'])) {
+                $data_almacen['id_ciudad_3'] = $this->buscarCiudad2($connection, $data['ciudad_3']);
+            } else {
+                isset($data['id_ciudad_3']) ?  $data_almacen['id_ciudad_3'] = $data['id_ciudad_3'] : null;
+            }
+
+            if (!empty($data['ciudad'])) {
+                $data_almacen['id_ciudad'] =  (int)$this->buscarCiudad2($connection, strtoupper($data['ciudad']));
+            } else {
+                isset($data['id_ciudad']) ? $data_almacen['id_ciudad'] = $data['id_ciudad'] : null;
+            }
+
+            if (!empty($data['sucursal'])) {
+                $data_almacen['SUCURSAL_ID'] = (int)$this->buscarEscritorio($connection, $data['sucursal']);
+            } else {
+                !empty($data['id_sucursal']) ?  $data_almacen['SUCURSAL_ID'] = $data['id_sucursal'] : $data_error['sucursal'] = 'es requerido';
+            }
+
+            if (!empty($data['id_tipo'])) {
+                (int)$data_almacen['id_tipo'] = $this->buscarTipo($connection, $data['tipo']);
+            } else {
+                isset($data['id_tipo']) ? $data_almacen['id_tipo'] = $data['id_tipo'] : null;
+            }
+            if (!empty($data['region'])) {
+                (int)$data_almacen['id_region'] = $this->buscarRegion($connection, $data['region']);
+            } else {
+                !empty($data['id_region']) ?  $data_almacen['id_region'] = $data['id_region'] : null;
+            }
+            if (!empty($data['zona'])) {
+                (int)$data_almacen['id_zona'] = $this->buscarZona($connection, $data['zona']);
+            } else {
+                !empty($data['id_zona']) ?  $data_almacen['id_zona'] = $data['id_zona'] : null;
+            }
+
+            !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es requerido';
+            !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es requerido';
+
+
+            if ($data['estado_deposito'] == 'A') {
+                $data_almacen['ESTADO_DEPOSITO'] = 1;
+            } else {
+                $data_almacen['ESTADO_DEPOSITO'] = 0;
+            }
+            !empty($data['calle']) ? $data_almacen['calle'] = $data['calle'] : $data_error['calle'] = 'es requerido';
+            !empty($data['encargado']) ?  $data_almacen['encargado'] = strtoupper($data['encargado']) : null;
+            if (!empty($data['departamento'])) {
+                $data_almacen['id_departamento'] = (int)$connection->fetchOne('SELECT id FROM TB_DEPARTAMENTO WHERE nombre_dep = ?', [strtoupper($data['departamento'])]);
+            } else {
+                isset($data['id_departamento']) ?  $data_almacen['id_departamento'] = $data['id_departamento'] : $data_error['departamento'] = 'es requerido';
+            }
+        } else {
+            $data_error['codigo_almacen'] = 'es necesario';
+        }
+
         try {
-            $CODIGO_ALMACEN = isset($data['codigo_almacen']) ? $data['codigo_almacen'] : null;
-            $NOMBRE_DEPOSITO = isset($data['nombre_almacen']) ? $data['nombre_almacen'] : null;
-            $id_grupo = isset($data['id_grupo']) ? $data['id_grupo'] : null;
-            $grupo = isset($data['grupo']) ? $data['grupo'] : null;
-            $id_ciudad_2 = isset($data['id_ciudad_2']) ? $data['id_ciudad_2'] : null;
-            $ciudad_2 = isset($data['ciudad_2']) ? $data['ciudad_2'] : null;
-            $id_ciudad_3 = isset($data['id_ciudad_3']) ? $data['id_ciudad_3'] : null;
-            $ciudad_3 = isset($data['ciudad_3']) ? $data['ciudad_3'] : null;
-            $id_ciudad = isset($data['id_ciudad']) ? $data['id_ciudad'] : null;
-            $ciudad = isset($data['ciudad']) ? $data['ciudad'] : null;
-            $SUCURSAL_ID = isset($data['sucursal_id']) ? $data['sucursal_id'] : null;
-            $sucursal = isset($data['sucursal']) ? $data['sucursal'] : null;
-            $id_tipo = isset($data['id_tipo']) ? $data['id_tipo'] : null;
-            $tipo = isset($data['tipo']) ? $data['tipo'] : null;
-            $id_region = isset($data['id_region']) ? $data['id_region'] : null;
-            $region = isset($data['region']) ? $data['region'] : null;
-            $id_zona = isset($data['id_zona']) ? $data['id_zona'] : null;
-            $zona = isset($data['zona']) ? $data['zona'] : null;
-            $latitud = isset($data['latitud']) ? $data['latitud'] : 0;
-            $longitud = isset($data['longitud']) ? $data['longitud'] : 0;
-            $DESCRICAO = isset($data['descricao']) ? $data['descricao'] : null;
-            $ESTADO_DEPOSITO = isset($data['estado_deposito']) ? $data['estado_deposito'] : null;
-            //$buscar_almacen = $this->buscarAlmacen($CODIGO_ALMACEN);
-
-            $buscar_almacen = $this->buscarAlmacen($connection, $CODIGO_ALMACEN, null);
-            $id_almacen = (int)$buscar_almacen;
-
-            if (!empty($id_almacen)  && $id_almacen != null && $CODIGO_ALMACEN != "") {
-                if ($ESTADO_DEPOSITO == 'A') {
-                    $estado_deposito_id = 1;
-                } else {
-                    $estado_deposito_id = 0;
-                }
-
-                if ($id_grupo == null and $grupo != null) {
-                    $id_grupo = $this->buscargrupo($connection, $grupo);
-                }
-
-                if ($id_ciudad_2 == null and $ciudad_2 != null) {
-                    $id_ciudad_2 = $this->buscarCiudad2($connection, $ciudad_2);
-                }
-
-                if ($id_ciudad_3 == null and $ciudad_3 != null) {
-
-                    $id_ciudad_3 = $this->buscarCiudad2($connection, $ciudad_3);
-                }
-
-                if ($id_ciudad == null and $ciudad != null) {
-                    $id_ciudad = $this->buscarCiudad2($connection, $ciudad);
-                }
-
-                if ($SUCURSAL_ID == null and $sucursal != null) {
-                    $sucursal_id = $this->buscarEscritorio($connection, $sucursal);
-                }
-
-                if ($id_tipo == null and $tipo != null) {
-                    $id_tipo = $this->buscarTipo($connection, $tipo);
-                }
-
-                if ($id_region == null and $region != null) {
-                    $id_region = $this->buscarRegion($connection, $region);
-                }
-                if ($id_zona == null and $zona != null) {
-                    $id_zona = $this->buscarZona($connection, $zona);
-                }
-
-                $sql = "UPDATE TB_DEPO_FISI_ESTO
-                    SET 
-                        CODIGO_ALMACEN = :CODIGO_ALMACEN,
-                        NOMBRE_DEPOSITO = :NOMBRE_DEPOSITO,
-                        id_grupo = :id_grupo,
-                        id_ciudad_2 = :id_ciudad_2,
-                        id_ciudad_3 = :id_ciudad_3,
-                        id_ciudad = :id_ciudad,
-                        SUCURSAL_ID = :SUCURSAL_ID,
-                        id_tipo = :id_tipo,
-                        id_region = :id_region,
-                        id_zona = :id_zona,
-                        latitud = :latitud,
-                        longitud = :longitud,
-                        DESCRICAO = :DESCRICAO,
-                        ESTADO_DEPOSITO = :ESTADO_DEPOSITO
-                    WHERE id = :id_almacen";
-
-                $stmt = $connection->prepare($sql);
-                $stmt->bindvalue(':id_almacen', (int)$id_almacen);
-                $stmt->bindvalue(':CODIGO_ALMACEN', $CODIGO_ALMACEN);
-                $stmt->bindvalue(':NOMBRE_DEPOSITO', $NOMBRE_DEPOSITO);
-                $stmt->bindValue(':id_grupo', (int)$id_grupo);
-                $stmt->bindValue(':id_ciudad_2', (int)$id_ciudad_2);
-                $stmt->bindValue(':id_ciudad_3', (int)$id_ciudad_3);
-                $stmt->bindValue(':id_ciudad', (int)$id_ciudad);
-                $stmt->bindValue(':SUCURSAL_ID', (int)$SUCURSAL_ID);
-                $stmt->bindValue(':id_tipo', (int)$id_tipo);
-                $stmt->bindValue(':id_region', (int)$id_region);
-                $stmt->bindValue(':id_zona', (int)$id_zona);
-                $stmt->bindValue(':latitud', (float)$latitud);
-                $stmt->bindValue(':longitud', (float)$longitud);
-                $stmt->bindValue(':DESCRICAO', $DESCRICAO);
-                $stmt->bindvalue(':ESTADO_DEPOSITO', $ESTADO_DEPOSITO);
-                $stmt->execute();
-                if ($stmt->rowCount() > 0) {
-                    return [
-                        "codigoRespuesta" => 200,
-                        "estado" => true,
-                        "detalle" => "Se actualizó el registro",
-                        "data" => [
-                            "id_almacen" => $id_almacen,
-                            "codigo_almacen" => $CODIGO_ALMACEN,
-                            "nombre_almacen" => $NOMBRE_DEPOSITO,
-                            "grupo" => $grupo,
-                            "ciudad_2" => $ciudad_2,
-                            "ciudad_3" => $ciudad_3,
-                            "ciudad" => $ciudad,
-                            "sucursal" => $sucursal,
-                            "tipo" => $tipo,
-                            "region" => $region,
-                            "zona" => $zona,
-                            "latitud" => $latitud,
-                            "longitud" => $longitud,
-                            "descricao" => $DESCRICAO,
-                            "estado_deposito" => $ESTADO_DEPOSITO
-                        ]
+            if (empty($data_error) && $data_error == null) {
+                $resp = $connection->update('TB_DEPO_FISI_ESTO', $data_almacen, ['id' => $data_id_almacen]);
+                if (!empty($resp)) {
+                    $message = [
+                        "CodigoRespuesta" => 200,
+                        "Estado" => true,
+                        'Mensaje' => 'Se actualizo Correctamente'
                     ];
                 } else {
-                    return [
-                        "codigoRespuesta" => 200,
-                        "estado" => true,
-                        "detalle" => "Se actualizó el registro",
+                    $message = [
+                        "CodigoRespuesta" => 204,
+                        "Estado" => false,
+                        'Mensaje' => $data_error
                     ];
                 }
             } else {
-                return [
-                    "codigoRespuesta" => 500,
-                    "estado" => false,
-                    "detalle" => "Es requerido Codigo de almacen",
+                $message = [
+                    "CodigoRespuesta" => 204,
+                    "Estado" => false,
+                    'Mensaje' => $data_error
                 ];
             }
         } catch (\Throwable $e) {
-            return [
-                "codigoRespuesta" => 500,
-                "estado" => false,
-                "detalle" => "Error al actualizar el registro: " . $e->getMessage()
+            $message = [
+                "CodigoRespuesta" => 500,
+                "Estado" => false,
+                "Mensaje" => $data_error
             ];
         }
+
+        return $message;
     }
     public function insertPrecios($connection, $data,  $id_lista, $material)
     {
@@ -2824,29 +2820,27 @@ class Helper
     {
         $url = $this->url_sap . $ruta;
         $data = json_encode($data);
-        print_r($data);
+        //print_r($data);
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2000);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
         ));
         $response = curl_exec($curl);
-        /* Verificar los errores de la solicitud */
         if (curl_errno($curl)) {
             echo 'Error en la solicitud cURL: ' . curl_error($curl);
             curl_close($curl);
             return false;
         }
-        /* Cerrar la sesión de CURL */
         curl_close($curl);
 
-        /* Decodificar respuesta */
         $responseData = json_decode($response, true);
 
-        dd($responseData); 
+        //print_r($responseData); 
         return $responseData;
 
         /*  if ($responseData['CodigoRespuesta'] == 200) {
@@ -3234,12 +3228,11 @@ class Helper
                 INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
                 LEFT JOIN TB_DEPO_FISI_ESTO AS DEPO ON OFE.id_almacen = DEPO.id
             WHERE  OFE.id = :id_oferta";
-        $connection->beginTransaction();
         $stmt1 = $connection->prepare($query_oferta);
         $stmt1->bindValue(':id_oferta', $id);
         $stmt1->execute();
         $res1 = $stmt1->fetch();
-        $stmt1->closeCursor();
+       
         if ($res1 > 0) {
             $arrFinal['oferta'] = $res1;
             $query =
@@ -3278,8 +3271,6 @@ class Helper
             $stmt->execute();
             $res = $stmt->fetchAll();
             $stmt->closeCursor();
-            /* dd($res); */
-
 
             if (count($res) > 0) {
                 $arrFinal['analitico'] = $res;
@@ -3579,46 +3570,46 @@ class Helper
 
 
     public function borrarUbicaciones($connection, $id_cliente)
-{
-    try {
-        $query = "DELETE FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = :id_cliente";
+    {
+        try {
+            $query = "DELETE FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = :id_cliente";
+            $statement = $connection->prepare($query);
+            $statement->bindValue(':id_cliente', $id_cliente);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+
+            return $affectedRows > 0;
+        } catch (PDOException $e) {
+
+            return false;
+        }
+    }
+    public function borrarUbicacionesId($connection, $id)
+    {
+        try {
+            $query = "DELETE FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_endereco = :id";
+            $statement = $connection->prepare($query);
+            $statement->bindValue(':id', $id);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+
+            return $affectedRows > 0;
+        } catch (PDOException $e) {
+
+            return false;
+        }
+    }
+
+
+    public function borrarClientes($connection, int $id_cliente)
+    {
+        $query = "DELETE FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = :id_cliente";
         $statement = $connection->prepare($query);
         $statement->bindValue(':id_cliente', $id_cliente);
         $statement->execute();
-
         $affectedRows = $statement->rowCount();
-
-        return $affectedRows > 0;
-    } catch (PDOException $e) {
-
-        return false;
-    }
-}
-public function borrarUbicacionesId($connection, $id)
-{
-    try {
-        $query = "DELETE FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_endereco = :id";
-        $statement = $connection->prepare($query);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-
-        $affectedRows = $statement->rowCount();
-
-        return $affectedRows > 0;
-    } catch (PDOException $e) {
-
-        return false;
-    }
-}
-
-
-    public function borrarClientes($connection, $id_cliente)
-    {
-        $query = "DELETE FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = :id_cliente";
-        $stament = $connection->prepare($query);
-        $stament->bindValue(':id_cliente',  $id_cliente);
-        $stament->execute();
-        $affectedRows = $stament->rowCount();
         if ($affectedRows > 0) {
             return true;
         } else {
@@ -3684,22 +3675,6 @@ public function borrarUbicacionesId($connection, $id)
                 'modo_entrega' => $detalle['modo_entrega']
             ];
         }
-
-        if (!empty($autorizacion['fecha_solicitud'])) {
-            $arrayOFerta['autorizacion']  = [
-                "usuario_gestion" => $autorizacion['nombres'],
-                "fecha_solicitud" => $autorizacion['fecha_solicitud'],
-                "fecha_gestion" => $autorizacion['fecha_gestion'],
-                "observacion_usuario" => $autorizacion['descripcion_usua'],
-                "observacion_ejecutivo" => $autorizacion['descripcion_vend'],
-                "estado" => $autorizacion['estado']
-            ];
-        }
-        else
-        {
-            $arrayOFerta['autorizacion']  = [];
-        }
-
         $arrayOFerta = ([
             'numero_oferta' => $id_oferta,
             'fecha_creacion' => date('Y-m-d', strtotime($oferta['fecha_creacion'])),
@@ -3717,30 +3692,27 @@ public function borrarUbicacionesId($connection, $id)
             'geolocalizacion' => $oferta['geolocalizacion'],
             'detalle_pedido' => $detalle_of,
         ]);
-
+        
+        if (!empty($autorizacion)) {
+            $arrayOFerta['autorizacion']  = [
+                "usuario_gestion" => $autorizacion['nombres'],
+                "fecha_solicitud" => $autorizacion['fecha_solicitud'],
+                "fecha_gestion" => $autorizacion['fecha_gestion'],
+                "observacion_usuario" => $autorizacion['descripcion_usua'],
+                "observacion_ejecutivo" => $autorizacion['descripcion_vend'],
+                "estado" => $autorizacion['estado']
+            ];
+        } else {
+            $arrayOFerta['autorizacion']  = [];
+        }
         try {
             $ruta = "/crearProforma";
-            $rsp = $this->conexionSap($ruta, $arrayOFerta);
-            if($rsp['CodigoRespuesta'] == 200)
-            {
-                $oferta = $connection->update('TB_OFERTA', ['codigo_oferta' => $rsp['Mensaje'],'envio_sap' => 1], ['id' => $id_oferta]);
-                $message = $rsp;
-            }
-            else
-            {
-                $oferta = $connection->update('TB_OFERTA', ['envio_sap' => 2], ['id' => $id_oferta]);
-                $message = $rsp;
-            }
-            if ($rsp) {
+            $rsp = $this->insertarServicio($ruta, $arrayOFerta);
+      
+            if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;
             } else {
-                $message = array(
-                    'responseCode' => 204,
-                    'message' => 'No agrego',
-                    'data' => $rsp,
-                    'success' => false
-                );
-                $connection->close();
+                $message = $rsp;
             }
         } catch (\Throwable $e) {
             $message = array(
@@ -3754,13 +3726,28 @@ public function borrarUbicacionesId($connection, $id)
         return $response;
     }
 
+    public function modificarCodigoOferta($connection, $data)
+    {
+        $data_oferta['codigo_sap'] = $sapresp['Mensaje'];
+        $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => (int)$data['codigo_sap']], ['id' => (int)$data['id_oferta']]);
+        $connection->commit();
+        $message = [
+            "responseCode" => 200,
+            "message" => 'Registro Correctamente',
+            "success" => true,
+            "data_sap" => $sapresp
+        ];
+
+        return $message;
+    }
     public function actualizarSapCliente($connection, $data)
     {
         $ruta = '/actualizarCliente';
         $respuesta = $this->conexionSap($ruta, $data);
-        //dd($respuesta['Campos']);
+        //dd($respuesta['CodigoRespuesta']);
 
         if ($respuesta['CodigoRespuesta'] == 200) {
+            //dd('aqui');
             /* $codigo_cliente_sap = $respuesta['Mensaje'];
             $data_codigo['codigo_cliente'] = $codigo_cliente_sap;
             $data_codigo['id_cliente'] = $data['id_cliente'];
@@ -3769,12 +3756,13 @@ public function borrarUbicacionesId($connection, $id)
                 "response" => 200,
                 "estado" => true,
                 "detalle" => "Se registro Sap",
-                "data" => $data['codigo_cliente'],
+                "data" => $respuesta['Mensaje'],
             ];
         } else {
 
             $mensaje = 'Error al registrar en SAP,  ';
-            foreach($respuesta['Campos'] as $dato){
+
+            foreach ($respuesta['Campos'] as $dato) {
                 //dd($dato);
                 $mensaje .= $dato . ', ';
             }
@@ -3782,8 +3770,8 @@ public function borrarUbicacionesId($connection, $id)
                 "response" => 204,
                 "estado" => false,
                 "detalle" => "Error de registro en Sap",
-                "data" => $mensaje,
-              
+                "data" => $mensaje . $respuesta['Mensaje'],
+
             ];
         }
         return $message;
@@ -3829,5 +3817,167 @@ public function borrarUbicacionesId($connection, $id)
         } else {
             return false;
         }
+    }
+    public function verificarOferta($connection, $id_vendedor)
+    {
+        $fechaActual = new DateTime();
+        $query = "SELECT * FROM TB_OFERTA WHERE id_vendedor = :id_vendedor AND estado_oferta = :estado_oferta 
+        AND tipo_estado = :tipo_estado";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(":id_vendedor", (int)$id_vendedor, PDO::PARAM_INT);
+        $stmt->bindValue(":estado_oferta", 1, PDO::PARAM_INT);
+        $stmt->bindValue(":tipo_estado", 14, PDO::PARAM_INT);
+        $stmt->execute();
+        $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+        if (count($ofertas) > 0) {
+            foreach ($ofertas as $oferta) {
+                $fechaCreacion = new DateTime($oferta['fecha_inicial']);
+                $diferencia = $fechaActual->diff($fechaCreacion)->days;
+                //dd($diferencia);
+                if ($diferencia > 7) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function verificarOfertaDias($connection, $id_vendedor)
+    {
+        $fechaActual = new DateTime();
+        $query = "SELECT * FROM TB_OFERTA WHERE id_vendedor = :id_vendedor AND estado_oferta = :estado_oferta 
+        AND tipo_estado = :tipo_estado";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(":id_vendedor", (int)$id_vendedor, PDO::PARAM_INT);
+        $stmt->bindValue(":estado_oferta", 1, PDO::PARAM_INT);
+        $stmt->bindValue(":tipo_estado", 14, PDO::PARAM_INT);
+        $stmt->execute();
+        $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+        if (count($ofertas) > 0) {
+            foreach ($ofertas as $oferta) {
+                $fechaFinal = new DateTime($oferta['fecha_final']);
+                $diferencia = $fechaFinal->diff($fechaActual)->days;
+               //s dd($fechaActual);
+                if ($diferencia > 0) {
+                    return $diferencia;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public function cierre_ofertea($connection, $data)
+    {
+        try {
+            $data_cierre['nrodocSAP'] = $data['codigo_oferta'];
+            $data_cierre['tipo'] = $data['tipo'];
+            $data_cierre['razon'] = $data['descripcion'];
+            $ruta = "/anular_oferta";
+            $messages = $this->conexionSap($ruta, $data_cierre);
+        } catch (DBALException  $e) {
+            $message = [
+                'responseCode' => 500,
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'success' => false
+            ];
+        }
+        return $messages;
+    }
+
+    public function crearOferta($conecction, $data)
+    {
+        $titulo = $data['titulo'];
+        $mensaje = $data['mensaje'];
+        $url = $data['url'];
+        $fecha = $data['fecha'];
+        $id_usuario = $data['id_usuario'];
+        $estado = $data['estado'];
+        $leido = $data['leido'];
+
+        $query = "INSERT INTO TB_NOTIFICACIONES(titulo, mensaje, url_notificacion, fecha_envio, id_usuario,estado,leido)
+        VALUES (:titulo,:mensaje,:url_notificacion,:fecha_envio,:id_usuario,:estado,:leido)";
+
+        $stmt = $conecction->prepare($query);
+        $stmt->bindValue(":titulo", $titulo);
+        $stmt->bindValue(":mensaje", $mensaje);
+        $stmt->bindValue(":url_notificacion", $url);
+        $stmt->bindValue(":fecha_envio", $fecha);
+        $stmt->bindValue(":id_usuario", (int)$id_usuario);
+        $stmt->bindValue(":estado", (int)$estado);
+        $stmt->bindValue(":leido", (int)$leido);
+        $stmt->execute();
+        $id_notificacion = $conecction->lastInsertId();
+        if ($id_notificacion > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function verificarNotificacionOferta($conexion, $data)
+    {
+        $titulo = $data['titulo'];
+        $fecha = date('Y-m-d', strtotime($data['fecha']));
+        $url = $data['url_notificacion'];
+        $id_usuario = $data['id_usuario'];
+
+        $query = "SELECT * FROM TB_NOTIFICACIONES WHERE titulo = :titulo AND url_notificacion = :url_notificacion 
+                AND CONVERT(DATE, fecha_envio) = :fecha_envio AND id_usuario = :id_usuario";
+
+        $stmt = $conexion->prepare($query);
+        $stmt->bindValue(":titulo", $titulo);
+        $stmt->bindValue(":url_notificacion", $url);
+        $stmt->bindValue(":fecha_envio", $fecha);
+        $stmt->bindValue(":id_usuario", (int)$id_usuario);
+        $stmt->execute();
+
+        $notificacion = $stmt->fetchAll();
+
+        if (count($notificacion) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function getEscritorios($conecction)
+    {
+        $query = "SELECT ESCR.id [id_escritorio], ESCR.nm_escr [nome_escritorio] FROM TB_ESCR ESCR ORDER BY ESCR.id";
+        $stmt = $conecction->prepare($query);
+        $stmt->execute();
+        $escritorios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($escritorios) > 0) {
+            return $escritorios;
+        } else {
+            return false;
+        }
+    }
+
+    public function verificarOfertaCliente($conecction, $data)
+    {
+        $id_cliente = $data['id_cliente'];
+        $id_vendedor = $data['id_vendedor'];
+        $query = "SELECT * FROM TB_OFERTA WHERE id_vendedor = :id_vendedor AND id_cliente = :id_cliente 
+        AND estado_oferta = :estado_oferta AND tipo_estado = :tipo_estado";
+        $stmt = $conecction->prepare($query);
+        $stmt->bindValue(":id_vendedor", (int)$id_vendedor, PDO::PARAM_INT);
+        $stmt->bindValue(":id_cliente", (int)$id_cliente, PDO::PARAM_INT);
+        $stmt->bindValue(":estado_oferta", 1, PDO::PARAM_INT);
+        $stmt->bindValue(":tipo_estado", 14, PDO::PARAM_INT);
+        $stmt->execute();
+        $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($ofertas) > 0) {
+            return true;
+        }
+        return false;
     }
 }
