@@ -34,7 +34,7 @@ class CadastroController extends AbstractController
         @ID_CLIENTE = {$codCliente}
       "
     )->fetchAll();
-    
+
     if (count($res) > 0) {
       return $res[0]['tipo'];
     } else {
@@ -50,11 +50,11 @@ class CadastroController extends AbstractController
         @CLIENTE = {$codCliente}
       "
     )->fetchAll();
-    
+
     if (count($res) > 0) {
       $atividadesSecundarias = array();
 
-      for ($i=0; $i < count($res); $i++) {
+      for ($i = 0; $i < count($res); $i++) {
         if ($res[$i]['PRINCIPAL'] != 1) {
           $atividadesSecundarias[] = array(
             'id' => $res[$i]['ID'],
@@ -73,7 +73,7 @@ class CadastroController extends AbstractController
       return [];
     }
   }
-  
+
   public function regioesAtuacaoComercial($connection)
   {
     $res = $connection->query(
@@ -117,7 +117,7 @@ class CadastroController extends AbstractController
         $horarioMinimo = date('H:i', strtotime($value['minimo']));
         $horarioMaximo = date('H:i', strtotime($value['maximo']));
         $idParam = $i == 0 ? 1 : 0;
-        
+
         /*
         $connection->query(
           "
@@ -143,7 +143,7 @@ class CadastroController extends AbstractController
             @ID_PARAM = '{$idParam}'
           "
         );
-        
+
         $i++;
       }
     }
@@ -152,7 +152,7 @@ class CadastroController extends AbstractController
   public function tiposVeiculos($connection, $codCliente, $idEndereco)
   {
 
-      $res = $connection->query(
+    $res = $connection->query(
       "
         EXEC [PRC_CLIE_ENDE_CONS]
         @ID_CLIE = {$codCliente},
@@ -161,9 +161,9 @@ class CadastroController extends AbstractController
         @PARAM = '2'
       "
     )->fetchAll();
-    
+
     if (count($res) > 0) {
-      for ($i=0; $i < count($res); $i++) {
+      for ($i = 0; $i < count($res); $i++) {
         if ($res[$i]['checked'] == 1) {
           $tiposVeiculos[] = $res[$i]['idTipo'];
         }
@@ -186,11 +186,11 @@ class CadastroController extends AbstractController
         @PARAM = '3'
       "
     )->fetchAll();
-    
+
     if (count($res) > 0) {
       $dadosEspeciais = array();
 
-      for ($i=0; $i < count($res); $i++) {
+      for ($i = 0; $i < count($res); $i++) {
         if ($res[$i]['checked'] == 1) {
           $dadosEspeciais[] = $res[$i]['idTipo'];
         }
@@ -212,7 +212,7 @@ class CadastroController extends AbstractController
     )->fetchAll();
 
     if (count($res) > 0) {
-      for ($i=0; $i < count($res); $i++) {
+      for ($i = 0; $i < count($res); $i++) {
         $filhos[] = array(
           'id' => $res[$i]['ID_FILH'],
           'nome' => $res[$i]['DS_NOME'],
@@ -240,7 +240,7 @@ class CadastroController extends AbstractController
 
   public function gravarFilhos($connection, $id, $filhos)
   {
-    for ($i=0; $i < count($filhos); $i++) {
+    for ($i = 0; $i < count($filhos); $i++) {
       $nomeFilho = strtoupper(FunctionsController::limpaCaracteresEspeciais($filhos[$i]['nome']));
       $idadeFilho = $filhos[$i]['idade'];
 
@@ -263,11 +263,11 @@ class CadastroController extends AbstractController
         @ID_CLIE = {$codCliente}
       "
     )->fetchAll();
-    
+
     if (count($res) > 0) {
       $meiosContato = array();
 
-      for ($i=0; $i < count($res); $i++) {
+      for ($i = 0; $i < count($res); $i++) {
         if (!empty($id)) {
           if ($res[$i]['ID_CONT'] == $id) {
             if ($res[$i]['ID_TIPO_CONT'] == 1 || $res[$i]['ID_TIPO_CONT'] == 2) {
@@ -373,7 +373,7 @@ class CadastroController extends AbstractController
     $id = $meiosContato->id;
     $nomeCompleto = $meiosContato->nomeCompleto;
 
-    for ($i=0; $i < count($meiosContato->contatos); $i++) {
+    for ($i = 0; $i < count($meiosContato->contatos); $i++) {
       if ($meiosContato->contatos[$i]['tipo'] == 'Celular') {
         $idTipoContato = $meiosContato->contatos[$i]['whatsapp'] == 1 ? 1 : 2;
       } else if ($meiosContato->contatos[$i]['tipo'] == 'Telefone') {
@@ -461,7 +461,7 @@ class CadastroController extends AbstractController
         $dadosFaturamento->id = $res[0]['ID_CLIENTE'];
         $dadosFaturamento->codCliente = $res[0]['ID_CLIENTE_ERP'];
         $dadosFaturamento->tipoPessoa = $res[0]['TIPO'];
-        $dadosFaturamento->idTipoCadastro = null; 
+        $dadosFaturamento->idTipoCadastro = null;
         $dadosFaturamento->descTipoCadastro = null;
         $dadosFaturamento->idContribuinte = $res[0]['ID_CONTRIBUINTE'];
         $dadosFaturamento->descContribuinte = !empty($res[0]['CONTRIBUINTE']) ? strtoupper($res[0]['CONTRIBUINTE']) : null;
@@ -478,7 +478,7 @@ class CadastroController extends AbstractController
         $dadosFaturamento->quemCadastrou = !empty($res[0]['nomeCadastrou']) ? strtoupper($res[0]['nomeCadastrou']) : null;
         $dadosFaturamento->notaCliente = $res[0]['notaCliente'];
         $dadosFaturamento->autoUpdateNota = $res[0]['autoUpdateNota'];
-        
+
         if ($res[0]['TIPO'] == 'F') {
           $dadosFaturamento->cpf = FunctionsController::completaZeroEsquerda($res[0]['CPF'], 11);
           $dadosFaturamento->cpf = FunctionsController::setMask($dadosFaturamento->cpf, '###.###.###-##');
@@ -557,7 +557,7 @@ class CadastroController extends AbstractController
         if (isset($data['notaCliente'])) $notaCliente = $data['notaCliente'];
       }
 
-      
+
 
       $codCliente = $data['codCliente'];
       $tipoPessoa = $data['tipoPessoa'];
@@ -614,7 +614,7 @@ class CadastroController extends AbstractController
             "
           );
 
-          for ($i=0; $i < count($atividadesSecundarias); $i++) {
+          for ($i = 0; $i < count($atividadesSecundarias); $i++) {
             $codCnae = FunctionsController::limpaMascara($atividadesSecundarias[$i]['idCnae']);
             $codCnae = FunctionsController::completaZeroEsquerda($codCnae, 7);
 
@@ -687,7 +687,7 @@ class CadastroController extends AbstractController
     return $response;
   }
 
-  
+
 
   /**
    * @Route(
@@ -705,23 +705,20 @@ class CadastroController extends AbstractController
 
     $params = $request->query->all();
     isset($params['localEntrega']) ? $id_cliente = $params['localEntrega'] : null;
-    try
-    {
-      
-    $result = $connection->fetchAllAssociative('SELECT id_endereco as id, logradouro as enderecos FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$id_cliente]);
+    try {
 
-    if (isset($result) && !empty($result)) 
-    {
-      return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
-    } else {
+      $result = $connection->fetchAllAssociative('SELECT id_endereco as id, logradouro as enderecos FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$id_cliente]);
+
+      if (isset($result) && !empty($result)) {
+        return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
+      } else {
         return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
-    }
-
+      }
     } catch (DBALException $e) {
-        return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+      return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
 
-   /*  try {
+    /*  try {
      
       // 1: Endereço principal
       // 2: Endereço de cobrança
@@ -895,7 +892,8 @@ class CadastroController extends AbstractController
     } */
   }
 
-  private function verificaEnderecosAguardandoAprovacao($connection, $codCliente){
+  private function verificaEnderecosAguardandoAprovacao($connection, $codCliente)
+  {
     $e = 0;
     $enderecosAguardandoAprovacao = array();
 
@@ -905,118 +903,119 @@ class CadastroController extends AbstractController
         @ID_CLIE = {$codCliente},
         @ID_SITU = 3
       "
-    )->fetchAll();   
-    
-      if (
-        count($resAguardandoAprovacao) > 0 &&
-        !isset($resAguardandoAprovacao[0]['MSG']) &&
-        (isset($resAguardandoAprovacao[0]['cep']) &&
+    )->fetchAll();
+
+    if (
+      count($resAguardandoAprovacao) > 0 &&
+      !isset($resAguardandoAprovacao[0]['MSG']) &&
+      (isset($resAguardandoAprovacao[0]['cep']) &&
         $resAguardandoAprovacao[0]['cep'] != '' &&
         $resAguardandoAprovacao[0]['cep'] != null)
-      ) {
-        for ($i=0; $i < count($resAguardandoAprovacao); $i++) {
-          $cep = FunctionsController::completaZeroEsquerda($resAguardandoAprovacao[$i]['cep'], 8);
-          $cep = FunctionsController::setMask($cep, '##.###-###');
+    ) {
+      for ($i = 0; $i < count($resAguardandoAprovacao); $i++) {
+        $cep = FunctionsController::completaZeroEsquerda($resAguardandoAprovacao[$i]['cep'], 8);
+        $cep = FunctionsController::setMask($cep, '##.###-###');
 
-          $enderecosAguardandoAprovacao[$e] = $resAguardandoAprovacao[$i];
-          $enderecosAguardandoAprovacao[$e]['id'] = isset($resAguardandoAprovacao[$i]['id']) ? $resAguardandoAprovacao[$i]['id'] : null;
-          $enderecosAguardandoAprovacao[$e]['cep'] = $cep;
-          $enderecosAguardandoAprovacao[$e]['diasEntrega'] = array(
-            'segunda' => array(
-              'id' => 1,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'terca' => array(
-              'id' => 2,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'quarta' => array(
-              'id' => 3,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'quinta' => array(
-              'id' => 4,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'sexta' => array(
-              'id' => 5,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'sabado' => array(
-              'id' => 6,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'domingo' => array(
-              'id' => 7,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            )
-          );
+        $enderecosAguardandoAprovacao[$e] = $resAguardandoAprovacao[$i];
+        $enderecosAguardandoAprovacao[$e]['id'] = isset($resAguardandoAprovacao[$i]['id']) ? $resAguardandoAprovacao[$i]['id'] : null;
+        $enderecosAguardandoAprovacao[$e]['cep'] = $cep;
+        $enderecosAguardandoAprovacao[$e]['diasEntrega'] = array(
+          'segunda' => array(
+            'id' => 1,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'terca' => array(
+            'id' => 2,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'quarta' => array(
+            'id' => 3,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'quinta' => array(
+            'id' => 4,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'sexta' => array(
+            'id' => 5,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'sabado' => array(
+            'id' => 6,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'domingo' => array(
+            'id' => 7,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          )
+        );
 
-          $diasEntrega = $this->diasEntrega($connection, $codCliente, $enderecosAguardandoAprovacao[$e]['id']);
+        $diasEntrega = $this->diasEntrega($connection, $codCliente, $enderecosAguardandoAprovacao[$e]['id']);
 
-          $enderecosAguardandoAprovacao[$e]['tiposVeiculos'] = explode(",", $enderecosAguardandoAprovacao[$e]['idTiposVeiculosDesc']);
-          unset($enderecosAguardandoAprovacao[$e]['idTiposVeiculosDesc']);
+        $enderecosAguardandoAprovacao[$e]['tiposVeiculos'] = explode(",", $enderecosAguardandoAprovacao[$e]['idTiposVeiculosDesc']);
+        unset($enderecosAguardandoAprovacao[$e]['idTiposVeiculosDesc']);
 
-          $enderecosAguardandoAprovacao[$e]['dadosEspeciais'] = explode(",", $enderecosAguardandoAprovacao[$e]['idDadosEspeciais']);
-          unset($enderecosAguardandoAprovacao[$e]['idDadosEspeciais']);
+        $enderecosAguardandoAprovacao[$e]['dadosEspeciais'] = explode(",", $enderecosAguardandoAprovacao[$e]['idDadosEspeciais']);
+        unset($enderecosAguardandoAprovacao[$e]['idDadosEspeciais']);
 
-          if (count($diasEntrega) > 0) {
-            for ($d=0; $d < count($diasEntrega); $d++) {
-              if ($diasEntrega[$d]['checked'] == 1) {
-                if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEGUNDA-FEIRA') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['segunda']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['segunda']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['segunda']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'TERÇA-FEIRA') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['terca']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['terca']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['terca']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUARTA-FEIRA') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['quarta']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['quarta']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['quarta']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUINTA-FEIRA') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['quinta']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['quinta']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['quinta']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEXTA-FEIRA') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['sexta']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['sexta']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['sexta']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SÁBADO') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['sabado']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['sabado']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['sabado']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'DOMINGO') {
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['domingo']['checked'] = 1;
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['domingo']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosAguardandoAprovacao[$e]['diasEntrega']['domingo']['maximo'] = $diasEntrega[$d]['horaMax'];
-                }
+        if (count($diasEntrega) > 0) {
+          for ($d = 0; $d < count($diasEntrega); $d++) {
+            if ($diasEntrega[$d]['checked'] == 1) {
+              if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEGUNDA-FEIRA') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['segunda']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['segunda']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['segunda']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'TERÇA-FEIRA') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['terca']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['terca']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['terca']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUARTA-FEIRA') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['quarta']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['quarta']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['quarta']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUINTA-FEIRA') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['quinta']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['quinta']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['quinta']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEXTA-FEIRA') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['sexta']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['sexta']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['sexta']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SÁBADO') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['sabado']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['sabado']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['sabado']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'DOMINGO') {
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['domingo']['checked'] = 1;
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['domingo']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosAguardandoAprovacao[$e]['diasEntrega']['domingo']['maximo'] = $diasEntrega[$d]['horaMax'];
               }
             }
           }
-          $e++;
         }
+        $e++;
       }
+    }
 
-      return $enderecosAguardandoAprovacao;
+    return $enderecosAguardandoAprovacao;
   }
 
-  private function verificaEnderecosInativos($connection, $codCliente){
+  private function verificaEnderecosInativos($connection, $codCliente)
+  {
     $e = 0;
     $enderecosInativos = array();
 
@@ -1026,118 +1025,118 @@ class CadastroController extends AbstractController
         @ID_CLIE = {$codCliente},
         @ID_SITU = '2,4'
       "
-    )->fetchAll();            
-    
-      if (
-        count($res) > 0 &&
-        !isset($res[0]['MSG']) &&
-        (isset($res[0]['cep']) &&
+    )->fetchAll();
+
+    if (
+      count($res) > 0 &&
+      !isset($res[0]['MSG']) &&
+      (isset($res[0]['cep']) &&
         $res[0]['cep'] != '' &&
         $res[0]['cep'] != null)
-      ) {
-        for ($i=0; $i < count($res); $i++) {
-          $cep = FunctionsController::completaZeroEsquerda($res[$i]['cep'], 8);
-          $cep = FunctionsController::setMask($cep, '##.###-###');
+    ) {
+      for ($i = 0; $i < count($res); $i++) {
+        $cep = FunctionsController::completaZeroEsquerda($res[$i]['cep'], 8);
+        $cep = FunctionsController::setMask($cep, '##.###-###');
 
-          $enderecosInativos[$e] = $res[$i];
-          $enderecosInativos[$e]['id'] = isset($res[$i]['id']) ? $res[$i]['id'] : null;
-          $enderecosInativos[$e]['cep'] = $cep;
-          $enderecosInativos[$e]['diasEntrega'] = array(
-            'segunda' => array(
-              'id' => 1,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'terca' => array(
-              'id' => 2,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'quarta' => array(
-              'id' => 3,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'quinta' => array(
-              'id' => 4,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'sexta' => array(
-              'id' => 5,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'sabado' => array(
-              'id' => 6,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            ),
-            'domingo' => array(
-              'id' => 7,
-              'checked' => 0,
-              'minimo' => null,
-              'maximo' => null,
-            )
-          );
+        $enderecosInativos[$e] = $res[$i];
+        $enderecosInativos[$e]['id'] = isset($res[$i]['id']) ? $res[$i]['id'] : null;
+        $enderecosInativos[$e]['cep'] = $cep;
+        $enderecosInativos[$e]['diasEntrega'] = array(
+          'segunda' => array(
+            'id' => 1,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'terca' => array(
+            'id' => 2,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'quarta' => array(
+            'id' => 3,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'quinta' => array(
+            'id' => 4,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'sexta' => array(
+            'id' => 5,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'sabado' => array(
+            'id' => 6,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          ),
+          'domingo' => array(
+            'id' => 7,
+            'checked' => 0,
+            'minimo' => null,
+            'maximo' => null,
+          )
+        );
 
-          $diasEntrega = $this->diasEntrega($connection, $codCliente, $enderecosInativos[$e]['id']);
+        $diasEntrega = $this->diasEntrega($connection, $codCliente, $enderecosInativos[$e]['id']);
 
-          /* print_r($diasEntrega);
+        /* print_r($diasEntrega);
           exit(0); */
 
-          $enderecosInativos[$e]['tiposVeiculos'] = explode(",", $enderecosInativos[$e]['idTiposVeiculosDesc']);
-          unset($enderecosInativos[$e]['idTiposVeiculosDesc']);
+        $enderecosInativos[$e]['tiposVeiculos'] = explode(",", $enderecosInativos[$e]['idTiposVeiculosDesc']);
+        unset($enderecosInativos[$e]['idTiposVeiculosDesc']);
 
-          $enderecosInativos[$e]['dadosEspeciais'] = explode(",", $enderecosInativos[$e]['idDadosEspeciais']);
-          unset($enderecosInativos[$e]['idDadosEspeciais']);
+        $enderecosInativos[$e]['dadosEspeciais'] = explode(",", $enderecosInativos[$e]['idDadosEspeciais']);
+        unset($enderecosInativos[$e]['idDadosEspeciais']);
 
-          if (count($diasEntrega) > 0) {
-            for ($d=0; $d < count($diasEntrega); $d++) {
-              if ($diasEntrega[$d]['checked'] == 1) {
-                if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEGUNDA-FEIRA') {
-                  $enderecosInativos[$e]['diasEntrega']['segunda']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['segunda']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['segunda']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'TERÇA-FEIRA') {
-                  $enderecosInativos[$e]['diasEntrega']['terca']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['terca']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['terca']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUARTA-FEIRA') {
-                  $enderecosInativos[$e]['diasEntrega']['quarta']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['quarta']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['quarta']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUINTA-FEIRA') {
-                  $enderecosInativos[$e]['diasEntrega']['quinta']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['quinta']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['quinta']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEXTA-FEIRA') {
-                  $enderecosInativos[$e]['diasEntrega']['sexta']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['sexta']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['sexta']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SÁBADO') {
-                  $enderecosInativos[$e]['diasEntrega']['sabado']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['sabado']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['sabado']['maximo'] = $diasEntrega[$d]['horaMax'];
-                } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'DOMINGO') {
-                  $enderecosInativos[$e]['diasEntrega']['domingo']['checked'] = 1;
-                  $enderecosInativos[$e]['diasEntrega']['domingo']['minimo'] = $diasEntrega[$d]['horaMin'];
-                  $enderecosInativos[$e]['diasEntrega']['domingo']['maximo'] = $diasEntrega[$d]['horaMax'];
-                }
+        if (count($diasEntrega) > 0) {
+          for ($d = 0; $d < count($diasEntrega); $d++) {
+            if ($diasEntrega[$d]['checked'] == 1) {
+              if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEGUNDA-FEIRA') {
+                $enderecosInativos[$e]['diasEntrega']['segunda']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['segunda']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['segunda']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'TERÇA-FEIRA') {
+                $enderecosInativos[$e]['diasEntrega']['terca']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['terca']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['terca']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUARTA-FEIRA') {
+                $enderecosInativos[$e]['diasEntrega']['quarta']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['quarta']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['quarta']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'QUINTA-FEIRA') {
+                $enderecosInativos[$e]['diasEntrega']['quinta']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['quinta']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['quinta']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEXTA-FEIRA') {
+                $enderecosInativos[$e]['diasEntrega']['sexta']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['sexta']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['sexta']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'SÁBADO') {
+                $enderecosInativos[$e]['diasEntrega']['sabado']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['sabado']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['sabado']['maximo'] = $diasEntrega[$d]['horaMax'];
+              } else if ($diasEntrega[$d]['nomeDiaSemana'] == 'DOMINGO') {
+                $enderecosInativos[$e]['diasEntrega']['domingo']['checked'] = 1;
+                $enderecosInativos[$e]['diasEntrega']['domingo']['minimo'] = $diasEntrega[$d]['horaMin'];
+                $enderecosInativos[$e]['diasEntrega']['domingo']['maximo'] = $diasEntrega[$d]['horaMax'];
               }
             }
           }
-          $e++;
         }
+        $e++;
       }
+    }
 
-      return $enderecosInativos;
+    return $enderecosInativos;
   }
 
   /**
@@ -1179,7 +1178,7 @@ class CadastroController extends AbstractController
       if (count($res) > 0) {
         $cep = FunctionsController::completaZeroEsquerda($res[0]['cep'], 8);
         $cep = FunctionsController::setMask($cep, '##.###-###');
-        
+
         $endereco = $res[0];
 
         $endereco['cep'] = $cep;
@@ -1227,17 +1226,17 @@ class CadastroController extends AbstractController
             'maximo' => null,
           )
         );
-        
-        if($hasAcessoAlterarStatus === false ){
+
+        if ($hasAcessoAlterarStatus === false) {
           $endereco['alteraStatus'] = 0;
         } else {
           $endereco['alteraStatus'] = 1;
         }
 
         if ($idSituacao == 1) {
-          
+
           if (!isset($res[0]['situacao'])) {
-          $endereco['situacao'] = 1;
+            $endereco['situacao'] = 1;
           }
 
           $endereco['tiposVeiculos'] = array();
@@ -1261,11 +1260,10 @@ class CadastroController extends AbstractController
 
           $dadosEspeciais = explode(",", $endereco['idDadosEspeciais']);
           unset($endereco['idDadosEspeciais']);
-
         }
 
         if (count($diasEntrega) > 0) {
-          for ($d=0; $d < count($diasEntrega); $d++) {
+          for ($d = 0; $d < count($diasEntrega); $d++) {
             if ($diasEntrega[$d]['checked'] == 1) {
               if ($diasEntrega[$d]['nomeDiaSemana'] == 'SEGUNDA-FEIRA') {
                 $endereco['diasEntrega']['segunda']['checked'] = 1;
@@ -1299,15 +1297,15 @@ class CadastroController extends AbstractController
             }
           }
         }
-        
+
         if (!empty($tiposVeiculos)) {
           $endereco['tiposVeiculos'] = $tiposVeiculos;
         }
-        
+
         if (!empty($dadosEspeciais)) {
           $endereco['dadosEspeciais'] = $dadosEspeciais;
         }
-        
+
 
         $message = array(
           'responseCode' => 200,
@@ -1351,13 +1349,13 @@ class CadastroController extends AbstractController
         if (isset($data['codEndereco'])) {
           $idEndereco = $data['codEndereco'];
         } else {
-         $idEndereco = $data['id'];
+          $idEndereco = $data['id'];
         }
 
         $matricula = $infoUsuario->matricula;
         $cep = FunctionsController::limpaMascara($data['cep']);
         $endereco = strtoupper(FunctionsController::limpaCaracteresEspeciais($data['endereco']));
-        $status = isset($data['status']) ? $data['status'] : 1; ;
+        $status = isset($data['status']) ? $data['status'] : 1;;
         $situacao = $data['situacao'];
         $observacao = $data['observacao'];
         // $numero = strtoupper(FunctionsController::limpaCaracteresEspeciais((string)$data['numero']));
@@ -1371,7 +1369,7 @@ class CadastroController extends AbstractController
         $cobranca = isset($data['cobranca']) ? $data['cobranca'] : 0;
         $entrega = isset($data['entrega']) ? $data['entrega'] : 0;
         $titulo = $data['titulo'] != null ? strtoupper(FunctionsController::limpaCaracteresEspeciais($data['titulo'])) : null;
-        $regiaoEntrega = $data['regiaoEntrega'];        
+        $regiaoEntrega = $data['regiaoEntrega'];
         $tipoMaterial = $data['tipoMaterial'];
         $tipoDescarga = $data['tipoDescarga'];
         $modoDescarga = $data['modoDescarga'];
@@ -1388,10 +1386,9 @@ class CadastroController extends AbstractController
           $end['uf'] = $uf;
 
           $retornoLatLong = GoogleApiService::ConsultaLatitudeLongitude($end);
-          
-          $latitude = $retornoLatLong[0]['lat']; 
-          $longitude = $retornoLatLong[0]['lng']; 
-         
+
+          $latitude = $retornoLatLong[0]['lat'];
+          $longitude = $retornoLatLong[0]['lng'];
         }
 
         if ($hasAprovacaoEndereco) {
@@ -1401,7 +1398,7 @@ class CadastroController extends AbstractController
             $aprovaEnderecos = 1;
           }
         } else {
-          if($status == 2 && $situacao == 1) {
+          if ($status == 2 && $situacao == 1) {
             $aprovaEnderecos = 0;
           } else {
             $aprovaEnderecos = 1;
@@ -1464,7 +1461,7 @@ class CadastroController extends AbstractController
 
             FunctionsController::sendSwiftMail(true, $body, $msg, $emails);
           }
-          $message = array('responseCode' => 200,'codEndereco' => $res[0]['ID']);
+          $message = array('responseCode' => 200, 'codEndereco' => $res[0]['ID']);
         } else {
           $message = array('responseCode' => 204);
         }
@@ -1480,7 +1477,7 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
- 
+
   /**
    * @Route(
    *  "/comercial/clientes/cadastro/excluir/endereco/{codCliente}/{id}",
@@ -1533,16 +1530,15 @@ class CadastroController extends AbstractController
    * @return JsonResponse
    */
   public function getContatos(Connection $connection, Request $request, $codCliente)
-  { 
+  {
     try {
-
-        $res = $connection->query("
+      $res = $connection->query("
           EXEC [PRC_CLIE_CONT_CONS]
             @ID_CLIE = {$codCliente}
       ")->fetchAll();
 
       if (count($res) > 0) {
-        for ($i=0; $i < count($res); $i++) {
+        for ($i = 0; $i < count($res); $i++) {
           $index = empty($res[$i]['ID_CONT']) ? 'MTC_' . $i : $res[$i]['ID_CONT'];
 
           if ($res[$i]['ID_GENE'] == null) {
@@ -1584,7 +1580,7 @@ class CadastroController extends AbstractController
 
         if (isset($contatos)) {
           $contatos = array_values($contatos);
-          
+
           return FunctionsController::Retorno(true, null, $contatos, Response::HTTP_OK);
         } else {
           return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
@@ -1592,12 +1588,11 @@ class CadastroController extends AbstractController
       } else {
         return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
-      
     } catch (DBALException $e) {
       return FunctionsController::Retorno(
-        false, 
-        'Erro ao retornar dados.', 
-        $e->getMessage(), 
+        false,
+        'Erro ao retornar dados.',
+        $e->getMessage(),
         Response::HTTP_BAD_REQUEST
       );
     }
@@ -1617,7 +1612,7 @@ class CadastroController extends AbstractController
   public function getContato(Connection $connection, Request $request, $codCliente, $idContato)
   {
     try {
-          $res = $connection->query("
+      $res = $connection->query("
               EXEC [PRC_CLIE_CONT_CONS]
                 @ID_CLIE = '{$idContato}',
                 @ID_SEQU_CONT =  '{$codCliente}'
@@ -1626,13 +1621,13 @@ class CadastroController extends AbstractController
       if (count($res) > 0) {
 
         if ($res[0]['ID_GENE'] == null) {
-         $res[0]['ID_GENE'] = null;
+          $res[0]['ID_GENE'] = null;
         } else if ($res[0]['ID_GENE'] == 1) {
-         $res[0]['DS_GENE'] = 'FEMININO';
+          $res[0]['DS_GENE'] = 'FEMININO';
         } else if ($res[0]['ID_GENE'] == 2) {
-         $res[0]['DS_GENE'] = 'MASCULINO';
+          $res[0]['DS_GENE'] = 'MASCULINO';
         }
-        
+
         $contato = new \stdClass;
         $contato->id = $res[0]['ID_CONT'];
         $contato->idSeqTid = $res[0]['ID_SEQ_ERP'];
@@ -1660,9 +1655,9 @@ class CadastroController extends AbstractController
       }
     } catch (DBALException $e) {
       return FunctionsController::Retorno(
-        false, 
-        'Erro ao retornar dados.', 
-        $e->getMessage(), 
+        false,
+        'Erro ao retornar dados.',
+        $e->getMessage(),
         Response::HTTP_BAD_REQUEST
       );
     }
@@ -1698,7 +1693,7 @@ class CadastroController extends AbstractController
         $hobbies = !empty($data['hobbies']) ? strtoupper(FunctionsController::limpaCaracteresEspeciais($data['hobbies'])) : null;
         $qtdeFilhos = isset($data['filhos']) ? count($data['filhos']) : 0;
         $observacoes = !empty($data['observacoes']) ? strtoupper(FunctionsController::limpaCaracteresEspeciais($data['observacoes'])) : null;
-       
+
         $res = $connection->query(
           "
             EXEC [PRC_CLIE_CONT_CADA]
@@ -1973,7 +1968,7 @@ class CadastroController extends AbstractController
         } else {
           $obsPropostas = '';
         }
-        
+
         $res = $connection->query(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_CONT_DADO_RELAC_CADA] 
@@ -2034,7 +2029,7 @@ class CadastroController extends AbstractController
         )->fetchAll();
 
         if (count($res) > 0) {
-          for ($i=0; $i < count($res); $i++) {
+          for ($i = 0; $i < count($res); $i++) {
             $potencialCompra[] = array(
               'id' => $res[$i]['codLinha'],
               'descricao' => $res[$i]['nomeLinha'],
@@ -2078,7 +2073,7 @@ class CadastroController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $arrValidacao = array();
 
-        for ($i=0; $i < count($data); $i++) {
+        for ($i = 0; $i < count($data); $i++) {
           $pesoDe = !empty($data[$i]['de']) ? $data[$i]['de'] : 0;
           $pesoAte = !empty($data[$i]['ate']) ? $data[$i]['ate'] : 0;
 
@@ -2091,7 +2086,7 @@ class CadastroController extends AbstractController
               @PESO_ATE = {$pesoAte}
             "
           )->fetchAll();
-          
+
           if ($res[0]['MSG'] == 'OK') {
             $arrValidacao[$i]['validacao'] = true;
           } else {
@@ -2100,7 +2095,7 @@ class CadastroController extends AbstractController
         }
 
         $validacao = true;
-        for ($x=0; $x < count($arrValidacao); $x++) {
+        for ($x = 0; $x < count($arrValidacao); $x++) {
           if ($arrValidacao[$x]['validacao'] === false) {
             $validacao = false;
           }
@@ -2124,7 +2119,7 @@ class CadastroController extends AbstractController
     }
   }
 
-/**
+  /**
    * @Route(
    *  "/comercial/clientes/cadastro/carregar/anexos/{codCliente}",
    *  name="comercial.clientes-cadastro-carregar-anexos",
@@ -2134,60 +2129,58 @@ class CadastroController extends AbstractController
    * @return JsonResponse
    */
   public function getAnexos(Connection $connection, Request $request, $codCliente)
-
   {
     try {
-        $params = $request->query->all();       
-        $resLoop = [];
-        $res = $connection->query(
-          "
+      $params = $request->query->all();
+      $resLoop = [];
+      $res = $connection->query(
+        "
             EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CONS]
             @CLIENTE = {$codCliente}
           "
-        )->fetchAll();   
-        
-       
-        if(count($res) > 0){
-        foreach($res as $key => $value) { 
+      )->fetchAll();
+
+
+      if (count($res) > 0) {
+        foreach ($res as $key => $value) {
           $resLoop[] = array(
-              'urlAnexo' => $res[$key]['URL_ARQUIVO_WEB'],
-              'codAnexo' => $res[$key]['ARQUIVO_ID'],
-              'idTipo' => $res[$key]['TIPO_ID'],
-              'descTipo' => $res[$key]['TIPO_DESCRICAO'],
-              'nomeAnexo' => $res[$key]['ARQUIVO'],
-              'nomeExibicao' => $res[$key]['NOME_EXIBICAO'],
-              'formato' => $res[$key]['FORMATO'],
-              'tipoCliente' => $this->tipoCliente($connection, $codCliente)
-            
+            'urlAnexo' => $res[$key]['URL_ARQUIVO_WEB'],
+            'codAnexo' => $res[$key]['ARQUIVO_ID'],
+            'idTipo' => $res[$key]['TIPO_ID'],
+            'descTipo' => $res[$key]['TIPO_DESCRICAO'],
+            'nomeAnexo' => $res[$key]['ARQUIVO'],
+            'nomeExibicao' => $res[$key]['NOME_EXIBICAO'],
+            'formato' => $res[$key]['FORMATO'],
+            'tipoCliente' => $this->tipoCliente($connection, $codCliente)
+
           );
-      }
+        }
         if (count($resLoop) > 0) {
 
-            // foreach ($resLoop as $key => $value) {
-            //     $resLoop[$key]["urlAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["urlAnexo"]);
-            //     $resLoop[$key]["urlAnexo"] = str_replace("\\", "/", $resLoop[$key]["urlAnexo"] );
-            //     $resLoop[$key]["urlAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $resLoop[$key]["urlAnexo"] : "https://" . $resLoop[$key]["urlAnexo"]; 
-            // }
+          // foreach ($resLoop as $key => $value) {
+          //     $resLoop[$key]["urlAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["urlAnexo"]);
+          //     $resLoop[$key]["urlAnexo"] = str_replace("\\", "/", $resLoop[$key]["urlAnexo"] );
+          //     $resLoop[$key]["urlAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $resLoop[$key]["urlAnexo"] : "https://" . $resLoop[$key]["urlAnexo"]; 
+          // }
 
-            return FunctionsController::Retorno(true, null, $resLoop, Response::HTTP_OK);
+          return FunctionsController::Retorno(true, null, $resLoop, Response::HTTP_OK);
         } else {
-            return FunctionsController::Retorno(false, null, $resLoop, Response::HTTP_OK);
+          return FunctionsController::Retorno(false, null, $resLoop, Response::HTTP_OK);
         }
-          if (count($res) > 0 && !isset($res[0]['msg'])) {
+        if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['msg'])) {
-                return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
-            } else {  
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
-            } 
+        } else if (count($res) > 0 && isset($res[0]['msg'])) {
+          return FunctionsController::Retorno(true, $res[0]['msg'], null, Response::HTTP_OK);
+        } else {
+          return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+        }
       } else {
-          return FunctionsController::Retorno(true, 'Vazio', $res, Response::HTTP_OK); 
-      }                                                     
-      
-      } catch (\Throwable $e) {
-          return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        return FunctionsController::Retorno(true, 'Vazio', $res, Response::HTTP_OK);
       }
-}
+    } catch (\Throwable $e) {
+      return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+    }
+  }
 
 
   // /**
@@ -2248,7 +2241,7 @@ class CadastroController extends AbstractController
   // }
 
 
- /**
+  /**
    * @Route(
    *  "/comercial/clientes/cadastro/upload/anexo",
    *  name="comercial.clientes-cadastro-upload-anexo",
@@ -2260,74 +2253,74 @@ class CadastroController extends AbstractController
    */
   public function uploadAnexo(Connection $connection, Request $request)
   {
-    try { 
+    try {
       $params = json_decode($request->getContent(), true);
       $codCliente = null;
       $tipoAnexo = null;
       $descAnexo = null;
       $file = null;
-      if (isset($params['codCliente'])) $codCliente = $params['codCliente']; 
+      if (isset($params['codCliente'])) $codCliente = $params['codCliente'];
       if (isset($params['anexos'][0]['nomeAnexo'])) $file = $params['anexos'][0]['nomeAnexo'];
       if (isset($params['anexos'][0]['linkAnexo'])) $urlAnexo = $params['anexos'][0]['linkAnexo'];
       if (isset($params['tipoAnexo'])) $tipoAnexo = $params['tipoAnexo'];
 
-      if ($params['tipoCliente'] == 'J'){
-        if($tipoAnexo == 1){
+      if ($params['tipoCliente'] == 'J') {
+        if ($tipoAnexo == 1) {
           $descAnexo = 'Contrato Social';
-        } else  if($tipoAnexo == 2){
+        } else  if ($tipoAnexo == 2) {
           $descAnexo = 'Situação Cadastral';
-        } else if($tipoAnexo == 3){
+        } else if ($tipoAnexo == 3) {
           $descAnexo = 'Sintegra';
-        } else if($tipoAnexo == 4){
+        } else if ($tipoAnexo == 4) {
           $descAnexo = 'Serasa';
-        } else if($tipoAnexo == 5){
+        } else if ($tipoAnexo == 5) {
           $descAnexo = 'Impostos';
-        } else if($tipoAnexo == 6){
+        } else if ($tipoAnexo == 6) {
           $descAnexo = 'Outros';
-        } 
+        }
       } else {
-        if($tipoAnexo == 2){
+        if ($tipoAnexo == 2) {
           $descAnexo = 'Identificação (CNH ou RG)';
-        } else  if($tipoAnexo == 4){
+        } else  if ($tipoAnexo == 4) {
           $descAnexo = 'Comprovante de endereço';
         }
       }
 
-       $extension = explode(".", $file);            
-       $fileExtension = $extension[1];  
-       $nomeAnexo = $extension[0];
+      $extension = explode(".", $file);
+      $fileExtension = $extension[1];
+      $nomeAnexo = $extension[0];
 
-       $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '\\app\\uploads\\comercial\\clientes\\cadastros\\' . $codCliente . '\\';
-      
-       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '\\app\\uploads\\comercial\\clientes\\cadastros\\' . $codCliente . '\\';
 
-       $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\clientes\\cadastros\\".  $codCliente  ."\\" . $tipoAnexo ."\\" ;
+      $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+      $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\clientes\\cadastros\\" .  $codCliente  . "\\" . $tipoAnexo . "\\";
       //  $webPath = '/uploads/comercial/clientes/cadastros/' . $codCliente . '/' ;
-      
-       
-      if (file_exists($path. $file)) {
-          $file = rand() . '-' . $file;
+
+
+      if (file_exists($path . $file)) {
+        $file = rand() . '-' . $file;
       }
 
-       if(!is_dir($path)){                
-           mkdir($path, 0777, true);
-       }  
+      if (!is_dir($path)) {
+        mkdir($path, 0777, true);
+      }
 
-       $caminho = $path . $file;   
+      $caminho = $path . $file;
 
       //  $data = base64_encode($urlAnexo);
-       file_put_contents($caminho, base64_decode($urlAnexo));
-       $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $caminho);
-       $webPath = str_replace("\\", "/", $webPath);
-       $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath;
+      file_put_contents($caminho, base64_decode($urlAnexo));
+      $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $caminho);
+      $webPath = str_replace("\\", "/", $webPath);
+      $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath;
       //  print_r($webPath);
       //  die();
-       $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-       $matricula      = $infoUsuario->matricula;
-       $nomeUsuario    = $infoUsuario->nomeCompleto;
-      
-       $res = $connection->query(
-                 "
+      $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+      $matricula      = $infoUsuario->matricula;
+      $nomeUsuario    = $infoUsuario->nomeCompleto;
+
+      $res = $connection->query(
+        "
                    EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CADA]
                    @CLIENTE = {$codCliente},
                    @TIPO_ANEXO = {$tipoAnexo},
@@ -2338,18 +2331,18 @@ class CadastroController extends AbstractController
                    @NOME_EXIBICAO = '{$descAnexo}',
                    @USUARIO_CADASTRO = '{$matricula}'
                  "
-               )->fetchAll();
+      )->fetchAll();
 
- if (isset($res[0])) {
-     return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
- } else if (count($res) > 0 && isset($res[0]['msg'])) {
-     return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
- } else {
-     return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
- }
-} catch (\Throwable $e) {
- return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-}
+      if (isset($res[0])) {
+        return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
+      } else if (count($res) > 0 && isset($res[0]['msg'])) {
+        return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_OK);
+      } else {
+        return FunctionsController::Retorno(false, 'O cadastro não foi realizado.', null, Response::HTTP_OK);
+      }
+    } catch (\Throwable $e) {
+      return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+    }
   }
 
 
@@ -2364,13 +2357,13 @@ class CadastroController extends AbstractController
   //  */
   // public function uploadAnexo(Connection $connection, Request $request)
   // {
-    
+
   //   if ($request->isMethod('POST')) {
 
   //     print_r('aqui');
   //   exit(0);
   //     try {
-        
+
   //       $codCliente = $request->request->get('codCliente');
   //       $idAnexo = $request->request->get('idAnexo');
   //       $tipoAnexo = $request->request->get('tipoAnexo');
@@ -2402,7 +2395,7 @@ class CadastroController extends AbstractController
   //           if ($file->move($uploadPath, $tipoAnexo . $fileExtension)) {
   //             $urlArquivoServ = $uploadPath . $tipoAnexo . $fileExtension;
   //             $urlArquivoWeb = $webPath . $tipoAnexo . $fileExtension;
-  
+
   //             $res = $connection->query(
   //               "
   //                 EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CADA]
@@ -2416,7 +2409,7 @@ class CadastroController extends AbstractController
   //                 @USUARIO_CADASTRO = '{$idVendedor}'
   //               "
   //             )->fetchAll();
-      
+
   //             if ($res[0]['ARQUIVO_ID']) {
   //               $message = array('responseCode' => 200);
   //             } else {
@@ -2574,7 +2567,7 @@ class CadastroController extends AbstractController
         }
 
         if (count($res) > 0) {
-          for ($i=0; $i < count($res); $i++) {
+          for ($i = 0; $i < count($res); $i++) {
             $travas[] = array(
               'id' => $res[$i]['ID_TRAVA'],
               'descricao' => $res[$i]['MOTIVO'],
@@ -2632,7 +2625,7 @@ class CadastroController extends AbstractController
 
           $arrExplode = explode('\\//', $res[0]['HISTORICO_FINANCEIRO']);
           $arrFilter = array_filter($arrExplode);
-          for ($i=0; $i < count($arrFilter); $i++) {
+          for ($i = 0; $i < count($arrFilter); $i++) {
             $infosFinanceiras[] = array(
               'id' => null,
               'descricao' => str_replace('\\', '', strtoupper($arrFilter[$i])),
@@ -2689,7 +2682,7 @@ class CadastroController extends AbstractController
           $arrExplode = explode('\\//', $res[0]['HISTORICO_COMERCIAL']);
           $arrFilter = array_filter($arrExplode);
 
-          for ($i=0; $i < count($arrFilter); $i++) {
+          for ($i = 0; $i < count($arrFilter); $i++) {
             $infosComerciais[] = array(
               'id' => null,
               'descricao' => str_replace('\\', '', strtoupper($arrFilter[$i])),
@@ -2716,4 +2709,39 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
+
+
+  /**
+   * @Route(
+   *  "/comercial/clientes/cadastro/ubicacionescliente{codCliente}",
+   *  name="comercial.clientes-cadastro-ubicacionescliente",
+   *  methods={"GET"},
+   *  requirements={"codCliente"="\d+"}
+   * )
+   * @return JsonResponse
+   */
+
+  public function clientUbicacion(Connection $connection, $codigo_clietne)
+  {
+
+    $resultado = $connection->fetchAllAssociative('SELECT logradouro, latitude, longitude, codigo_cliente, ubicacion FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$codigo_clietne]);
+    if ($resultado->rowCount() > 0) {
+      // La fila existe, haz lo que necesites aquí
+       $message = array(
+          "responseCode" => 200,
+          "data" => $resultado,
+          "success" => true
+      );
+    } else {
+        $message = array(
+          "responseCode" => 204,
+          "message" => 'No tienen direccion',
+          "success" => true
+        );
+    }
+    $response = new JsonResponse($message);
+    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+    return $response;
+  }
+
 }

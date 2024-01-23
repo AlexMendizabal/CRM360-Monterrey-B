@@ -147,6 +147,20 @@ class Helper
         }
     }
 
+    public function buscarCiudadId($connection, int $id_ciudad)
+    {
+        $query = "select * from TB_CIUDAD where id =  :id_ciudad";
+        $stament2 = $connection->prepare($query);
+        $stament2->bindValue(':nombre_ciudad', $id_ciudad);
+        $stament2->execute();
+        $datos_ciudad = $stament2->fetch();
+        if ($datos_ciudad['id'] > 0) {
+            return $datos_ciudad;
+        } else {
+            return false;
+        }
+    }
+
     public function buscarCiudadAbreviatura($connection, $sigla_ciudad)
     {
         $query = "select * from TB_CIUDAD where sigla like :sigla_ciudad";
@@ -286,7 +300,7 @@ class Helper
 
             $tipo_pessoa = isset($data['tipo_pessoa']) ? $data['tipo_pessoa'] : 'S';
             $sap_vendedor = isset($data['sap_vendedor']) ? (int)$data['sap_vendedor'] : null;
-            $tipo_cliente  = isset($data['tipo_cliente']) ? (int)$data['tipo_cliente'] : null;
+            $tipo_cliente  = isset($data['tipo_cliente']) ? (int)$data['tipo_cliente'] : 0;
             $id_vendedor_sap = 0;
             $limi_cred = isset($data['limi_cred']) ? $data['limi_cred'] : 0;
             $cred_segu = isset($data['cred_segu']) ? $data['cred_segu'] : 0;
@@ -298,22 +312,25 @@ class Helper
             $email  = isset($data['email']) ? $data['email'] : null;
             $nombre_factura = isset($data['nombre_factura']) ? $data['nombre_factura'] :  null;
             $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 0;
-            if (empty($sap_vendedor)) {
-                $vendedor = isset($data['id_vendedor']) ? $data['id_vendedor'] : null;
+            if (isset($data['frontend'])) {
+                $vendedor = isset($data['id_vendedor']) ? (int)$data['id_vendedor'] : null;
             } else {
-                $vendedor = $this->traerVendedor($connection, $sap_vendedor);
+                $vendedor = $this->traerVendedor($connection, (int)$data['id_vendedor']);
             }
+
 
             if (!isset($vendedor)) {
                 $camposFaltantes[] = 'vendedor';
             }
+            /* dd($camposFaltantes); */
 
             $traerCodigoVendedor = $this->traerVendedorSap($connection, $vendedor);
 
             if ($traerCodigoVendedor !== false) {
                 $id_vendedor_sap = $traerCodigoVendedor[0]['codigo_sap'];
             }
-            if (!empty($cnpj_cpf) && !empty($vendedor) &&  $vendedor != false) {
+
+            if (empty($camposFaltantes)) {
 
                 $rubro = isset($data['rubro']) ? $data['rubro'] : null;
                 if (!empty($rubro)) {
@@ -349,7 +366,7 @@ class Helper
                 
                dd($respCLi); */
 
-               //dd($id_tipo_cliente);
+                //dd($id_tipo_cliente);
 
                 $queryClient = "INSERT INTO MTCORP_MODU_CLIE_BASE(
                     prim_nome, 
@@ -378,7 +395,7 @@ class Helper
 
                 //$connection->beginTransaction();
                 //dd($telefono);
-                
+
                 $stmt = $connection->prepare($queryClient);
                 $stmt->bindValue(":nombres", $nombres);
                 $stmt->bindValue(":segu_nome", $segu_nome);
@@ -401,7 +418,6 @@ class Helper
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
                 $stmt->bindValue(":nit", $nit);
                 $stmt->execute();
-                //dd( $stmt->fetchColumn());
                 $id_cliente = $connection->lastInsertId();
                 //dd($id_cliente);
 
@@ -509,11 +525,11 @@ class Helper
     }
     public function insertUbClient($connection, $data = [], $id_cliente, $codigo_cliente)
     {
-        //dd('aqui');
-
         $camposFaltantes = array();
         $ciudad = isset($data['ciudad']) ? strtoupper($data['ciudad']) : null;
         $id_ciudad = isset($data['id_ciudad']) ? (int)$data['id_ciudad'] :  0;
+
+        //dd($ciudad);
 
 
         if (!empty($data['ubicacion'])) {
@@ -551,19 +567,31 @@ class Helper
             $buscarCiudad = $this->buscarCiudad2($connection, (int)$data['id_ciudad']);
             $ciudad = $buscarCiudad['nombre_ciudad'];
         }
-        $sigla_ciudad = $buscarCiudad['sigla'];
 
+        if (isset($data['ciudad_sigla'])) {
+            $sigla_ciudad = $data['ciudad_sigla'];
+        } else {
+            $sigla_ciudad = $buscarCiudad['sigla'];
+        }
         if (empty($id_ciudad)) {
-            $camposFaltantes[] = 'ciudad';
+            $buscarCiudad = $this->buscarCiudad2($connection, $data['ciudad']);
+            if ($buscarCiudad !== false) {
+                $id_ciudad = (int)$buscarCiudad;
+            } else {
+                $camposFaltantes[] = 'ciudad';
+            }
         }
 
-        //dd($camposFaltantes);
+        /* if (empty($ciudad)) {
+            $buscarCiudadsigla = 
+        } */
+
         if (count($camposFaltantes) > 0) {
 
             $message = [
                 "codigoRespuesta" => 204,
                 "estado" => false,
-                "detalle" => 'Faltan campos obligatorios en la ubicación: ' . implode(', ', $camposFaltantes)
+                "detalle" => 'Faltan campos obligatorios en la ubicacion: ' . implode(', ', $camposFaltantes)
             ];
         } else {
 
@@ -581,10 +609,11 @@ class Helper
             $stmt_ub->execute();
             $id_ubicacion = $connection->lastInsertId();
 
+
             if ($id_ubicacion > 0) {
                 $message = array(
                     "ubicacion" => $ubicacion,
-                    "id_cliente" =>  $id_cliente,
+                    "id_cliente" =>  (int)$id_cliente,
                     "direccion" => $direccion,
                     "latitud" => $latitud,
                     "longitud" => $longitud,
@@ -980,6 +1009,7 @@ class Helper
 
     public function traerVendedorSap($connection, $id_vendedor)
     {
+
         $query = "SELECT codigo_sap FROM TB_VEND WHERE ID = :id_vendedor";
         $stament = $connection->prepare($query);
         $stament->bindValue('id_vendedor', $id_vendedor);
@@ -1032,18 +1062,17 @@ class Helper
     public function updateClient($connection, $data)
     {
 
-        //dd($data);
+
         if (!empty($data['codigo_cliente'])) {
             $cliente['codigo_cliente'] = $data['codigo_cliente'];
         } else {
             $camposFaltantes[] = 'codigo_cliente';
         }
 
-        if (!empty($data['ciudad']) || !empty($data['id_ciudad'])) {
-            //$cliente['codigo_cliente'] = $data['codigo_cliente'];
-        } else {
+        if (empty($data['ciudad']) && empty($data['id_ciudad'])) {
             $camposFaltantes[] = 'ciudad';
         }
+
         if (!empty($data['nit'])) {
             $cliente['nit'] = $data['nit'];
         } else {
@@ -1096,9 +1125,9 @@ class Helper
         /* dd($data['id_tipo_cliente']); */
         if (!empty($data['id_tipo_cliente']) || $data['id_tipo_cliente'] == 0) {
             $cliente['id_tipo_cliente'] = $data['id_tipo_cliente'];
-        } /* else {
-            $camposFaltantes[] = 'tipo_cliente';
-        } */
+        } else {
+            $cliente['id_tipo_cliente'] = 0;
+        }
         if (!empty($data['nombre_factura'])) {
             $cliente['nombre_factura'] = $data['nombre_factura'];
         } /* else {
@@ -1125,6 +1154,7 @@ class Helper
         } else {
             $camposFaltantes[] = 'id_cliente';
         }
+
 
         /* dd($data); 
         dd($cliente['id_cliente']); */
@@ -1178,7 +1208,10 @@ class Helper
         }
         $condition = ['id_cliente' => (int)$data['id_cliente']];
 
-        //dd($cliente);
+        if (!isset($cliente['id_tipo_cliente'])) {
+            $cliente['id_tipo_cliente'] = 0;
+        }
+
         $rowsAffected = $connection->update('MTCORP_MODU_CLIE_BASE', $cliente, $condition);
 
         if ($rowsAffected > 0) {
@@ -2840,7 +2873,7 @@ class Helper
 
         $responseData = json_decode($response, true);
 
-        //print_r($responseData); 
+
         return $responseData;
 
         /*  if ($responseData['CodigoRespuesta'] == 200) {
@@ -3232,7 +3265,7 @@ class Helper
         $stmt1->bindValue(':id_oferta', $id);
         $stmt1->execute();
         $res1 = $stmt1->fetch();
-       
+
         if ($res1 > 0) {
             $arrFinal['oferta'] = $res1;
             $query =
@@ -3692,7 +3725,7 @@ class Helper
             'geolocalizacion' => $oferta['geolocalizacion'],
             'detalle_pedido' => $detalle_of,
         ]);
-        
+
         if (!empty($autorizacion)) {
             $arrayOFerta['autorizacion']  = [
                 "usuario_gestion" => $autorizacion['nombres'],
@@ -3707,8 +3740,9 @@ class Helper
         }
         try {
             $ruta = "/crearProforma";
+
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
-      
+
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;
             } else {
@@ -3862,7 +3896,7 @@ class Helper
             foreach ($ofertas as $oferta) {
                 $fechaFinal = new DateTime($oferta['fecha_final']);
                 $diferencia = $fechaFinal->diff($fechaActual)->days;
-               //s dd($fechaActual);
+                //s dd($fechaActual);
                 if ($diferencia > 0) {
                     return $diferencia;
                 }
@@ -3875,19 +3909,16 @@ class Helper
     public function cierre_ofertea($connection, $data)
     {
         try {
-            $data_cierre['nrodocSAP'] = $data['codigo_oferta'];
-            $data_cierre['tipo'] = $data['tipo'];
-            $data_cierre['razon'] = $data['descripcion'];
-            $ruta = "/anular_oferta";
-            $messages = $this->conexionSap($ruta, $data_cierre);
-        } catch (DBALException  $e) {
+            $ruta = "/anularProforma";
+            $message = $this->insertarServicio($ruta, $data);
+        } catch (\Throwable  $e) {
             $message = [
                 'responseCode' => 500,
                 'message' => 'Error en la base de datos: ' . $e->getMessage(),
                 'success' => false
             ];
         }
-        return $messages;
+        return $message;
     }
 
     public function crearOferta($conecction, $data)

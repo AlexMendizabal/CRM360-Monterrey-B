@@ -244,6 +244,7 @@ class CotacoesController extends AbstractController
      */
     public function getCotizaciones(Connection $connection, Request $request)
     {
+        /*getCotizaciones() esta funcion sirve para enviar las lista de cotizaciones y filtra por vendedor, clientes, codigo_oferta, */
         try {
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -266,12 +267,13 @@ class CotacoesController extends AbstractController
             isset($params['dataInicial2']) ? $dataFinal = $params['dataInicial2'] : NULL;
             isset($params['codSituacao']) ? $codSituacao = $params['codSituacao'] : NULL;
             isset($params['id_oferta']) ? $nrPedido = $params['id_oferta'] : NULL;
+            isset($params['codigo_oferta']) ? $codigo_oferta = $params['codigo_oferta'] : NULL;
             isset($params['cliente']) ? $cliente = $params['cliente'] : NULL;
             isset($params['orderBy']) ? $orderBy = $params['orderBy'] : NULL;
             isset($params['orderType']) ? $orderType = $params['orderType'] : NULL;
             isset($params['pagina']) ? $pagina = $params['pagina'] : NULL;
             isset($params['registros']) ? $registros = $params['registros'] : NULL;
-            isset($params['codVendedor']) ? $codVendedor  = $params['codVendedor'] : NULL;
+            isset($params['codVendedor']) ? $codVendedor  = $params['codVendedor'] : NULL; 
 
             if (!isset($params['codVendedor'])) {
                 $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
@@ -293,26 +295,6 @@ class CotacoesController extends AbstractController
 
                 $fechaFinal = date('Y-m-d', strtotime($dataFinal));
             }
-
-            // /* Situacion pedido */
-            // if (!empty($codSituacao)) {
-            //     $conditions[] = " OFE.estado_oferta = :estado_oferta";
-            //     $bindings['estado_oferta'] = $codSituacao;
-            // }
-
-            // /* Número de pedido */
-            // if (!empty($nrPedido)) {
-            //     $conditions[] = " OFE.id = :id_oferta";
-            //     $bindings['id_oferta'] = $nrPedido;
-            // }
-
-            // /* Cliente */
-
-            // /* Vendedor */
-            // if (!empty($codVendedor)) {
-            //     $conditions[] = " OFE.id_vendedor = :id_vendedor";
-            //     $bindings['id_vendedor'] = $codVendedor;
-            // }
 
             $queryOferta = $connection->CreateQueryBuilder();
             $queryOferta->select(
@@ -368,23 +350,18 @@ class CotacoesController extends AbstractController
                 $queryOferta->andWhere('OFE.id = :nrPedido');
                 $queryOferta->setParameter('nrPedido', $nrPedido);
             }
+            if (!empty($codigo_oferta)) {
+                $queryOferta->andWhere('OFE.codigo_oferta = :codigo_oferta');
+                $queryOferta->setParameter('codigo_oferta', $codigo_oferta);
+            }
 
             if (!empty($codVendedor)) {
                 $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
                 $queryOferta->setParameter('id_vendedor', $codVendedor);
             }
 
-
-
             $stmt = $queryOferta->execute();
             $res = $stmt->fetchAllAssociative();
-
-            //$res = $stmt->fetchAllAssociative();
-            //dd($conditions);
-
-            //$stmt = $connection->prepare($query);
-            //$stmt->executeQuery($bindings);
-            //dd($stmt);
 
             if (count($res) > 0) {
                 $message = array(
@@ -2506,6 +2483,7 @@ class CotacoesController extends AbstractController
             }
             if ($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200) {
                 if ($data_detalleoferta['autorizacion'] == 1) {
+                   
                     $message = [
                         "responseCode" => 200,
                         "message" => 'Registro Correctamente',
@@ -2515,11 +2493,13 @@ class CotacoesController extends AbstractController
                     $dato = null;
                     $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
                     $sapresp = json_decode($repSap->getContent(), true);
-
+                   
                     if ($sapresp['CodigoRespuesta'] == 200) {
-                        $dato = $sapresp['Mensaje'];
+                        $data_sap['codigo_oferta'] = $sapresp['Mensaje'];
+                        $data_sap['envio_sap'] = 1;
                         //cambia el estado si envio a sap 1 
-                        $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => (int)$dato, 'envio_sap' => 1], ['id' => (int)$data['id_oferta']]);
+                        $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+                        
                         $message = [
                             "responseCode" => 200,
                             "message" => 'Registro Correctamente',
@@ -2528,12 +2508,12 @@ class CotacoesController extends AbstractController
                         ];
                     } else {
                         //sino envio al sap 0
-                        $sap = $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$data['id_oferta']]);
+                        $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
                         $message = [
                             "responseCode" => 200,
                             "message" => 'Registro Correctamente',
                             "success" => true,
-                            "data_sap" => 'no se registro en el sap'
+                            "data_sap" => $sapresp
                         ];
                     }
                 }
@@ -2619,7 +2599,7 @@ class CotacoesController extends AbstractController
         !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
 
-        if (!empty($data['percentualDesc'])) {
+        if (!empty($data['percentualDesc']) ) {
             // $data_items['descuento'] = !empty($data['descuento']) ? $data['descuento'] : $data_error['descuento'] = 'es necesario';
             !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
             !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
@@ -2627,7 +2607,7 @@ class CotacoesController extends AbstractController
         }
         !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
         !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
-
+       
         try {
             //dd($data_items, $data_error);
             $data_detalle = $connection->insert('TB_OFERTA_DETALLE', $data_items);
@@ -2738,7 +2718,7 @@ class CotacoesController extends AbstractController
      * @return JsonResponse
      */
     public function oferta_sap(Connection $connection, Request $request, $nrPedido)
-    {
+    { 
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
         $data_oferta['id_oferta'] = (int)$nrPedido;
@@ -2746,11 +2726,14 @@ class CotacoesController extends AbstractController
        
         if(empty($oferta['codigo_oferta']) && (int)$oferta['tipo_estado'] == 14 && (int)$oferta['estado_oferta'] == 1)
         {   
-            $resp = $helper->autorizacion_estado_sap($connection, (int)$nrPedido);
+            
+            $resp = $helper->autorizacion_estado_sap($connection, (int)$nrPedido); 
+        
             $sapresp = json_decode($resp->getContent(), true);
+            
             if ($sapresp['CodigoRespuesta'] == 200) {
                 //$data_oferta['codigo_sap'] = $sapresp['Mensaje'];
-                $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => (int)$sapresp['Mensaje']], ['id' => (int)$data['id_oferta']]);
+                $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => $sapresp['Mensaje']], ['id' => (int) $data_oferta['id_oferta']]);
                 $message = [
                     "responseCode" => 200,
                     "message" => 'Registro Correctamente',
@@ -3127,12 +3110,12 @@ class CotacoesController extends AbstractController
             $params = json_decode($request->getContent(), true);
            
             !empty($params['id_oferta']) ? $row = $connection->fetchAssociative('SELECT id, estado_oferta, codigo_oferta FROM TB_OFERTA WHERE ID = ?', [$params['id_oferta']]) : $data_error['id_oferta'] = 'es requerido';
-            !empty($params['estadoOfert']) ? $data_oferta['estado_oferta'] = (int)$params['estadoOfert'] - 1 : $data_error['estadoOferta'] = 'es reqierodo';
+            !empty($params['estadoOfert']) ? $data_sap['estado_oferta'] = (int)$params['estadoOfert'] - 1 : $data_error['estadoOferta'] = 'es reqierodo';
             !empty($params['descripcion']) ? $data_oferta['descripcion'] = $params['descripcion'] : $data_error['descripcion'] = 'es requerido';
 
             $estado  = $row['estado_oferta'];
             $codigo_oferta = $row['codigo_oferta'];
-            $id_oferta =  $row['id_oferta'];
+            $id_oferta =  $params['id_oferta'];
            
             if(!empty($codigo_oferta))
             {   
@@ -3141,17 +3124,20 @@ class CotacoesController extends AbstractController
                     'razon' => $data_oferta['descripcion'],
                     'tipo' =>  $data_oferta['estado_oferta']
                 ];
-                
                 $respta = $helper->cierre_ofertea($connection, $data_cierre);
-                if(!empty($respta))
-                {
+                  
+              if(!empty($respta)  && $respta['CodigoRespuesta'] == 200) 
+              {
+               
                     if ($estado == 1) {
                         $data_oferta['tipo_estado'] = 13;
-                        $resp = $connection->update('TB_OFERTA', [$data_oferta], ['id' => $id_oferta]);
+                        $data_oferta['estado_oferta'] = (int)$params['estadoOfert'];
+                        $resp = $connection->update('TB_OFERTA', $data_oferta, ['id' => $id_oferta]);
                         if(!empty($resp)) {
                             $qra = $connection->query("SELECT TOP 1 autorizacion FROM TB_OFERTA WHERE ID = {$id_oferta}");
                             $row = $qra->fetch();
-                         if ($row['autorizacion'] == 1) {
+                            
+                            if ($row['autorizacion'] == 1) {
                                 $connection->update('TB_autorizaciones', ['estado' => 13], ['id_oferta' => $id_oferta]);
                             }                 
                             $message = [

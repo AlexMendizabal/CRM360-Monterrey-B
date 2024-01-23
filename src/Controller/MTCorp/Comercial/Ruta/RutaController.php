@@ -88,21 +88,20 @@ class RutaController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $errors = [];
-
+            
             foreach ($data as $item) {
                 $cor = null;
                 $codTitulo = $item['codTitulo'];
                 $codCliente = !empty($item['codClient']) ? $item['codClient'] : '';
                 $formaContato = 11;
                 $meioContato = 1;
-                $dataInicial = date('d/m/Y H:i:s', strtotime($item['fechaVisita']));
-                $dataFinal = date('d/m/Y H:i:s', strtotime($item['fechaVisita']));
+                $dataInicial = date('Y-m-d H:i:s', strtotime($item['fechaVisita']));
+                $dataFinal = date('Y-m-d H:i:s', strtotime($item['fechaVisita']));
                 $diaInteiro = 1;
                 $observacao = '';
-                $id_vendedor = $item['id_vendedor'];
-
-                $save = $connection->query("
-                EXEC [PRC_AGEN_VEND_CADA]
+                $id_vendedor = $item['vendedor_id'];
+                
+                $save = $connection->query("EXEC PRC_AGEN_VEND_CADA
                     @AGENDA = ''
                     ,@COR = '{$cor}'
                     ,@ID_TITULO = '{$codTitulo}'

@@ -116,7 +116,7 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     public function getVendedores(Connection $connection, Request $request)
-    {
+    { 
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = $infoUsuario->idVendedor;
@@ -637,7 +637,7 @@ class VendedorController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            //dd($infoUsuario->idVendedor);
+          
             if ($infoUsuario->idVendedor != 88) {
             } else {
                 if ($id == 0) {
@@ -648,7 +648,6 @@ class VendedorController extends AbstractController
                     @ID_ESCR = '{$id}'")->fetchAll();
                 }
 
-                //dd($res);
                 if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 } else if (count($res) > 0 && isset($res[0]['ERROR'])) {

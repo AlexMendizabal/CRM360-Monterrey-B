@@ -164,7 +164,7 @@ class AgendaController extends AbstractController
     }
 
 
-    /**
+   /**
      * @Route(
      *  "/comercial/agenda/compromiso/getcompromiso_api",
      *  name="comercial.agenda-compromiso-getcompromiso_api",
@@ -180,69 +180,61 @@ class AgendaController extends AbstractController
 
         try {
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
-            $jsonData = $request->getContent();
-            $params = json_decode($jsonData, true);
+            $params = $request->query->all();
 
-            $idVendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->matricula;
+
+            $idVendedor = isset($params['idVendedor']) ? $params['idVendedor'] : $infoUsuario->matricula;
+
             $inicio = date('Y-m-d', strtotime($params['inicio'])) . ' 00:00:00';
-            $fim = date('Y-m-d', strtotime($params['final'])) . ' 23:59:59';
+            $fim = date('Y-m-d', strtotime($params['fim'])) . ' 23:59:59';
             $tipo_compromiso = isset($params['tipo_compromiso']) ? $params['tipo_compromiso'] : '';
+            /* dd($inicio); */
+            if ($inicio !== '1969-31-12 00:00:00') {
+                $res = $connection->query("
+                    EXEC PROC_AGEN_COMP_STA
+                    @id_vendedor = '{$idVendedor}',
+                    @DATA_INICIAL = '{$inicio}',
+                    @DATA_FINAL = '{$fim}',
+                    @TIPO_REGISTRO = '{$tipo_compromiso}'
+                ")->fetchAll();
+                //dd($res);
+                $compromissos = [];
+                if (count($res) > 0 && !isset($res[0]['MSG'])) {
+                    foreach ($res as $item) {
+                        $compromissos[] = [
+                            'id' => $item['ID_AGENDA'],
+                            'color' => $item['COR'],
+                            'title' => $item['TITULO'],
+                            'codClient' => $item['CLIENTE'],
+                            'client' => $item['NOME_CLIENTE'],
+                            'formContactId' => $item['FORMA_CONTATO'],
+                            'formContactDesc' => $item['DESC_FORMA_CONTATO'],
+                            'typeContactId' => $item['MEIO_CONTATO'],
+                            'typeContactDesc' => $item['DESC_MEIO_CONTATO'],
+                            'start' => $item['DATA_INICIO'],
+                            'end' => $item['DATA_FINAL'],
+                            'allDay' => $item['ID_DIA_INTEIRO'] == 0 ? false : true,
+                            'description' => $item['OBSERVACAO'],
+                            'status' => $item['STATUS'],
+                            'statusnome' => $item['DESC_STATUS'],
+                            'fecha_inicial' => date('d/m/Y', strtotime($item['DATA_INICIO'])),
+                            'fecha_final' => date('d/m/Y', strtotime($item['DATA_FINAL'])),
+                            'hora_inicial'  => date('H:i', strtotime($item['DATA_INICIO'])),
+                            'hora_final' =>  date('H:i', strtotime($item['DATA_FINAL'])),
+                        ];
+                    }
 
-            /* $res = $connection->query("
-                EXEC PROC_AGEN_COMP_STA
-                @id_vendedor = '2',
-                @DATA_INICIAL = '{$inicio}',
-                @DATA_FINAL = '{$fim}',
-                @TIPO_REGISTRO = '{$tipo_compromiso}'
-            ")->fetchAll(); */
-            $sql = "EXEC [PROC_AGEN_COMP_STA]
-            @id_vendedor = :id_vendedor,
-            @DATA_INICIAL = :inicio,
-            @DATA_FINAL = :fim,
-            @TIPO_REGISTRO = :tipo_compromiso
-            ";
+                    $message = [
+                        'responseCode' => 200,
+                        'result' => $compromissos
+                    ];
+                } else {
+                    $message = [
+                        'responseCode' => 204,
+                        'result' => $compromissos
 
-            $params = [
-                'vendedor' => 2,
-                'inicio' => $inicio,
-                'fim' => $fim,
-                'tipo_compromiso' => $tipo_compromiso,
-            ];
-
-            $stmt = $connection->prepare($sql);
-            $stmt->execute($params);
-
-            $res = $stmt->fetchAllAssociative();
-
-            /* dd($res); */
-            $compromissos = [];
-            if (count($res) > 0 && !isset($res[0]['MSG'])) {
-                foreach ($res as $item) {
-                    $compromissos[] = [
-                        'id' => $item['ID_AGENDA'],
-                        'color' => $item['COR'],
-                        'title' => $item['TITULO'],
-                        'codClient' => $item['CLIENTE'],
-                        'client' => $item['NOME_CLIENTE'],
-                        'formContactId' => $item['FORMA_CONTATO'],
-                        'formContactDesc' => $item['DESC_FORMA_CONTATO'],
-                        'typeContactId' => $item['MEIO_CONTATO'],
-                        'typeContactDesc' => $item['DESC_MEIO_CONTATO'],
-                        'start' => $item['DATA_INICIO'],
-                        'end' => $item['DATA_FINAL'],
-                        'allDay' => $item['ID_DIA_INTEIRO'] == 0 ? false : true,
-                        'description' => $item['OBSERVACAO'],
-                        'status' => $item['STATUS'],
-                        'statusnome' => $item['DESC_STATUS']
                     ];
                 }
-
-                $message = [
-                    'responseCode' => 200,
-                    'result' => $compromissos
-                ];
-            } else {
-                $message = ['responseCode' => 204];
             }
         } catch (DBALException $e) {
             $message = [
@@ -371,7 +363,7 @@ class AgendaController extends AbstractController
      * @return JsonResponse
      */
     public function saveCompromisso(Connection $connection, Request $request)
-    {
+    {   
         try {
             /* Variables de control */
             $swAgenda = false;
@@ -380,9 +372,7 @@ class AgendaController extends AbstractController
             $longitud = '';
             $codigo_cliente = '';
 
-
             $data = json_decode($request->getContent(), true);
-
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $cor = "";
@@ -400,26 +390,23 @@ class AgendaController extends AbstractController
             $dataFinal = !empty($data['end']) ? date('Y/m/d H:i:s', strtotime($data['end'])) : '';
             $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
             $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
-            $direccion = !empty($data['direccion']) ? $data['direccion'] : '';
-            $latitud = !empty($data['latitud']) ? $data['latitud'] : '';
-            $longitud = !empty($data['longitud']) ? $data['longitud'] : '';
-
-
+            $direccion = !empty($data['direccion']) ? strtoupper($data['direccion']) : '';
+            $latitud = !empty($data['latitud']) ? $data['latitud'] : 0;
+            $longitud = !empty($data['longitud']) ? $data['longitud'] : 0;
+            $codigo_cliente =   $connection->fetchOne('SELECT codigo_cliente FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = ?', [$codCliente]);
+        
             if (isset($data['latitud']) && $data['latitud'] != null) {
                 $latitud = $data['latitud'];
             }
             if (isset($data['longitud']) && $data['longitud'] != null) {
                 $longitud = $data['longitud'];
             }
-            if (isset($data['codigo_cliiente']) && $data['codigo_cliiente'] != null) {
-                $codigo_cliente = $data['codigo_cliiente'];
-            }
+           
             if (isset($data['idVendedor'])) {
                 $id_vendedor = $data['idVendedor'];
             } else {
                 $id_vendedor = $infoUsuario->idVendedor;
             }
-            /*  dd('latitud-' .$latitud . 'longitud-' .$longitud . 'direccion' . $direccion . 'cliente' . $codCliente); */
             $save = $connection->query("
                     EXEC [PRC_AGEN_VEND_CADA]
                         @AGENDA = ''
@@ -915,6 +902,7 @@ class AgendaController extends AbstractController
             $stmt->bindValue('id_cliente', $id_cliente, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll();
+           
             if (count($result) > 0) {
                 $message = [
                     'responseCode' => 200,

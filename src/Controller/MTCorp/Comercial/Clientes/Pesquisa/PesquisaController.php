@@ -79,7 +79,7 @@ class PesquisaController extends AbstractController
             $helper = new Helper();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
             $resLista = array();
-            //$borrarClientes = $helper->borrarClientesLocales($connection);
+            $borrarClientes = $helper->borrarClientesLocales($connection);
 
             $buscarPor = '';
             $pesquisa = '';
@@ -112,7 +112,7 @@ class PesquisaController extends AbstractController
             if (isset($params['registros'])) $registros = $params['registros'];
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
-
+            $carteiraParam = null;
             $order = $orderBy . ' ' . $orderType;
             /* if (empty($infoUsuario->idVendedor)) {
                 $idVendedor = (int)$vendedor->idVendedor($connection, $infoUsuario);
@@ -194,7 +194,7 @@ class PesquisaController extends AbstractController
                     if (
                         $resLista[$i]['situacao'] == 'Arquivo' ||
                         $resLista[$i]['situacao'] == 'Inativo' ||
-                        $idVendedor == $resLista[$i]['codVendedor'] ||
+                        $idVendedores == $resLista[$i]['codVendedor'] ||
                         in_array($resLista[$i]['codVendedor'], $idVendedores) ||
                         $usuariosLiberados
                     ) {
@@ -568,17 +568,18 @@ class PesquisaController extends AbstractController
     {
         try {
             // Consulta para verificar si el cliente tiene una oferta abierta
-            $sql = "SELECT COUNT(*) as oferta_count FROM tb_oferta 
-            INNER JOIN MTCORP_MODU_CLIE_BASE CLI ON CLI.id_cliente = tb_oferta.id_cliente
-            WHERE tb_oferta.id_cliente = :id_cliente 
-            AND tb_oferta.estado_oferta = 10 
-            AND tb_oferta.tipo_estado = 14";
+            // $sql = "SELECT COUNT(id) as oferta_count FROM tb_oferta 
+            // INNER JOIN MTCORP_MODU_CLIE_BASE CLI ON CLI.id_cliente = tb_oferta.id_cliente
+            // WHERE tb_oferta.id_cliente = :id_cliente 
+            // AND tb_oferta.estado_oferta = 10 
+            // AND tb_oferta.tipo_estado = 14";
 
-            $stmt = $connection->prepare($sql);
-            $stmt->bindValue(":id_cliente", $codCliente);
-            $stmt->execute();
-            $result = $stmt->fetch();
-
+            // $stmt = $connection->prepare($sql);
+            // $stmt->bindValue(":id_cliente", (int)$codCliente);
+            // $stmt->execute();
+            // $result = $stmt->fetchAll();dd($result);
+            $result = $connection->fetchOne('SELECT COUNT(id) FROM tb_oferta  WHERE id_cliente = ? AND tb_oferta.estado_oferta = ? 
+             AND tb_oferta.tipo_estado = ?', [$codCliente,1,14] ); 
             // Devolver true si hay ofertas y false si no hay
             $tieneOferta = $result['oferta_count'] > 0;
 

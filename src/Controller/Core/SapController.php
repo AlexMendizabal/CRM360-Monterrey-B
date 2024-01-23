@@ -20,8 +20,6 @@ use App\Security\Core\JwtAplication;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 
-
-
 /**
  * Class SapController
  * @package App\Controller\Core\Sap
@@ -636,8 +634,6 @@ class SapController extends AbstractController
             ];
         } else {
 
-            /*             dd($insertCliente);
- */
             $insertCliente = $helper->insertClient($connection, $data);
             if ($insertCliente['codigoRespuesta'] == 200) {
                 $id_cliente = $insertCliente['data']['cliente'];
@@ -714,6 +710,7 @@ class SapController extends AbstractController
                         }
                     } else {
                         $insertCliente['data']['ciudad'] = $ubClie[0]['ciudad'];
+                        /* dd($insertCliente); */
 
 
                         $data_cliente = [
@@ -735,7 +732,6 @@ class SapController extends AbstractController
                             "ubicacion" => $ubClie,
                             "contactos" => $contacto
                         ];
-                        //dd($ubClie);
                         if (isset($ubClie)   &&   isset($contacto)) {
                             if ($swSap === true) {
 
@@ -763,6 +759,7 @@ class SapController extends AbstractController
                                     }
                                 }
                                 if (!empty($missing_fields)) {
+                                    /* dd($missing_fields); */
                                     $traerUbicaciones = $helper->traerDireccionCliente($connection, $id_cliente);
                                     if ($traerUbicaciones !== false) {
                                         $eliminarDireccion = $helper->borrarUbicaciones($connection, $id_cliente);
@@ -789,6 +786,7 @@ class SapController extends AbstractController
                                     }
                                     $eliminarClientes = $helper->borrarClientes($connection, (int)$id_cliente);
                                     if ($eliminarClientes !== false) {
+                                        
                                         $message = [
                                             "CodigoRespuesta" => 204,
                                             "Estado" => false,
@@ -797,7 +795,7 @@ class SapController extends AbstractController
                                     }
                                 } else {
                                     $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
-                                    //dd($resp_sap);
+
                                     if (isset($resp_sap['response']) && isset($resp_sap['detalle']) && $resp_sap['response'] == 200) {
                                         $message = [
                                             "CodigoRespuesta" => 200,
@@ -805,7 +803,7 @@ class SapController extends AbstractController
                                             "Mensaje" => "Se registro correctamente",
                                         ];
                                     } else {
-                                        //dd('aqui');
+
                                         $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$id_cliente);
                                         if ($traerUbicaciones !== false) {
                                             $eliminarDireccion = $helper->borrarUbicaciones($connection, (int)$id_cliente);
@@ -1238,7 +1236,6 @@ class SapController extends AbstractController
     public function sapUpdateClienteSap(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        /* dd($data); */
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
 
@@ -1260,7 +1257,6 @@ class SapController extends AbstractController
             ];
         }
 
-        //dd($data['tipo_cliente']);
         if (isset($data['id_tipo_cliente'])) {
             $traerTipoCliente = $helper->buscarTipoCliente($connection, $data['id_tipo_cliente']);
             if ($traerTipoCliente !== false) {
@@ -1284,14 +1280,13 @@ class SapController extends AbstractController
             'Gobierno' => 'G',
             'Empleado' => 'E',
         ];
-        //dd($buscarTipoPersona[$data['tipo_persona']]);
+
         $id_tipo_persona  = isset($data['tipo_persona']) ? $buscarTipoPersona[$data['tipo_persona']] : null;
         $data['id_tipo_persona'] = $id_tipo_persona;
 
         if (isset($data['tipo_cliente'])) {
             $buscarTipoCliente = $helper->buscarTipoCliente($connection, $data['tipo_cliente']);
             $id_tipo_cliente = (int)$buscarTipoCliente['id'];
-            //dd($buscarTipoCliente);
             $data['id_tipo_cliente'] = $id_tipo_cliente;
         }
 
@@ -1338,7 +1333,6 @@ class SapController extends AbstractController
         if ($swSap === true) {
 
             $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
-            //dd($resp_sap['response']);
             if ($resp_sap['response'] == 200) {
 
                 /* dd($data); */
@@ -1361,7 +1355,7 @@ class SapController extends AbstractController
                 $message = [
                     "CodigoRespuesta" => 204,
                     "Estado" => false,
-                    "Mensaje" => 'SAP: ' . $mensaje = $resp_sap['data'],
+                    // "Mensaje" => 'SAP: ' . $mensaje = $resp_sap['data'],
                 ];
             }
         } else {
@@ -1370,7 +1364,7 @@ class SapController extends AbstractController
                 $id_vendedor = $helper->traerVendedor($connection, $data['id_vendedor']);
                 $data['id_vendedor'] = (int)$id_vendedor;
             }
-            //dd($data);
+
 
             $actualizarLocal = $this->actualizarClienteLocal($connection, $data, $helper);
             if ($actualizarLocal['Estado'] == true) {
@@ -1395,7 +1389,7 @@ class SapController extends AbstractController
 
     public function actualizarClienteLocal($connection, $data, $helper)
     {
-        //dd('aqui');
+
         $respuesta = array();
         $id_cliente = '';
         if (isset($data['id_cliente'])) {
@@ -1410,14 +1404,12 @@ class SapController extends AbstractController
         if (isset($data['ubicacion'][0]['id_ciudad'])) {
             $data['id_ciudad'] = $data['ubicacion'][0]['id_ciudad'];
         }
+
         $respuestaClient = $helper->updateClient($connection, $data);
         if ($respuestaClient['Estado'] === true) {
-            //Actualizar ubicaciones
-            /* dd($data['id_cliente']); */
-            //dd('aqui');
             if (count($data) > 0) {
                 $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
-                //dd($traerUbicaciones);
+
                 if ($traerUbicaciones !== false) {
                     $swRover = false;
                     foreach ($traerUbicaciones as $ubicacion) {
@@ -1430,55 +1422,44 @@ class SapController extends AbstractController
                             'id_ciudad' => (int)$ubicacion['id_ciudad']
                         ];
                     }
+                    foreach ($data['ubicacion'] as $ubicacion) {
 
-                    //dd($array_ubicaciones_respaldo);
-                    /* $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$data['id_cliente']);
-                    if ($borrarUbicaciones === true) {
-*/
-                    foreach ($data['ubicacion'] as &$ubicacion) {
                         $buscarCiudad = $helper->buscarCiudadAbreviatura($connection, $ubicacion['ciudad']);
                         //dd($buscarCiudad);
                         $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
-                        $ubicacion['ciudad'] = $buscarCiudad['sigla'];
+                        $ubicacion['ciudad'] = $buscarCiudad['nombre_ciudad'];
                         $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
                         $ubicacion['id_cliente'] = $data['id_cliente'];
-                        //dd($ubicacion);
-                        //dd($ubicacion);
-                        $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
-                        if ($insertarUbicaciones == false) {
+
+                        $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, (int)$data['id_cliente'],  $data['codigo_cliente']);
+                        if ($insertarUbicaciones === false) {
                             $swRover = true;
                             break;
                         }
-                        /*   } */
+                    }
 
-                        if ($swRover === true) {
-                            $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
-                            if ($traerUbicaciones !== false) {
-                                $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$data['id_cliente']);
-                            }
-                            //dd($borrarUbicaciones);
-                            foreach ($array_ubicaciones_respaldo as $array) {
-                                $insertarUbicaciones = $helper->insertUbClient($connection, $array, $data['id_cliente'],  $data['codigo_cliente']);
-                            }
-                        } else {
-                            foreach ($array_ubicaciones_respaldo as $ubicacion) {
-                                $borrarUbicaciones = $helper->borrarUbicacionesId($connection, $ubicacion['id']);
-                                //dd($borrarUbicaciones);
-                            }
+                    if ($swRover === true) {
+                        $traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
+                        if ($traerUbicaciones !== false) {
+                            $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$data['id_cliente']);
+                        }
+                        foreach ($array_ubicaciones_respaldo as $array) {
+                            $insertarUbicaciones = $helper->insertUbClient($connection, $array, (int)$data['id_cliente'],  $data['codigo_cliente']);
+                        }
+                    } else {
+                        //dd('aqui');
+                        //$traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
+
+                        foreach ($array_ubicaciones_respaldo as $ubicacion) {
+                            $borrarUbicaciones = $helper->borrarUbicacionesId($connection, (int)$ubicacion['id']);
                         }
                     }
                 } else {
-                    //dd('aqui2');
                     if (count($data['ubicacion']) > 0) {
                         foreach ($data['ubicacion'] as &$ubicacion) {
-                            $buscarCiudad = $helper->buscarCiudad2($connection, $ubicacion['id_ciudad']);
-                            /* $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
-                            $ubicacion['ciudad'] = $buscarCiudad['sigla']; */
                             $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
                             $ubicacion['id_cliente'] = $data['id_cliente'];
-                            //dd($data);
                             $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, $data['id_cliente'],  $data['codigo_cliente']);
-                            //dd($insertarUbicaciones);
                             if ($insertarUbicaciones['estado'] === false) {
                                 $respuesta = ([
                                     'CodigoRespuesta' => 204,
@@ -1546,6 +1527,7 @@ class SapController extends AbstractController
             return $respuestaClient;
         }
     }
+
 
 
     /**
@@ -1840,7 +1822,7 @@ class SapController extends AbstractController
         $data_ejecutivo['NM_CARG_FUNC'] = 'PROMOTOR';
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
-        $data_ejecutivo['DS_SENh'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
+        $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
 
         try {
             if (empty($data_error)) {

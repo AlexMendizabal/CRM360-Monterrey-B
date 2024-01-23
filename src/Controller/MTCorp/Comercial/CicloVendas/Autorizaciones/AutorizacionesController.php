@@ -42,7 +42,7 @@ class AutorizacionesController extends AbstractController
     {
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-
+        
         $id_oferta = isset($data['id_oferta']) ? $data['id_oferta'] : null;
         $id_usuario =  0;
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
@@ -50,7 +50,6 @@ class AutorizacionesController extends AbstractController
         $estado = 10;
         $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
         $respt = $helper->actualizaOfertaA($connection, $id_oferta);
-
         try {
             $data_insert = [
                 'id_oferta' => (int)$id_oferta,
@@ -59,7 +58,7 @@ class AutorizacionesController extends AbstractController
                 'estado' => $estado
             ];
             $affectedRows = $connection->insert('tb_autorizaciones', $data_insert);
-
+            
             if (!empty($affectedRows) && $affectedRows > 0) {
                 //$resp =  $this->enviarcorreo($connection, $helper, $id_oferta);
                 $message = array(
@@ -540,6 +539,7 @@ class AutorizacionesController extends AbstractController
         $resultSet = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
 
         try {
+            
             if ($resultSet !== 'PROMOTOR' && $resultSet !== 'VENDEDOR' && !empty($resultSet)) {
                 if ($estado == 10) {
                     $message = array(
