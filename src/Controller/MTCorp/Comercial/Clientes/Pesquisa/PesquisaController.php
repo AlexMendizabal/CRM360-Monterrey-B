@@ -72,7 +72,7 @@ class PesquisaController extends AbstractController
     {
         try {
             //dd('aqui');
-            $params = $request->query->all();
+            $params = $request->query->all(); 
             $usuario = new usuarioController();
             $vendedor =  new VendedorController();
             $comercial = new ComercialController();
@@ -109,7 +109,7 @@ class PesquisaController extends AbstractController
             if (isset($params['segurado'])) $segurado = $params['segurado'];
             if (isset($params['carteira'])) $carteira = $params['carteira'];
             if (isset($params['pagina'])) $pagina = $params['pagina'];
-            if (isset($params['registros'])) $registros = $params['registros'];
+            if (isset($params['registros'])) $registros = $params['registros']; 
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
             $carteiraParam = null;
@@ -221,7 +221,7 @@ class PesquisaController extends AbstractController
             );
         }
 
-        $response = new JsonResponse($message);
+        $response = new JsonResponse($message); 
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }

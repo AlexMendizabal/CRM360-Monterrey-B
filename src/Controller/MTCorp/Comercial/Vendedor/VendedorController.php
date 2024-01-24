@@ -819,6 +819,36 @@ class VendedorController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
+    /**
+   * @Route(
+   *  "/comercial/vendedor/cliente/ubicacionescliente/{codCliente}",
+   *  name="comercial.vendedor-cliente-ubicacionescliente",
+   *  methods={"GET"},
+   *  requirements={"codCliente"="\d+"}
+   * )
+   * @return JsonResponse
+   */
+  public function clientUbicacion(Connection $connection, $codCliente)
+  { 
+    $resultado = $connection->fetchAllAssociative('SELECT logradouro, latitude, longitude, codigo_cliente, ubicacion FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$codCliente]);
+    if (!empty($resultado)) {
+       $message = array(
+          "responseCode" => 200,
+          "data" => $resultado,
+          "success" => true
+      );
+    } else {
+        $message = array(
+          "responseCode" => 204,
+          "message" => 'No tienen direccion',
+          "success" => true
+        );
+    }
+    $response = new JsonResponse($message);
+    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+    return $response;
+  }
 }
 
 

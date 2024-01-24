@@ -573,6 +573,10 @@ class Helper
         } else {
             $sigla_ciudad = $buscarCiudad['sigla'];
         }
+
+        /* 
+        */
+
         if (empty($id_ciudad)) {
             $buscarCiudad = $this->buscarCiudad2($connection, $data['ciudad']);
             if ($buscarCiudad !== false) {

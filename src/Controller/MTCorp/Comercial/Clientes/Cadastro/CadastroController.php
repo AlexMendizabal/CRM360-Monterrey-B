@@ -2711,37 +2711,6 @@ class CadastroController extends AbstractController
   }
 
 
-  /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/ubicacionescliente{codCliente}",
-   *  name="comercial.clientes-cadastro-ubicacionescliente",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
-   * @return JsonResponse
-   */
-
-  public function clientUbicacion(Connection $connection, $codigo_clietne)
-  {
-
-    $resultado = $connection->fetchAllAssociative('SELECT logradouro, latitude, longitude, codigo_cliente, ubicacion FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$codigo_clietne]);
-    if ($resultado->rowCount() > 0) {
-      // La fila existe, haz lo que necesites aquí
-       $message = array(
-          "responseCode" => 200,
-          "data" => $resultado,
-          "success" => true
-      );
-    } else {
-        $message = array(
-          "responseCode" => 204,
-          "message" => 'No tienen direccion',
-          "success" => true
-        );
-    }
-    $response = new JsonResponse($message);
-    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-    return $response;
-  }
+  
 
 }

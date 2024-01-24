@@ -258,4 +258,6 @@ class ClientesController extends AbstractController
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
+
+   
 }
