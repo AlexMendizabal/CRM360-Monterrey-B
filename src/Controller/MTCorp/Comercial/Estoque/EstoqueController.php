@@ -156,25 +156,24 @@ class EstoqueController extends AbstractController
                     $bindings['nombre_material'] = '%' . $nombre_material . '%';
                 }
                 $query = "SELECT 
-                    CLASE.descricao as familia,
-                    LINEA.descricao AS grupo,
-                    SUB.NM_SUB_LINH as linea,
-                    MATE.ID_CODIGOMATERIAL AS id_material, 
-                    MATE.CODIGOMATERIAL AS codigo_material, 
-                    MATE.DESCRICAO AS nombre,
-                    --MAT_DEP.cantidad as cantidad, 
-                    UNI.SIGLAS_UNI AS sigla
-                    --DEPO.codigo_almacen as codigo_almacen, 
-                    --DEPO.nombre_deposito as nombre_almacen
-                    FROM TB_MATE MATE
-                    INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
-                    INNER JOIN MTCORP_BASE_LINHAS LINEA ON SUB.ID_CLASE = LINEA.id_linha
-                    INNER JOIN MTCORP_BASE_LINHAS_CLASSE CLASE ON CLASE.id_classe = LINEA.id_classe
-                   -- INNER JOIN TB_MATERIAL_DEPOSITO MAT_DEP ON MAT_DEP.id_material = MATE.ID_CODIGOMATERIAL
-                    --INNER JOIN TB_DEPOSITO DEPO ON DEPO.id = MAT_DEP.id_deposito
-                    INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-                ";
-
+                            CLASE.descricao as familia,
+                            LINEA.descricao AS grupo,
+                            SUB.NM_SUB_LINH as linea,
+                            MATE.ID_CODIGOMATERIAL AS id_material, 
+                            MATE.CODIGOMATERIAL AS codigo_material, 
+                            MATE.DESCRICAO AS nombre,
+                            --MAT_DEP.cantidad as cantidad, 
+                            UNI.SIGLAS_UNI AS sigla
+                            --DEPO.codigo_almacen as codigo_almacen, 
+                            --DEPO.nombre_deposito as nombre_almacen
+                            FROM TB_MATE MATE
+                            INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
+                            INNER JOIN MTCORP_BASE_LINHAS LINEA ON SUB.ID_CLASE = LINEA.id_linha
+                            INNER JOIN MTCORP_BASE_LINHAS_CLASSE CLASE ON CLASE.id_classe = LINEA.id_classe
+                            -- INNER JOIN TB_MATERIAL_DEPOSITO MAT_DEP ON MAT_DEP.id_material = MATE.ID_CODIGOMATERIAL
+                            --INNER JOIN TB_DEPOSITO DEPO ON DEPO.id = MAT_DEP.id_deposito
+                            INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
+                        ";
 
                 if (!empty($conditions)) {
                     $conditionString = implode(' AND ', $conditions);
@@ -1291,6 +1290,10 @@ class EstoqueController extends AbstractController
             $codigo_almacen = $params['codigo_almacen'] ?? '';
             $nombre_almacen = $params['nombre_almacen'] ?? '';
             $id_lista_precio = $params['id_lista_precio'] ?? '';
+            $tamanoPagina = $params['registrosLista'] ?? 10;
+            $orderBy = 'nombre_almacen';
+            $orderType = 'ASC'; 
+            $offset = 0; 
 
             $conditions = [];
             $bindings = [];
@@ -1336,7 +1339,7 @@ class EstoqueController extends AbstractController
                 $bindings['nombre_almacen'] = '%' . $nombre_almacen . '%';
             }
 
-            // Construir la consulta SQL dinámicamente
+           
             $query = "
                 SELECT DISTINCT
                     CLASE.descricao as familia,
@@ -1360,17 +1363,15 @@ class EstoqueController extends AbstractController
                 INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
                 INNER JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
                 INNER JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
-                WHERE " . implode(' AND ', $conditions) . "
-                    AND DEPO.codigo_almacen NOT LIKE '%00'
-                    AND LP.id NOT IN (8, 9, 10)
-            ";
+                WHERE " . implode(' AND ', $conditions);
 
             $bindings['codMaterial'] = $codMaterial;
 
+            // Agrega la paginación a la consulta SQL
+            $query .= " AND LP.id NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
+
             $result = $connection->executeQuery($query, $bindings)->fetchAll();
-
-
-
+    
 
         if (!empty($result)) {
             $message = [

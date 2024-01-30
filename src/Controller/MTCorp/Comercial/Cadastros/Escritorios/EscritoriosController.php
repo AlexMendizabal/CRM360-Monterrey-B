@@ -32,29 +32,32 @@ class EscritoriosController extends AbstractController
     public function getListaEscritorios(Connection $connection, Request $request)
     { 
         try {
-            $params = $request->query->all();
+            $params = $request->query->all(); 
            
             $nomeEscritorio = null;
             $codEmpresa = 0;
             $codSituacao = 0;
+            $codReferenteErp = null;
             $orderBy = 'codEscritorio';
             $orderType = 'ASC';
             
-            //if (isset($params['nomeEscritorio'])) $nomeEscritorio = $params['nomeEscritorio'];
+            if (isset($params['nomeEscritorio'])) $nomeEscritorio = $params['nomeEscritorio'];
             if (isset($params['codEmpresa'])) $codEmpresa = $params['codEmpresa'];
+            if (isset($params['codReferenteErp'])) $codReferenteErp = $params['codReferenteErp'];
             if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
-
+            
             $res = $connection->query("
                 EXECUTE [dbo].[PRC_ESCR_CONS]
                      @NM_ESCR = '{$nomeEscritorio}'
                     ,@ID_EMPR = '{$codEmpresa}'
+                    ,@CODREFERENTEERP = '{$codReferenteErp}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ORDE_BY = '{$orderBy}'
                     ,@ORDE_TYPE = '{$orderType}'
             ")->fetchAll();
-
+           
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['msg'])) {

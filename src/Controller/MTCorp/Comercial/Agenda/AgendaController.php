@@ -9,9 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-/* use Doctrine\DBAL\Connection; */
 use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\ParameterType;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PDO;
 use Doctrine\DBAL\Connection as conecion;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Services\Helper;
 
 
 use App\Controller\Common\Services\ParseFileFromRequestController;
@@ -164,7 +165,7 @@ class AgendaController extends AbstractController
     }
 
 
-   /**
+    /**
      * @Route(
      *  "/comercial/agenda/compromiso/getcompromiso_api",
      *  name="comercial.agenda-compromiso-getcompromiso_api",
@@ -269,7 +270,10 @@ class AgendaController extends AbstractController
                 @ID_AGENDA = '{$id}'
             "
                 )->fetchAll();
-
+            
+                $data = $connection->executeQuery('SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
+                ['id_agenda' => $id])->fetchAll();
+           
                 if (!empty($res)) {
                     $compromisso = new \stdClass;
                     $compromisso->id = (int)$res[0]['ID_AGENDA'];
@@ -289,8 +293,8 @@ class AgendaController extends AbstractController
                     $compromisso->motivo = $res[0]['MOTIVO'];
                     $compromisso->id_motivo = $res[0]['MOTIVO_REAGENDADO'];
                     $compromisso->direccion = $res[0]['DIRECCION'];
-                    $compromisso->latitud = $res[0]['LATITUD'];
-                    $compromisso->longitud = $res[0]['LONGITUD'];
+                    $compromisso->latitud = $data[0]['latitud'];
+                    $compromisso->longitud = $data[0]['longitud'];
                     $compromisso->codigo_cliente = $res[0]['CODIGO_CLIENTE'];
                     $compromisso->id_status = $res[0]['STATUS'];
                     $compromisso->status = $res[0]['DESC_STATUS'];
@@ -363,7 +367,7 @@ class AgendaController extends AbstractController
      * @return JsonResponse
      */
     public function saveCompromisso(Connection $connection, Request $request)
-    {   
+    {
         try {
             /* Variables de control */
             $swAgenda = false;
@@ -394,14 +398,14 @@ class AgendaController extends AbstractController
             $latitud = !empty($data['latitud']) ? $data['latitud'] : 0;
             $longitud = !empty($data['longitud']) ? $data['longitud'] : 0;
             $codigo_cliente =   $connection->fetchOne('SELECT codigo_cliente FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = ?', [$codCliente]);
-        
+
             if (isset($data['latitud']) && $data['latitud'] != null) {
                 $latitud = $data['latitud'];
             }
             if (isset($data['longitud']) && $data['longitud'] != null) {
                 $longitud = $data['longitud'];
             }
-           
+
             if (isset($data['idVendedor'])) {
                 $id_vendedor = $data['idVendedor'];
             } else {
@@ -423,16 +427,20 @@ class AgendaController extends AbstractController
                         ,@VENDEDOR = '{$id_vendedor}'
                 ")->fetchAll();
 
-            if ($save[0]['MSG'] == 'TRUE') {
+             $id_agenda =  $connection->lastInsertId();
+            
+             $fechaFormateada =  date('Y-m-d');
+
+            if ($save[0]['MSG'] == 'TRUE') 
+            {
                 if (!empty($latitud) && !empty($longitud) && !empty($direccion)) {
-                    $statement = $connection->prepare('EXEC [dbo].[PCR_CLIE_DIRECCION] @latitud = :latitud, @longitud = :longitud, @direccion = :direccion, @idCliente = :idCliente, @codigo_cliente = :codigoCliente, @resultado = FALSE');
-                    $statement->bindValue('latitud', $latitud);
-                    $statement->bindValue('longitud', $longitud);
-                    $statement->bindValue('direccion', $direccion);
-                    $statement->bindValue('idCliente', $codCliente);
-                    $statement->bindValue('codigoCliente', $codigo_cliente);
-                    /*  $statement->bindParam('resultado', 'FALSE');  */
-                    $statement->execute();
+                    $data_ltlg = [
+                            'id_agenda' => $id_agenda,
+                            'fecha'=>  $fechaFormateada,
+                            'latitud' => $latitud, 
+                            'longitud' =>  $longitud
+                        ];
+                   $reg = $connection->insert('TB_CORE_AGEN_UB', $data_ltlg);
                 }
                 $message = array(
                     'responseCode' => 200,
@@ -902,7 +910,7 @@ class AgendaController extends AbstractController
             $stmt->bindValue('id_cliente', $id_cliente, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll();
-           
+
             if (count($result) > 0) {
                 $message = [
                     'responseCode' => 200,
@@ -1145,28 +1153,26 @@ class AgendaController extends AbstractController
             $usuariocontroller = new UsuarioController();
             $arrayVacio = [];
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
-            if ($infoUsuario->matricula == 1) {
-                $id_agenda = $id;
-                $rutas = $connection->executeQuery(
-                    'EXEC [PROC_AGEN_VEN_UB_GET] @id_agenda = :id_agenda',
-                    ['id_agenda' => $id_agenda]
+
+            $id_agenda = $id;
+            
+            $rutas = $connection->executeQuery(
+                'EXEC [PROC_AGEN_VEN_UB_GET] @id_agenda = :id_agenda',
+                ['id_agenda' => $id_agenda]
+            )->fetch();
+            $data = $connection->executeQuery('SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
+            ['id_agenda' => $id_agenda]
                 )->fetchAll();
-
-
-                $message = array(
-                    'responseCode' => 200,
-                    'estado' => true,
-                    'result' =>  $rutas,
-                    'message' => 'success'
-                );
-            } else {
-                $message = array(
-                    'responseCode' => 403,
-                    'estado' => false,
-                    'result' =>  $arrayVacio,
-                    'message' => "Prohibido el acceso"
-                );
-            }
+                /* $rutas = [
+                   'latitud' => $data[0]['latitud'],
+                    'longitud' => $data[0]['longitud']
+                ]; */
+            $message = array(
+                'responseCode' => 200,
+                'estado' => true,
+                'result' =>  $data,
+                'message' => 'success'
+            );
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
@@ -1194,31 +1200,33 @@ class AgendaController extends AbstractController
     public function rutasVendedor(Connection $connection, Request $request)
     {
         try {
+            $helpers = new Helper();
             $jsonData = $request->getContent();
             $datos = json_decode($jsonData, true);
-            // Extraer los datos del JSON
+            $swGuardarDatos = false;
 
-            foreach ($datos[0]['lista'] as $key => $data) {
-                $id_agenda = $data['id_agenda'];
-                $datetime =  date('d/m/Y H:i:s', strtotime($data['datetime']));
-                $latitud = $data['latitud'];
-                $longitud = $data['longitud'];
 
-                $statement = $connection->prepare("EXEC  PROC_AGEN_VEN_UB ?, ?, ?, ?");
-                $statement->bindValue(1, $id_agenda);
-                $statement->bindValue(2, $datetime);
-                $statement->bindValue(3, $latitud);
-                $statement->bindValue(4, $longitud);
-                $statement->execute();
+            foreach ($datos['lista'] as  $data) {
+                $guardarDatos = $helpers->guardarRutaAgenda($connection, $data);
+                if ($guardarDatos == true) {
+                    $swGuardarDatos = true;
+                }else{
+                    $swGuardarDatos = false;
+
+                }
+            }
+            if ($swGuardarDatos == true) {
+                $message = array(
+                    'responseCode' => 200,
+                    'success' => true ,
+                );
+            } else if ($swGuardarDatos == false) {
+                $message = array(
+                    'responseCode' => 204,
+                    'success' =>$datos['lista']
+                );
             }
 
-            return new JsonResponse(
-                [
-                    'responseCode' => 200,
-                    'success' => true
-                    /*  'variable' => $datos[0]['lista'] */
-                ]
-            );
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => 500,

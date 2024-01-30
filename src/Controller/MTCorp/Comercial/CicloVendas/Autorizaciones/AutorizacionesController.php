@@ -362,10 +362,11 @@ class AutorizacionesController extends AbstractController
                 }
 
                 if (count($params) > 0) {
-                    $query .= " ORDER BY TB_OFERTA.id DESC";    //en vez del 1000 antes iba :registros  
+                    $query .= " ORDER BY TB_OFERTA.id $orderType";
                 } else {
-                    $query .= " ORDER BY TB_OFERTA.id DESC";
-                }
+                    $query .= " ORDER BY TB_OFERTA.id ASC";
+                }                
+                
 
                 $stmt = $connection->prepare($query);
                 $stmt->execute($bindings);

@@ -912,7 +912,7 @@ class Helper
 
             $condition = ['codigo_sap' => (int)$data['codigo_sap']];
             $rowsAffected = $connection->update('TB_VEND', $data_vendedor, $condition);
-
+          
             if (!empty($rowsAffected)) {
                 $message = array(
                     'response' => 200,
@@ -934,7 +934,10 @@ class Helper
     }
 
     public function updateUsuario($connection, $data)
-    {
+    {   
+        $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
+
+        if (!empty($data_vendedor['ID_ESCR'])) {
         $data_usuario['id_usua'] = (int)$connection->fetchOne('SELECT ID FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
         isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
         $data_ejecutivo['TP_PESS'] = 'F';
@@ -960,6 +963,13 @@ class Helper
                 'message' => 'No se actualizo!',
             );
         }
+        } else {
+            $message = array(
+                'response' => 204,
+                'estado' => false,
+                'message' => 'no existe la sucursal',
+            );
+    }
         return $message;
     }
 
@@ -1568,43 +1578,52 @@ class Helper
 
 
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio)
-    {
-        $query = "SELECT DISTINCT
-                MATE.ID_CODIGOMATERIAL as id_material,
-                PM.id as id_precio_material, 
-                MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
-                DEPO.ID AS id_almacen, PM.peso AS peso, UNI.id as id_unidad,
-                UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
-                SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
-                BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-         FROM TB_MATE MATE 
-                inner JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
-				inner JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MATDEP.id_deposito
-				inner JOIN TB_CIUDAD  CIU ON depo.id_ciudad = CIU.id
-				inner JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = CIU.id
-                inner JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
-				inner JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
-				inner JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-                inner JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-                inner JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
-                inner JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
-        WHERE ID_CODIGOMATERIAL IN (select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
+    {   
+
+       /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                     inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
-                                    where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material)
-        AND LP.id = :id_lista_precio
-        AND MATDEP.ID_UNIDAD = UNI.ID
-        order by MATE.id_CODIGOMATERIAL asc";
+                                    where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material */
 
-        $buscar_material = $connection->prepare($query);
-        $buscar_material->bindValue('id_material', $codMaterial);
-        $buscar_material->bindValue('estado_material', $estado_material);
-        $buscar_material->bindValue('id_lista_precio', $id_lista_precio);
+        $resp =  $connection->fetchOne('SELECT TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
+                                        inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
+                                        where TB_CROS_SELL.ID_MATE = ?', [$codMaterial]);
 
-        $buscar_material->execute();
-        $res = $buscar_material->fetchAll();
-        //dd($id_vendedor);
+        $res = $connection->fetchAllAssociative('SELECT distinct
+                                                 MATE.ID_CODIGOMATERIAL as id_material,
+                                                PM.id as id_precio_material, 
+                                                MATE.CODIGOMATERIAL AS codigo_material, 
+                                                MATE.DESCRICAO AS nombre_material, 
+                                                DEPO.CODIGO_ALMACEN AS nombre_almacen,
+                                                DEPO.ID AS id_almacen, 
+                                                PM.peso AS peso, 
+                                                UNI.id as id_unidad,
+                                                UNI.NOMBRE_UNI AS unidad, 
+                                                MATDEP.cantidad AS cantidad, 
+                                                PM.precio as precio, 
+                                                0.00 as descuento, 
+                                                PM.precio AS precio_neto, 
+                                                (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, 
+                                                MONE.nombre_moneda, 
+                                                BASE.id_classe AS id_linea, 
+                                                BASE.descricao as nombre_linea,
+                                                MATE.largo_material as largo_material
+                                        FROM TB_MATE MATE 
+                                                inner JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
+                                                inner JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MATDEP.id_deposito
+                                                inner JOIN TB_CIUDAD  CIU ON depo.id_ciudad = CIU.id
+                                                inner JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = CIU.id
+                                                inner JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
+                                                inner JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
+                                                inner JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
+                                                inner JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
+                                                inner JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
+                                                inner JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
+                                        WHERE  DEPO.ESTADO_DEPOSITO = 1 
+                                        AND LP.id = ?
+                                        AND ID_CODIGOMATERIAL IN (?)
+                                        order by MATE.id_CODIGOMATERIAL asc', [$id_lista_precio, $resp]);
+       
         if (count($res) > 0) {
-
             return $res;
         } else {
             return false;
@@ -2296,8 +2315,8 @@ class Helper
                 !empty($data['id_zona']) ?  $data_almacen['id_zona'] = $data['id_zona'] : null;
             }
 
-            !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es requerido';
-            !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es requerido';
+            !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_almacen['latitud']  = 0;
+            !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] :  $data_almacen['longitud'] = 0;
 
             if ($data['estado_deposito'] == 'A') {
                 $data_almacen['ESTADO_DEPOSITO'] = 1;
@@ -2317,6 +2336,7 @@ class Helper
                 $message = [
                     "CodigoRespuesta" => 200,
                     "Estado" => true,
+                    "Mensaje"=> 'Se registro exitosamente'
                 ];
             } else {
                 $message = [
@@ -2333,10 +2353,11 @@ class Helper
 
     public function actualizaAlmacen($connection, $data)
     {
-
-        if (!empty($data['codigo_almacen'])) {
+        if (!empty($data['codigo_almacen'])) 
+        {
             $almacen = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE CODIGO_ALMACEN = ?', [$data['codigo_almacen']]);
             $data_id_almacen = (int)$almacen;
+
             !empty($data['nombre_almacen']) ? $data_almacen['NOMBRE_DEPOSITO'] = $data['nombre_almacen'] : null;
 
             if (!empty($data['grupo'])) {
@@ -2385,8 +2406,8 @@ class Helper
                 !empty($data['id_zona']) ?  $data_almacen['id_zona'] = $data['id_zona'] : null;
             }
 
-            !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es requerido';
-            !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es requerido';
+            !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_almacen['latitud']  = 0;
+            !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] :  $data_almacen['longitud'] = 0;
 
 
             if ($data['estado_deposito'] == 'A') {
@@ -4014,5 +4035,26 @@ class Helper
             return true;
         }
         return false;
+    }
+    public function guardarRutaAgenda($connection, $data)
+    {
+        $id_agenda = (int)$data['id_agenda'];
+        $fecha = date('Y-m-d H:i:s', strtotime($data['datetime']));
+        $latitud = $data['latitud'];
+        $longitud = $data['longitud'];
+
+        $query = "INSERT INTO TB_CORE_AGEN_UB (id_agenda, fecha, latitud, longitud)
+              VALUES (:id_agenda, :fecha, :latitud, :longitud)";
+
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(":id_agenda", $id_agenda, PDO::PARAM_INT);
+        $stmt->bindValue(":fecha", $fecha);
+        $stmt->bindValue(":latitud", $latitud);
+        $stmt->bindValue(":longitud", $longitud);
+
+        $stmt->execute();
+        $id_ubicacion_agenda = $connection->lastInsertId();
+
+        return $id_ubicacion_agenda > 0; 
     }
 }

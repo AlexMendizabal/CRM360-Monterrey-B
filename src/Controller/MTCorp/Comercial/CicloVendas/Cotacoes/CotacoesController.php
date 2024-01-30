@@ -264,8 +264,14 @@ class CotacoesController extends AbstractController
 
             isset($params['tipoData']) ? $tipoData = $params['tipoData'] : NULL;
             isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
-            isset($params['dataInicial2']) ? $dataFinal = $params['dataInicial2'] : NULL;
-            isset($params['codSituacao']) ? $codSituacao = $params['codSituacao'] : NULL;
+            if (isset($params['dataInicial2'])) {
+                $fechaFinal = new \DateTime($params['dataInicial2']);
+                $fechaFinal->modify('+1 day');
+                $dataFinal = $fechaFinal->format('Y-m-d');
+            } else {
+                $dataFinal = NULL;
+            }
+            isset($params['codSituacao']) ? $codSituacao = $params['codSituacao'] : NULL; 
             isset($params['id_oferta']) ? $nrPedido = $params['id_oferta'] : NULL;
             isset($params['codigo_oferta']) ? $codigo_oferta = $params['codigo_oferta'] : NULL;
             isset($params['cliente']) ? $cliente = $params['cliente'] : NULL;
@@ -282,12 +288,11 @@ class CotacoesController extends AbstractController
                 }
             }
             
-            /* Fecha inicial */
             $order = $orderBy . ' ' . $orderType;
             /* Fecha Inicial */
             if (!empty($dataInicial)) {
 
-                $fechaInicial = date('Y-m-d', strtotime($dataInicial));
+                $fechaInicial = date('Y-m-d', strtotime($dataInicial)); 
             }
 
             /* Fecha Final */
@@ -296,7 +301,7 @@ class CotacoesController extends AbstractController
                 $fechaFinal = date('Y-m-d', strtotime($dataFinal));
             }
 
-            $queryOferta = $connection->CreateQueryBuilder();
+            $queryOferta = $connection->CreateQueryBuilder(); 
             $queryOferta->select(
                 'OFE.id as id_oferta',
                 'OFE.codigo_oferta as codigo_oferta',
@@ -335,12 +340,16 @@ class CotacoesController extends AbstractController
                 ->setMaxResults($registros)
                 ->where('1 = 1');
             if (!empty($dataInicial)) {
-                $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
+                $queryOferta->andWhere('OFE.fecha_creacion >= :fecha_inicial'); 
                 $queryOferta->setParameter('fecha_inicial', $fechaInicial);
             }
             if (!empty($dataFinal)) {
-                $queryOferta->andWhere('OFE.fecha_inicial <= :fecha_final');
+                $queryOferta->andWhere('OFE.fecha_creacion <= :fecha_final');
                 $queryOferta->setParameter('fecha_final', $fechaFinal);
+            }
+            if (!empty($codSituacao)) {
+                $queryOferta->andWhere('OFE.tipo_estado = :codSituacao');
+                $queryOferta->setParameter('codSituacao', $codSituacao);
             }
             if (!empty($cliente)) {
                 $queryOferta->andWhere('CLIE.prim_nome = :id_cliente');
@@ -357,7 +366,7 @@ class CotacoesController extends AbstractController
 
             if (!empty($codVendedor)) {
                 $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
-                $queryOferta->setParameter('id_vendedor', $codVendedor);
+                $queryOferta->setParameter('id_vendedor',  (int)$codVendedor);
             }
 
             $stmt = $queryOferta->execute();
@@ -1642,14 +1651,20 @@ class CotacoesController extends AbstractController
             $result = [];
             
             if (isset($codMaterial)) {
-                $query1 =  "SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, 
+                /* $query1 =  "SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, 
                                     MATE.CODIGOMATERIAL AS codigo_material, 
                                     MATE.DESCRICAO AS nombre_material 
                             FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = :id_material";
                 $buscar_material_filtro = $connection->prepare($query1);
                 $buscar_material_filtro->bindValue('id_material', $codMaterial);
                 $buscar_material_filtro->execute();
-                $res1 = $buscar_material_filtro->fetchAll();
+                $res1 = $buscar_material_filtro->fetchAll(); */
+
+                $res1 = $connection->fetchAssociative('SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, 
+                                                                    MATE.CODIGOMATERIAL AS codigo_material, 
+                                                                    MATE.DESCRICAO AS nombre_material 
+                                                            FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = ?', [$codMaterial]);
+                
                 if (count($res1) > 0) {
                     $material_filtro = $res1;
                     //dd($id_vendedor);

@@ -842,7 +842,7 @@ class VendedorController extends AbstractController
         $message = array(
           "responseCode" => 204,
           "message" => 'No tienen direccion',
-          "success" => true
+          "success" => false
         );
     }
     $response = new JsonResponse($message);

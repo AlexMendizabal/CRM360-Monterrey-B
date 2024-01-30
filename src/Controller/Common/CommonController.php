@@ -384,7 +384,9 @@ class CommonController extends AbstractController
 
     /**
      * @Route(
-     * "/common/v2/linhas", name="common.linhas-listar", methods={"GET"}
+     * "/common/v2/linhas", 
+     * name="common.linhas-listar",
+     * methods={"GET"}
      * )
      *
      * @param Connection $connection
@@ -457,6 +459,55 @@ class CommonController extends AbstractController
                 'errors' => array(
                     array(
                         'moreInfo' => 'http://www.mtcorp.com.br',
+                    )
+                )
+            );
+        }
+        $response = new JsonResponse($result);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    
+    /**
+     * @Route(
+     * "/common/v2/departamentos", 
+     * name="common.departamentos-listar",
+     * methods={"GET"}
+     * )
+     *
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDepartamento(Connection $connection, Request $request): JsonResponse
+    {
+        try {
+            if ($request->isMethod('GET')) {
+
+                $params = $request->query->all();
+
+                $despartamentos = $connection->fetchAllAssociative('SELECT id, nombre_dep FROM TB_DEPARTAMENTO');
+   
+                if (count($despartamentos) > 0) {
+                    $result = array(
+                        'responseCode' => 200,
+                        'result' => $despartamentos
+                    );
+                } else {
+                    $result = array(
+                        'responseCode' => 404,
+                        'message' => 'Nenhum registro encontrado'
+                    );
+                }
+            }
+        } catch (DBALException $e) {
+            $result = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'errors' => array(
+                    array(
+                        'moreInfo' => 'RIA VENTURES',
                     )
                 )
             );

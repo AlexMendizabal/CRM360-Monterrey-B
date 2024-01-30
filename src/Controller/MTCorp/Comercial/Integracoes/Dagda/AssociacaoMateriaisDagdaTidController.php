@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Logistica\Services\Traits\RequestTrait;
@@ -27,54 +28,55 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
      * @return Response
      */
     public function getAssociacao(Connection $connection, Request $request): Response
-    {
-
+    { /*     
+        $params = $request->query->all();
+             */
         try {
             $this->setRequest($request);
+            
+         
+            $codigoMaterial    = $request->query->get("codigoMaterial");
+            $nomMaterial       = $request->query->get("nomMaterial");
+            $id_departamento   = $request->query->get("id_dep");
+            $status            = $request->query->get("status");
 
-            $idMatTidDag    = $request->query->get("idMatTidDagda");
-            $idMatTid       = $request->query->get("codigoMaterial");
-            $idClas         = $request->query->get("ID_CLAS");
-            $idLinh         = $request->query->get("ID_LINH");
+
             $inCada         = $request->query->get("inCada") ?? null;
             $orderBy        = $request->query->get("orderBy");
             $orderType      = $request->query->get("orderType");
             $pagina         = $request->query->get("pagina");
             $ttRegiPage     = $request->query->get("registros");
 
+            /* dd('aqui',$request->query->all()); */
+            $queryBuilder = new QueryBuilder($connection);
 
-            $query = <<<SQL
-                EXECUTE PRC_ASSO_MATE_TID_DAGD
-                    @PARAMETRO          = 'C1'
-                    ,@ID_MATE_TID_DAGD   = :idMatTidDag
-                    ,@ID_MATE_TID       = :idMatTid
-                    ,@ID_CLAS           = :idClas
-                    ,@ID_LINH           = :idLinh
-                    ,@IN_CADA           = :inCada
-                    ,@NR_PAGE_INIC      = :pagina
-                    ,@TT_REGI_PAGI      = :ttRegiPage
-                    ,@ORDE_TYPE         = :orderType
-            SQL;
+            $paginaActual =  (int)$pagina; // Página 2
+            $tamanoPagina = (int)$ttRegiPage; // 10 resultados por página
+            
+            // Calcula el offset (desplazamiento)
+            $offset = ($paginaActual - 1) * $tamanoPagina;
 
-            $stmt = $connection->prepare($query);
+            $queryBuilder
+                ->select('DS.id', 'MT.DESCRICAO', 'DP.nombre_ciudad', 'DS.CODIGOMATERIAL', 'DS.rango_inicial', 'DS.rango_final', 'DS.descuento', 'DS.estado')
+                ->from('TB_MATE', 'MT')
+                ->innerJoin('MT', 'TB_DESCUENTO', 'DS', 'DS.codigomaterial = MT.CODIGOMATERIAL')
+                ->innerJoin('DS', 'TB_CIUDAD', 'DP', 'DP.id = DS.id_departamento')
+                ->orderBy($orderBy, $orderType)
+                ->setFirstResult($offset) // Comienza desde el primer resultado
+                ->setMaxResults($ttRegiPage); // Recupera un máximo de 10 resultados
+            $response = $queryBuilder->execute()->fetchAll();
 
-            $stmt->bindValue(":idMatTidDag",        $idMatTidDag);
-            $stmt->bindValue(":idMatTid",           $idMatTid);
-            $stmt->bindValue(":idClas",             $idClas);
-            $stmt->bindValue(":idLinh",             $idLinh);
-            $stmt->bindValue(":inCada",             $inCada);
-            $stmt->bindValue(":orderType",          $orderType);
-            $stmt->bindValue(":pagina",             $pagina);
-            $stmt->bindValue(":ttRegiPage",         $ttRegiPage);
-
-            $stmt->execute();
-
-            $response = $stmt->fetchAllAssociative();
-
+            $total = $connection->fetchOne('SELECT COUNT(DS.id) as total_registros FROM TB_MATE MT INNER JOIN TB_DESCUENTO DS ON DS.codigomaterial = MT.CODIGOMATERIAL
+                                                         INNER JOIN TB_DEPARTAMENTO DP ON DP.id = DS.id_departamento WHERE DS.estado = 1');
+            
+            $data = [
+                'response'=>$response,
+                'total'=>$total
+            ];
             if (empty($response)) {
                 return (new FunctionsController)->Retorno(false, "A requisição não retornou informações", null, Response::HTTP_NO_CONTENT);
             } else
-                return (new FunctionsController)->Retorno(true, null, $response, Response::HTTP_OK);
+                return (new FunctionsController)->Retorno(true, null, $response , Response::HTTP_OK);
         } catch (\Throwable $th) {
             return (new FunctionsController)->Retorno(false, $th->getMessage() . "Ocorreu um erro ao processar a requisição", null, Response::HTTP_BAD_REQUEST);
         }
@@ -92,6 +94,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
     {
 
         try {
+            dd($request->query->all());
             $this->setRequest($request);
 
             $idMatTid   = $request->query->get("codigoMaterial");
@@ -133,37 +136,22 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
      */
     public function postAlteraIntegracao(Connection $connection, Request $request)
     {
+        $params = json_decode($request->getContent());
+       
         try {
+          
+            $data_descu = [
+                'codigomaterial' => $params->codigo_material,
+                'estado' => $params->status,
+            ];
+            $id_desc           = $params->id_descuento     ?? null;
 
-            $params = json_decode($request->getContent());
-
-            $idMateTidDagda = $params->idMatTidDagda  ?? null;
-            $user           = $params->user           ?? null;
-            $stat           = $params->status           ?? null;
-
-
-            $query = <<<SQL
-                EXECUTE PRC_ASSO_MATE_TID_DAGD_GRAV
-                    @PARAMETRO         = 'P1'
-                    ,@ID_MATE_TID_DAGD = :idMateTidDagda
-                    ,@ID_USUA          = :user
-                    ,@IN_STAT          = :stat
-            SQL;
-
-            $stmt = $connection->prepare($query);
-
-            $stmt->bindValue(":idMateTidDagda", $idMateTidDagda);
-            $stmt->bindValue(":user",           $user);
-            $stmt->bindValue(":stat",           $stat);
-
-            $stmt->execute();
-
-            $response = $stmt->fetchOne();
+            $response = $connection->update('TB_DESCUENTO',  $data_descu, ['id' => $id_desc]);
 
             if ($response != true) {
                 return (new FunctionsController)->Retorno(false, "Erro ao tentar gravar", null, Response::HTTP_NO_CONTENT);
             } else
-                return (new FunctionsController)->Retorno(true, "Associação id = {$response} cadastrada com sucesso", null, Response::HTTP_OK);
+                return (new FunctionsController)->Retorno(true, "registrado exitosamente", null, Response::HTTP_OK);
         } catch (\Throwable $th) {
             return (new FunctionsController)->Retorno(false, $th->getMessage() . "Ocorreu um erro ao processar a requisição", null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -179,10 +167,11 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
      */
     public function postIntegracaoMateriaisDagda(Connection $connection, Request $request)
     {
+
+        $params = json_decode($request->getContent());
+        dd($params);
         try {
-
-            $params = json_decode($request->getContent());
-
+          
             $idMateTidDagda = $params->idMatTidDagda  ?? null;
             $idMateTid      = $params->codigoMaterial ?? null;
             $idMatDagda     = $params->cdDagda        ?? null;
@@ -249,10 +238,11 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
      */
     public function deleteIntegracao(Connection $connection, Request $request)
     {
+        $params = json_decode($request->getContent());
+        dd($params);
         try {
 
-            $params = json_decode($request->getContent());
-
+      
             $idMateTidDagda = $params->idMatTidDagda  ?? null;
             $idMateTid      = $params->cdMatTid       ?? null;
             $idMateDagda    = $params->cdMatDagda     ?? null;

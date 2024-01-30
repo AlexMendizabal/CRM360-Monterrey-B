@@ -72,7 +72,7 @@ class PesquisaController extends AbstractController
     {
         try {
             //dd('aqui');
-            $params = $request->query->all(); 
+            $params = $request->query->all();
             $usuario = new usuarioController();
             $vendedor =  new VendedorController();
             $comercial = new ComercialController();
@@ -109,7 +109,7 @@ class PesquisaController extends AbstractController
             if (isset($params['segurado'])) $segurado = $params['segurado'];
             if (isset($params['carteira'])) $carteira = $params['carteira'];
             if (isset($params['pagina'])) $pagina = $params['pagina'];
-            if (isset($params['registros'])) $registros = $params['registros']; 
+            if (isset($params['registros'])) $registros = $params['registros'];
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
             $carteiraParam = null;
@@ -221,7 +221,7 @@ class PesquisaController extends AbstractController
             );
         }
 
-        $response = new JsonResponse($message); 
+        $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
@@ -579,7 +579,7 @@ class PesquisaController extends AbstractController
             // $stmt->execute();
             // $result = $stmt->fetchAll();dd($result);
             $result = $connection->fetchOne('SELECT COUNT(id) FROM tb_oferta  WHERE id_cliente = ? AND tb_oferta.estado_oferta = ? 
-             AND tb_oferta.tipo_estado = ?', [$codCliente,1,14] ); 
+             AND tb_oferta.tipo_estado = ?', [$codCliente, 1, 14]);
             // Devolver true si hay ofertas y false si no hay
             $tieneOferta = $result['oferta_count'] > 0;
 
@@ -670,15 +670,25 @@ class PesquisaController extends AbstractController
     public function getBuscadorDeClientes(Connection $connection, Request $request)
     {
         $UsuarioController = new UsuarioController();
+        $helper = new Helper();
         try {
             $params = $request->query->all();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $nombre_cliente = !empty($params['nombre_cliente']) ? strtoupper($params['nombre_cliente']) : '';
-            $res = $connection->query("
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+            if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+                $id_vendedor =  (int)$infoUsuario->idVendedor;
+                $res = $connection->query("
                 EXEC [PRC_VENDEDOR_CLIEN] 
                     @id_vendedor = '{$infoUsuario->idVendedor}',
                     @nombre_cliente ='{$nombre_cliente}'
             ")->fetchAll();
+            }else{
+                $res = $connection->query("
+                EXEC [PRC_VENDEDOR_CLIEN_USUA] 
+                    @nombre_cliente ='{$nombre_cliente}'
+            ")->fetchAll();
+            }
 
             if (count($res) > 0) {
                 $clientes = array();

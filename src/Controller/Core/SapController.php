@@ -1543,8 +1543,17 @@ class SapController extends AbstractController
         $helper = new Helper();
         try {
             $data = json_decode($request->getContent(), true);
-            if (!empty($data['codigo_almacen'])) {
-                $message = $helper->insertAlmacen($connection, $data);
+            if (!empty($data['codigo_almacen'])) 
+            {
+                $almacen = $dataCodigo['codigo_almacen'] = $helper->buscarAlmacen($connection, $data['codigo_almacen'], null);
+                if(empty($almacen)){
+                    $message = $helper->insertAlmacen($connection, $data);
+                }
+                else
+                {
+                    $message = $helper->actualizaAlmacen($connection, $data);
+                }
+
             } else {
                 $message = [
                     "CodigoRespuesta" => 204,
@@ -1649,15 +1658,17 @@ class SapController extends AbstractController
 
             if (!empty($data['cod_mate'])) {
                 $material = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$data['cod_mate']]);
-
+               
                 if (!empty($material)) {
                     $id_lista = $helper->buscarListaPrecio($connection, $data['lista']);
+                    
                     if (!empty($id_lista)) {
-                        $prec_material = $connection->fetchOne('SELECT id FROM TB_PRECIO_MATERIAL WHERE cod_mate = ? and id_lista = ?', [$data['cod_mate'], $id_lista]);
+                       
+                        $prec_material = $connection->fetchOne('SELECT id FROM TB_PRECIO_MATERIAL WHERE cod_mate = ? and id_lista = ?', [$data['cod_mate'], $id_lista[0]['id']]);
                         if (!empty($prec_material)) {
-                            $message = $helper->actualizarPrecios($connection, $data, $prec_material, $id_lista);
+                            $message = $helper->actualizarPrecios($connection, $data, $prec_material,  $id_lista[0]['id']);
                         } else {
-                            $message = $helper->insertPrecios($connection, $data,  $id_lista, $material);
+                            $message = $helper->insertPrecios($connection, $data,   $id_lista[0]['id'], $material);
                         }
                     } else {
                         $message = [
@@ -1732,7 +1743,6 @@ class SapController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (!empty($data)) {
-
             try {
                 $resp = $helper->updateVendedor($connection, $data);
                 if ($resp['response'] == true); {
@@ -1823,7 +1833,6 @@ class SapController extends AbstractController
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
         $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
-
         try {
             if (empty($data_error)) {
                 if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
@@ -1880,8 +1889,15 @@ class SapController extends AbstractController
                             );
                         }
                     } else {
-                        $helper->updateUsuario($connection, $data);
-                        $message = $helper->updateVendedor($connection, $data);
+                        $resps = $helper->updateUsuario($connection, $data);
+                        if( $resps['response'] == 200)
+                        {
+                            $message = $helper->updateVendedor($connection, $data);
+                        }
+                        else
+                        {
+                            $message = $resps;
+                        }
                     }
                 } else {
                     $message = array(
