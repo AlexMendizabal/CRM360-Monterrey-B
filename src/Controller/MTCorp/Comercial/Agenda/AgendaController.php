@@ -270,10 +270,12 @@ class AgendaController extends AbstractController
                 @ID_AGENDA = '{$id}'
             "
                 )->fetchAll();
-            
-                $data = $connection->executeQuery('SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
-                ['id_agenda' => $id])->fetchAll();
-           
+
+                $data = $connection->executeQuery(
+                    'SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
+                    ['id_agenda' => $id]
+                )->fetchAll();
+
                 if (!empty($res)) {
                     $compromisso = new \stdClass;
                     $compromisso->id = (int)$res[0]['ID_AGENDA'];
@@ -427,20 +429,19 @@ class AgendaController extends AbstractController
                         ,@VENDEDOR = '{$id_vendedor}'
                 ")->fetchAll();
 
-             $id_agenda =  $connection->lastInsertId();
-            
-             $fechaFormateada =  date('Y-m-d');
+            $id_agenda =  $connection->lastInsertId();
 
-            if ($save[0]['MSG'] == 'TRUE') 
-            {
+            $fechaFormateada =  date('Y-m-d');
+
+            if ($save[0]['MSG'] == 'TRUE') {
                 if (!empty($latitud) && !empty($longitud) && !empty($direccion)) {
                     $data_ltlg = [
-                            'id_agenda' => $id_agenda,
-                            'fecha'=>  $fechaFormateada,
-                            'latitud' => $latitud, 
-                            'longitud' =>  $longitud
-                        ];
-                   $reg = $connection->insert('TB_CORE_AGEN_UB', $data_ltlg);
+                        'id_agenda' => $id_agenda,
+                        'fecha' =>  $fechaFormateada,
+                        'latitud' => $latitud,
+                        'longitud' =>  $longitud
+                    ];
+                    $reg = $connection->insert('TB_CORE_AGEN_UB', $data_ltlg);
                 }
                 $message = array(
                     'responseCode' => 200,
@@ -1049,7 +1050,7 @@ class AgendaController extends AbstractController
 
     /**
      * @Route(
-     *  "/comercial/agenda/compromisso/finalizar",
+     *  "/comercial/agenda/compromisso/",
      *  name="comercial.agenda-compromisso-finalizar",
      *  methods={"POST"},
      * )
@@ -1058,7 +1059,7 @@ class AgendaController extends AbstractController
      * @return JsonResponse
      */
 
-    public function finalizarCompromisso(Connection $connection, Request $request)
+    /*  public function finalizarCompromisso(Connection $connection, Request $request)
     {
         try {
             $requestContent = $request->getContent();
@@ -1088,14 +1089,14 @@ class AgendaController extends AbstractController
                     $filename = uniqid() . '.jpeg';
                     $destination = $this->getParameter('kernel.project_dir') . '/uploads/agenda/images';
                     $destination = str_replace('\\', '/', $destination);
-                    file_put_contents($destination . '/' . $filename, $imageDecoded);
+                    file_put_contents($destination . '/' . $filename, $imageDecoded); */
 
-                    /* $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $destination);
+    /* $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $destination);
                     $webPath = str_replace("\\", "/", $webPath);
                     $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath; */
 
 
-                    $webPath = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\agenda\\images";
+    /* $webPath = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\agenda\\images";
                     $imageFile = new UploadedFile(
                         $destination . '/' . $filename,
                         $filename,
@@ -1133,7 +1134,7 @@ class AgendaController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
-    }
+    } */
 
     /**
      * @Route(
@@ -1155,15 +1156,16 @@ class AgendaController extends AbstractController
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
             $id_agenda = $id;
-            
+
             $rutas = $connection->executeQuery(
                 'EXEC [PROC_AGEN_VEN_UB_GET] @id_agenda = :id_agenda',
                 ['id_agenda' => $id_agenda]
             )->fetch();
-            $data = $connection->executeQuery('SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
-            ['id_agenda' => $id_agenda]
-                )->fetchAll();
-                /* $rutas = [
+            $data = $connection->executeQuery(
+                'SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
+                ['id_agenda' => $id_agenda]
+            )->fetchAll();
+            /* $rutas = [
                    'latitud' => $data[0]['latitud'],
                     'longitud' => $data[0]['longitud']
                 ]; */
@@ -1210,23 +1212,21 @@ class AgendaController extends AbstractController
                 $guardarDatos = $helpers->guardarRutaAgenda($connection, $data);
                 if ($guardarDatos == true) {
                     $swGuardarDatos = true;
-                }else{
+                } else {
                     $swGuardarDatos = false;
-
                 }
             }
             if ($swGuardarDatos == true) {
                 $message = array(
                     'responseCode' => 200,
-                    'success' => true ,
+                    'success' => true,
                 );
             } else if ($swGuardarDatos == false) {
                 $message = array(
                     'responseCode' => 204,
-                    'success' =>$datos['lista']
+                    'success' => $datos['lista']
                 );
             }
-
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => 500,
@@ -1278,6 +1278,108 @@ class AgendaController extends AbstractController
             $message = array(
                 'responseCode' => $e->getCode(),
                 'message' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+    /**
+     * @Route(
+     *  "/comercial/agenda/compromisso/finalizar",
+     *  name="comercial.agenda-compromisso-finalizar",
+     *  methods={"POST"},
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+    public function finalizarCompromisso(Connection $connection, Request $request)
+    {
+        try {
+            $requestContent = $request->getContent();
+            $data = json_decode($requestContent, true);
+
+            $id_agenda = (int)$data['id_agenda'];
+            $latitud = !empty($data['latitud']) ? $data['latitud'] : 0;
+            $longitud = !empty($data['longitud']) ? $data['longitud'] : 0;
+            $obs_final = !empty($data['observacion_final']) ? strtoupper($data['observacion_final']) : '';
+            //$fecha = date('d/m/Y H:i:s');
+            $fecha = date('Y-m-d H:i:s');
+
+            $destination = "";
+
+
+            $stmt = $connection->prepare("EXEC [dbo].[PRC_AGEN_VEND_FIN]
+                    @AGENDA = :id_agenda,
+                    @OBS_FINAL = :obs_final,
+                    @latitud = :latitud,
+                    @longitud = :longitud");
+
+            $stmt->bindParam(':id_agenda', $id_agenda);
+            $stmt->bindParam(':obs_final', $obs_final);
+            $stmt->bindParam(':latitud', $latitud);
+            $stmt->bindParam(':longitud', $longitud);
+
+            $stmt->execute();
+
+            // Obtener el resultado del procedimiento almacenado
+            $result = $stmt->fetch();
+            //dd($result);
+
+            if (!empty($data['imagen'])) {
+                $id_agenda = $data['id_agenda'];
+                $imageFiles = $data['imagen'];
+                foreach ($imageFiles as $imageBase64) {
+                    $imageData = substr($imageBase64, strpos($imageBase64, ',') + 1);
+                    $imageDecoded = base64_decode($imageData);
+                    $filename = uniqid() . '.jpeg';
+                    $destination = $this->getParameter('kernel.project_dir') . '/uploads/agenda/images';
+                    $destination = str_replace('\\', '/', $destination);
+                    file_put_contents($destination . '/' . $filename, $imageDecoded);
+
+                    /* $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $destination);
+                     $webPath = str_replace("\\", "/", $webPath);
+                     $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath; */
+
+
+                    $webPath = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\agenda\\images";
+                    $imageFile = new UploadedFile(
+                        $destination . '/' . $filename,
+                        $filename,
+                        'image/jpeg',
+                        null,
+                        true
+                    );
+                    $url_imagen = $imageFile->getRealPath();
+
+                    $stmt = $connection->prepare("EXEC proc_imagen_agenda ?,?,?,?,?");
+                    $stmt->bindParam(1, $id_agenda);
+                    $stmt->bindParam(2, $url_imagen);
+                    $stmt->bindParam(3, $webPath);
+                    $stmt->bindParam(4, $filename);
+                    $stmt->bindParam(5, $fecha);
+                    $stmt->execute();
+                    $result = $stmt->fetch();
+
+                    $message = array('responseCode' => $result, 'estado' => true);
+                }
+            }
+
+            if ($result['MSG'] == 'TRUE') {
+                $message = array('responseCode' => 200, 'estado' => true);
+            } else {
+                $message = array('responseCode' => 204, 'estado' => false);
+            }
+        } catch (\Exception $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'estado' => false
             );
         }
 

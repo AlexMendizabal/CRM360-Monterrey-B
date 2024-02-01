@@ -2507,7 +2507,7 @@ class CotacoesController extends AbstractController
                 } else {
                     $dato = null;
                     $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
-                    $sapresp = json_decode($repSap->getContent(), true);
+                    $sapresp = json_decode($repSap->getContent(), true); 
                    
                     if ($sapresp['CodigoRespuesta'] == 200) {
                         $data_sap['codigo_oferta'] = $sapresp['Mensaje'];
@@ -2552,7 +2552,7 @@ class CotacoesController extends AbstractController
     }
 
     public function insertaOferta($connection, $data)
-    {
+    {     
         !empty($data['id_forma_pago']) ?  $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
         !empty($data['id_lista_precio']) ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
         !empty($data['id_modo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['id_modo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
@@ -2735,10 +2735,10 @@ class CotacoesController extends AbstractController
     public function oferta_sap(Connection $connection, Request $request, $nrPedido)
     { 
         $helper = new Helper();
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true); 
         $data_oferta['id_oferta'] = (int)$nrPedido;
         $oferta = $connection->fetchAssociative('SELECT codigo_oferta, tipo_estado, estado_oferta FROM TB_OFERTA WHERE id = ?', [$data_oferta['id_oferta']]);
-       
+        
         if(empty($oferta['codigo_oferta']) && (int)$oferta['tipo_estado'] == 14 && (int)$oferta['estado_oferta'] == 1)
         {   
             
@@ -2773,7 +2773,7 @@ class CotacoesController extends AbstractController
                 "success" => false,
             ];
         }
-        $response = new JsonResponse($message);
+        $response = new JsonResponse($message); 
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }

@@ -622,18 +622,12 @@ class SapController extends AbstractController
         $verificarCliente = $helper->verificarCliente($connection, $data['codigo_cliente']);
         /*  $arrayUbicacion = [];
         $arrayContacto = [];
- */
+         */
         $ubClie = [];
         $contacto = [];
         if ($verificarCliente !== false) {
-            $message = [
-                //"response" => 204,
-                "CodigoRespuesta" => 204,
-                "Estado" => false,
-                "Mensaje" => 'Error, el codigo_cliente ya fue registrado'
-            ];
+            $message = $this->sapUpdateClienteSap($connection, $request);
         } else {
-
             $insertCliente = $helper->insertClient($connection, $data);
             if ($insertCliente['codigoRespuesta'] == 200) {
                 $id_cliente = $insertCliente['data']['cliente'];
@@ -1019,8 +1013,9 @@ class SapController extends AbstractController
      */
     public function sapUpdateCliente(Connection $connection, Request $request)
     {
+        
         $data = json_decode($request->getContent(), true);
-        //dd($data);
+      
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
         $array_ubicaciones_respaldo = array();
@@ -1147,10 +1142,10 @@ class SapController extends AbstractController
                     'codigo_cliente' => $data['codigo_cliente'],
                     'id_cliente' => $data['id_cliente'],
                     'nombres' => $data['nombres'],
-                    'carnet' => $data['ci'],
+                    'numero_doc' => $data['numoro_doc'],
                     'telefono' => $data['telefono'],
                     'celular' => $data['celular'],
-                    'nit' => $data['nit'],
+                    'tipo_documento' => $data['tipo_documento'],
                     'razon_social' => $data['razon_social'],
                     'rubro' => $rubro,
                     'id_vendedor' =>  $id_vendedor_sap,
@@ -1163,9 +1158,10 @@ class SapController extends AbstractController
                     'contactos' => $data['contactos'],
                     'id_estado' => $data['id_estado'],
                 ]);
+
+              dd($data_sap);
                 if ($swSap === true) {
                     $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
-                    //dd($resp_sap); 
                     if ($resp_sap['response'] == 200) {
                         $message = [
                             "CodigoRespuesta" => 200,
@@ -1238,11 +1234,10 @@ class SapController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
-
         $data_sap = array();
         $id_setor_actividade  = isset($data['id_rubro']) ? $data['id_rubro'] : 0;
-        $rubro2 = $helper->buscarRubro($connection, (int)$id_setor_actividade);
-        $rubro = $rubro2[0]['descricao'];
+            $rubro2 = $helper->buscarRubro($connection, (int)$id_setor_actividade);
+            $rubro = $rubro2[0]['descricao'];
 
         $traerCodigoVendedor = $helper->traerVendedorSap($connection, $data['id_vendedor']);
         if ($traerCodigoVendedor !== false) {
@@ -1303,8 +1298,6 @@ class SapController extends AbstractController
                 $ubicacion['ciudad'] = '';
             }
         }
-
-
         unset($ubicacion);
         $arrayContacto = $data['contactos'];
 
@@ -1312,23 +1305,23 @@ class SapController extends AbstractController
             'codigo_cliente' => $data['codigo_cliente'],
             'id_cliente' => $data['id_cliente'],
             'nombres' => $data['nombres'],
-            'carnet' => $data['ci'],
+            'numero_doc' => $data['numero_doc'],
             'telefono' => $data['telefono'],
             'celular' => $data['celular'],
-            'nit' => $data['nit'],
+            'tipo_documento' => $data['tipo_documento'],
             'razon_social' => $data['razon_social'],
             'rubro' => $rubro,
             'id_vendedor' =>  $id_vendedor_sap,
             'tipo_cliente' => $tipo_cliente,
             'tipo_persona' => $data['tipo_persona'],
-            'ciudad' => $sigla_ciudad,
+            'ciudad' => $data['ciudad'],
             'condicion_pago' => 'Contado',
             'nombre_factura' =>  $data['nombre_factura'],
             'ubicacion' => $arrayUbicacion,
             'contactos' => $arrayContacto,
             'id_estado' => $data['id_estado'],
         ]);
-        //dd($data_sap);
+        dd('aqui', $data_sap);
 
         if ($swSap === true) {
 
@@ -1387,9 +1380,11 @@ class SapController extends AbstractController
         return $response;
     }
 
+    public function sapmodificarCliente($connection,  $codigo_cliente){
+        $datos_cliente = $connection->fetchAllAssociative('SELECT * FROM user = ?', ['jwage']);
+    }
     public function actualizarClienteLocal($connection, $data, $helper)
     {
-
         $respuesta = array();
         $id_cliente = '';
         if (isset($data['id_cliente'])) {

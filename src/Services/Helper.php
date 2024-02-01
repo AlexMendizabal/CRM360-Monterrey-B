@@ -2854,7 +2854,7 @@ class Helper
 
 
     public function insertarServicio($ruta, $data)
-    {
+    { 
         $client = HttpClient::create();
         // Define la URL de destino
         $url = $this->url_sap . $ruta;
@@ -2897,7 +2897,7 @@ class Helper
         curl_close($curl);
 
         $responseData = json_decode($response, true);
-
+       
 
         return $responseData;
 
@@ -3700,9 +3700,9 @@ class Helper
 
 
     public function autorizacion_estado_sap($connection, $id_oferta)
-    {
+    { 
         $obtenerOferta = $this->buscarOferta($connection, $id_oferta);
-
+        
         $resultSet = $connection->executeQuery('SELECT 
                     TBU.NM_COMP_RAZA_SOCI AS nombres,
                     TB_AUTORIZACIONES.fecha_solicitud as fecha_solicitud,
@@ -3717,7 +3717,7 @@ class Helper
                     id_oferta = ?', [$id_oferta]);
 
         $autorizacion = $resultSet->fetchAssociative();
-
+        
         $oferta = $obtenerOferta['oferta'];
         $detalle_oferta = $obtenerOferta['analitico'];
 
@@ -3750,7 +3750,7 @@ class Helper
             'geolocalizacion' => $oferta['geolocalizacion'],
             'detalle_pedido' => $detalle_of,
         ]);
-
+        
         if (!empty($autorizacion)) {
             $arrayOFerta['autorizacion']  = [
                 "usuario_gestion" => $autorizacion['nombres'],
@@ -3765,9 +3765,9 @@ class Helper
         }
         try {
             $ruta = "/crearProforma";
-
+            
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
-
+            
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;
             } else {

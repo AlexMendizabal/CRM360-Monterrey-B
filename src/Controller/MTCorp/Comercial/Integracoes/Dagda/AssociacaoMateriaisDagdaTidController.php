@@ -47,8 +47,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $pagina         = $request->query->get("pagina");
             $ttRegiPage     = $request->query->get("registros");
 
-            /* dd('aqui',$request->query->all()); */
-            $queryBuilder = new QueryBuilder($connection);
+            $queryDescuento = new QueryBuilder($connection);
 
             $paginaActual =  (int)$pagina; // Página 2
             $tamanoPagina = (int)$ttRegiPage; // 10 resultados por página
@@ -56,29 +55,40 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             // Calcula el offset (desplazamiento)
             $offset = ($paginaActual - 1) * $tamanoPagina;
 
-            $queryBuilder
-                ->select('DS.id', 'MT.DESCRICAO', 'DP.nombre_ciudad', 'DS.CODIGOMATERIAL', 'DS.rango_inicial', 'DS.rango_final', 'DS.descuento', 'DS.estado')
+            $queryDescuento
+                ->select('DS.id', 'MT.DESCRICAO', 'DP.nombre_dep', 'DS.CODIGOMATERIAL', 'DS.rango_inicial', 'DS.rango_final', 'DS.descuento', 'DS.estado')
                 ->from('TB_MATE', 'MT')
                 ->innerJoin('MT', 'TB_DESCUENTO', 'DS', 'DS.codigomaterial = MT.CODIGOMATERIAL')
-                ->innerJoin('DS', 'TB_CIUDAD', 'DP', 'DP.id = DS.id_departamento')
+                ->innerJoin('DS', 'TB_CIUDAD', 'CI', 'DS.id_departamento = CI.id')
+                ->innerJoin('CI', 'TB_DEPARTAMENTO', 'DP', 'DP.id = CI.id_departamento')
                 ->orderBy($orderBy, $orderType)
                 ->setFirstResult($offset) // Comienza desde el primer resultado
-                ->setMaxResults($ttRegiPage); // Recupera un máximo de 10 resultados
-            $response = $queryBuilder->execute()->fetchAll();
+                ->setMaxResults($ttRegiPage) // Recupera un máximo de 10 resultados
+                ->where('1 = 1');
+                if (!empty($codigoMaterial)) {
+                    $queryDescuento->andWhere('DS.codigomaterial like :codigo_material'); 
+                    $queryDescuento->setParameter('codigo_material', '%'.$codigoMaterial.'%');
+                }
+                if (!empty($nomMaterial)) {
+                    $queryDescuento->andWhere('MT.DESCRICAO like :material'); 
+                    $queryDescuento->setParameter('material', '%'.$nomMaterial.'%');
+                }
+                if (!empty($id_departamento)) {
+                    $queryDescuento->andWhere('DP.id = :departamento'); 
+                    $queryDescuento->setParameter('departamento', $id_departamento);
+                }
+                if (!empty($status)) {
+                    $queryDescuento->andWhere('DS.estado = :'); 
+                    $queryDescuento->setParameter('estado', $status);
+                }
+            $response = $queryDescuento->execute()->fetchAll();
 
-            $total = $connection->fetchOne('SELECT COUNT(DS.id) as total_registros FROM TB_MATE MT INNER JOIN TB_DESCUENTO DS ON DS.codigomaterial = MT.CODIGOMATERIAL
-                                                         INNER JOIN TB_DEPARTAMENTO DP ON DP.id = DS.id_departamento WHERE DS.estado = 1');
-            
-            $data = [
-                'response'=>$response,
-                'total'=>$total
-            ];
             if (empty($response)) {
-                return (new FunctionsController)->Retorno(false, "A requisição não retornou informações", null, Response::HTTP_NO_CONTENT);
+                return (new FunctionsController)->Retorno(false, "La solicitud no devolvió información", null, Response::HTTP_NO_CONTENT);
             } else
                 return (new FunctionsController)->Retorno(true, null, $response , Response::HTTP_OK);
         } catch (\Throwable $th) {
-            return (new FunctionsController)->Retorno(false, $th->getMessage() . "Ocorreu um erro ao processar a requisição", null, Response::HTTP_BAD_REQUEST);
+            return (new FunctionsController)->Retorno(false, $th->getMessage() . "Se produjo un error al procesar la solicitud.", null, Response::HTTP_BAD_REQUEST);
         }
     }
 
