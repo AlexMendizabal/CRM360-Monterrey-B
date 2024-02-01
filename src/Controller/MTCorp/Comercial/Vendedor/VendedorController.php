@@ -318,9 +318,9 @@ class VendedorController extends AbstractController
                         "telefono" => $re["telefono"],
                         "celular" => $re["celular"],
                         "codigo_rubro" => $re["codigo_rubro"],
-                        "nit" => $re["nit"],
+                        "tipo_documento" => $re["tipo_documento"],
                         "nombre_factura" => $nombre,
-                        "carnet" => $re["carnet"]
+                        "numero_documento" => $re["numero_documento"]
                     ];
                 }
                 $res = $resp;

@@ -268,8 +268,8 @@ class Helper
                 $camposFaltantes[] = 'razon Social';
             }
 
-            if (isset($data['cnpj_cpf']) || isset($data['carnet'])) {
-                $cnpj_cpf = isset($data['cnpj_cpf']) ? $data['cnpj_cpf'] : $data['carnet'];
+            if (isset($data['cnpj_cpf']) || isset($data['numero_documento'])) {
+                $cnpj_cpf = isset($data['cnpj_cpf']) ? $data['cnpj_cpf'] : $data['numero_documento'];
             } /* else {
                 $camposFaltantes[] = 'carnet';
             } */
@@ -286,10 +286,10 @@ class Helper
                 $camposFaltantes[] = 'celular';
             }  */
 
-            if (isset($data['nit'])) {
-                $nit  = $data['nit'];
+            if (isset($data['tipo_documento'])) {
+                $tipo_documento  = $data['tipo_documento'];
             } else {
-                $camposFaltantes[] = 'nit';
+                $camposFaltantes[] = 'tipo_documento';
             }
 
             if (isset($data['tipo_persona'])) {
@@ -318,7 +318,6 @@ class Helper
                 $vendedor = $this->traerVendedor($connection, (int)$data['id_vendedor']);
             }
 
-
             if (!isset($vendedor)) {
                 $camposFaltantes[] = 'vendedor';
             }
@@ -329,7 +328,7 @@ class Helper
             if ($traerCodigoVendedor !== false) {
                 $id_vendedor_sap = $traerCodigoVendedor[0]['codigo_sap'];
             }
-
+           
             if (empty($camposFaltantes)) {
 
                 $rubro = isset($data['rubro']) ? $data['rubro'] : null;
@@ -341,32 +340,6 @@ class Helper
                     $rubro2 = $this->buscarRubro($connection, $id_setor_actividade);
                     $rubro = $rubro2[0]['descricao'];
                 }
-
-                /*  $data_cliete = [
-                    'prim_nome' => $nombres, 
-                    'segu_nome' => $segu_nome, 
-                    'cnpj_cpf' => $cnpj_cpf, 
-                    'tipo_pessoa' => $tipo_pessoa, 
-                    'id_vendedor' => $vendedor, 
-                    'situacao' => $situacao, 
-                    'is_descontado' => $is_descontado, 
-                    'id_regi_trib' => $id_regi_trib, 
-                    'codigo_cliente' =>$codigo_cliente, 
-                    'tipo_persona' => $tipo_persona, 
-                    'telefono' => $telefono, 
-                    'celular' =>  $celular,
-                    'id_tipo_cliente' => $id_tipo_cliente, 
-                    'email' => $email, 
-                    'nombre_factura' => $nombre_factura, 
-                    'id_rubro' => $id_setor_actividade, 
-                    'nit' => $nit
-                ];
-
-               $respCLi = $connection->insert('MTCORP_MODU_CLIE_BASE', $data_cliete);
-                
-               dd($respCLi); */
-
-                //dd($id_tipo_cliente);
 
                 $queryClient = "INSERT INTO MTCORP_MODU_CLIE_BASE(
                     prim_nome, 
@@ -388,13 +361,10 @@ class Helper
                     email, 
                     nombre_factura, 
                     id_rubro, 
-                    nit
+                    id_tipo_documento
                     )
-                                        VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,
-                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :nit)";
-
-                //$connection->beginTransaction();
-                //dd($telefono);
+                    VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,
+                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :tipo_documento)";
 
                 $stmt = $connection->prepare($queryClient);
                 $stmt->bindValue(":nombres", $nombres);
@@ -416,10 +386,10 @@ class Helper
                 $stmt->bindValue(":email", $email);
                 $stmt->bindValue(":nombre_factura", $nombre_factura);
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
-                $stmt->bindValue(":nit", $nit);
+                $stmt->bindValue(":tipo_documento", $tipo_documento);
                 $stmt->execute();
                 $id_cliente = $connection->lastInsertId();
-                //dd($id_cliente);
+               /*  dd($id_cliente); */
 
                 if ($id_cliente > 0) {
                     $message = [
@@ -430,7 +400,7 @@ class Helper
                             "cliente" =>  $id_cliente,
                             "codigo_cliente" => $codigo_cliente,
                             "nombres" => $nombres,
-                            "nit" => $cnpj_cpf,
+                            "numero_documento" => $cnpj_cpf,
                             "telefono" => $telefono,
                             "celular" => $celular,
                             "razonSocial" => $segu_nome,
@@ -439,7 +409,8 @@ class Helper
                             "rubro" => $rubro,
                             "tipo_persona" => $tipo_persona,
                             "nombre_factura" => $nombre_factura,
-                            "id_tipo_cliente" => $id_tipo_cliente
+                            "id_tipo_cliente" => $id_tipo_cliente,
+                            "tipo_documento" => $tipo_documento
                         ]
                     ];
                 } else {
@@ -3258,7 +3229,7 @@ class Helper
             OFE.codigo_oferta AS codigo_oferta, 
             OFE.peso_total AS peso_total,  
             CLIE.nombre_factura AS nombre_factura, 
-            CLIE.nit AS nit, 
+            CLIE.id_tipo_documento AS tipo_documento, 
             OFE.id_persona_contacto AS id_persona_contacto,
             CASE
                 WHEN  OFE.estado_oferta = 0 THEN 'Borrador'
@@ -3269,7 +3240,7 @@ class Helper
             OFE.id_vendedor AS id_vendedor, 
             CLIE.id_cliente AS id_cliente, 
             CLIE.codigo_cliente AS codigo_cliente,
-            CLIE.cnpj_cpf as nit_factura, 
+            CLIE.cnpj_cpf as numero_documento, 
             TCC.ds_cont AS codigo_direccion,
             OFE.id_modo_entrega AS id_modo_entrega,
             ME.nombre_modo_entrega AS nombre_modo_entrega, 
@@ -3467,17 +3438,25 @@ class Helper
                 $tipo_cliente = $buscar_tipo_cliente[0]['nombre_tipo'];
             }
         }
+
+        if ($traerCliente[0]['id_tipo_documento'] !== 0) {
+            $buscar_tipo_cliente = $this->buscarTipoDocumentoId($conecction, $traerCliente[0]['id_tipo_documento']);
+            //dd($buscar_tipo_cliente);
+            if ($buscar_tipo_cliente !== false) {
+                $tipo_documento = $buscar_tipo_cliente[0]['nombre_doc'];
+            }
+        }
         //dd($traerCliente);
         $array_cliente = ([
             'id_cliente' => $traerCliente[0]['id_cliente'],
-            'carnet' => $traerCliente[0]['cnpj_cpf'],
+            'numero_documento' => $traerCliente[0]['cnpj_cpf'],
             'codigo_cliente' => $traerCliente[0]['codigo_cliente'],
             'nombre' => $traerCliente[0]['prim_nome'],
             'razon_social' => $traerCliente[0]['segu_nome'],
             'tipo_persona' => $traerCliente[0]['tipo_persona'],
             'id_tipo_persona' => $traerCliente[0]['tipo_pessoa'],
             'nombre_factura' => $traerCliente[0]['nombre_factura'],
-            'nit' => $traerCliente[0]['nit'],
+            'id_tipo_documento' => $traerCliente[0]['id_tipo_documento'],
             'celular' => $traerCliente[0]['celular'],
             'telefono' => $traerCliente[0]['telefono'],
             'id_rubro' => $traerCliente[0]['id_rubro'],
@@ -3487,7 +3466,8 @@ class Helper
             'email' => $traerCliente[0]['email'],
             'id_tipo_cliente' => $traerCliente[0]['id_tipo_cliente'],
             'id_situacion' => $traerCliente[0]['situacao'],
-            'tipo_cliente' => $tipo_cliente
+            'tipo_cliente' => $tipo_cliente,
+            'tipo_documento' => $tipo_documento 
         ]);
         $array_final['datos_cliente'] = $array_cliente;
         if (count($array_cliente) > 0) {
@@ -3578,6 +3558,19 @@ class Helper
         $datos_tipo_cliente =  $stament->fetchAll();
         if (count($datos_tipo_cliente) > 0) {
             return $datos_tipo_cliente;
+        } else {
+            return false;
+        }
+    }
+    public function buscarTipoDocumentoId($connection, $id_tipo_documento)
+    {
+        $query = "SELECT * FROM tb_base_clie_doc WHERE id = :id_tipo";
+        $stament = $connection->prepare($query);
+        $stament->bindValue(':id_tipo',  $id_tipo_documento);
+        $stament->execute();
+        $datos_tipo_documento =  $stament->fetchAll();
+        if (count($datos_tipo_documento) > 0) {
+            return $datos_tipo_documento;
         } else {
             return false;
         }
@@ -3742,7 +3735,8 @@ class Helper
             'total_documento' => $oferta['monto_total'],
             'nombre_factura' => $oferta['nombre_cliente'],
             'ejecutivo_ventas' => $oferta['nombre_vendedor'],
-            'nit_factura' => $oferta['nit_factura'],
+            'tipo_documento' => $oferta['tipo_documento'],
+            'numero_documento' => $oferta['numero_documento'],
             'tipo_entrega' => $oferta['id_modo_entrega'],
             'codigo_direccion' => $oferta['codigo_direccion'],
             'porc_descuento' => null,
@@ -3752,7 +3746,7 @@ class Helper
         ]);
         
         if (!empty($autorizacion)) {
-            $arrayOFerta['autorizacion']  = [
+           $autorizaciones = [
                 "usuario_gestion" => $autorizacion['nombres'],
                 "fecha_solicitud" => $autorizacion['fecha_solicitud'],
                 "fecha_gestion" => $autorizacion['fecha_gestion'],
@@ -3760,12 +3754,15 @@ class Helper
                 "observacion_ejecutivo" => $autorizacion['descripcion_vend'],
                 "estado" => $autorizacion['estado']
             ];
+            
+            $arrayOFerta['autorizacion'] =  [$autorizaciones];
+            
         } else {
             $arrayOFerta['autorizacion']  = [];
         }
         try {
             $ruta = "/crearProforma";
-            
+            //dd($arrayOFerta);
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
             
             if ($rsp['CodigoRespuesta'] == 200) {

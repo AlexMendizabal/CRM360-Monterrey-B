@@ -719,7 +719,7 @@ class AgendaController extends AbstractController
             $data = json_decode($request->getContent(), true);
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
-            $cor = $data['color']['primary'];
+            $cor = $data['color']['primary']?$data['color']['primary']: null;
             $codTitulo = $data['codTitulo'];
             $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
             $formaContato = $data['formContactId'];
