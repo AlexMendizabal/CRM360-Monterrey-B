@@ -150,7 +150,15 @@ class AutorizacionesController extends AbstractController
         try {
 
             $ruta = "/crearProforma";
+
             $rsp = $helper->insertarServicio($ruta, $arrayMaterial);
+
+            if ($rsp['CodigoRespuesta'] == 200) {
+                $message = $rsp;
+            } else {
+                $message = $rsp;
+            }
+
         } catch (\Throwable $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
@@ -288,17 +296,19 @@ class AutorizacionesController extends AbstractController
             $idVend =  $infoUsuario->idVendedor;
 
             $params = $request->query->all();
+          
             $cargo = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
-
+            
             if ($cargo == 'GERENTE' || $cargo == 'SUBGERENTE' || $cargo == 'SUPERVISOR' || $cargo ==  'ADMINISTRADOR' || $cargo == 'PROMOTOR') {
                 //filtaspo
+             
                 $orderBy = 'id_oferta';
                 $orderType = 'DESC';
                 $dataInicial = isset($params['dataInicial']) ? (strtotime($params['dataInicial']) ? date('Y/m/d H:i:s', strtotime($params['dataInicial'])) : '') : '';
                 $dataFinal = isset($params['dataFinal']) ? (strtotime($params['dataFinal']) ? date('Y/m/d H:i:s', strtotime($params['dataFinal'])) : '') : '';
                 $estado_oferta = isset($params['estado_oferta']) ? $params['estado_oferta'] : 1;
                 //$nrPedido = isset($params['nrPedido']) ? $params['nrPedido'] :  $message = '';
-                $codVendedor = isset($params['codVendedor']) ? $params['codVendedor'] : $idVend;
+                $codVendedor = isset($params['codVendedor']) ? $params['codVendedor'] : 0;
                 $orderType = isset($params['orderType']) ? $params['orderType'] : 'se requiere dato';
                 $pagina = isset($params['pagina']) ? $params['pagina'] : $message = '';
                 $registros = isset($params['registros']) ?   $params['registros'] :    $message = '';
@@ -309,7 +319,6 @@ class AutorizacionesController extends AbstractController
                 }
                 /* Fecha inicial */
                 $order = $orderBy . ' ' . $orderType;
-
                 /* Fecha Inicial */
                 if (!empty($dataInicial)  && !empty($dataFinal)) {
                     $conditions[] = "tb_autorizaciones.fecha_solicitud between :fecha_solicitud and :fecha_gestion";
@@ -318,10 +327,10 @@ class AutorizacionesController extends AbstractController
                 }
 
                 /* Número de pedido */
-                if (!empty($nrPedido)) {
+               /*  if (!empty($nrPedido)) {
                     $conditions[] = "TB_OFERTA.codigo_oferta LIKE :nro_pedido";
                     $bindings['nro_pedido'] = '%' . $nrPedido . '%';
-                }
+                } */
 
                 /* Vendedor */
                 if (!empty($codVendedor)) {
@@ -332,30 +341,34 @@ class AutorizacionesController extends AbstractController
                     $bindings['idVendedorPromotor'] = $idVend;
                 }
 
-                $query = "SELECT DISTINCT TB_OFERTA.id AS id_oferta,
-                                MTCORP_MODU_CLIE_BASE.codigo_cliente AS id_cliente, 
-                                prim_nome AS nombre_cliente, 
-                                nombre_oferta AS nombre_oferta,
-                                monto_total AS monto_total, 
-                                monto_total_bruto AS monto_total_bruto, 
-                                descuento_total AS descuento_total, 
-                                peso_total AS peso_total,
-                                cantidad_total AS cantidad_total , 
-                                fecha_creacion AS fecha_creacion, 
+                $query = "SELECT 
+                                TB_OFERTA.id AS id_oferta, 
                                 codigo_oferta AS codigo_oferta,
-                                TB_AUTORIZACIONES.id AS id_autorizacion, 
-                                tb_autorizaciones.fecha_solicitud AS fecha_solicitud, 
+                                MTCORP_MODU_CLIE_BASE.codigo_cliente AS id_cliente, 
+                                MTCORP_MODU_CLIE_BASE.prim_nome AS nombre_cliente, 
+                                CONCAT(TB_VEND.NM_VEND, ' ', TB_VEND.NM_RAZA_SOCI) AS nombre_vendedor,
+                                monto_total,
+                                monto_total_bruto AS monto_total_bruto,
+                                peso_total, 
+                                descuento_total, 
+                                cantidad_total, 
+                                tb_autorizaciones.fecha_solicitud, 
+                                fecha_creacion AS fecha_creacion, 
+                                descripcion_vend,
+                                tb_autorizaciones.id AS id_autorizacion,
                                 tb_autorizaciones.fecha_gestion AS fecha_gestion, 
-                                TB_AUTORIZACIONES.id_usuario AS id_usuario, 
-                                TB_OFERTA.id_vendedor AS id_vendedor, TB_VEND.NM_VEND,
+                                TB_core_usua.NM_COMP_RAZA_SOCI AS nombre_usuario,
+                                tb_detalle_auto.desc_vendedor as desc_usuario,
+                                tb_autorizaciones.estado,
                                 tb_autorizaciones.estado AS id_estado_auto,
-                                (select descripcion from tb_cierre_oferta where id = tb_autorizaciones.estado) AS estado_oferta
-                                FROM TB_OFERTA
-                                JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta
-                                LEFT JOIN tb_detalle_auto ON tb_detalle_auto.id_autorizacion = TB_OFERTA.id
-                                LEFT JOIN MTCORP_MODU_CLIE_BASE ON  MTCORP_MODU_CLIE_BASE.id_cliente = TB_OFERTA.id_cliente
-                                LEFT JOIN TB_CORE_USUA ON TB_CORE_USUA.ID = tb_autorizaciones.id_usuario
-                                LEFT JOIN TB_VEND ON TB_VEND.ID = TB_OFERTA.id_vendedor";
+                                tb_cierre_oferta.descripcion AS estado_oferta
+                            FROM TB_OFERTA
+                                inner JOIN TB_VEND ON TB_OFERTA.id_vendedor = TB_VEND.ID
+                                inner JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta 
+                                left join tb_detalle_auto on tb_detalle_auto.id_autorizacion = tb_autorizaciones.id
+                                left join TB_core_usua  on TB_core_usua.id = tb_detalle_auto.id_usuario
+                                inner JOIN MTCORP_MODU_CLIE_BASE ON TB_OFERTA.id_cliente = MTCORP_MODU_CLIE_BASE.id_cliente
+                                join tb_cierre_oferta on tb_cierre_oferta.id = tb_autorizaciones.estado";
                 if (!empty($conditions)) {
                     $conditionString = implode(' AND ', $conditions);
                     $query .= " WHERE $conditionString";
@@ -371,7 +384,7 @@ class AutorizacionesController extends AbstractController
                 $stmt = $connection->prepare($query);
                 $stmt->execute($bindings);
                 $res = $stmt->fetchAll();
-                //dd($res);
+             
 
                 if (count($res) > 0) {
                     $message = array(
@@ -424,21 +437,21 @@ class AutorizacionesController extends AbstractController
             $arrayFinal = array();
             $helper = new Helper();
             $query_oferta = "SELECT TB_OFERTA.id AS id_oferta, 
-                            CONCAT(TB_VEND.NM_VEND, ' ', TB_VEND.NM_RAZA_SOCI) AS nombre_vendedor,
-                            monto_total, 
-                            peso_total, 
-                            descuento_total, 
-                            cantidad_total, 
-                            fecha_solicitud, 
-                            descripcion_vend,
-                            tb_autorizaciones.id AS id_autorizacion,
-                            tb_autorizaciones.estado,
-                            MTCORP_MODU_CLIE_BASE.prim_nome AS nombre_cliente
-                            FROM TB_OFERTA
-                            LEFT JOIN TB_VEND ON TB_OFERTA.id_vendedor = TB_VEND.ID
-                            LEFT JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta 
-                            LEFT JOIN MTCORP_MODU_CLIE_BASE ON TB_OFERTA.id_cliente = MTCORP_MODU_CLIE_BASE.id_cliente
-                            WHERE tb_autorizaciones.id = :id";
+                                CONCAT(TB_VEND.NM_VEND, ' ', TB_VEND.NM_RAZA_SOCI) AS nombre_vendedor,
+                                monto_total, 
+                                peso_total, 
+                                descuento_total, 
+                                cantidad_total, 
+                                fecha_solicitud, 
+                                descripcion_vend,
+                                tb_autorizaciones.id AS id_autorizacion,
+                                tb_autorizaciones.estado,
+                                MTCORP_MODU_CLIE_BASE.prim_nome AS nombre_cliente
+                                FROM TB_OFERTA
+                                inner JOIN TB_VEND ON TB_OFERTA.id_vendedor = TB_VEND.ID
+                                inner JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta 
+                                inner JOIN MTCORP_MODU_CLIE_BASE ON TB_OFERTA.id_cliente = MTCORP_MODU_CLIE_BASE.id_cliente
+                                WHERE tb_autorizaciones.id = :id";
             $statement = $connection->prepare($query_oferta);
             $statement->bindValue(':id', $id_autorizacion);
             $statement->execute();
@@ -456,9 +469,9 @@ class AutorizacionesController extends AbstractController
                 TB_OFERTA_DETALLE.percentualDesc-TB_OFERTA_DETALLE.descuento_permitido AS excedente
             FROM
                 TB_OFERTA_DETALLE
-            LEFT JOIN TB_OFERTA ON TB_OFERTA_DETALLE.id_oferta = TB_OFERTA.ID
-            LEFT JOIN TB_MATE ON TB_OFERTA_DETALLE.id_material = TB_MATE.ID_CODIGOMATERIAL
-            LEFT JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta
+            inner JOIN TB_OFERTA ON TB_OFERTA_DETALLE.id_oferta = TB_OFERTA.ID
+            inner JOIN TB_MATE ON TB_OFERTA_DETALLE.id_material = TB_MATE.ID_CODIGOMATERIAL
+            inner JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta
             WHERE tb_autorizaciones.id  = :id";
 
                 $statement2 = $connection->prepare($query_detalle);
@@ -564,7 +577,6 @@ class AutorizacionesController extends AbstractController
 
                     $respMd = $statement->rowCount();
 
-
                     if ($respMd > 0) {
 
                         $query2 = "INSERT INTO tb_detalle_auto (id_autorizacion, id_usuario, fecha_solicitud, desc_vendedor) VALUES (:id_autorizacion, :id_usuario, :fecha_solicitud, :desc_vendedor);";
@@ -585,7 +597,7 @@ class AutorizacionesController extends AbstractController
                                 $dato = $sapresp['Mensaje'];
                                 //cambia el estado si envio a sap 1 
                                 $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => (int)$dato, 'envio_sap' => 1], ['id' => (int)$id_oferta]);
-                                $connection->commit();
+                             
                                 $message = [
                                     "responseCode" => 200,
                                     "message" => 'Registro Correctamente',

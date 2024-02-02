@@ -509,7 +509,7 @@ class CotacoesController extends AbstractController
 
             $query_oferta =
                 "SELECT
-                OFE.id AS id_oferta,
+                 OFE.id AS id_oferta,
                 OFE.nombre_oferta AS nombre_oferta,
                 FORMAT(OFE.fecha_inicial, 'dd-MM-yyyy') AS fecha_inicial,
                 FORMAT(OFE.fecha_final, 'dd-MM-yyyy') AS fecha_final,
@@ -532,7 +532,13 @@ class CotacoesController extends AbstractController
                 CLIE.email_nfe AS e_mail,
                 CLIE.celular AS celular_clie, CONT.ds_cont AS nombre_cont,ME.id AS id_modo_entrega,
                 ME.nombre_modo_entrega AS nombre_modo_entrega, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS nombre_vendedor,
-                LP.nombre_lista AS nombre_lista
+                LP.nombre_lista AS nombre_lista,
+				DAU.id_usuario as usuario,
+				AU.fecha_gestion as fecha_gestion,
+				CU.NM_COMP_RAZA_SOCI as gestor,
+				AU.descripcion_vend as obs_solicitante,
+				DAU.desc_vendedor as obs_gestor
+
                 FROM TB_OFERTA OFE 
                     INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
                     INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
@@ -540,6 +546,9 @@ class CotacoesController extends AbstractController
                     INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
                     left JOIN TB_CLIE_CONT CONT ON OFE.id_persona_contacto = CONT.id_cont
                     left JOIN tb_cierre_oferta CO ON OFE.tipo_estado = CO.id
+					LEFT JOIN tb_autorizaciones AU ON OFE.id = AU.id_oferta
+					LEFT JOIN tb_detalle_auto DAU on DAU.id_autorizacion = AU.id
+					LEFT JOIN TB_CORE_USUA CU ON CU.ID = DAU.id_usuario		
                 WHERE  OFE.id = :id_oferta";
             $stmt1 = $connection->prepare($query_oferta);
             $stmt1->bindValue(':id_oferta', $tipoData);
@@ -559,7 +568,7 @@ class CotacoesController extends AbstractController
                     PM.precio as precio, 
                     OD.cantidad as cantidad,
                     OD.subtotal_bruto AS total_bruto,
-                    od.descuento as precio_descuento,
+                    od.percentualDesc as precio_descuento,
                     od.subtotal as subtotal,
                     DEPO.CODIGO_ALMACEN as nombre_almacen,
                     MONE.nombre_moneda as nombre_moneda

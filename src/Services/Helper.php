@@ -1047,7 +1047,6 @@ class Helper
     public function updateClient($connection, $data)
     {
 
-
         if (!empty($data['codigo_cliente'])) {
             $cliente['codigo_cliente'] = $data['codigo_cliente'];
         } else {
@@ -1058,15 +1057,15 @@ class Helper
             $camposFaltantes[] = 'ciudad';
         }
 
-        if (!empty($data['nit'])) {
-            $cliente['nit'] = $data['nit'];
+        if (!empty($data['tipo_documento'])) {
+            $cliente['id_tipo_documento'] = $data['tipo_documento'];
         } else {
-            $camposFaltantes[] = 'nit';
+            $camposFaltantes[] = 'tipo_documento';
         }
-        if (!empty($data['ci']) || !empty($data['carnet'])) {
-            $cliente['cnpj_cpf'] = !empty($data['ci']) ? $data['ci'] : $data['carnet'];
+        if (!empty($data['numero_documento'])) {
+            $cliente['cnpj_cpf'] = !empty($data['numero_documento']) ? $data['numero_documento'] : $data['numero_documento'];
         } else {
-            $camposFaltantes[] = 'carnet';
+            $camposFaltantes[] = 'numero_documento';
         }
 
         if (!empty($data['nombres'])) {
@@ -3762,7 +3761,7 @@ class Helper
         }
         try {
             $ruta = "/crearProforma";
-            //dd($arrayOFerta);
+           
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
             
             if ($rsp['CodigoRespuesta'] == 200) {

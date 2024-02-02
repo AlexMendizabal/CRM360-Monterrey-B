@@ -625,7 +625,8 @@ class SapController extends AbstractController
         $ubClie = [];
         $contacto = [];
         if ($verificarCliente !== false) {
-            $message = $this->sapUpdateClienteSap($connection, $request);
+            $message2 = $this->sapUpdateClienteSap($connection, $request);
+            return $message2;
         } else {
             $insertCliente = $helper->insertClient($connection, $data);
             if ($insertCliente['codigoRespuesta'] == 200) {
@@ -856,6 +857,7 @@ class SapController extends AbstractController
             }
         }
         $response = new JsonResponse($message);
+      
         return $response;
     }
 
@@ -1226,9 +1228,7 @@ class SapController extends AbstractController
     public function sapUpdateClienteSap(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-
-        $this->sapmodificarCliente($connection, $data, $data['codigo_cliente']);
-
+       
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
         $data_sap = array();
@@ -1256,8 +1256,10 @@ class SapController extends AbstractController
             }
         }
 
-        $buscarCiudad = $helper->buscarCiudad2($connection, (int)$data['ubicacion'][0]['id_ciudad']);
-        $sigla_ciudad = $buscarCiudad['sigla'];
+        if(isset($data['ubicacion'][0]['id_ciudad'])){
+            $buscarCiudad = $helper->buscarCiudad2($connection, (int)$data['ubicacion'][0]['id_ciudad']);
+            $sigla_ciudad = $buscarCiudad['sigla'];
+        }
 
 
         $buscarRubro = $helper->buscarRubro($connection, $data['rubro']);
@@ -1286,18 +1288,15 @@ class SapController extends AbstractController
         $arrayContacto = [];
 
         $arrayUbicacion = $data['ubicacion'];
-
+    
         foreach ($arrayUbicacion as &$ubicacion) {
             $buscarCiudad = $helper->buscarCiudad2($connection, (int)$ubicacion['id_ciudad']);
             if ($buscarCiudad !== false) {
                 $ubicacion['ciudad'] = $buscarCiudad['sigla'];
-            } else {
-                $ubicacion['ciudad'] = '';
-            }
+            } 
         }
-        unset($ubicacion);
+        unset($ubicacion);;
         $arrayContacto = $data['contactos'];
-
         $data_sap = ([
             'codigo_cliente' => $data['codigo_cliente'],
             'id_cliente' => $data['id_cliente'],
@@ -1305,24 +1304,24 @@ class SapController extends AbstractController
             'numero_documento' => $data['numero_documento'],
             'telefono' => $data['telefono'],
             'celular' => $data['celular'],
-            'tipo_documento' => $data['tipo_documento'],
+            'tipo_documento' => (int)$data['tipo_documento'],
             'razon_social' => $data['razon_social'],
             'rubro' => $rubro,
             'id_vendedor' =>  $id_vendedor_sap,
             'tipo_cliente' => $tipo_cliente,
             'tipo_persona' => $data['tipo_persona'],
-            'ciudad' => $data['ciudad'],
+            'ciudad' => $sigla_ciudad,
             'condicion_pago' => 'Contado',
             'nombre_factura' =>  $data['nombre_factura'],
             'ubicacion' => $arrayUbicacion,
             'contactos' => $arrayContacto,
             'id_estado' => $data['id_estado'],
         ]);
-        dd('aqui', $data_sap);
-
+       
         if ($swSap === true) {
-
+           
             $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
+           
             if ($resp_sap['response'] == 200) {
 
                 /* dd($data); */
@@ -1510,7 +1509,7 @@ class SapController extends AbstractController
                     }
                 }
             }
-            /* dd($respuestaClient); */
+            
             return $respuestaClient;
         } else {
             return $respuestaClient;
@@ -1822,6 +1821,7 @@ class SapController extends AbstractController
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
         $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
+        
         try {
             if (empty($data_error)) {
                 if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
