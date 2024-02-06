@@ -24,7 +24,7 @@ class SubmodulosController
      * @return JsonResponse
      */
     public function index(Connection $connection, Request $request, ?int $id, bool $show_route = false): JsonResponse
-    {
+    { 
         try {
 
             $id                     = $request->query->get("id") ?? $id;
@@ -37,7 +37,7 @@ class SubmodulosController
             $orderBy                = $request->query->get("orderBy");
             $orderType              = $request->query->get("orderType");
             $inPagina               = $request->query->get("inPagina");
-
+            
             $query = <<<SQL
                 EXECUTE PRC_CORE_SUB_MODU
                      @PARAMETRO       = 2

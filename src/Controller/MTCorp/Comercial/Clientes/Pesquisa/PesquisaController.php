@@ -567,19 +567,11 @@ class PesquisaController extends AbstractController
     public function verificaOferta(Connection $connection, Request $request, $codCliente)
     {
         try {
-            // Consulta para verificar si el cliente tiene una oferta abierta
-            // $sql = "SELECT COUNT(id) as oferta_count FROM tb_oferta 
-            // INNER JOIN MTCORP_MODU_CLIE_BASE CLI ON CLI.id_cliente = tb_oferta.id_cliente
-            // WHERE tb_oferta.id_cliente = :id_cliente 
-            // AND tb_oferta.estado_oferta = 10 
-            // AND tb_oferta.tipo_estado = 14";
+            $result = $connection->fetchOne('SELECT COUNT(id) 
+            FROM tb_oferta WHERE id_cliente = ? AND ((tb_oferta.estado_oferta = ? 
+            AND tb_oferta.tipo_estado = ?) OR (tb_oferta.estado_oferta = ? 
+            AND tb_oferta.tipo_estado = ?))', [$codCliente, 1, 14, 10, 14]);
 
-            // $stmt = $connection->prepare($sql);
-            // $stmt->bindValue(":id_cliente", (int)$codCliente);
-            // $stmt->execute();
-            // $result = $stmt->fetchAll();dd($result);
-            $result = $connection->fetchOne('SELECT COUNT(id) FROM tb_oferta  WHERE id_cliente = ? AND tb_oferta.estado_oferta = ? 
-             AND tb_oferta.tipo_estado = ?', [$codCliente, 1, 14]);
             // Devolver true si hay ofertas y false si no hay
             $tieneOferta = $result['oferta_count'] > 0;
 

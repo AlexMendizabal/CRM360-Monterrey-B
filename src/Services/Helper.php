@@ -328,7 +328,7 @@ class Helper
             if ($traerCodigoVendedor !== false) {
                 $id_vendedor_sap = $traerCodigoVendedor[0]['codigo_sap'];
             }
-           
+
             if (empty($camposFaltantes)) {
 
                 $rubro = isset($data['rubro']) ? $data['rubro'] : null;
@@ -389,7 +389,7 @@ class Helper
                 $stmt->bindValue(":tipo_documento", $tipo_documento);
                 $stmt->execute();
                 $id_cliente = $connection->lastInsertId();
-               /*  dd($id_cliente); */
+                /*  dd($id_cliente); */
 
                 if ($id_cliente > 0) {
                     $message = [
@@ -883,7 +883,7 @@ class Helper
 
             $condition = ['codigo_sap' => (int)$data['codigo_sap']];
             $rowsAffected = $connection->update('TB_VEND', $data_vendedor, $condition);
-          
+
             if (!empty($rowsAffected)) {
                 $message = array(
                     'response' => 200,
@@ -905,42 +905,42 @@ class Helper
     }
 
     public function updateUsuario($connection, $data)
-    {   
+    {
         $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
 
         if (!empty($data_vendedor['ID_ESCR'])) {
-        $data_usuario['id_usua'] = (int)$connection->fetchOne('SELECT ID FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
-        isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
-        $data_ejecutivo['TP_PESS'] = 'F';
-        $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
-        $data_ejecutivo['NM_DEPA'] = 'COMERCIAL';
-        $data_ejecutivo['NM_CARG_FUNC'] = 'PROMOTOR';
-        $data_ejecutivo['ID_MODU'] = '3';
-        isset($data['email']) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
+            $data_usuario['id_usua'] = (int)$connection->fetchOne('SELECT ID FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
+            isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
+            $data_ejecutivo['TP_PESS'] = 'F';
+            $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
+            $data_ejecutivo['NM_DEPA'] = 'COMERCIAL';
+            $data_ejecutivo['NM_CARG_FUNC'] = 'PROMOTOR';
+            $data_ejecutivo['ID_MODU'] = '3';
+            isset($data['email']) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
 
-        $condition = ['ID' => (int)$data_usuario['id_usua']];
-        $rowsAffected = $connection->update('TB_CORE_USUA', $data_ejecutivo, $condition);
+            $condition = ['ID' => (int)$data_usuario['id_usua']];
+            $rowsAffected = $connection->update('TB_CORE_USUA', $data_ejecutivo, $condition);
 
-        if (!empty($rowsAffected)) {
-            $message = array(
-                'response' => 200,
-                'estado' => true,
-                'message' => 'Se actualizo!',
-            );
-        } else {
-            $message = array(
-                'response' => 204,
-                'estado' => false,
-                'message' => 'No se actualizo!',
-            );
-        }
+            if (!empty($rowsAffected)) {
+                $message = array(
+                    'response' => 200,
+                    'estado' => true,
+                    'message' => 'Se actualizo!',
+                );
+            } else {
+                $message = array(
+                    'response' => 204,
+                    'estado' => false,
+                    'message' => 'No se actualizo!',
+                );
+            }
         } else {
             $message = array(
                 'response' => 204,
                 'estado' => false,
                 'message' => 'no existe la sucursal',
             );
-    }
+        }
         return $message;
     }
 
@@ -1548,9 +1548,9 @@ class Helper
 
 
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio)
-    {   
+    {
 
-       /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
+        /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                     inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
                                     where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material */
 
@@ -1592,7 +1592,7 @@ class Helper
                                         AND LP.id = ?
                                         AND ID_CODIGOMATERIAL IN (?)
                                         order by MATE.id_CODIGOMATERIAL asc', [$id_lista_precio, $resp]);
-       
+
         if (count($res) > 0) {
             return $res;
         } else {
@@ -2306,7 +2306,7 @@ class Helper
                 $message = [
                     "CodigoRespuesta" => 200,
                     "Estado" => true,
-                    "Mensaje"=> 'Se registro exitosamente'
+                    "Mensaje" => 'Se registro exitosamente'
                 ];
             } else {
                 $message = [
@@ -2323,8 +2323,7 @@ class Helper
 
     public function actualizaAlmacen($connection, $data)
     {
-        if (!empty($data['codigo_almacen'])) 
-        {
+        if (!empty($data['codigo_almacen'])) {
             $almacen = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE CODIGO_ALMACEN = ?', [$data['codigo_almacen']]);
             $data_id_almacen = (int)$almacen;
 
@@ -2824,7 +2823,7 @@ class Helper
 
 
     public function insertarServicio($ruta, $data)
-    { 
+    {
         $client = HttpClient::create();
         // Define la URL de destino
         $url = $this->url_sap . $ruta;
@@ -2867,7 +2866,7 @@ class Helper
         curl_close($curl);
 
         $responseData = json_decode($response, true);
-       
+
 
         return $responseData;
 
@@ -3466,7 +3465,7 @@ class Helper
             'id_tipo_cliente' => $traerCliente[0]['id_tipo_cliente'],
             'id_situacion' => $traerCliente[0]['situacao'],
             'tipo_cliente' => $tipo_cliente,
-            'tipo_documento' => $tipo_documento 
+            'tipo_documento' => $tipo_documento
         ]);
         $array_final['datos_cliente'] = $array_cliente;
         if (count($array_cliente) > 0) {
@@ -3692,9 +3691,9 @@ class Helper
 
 
     public function autorizacion_estado_sap($connection, $id_oferta)
-    { 
+    {
         $obtenerOferta = $this->buscarOferta($connection, $id_oferta);
-        
+
         $resultSet = $connection->executeQuery('SELECT 
                     TBU.NM_COMP_RAZA_SOCI AS nombres,
                     TB_AUTORIZACIONES.fecha_solicitud as fecha_solicitud,
@@ -3709,7 +3708,7 @@ class Helper
                     id_oferta = ?', [$id_oferta]);
 
         $autorizacion = $resultSet->fetchAssociative();
-        
+
         $oferta = $obtenerOferta['oferta'];
         $detalle_oferta = $obtenerOferta['analitico'];
 
@@ -3743,9 +3742,9 @@ class Helper
             'geolocalizacion' => $oferta['geolocalizacion'],
             'detalle_pedido' => $detalle_of,
         ]);
-        
+
         if (!empty($autorizacion)) {
-           $autorizaciones = [
+            $autorizaciones = [
                 "usuario_gestion" => $autorizacion['nombres'],
                 "fecha_solicitud" => $autorizacion['fecha_solicitud'],
                 "fecha_gestion" => $autorizacion['fecha_gestion'],
@@ -3753,17 +3752,16 @@ class Helper
                 "observacion_ejecutivo" => $autorizacion['descripcion_vend'],
                 "estado" => $autorizacion['estado']
             ];
-            
+
             $arrayOFerta['autorizacion'] =  [$autorizaciones];
-            
         } else {
             $arrayOFerta['autorizacion']  = [];
         }
         try {
             $ruta = "/crearProforma";
-           
+
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
-            
+
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;
             } else {
@@ -4051,6 +4049,39 @@ class Helper
         $stmt->execute();
         $id_ubicacion_agenda = $connection->lastInsertId();
 
-        return $id_ubicacion_agenda > 0; 
+        return $id_ubicacion_agenda > 0;
+    }
+
+    public function actualizarAgenda($connection, $data, int $id)
+    {
+        if (!empty($data)) {           
+
+            $sql = "UPDATE TB_CORE_AGEN_COME SET ";
+            $updates = array();
+
+            foreach ($data as $campo => $valor) {
+                $updates[] = "$campo = :$campo";
+            }
+
+            $sql .= implode(", ", $updates);
+            $sql .= " WHERE id_agenda = :id"; 
+
+            $stmt = $connection->prepare($sql);
+            foreach ($data as $campo => $valor) {
+                $stmt->bindValue(":$campo", $valor);
+            }
+            $stmt->bindValue(":id", $id);
+
+            $stmt->execute();
+
+            $modificado = $stmt->rowCount();
+            if ($modificado > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

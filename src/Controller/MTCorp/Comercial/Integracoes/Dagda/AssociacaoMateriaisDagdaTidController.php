@@ -19,6 +19,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
 {
     use RequestTrait;
     use ResponseTrait;
+    
     /**
      * Consultar associação de Materiais
      * @Route("/comercial/integracoes/dagda/associacao", 
@@ -34,7 +35,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
         try {
             $this->setRequest($request);
             
-         
             $codigoMaterial    = $request->query->get("codigoMaterial");
             $nomMaterial       = $request->query->get("nomMaterial");
             $id_departamento   = $request->query->get("id_dep");
@@ -63,7 +63,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
                 ->innerJoin('CI', 'TB_DEPARTAMENTO', 'DP', 'DP.id = CI.id_departamento')
                 ->orderBy($orderBy, $orderType)
                 ->setFirstResult($offset) // Comienza desde el primer resultado
-                ->setMaxResults($ttRegiPage) // Recupera un máximo de 10 resultados
+                ->setMaxResults($ttRegiPage) // Recupera un máximo resultados
                 ->where('1 = 1');
                 if (!empty($codigoMaterial)) {
                     $queryDescuento->andWhere('DS.codigomaterial like :codigo_material'); 

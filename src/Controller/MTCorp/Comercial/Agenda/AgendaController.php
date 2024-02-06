@@ -271,10 +271,10 @@ class AgendaController extends AbstractController
             "
                 )->fetchAll();
 
-                $data = $connection->executeQuery(
+             /*    $data = $connection->executeQuery(
                     'SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
                     ['id_agenda' => $id]
-                )->fetchAll();
+                )->fetchAll(); */
 
                 if (!empty($res)) {
                     $compromisso = new \stdClass;
@@ -295,8 +295,10 @@ class AgendaController extends AbstractController
                     $compromisso->motivo = $res[0]['MOTIVO'];
                     $compromisso->id_motivo = $res[0]['MOTIVO_REAGENDADO'];
                     $compromisso->direccion = $res[0]['DIRECCION'];
-                    $compromisso->latitud = $data[0]['latitud'];
-                    $compromisso->longitud = $data[0]['longitud'];
+                    $compromisso->latitud = $res[0]['LATITUD'];
+                    $compromisso->longitud = $res[0]['LONGITUD'];
+                    $compromisso->latitud_final = $res[0]['LATITUD_FINAL'];
+                    $compromisso->longitud_final = $res[0]['LONGITUD_FINAL'];
                     $compromisso->codigo_cliente = $res[0]['CODIGO_CLIENTE'];
                     $compromisso->id_status = $res[0]['STATUS'];
                     $compromisso->status = $res[0]['DESC_STATUS'];
@@ -377,6 +379,8 @@ class AgendaController extends AbstractController
             $latitud = '';
             $longitud = '';
             $codigo_cliente = '';
+            $helper = new Helper();
+
 
             $data = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -435,18 +439,24 @@ class AgendaController extends AbstractController
 
             if ($save[0]['MSG'] == 'TRUE') {
                 if (!empty($latitud) && !empty($longitud) && !empty($direccion)) {
+
                     $data_ltlg = [
-                        'id_agenda' => $id_agenda,
-                        'fecha' =>  $fechaFormateada,
-                        'latitud' => $latitud,
-                        'longitud' =>  $longitud
+                        'latitud_inicial' => $latitud,
+                        'longitud_inicial' =>  $longitud
                     ];
-                    $reg = $connection->insert('TB_CORE_AGEN_UB', $data_ltlg);
+                    $reg = $helper->actualizarAgenda($connection, $data_ltlg, (int)  $id_agenda);
+                    if($reg !== false){
+                        $message = array(
+                            'responseCode' => 200,
+                            'estado' => true
+                        );
+                    }else{
+                        $message = array(
+                            'responseCode' => 204,
+                            'estado' => false
+                        );
+                    }
                 }
-                $message = array(
-                    'responseCode' => 200,
-                    'estado' => true
-                );
             } else {
 
                 $message = array(

@@ -116,13 +116,13 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     public function getVendedores(Connection $connection, Request $request)
-    { 
+    {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = $infoUsuario->idVendedor;
             $helper = new Helper();
             $id_usuario = 0;
-
+          
             $traerVendedor = $helper->traerVendedorId($connection, $id_vendedor);
             if ($traerVendedor !== false) {
                 $id_usuario = $traerVendedor[0]['ID_USUA'];
@@ -130,7 +130,6 @@ class VendedorController extends AbstractController
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
             $cargo = $buscarUsuario['NM_CARG_FUNC'];
-        
 
             switch ($cargo) {
                 case 'PROMOTOR':
@@ -153,7 +152,7 @@ class VendedorController extends AbstractController
 
             $stmt->execute();
             $res = $stmt->fetchAll();
-        
+
 
             if (count($res) > 0) {
                 $message = [
@@ -184,7 +183,89 @@ class VendedorController extends AbstractController
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;    }
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/vendedor/lista_app",
+     *  name="comercial.vendedor-lista-app",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getVendedoresApp(Connection $connection, Request $request)
+    {
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $id_vendedor = $infoUsuario->idVendedor;
+            $helper = new Helper();
+            $id_usuario = 0;
+
+            $traerVendedor = $helper->traerVendedorId($connection, $id_vendedor);
+            if ($traerVendedor !== false) {
+                $id_usuario = $traerVendedor[0]['ID_USUA'];
+            }
+
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
+            $cargo = $buscarUsuario['NM_CARG_FUNC'];
+
+
+            switch ($cargo) {
+                case 'PROMOTOR':
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
+                        FROM TB_VEND 
+                        WHERE ID = :id";
+                    break;
+
+                default:
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
+                        FROM TB_VEND 
+                        ORDER BY nombre ASC";
+                    break;
+            }
+
+            $stmt = $connection->prepare($query);
+            if ($cargo == 'PROMOTOR') {
+                $stmt->bindValue(':id',  $id_vendedor);
+            }
+
+            $stmt->execute();
+            $res = $stmt->fetchAll();
+
+
+            if (count($res) > 0) {
+                $message = [
+                    "responseCode" => 200,
+                    "data" => $res,
+                    "success" => true
+                ];
+            } else {
+                $message = [
+                    "responseCode" => 204,
+                    "message" => "No existe el vendedor",
+                    "success" => false
+                ];
+            }
+        } catch (\PDOException $pdoException) {
+            $message = [
+                "responseCode" => $pdoException->getCode(),
+                "message" => $pdoException->getMessage(),
+                "success" => false
+            ];
+        } catch (\Exception $exception) {
+            $message = [
+                "responseCode" => $exception->getCode(),
+                "message" => $exception->getMessage(),
+                "success" => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
 
 
     /**
@@ -637,7 +718,7 @@ class VendedorController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-          
+
             if ($infoUsuario->idVendedor != 88) {
             } else {
                 if ($id == 0) {
@@ -821,34 +902,34 @@ class VendedorController extends AbstractController
     }
 
     /**
-   * @Route(
-   *  "/comercial/vendedor/cliente/ubicacionescliente/{codCliente}",
-   *  name="comercial.vendedor-cliente-ubicacionescliente",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
-   * @return JsonResponse
-   */
-  public function clientUbicacion(Connection $connection, $codCliente)
-  { 
-    $resultado = $connection->fetchAllAssociative('SELECT logradouro, latitude, longitude, codigo_cliente, ubicacion FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$codCliente]);
-    if (!empty($resultado)) {
-       $message = array(
-          "responseCode" => 200,
-          "data" => $resultado,
-          "success" => true
-      );
-    } else {
-        $message = array(
-          "responseCode" => 204,
-          "message" => 'No tienen direccion',
-          "success" => false
-        );
+     * @Route(
+     *  "/comercial/vendedor/cliente/ubicacionescliente/{codCliente}",
+     *  name="comercial.vendedor-cliente-ubicacionescliente",
+     *  methods={"GET"},
+     *  requirements={"codCliente"="\d+"}
+     * )
+     * @return JsonResponse
+     */
+    public function clientUbicacion(Connection $connection, $codCliente)
+    {
+        $resultado = $connection->fetchAllAssociative('SELECT logradouro, latitude, longitude, codigo_cliente, ubicacion FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$codCliente]);
+        if (!empty($resultado)) {
+            $message = array(
+                "responseCode" => 200,
+                "data" => $resultado,
+                "success" => true
+            );
+        } else {
+            $message = array(
+                "responseCode" => 204,
+                "message" => 'No tienen direccion',
+                "success" => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
-    $response = new JsonResponse($message);
-    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-    return $response;
-  }
 }
 
 
