@@ -302,13 +302,13 @@ class CotacoesController extends AbstractController
             $codEmpresa = NULL;
             $codDeposito = NULL;
 
-            $orderBy = 'OFE.id';
-            $orderType = 'ASC';
             $pagina = NULL;
             $registros = NULL;
 
             !empty($params['pagina']) ? $pagina = $params['pagina'] : $pagina = null;
             !empty($params['registros']) ? $registros = $params['registros'] : $registros = null;
+            !empty($params['orderBy']) ? $orderBy = 'OFE.'.$params['orderBy'] : $orderBy = 'OFE.id';
+            !empty($params['orderType']) ? $orderType = $params['orderType'] : $orderType = 'ASC';
 
             $paginaActual =  (int)$pagina; // Página 2
             $tamanoPagina = (int)$registros; // 10 resultados por página
@@ -1720,25 +1720,16 @@ class CotacoesController extends AbstractController
             $result = [];
 
             if (isset($codMaterial)) {
-                /* $query1 =  "SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, 
-                                    MATE.CODIGOMATERIAL AS codigo_material, 
-                                    MATE.DESCRICAO AS nombre_material 
-                            FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = :id_material";
-                $buscar_material_filtro = $connection->prepare($query1);
-                $buscar_material_filtro->bindValue('id_material', $codMaterial);
-                $buscar_material_filtro->execute();
-                $res1 = $buscar_material_filtro->fetchAll(); */
-
+             
                 $res1 = $connection->fetchAssociative('SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, 
                                                                     MATE.CODIGOMATERIAL AS codigo_material, 
                                                                     MATE.DESCRICAO AS nombre_material 
                                                             FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = ?', [$codMaterial]);
-
                 if (count($res1) > 0) {
                     $material_filtro = $res1;
-                    //dd($id_vendedor);
+               
                     $filtrar_material =  $helper->filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio);
-                    //dd($filtrar_material);
+                   
                     if ($filtrar_material != false) {
                         $result['materiales'] = $filtrar_material;
                         $result['filtro'] =  $res1;

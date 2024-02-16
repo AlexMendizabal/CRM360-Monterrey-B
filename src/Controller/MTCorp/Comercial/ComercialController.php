@@ -550,27 +550,17 @@ class ComercialController extends AbstractController
      * @return JsonResponse
      */
     public function getClasses(Connection $connection, Request $request)
-    {   
-        /**
-         * Enviar: 
-         *  idLinha - (opcional),
-         *  idCLasse - (opcional),
-         *  descClasse - (opcional),
-         *  descLinha - (opcional)
-         */
+    {  
         try {
             $params = $request->query->all();
-           
             /* $idLinha = isset($params['idLinha']) ? $params['idLinha'] : 0; */
             $idClasse = isset($params['idClasse']) ? $params['idClasse'] : 0;
             $dsClasse = isset($params['descClasse']) ? $params['descClasse'] : '';
-            $dsLinha = isset($params['descLinha']) ? $params['descLinha'] : '';
-
+           
             $classes = $connection->query("
                 EXEC [PRC_MATE_CLASS_CONS]
                     @ID_CLASSE = {$idClasse},
-                    @DS_CLASSE = '{$dsClasse}',
-                    @DS_LINHA = '{$dsLinha}'
+                    @DS_CLASSE = '{$dsClasse}'
             ")->fetchAll();
 
             if (count($classes) > 0) {
@@ -581,7 +571,7 @@ class ComercialController extends AbstractController
             } else {
                 $message = array(
                     'responseCode' => 204,
-                    'result' => 'Nenhum registro encontrado.'
+                    'result' => 'No se encontraron registros.'
                 );
             }
         } catch (\Exception $e) {

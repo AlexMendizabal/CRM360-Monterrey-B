@@ -13,6 +13,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
+use App\Controller\MTCorp\Comercial\ComercialController;
 use PDO;
 use App\Services\Helper;
 
@@ -340,66 +341,21 @@ class EstoqueController extends AbstractController
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
-              /*   $params = $request->query->all();
-                $id_material = $params['id_material'] ?? '';
-                $id_lista_precio = $params['id_lista'] ?? '';
-                $registros = $params['registros'] ?? '';
-                $vendedor = $infoUsuario->idVendedor;
-                //dd($infoUsuario);
-                $conditions = [];
-                $bindings = [];
-                if (!empty($id_material) && $id_material !== 'null' && $id_material > 0) {
-                    $conditions[] = "MATE.ID_CODIGOMATERIAL = :id_material";
-                    $bindings['id_material'] = $id_material;
-                }
-                if (!empty($id_lista_precio) && $id_lista_precio !== 'null' && $id_lista_precio > 0) {
-                    $conditions[] = "LP.id = :id_lista";
-                    $bindings['id_lista'] = $id_lista_precio;
-                }
-                if (!empty($vendedor) && $vendedor !== 'null' && $vendedor > 0) {
-                    $conditions[] = "AV.id_vendedor = :id_vendedor";
-                    $bindings['id_vendedor'] = $vendedor;
-                }
-                $conditions[] = 'DEP.id = LP.id_departamento';
-                $query = "SELECT MATE.ID_CODIGOMATERIAL as id_material, PM.id as id_precio_material, MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
-                DEPO.ID AS id_almacen, PM.peso AS peso, UNI.id as id_unidad,
-                UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
-                SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
-				BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-                FROM TB_MATE MATE 
-                LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
-                LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
-				LEFT JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
-				LEFT JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
-                LEFT JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
-                LEFT JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
-                LEFT JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-                LEFT JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-				LEFT JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
-				LEFT JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
-				LEFT JOIN TB_ALMACEN_VENDEDOR AV ON DEPO.id = AV.id_almacen
-                ";
-
-                if (!empty($conditions)) {
-                    $conditionString = implode(' AND ', $conditions);
-                    $query .= " WHERE $conditionString";
-                }
                 
-                $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
-                OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
-                $stmt = $connection->prepare($query);
-                $stmt->execute();
-                $res = $stmt->fetchAll(); */
-
-
-                //dd($res);
             $params = $request->query->all();
             $id_material = $params['id_material'] ?? '';
             $id_lista_precio = $params['id_lista'] ?? '';
             $registros = $params['registros'] ?? '';
             $estado_material = 1;
             $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
-               $query = "	SELECT
+
+            $ComercialController = new ComercialController();
+            
+            $upsell = $ComercialController->filtrarMaterialContratipo($connection, $id_material, 1, $id_lista_precio, $id_vendedor);
+                
+            $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio);
+                
+            $query = "	SELECT
                distinct 
               MAT.ID_CODIGOMATERIAL as id_material, 
               PM.id as id_precio_material,
@@ -417,7 +373,7 @@ class EstoqueController extends AbstractController
               MONE.nombre_moneda,
               'A' AS codigo_situacion,
               MAT.largo_material as largo_material
-               from TB_VEND VEND
+            from TB_VEND VEND
                  inner join tb_Escr as SCL on SCL.id = VEND.ID_ESCR
                  inner join tb_ciudad as CD on CD.iD = SCL.id_ciudad
                  inner join TB_DEPO_FISI_ESTO as DEPO on DEPO.id_ciudad = CD.id
@@ -439,11 +395,14 @@ class EstoqueController extends AbstractController
             $buscar_material->bindValue('CODIGOMATERIAL',  $id_material );
             $buscar_material->execute();
             $res = $buscar_material->fetchAll();
-            
+
+
                 if (count($res) > 0) {
                     $message = array(
                         'responseCode' => 200,
-                        'result' => $res,
+                        'material' => $res,
+                        'upsell' => $upsell,
+                        'crosell' => $crosell,
                         'estado' => true
                     );
                 } else {

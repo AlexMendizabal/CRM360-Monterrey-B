@@ -112,7 +112,7 @@ class DashboardVendedorController extends AbstractController
                 @ID_PARA = '1'
             "
           )->fetchAll();     
-          
+        
           if ((count($faturasCorrentePassado) > 0) && (count($faturasCorrentePresente) > 0)) {
             $totalPassado = 0;
             $totalPresente = 0;
@@ -1338,7 +1338,7 @@ class DashboardVendedorController extends AbstractController
    * @return JsonResponse
    */
   public function getComissaoRepresentante(Connection $connection, Request $request, $idVendedor)
-    {dd($request);
+    {
         try {
 
             $res = $connection->query("

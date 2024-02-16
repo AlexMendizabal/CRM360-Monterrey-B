@@ -1557,7 +1557,7 @@ class Helper
         $resp =  $connection->fetchOne('SELECT TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                         inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
                                         where TB_CROS_SELL.ID_MATE = ?', [$codMaterial]);
-
+        $codigo = "A";
         $res = $connection->fetchAllAssociative('SELECT distinct
                                                  MATE.ID_CODIGOMATERIAL as id_material,
                                                 PM.id as id_precio_material, 
@@ -1574,6 +1574,7 @@ class Helper
                                                 PM.precio AS precio_neto, 
                                                 (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, 
                                                 MONE.nombre_moneda, 
+                                                ?  AS codigo_situacion,
                                                 BASE.id_classe AS id_linea, 
                                                 BASE.descricao as nombre_linea,
                                                 MATE.largo_material as largo_material
@@ -1591,7 +1592,7 @@ class Helper
                                         WHERE  DEPO.ESTADO_DEPOSITO = 1 
                                         AND LP.id = ?
                                         AND ID_CODIGOMATERIAL IN (?)
-                                        order by MATE.id_CODIGOMATERIAL asc', [$id_lista_precio, $resp]);
+                                        order by MATE.id_CODIGOMATERIAL asc', [ $codigo, $id_lista_precio, $resp]);
 
         if (count($res) > 0) {
             return $res;
