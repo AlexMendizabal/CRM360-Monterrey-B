@@ -294,7 +294,7 @@ class CotacoesController extends AbstractController
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
-
+            
             $dataInicial = NULL;
             $dataFinal = NULL;
             $codSituacao = 0;
@@ -318,8 +318,10 @@ class CotacoesController extends AbstractController
 
             isset($params['tipoData']) ? $tipoData = $params['tipoData'] : NULL;
             isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
-            if (isset($params['dataInicial2'])) {
-                $fechaFinal = new \DateTime($params['dataInicial2']);
+            isset($params['dataInicial2']) ? $fechaFinal = \DateTime::createFromFormat('d/m/Y', $params['dataInicial2']) : NULL;
+
+            if (!empty($fechaFinal)) {
+                // Solo si la fecha final se pudo parsear correctamente
                 $fechaFinal->modify('+1 day');
                 $dataFinal = $fechaFinal->format('Y-m-d');
             } else {
@@ -354,7 +356,7 @@ class CotacoesController extends AbstractController
 
                 $fechaFinal = date('Y-m-d', strtotime($dataFinal));
             }
-
+            
             $queryOferta = $connection->CreateQueryBuilder();
             $queryOferta->select(
                 'OFE.id as id_oferta',
