@@ -441,18 +441,20 @@ class AutorizacionesController extends AbstractController
             $helper = new Helper();
             $query_oferta = "SELECT TB_OFERTA.id AS id_oferta, 
                                 CONCAT(TB_VEND.NM_VEND, ' ', TB_VEND.NM_RAZA_SOCI) AS nombre_vendedor,
-                                monto_total, 
-                                peso_total, 
-                                descuento_total, 
-                                cantidad_total, 
-                                fecha_solicitud, 
-                                descripcion_vend,
+                                TB_OFERTA.monto_total, 
+                                TB_OFERTA.peso_total, 
+                                TB_OFERTA.descuento_total, 
+                                TB_OFERTA.cantidad_total, 
+                                tb_autorizaciones.fecha_solicitud, 
+                                tb_autorizaciones.descripcion_vend,
                                 tb_autorizaciones.id AS id_autorizacion,
                                 tb_autorizaciones.estado,
+                                Tb_detalle_auto.desc_vendedor as desc_usuario,
                                 MTCORP_MODU_CLIE_BASE.prim_nome AS nombre_cliente
                                 FROM TB_OFERTA
                                 inner JOIN TB_VEND ON TB_OFERTA.id_vendedor = TB_VEND.ID
                                 inner JOIN tb_autorizaciones ON TB_OFERTA.id = tb_autorizaciones.id_oferta 
+                                left join Tb_detalle_auto on Tb_detalle_auto.id_autorizacion = tb_autorizaciones.id
                                 inner JOIN MTCORP_MODU_CLIE_BASE ON TB_OFERTA.id_cliente = MTCORP_MODU_CLIE_BASE.id_cliente
                                 WHERE tb_autorizaciones.id = :id";
             $statement = $connection->prepare($query_oferta);

@@ -778,7 +778,7 @@ class DashboardVendedorController extends AbstractController
    * @return JsonResponse
    */
   public function getCarteiraClientes(Connection $connection, Request $request, $idEscritorio, $idVendedor)
-  { 
+  {  
     if ($request->isMethod('GET')) {
       try {
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -815,17 +815,25 @@ class DashboardVendedorController extends AbstractController
         }
 
         if ($podeAcessar) {
-         
-          $res = $connection->query(
-            "
+           // Obtener la fecha actual
+          $fechaActual = new \DateTime();
+          
+          // Retroceder hasta el año 2016
+          $fechaInicio = new \DateTime('2016-01-01');
+          
+          // Convertir las fechas al formato necesario (Y-m-d)
+          $fechaInicioStr = $fechaInicio->format('Y-m-d');
+          $fechaActualStr = $fechaActual->format('Y-m-d');
+          
+          $res = $connection->query( 
+              "
               EXEC [PRC_MTCORP_MODU_COME_CLIE_CONS]
-              @DTINI = '',
-              @DTFIM = '',
+              @DTINI = '{$fechaInicioStr}',
+              @DTFIM = '{$fechaActualStr}',
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
-            "
+              "
           )->fetchAll();
-         
           if (count($res) > 0) {
             $ativos = new \stdClass;
             $ativos->tipo = 'Ativos';
@@ -1070,7 +1078,7 @@ class DashboardVendedorController extends AbstractController
   }
 
   public function clientesInativar(Connection $connection, $idEscritorio, $idVendedor)
-  {
+  { 
     $clientes = $connection->query(
       "
         EXEC [PRC_MTCORP_MODU_COME_CLIE_INAT]
@@ -1079,7 +1087,7 @@ class DashboardVendedorController extends AbstractController
         @MODULO = '1'
       "
     )->fetchAll();
-    
+    dd($clientes);
     if (count($clientes) > 0) {
       return $clientes;
     } else {

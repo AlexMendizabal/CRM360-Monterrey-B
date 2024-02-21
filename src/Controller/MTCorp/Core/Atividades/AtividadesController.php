@@ -41,7 +41,7 @@ class AtividadesController
             $situacao               = $request->query->get("situacao");
             $pagina                 = $request->query->get("pagina");
             $registrosPorPagina     = $request->query->get("registrosPorPagina");
-            $orderBy                = $request->query->get("orderBy");
+            $orderBy                = "nm_ativ";
             $orderType              = $request->query->get("orderType");
             $inPagina               = $request->query->get("inPagina");
             

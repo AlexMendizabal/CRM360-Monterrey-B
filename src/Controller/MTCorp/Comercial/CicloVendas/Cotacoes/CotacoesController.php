@@ -318,15 +318,15 @@ class CotacoesController extends AbstractController
 
             isset($params['tipoData']) ? $tipoData = $params['tipoData'] : NULL;
             isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
-            isset($params['dataInicial2']) ? $fechaFinal = \DateTime::createFromFormat('d/m/Y', $params['dataInicial2']) : NULL;
+            isset($params['dataInicial2']) ? $fechaFinal = $params['dataInicial2'] : NULL;
 
-            if (!empty($fechaFinal)) {
+          /*   if (!empty($fechaFinal)) {
                 // Solo si la fecha final se pudo parsear correctamente
                 $fechaFinal->modify('+1 day');
                 $dataFinal = $fechaFinal->format('Y-m-d');
             } else {
                 $dataFinal = NULL;
-            }
+            } */
 
             isset($params['status']) ? $codSituacao = $params['status'] : NULL;
             isset($params['id_oferta']) ? $nrPedido = $params['id_oferta'] : NULL;
@@ -344,17 +344,13 @@ class CotacoesController extends AbstractController
                     $codVendedor =  (int)$infoUsuario->idVendedor;
                 }
             }
-
             /* Fecha Inicial */
             if (!empty($dataInicial)) {
-
-                $fechaInicial = date('Y-m-d', strtotime($dataInicial));
+                $fechaInicial1 = date('Y-m-d', strtotime($dataInicial));
             }
-
             /* Fecha Final */
-            if (!empty($dataFinal)) {
-
-                $fechaFinal = date('Y-m-d', strtotime($dataFinal));
+            if (!empty($fechaFinal)) {
+                $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
             }
             
             $queryOferta = $connection->CreateQueryBuilder();
@@ -396,14 +392,14 @@ class CotacoesController extends AbstractController
                 ->setFirstResult($offset) // Comienza desde el primer resultado
                 ->setMaxResults($registros) // Recupera un máximo resultados
                 ->where('1 = 1');
-            if (!empty($dataInicial)) {
-                $queryOferta->andWhere('OFE.fecha_creacion >= :fecha_inicial');
-                $queryOferta->setParameter('fecha_inicial', $fechaInicial);
-            }
-            if (!empty($dataFinal)) {
-                $queryOferta->andWhere('OFE.fecha_creacion <= :fecha_final');
-                $queryOferta->setParameter('fecha_final', $fechaFinal);
-            }
+                if (!empty($fechaInicial1)) {
+                    $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
+                    $queryOferta->setParameter('fecha_inicial', $fechaInicial1);
+                }
+                if (!empty($fechaFinal1)) {
+                    $queryOferta->andWhere('OFE.fecha_inicial <= :fecha_final');
+                    $queryOferta->setParameter('fecha_final', $fechaFinal1);
+                }
             if (!empty($codSituacao)) {
                 $queryOferta->andWhere('OFE.tipo_estado = :codSituacao');
                 $queryOferta->setParameter('codSituacao', $codSituacao);
@@ -425,7 +421,7 @@ class CotacoesController extends AbstractController
                 $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
                 $queryOferta->setParameter('id_vendedor',  (int)$codVendedor);
             }
-
+       
             $stmt = $queryOferta->execute();
             $res = $stmt->fetchAllAssociative();
 
