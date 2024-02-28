@@ -91,8 +91,8 @@ class PesquisaController extends AbstractController
             $carteira = 'S';
             $pagina = 1;
             $registros = 50;
-            $orderBy = 'codCliente';
-            $orderType = 'desc';
+            $orderBy = '';
+            $orderType = '';
 
 
 
@@ -135,10 +135,10 @@ class PesquisaController extends AbstractController
                     $id_vendedor =  (int)$infoUsuario->idVendedor;
                 }
             }
-
-            //dd($id_vendedor);
-
-            $resListaSr = $connection->query(
+            
+            
+      //dd($params);
+            $resLista = $connection->query(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 1, 
@@ -153,14 +153,15 @@ class PesquisaController extends AbstractController
                     @ID_CART = '{$carteira}',
                     @ID_PAGI = '{$pagina}',
                     @QT_REGI = '{$registros}',
-                    @DS_ORDE = '{$order}'
+                    @DS_ORDE = '{$orderType}'
                 " . $carteiraParam
             )->fetchAll();
+            
 
-            //dd($resListaSr);
-            if (count($resListaSr) > 0) {
-                $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
-            }
+           //dd($resListaSr);
+            // if (count($resListaSr) > 0) {
+            //     $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
+            // }
 
 
             //dd($resLista);

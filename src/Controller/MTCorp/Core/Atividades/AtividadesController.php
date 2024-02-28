@@ -93,7 +93,6 @@ class AtividadesController
             $stmt->bindValue(":inTotalRegistros",       "0");
             $stmt->execute();
             $response = $stmt->fetchAllAssociative();
-
            
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);

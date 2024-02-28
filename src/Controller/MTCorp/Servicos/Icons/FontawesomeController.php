@@ -35,16 +35,10 @@ class FontawesomeController
             $qtItensPorPagina = $request->query->get("qtItensPorPagina");
             $class            = $request->query->get("classe");
 
-            $query = <<<SQL
-        EXECUTE PRC_ICON_FOAW
-          @parametro          = 2
-          ,@pagina            = '$pagina'
-          ,@qtItensPorPagina  = '$qtItensPorPagina'
-          ,@class             = '$class'
-      SQL;
-
+            $query = "SELECT id_icon_foaw , class as classe FROM tb_icon_foaw";
+            
             $icons = $connection->query($query)->fetchall();
-
+          
             if (is_array($icons)) {
                 if (count($icons)) {
                     $code = Response::HTTP_OK;
@@ -57,15 +51,12 @@ class FontawesomeController
 
             $response["icones"] = $icons;
 
-            $query = <<<SQL
-                EXECUTE PRC_ICON_FOAW
-                    @parametro          = 3
-                    ,@class             = '$class'
-            SQL;
+            $query = "SELECT id_icon_foaw, class as classe FROM tb_icon_foaw";
 
             $qtIcones = $connection->query($query)->fetch();
 
             $response["qtIcones"] = isset($qtIcones["qtIcones"]) ? $qtIcones["qtIcones"] : 0;
+
         } catch (\Throwable $th) {
             $code = Response::HTTP_BAD_REQUEST;
             $response = [

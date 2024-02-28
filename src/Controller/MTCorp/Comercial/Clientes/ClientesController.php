@@ -131,6 +131,51 @@ class ClientesController extends AbstractController
 
     /**
      * @Route(
+     *  "/comercial/clientes/todosclientes/{id}",
+     *  name="comercial.clientes-todosclientes",
+     *  methods={"GET"},
+     *  requirements={"id"="\d+"}
+     * )
+     * @return JsonResponse
+     */
+    /* public function getClientesAll(Connection $connection, Request $request, $id)
+    {
+        //dd($id);
+        try {
+
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $helper = new Helper();
+            $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula);
+            
+            $NR_MATR = $infoUsuario->matricula;
+            $micliente = $request->query->get("MI_NM_CLIE");
+            $cliente   = $request->query->get("NM_CLIE");
+            $situacao = 1;
+
+            if($id==1 && $datosUsuario[0]['NM_CARG_FUNC'] == 'PROMOTOR')
+            {
+                $res = $connection->query("
+                EXECUTE [PRC_CLIE_CONS5]
+                     @ID_PARAM = 6
+                    ,@ID_SITU = '{$situacao}'
+                    ,@NR_MATR = '{$NR_MATR }'
+                ")->fetchAll();
+         
+            }
+            else
+            {
+                $res = $connection->query("
+                EXECUTE [PRC_CLIE_CONS5]
+                     @ID_PARAM = 6
+                    ,@ID_SITU = '{$situacao}'
+                ")->fetchAll();
+            }
+        }
+    } */
+
+    /**
+     * @Route(
      *  "/comercial/clientes/verificar-cpf-cnpj/{documento}",
      *  name="comercial.clientes-verificar-cpf-cnpj",
      *  methods={"GET"},

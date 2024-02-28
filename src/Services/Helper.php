@@ -122,6 +122,7 @@ class Helper
                 "idEscritorio" => $usuario[0]['ID_ESCAP'],
                 "nomeCompleto"  => $usuario[0]['NM_COMP_RAZA_SOCI'],
                 "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
+                "nomeCargo" =>$usuario[0]['NM_CARG_FUNC'],
                 "moduloPrincipal" => $modulo_principal
             );
             $devolverArray =  base64_encode(json_encode($datos));

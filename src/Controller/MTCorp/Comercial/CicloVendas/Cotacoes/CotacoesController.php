@@ -255,7 +255,7 @@ class CotacoesController extends AbstractController
         try {
             $params = $request->query->all();
             isset($params['status']) ? $codSituacao = $params['status'] : NULL;
-            
+
             $queryClient = $connection->CreateQueryBuilder();
             $queryClient
                 ->select('MCB.id_cliente as id_cliente', 'prim_nome as nombre')
@@ -263,15 +263,15 @@ class CotacoesController extends AbstractController
                 ->from('TB_OFERTA', 'TBO')
                 ->innerJoin('TBO', 'MTCORP_MODU_CLIE_BASE', 'MCB', 'MCB.id_cliente = TBO.id_cliente')
                 ->where('1 = 1');
-                if (!empty($codSituacao)) {
-                    $queryClient->andWhere('OFE.tipo_estado = :codSituacao');
-                    $queryClient->setParameter('codSituacao', $codSituacao);
-                }
+            if (!empty($codSituacao)) {
+                $queryClient->andWhere('OFE.tipo_estado = :codSituacao');
+                $queryClient->setParameter('codSituacao', $codSituacao);
+            }
             $response = $queryClient->execute()->fetchAll();
             if (empty($response)) {
                 return (new FunctionsController)->Retorno(false, "La solicitud no devolvió información", null, Response::HTTP_NO_CONTENT);
             } else
-                return (new FunctionsController)->Retorno(true, null, $response , Response::HTTP_OK);
+                return (new FunctionsController)->Retorno(true, null, $response, Response::HTTP_OK);
         } catch (\Throwable $th) {
             return (new FunctionsController)->Retorno(false, $th->getMessage() . "Se produjo un error al procesar la solicitud.", null, Response::HTTP_BAD_REQUEST);
         }
@@ -294,7 +294,8 @@ class CotacoesController extends AbstractController
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
-            
+
+
             $dataInicial = NULL;
             $dataFinal = NULL;
             $codSituacao = 0;
@@ -307,20 +308,18 @@ class CotacoesController extends AbstractController
 
             !empty($params['pagina']) ? $pagina = $params['pagina'] : $pagina = null;
             !empty($params['registros']) ? $registros = $params['registros'] : $registros = null;
-            !empty($params['orderBy']) ? $orderBy = 'OFE.'.$params['orderBy'] : $orderBy = 'OFE.id';
-            !empty($params['orderType']) ? $orderType = $params['orderType'] : $orderType = 'ASC';
+            !empty($params['orderBy']) ? $orderBy = 'OFE.' . $params['orderBy'] : $orderBy = 'OFE.id';
+            !empty($params['orderType']) ? $orderType = $params['orderType'] : $orderType = 'DESC';
 
             $paginaActual =  (int)$pagina; // Página 2
             $tamanoPagina = (int)$registros; // 10 resultados por página
-
-            // Calcula el offset (desplazamiento)
             $offset = ($paginaActual - 1) * $tamanoPagina;
 
             isset($params['tipoData']) ? $tipoData = $params['tipoData'] : NULL;
             isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
             isset($params['dataInicial2']) ? $fechaFinal = $params['dataInicial2'] : NULL;
 
-          /*   if (!empty($fechaFinal)) {
+            /*   if (!empty($fechaFinal)) {
                 // Solo si la fecha final se pudo parsear correctamente
                 $fechaFinal->modify('+1 day');
                 $dataFinal = $fechaFinal->format('Y-m-d');
@@ -352,7 +351,8 @@ class CotacoesController extends AbstractController
             if (!empty($fechaFinal)) {
                 $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
             }
-            
+
+
             $queryOferta = $connection->CreateQueryBuilder();
             $queryOferta->select(
                 'OFE.id as id_oferta',
@@ -392,14 +392,15 @@ class CotacoesController extends AbstractController
                 ->setFirstResult($offset) // Comienza desde el primer resultado
                 ->setMaxResults($registros) // Recupera un máximo resultados
                 ->where('1 = 1');
-                if (!empty($fechaInicial1)) {
-                    $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
-                    $queryOferta->setParameter('fecha_inicial', $fechaInicial1);
-                }
-                if (!empty($fechaFinal1)) {
-                    $queryOferta->andWhere('OFE.fecha_inicial <= :fecha_final');
-                    $queryOferta->setParameter('fecha_final', $fechaFinal1);
-                }
+            if (!empty($fechaInicial1)) {
+                $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
+                $queryOferta->setParameter('fecha_inicial', $fechaInicial1);
+            }
+            if (!empty($fechaFinal1)) {
+                $queryOferta->andWhere('OFE.fecha_final <= :fecha_final');
+                $queryOferta->setParameter('fecha_final', $fechaFinal1);
+            }
+
             if (!empty($codSituacao)) {
                 $queryOferta->andWhere('OFE.tipo_estado = :codSituacao');
                 $queryOferta->setParameter('codSituacao', $codSituacao);
@@ -421,7 +422,7 @@ class CotacoesController extends AbstractController
                 $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
                 $queryOferta->setParameter('id_vendedor',  (int)$codVendedor);
             }
-       
+
             $stmt = $queryOferta->execute();
             $res = $stmt->fetchAllAssociative();
 
@@ -429,7 +430,7 @@ class CotacoesController extends AbstractController
                 $respo = $this->postClienteOferta($connection, $request);
                 $content = $respo->getContent();
                 $data = json_decode($content, true);
-             
+
                 $message = array(
                     'responseCode' => 200,
                     'result' => $res,
@@ -567,47 +568,50 @@ class CotacoesController extends AbstractController
 
             $query_oferta =
                 "SELECT
-                 OFE.id AS id_oferta,
-                OFE.nombre_oferta AS nombre_oferta,
-                FORMAT(OFE.fecha_inicial, 'dd-MM-yyyy') AS fecha_inicial,
-                FORMAT(OFE.fecha_final, 'dd-MM-yyyy') AS fecha_final,
-                FORMAT(OFE.fecha_creacion, 'dd-MM-yyyy') AS fecha_creacion,
-                OFE.cantidad_total as cantidad_total,
-                OFE.monto_total_bruto as monto_total_bruto,
-                OFE.monto_total as monto_total,
-                OFE.descuento_total AS descuento_total,
-                OFE.observacion AS observacion,
-                OFE.latitud AS latitud,
-                OFE.longitud AS longitud,
-                OFE.codigo_oferta AS codigo_oferta,
-                OFE.peso_total AS peso_total,
-                OFE.tipo_estado,
-                OFE.estado_oferta,
-                OFE.descripcion,
-                CLIE.prim_nome AS nombre_cliente,
-                CLIE.id_cliente AS id_cliente,
-                CLIE.codigo_cliente AS codigo_cliente,
-                CLIE.email_nfe AS e_mail,
-                CLIE.celular AS celular_clie, CONT.ds_cont AS nombre_cont,ME.id AS id_modo_entrega,
-                ME.nombre_modo_entrega AS nombre_modo_entrega, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS nombre_vendedor,
-                LP.nombre_lista AS nombre_lista,
-				DAU.id_usuario as usuario,
-				AU.fecha_gestion as fecha_gestion,
-				CU.NM_COMP_RAZA_SOCI as gestor,
-				AU.descripcion_vend as obs_solicitante,
-				DAU.desc_vendedor as obs_gestor
+                OFE.id AS id_oferta,
+               OFE.nombre_oferta AS nombre_oferta,
+               FORMAT(OFE.fecha_inicial, 'dd-MM-yyyy') AS fecha_inicial,
+               FORMAT(OFE.fecha_final, 'dd-MM-yyyy') AS fecha_final,
+               FORMAT(OFE.fecha_creacion, 'dd-MM-yyyy') AS fecha_creacion,
+               OFE.cantidad_total as cantidad_total,
+               OFE.monto_total_bruto as monto_total_bruto,
+               OFE.monto_total as monto_total,
+               OFE.descuento_total AS descuento_total,
+               OFE.observacion AS observacion,
+               OFE.latitud AS latitud,
+               OFE.longitud AS longitud,
+               OFE.codigo_oferta AS codigo_oferta,
+               OFE.peso_total AS peso_total,
+               OFE.tipo_estado,
+               OFE.estado_oferta,
+               OFE.descripcion,
+               CLIE.prim_nome AS nombre_cliente,
+               CLIE.id_cliente AS id_cliente,
+               CLIE.codigo_cliente AS codigo_cliente,
+               CLIE.email_nfe AS e_mail,
+               CLIE.celular AS celular_clie, 
+               CONT.ds_cont AS nombre_cont,
+               ME.id AS id_modo_entrega,
+               ME.nombre_modo_entrega AS nombre_modo_entrega, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) AS nombre_vendedor,
+               VEND.id AS id_vendedor,
+               LP.nombre_lista AS nombre_lista,
+               DAU.id_usuario as usuario,
+               AU.fecha_gestion as fecha_gestion,
+               CU.NM_COMP_RAZA_SOCI as gestor,
+               AU.descripcion_vend as obs_solicitante,
+               DAU.desc_vendedor as obs_gestor
 
-                FROM TB_OFERTA OFE 
-                    INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
-                    INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
-                    left JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
-                    INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
-                    left JOIN TB_CLIE_CONT CONT ON OFE.id_persona_contacto = CONT.id_cont
-                    left JOIN tb_cierre_oferta CO ON OFE.tipo_estado = CO.id
-					LEFT JOIN tb_autorizaciones AU ON OFE.id = AU.id_oferta
-					LEFT JOIN tb_detalle_auto DAU on DAU.id_autorizacion = AU.id
-					LEFT JOIN TB_CORE_USUA CU ON CU.ID = DAU.id_usuario		
-                WHERE  OFE.id = :id_oferta";
+               FROM TB_OFERTA OFE 
+                   INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
+                   INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
+                   left JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+                   INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
+                   left JOIN TB_CLIE_CONT CONT ON OFE.id_persona_contacto = CONT.id_cont
+                   left JOIN tb_cierre_oferta CO ON OFE.tipo_estado = CO.id
+                   LEFT JOIN tb_autorizaciones AU ON OFE.id = AU.id_oferta
+                   LEFT JOIN tb_detalle_auto DAU on DAU.id_autorizacion = AU.id
+                   LEFT JOIN TB_CORE_USUA CU ON CU.ID = DAU.id_usuario		
+               WHERE  OFE.id = :id_oferta";
             $stmt1 = $connection->prepare($query_oferta);
             $stmt1->bindValue(':id_oferta', $tipoData);
             $stmt1->execute();
@@ -1718,16 +1722,16 @@ class CotacoesController extends AbstractController
             $result = [];
 
             if (isset($codMaterial)) {
-             
+
                 $res1 = $connection->fetchAssociative('SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, 
                                                                     MATE.CODIGOMATERIAL AS codigo_material, 
                                                                     MATE.DESCRICAO AS nombre_material 
                                                             FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = ?', [$codMaterial]);
                 if (count($res1) > 0) {
                     $material_filtro = $res1;
-               
+
                     $filtrar_material =  $helper->filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio);
-                   
+
                     if ($filtrar_material != false) {
                         $result['materiales'] = $filtrar_material;
                         $result['filtro'] =  $res1;
@@ -2804,7 +2808,7 @@ class CotacoesController extends AbstractController
 
             if ($sapresp['CodigoRespuesta'] == 200) {
                 //$data_oferta['codigo_sap'] = $sapresp['Mensaje'];
-                $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => $sapresp['Mensaje']], ['id' => (int) $data_oferta['id_oferta']]);
+                $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => $sapresp['Oferta']], ['id' => (int) $data_oferta['id_oferta']]);
                 $message = [
                     "responseCode" => 200,
                     "message" => 'Registro Correctamente',
@@ -3263,24 +3267,38 @@ class CotacoesController extends AbstractController
     {
         $params = json_decode($request->getContent(), true);
         $helper = new Helper();
+        $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
         isset($params['codVendedor']) ? $id_vendedor  = $params['codVendedor'] : NULL;
         try {
-            $verificarOferta = $helper->verificarOferta($connection, $id_vendedor);
-            if ($verificarOferta === true) {
-                $message = [
-                    'responseCode' => 200,
-                    'message' => 'El usuario tiene ofertas pendientes de gestión.',
-                    'success' => true,
-                    'pendiente' => true,
-                ];
-            } else {
+
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+            if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+                $verificarOferta = $helper->verificarOferta($connection, $id_vendedor);
+                if ($verificarOferta === true) {
+                    $message = [
+                        'responseCode' => 200,
+                        'message' => 'El usuario tiene ofertas pendientes de gestión.',
+                        'success' => true,
+                        'pendiente' => true,
+                    ];
+                } else {
+                    $message = [
+                        'responseCode' => 204,
+                        'message' => 'El usuario no tiene ofertas pendientes de gestion.',
+                        'success' => false,
+                        'pendiente' => false,
+
+                    ];
+                }
+            }else{
                 $message = [
                     'responseCode' => 204,
                     'message' => 'El usuario no tiene ofertas pendientes de gestion.',
                     'success' => false,
                     'pendiente' => false,
 
-                ];
+                ]; 
             }
         } catch (\Exception $e) {
             $message = [

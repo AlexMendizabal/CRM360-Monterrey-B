@@ -358,17 +358,36 @@ class VendedorController extends AbstractController
 
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
+            $helper = new Helper();
+            $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula);
+            
+            $NR_MATR = $infoUsuario->matricula;
+            $micliente = $request->query->get("MI_NM_CLIE");
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
 
-            $res = $connection->query("
+            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 'PROMOTOR')
+            {
+                $res = $connection->query("
+                EXECUTE [PRC_CLIE_CONS5]
+                     @ID_PARAM = 6
+                    ,@NM_CLIE = '{$micliente }'
+                    ,@ID_SITU = '{$situacao}'
+                    ,@NR_MATR = '{$NR_MATR }'
+                ")->fetchAll();
+         
+            }
+            else
+            {
+                $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]
                      @ID_PARAM = 6
                     ,@NM_CLIE = '{$cliente}'
                     ,@ID_SITU = '{$situacao}'
-            ")->fetchAll();
-
+                ")->fetchAll();
+            }
+        
+             
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                 foreach ($res as $re) {
                     if (empty($re["nombre_factura"])) {
@@ -399,7 +418,7 @@ class VendedorController extends AbstractController
                         "telefono" => $re["telefono"],
                         "celular" => $re["celular"],
                         "codigo_rubro" => $re["codigo_rubro"],
-                        "tipo_documento" => $re["tipo_documento"],
+                        "tipo_documento" => $re["nombre_doc"],
                         "nombre_factura" => $nombre,
                         "numero_documento" => $re["numero_documento"]
                     ];

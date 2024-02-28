@@ -22,8 +22,9 @@ use App\Controller\Common\Services\FunctionsController;
 class UsuarioController extends AbstractController
 {
     public function infoUsuario($headers)
-    {
-        return json_decode(utf8_encode(base64_decode($headers)));
+    {   
+        $user = json_decode(utf8_encode(base64_decode($headers)));
+        return   $user;
     }
 
     public function ipUsuario()

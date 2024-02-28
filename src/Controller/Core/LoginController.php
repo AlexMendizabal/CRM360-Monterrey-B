@@ -107,7 +107,6 @@ class LoginController extends AbstractController
 
                     if (password_verify($data['ds_senh_usua'], $usuario[0]['DS_SENH'])) {
 
-                      
                         $dadosUsuario = array(
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
                             'id_usuario' => $usuario[0]['ID'],
