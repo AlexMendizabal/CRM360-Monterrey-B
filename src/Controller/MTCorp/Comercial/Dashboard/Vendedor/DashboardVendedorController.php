@@ -1087,7 +1087,7 @@ class DashboardVendedorController extends AbstractController
         @MODULO = '1'
       "
     )->fetchAll();
-    dd($clientes);
+    //dd($clientes);
     if (count($clientes) > 0) {
       return $clientes;
     } else {

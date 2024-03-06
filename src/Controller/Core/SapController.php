@@ -89,7 +89,7 @@ class SapController extends AbstractController
                         "idEscritorio" => $usuario[0]['ID_ESCAP'],
                         "nomeCompleto" => $usuario[0]['NM_COMP_RAZA_SOCI'],
                         "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
-                        "nomeCargo" =>$usuario[0]['NM_CARG_FUNC'],
+                        "nomeCargo" => $usuario[0]['NM_CARG_FUNC'],
                         "moduloPrincipal" => $modulo_principal
                     );
                     $devolverArray = base64_encode(json_encode($datos));
@@ -454,7 +454,7 @@ class SapController extends AbstractController
                     ]);
                     //Helper insertar item
                     $insertarMaterial = $helper->insertarItem($connection, $arrayMaterial);
-                    dd($insertarMaterial);
+                    //dd($insertarMaterial);
                     if (!empty($insertarMaterial)) {
                         $message = array(
                             'response' => 200,
@@ -779,7 +779,7 @@ class SapController extends AbstractController
                                     }
                                     $eliminarClientes = $helper->borrarClientes($connection, (int)$id_cliente);
                                     if ($eliminarClientes !== false) {
-                                        
+
                                         $message = [
                                             "CodigoRespuesta" => 204,
                                             "Estado" => false,
@@ -787,7 +787,7 @@ class SapController extends AbstractController
                                         ];
                                     }
                                 } else {
-                                   
+
                                     $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
 
                                     if (isset($resp_sap['response']) && isset($resp_sap['detalle']) && $resp_sap['response'] == 200) {
@@ -858,7 +858,7 @@ class SapController extends AbstractController
             }
         }
         $response = new JsonResponse($message);
-      
+
         return $response;
     }
 
@@ -1014,9 +1014,9 @@ class SapController extends AbstractController
      */
     public function sapUpdateCliente(Connection $connection, Request $request)
     {
-        
+
         $data = json_decode($request->getContent(), true);
-      
+
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
         $array_ubicaciones_respaldo = array();
@@ -1173,7 +1173,7 @@ class SapController extends AbstractController
                         if (count($traerUbicaciones) > 0) {
                             $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
                         }
-                        dd($array_ubicaciones_respaldo);
+                        //dd($array_ubicaciones_respaldo);
                         $insertarUbicaciones = $helper->insertUbClient($connection, $array_ubicaciones_respaldo, $data['id_cliente'],  $data['codigo_cliente']);
 
                         $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
@@ -1229,13 +1229,13 @@ class SapController extends AbstractController
     public function sapUpdateClienteSap(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-       
+
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
         $data_sap = array();
         $id_setor_actividade  = isset($data['id_rubro']) ? $data['id_rubro'] : 0;
-            $rubro2 = $helper->buscarRubro($connection, (int)$id_setor_actividade);
-            $rubro = $rubro2[0]['descricao'];
+        $rubro2 = $helper->buscarRubro($connection, (int)$id_setor_actividade);
+        $rubro = $rubro2[0]['descricao'];
 
         $traerCodigoVendedor = $helper->traerVendedorSap($connection, $data['id_vendedor']);
         if ($traerCodigoVendedor !== false) {
@@ -1257,7 +1257,7 @@ class SapController extends AbstractController
             }
         }
 
-        if(isset($data['ubicacion'][0]['id_ciudad'])){
+        if (isset($data['ubicacion'][0]['id_ciudad'])) {
             $buscarCiudad = $helper->buscarCiudad2($connection, (int)$data['ubicacion'][0]['id_ciudad']);
             $sigla_ciudad = $buscarCiudad['sigla'];
         }
@@ -1289,12 +1289,12 @@ class SapController extends AbstractController
         $arrayContacto = [];
 
         $arrayUbicacion = $data['ubicacion'];
-    
+
         foreach ($arrayUbicacion as &$ubicacion) {
             $buscarCiudad = $helper->buscarCiudad2($connection, (int)$ubicacion['id_ciudad']);
             if ($buscarCiudad !== false) {
                 $ubicacion['ciudad'] = $buscarCiudad['sigla'];
-            } 
+            }
         }
         unset($ubicacion);;
         $arrayContacto = $data['contactos'];
@@ -1318,11 +1318,11 @@ class SapController extends AbstractController
             'contactos' => $arrayContacto,
             'id_estado' => $data['id_estado'],
         ]);
-       
+
         if ($swSap === true) {
-           
+
             $resp_sap = $helper->actualizarSapCliente($connection, $data_sap);
-           
+
             if ($resp_sap['response'] == 200) {
 
                 /* dd($data); */
@@ -1411,6 +1411,7 @@ class SapController extends AbstractController
                             'id_ciudad' => (int)$ubicacion['id_ciudad']
                         ];
                     }
+                    $borrarUbicaciones = $helper->borrarUbicaciones($connection, (int)$data['id_cliente']);
                     foreach ($data['ubicacion'] as $ubicacion) {
 
                         $buscarCiudad = $helper->buscarCiudadAbreviatura($connection, $ubicacion['ciudad']);
@@ -1419,6 +1420,8 @@ class SapController extends AbstractController
                         $ubicacion['ciudad'] = $buscarCiudad['nombre_ciudad'];
                         $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
                         $ubicacion['id_cliente'] = $data['id_cliente'];
+
+                        // dd($ubicacion);
 
                         $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, (int)$data['id_cliente'],  $data['codigo_cliente']);
                         if ($insertarUbicaciones === false) {
@@ -1510,7 +1513,7 @@ class SapController extends AbstractController
                     }
                 }
             }
-            
+
             return $respuestaClient;
         } else {
             return $respuestaClient;
@@ -1532,17 +1535,13 @@ class SapController extends AbstractController
         $helper = new Helper();
         try {
             $data = json_decode($request->getContent(), true);
-            if (!empty($data['codigo_almacen'])) 
-            {
+            if (!empty($data['codigo_almacen'])) {
                 $almacen = $dataCodigo['codigo_almacen'] = $helper->buscarAlmacen($connection, $data['codigo_almacen'], null);
-                if(empty($almacen)){
+                if (empty($almacen)) {
                     $message = $helper->insertAlmacen($connection, $data);
-                }
-                else
-                {
+                } else {
                     $message = $helper->actualizaAlmacen($connection, $data);
                 }
-
             } else {
                 $message = [
                     "CodigoRespuesta" => 204,
@@ -1647,12 +1646,12 @@ class SapController extends AbstractController
 
             if (!empty($data['cod_mate'])) {
                 $material = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$data['cod_mate']]);
-               
+
                 if (!empty($material)) {
                     $id_lista = $helper->buscarListaPrecio($connection, $data['lista']);
-                    
+
                     if (!empty($id_lista)) {
-                       
+
                         $prec_material = $connection->fetchOne('SELECT id FROM TB_PRECIO_MATERIAL WHERE cod_mate = ? and id_lista = ?', [$data['cod_mate'], $id_lista[0]['id']]);
                         if (!empty($prec_material)) {
                             $message = $helper->actualizarPrecios($connection, $data, $prec_material,  $id_lista[0]['id']);
@@ -1822,7 +1821,7 @@ class SapController extends AbstractController
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
         $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
-        
+
         try {
             if (empty($data_error)) {
                 if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
@@ -1846,15 +1845,28 @@ class SapController extends AbstractController
                                 }
                                 $respVend = $helper->insertVendedor($connection, $data, $id_usuario, $id_sucursal);
                                 if ($respVend['response'] != 200) {
-                                    $connection->rollBack();
-                                    $message = array(
-                                        'response' => 204,
-                                        'estado' => false,
-                                        'detalle' => 'No se registro',
-                                        'error' => $data_error
-                                    );
+
+                                   
                                 }
                                 if ($resultPermiso['codigoRespuesta'] == 200 && $respVend['response'] == 200) {
+                                     //ENVIO CORREO CREDENCIALES
+                                     $url = 'http://23.254.204.187/api/comercial/ciclo-vendas/23/autorizaciones/lista';
+                                     $contenido = $helper->correoEnvioCredenciales($data['codigo_sap'], 'CRMTEMP', $url);
+                                     $arrayDatos = [
+                                         'remitente' => 'test.crm360@mtcorplatam.com',
+                                         'destinatario' =>  $data['email'],
+                                         'asunto' => 'Envio de credenciales',
+                                         'contenido' => $contenido,
+                                     ];
+                                     $enviarCorreo = $helper->enviarCorreo($arrayDatos);
+                                     //FIN ENVIO CORREO CREDENCIALES
+                                     $connection->rollBack();
+                                     $message = array(
+                                         'response' => 204,
+                                         'estado' => false,
+                                         'detalle' => 'No se registro',
+                                         'error' => $data_error
+                                     );
                                     $message = array(
                                         'response' => 200,
                                         'estado' => true,
@@ -1880,12 +1892,10 @@ class SapController extends AbstractController
                         }
                     } else {
                         $resps = $helper->updateUsuario($connection, $data);
-                        if( $resps['response'] == 200)
-                        {
+                        if ($resps['response'] == 200) {
+                            
                             $message = $helper->updateVendedor($connection, $data);
-                        }
-                        else
-                        {
+                        } else {
                             $message = $resps;
                         }
                     }
@@ -2168,5 +2178,56 @@ class SapController extends AbstractController
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * @Route(
+     * "/sap/actualiza/ofetaestado",
+     * name="sap_actualiza_ofetaestado",
+     * methods={"POST"}
+     * )
+     * @return JsonResponse
+     */
+    public function actualizaofertaestado(Connection $connection, Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $helper = new Helper();
+
+        $estado = ['DocNum' => $data['docnum']];
+        try {
+            $ruta = "/estadoOferta";
+            $message = $helper->insertarServicio($ruta, $estado);
+
+            if ($message['CodigoRespuesta'] == 200) {
+                $codigoEstado = $message['CodigoEstado'];
+
+                $oferte_vigencia = $connection->update('TB_OFERTA', ['estado_vigente' => $codigoEstado], ['codigo_oferta' => $data['docnum']]);
+
+                if (!empty($codigoEstado)) {
+                    $message = [
+                        'responseCode' => 200,
+                        'message' => 'Actualizo el estado de vigencia',
+                        'success' => true
+                    ];
+                } else {
+                    $message = [
+                        'responseCode' => 204,
+                        'message' => 'Actualizo el estado de vigencia',
+                        'success' => false
+                    ];
+                }
+            }
+        } catch (\Throwable  $e) {
+            $message = [
+                'responseCode' => 500,
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'success' => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 }

@@ -280,6 +280,7 @@ class VendedorController extends AbstractController
      */
     public function getClientesCarteira(Connection $connection, Request $request)
     {
+        
         try {
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -287,12 +288,12 @@ class VendedorController extends AbstractController
             $matricula = $acessoClientes ? 0 : $infoUsuario->matricula;
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
-
+         /*    dd($request->query->all()); */
             $idVendedor = '';
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
             if ($infoUsuario->matricula != 1 && $buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
-                $idVendedor = $infoUsuario->idVendedor;
+                $idVendedor = $infoUsuario->matricula;
                 $res = $connection->query("
                 EXECUTE [PCR_CLIE_CONS3]
                     @ID_PARAM = 6
@@ -301,7 +302,6 @@ class VendedorController extends AbstractController
                     ,@ID_SITU = '{$situacao}'
                     ,@ID_DEBU = 0
             ")->fetchAll();
-                /* dd($res); */
             } else {
                 //dd($request);
                 if ($request->query->get("idVendedor") == '' && $buscarUsuario['NM_CARG_FUNC'] != 'PROMOTOR') {
@@ -377,7 +377,7 @@ class VendedorController extends AbstractController
                 ")->fetchAll();
          
             }
-            else
+            else    
             {
                 $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]

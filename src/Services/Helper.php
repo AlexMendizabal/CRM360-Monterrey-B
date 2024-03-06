@@ -122,7 +122,7 @@ class Helper
                 "idEscritorio" => $usuario[0]['ID_ESCAP'],
                 "nomeCompleto"  => $usuario[0]['NM_COMP_RAZA_SOCI'],
                 "nomeAbreviado" => $usuario[0]['NM_APEL_FANT'],
-                "nomeCargo" =>$usuario[0]['NM_CARG_FUNC'],
+                "nomeCargo" => $usuario[0]['NM_CARG_FUNC'],
                 "moduloPrincipal" => $modulo_principal
             );
             $devolverArray =  base64_encode(json_encode($datos));
@@ -1593,7 +1593,7 @@ class Helper
                                         WHERE  DEPO.ESTADO_DEPOSITO = 1 
                                         AND LP.id = ?
                                         AND ID_CODIGOMATERIAL IN (?)
-                                        order by MATE.id_CODIGOMATERIAL asc', [ $codigo, $id_lista_precio, $resp]);
+                                        order by MATE.id_CODIGOMATERIAL asc', [$codigo, $id_lista_precio, $resp]);
 
         if (count($res) > 0) {
             return $res;
@@ -2916,6 +2916,41 @@ class Helper
         return $contenido;
     }
 
+    public function correoEnvioCredenciales($usuario, $password, $url){
+        $contenido =
+            '<html>
+                    <head>
+                        <style>
+                            /* Estilos para el botón */
+                            .button {
+                                display: inline-block;
+                                padding: 10px 50px;
+                                background-color: #28A745; /* Color de fondo del botón */
+                                color: #fff; /* Color del texto del botón */
+                                text-decoration: none; /* Eliminar subrayado del enlace */
+                                border-radius: 5px; /* Bordes redondeados del botón */
+                            }
+
+                            /* Cambiar el estilo del botón al pasar el mouse sobre él */
+                            .button:hover {
+                                background-color: #32CD32; /* Cambiar el color de fondo al pasar el mouse */
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div align="center">
+                            <h1>Bienvenid(a) al sistema CRM </h1>
+                            <p>Sus credenciales de acceso son: .</p>
+                            <p style="font-weight: bold">Usuario:' .$usuario.'</p>
+                            <p style="font-weight: bold">Contraseña:' .$password.'</p>
+                            <p>Recuerde cambiar su contraseña al iniciar sesión</p>
+                            <img src="' . $url . '" width="250px" height="70px">
+                        </div>
+                    </body>
+                </html>';
+        return $contenido;
+    }
+
     public function correoEstado($nombre_usuario, $estado_oferta, $url)
     {
         $contenido =
@@ -3763,7 +3798,6 @@ class Helper
             $ruta = "/crearProforma";
 
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
-
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;
             } else {
@@ -3876,14 +3910,16 @@ class Helper
     public function verificarOferta($connection, $id_vendedor)
     {
         $fechaActual = new DateTime();
+        $arrayOferta = array();
         $query = "SELECT * FROM TB_OFERTA WHERE id_vendedor = :id_vendedor AND estado_oferta = :estado_oferta 
-        AND tipo_estado = :tipo_estado";
+        AND tipo_estado = :tipo_estado AND codigo_oferta IS NOT NULL AND codigo_oferta <> 0";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(":id_vendedor", (int)$id_vendedor, PDO::PARAM_INT);
         $stmt->bindValue(":estado_oferta", 1, PDO::PARAM_INT);
         $stmt->bindValue(":tipo_estado", 14, PDO::PARAM_INT);
         $stmt->execute();
         $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //dd($ofertas);
 
 
         if (count($ofertas) > 0) {
@@ -3892,12 +3928,15 @@ class Helper
                 $diferencia = $fechaActual->diff($fechaCreacion)->days;
                 //dd($diferencia);
                 if ($diferencia > 7) {
-                    return true;
+                    $arrayOferta[] = $oferta['codigo_oferta'];
                 }
+            }
+            if (count($arrayOferta) > 0) {
+                return array(true, $arrayOferta);
             }
         }
 
-        return false;
+        return array(false, $arrayOferta);
     }
 
     public function verificarOfertaDias($connection, $id_vendedor)
@@ -4056,7 +4095,7 @@ class Helper
 
     public function actualizarAgenda($connection, $data, int $id)
     {
-        if (!empty($data)) {           
+        if (!empty($data)) {
 
             $sql = "UPDATE TB_CORE_AGEN_COME SET ";
             $updates = array();
@@ -4066,7 +4105,7 @@ class Helper
             }
 
             $sql .= implode(", ", $updates);
-            $sql .= " WHERE id_agenda = :id"; 
+            $sql .= " WHERE id_agenda = :id";
 
             $stmt = $connection->prepare($sql);
             foreach ($data as $campo => $valor) {
@@ -4084,6 +4123,24 @@ class Helper
             }
         } else {
             return false;
+        }
+    }
+    public function verificarCitaProceso($connection, int $id_vendedor)
+    {
+        $idArray = array();
+        $query = "SELECT * FROM TB_CORE_AGEN_COME WHERE id_status= :id_estado AND id_vendedor = :id_vendedor";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(":id_estado", 2, PDO::PARAM_INT);
+        $stmt->bindValue(":id_vendedor", $id_vendedor, PDO::PARAM_INT);
+        $stmt->execute();
+        $agendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if(count($agendas) > 0) {
+            foreach ($agendas as $agenda) {
+                $idArray[] = $agenda['id_agenda'];
+            }
+            return array (true, $idArray);
+        }else{
+            return array (false, $idArray);
         }
     }
 }

@@ -104,7 +104,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
     {
 
         try {
-            dd($request->query->all());
+           // dd($request->query->all());
             $this->setRequest($request);
 
             $idMatTid   = $request->query->get("codigoMaterial");
@@ -179,7 +179,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
     {
 
         $params = json_decode($request->getContent());
-        dd($params);
+        //dd($params);
         try {
           
             $idMateTidDagda = $params->idMatTidDagda  ?? null;
@@ -249,7 +249,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
     public function deleteIntegracao(Connection $connection, Request $request)
     {
         $params = json_decode($request->getContent());
-        dd($params);
+        //dd($params);
         try {
 
       

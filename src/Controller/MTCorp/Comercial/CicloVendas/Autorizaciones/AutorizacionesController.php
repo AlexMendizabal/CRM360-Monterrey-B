@@ -186,6 +186,7 @@ class AutorizacionesController extends AbstractController
             ]
         );
 
+        
         $data = $resultSet->fetchAllAssociative();
         $correos = array();
 
@@ -354,10 +355,12 @@ class AutorizacionesController extends AbstractController
                     descuento_total, 
                     cantidad_total, 
                     tb_autorizaciones.fecha_solicitud, 
-                    fecha_creacion AS fecha_creacion, 
+                    fecha_creacion AS fecha_creacion,   
                     descripcion_vend,
                     tb_autorizaciones.id AS id_autorizacion,
                     tb_autorizaciones.fecha_gestion AS fecha_gestion, 
+                    tb_autorizaciones.hora_solicitud AS horasolicitud,
+                    tb_autorizaciones.hora_gestion AS horagestion,
                     TB_core_usua.NM_COMP_RAZA_SOCI AS nombre_usuario,
                     tb_detalle_auto.desc_vendedor as desc_usuario,
                     tb_autorizaciones.estado,
@@ -448,6 +451,8 @@ class AutorizacionesController extends AbstractController
             tb_autorizaciones.fecha_gestion AS fecha_gestion, 
             tb_autorizaciones.descripcion_vend,
             tb_autorizaciones.id AS id_autorizacion,
+            tb_autorizaciones.hora_gestion AS horagestion,
+            tb_autorizaciones.hora_solicitud AS horasolicitud,
             tb_autorizaciones.estado,
             TB_core_usua.NM_COMP_RAZA_SOCI AS nombre_usuario,
             Tb_detalle_auto.desc_vendedor as desc_usuario,
@@ -601,10 +606,15 @@ class AutorizacionesController extends AbstractController
                             $sapresp = json_decode($repSap->getContent(), true);
 
                             if ($sapresp['CodigoRespuesta'] == 200) {
-                                $dato = $sapresp['Mensaje'];
-                                //cambia el estado si envio a sap 1 
-                                $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => (int)$dato, 'envio_sap' => 1], ['id' => (int)$id_oferta]);
-
+                                $data_sap = [
+                                    'codigo_oferta' => $sapresp['Oferta'],
+                                    'nombre_oferta' => $sapresp['Mensaje'],
+                                    'vencimiento' => $sapresp['Vencimiento'],
+                                    'envio_sap' => 1,
+                                ];
+                            
+                                $resp2 = $connection->update('TB_OFERTA', $data_sap, ['id' => (int) $id_oferta]);
+                            
                                 $message = [
                                     "responseCode" => 200,
                                     "message" => 'Registro Correctamente',

@@ -37,7 +37,7 @@ class ClientesController extends AbstractController
             } else {
                 $idVendedor = $infoUsuario->idVendedor;
             }
-            
+
             $usuariosLiberados = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
             $idVendedores = VendedorController::vinculoOperadores($connection, $infoUsuario);
             $podeAcessar = 0;
@@ -52,7 +52,7 @@ class ClientesController extends AbstractController
                 $podeAcessar = 1;
             }
 
-            for ($i=0; $i < count($res); $i++) {
+            for ($i = 0; $i < count($res); $i++) {
                 if (!empty($res[$i]['cpf'])) {
                     $res[$i]['cpf'] = FunctionsController::setMask($res[$i]['cpf'], '###.###.###-##');
                 } else if (!empty($res[$i]['cnpj'])) {
@@ -98,7 +98,7 @@ class ClientesController extends AbstractController
                 $usuariosLiberados = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
                 $vinculoOperadores = VendedorController::vinculoOperadores($connection, $infoUsuario);
                 $podeAcessar = 0;
-                
+
                 if (
                     $res[0]['status'] == 'Arquivo' ||
                     $res[0]['status'] == 'Inativo' ||
@@ -138,41 +138,52 @@ class ClientesController extends AbstractController
      * )
      * @return JsonResponse
      */
-    /* public function getClientesAll(Connection $connection, Request $request, $id)
+    public function getClientesAll(Connection $connection, Request $request, $id)
     {
-        //dd($id);
+        $helper = new Helper();
         try {
 
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $helper = new Helper();
-            $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula);
-            
-            $NR_MATR = $infoUsuario->matricula;
-            $micliente = $request->query->get("MI_NM_CLIE");
-            $cliente   = $request->query->get("NM_CLIE");
-            $situacao = 1;
+            if (!empty($id)) {
+                $datosVEndedor = $helper->traerVendedorId($connection, (int)$id);
+                $id_usuario = $datosVEndedor[0]['ID_USUA'];
+                $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
+                $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $buscarUsuario['NR_MATR'], 'ACES_GERA_CLIE');
+              
+                $res = $connection->query("
+                            EXECUTE [PCR_CLIE_CONS3]
+                            @ID_PARAM = 6
+                            ,@NR_MATR = {$buscarUsuario['NR_MATR']}
+                            ,@ID_SITU = 1
+                            ,@ID_DEBU = 0
+                            ")->fetchAll();
+            } else {
 
-            if($id==1 && $datosUsuario[0]['NM_CARG_FUNC'] == 'PROMOTOR')
-            {
                 $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
-                     @ID_PARAM = 6
-                    ,@ID_SITU = '{$situacao}'
-                    ,@NR_MATR = '{$NR_MATR }'
-                ")->fetchAll();
-         
+                            EXECUTE [PCR_CLIE_CONS3]
+                            @ID_PARAM = 6
+                            ,@ID_SITU = 1
+                            ,@ID_DEBU = 0
+                            ")->fetchAll();
             }
-            else
-            {
-                $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
-                     @ID_PARAM = 6
-                    ,@ID_SITU = '{$situacao}'
-                ")->fetchAll();
+           
+          
+            //dd("pruebas",$res);
+            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+            } else {
+
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
             }
+            if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
+            }
+        } catch (DBALException $e) {
+            return FunctionsController::Retorno(false, 'Error al retornar datos.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-    } */
+    }
 
     /**
      * @Route(
@@ -288,7 +299,7 @@ class ClientesController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            
+
             $res = $connection->query("
                 EXEC PRC_COME_CONT_EMAI_CONS 
                     @ID_CLIE = '{$codCliente}'
@@ -303,6 +314,4 @@ class ClientesController extends AbstractController
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
-
-   
 }

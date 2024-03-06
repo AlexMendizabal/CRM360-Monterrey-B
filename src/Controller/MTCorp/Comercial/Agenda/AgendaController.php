@@ -271,7 +271,7 @@ class AgendaController extends AbstractController
             "
                 )->fetchAll();
 
-             /*    $data = $connection->executeQuery(
+                /*    $data = $connection->executeQuery(
                     'SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
                     ['id_agenda' => $id]
                 )->fetchAll(); */
@@ -445,12 +445,12 @@ class AgendaController extends AbstractController
                         'longitud_inicial' =>  $longitud
                     ];
                     $reg = $helper->actualizarAgenda($connection, $data_ltlg, (int)  $id_agenda);
-                    if($reg !== false){
+                    if ($reg !== false) {
                         $message = array(
                             'responseCode' => 200,
                             'estado' => true
                         );
-                    }else{
+                    } else {
                         $message = array(
                             'responseCode' => 204,
                             'estado' => false
@@ -729,7 +729,7 @@ class AgendaController extends AbstractController
             $data = json_decode($request->getContent(), true);
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
 
-            $cor = $data['color']['primary']?$data['color']['primary']: null;
+            $cor = $data['color']['primary'] ? $data['color']['primary'] : null;
             $codTitulo = $data['codTitulo'];
             $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
             $formaContato = $data['formContactId'];
@@ -1391,6 +1391,68 @@ class AgendaController extends AbstractController
                 'message' => $e->getMessage(),
                 'estado' => false
             );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/agenda/compromiso/verificar_inicio",
+     *  name="comercial.agenda-compromiso-verificar_inicio",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function verificarInicio(Connection $connection, Request $request)
+    {
+        $usuariocontroller = new UsuarioController();
+        $helper = new Helper();
+        $swRespuesta = false;
+
+        try {
+            $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
+            $params = $request->query->all();
+            $idVendedor = isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->matricula;
+            $idAgenda = isset($params['id_agenda']) ? $params['id_agenda'] : 0;
+
+            $verificarAgenda = $helper->verificarCitaProceso($connection, (int)$idVendedor);
+            if ($verificarAgenda[0] !== false) {
+                $swRespuesta = true;
+                if (count($verificarAgenda[1]) > 0) {
+                    foreach ($verificarAgenda[1] as $agenda) {
+                        if ($agenda === $idAgenda) {
+                            $swRespuesta = false;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                $swRespuesta = false;
+            }
+
+            if ($swRespuesta === true) {
+                $message = [
+                    'responseCode' => 200,
+                    'estado' => true,
+                    'message' => 'Error, tiene agendas iniciadas',
+                ];
+            } else if ($swRespuesta === false) {
+                $message = [
+                    'responseCode' => 204,
+                    'estado' => false,
+                    'message' => 'No tiene agendas iniciadas',
+                ];
+            }
+        } catch (DBALException $e) {
+            $message = [
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ];
         }
 
         $response = new JsonResponse($message);

@@ -346,7 +346,7 @@ class CotacoesController extends AbstractController
             /* Fecha Inicial */
             if (!empty($dataInicial)) {
                 $fechaInicial1 = date('Y-m-d', strtotime($dataInicial));
-            }
+            } 
             /* Fecha Final */
             if (!empty($fechaFinal)) {
                 $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
@@ -1059,8 +1059,9 @@ class CotacoesController extends AbstractController
                     ")->fetchAll();
 
                 $res += [$value => $arrayTemp];
+                
             }
-
+            
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
@@ -2546,64 +2547,73 @@ class CotacoesController extends AbstractController
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
+        if(!empty($data))
+        {
+            $resp = $this->insertaOferta($connection, $data);
+            $data_oferta = json_decode($resp->getContent(), true);
+            $id_oferta = $data_oferta['data'];
 
-        $resp = $this->insertaOferta($connection, $data);
-        $data_oferta = json_decode($resp->getContent(), true);
-
-        $id_oferta = $data_oferta['data'];
-
-        if ($data_oferta['success']) {
-            foreach ($data['carrinho'] as $items) {
-                $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
-                $data_detalleoferta = json_decode($data_detalle->getContent(), true);
-            }
-            if ($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200) {
-                if ($data_detalleoferta['autorizacion'] == 1) {
-
-                    $message = [
-                        "responseCode" => 200,
-                        "message" => 'Registro Correctamente',
-                        "success" => true
-                    ];
-                } else {
-                    $dato = null;
-                    $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
-                    $sapresp = json_decode($repSap->getContent(), true);
-
-                    if ($sapresp['CodigoRespuesta'] == 200) {
-                        $data_sap['codigo_oferta'] = $sapresp['Mensaje'];
-                        $data_sap['envio_sap'] = 1;
-                        //cambia el estado si envio a sap 1 
-                        $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+            if ($data_oferta['success']) {
+                foreach ($data['carrinho'] as $items) {
+                    $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
+                    $data_detalleoferta = json_decode($data_detalle->getContent(), true);
+                }
+                if ($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200) {
+                    if ($data_detalleoferta['autorizacion'] == 1) {
 
                         $message = [
                             "responseCode" => 200,
                             "message" => 'Registro Correctamente',
-                            "success" => true,
-                            "data_sap" => $sapresp
+                            "success" => true
                         ];
                     } else {
-                        //sino envio al sap 0
-                        $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
-                        $message = [
-                            "responseCode" => 200,
-                            "message" => 'Registro Correctamente',
-                            "success" => true,
-                            "data_sap" => $sapresp
-                        ];
+                        $dato = null;
+                        $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+                        $sapresp = json_decode($repSap->getContent(), true);
+
+                        if ($sapresp['CodigoRespuesta'] == 200) {
+                            $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                            $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                            $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                            $data_sap['envio_sap'] = 1;
+                            //cambia el estado si envio a sap 1 
+                            $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+
+                            $message = [
+                                "responseCode" => 200,
+                                "message" => 'Registro Correctamente',
+                                "success" => true,
+                                "data_sap" => $sapresp
+                            ];
+                        } else {
+                            //sino envio al sap 0
+                            $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+                            $message = [
+                                "responseCode" => 200,
+                                "message" => 'Registro Correctamente',
+                                "success" => true,
+                                "data_sap" => $sapresp
+                            ];
+                        }
                     }
+                } else {
+                    $message = [
+                        "responseCode" => 500,
+                        "message" => 'No registro',
+                        "success" => false
+                    ];
                 }
             } else {
                 $message = [
-                    "responseCode" => 500,
-                    "message" => 'No registro',
+                    "responseCode" => 204,
+                    "message" => 'Registro Correctamente',
                     "success" => false
                 ];
             }
         } else {
             $message = [
                 "responseCode" => 204,
-                "message" => 'Registro Correctamente',
+                "message" => 'No hay datos',
                 "success" => false
             ];
         }
@@ -2803,12 +2813,14 @@ class CotacoesController extends AbstractController
         if (empty($oferta['codigo_oferta']) && (int)$oferta['tipo_estado'] == 14 && (int)$oferta['estado_oferta'] == 1) {
 
             $resp = $helper->autorizacion_estado_sap($connection, (int)$nrPedido);
-
+            //dd($resp);
             $sapresp = json_decode($resp->getContent(), true);
 
             if ($sapresp['CodigoRespuesta'] == 200) {
-                //$data_oferta['codigo_sap'] = $sapresp['Mensaje'];
-                $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => $sapresp['Oferta']], ['id' => (int) $data_oferta['id_oferta']]);
+                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                 $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                $resp2 = $connection->update('TB_OFERTA', $data_sap, ['id' => (int) $data_oferta['id_oferta']]);
                 $message = [
                     "responseCode" => 200,
                     "message" => 'Registro Correctamente',
@@ -2831,6 +2843,71 @@ class CotacoesController extends AbstractController
                 "success" => false,
             ];
         }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+      /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/vigencia_oferta/{codigo_oferta}",
+     *  name="comercial.ciclo-vendas-cotacoes-vigencia-estado",
+     *  methods={"GET"},
+     *  requirements={"codigo_oferta"="\d+"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function actualizaofertaestado(Connection $connection, Request $request, $codigo_oferta)
+    {
+        $data = json_decode($request->getContent(), true);
+        $helper = new Helper();
+
+        $estado = ['DocNum' => $codigo_oferta];
+        try {
+            $ruta = "/estadoOferta";
+            $message = $helper->insertarServicio($ruta, $estado);
+            if($message['CodigoRespuesta'] == 200)
+            {   
+                $codigoEstado = $message['CodigoEstado'];
+                $oferte_vigencia = $connection->update('TB_OFERTA', ['estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);
+               
+                if(!empty($oferte_vigencia))
+                {
+                    $message = [
+                        'CodigoRespuesta' => 200,
+                        'message' => $message['Mensaje'],
+                        'success' => true
+                    ];
+                }
+                else
+                {
+                    $message = [
+                        'CodigoRespuesta' => 204,
+                        'message' => 'no puedo actualizar',
+                        'success' => false
+                    ];
+                }
+            }
+            else
+            {
+                $message = [
+                    'CodigoRespuesta' => 204,
+                    'message' => $message['Mensaje'],
+                    'success' => false
+                ];
+            }
+            
+        } catch (\Throwable  $e) {
+            $message = [
+                'CodigoRespuesta' => 500,
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'success' => false
+            ];
+        }
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
@@ -3189,15 +3266,16 @@ class CotacoesController extends AbstractController
             $estado  = $row['estado_oferta'];
             $codigo_oferta = $row['codigo_oferta'];
             $id_oferta =  $params['id_oferta'];
-
+           
             if (!empty($codigo_oferta)) {
                 $data_cierre = [
                     'nrodocSAP' => $codigo_oferta,
                     'razon' => $data_oferta['descripcion'],
-                    'tipo' =>  $data_oferta['estado_oferta']
+                    'tipo' =>  $data_sap['estado_oferta']
                 ];
+                   dd($data_cierre);
                 $respta = $helper->cierre_ofertea($connection, $data_cierre);
-
+                
                 if (!empty($respta)  && $respta['CodigoRespuesta'] == 200) {
 
                     if ($estado == 1) {
@@ -3207,7 +3285,7 @@ class CotacoesController extends AbstractController
                         if (!empty($resp)) {
                             $qra = $connection->query("SELECT TOP 1 autorizacion FROM TB_OFERTA WHERE ID = {$id_oferta}");
                             $row = $qra->fetch();
-
+                            
                             if ($row['autorizacion'] == 1) {
                                 $connection->update('TB_autorizaciones', ['estado' => 13], ['id_oferta' => $id_oferta]);
                             }
@@ -3275,12 +3353,13 @@ class CotacoesController extends AbstractController
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
             if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
                 $verificarOferta = $helper->verificarOferta($connection, $id_vendedor);
-                if ($verificarOferta === true) {
+                if ($verificarOferta[0] === true) {
                     $message = [
                         'responseCode' => 200,
                         'message' => 'El usuario tiene ofertas pendientes de gestión.',
                         'success' => true,
                         'pendiente' => true,
+                        'ofertas'=> $verificarOferta[1]
                     ];
                 } else {
                     $message = [
@@ -3288,6 +3367,7 @@ class CotacoesController extends AbstractController
                         'message' => 'El usuario no tiene ofertas pendientes de gestion.',
                         'success' => false,
                         'pendiente' => false,
+                        'ofertas'=> $verificarOferta[1]
 
                     ];
                 }
@@ -3297,6 +3377,8 @@ class CotacoesController extends AbstractController
                     'message' => 'El usuario no tiene ofertas pendientes de gestion.',
                     'success' => false,
                     'pendiente' => false,
+                    'ofertas'=> []
+
 
                 ]; 
             }
@@ -3306,6 +3388,8 @@ class CotacoesController extends AbstractController
                 'message' => $e->getMessage(),
                 'success' => false,
                 'pendiente' => null,
+                'ofertas'=> []
+
             ];
         }
         $response = new JsonResponse($message);
