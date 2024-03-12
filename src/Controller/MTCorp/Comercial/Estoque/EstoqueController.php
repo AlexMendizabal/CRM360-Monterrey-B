@@ -128,7 +128,7 @@ class EstoqueController extends AbstractController
                 $conditions = [];
                 $bindings = [];
 
-              /*   if (!empty($id_almacen) && $id_almacen !== 'null' && $id_almacen > 0) {
+                /*   if (!empty($id_almacen) && $id_almacen !== 'null' && $id_almacen > 0) {
                     $conditions[] = "DEPO.id = :id_almacen";
                     $bindings['id_almacen'] = $id_almacen;
                 }*/
@@ -325,7 +325,7 @@ class EstoqueController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    
+
 
     /**
      * @Route(
@@ -341,21 +341,21 @@ class EstoqueController extends AbstractController
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
-                
-            $params = $request->query->all();
-            $id_material = $params['id_material'] ?? '';
-            $id_lista_precio = $params['id_lista'] ?? '';
-            $registros = $params['registros'] ?? '';
-            $estado_material = 1;
-            $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
 
-            $ComercialController = new ComercialController();
-            
-            $upsell = $ComercialController->filtrarMaterialContratipo($connection, $id_material, 1, $id_lista_precio, $id_vendedor);
-                
-            $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio);
-                
-            $query = "	SELECT
+                $params = $request->query->all();
+                $id_material = $params['id_material'] ?? '';
+                $id_lista_precio = $params['id_lista'] ?? '';
+                $registros = $params['registros'] ?? '';
+                $estado_material = 1;
+                $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
+
+                $ComercialController = new ComercialController();
+
+                $upsell = $ComercialController->filtrarMaterialContratipo($connection, $id_material, 1, $id_lista_precio, $id_vendedor);
+
+                $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio);
+
+                $query = "	SELECT
                distinct 
               MAT.ID_CODIGOMATERIAL as id_material, 
               PM.id as id_precio_material,
@@ -389,12 +389,12 @@ class EstoqueController extends AbstractController
                and MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
                order by DEPO.ID asc";
 
-            $buscar_material = $connection->prepare($query);
-            $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
-            $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
-            $buscar_material->bindValue('CODIGOMATERIAL',  $id_material );
-            $buscar_material->execute();
-            $res = $buscar_material->fetchAll();
+                $buscar_material = $connection->prepare($query);
+                $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
+                $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
+                $buscar_material->bindValue('CODIGOMATERIAL',  $id_material);
+                $buscar_material->execute();
+                $res = $buscar_material->fetchAll();
 
 
                 if (count($res) > 0) {
@@ -489,7 +489,7 @@ class EstoqueController extends AbstractController
                     $query .= " WHERE $conditionString AND DEPO.CODIGO_ALMACEN NOT LIKE '%00'";
                 } else {
                     $query .= " WHERE DEPO.CODIGO_ALMACEN NOT LIKE '%00'";
-}
+                }
 
                 $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
                 OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
@@ -874,7 +874,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-    
+
     /**
      * @Route(
      *  "/comercial/estoque/estoque-suspenso/{codMaterial}/{idEmpresa}",
@@ -930,7 +930,7 @@ class EstoqueController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    
+
 
     /**
      * @Route(
@@ -1227,7 +1227,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-     /**
+    /**
      * @Route(
      *  "/comercial/estoque/estoquealmacen/{codMaterial}",
      *  name="comercial.estoque.estoquealmacen",
@@ -1237,37 +1237,37 @@ class EstoqueController extends AbstractController
      * @return JsonResponse
      */
     public function getEstoqueAlmacen(Connection $connection, Request $request, $codMaterial)
-    { 
-     try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-        $idVendedor = $infoUsuario->idVendedor;
+    {
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $idVendedor = $infoUsuario->idVendedor;
 
-        if ($codMaterial != '' && $codMaterial != 0) {
-            $params = $request->query->all();
+            if ($codMaterial != '' && $codMaterial != 0) {
+                $params = $request->query->all();
 
-            $nombre_lista_precio = $params['nombre_lista'] ?? '';
-            $codigo_almacen = $params['codigo_almacen'] ?? '';
-            $nombre_almacen = $params['nombre_almacen'] ?? '';
-            $id_lista_precio = $params['id_lista_precio'] ?? '';
-            $tamanoPagina = $params['registrosLista'] ?? 10;
-            $orderBy = 'nombre_almacen';
-            $orderType = 'ASC'; 
-            $offset = 0; 
+                $nombre_lista_precio = $params['nombre_lista'] ?? '';
+                $codigo_almacen = $params['codigo_almacen'] ?? '';
+                $nombre_almacen = $params['nombre_almacen'] ?? '';
+                $id_lista_precio = $params['id_lista_precio'] ?? '';
+                $tamanoPagina = $params['registrosLista'] ?? 10;
+                $orderBy = 'nombre_almacen';
+                $orderType = 'ASC';
+                $offset = 0;
 
-            $conditions = [];
-            $bindings = [];
+                $conditions = [];
+                $bindings = [];
 
-            // Condiciones comunes para todos los casos
-            $conditions[] = " MATE.ID_CODIGOMATERIAL = :id_material";
-            $bindings['id_material'] = $codMaterial;
+                // Condiciones comunes para todos los casos
+                $conditions[] = " MATE.ID_CODIGOMATERIAL = :id_material";
+                $bindings['id_material'] = $codMaterial;
 
-            // Si el idVendedor es 88, usar el parámetro id_lista_precio
-            if ($idVendedor == 88 && !empty($id_lista_precio)) {
-                $conditions[] = " LP.id = :id_lista";
-                $bindings['id_lista'] = (int) $id_lista_precio;
-            } elseif ($idVendedor != 88) {
-                // Si el idVendedor es diferente a 88, buscar la lista del vendedor
-                $id_lista_precio = $connection->fetchOne('select TB_lista_precio.id as id_lista_precio
+                // Si el idVendedor es 88, usar el parámetro id_lista_precio
+                if ($idVendedor == 88 && !empty($id_lista_precio)) {
+                    $conditions[] = " LP.id = :id_lista";
+                    $bindings['id_lista'] = (int) $id_lista_precio;
+                } elseif ($idVendedor != 88) {
+                    // Si el idVendedor es diferente a 88, buscar la lista del vendedor
+                    $id_lista_precio = $connection->fetchOne('select TB_lista_precio.id as id_lista_precio
                     from 
                     TB_VEND
                     inner join tb_escr on tb_escr.id = tb_vend.id_escr
@@ -1276,30 +1276,30 @@ class EstoqueController extends AbstractController
                     inner join TB_lista_precio on TB_lista_precio.id_departamento = tb_departamento.id 
                     where tb_vend.id =  ?', [$idVendedor]);
 
-                if (!empty($id_lista_precio)) {
-                    $conditions[] = " LP.id = :id_lista";
-                    $bindings['id_lista'] = (int) $id_lista_precio;
+                    if (!empty($id_lista_precio)) {
+                        $conditions[] = " LP.id = :id_lista";
+                        $bindings['id_lista'] = (int) $id_lista_precio;
+                    }
                 }
-            }
 
-            // Agregar condiciones según la presencia de valores
-            if (!empty($nombre_lista_precio)) {
-                $conditions[] = " LP.nombre_lista = :nombre_lista";
-                $bindings['nombre_lista'] = $nombre_lista_precio;
-            }
+                // Agregar condiciones según la presencia de valores
+                if (!empty($nombre_lista_precio)) {
+                    $conditions[] = " LP.nombre_lista = :nombre_lista";
+                    $bindings['nombre_lista'] = $nombre_lista_precio;
+                }
 
-            if (!empty($codigo_almacen)) {
-                $conditions[] = " DEPO.codigo_almacen LIKE :codigo_almacen";
-                $bindings['codigo_almacen'] = '%' . $codigo_almacen . '%';
-            }
+                if (!empty($codigo_almacen)) {
+                    $conditions[] = " DEPO.codigo_almacen LIKE :codigo_almacen";
+                    $bindings['codigo_almacen'] = '%' . $codigo_almacen . '%';
+                }
 
-            if (!empty($nombre_almacen)) {
-                $conditions[] = " DEPO.nombre_deposito LIKE :nombre_almacen";
-                $bindings['nombre_almacen'] = '%' . $nombre_almacen . '%';
-            }
+                if (!empty($nombre_almacen)) {
+                    $conditions[] = " DEPO.nombre_deposito LIKE :nombre_almacen";
+                    $bindings['nombre_almacen'] = '%' . $nombre_almacen . '%';
+                }
 
-           
-            $query = "
+
+                $query = "
                 SELECT DISTINCT
                     CLASE.descricao as familia,
                     LINEA.descricao AS grupo,
@@ -1324,22 +1324,22 @@ class EstoqueController extends AbstractController
                 INNER JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
                 WHERE " . implode(' AND ', $conditions);
 
-            $bindings['codMaterial'] = $codMaterial;
+                $bindings['codMaterial'] = $codMaterial;
 
-            // Agrega la paginación a la consulta SQL
-            $query .= " AND LP.id NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
+                // Agrega la paginación a la consulta SQL
+                $query .= " AND LP.id NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
 
-            $result = $connection->executeQuery($query, $bindings)->fetchAll();
-    
+                $result = $connection->executeQuery($query, $bindings)->fetchAll();
 
-        if (!empty($result)) {
-            $message = [
-                'responseCode' => 200,
-                'result' => $result,
-            ];
-           } else {
-            $message = [
-                'responseCode' => 204,
+
+                if (!empty($result)) {
+                    $message = [
+                        'responseCode' => 200,
+                        'result' => $result,
+                    ];
+                } else {
+                    $message = [
+                        'responseCode' => 204,
                         'result' => 'No es posible localizar datos',
                     ];
                 }
@@ -1360,10 +1360,9 @@ class EstoqueController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
+    }
 
-        }
 
-        
     /**
      * @Route(
      *  "/comercial/estoque/lista-precio",
@@ -1375,10 +1374,10 @@ class EstoqueController extends AbstractController
     public function traerLista(Connection $connection, Request $request)
     {
         try {
-            $nombre_lista = $request->query->get('nombre_lista'); 
-    
+            $nombre_lista = $request->query->get('nombre_lista');
+
             $listas_precios = $this->helper->buscarListaPrecio($connection, $nombre_lista);
-    
+
             $message = [
                 "response" => 200,
                 "estado" => true,
@@ -1391,12 +1390,11 @@ class EstoqueController extends AbstractController
                 "detalle" => $e->getMessage()
             ];
         }
-    
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
-}
+    }
 
+    
 }
-
-   

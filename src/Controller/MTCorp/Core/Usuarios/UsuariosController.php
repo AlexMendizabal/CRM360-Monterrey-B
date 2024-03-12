@@ -118,13 +118,11 @@ class UsuariosController
         try {
 
             $data = json_decode($request->getContent());
-
+         
             $id                         = $data->id                 ?? null;
             $nome                       = $data->nome               ?? null;
             $apelido                    = $data->apelido            ?? null;
             $empresa                    = $data->empresa            ?? null;
-            $departamento               = $data->departamento       ?? null;
-            $cargo                      = $data->cargo              ?? null;
             $dataAniversario            = $data->dataAniversario    ?? null;
             $inFuncionario              = $data->inFuncionario      ?? null;
             $email                      = $data->email              ?? null;
@@ -187,8 +185,7 @@ class UsuariosController
             $stmt->bindValue(":senha",              $senha);
             $stmt->bindValue(":moduloId",           $moduloId);
             $stmt->bindValue(":situacao",           $situacao);
-            
-
+           
             $stmt->execute();
 
             $response = $stmt->fetchAssociative();
@@ -222,6 +219,89 @@ class UsuariosController
                 "error"     => $th->getMessage(),
                 "message"   => "Ocorreu um erro ao processar a requisição",
                 "success"   => false
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @Route(
+     *  "/core/usuarios/cargos",
+     *  name="core.usuarios.cargos",
+     *  methods={"GET"})
+     *
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function cargos(Connection $connection, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent());
+        try {
+            empty($data) ? $response =  $connection->fetchAllAssociative('SELECT id_carg, ds_carg FROM TB_CORE_CARG'): $response =  $connection->fetchAssociative('SELECT id_carg, ds_carg FROM TB_CORE_CARG WHERE id_carg = ?', [$data->cargo]);
+           
+            if(!is_array($response))
+                throw new \Exception($response);
+               
+            if(empty($response))
+                return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+
+            $jr = new JsonResponse([
+                "data"      => $response,
+                "error"     => null,
+                "message"   => null,
+                "success"   => true,
+            ], Response::HTTP_OK);
+
+            return $jr->setEncodingOptions(JSON_NUMERIC_CHECK|JSON_UNESCAPED_SLASHES);
+            
+        } catch (\Throwable $th) {
+            return new JsonResponse([
+                "data"      => null,
+                "error"     => $th->getMessage(),
+                "message"   => "Ocorreu um erro ao processar a requisição",
+                "success"   => false,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @Route(
+     *  "/core/usuarios/departamentos",
+     *  name="core.usuarios.departamentos",
+     *  methods={"GET"})
+     *
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function departamentos(Connection $connection, Request $request):JsonResponse
+    {   
+        $data = json_decode($request->getContent());
+            
+        try {
+            empty($data) ? $response =  $connection->fetchAllAssociative('SELECT * FROM TB_CORE_SETR'): $response =  $connection->fetchAssociative('SELECT * FROM TB_CORE_SETR WHERE id_setr = ?', [$data->departamento]);
+            
+            if(!is_array($response))
+                throw new \Exception($response);
+          
+            if(empty($response))
+                return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+
+            $jr = new JsonResponse([
+                "data"      => $response,
+                "error"     => null,
+                "message"   => null,
+                "success"   => true,
+            ], Response::HTTP_OK);
+
+            return $jr->setEncodingOptions(JSON_NUMERIC_CHECK|JSON_UNESCAPED_SLASHES);
+            
+        } catch (\Throwable $th) {
+            return new JsonResponse([
+                "data"      => null,
+                "error"     => $th->getMessage(),
+                "message"   => "Ocorreu um erro ao processar a requisição",
+                "success"   => false,
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

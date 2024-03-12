@@ -47,6 +47,7 @@ class AutorizacionesController extends AbstractController
         $id_usuario =  0;
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
         $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : null;
+        $hora_solicitud = date('H:i:s') ;
         $estado = 10;
         $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
         $respt = $helper->actualizaOfertaA($connection, $id_oferta);
@@ -55,6 +56,7 @@ class AutorizacionesController extends AbstractController
                 'id_oferta' => (int)$id_oferta,
                 'fecha_solicitud' => $fecha_solicitud,
                 'descripcion_vend' => $descripcion_vend,
+                'hora_solicitud' => $hora_solicitud,
                 'estado' => $estado
             ];
             $affectedRows = $connection->insert('tb_autorizaciones', $data_insert);
@@ -85,7 +87,7 @@ class AutorizacionesController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
+    
     public function autorizacion_estado_sap($helper, $connection, $id_oferta)
     {
         $obtenerOferta = $helper->buscarOferta($connection, $id_oferta);
@@ -299,7 +301,7 @@ class AutorizacionesController extends AbstractController
 
             $cargo = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
 
-            if (in_array($cargo, ['GERENTE', 'SUBGERENTE', 'SUPERVISOR', 'ADMINISTRADOR', 'PROMOTOR'])) {
+            if (in_array($cargo, [1, 2, 3, 4, 6])) {
                 // Filtros
                 $orderBy = 'TB_OFERTA.id';
                 $orderType = 'DESC'; //filtaspo
@@ -338,7 +340,9 @@ class AutorizacionesController extends AbstractController
                 if (!empty($codVendedor)) {
                     $conditions[] = "TB_VEND.ID = :codVendedor";
                     $bindings['codVendedor'] = $codVendedor;
-                } else if ($cargo == 'PROMOTOR') {
+                } 
+                
+                if ($cargo == 6) {
                     $conditions[] = "TB_VEND.ID = :idVendedorPromotor";
                     $bindings['idVendedorPromotor'] = $idVend;
                 }
@@ -558,6 +562,7 @@ class AutorizacionesController extends AbstractController
         $helper = new Helper();
         $params = json_decode($request->getContent(), true);
         $id_autorizacion = isset($params['id_autorizacion']) ? $params['id_autorizacion'] : null;
+        $hora_gestion = date('H:i:s') ;
 
         $estado = isset($params['estado']) ? intval($params['estado']) : 10;
         $descripcion_usua = isset($params['descripcion_usua']) ? $params['descripcion_usua'] : null;
@@ -575,16 +580,18 @@ class AutorizacionesController extends AbstractController
                     );
                 } else {
                     $fecha_actual = new \DateTime();
-                    $fecha = $fecha_actual->format('Y-m-d');
+                    $fecha = $fecha_actual->format('Y-m-d H:i:s');
 
                     $query = "UPDATE tb_autorizaciones 
                                 SET fecha_gestion = :fecha_actual,
-                                    estado = :estado 
+                                    estado = :estado,
+                                    hora_gestion = :hora_gestion
                                 WHERE id = :id_autorizacion";
                     $statement = $connection->prepare($query);
                     $statement->bindValue(':id_autorizacion', $id_autorizacion);
                     $statement->bindValue(':fecha_actual', $fecha);
                     $statement->bindValue(':estado', $estado);
+                    $statement->bindValue('hora_gestion', $hora_gestion);
                     $statement->execute();
 
                     $respMd = $statement->rowCount();

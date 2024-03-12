@@ -1821,7 +1821,7 @@ class SapController extends AbstractController
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
         $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
-
+       /*  $connection->beginTransaction(); */
         try {
             if (empty($data_error)) {
                 if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
@@ -1830,10 +1830,14 @@ class SapController extends AbstractController
                         $id_sucursal = $connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
                         if (!empty($id_sucursal)) {
                             $data_ejecutivo['NR_MATR'] = $data['codigo_sap'];
+                            
+
                             $resp_usuario = $connection->insert('TB_CORE_USUA', $data_ejecutivo);
+
                             $id_usuario = $connection->lastInsertId();
                             if (!empty($resp_usuario)) {
                                 $resultPermiso = $helper->asignarPermisos($connection, $id_usuario);
+                                
                                 if ($resultPermiso['codigoRespuesta'] != 200) {
                                     $connection->rollBack();
                                     $message = array(
@@ -1844,23 +1848,21 @@ class SapController extends AbstractController
                                     );
                                 }
                                 $respVend = $helper->insertVendedor($connection, $data, $id_usuario, $id_sucursal);
-                                if ($respVend['response'] != 200) {
-
-                                   
-                                }
+                                /* dd($respVend); */
+                                
                                 if ($resultPermiso['codigoRespuesta'] == 200 && $respVend['response'] == 200) {
                                      //ENVIO CORREO CREDENCIALES
-                                     $url = 'http://23.254.204.187/api/comercial/ciclo-vendas/23/autorizaciones/lista';
+                                     $url = 'http://23.254.204.187/assets/images/logo/crm-360.png';
                                      $contenido = $helper->correoEnvioCredenciales($data['codigo_sap'], 'CRMTEMP', $url);
                                      $arrayDatos = [
                                          'remitente' => 'test.crm360@mtcorplatam.com',
                                          'destinatario' =>  $data['email'],
-                                         'asunto' => 'Envio de credenciales',
+                                         'asunto' => 'Envío de credenciales CRM360 PRUEBA',
                                          'contenido' => $contenido,
                                      ];
-                                     $enviarCorreo = $helper->enviarCorreo($arrayDatos);
+                                     $enviarCorreo = $helper->enviarCorreo($arrayDatos); 
                                      //FIN ENVIO CORREO CREDENCIALES
-                                     $connection->rollBack();
+                                     /* $connection->rollBack(); */
                                      $message = array(
                                          'response' => 204,
                                          'estado' => false,
@@ -1914,6 +1916,9 @@ class SapController extends AbstractController
                 );
             }
         } catch (\Throwable $th) {
+            /* $connection->commit(); */
+          /*   dd($th); */
+            
             $message = array(
                 'response' => 401,
                 'estado' => false,

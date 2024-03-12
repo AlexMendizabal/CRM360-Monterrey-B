@@ -9,7 +9,7 @@ try {
     $conn = new PDO("sqlsrv:server = $serverName; Database = $databaseName;", $uid, $pwd);
 
     // Select Query
-    $tsql = "SELECT @@Version AS SQL_VERSION";
+    $tsql = "SELECT @@Version AS SQL_VERSION";https://prod.liveshare.vsengsaas.visualstudio.com/join?A06EE4D28AAA63E335D8145B054369E8DDB3
 
     // Executes the query
     $stmt = $conn->query($tsql);

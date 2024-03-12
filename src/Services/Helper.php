@@ -313,6 +313,7 @@ class Helper
             $email  = isset($data['email']) ? $data['email'] : null;
             $nombre_factura = isset($data['nombre_factura']) ? $data['nombre_factura'] :  null;
             $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 0;
+            $fecha_creacion = datetime('Y/m/d H:i:s');
             if (isset($data['frontend'])) {
                 $vendedor = isset($data['id_vendedor']) ? (int)$data['id_vendedor'] : null;
             } else {
@@ -362,10 +363,11 @@ class Helper
                     email, 
                     nombre_factura, 
                     id_rubro, 
-                    id_tipo_documento
+                    id_tipo_documento,
+                    created_at
                     )
                     VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,
-                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :tipo_documento)";
+                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :tipo_documento, :fecha_creacion)";
 
                 $stmt = $connection->prepare($queryClient);
                 $stmt->bindValue(":nombres", $nombres);
@@ -388,6 +390,7 @@ class Helper
                 $stmt->bindValue(":nombre_factura", $nombre_factura);
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
                 $stmt->bindValue(":tipo_documento", $tipo_documento);
+                $stmt->bindValue(":fecha_creacion", $fecha_creacion);
                 $stmt->execute();
                 $id_cliente = $connection->lastInsertId();
                 /*  dd($id_cliente); */
@@ -812,53 +815,57 @@ class Helper
         $fechaActual = new \DateTime();
         $fechaFormateada = $fechaActual->format('Y-m-d');
         $data_vendedor['ID_ESCR'] = $id_sucursal;
+        try {
+            if (!empty($data_vendedor['ID_ESCR'])) {
+                isset($data['nombreUsuario']) ? $nombres = $data['nombreUsuario'] : $data_error['nombre'] = 'es requerido';
+                $partes = explode(' ', $nombres);
+                $data_vendedor['NM_VEND'] = $partes[0];
+                $data_vendedor['NM_RAZA_SOCI'] = $partes[1];
 
-        if (!empty($data_vendedor['ID_ESCR'])) {
-            isset($data['nombreUsuario']) ? $nombres = $data['nombreUsuario'] : $data_error['nombre'] = 'es requerido';
-            $partes = explode(' ', $nombres);
-            $data_vendedor['NM_VEND'] = $partes[0];
-            $data_vendedor['NM_RAZA_SOCI'] = $partes[1];
+                isset($data['carnet']) ? $data_vendedor['NR_CPF_CNPJ'] = $data['carnet'] : $data_error['carnet'] = 'es requerido';
+                isset($data['email']) ? $data_vendedor['NM_EMAI'] = $data['email'] : $data_error['email'] = 'es requerido';
+                $data_vendedor['ID_EQUI_VEND'] = 1;
+                $data_vendedor['ID_EMPR'] = -1;
+                $data_vendedor['ID_TIPO_VEND'] = 14;
+                $data_vendedor['ID_BANC'] = -1;
+                $data_vendedor['IN_STAT'] = 1;
+                $data_vendedor['ID_USUA'] = $id_usuario;
+                $data_vendedor['DT_ACAO'] = $fechaFormateada;
+                isset($data['codigo_sap']) ? $data_vendedor['codigo_sap'] = (int)$data['codigo_sap'] : $data_error['codigo_sap'] = 'es requerido';
+                try {
+                    $resp =  $connection->insert('TB_VEND', $data_vendedor);
 
-            isset($data['carnet']) ? $data_vendedor['NR_CPF_CNPJ'] = $data['carnet'] : $data_error['carnet'] = 'es requerido';
-            isset($data['email']) ? $data_vendedor['NM_EMAI'] = $data['email'] : $data_error['email'] = 'es requerido';
-            $data_vendedor['ID_EQUI_VEND'] = 1;
-            $data_vendedor['ID_EMPR'] = -1;
-            $data_vendedor['ID_TIPO_VEND'] = 14;
-            $data_vendedor['ID_BANC'] = -1;
-            $data_vendedor['IN_STAT'] = 1;
-            $data_vendedor['ID_USUA'] = $id_usuario;
-            $data_vendedor['DT_ACAO'] = $fechaFormateada;
-            isset($data['codigo_sap']) ? $data_vendedor['codigo_sap'] = (int)$data['codigo_sap'] : $data_error['codigo_sap'] = 'es requerido';
-            try {
-                $resp =  $connection->insert('TB_VEND', $data_vendedor);
-
-                if (!empty($resp)) {
+                    if (!empty($resp)) {
+                        $message = array(
+                            'response' => 200,
+                            'estado' => true,
+                            'message' => 'Se registro corectamente!',
+                        );
+                    } else {
+                        $message = array(
+                            'codigoRespuesta' => 204,
+                            'estado' => false,
+                            'message' => $data_error,
+                        );
+                    }
+                } catch (\Throwable $th) {
                     $message = array(
-                        'response' => 200,
-                        'estado' => true,
-                        'message' => 'Se registro corectamente!',
-                    );
-                } else {
-                    $message = array(
-                        'codigoRespuesta' => 204,
+                        'codigoRespuesta' => 401,
                         'estado' => false,
-                        'message' => $data_error,
+                        'detalle' => $data_error,
                     );
                 }
-            } catch (\Throwable $th) {
+            } else {
                 $message = array(
-                    'codigoRespuesta' => 401,
+                    'codigoRespuesta' => 204,
                     'estado' => false,
-                    'detalle' => $data_error,
+                    'message' => 'error al ingresar el vendedor',
                 );
             }
-        } else {
-            $message = array(
-                'codigoRespuesta' => 204,
-                'estado' => false,
-                'message' => $data_error,
-            );
+        } catch (\Throwable $th) {
+            $message = $th->getMessage();
         }
+
         return $message;
     }
 
@@ -2623,10 +2630,10 @@ class Helper
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host       = 'mail.mtcorplatam.com';
+            $mail->Host       = 'mail.ingbolivia.com'; /* 'mail.monterreysrl.com.bo' */
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'test.crm360@mtcorplatam.com';
-            $mail->Password   = '7D)npu]jo{Iz';
+            $mail->Username   = 'testcrm@ingbolivia.com'; /* 'crm360@monterreysrl.com.bo' */
+            $mail->Password   = 'Barja1994*';/* 'cccRRRmmm360' */
             $mail->SMTPSecure = 'ssl';
             $mail->Port       = 465;
             $mail->CharSet = 'UTF-8';
@@ -2916,7 +2923,8 @@ class Helper
         return $contenido;
     }
 
-    public function correoEnvioCredenciales($usuario, $password, $url){
+    public function correoEnvioCredenciales($usuario, $password, $url)
+    {
         $contenido =
             '<html>
                     <head>
@@ -2939,12 +2947,14 @@ class Helper
                     </head>
                     <body>
                         <div align="center">
-                            <h1>Bienvenid(a) al sistema CRM </h1>
-                            <p>Sus credenciales de acceso son: .</p>
-                            <p style="font-weight: bold">Usuario:' .$usuario.'</p>
-                            <p style="font-weight: bold">Contraseña:' .$password.'</p>
-                            <p>Recuerde cambiar su contraseña al iniciar sesión</p>
+                            <h1>Bienvenido(a) al sistema CRM360. </h1>
+                            <p style="font-size: 15px;">Sus credenciales de acceso son: .</p>
+                            <p style="font-weight: bold; font-size: 15px;">Usuario: ' . $usuario . '</p>
+                            <p style="font-weight: bold; font-size: 15px;">Contraseña: ' . $password . '</p>
+                            <p style="font-size: 13px;">Recuerde cambiar su contraseña al iniciar sesión.</p>
                             <img src="' . $url . '" width="250px" height="70px">
+                            <p style="font-size: 13px; font-weight: bold;">Porfavor no responda a este mensaje.</p>
+
                         </div>
                     </body>
                 </html>';
@@ -4134,13 +4144,37 @@ class Helper
         $stmt->bindValue(":id_vendedor", $id_vendedor, PDO::PARAM_INT);
         $stmt->execute();
         $agendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if(count($agendas) > 0) {
+        if (count($agendas) > 0) {
             foreach ($agendas as $agenda) {
                 $idArray[] = $agenda['id_agenda'];
             }
-            return array (true, $idArray);
-        }else{
-            return array (false, $idArray);
+            return array(true, $idArray);
+        } else {
+            return array(false, $idArray);
+        }
+    }
+    public function almacenVendedor($connection, int $id_vendedor, $nombre_cargo)
+    {
+       
+        $almacenArray = array();
+        if ($nombre_cargo === 'PROMOTOR') {
+            $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP INNER JOIN TB_ALMACEN_VENDEDOR AV ON (DP.CODIGO_ALMACEN =AV.id_almacen) 
+            WHERE AV.id_vendedor = :id_vendedor AND DP.ESTADO_DEPOSITO = :estado_deposito";
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(":id_vendedor", $id_vendedor, PDO::PARAM_INT);
+        } else {
+            $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP 
+            WHERE DP.ESTADO_DEPOSITO = :estado_deposito";
+            $stmt = $connection->prepare($query);
+
+        }
+        $stmt->bindValue(":estado_deposito", 1, PDO::PARAM_INT);
+        $stmt->execute();
+        $almacenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($almacenes) > 0) {
+            return $almacenes;
+        } else {
+            return false;
         }
     }
 }

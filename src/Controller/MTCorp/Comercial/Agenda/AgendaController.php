@@ -48,7 +48,7 @@ class AgendaController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $simuladorVendas = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'HOMO_CICL_VEND');
-            //dd($simuladorVendas);
+
             $res = array(
                 array(
                     'simuladorVendas' => $simuladorVendas
@@ -84,14 +84,13 @@ class AgendaController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            /* dd($infoUsuario); */
+
             $params = $request->query->all();
             $inicio = date('Y-m-d', strtotime($params['inicio'])) . ' 00:00:00';
             $fim = date('Y-m-d', strtotime($params['fim'])) . ' 23:59:59';
             $idVendedor = isset($params['idVendedor']) ? $params['idVendedor'] : $infoUsuario->matricula;
             $tipo_compromiso = isset($params['tipo_compromiso']) ? $params['tipo_compromiso'] : '';
 
-            //dd($inicio);
             $sql = "EXEC [PRC_AGEN_VEND_CONS]
                     @VENDEDOR = :vendedor,
                     @DATA_INICIAL = :inicio,
@@ -139,7 +138,6 @@ class AgendaController extends AbstractController
                     ];
                 }
 
-                //dd($compromissos);
                 $message = [
                     'responseCode' => 200,
                     'result' => $compromissos
@@ -157,7 +155,7 @@ class AgendaController extends AbstractController
                 'message' => $e->getMessage()
             ];
         }
-        //dd($message);
+
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
@@ -189,7 +187,7 @@ class AgendaController extends AbstractController
             $inicio = date('Y-m-d', strtotime($params['inicio'])) . ' 00:00:00';
             $fim = date('Y-m-d', strtotime($params['fim'])) . ' 23:59:59';
             $tipo_compromiso = isset($params['tipo_compromiso']) ? $params['tipo_compromiso'] : '';
-            /* dd($inicio); */
+
             if ($inicio !== '1969-31-12 00:00:00') {
                 $res = $connection->query("
                     EXEC PROC_AGEN_COMP_STA
@@ -198,7 +196,7 @@ class AgendaController extends AbstractController
                     @DATA_FINAL = '{$fim}',
                     @TIPO_REGISTRO = '{$tipo_compromiso}'
                 ")->fetchAll();
-                //dd($res);
+
                 $compromissos = [];
                 if (count($res) > 0 && !isset($res[0]['MSG'])) {
                     foreach ($res as $item) {
@@ -266,16 +264,15 @@ class AgendaController extends AbstractController
 
                 $res = $connection->query(
                     "
-                EXEC [PRC_AGEN_VEND_CONS]
-                @ID_AGENDA = '{$id}'
-            "
+                        EXEC [PRC_AGEN_VEND_CONS]
+                        @ID_AGENDA = '{$id}'
+                    "
                 )->fetchAll();
 
                 /*    $data = $connection->executeQuery(
                     'SELECT latitud, longitud FROM TB_CORE_AGEN_UB WHERE id_agenda = :id_agenda',
                     ['id_agenda' => $id]
                 )->fetchAll(); */
-
                 if (!empty($res)) {
                     $compromisso = new \stdClass;
                     $compromisso->id = (int)$res[0]['ID_AGENDA'];
@@ -308,6 +305,8 @@ class AgendaController extends AbstractController
                     $compromisso->hora_inicio = date('H:i:s', strtotime($res[0]['DATA_FINAL']));
                     $compromisso->fecha_final = date('d-m-Y', strtotime($res[0]['DATA_INICIO']));
                     $compromisso->hora_final = date('H:i:s', strtotime($res[0]['DATA_FINAL']));
+                    $compromisso->id_vend_asig = $res[0]['ID_VEND_ASIG']; 
+                    $compromisso->vend_asig = $res[0]['NOMBRE_VEND_ASIG']; 
 
                     /*  if ($compromisso->id_motivo > 0) {
                         $compromisso->color = '#F0F8FF';
@@ -340,7 +339,6 @@ class AgendaController extends AbstractController
                             break;
                     }
 
-                    //dd($compromisso);
                     $message = array(
                         'responseCode' => 200,
                         'result' => $compromisso
@@ -380,10 +378,9 @@ class AgendaController extends AbstractController
             $longitud = '';
             $codigo_cliente = '';
             $helper = new Helper();
-
-
             $data = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
             $id_vendedor = 0;
             $cor = "";
             if ($infoUsuario->matricula == 1) {
@@ -391,76 +388,85 @@ class AgendaController extends AbstractController
             } else {
                 $cor = "#BC0BDF";
             }
-
-            $codTitulo = $data['codTitulo'];
-            $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
-            $formaContato = $data['formContactId'];
-            $meioContato = $data['typeContactId'];
-            $dataInicial = date('Y/m/d H:i:s', strtotime($data['start']));
-            $dataFinal = !empty($data['end']) ? date('Y/m/d H:i:s', strtotime($data['end'])) : '';
-            $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
+            !empty($data['codTitulo']) ? $codTitulo = $data['codTitulo'] : $data_error_agenda['codTitulo'] = 'es nesesario';
+            !empty($data['codClient']) ? $codCliente = $data['codClient'] : $data_error_agenda['cliente'] = 'es nesesario';
+            !empty($data['formContactId']) ?  $formaContato = $data['formContactId'] : $data_error_agenda['contacto'] = 'es nesesario';
+            !empty($data['typeContactId']) ?  $meioContato = $data['typeContactId'] : $data_error_agenda['medio_contacto'] = 'es nesesario';
+            !empty($data['start']) ? $dataInicial = date('Y/m/d H:i:s', strtotime($data['start'])) : $data_error_agenda['fecha_inicial'] = 'es nesesario';
+            !empty($data['end']) ? $dataFinal = date('Y/m/d H:i:s', strtotime($data['end'])) : !empty($data['allDay']) ?  $diaInteiro = $data['allDay'] == '1' ? 1 : 0 :  $data_error_agenda['fecha_final'] = 'es nesesario';
+            !empty($data['direccion']) ? $direccion = strtoupper($data['direccion']) : '';
             $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
-            $direccion = !empty($data['direccion']) ? strtoupper($data['direccion']) : '';
-            $latitud = !empty($data['latitud']) ? $data['latitud'] : 0;
-            $longitud = !empty($data['longitud']) ? $data['longitud'] : 0;
-            $codigo_cliente =   $connection->fetchOne('SELECT codigo_cliente FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = ?', [$codCliente]);
+            !empty($data['latitud']) ? $latitud =  $data['latitud'] : $data_error_agenda['latitud'] = 'es nesesario';
+            !empty($data['longitud']) ? $longitud = $data['longitud'] : $data_error_agenda['longitud'] = 'es nesesario';
+            !empty($data['id_promotorasignado']) ?  $promotorasignado = $data['id_promotorasignado'] : $data_error['promotorasignado'] = 'es necesario';
+            $codigo_cliente = $connection->fetchOne('SELECT codigo_cliente FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = ?', [$codCliente]);
 
-            if (isset($data['latitud']) && $data['latitud'] != null) {
-                $latitud = $data['latitud'];
+            if(!empty($data['promotorparaasignar']) && $infoUsuario->none_cargo == 1)
+            {
+                $id_vendedor = $data['promotorparaasignar'];
             }
-            if (isset($data['longitud']) && $data['longitud'] != null) {
-                $longitud = $data['longitud'];
+            else
+            {
+                if (isset($data['idVendedor']) && !empty($data['idVendedor'])) {
+                    $id_vendedor = $data['idVendedor'];
+                } else {
+                    $id_vendedor = $infoUsuario->idVendedor;
+                }
             }
+            
+            if (empty($data_error_agenda)) {
+                $save = $connection->query("
+                EXEC [PRC_AGEN_VEND_CADA]
+                    @AGENDA = ''
+                    ,@COR = '{$cor}'
+                    ,@ID_TITULO = '{$codTitulo}'
+                    ,@CLIENTE = '{$codCliente}'
+                    ,@FORMA_CONTATO = '{$formaContato}'
+                    ,@MEIO_CONTATO = '{$meioContato}'
+                    ,@DATA_INICIAL = '{$dataInicial}'
+                    ,@DATA_FINAL = '{$dataFinal}'
+                    ,@DIA_INTEIRO = '{$diaInteiro}'
+                    ,@STATUS = '1'
+                    ,@OBSERVACAO = '{$observacao}'
+                    ,@VENDEDOR = '{$id_vendedor}'
+                    ,@id_vend_asig ='{$promotorasignado}'
 
-            if (isset($data['idVendedor'])) {
-                $id_vendedor = $data['idVendedor'];
-            } else {
-                $id_vendedor = $infoUsuario->idVendedor;
-            }
-            $save = $connection->query("
-                    EXEC [PRC_AGEN_VEND_CADA]
-                        @AGENDA = ''
-                        ,@COR = '{$cor}'
-                        ,@ID_TITULO = '{$codTitulo}'
-                        ,@CLIENTE = '{$codCliente}'
-                        ,@FORMA_CONTATO = '{$formaContato}'
-                        ,@MEIO_CONTATO = '{$meioContato}'
-                        ,@DATA_INICIAL = '{$dataInicial}'
-                        ,@DATA_FINAL = '{$dataFinal}'
-                        ,@DIA_INTEIRO = '{$diaInteiro}'
-                        ,@STATUS = '1'
-                        ,@OBSERVACAO = '{$observacao}'
-                        ,@VENDEDOR = '{$id_vendedor}'
-                ")->fetchAll();
+            ")->fetchAll();
 
-            $id_agenda =  $connection->lastInsertId();
+                $id_agenda =  $connection->lastInsertId();
+                $fechaFormateada =  date('Y-m-d');
 
-            $fechaFormateada =  date('Y-m-d');
+                if ($save[0]['MSG'] == 'TRUE') {
+                    if (!empty($latitud) && !empty($longitud) && !empty($direccion)) {
 
-            if ($save[0]['MSG'] == 'TRUE') {
-                if (!empty($latitud) && !empty($longitud) && !empty($direccion)) {
-
-                    $data_ltlg = [
-                        'latitud_inicial' => $latitud,
-                        'longitud_inicial' =>  $longitud
-                    ];
-                    $reg = $helper->actualizarAgenda($connection, $data_ltlg, (int)  $id_agenda);
-                    if ($reg !== false) {
-                        $message = array(
-                            'responseCode' => 200,
-                            'estado' => true
-                        );
-                    } else {
-                        $message = array(
-                            'responseCode' => 204,
-                            'estado' => false
-                        );
+                        $data_ltlg = [
+                            'latitud_inicial' => $latitud,
+                            'longitud_inicial' =>  $longitud
+                        ];
+                        $reg = $helper->actualizarAgenda($connection, $data_ltlg, (int)$id_agenda);
+                        if ($reg !== false) {
+                            $message = array(
+                                'responseCode' => 200,
+                                'estado' => true
+                            );
+                        } else {
+                            $message = array(
+                                'responseCode' => 204,
+                                'estado' => false
+                            );
+                        }
                     }
+                } else {
+
+                    $message = array(
+                        'responseCode' => $save,
+                        'estado' => false
+                    );
                 }
             } else {
-
                 $message = array(
-                    'responseCode' => $save,
+                    'responseCode' => 204,
+                    'error' => $data_error_agenda,
                     'estado' => false
                 );
             }
@@ -491,6 +497,7 @@ class AgendaController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
+            dd($infoUsuario, $data);
             $id = $data['id'];
             $cor = "";
             $codTitulo = $data['codTitulo'];
@@ -502,7 +509,14 @@ class AgendaController extends AbstractController
             $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
             $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
             $obs_final = !empty($data['obsFinalizar']) ? strtoupper($data['obsFinalizar']) : '';
-            $id_vendedor = !empty($data['idVendedor']) ? strtoupper($data['idVendedor']) : '';
+            if($infoUsuario->none_cargo == 1 && !empty($data['promotorparaasignar']))
+            {
+                $id_vendedor = $data['promotorparaasignar'];
+            }
+            else
+            {
+                $id_vendedor = !empty($data['idVendedor']) ? strtoupper($data['idVendedor']) : '';
+            }
             $codigo_cliente = !empty($data['codClient']) ? $data['codClient'] : '';
             $direccion = !empty($data['direccion']) ? $data['direccion'] : '';
             $latitud = !empty($data['latitud']) ? $data['latitud'] : '';
@@ -552,7 +566,6 @@ class AgendaController extends AbstractController
                     $status = 1;
                     break;
             }
-            /* dd($data); */
             $update = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA]
                     @AGENDA = '{$id}'
@@ -728,21 +741,23 @@ class AgendaController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
+            !empty($data['rescheduleId']) ? $motivoReagendamento = $data['rescheduleId'] :  $data_error['motivo reprogramacion'] = 'es requerido';
 
-            $cor = $data['color']['primary'] ? $data['color']['primary'] : null;
-            $codTitulo = $data['codTitulo'];
-            $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
-            $formaContato = $data['formContactId'];
-            $meioContato = $data['typeContactId'];
-            $dataInicial = date('Y-m-d H:i:s', strtotime($data['start']));
-            $dataFinal = !empty($data['end']) ? date('Y-m-d H:i:s', strtotime($data['end'])) : '';
-            $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
-            $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
-            $id = $data['id'];
-            $idVendedor = $data['idVendedor'];
-            $status = $data['status'];
+            if (!empty($data_error)) {
+                $cor = $data['color']['primary'] ? $data['color']['primary'] : null;
+                $codTitulo = $data['codTitulo'];
+                $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
+                $formaContato = $data['formContactId'];
+                $meioContato = $data['typeContactId'];
+                $dataInicial = date('Y-m-d H:i:s', strtotime($data['start']));
+                $dataFinal = !empty($data['end']) ? date('Y-m-d H:i:s', strtotime($data['end'])) : '';
+                $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
+                $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
+                $id = $data['id'];
+                $idVendedor = $data['idVendedor'];
+                $status = $data['status'];
 
-            $res = $connection->query("
+                $res = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA]
                     @AGENDA = '{$id}'
                     ,@COR = '{$cor}'
@@ -758,13 +773,13 @@ class AgendaController extends AbstractController
                     ,@VENDEDOR = '{$idVendedor}'
             ")->fetchAll();
 
-            if ($res[0]['MSG'] == 'TRUE' && isset($res[0]['ID_AGENDA'])) {
-                $idCompromissoAntigo = $data['id'];
-                $idCompromissoReagendado = $res[0]['ID_AGENDA'];
-                $motivoReagendamento = $data['rescheduleId'];
+                if ($res[0]['MSG'] == 'TRUE' && isset($res[0]['ID_AGENDA'])) {
+                    $idCompromissoAntigo = $data['id'];
+                    $idCompromissoReagendado = $res[0]['ID_AGENDA'];
+                    $motivoReagendamento = $data['rescheduleId'];
 
-                $arquivar = $connection->query(
-                    "
+                    $arquivar = $connection->query(
+                        "
                     EXEC [PRC_AGEN_VEND_CADA]
                     @AGENDA = '{$idCompromissoAntigo}',
                     @COR = '#696969',
@@ -778,16 +793,16 @@ class AgendaController extends AbstractController
                     @REAGENDADO_MOTIVO = '{$motivoReagendamento}',
                     @VENDEDOR = '{$idVendedor}'
                     "
-                )->fetchAll();
+                    )->fetchAll();
 
-                if ($arquivar[0]['MSG'] == 'TRUE') {
-                    /* dd($arquivar); */
-                    $message = array('responseCode' => 200, 'estado' => true);
+                    if ($arquivar[0]['MSG'] == 'TRUE') {
+                        $message = array('responseCode' => 200, 'estado' => true);
+                    } else {
+                        $message = array('responseCode' => 204, 'estado' => false);
+                    }
                 } else {
                     $message = array('responseCode' => 204, 'estado' => false);
                 }
-            } else {
-                $message = array('responseCode' => 204, 'estado' => false);
             }
         } catch (DBALException $e) {
             $message = array(
@@ -1020,14 +1035,14 @@ class AgendaController extends AbstractController
             if (count($res) > 0) {
 
                 foreach ($res as $value) {
-                    //dd($value);
+
                     $file = $value['url_imagen'];
                     $response = new BinaryFileResponse($file);
 
                     $image = file_get_contents($value['url_imagen']);
 
                     $imagedata = base64_encode($image);
-                    //dd($imagedata);
+
                     $resLoop[] = array(
                         'url_imagen' => $imagedata,
                         'url_web' => $value['url_web'],
@@ -1268,7 +1283,7 @@ class AgendaController extends AbstractController
             $statement->execute();
 
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            //dd($row);
+
             $msg = $row['MSG'];
 
             if ($msg == "TRUE") {
@@ -1339,7 +1354,7 @@ class AgendaController extends AbstractController
 
             // Obtener el resultado del procedimiento almacenado
             $result = $stmt->fetch();
-            //dd($result);
+
 
             if (!empty($data['imagen'])) {
                 $id_agenda = $data['id_agenda'];

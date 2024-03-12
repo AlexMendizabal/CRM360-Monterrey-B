@@ -346,7 +346,7 @@ class CotacoesController extends AbstractController
             /* Fecha Inicial */
             if (!empty($dataInicial)) {
                 $fechaInicial1 = date('Y-m-d', strtotime($dataInicial));
-            } 
+            }
             /* Fecha Final */
             if (!empty($fechaFinal)) {
                 $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
@@ -378,20 +378,32 @@ class CotacoesController extends AbstractController
                 'OFE.autorizacion',
                 'CO.descripcion as descripcion_cierre',
                 'CO.descripcion',
+                'AU.id AS id_autorizacion',
+                'AU.estado AS id_estado_autorizacion', 
+                'DAU.id_usuario AS id_usuario',
+                'USU.NM_COMP_RAZA_SOCI as nombre_usuario',
                 "CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre",
-            )
-                ->from('TB_OFERTA', 'OFE')
-                ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
-                ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
-                ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
-                ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
-                ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
-                ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
-                ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta= CO.id')
+
+
+
+            )->from('TB_OFERTA', 'OFE')
+            ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
+            ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
+            ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
+            ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
+            ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
+            ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
+            ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta = CO.id')
+            ->leftJoin('OFE', 'tb_autorizaciones', 'AU', 'AU.id_oferta = OFE.id')
+            ->leftJoin('AU', 'TB_DETALLE_AUTO', 'DAU', 'AU.id = DAU.id_autorizacion')
+            ->leftJoin('AU', 'TB_CORE_USUA', 'USU', 'DAU.id_usuario = USU.ID')
+            
+
                 ->orderBy($orderBy,  $orderType)
-                ->setFirstResult($offset) // Comienza desde el primer resultado
-                ->setMaxResults($registros) // Recupera un máximo resultados
+                ->setFirstResult($offset)
+                ->setMaxResults($registros)
                 ->where('1 = 1');
+
             if (!empty($fechaInicial1)) {
                 $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
                 $queryOferta->setParameter('fecha_inicial', $fechaInicial1);
@@ -1059,9 +1071,8 @@ class CotacoesController extends AbstractController
                     ")->fetchAll();
 
                 $res += [$value => $arrayTemp];
-                
             }
-            
+
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
@@ -2547,8 +2558,7 @@ class CotacoesController extends AbstractController
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        if(!empty($data))
-        {
+        if (!empty($data)) {
             $resp = $this->insertaOferta($connection, $data);
             $data_oferta = json_decode($resp->getContent(), true);
             $id_oferta = $data_oferta['data'];
@@ -2639,6 +2649,8 @@ class CotacoesController extends AbstractController
         !empty($data['monto_total_bruto']) ? $data_oferta['monto_total_bruto'] = $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es necesario';
         !empty($data['peso_total']) ? $data_oferta['peso_total'] = $data['peso_total'] : $data_error['peso_total'] = 'es necesario';
         !empty($data['descuento_total']) ? $data_oferta['descuento_total'] = $data['descuento_total'] : null;
+        !empty($data['formaContacto']) ? $data_oferta['forma_contacto'] = $data['formaContacto'] : null;
+        !empty($data['tipoContacto']) ? $data_oferta['origen_contacto'] = $data['tipoContacto'] : null;
 
         !empty($data['cantidad_total']) ?  $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
 
@@ -2818,7 +2830,7 @@ class CotacoesController extends AbstractController
 
             if ($sapresp['CodigoRespuesta'] == 200) {
                 $data_sap['codigo_oferta'] = $sapresp['Oferta'];
-                 $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
                 $data_sap['vencimiento'] = $sapresp['Vencimiento'];
                 $resp2 = $connection->update('TB_OFERTA', $data_sap, ['id' => (int) $data_oferta['id_oferta']]);
                 $message = [
@@ -2849,7 +2861,7 @@ class CotacoesController extends AbstractController
     }
 
 
-      /**
+    /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/vigencia_oferta/{codigo_oferta}",
      *  name="comercial.ciclo-vendas-cotacoes-vigencia-estado",
@@ -2869,37 +2881,30 @@ class CotacoesController extends AbstractController
         try {
             $ruta = "/estadoOferta";
             $message = $helper->insertarServicio($ruta, $estado);
-            if($message['CodigoRespuesta'] == 200)
-            {   
+            if ($message['CodigoRespuesta'] == 200) {
                 $codigoEstado = $message['CodigoEstado'];
                 $oferte_vigencia = $connection->update('TB_OFERTA', ['estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);
-               
-                if(!empty($oferte_vigencia))
-                {
+
+                if (!empty($oferte_vigencia)) {
                     $message = [
                         'CodigoRespuesta' => 200,
-                        'message' => $message['Mensaje'],
+                        'message' => ($message['Mensaje'] === 'No existe la Oferta') ? 'Oferta cerrada' : $message['Mensaje'],
                         'success' => true
                     ];
-                }
-                else
-                {
+                } else {
                     $message = [
                         'CodigoRespuesta' => 204,
                         'message' => 'no puedo actualizar',
                         'success' => false
                     ];
                 }
-            }
-            else
-            {
+            } else {
                 $message = [
                     'CodigoRespuesta' => 204,
                     'message' => $message['Mensaje'],
                     'success' => false
                 ];
             }
-            
         } catch (\Throwable  $e) {
             $message = [
                 'CodigoRespuesta' => 500,
@@ -3254,26 +3259,26 @@ class CotacoesController extends AbstractController
      * @return JsonResponse
      */
     public function putModificarOferata(Connection $connection, Request $request)
-    {
+    { 
         $helper = new Helper();
         try {
             $params = json_decode($request->getContent(), true);
-
-            !empty($params['id_oferta']) ? $row = $connection->fetchAssociative('SELECT id, estado_oferta, codigo_oferta FROM TB_OFERTA WHERE ID = ?', [$params['id_oferta']]) : $data_error['id_oferta'] = 'es requerido';
+            
+            !empty($params['id_oferta']) ? $row = $connection->fetchAssociative('SELECT id, estado_oferta, nombre_oferta FROM TB_OFERTA WHERE ID = ?', [$params['id_oferta']]) : $data_error['id_oferta'] = 'es requerido';
             !empty($params['estadoOfert']) ? $data_sap['estado_oferta'] = (int)$params['estadoOfert'] - 1 : $data_error['estadoOferta'] = 'es reqierodo';
             !empty($params['descripcion']) ? $data_oferta['descripcion'] = $params['descripcion'] : $data_error['descripcion'] = 'es requerido';
 
             $estado  = $row['estado_oferta'];
-            $codigo_oferta = $row['codigo_oferta'];
+            $codigo_oferta = $row['nombre_oferta'];
             $id_oferta =  $params['id_oferta'];
-           
+            
             if (!empty($codigo_oferta)) {
                 $data_cierre = [
                     'nrodocSAP' => $codigo_oferta,
                     'razon' => $data_oferta['descripcion'],
                     'tipo' =>  $data_sap['estado_oferta']
                 ];
-                   dd($data_cierre);
+               
                 $respta = $helper->cierre_ofertea($connection, $data_cierre);
                 
                 if (!empty($respta)  && $respta['CodigoRespuesta'] == 200) {
@@ -3285,7 +3290,7 @@ class CotacoesController extends AbstractController
                         if (!empty($resp)) {
                             $qra = $connection->query("SELECT TOP 1 autorizacion FROM TB_OFERTA WHERE ID = {$id_oferta}");
                             $row = $qra->fetch();
-                            
+
                             if ($row['autorizacion'] == 1) {
                                 $connection->update('TB_autorizaciones', ['estado' => 13], ['id_oferta' => $id_oferta]);
                             }
@@ -3359,7 +3364,7 @@ class CotacoesController extends AbstractController
                         'message' => 'El usuario tiene ofertas pendientes de gestión.',
                         'success' => true,
                         'pendiente' => true,
-                        'ofertas'=> $verificarOferta[1]
+                        'ofertas' => $verificarOferta[1]
                     ];
                 } else {
                     $message = [
@@ -3367,20 +3372,20 @@ class CotacoesController extends AbstractController
                         'message' => 'El usuario no tiene ofertas pendientes de gestion.',
                         'success' => false,
                         'pendiente' => false,
-                        'ofertas'=> $verificarOferta[1]
+                        'ofertas' => $verificarOferta[1]
 
                     ];
                 }
-            }else{
+            } else {
                 $message = [
                     'responseCode' => 204,
                     'message' => 'El usuario no tiene ofertas pendientes de gestion.',
                     'success' => false,
                     'pendiente' => false,
-                    'ofertas'=> []
+                    'ofertas' => []
 
 
-                ]; 
+                ];
             }
         } catch (\Exception $e) {
             $message = [
@@ -3388,7 +3393,7 @@ class CotacoesController extends AbstractController
                 'message' => $e->getMessage(),
                 'success' => false,
                 'pendiente' => null,
-                'ofertas'=> []
+                'ofertas' => []
 
             ];
         }

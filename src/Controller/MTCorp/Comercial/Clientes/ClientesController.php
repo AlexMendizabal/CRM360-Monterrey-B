@@ -148,7 +148,7 @@ class ClientesController extends AbstractController
                 $id_usuario = $datosVEndedor[0]['ID_USUA'];
                 $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
                 $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $buscarUsuario['NR_MATR'], 'ACES_GERA_CLIE');
-              
+
                 $res = $connection->query("
                             EXECUTE [PCR_CLIE_CONS3]
                             @ID_PARAM = 6
@@ -157,7 +157,6 @@ class ClientesController extends AbstractController
                             ,@ID_DEBU = 0
                             ")->fetchAll();
             } else {
-
                 $res = $connection->query("
                             EXECUTE [PCR_CLIE_CONS3]
                             @ID_PARAM = 6
@@ -165,8 +164,6 @@ class ClientesController extends AbstractController
                             ,@ID_DEBU = 0
                             ")->fetchAll();
             }
-           
-          
             //dd("pruebas",$res);
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
 
@@ -312,6 +309,40 @@ class ClientesController extends AbstractController
             }
         } catch (DBALException $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/clientes/getvendedorporcliente/{codCliente}",
+     *  name="comercial.clientes-getvendedorporcliente",
+     *  methods={"GET"},
+     *  requirements={"codCliente"="\d+"}
+     * )
+     * @return JsonResponse
+     */
+    public function getvendedorporcliente(Connection $connection, $codCliente)
+    {
+        !empty($codCliente) ?
+            $res = $connection->query("EXECUTE [PCR_CLIE_CONS3]
+                        @ID_PARAM = 6
+                        ,@NM_CLIE = {$codCliente}
+                        ,@ID_SITU = 1
+                        ,@ID_DEBU = 0
+                        ")->fetchAll()
+            : $codCliente = 'selecione un cliente';
+        try {
+            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
+                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+
+                return FunctionsController::Retorno(false, $error_cliente, null, Response::HTTP_OK);
+            } else {
+
+                return FunctionsController::Retorno(false, $error_cliente, null, Response::HTTP_NO_CONTENT);
+            }
+        } catch (DBALException $e) {
+            return FunctionsController::Retorno(false, 'Error al retornar datos.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }

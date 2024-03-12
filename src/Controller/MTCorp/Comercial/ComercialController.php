@@ -603,8 +603,8 @@ class ComercialController extends AbstractController
             $idSubLinea = isset($params['idClasse']) ? $params['idClasse'] : 0;
 
             $queryBuilder = $connection->createQueryBuilder();
-            $queryBuilder->select('id as idSubLinea', 'NM_SUB_LINH as descripcion', 'id_clase  as id_grupo')
-                        ->from('TB_SUB_LINH')
+            $queryBuilder->select('id_linha as idSubLinea', 'descricao as descripcion', 'id_classe  as id_grupo')
+                        ->from('MTCORP_BASE_LINHAS')
                         ->where('1 = 1');
              if (!empty($idSubLinea)) {
                 $queryBuilder->andWhere('id = :idSubLinea');
@@ -840,5 +840,52 @@ class ComercialController extends AbstractController
         } else {
             return false;
         }
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/materiales/lista_almacen",
+     *  name="comercial.almacen",
+     *  methods={"GET"},
+     * )
+     * @return JsonResponse
+     */
+    public function getListaAlmacen(Connection $connection, Request $request)
+    {
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        //dd($infoUsuario);
+        $helper = new Helper();
+        $params = $request->query->all();
+        $id_vendedor = 0;
+        $nombreCargo = '';
+        try {
+            isset($params['id_vendedor']) ? $id_vendedor  = $params['id_vendedor'] : NULL;
+            $nombreCargo = $infoUsuario->none_cargo;
+
+            $almacenes = $helper->almacenVendedor($connection, (int)$id_vendedor, $nombreCargo);
+            if ($almacenes != false) {
+                $message = [
+                    "response" => 200,
+                    "estado" => true,
+                    "data" => $almacenes
+                ];
+            } else {
+                $message = [
+                    "response" => 204,
+                    "estado" => false,
+                    "data" => []
+                ];
+            }
+        } catch (\Throwable $e) {
+            $message = [
+                "response" => 401,
+                "estado" => false,
+                "data" => $e->getMessage()
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 }

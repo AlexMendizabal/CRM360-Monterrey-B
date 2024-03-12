@@ -490,24 +490,29 @@ class VendedorController extends AbstractController
         try {
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            //dd($infoUsuario);
+         
 
-            if ($infoUsuario->idVendedor != 64 && $infoUsuario->idVendedor != 88) {
+            if ($infoUsuario->none_cargo != 1) {
                 $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
                         from TB_VEND where id = :id_vendedor";
                 $statement = $connection->prepare($query);
                 $statement->bindValue('id_vendedor', $infoUsuario->idVendedor);
                 $statement->execute();
-                //dd($statement);
-
                 $res = $statement->fetchAll();
-
                 if (isset($res)) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 }
-            } else {
-                //dd('ingreso');
-                $res = $this->todosVendedores($connection);
+                else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+                    return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+                } else {
+                    return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+                }
+            }else {
+                $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
+                        from TB_VEND ";
+                $statement = $connection->prepare($query);
+                $statement->execute();
+                $res = $statement->fetchAll();
                 if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
@@ -737,8 +742,9 @@ class VendedorController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            
+            if ($infoUsuario->none_cargo != 1) {
 
-            if ($infoUsuario->idVendedor != 88) {
             } else {
                 if ($id == 0) {
                     $res = $this->todosVendedores($connection);

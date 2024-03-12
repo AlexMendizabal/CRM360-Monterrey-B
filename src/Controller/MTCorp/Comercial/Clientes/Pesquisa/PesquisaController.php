@@ -35,11 +35,29 @@ class PesquisaController extends AbstractController
     public function getStatus(Connection $connection, Request $request)
     {
         try {
-            $res = $connection->query("
+
+            $usuario = new usuarioController();
+
+            $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
+            $vendedor = $infoUsuario->idVendedor;
+            $cargo = $infoUsuario->none_cargo;
+            //dd($cargo);
+            if($cargo == 6){
+                $res = $connection->query("
+                EXEC [PRC_CLIE_CONS]
+                    @ID_VEND = '{$vendedor}', 
+                    @ID_PARAM = 0
+                    
+            ")->fetchAll();
+            
+            }
+            else{
+                $res = $connection->query("
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 0
             ")->fetchAll();
-
+            } 
+            
             if (count($res) > 0) {
                 $message = array(
                     'responseCode' => 200,
