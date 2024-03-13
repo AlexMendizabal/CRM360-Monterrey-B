@@ -118,12 +118,14 @@ class UsuariosController
         try {
 
             $data = json_decode($request->getContent());
-         
+
             $id                         = $data->id                 ?? null;
             $nome                       = $data->nome               ?? null;
             $apelido                    = $data->apelido            ?? null;
             $empresa                    = $data->empresa            ?? null;
             $dataAniversario            = $data->dataAniversario    ?? null;
+            $cargo                      = $data->cargo              ?? null;
+            $departamento               = $data->departamento       ?? null;
             $inFuncionario              = $data->inFuncionario      ?? null;
             $email                      = $data->email              ?? null;
             $telefoneCelular            = $data->telefoneCelular    ?? null;

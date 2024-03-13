@@ -497,7 +497,7 @@ class AgendaController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
-            dd($infoUsuario, $data);
+         
             $id = $data['id'];
             $cor = "";
             $codTitulo = $data['codTitulo'];
@@ -740,10 +740,20 @@ class AgendaController extends AbstractController
         $usuariocontroller = new UsuarioController();
         try {
             $data = json_decode($request->getContent(), true);
+            
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
             !empty($data['rescheduleId']) ? $motivoReagendamento = $data['rescheduleId'] :  $data_error['motivo reprogramacion'] = 'es requerido';
-
-            if (!empty($data_error)) {
+           
+            if(!empty($data['idVendedor']) && $data['idVendedor'] != 0)
+            {
+                $idVendedor = $data['idVendedor'];
+            }
+            else
+            {
+                $idVendedor = $data['promotorparaasignar'];
+            }
+           
+            if (empty($data_error)) {
                 $cor = $data['color']['primary'] ? $data['color']['primary'] : null;
                 $codTitulo = $data['codTitulo'];
                 $codCliente = !empty($data['codClient']) ? $data['codClient'] : '';
@@ -754,9 +764,7 @@ class AgendaController extends AbstractController
                 $diaInteiro = $data['allDay'] == '1' ? 1 : 0;
                 $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
                 $id = $data['id'];
-                $idVendedor = $data['idVendedor'];
                 $status = $data['status'];
-
                 $res = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA]
                     @AGENDA = '{$id}'
@@ -771,28 +779,27 @@ class AgendaController extends AbstractController
                     ,@STATUS = '{$status}'
                     ,@OBSERVACAO = '{$observacao}'
                     ,@VENDEDOR = '{$idVendedor}'
-            ")->fetchAll();
-
+                ")->fetchAll();
+               
                 if ($res[0]['MSG'] == 'TRUE' && isset($res[0]['ID_AGENDA'])) {
                     $idCompromissoAntigo = $data['id'];
                     $idCompromissoReagendado = $res[0]['ID_AGENDA'];
                     $motivoReagendamento = $data['rescheduleId'];
 
                     $arquivar = $connection->query(
+                        " EXEC [PRC_AGEN_VEND_CADA]
+                                @AGENDA = '{$idCompromissoAntigo}',
+                                @COR = '#696969',
+                                @ID_TITULO = '{$codTitulo}',
+                                @CLIENTE = '{$codCliente}',
+                                @FORMA_CONTATO = '{$formaContato}',
+                                @MEIO_CONTATO = '{$meioContato}',
+                                
+                                @STATUS = '4',
+                                @REAGENDADO = '{$idCompromissoReagendado}',
+                                @REAGENDADO_MOTIVO = '{$motivoReagendamento}',
+                                @VENDEDOR = '{$idVendedor}'
                         "
-                    EXEC [PRC_AGEN_VEND_CADA]
-                    @AGENDA = '{$idCompromissoAntigo}',
-                    @COR = '#696969',
-                    @ID_TITULO = '{$codTitulo}',
-                    @CLIENTE = '{$codCliente}',
-                    @FORMA_CONTATO = '{$formaContato}',
-                    @MEIO_CONTATO = '{$meioContato}',
-                    
-                    @STATUS = '4',
-                    @REAGENDADO = '{$idCompromissoReagendado}',
-                    @REAGENDADO_MOTIVO = '{$motivoReagendamento}',
-                    @VENDEDOR = '{$idVendedor}'
-                    "
                     )->fetchAll();
 
                     if ($arquivar[0]['MSG'] == 'TRUE') {
@@ -801,7 +808,7 @@ class AgendaController extends AbstractController
                         $message = array('responseCode' => 204, 'estado' => false);
                     }
                 } else {
-                    $message = array('responseCode' => 204, 'estado' => false);
+                    $message = array('responseCode' => 204, 'data'=> $data_error, 'estado' => false);
                 }
             }
         } catch (DBALException $e) {

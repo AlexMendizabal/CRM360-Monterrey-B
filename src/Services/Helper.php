@@ -4153,21 +4153,21 @@ class Helper
             return array(false, $idArray);
         }
     }
-    public function almacenVendedor($connection, int $id_vendedor, $nombre_cargo)
+    public function almacenVendedorVenta($connection, int $id_vendedor, $nombre_cargo)
     {
-       
         $almacenArray = array();
         if ($nombre_cargo === 'PROMOTOR') {
-            $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP INNER JOIN TB_ALMACEN_VENDEDOR AV ON (DP.CODIGO_ALMACEN =AV.id_almacen) 
-            WHERE AV.id_vendedor = :id_vendedor AND DP.ESTADO_DEPOSITO = :estado_deposito";
+            $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP INNER JOIN TB_ALMACEN_VENDEDOR AV ON (DP.CODIGO_ALMACEN = AV.id_almacen) 
+        WHERE AV.id_vendedor = :id_vendedor AND DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' AND DP.CODIGO_ALMACEN != 'ALM-V-00'";
+
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":id_vendedor", $id_vendedor, PDO::PARAM_INT);
         } else {
             $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP 
-            WHERE DP.ESTADO_DEPOSITO = :estado_deposito";
+        WHERE DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' AND DP.CODIGO_ALMACEN != 'ALM-V-00'";
             $stmt = $connection->prepare($query);
-
         }
+
         $stmt->bindValue(":estado_deposito", 1, PDO::PARAM_INT);
         $stmt->execute();
         $almacenes = $stmt->fetchAll(PDO::FETCH_ASSOC);

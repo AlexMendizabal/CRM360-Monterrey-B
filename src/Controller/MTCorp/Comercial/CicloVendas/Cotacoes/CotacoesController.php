@@ -1257,6 +1257,7 @@ class CotacoesController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
+            dd($codCotacao, $idEmpresa);
             $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
 								@ID_PARA = 2,

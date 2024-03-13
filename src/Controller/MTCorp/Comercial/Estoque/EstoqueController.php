@@ -345,6 +345,10 @@ class EstoqueController extends AbstractController
                 $params = $request->query->all();
                 $id_material = $params['id_material'] ?? '';
                 $id_lista_precio = $params['id_lista'] ?? '';
+
+
+                $codigo_almacen = $params['id_lista'] ?? '';
+
                 $registros = $params['registros'] ?? '';
                 $estado_material = 1;
                 $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
@@ -385,13 +389,17 @@ class EstoqueController extends AbstractController
                  inner join TB_LISTA_PRECIO as LP On LP.id = PM.id_lista
                where VEND.id = :id_vendedor
                AND LP.id = :id_lista_precio
-               and DEPO.estado_mostrar = 1
-               and MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
+               AND DEPO.estado_mostrar = 1
+               AND DEPO.CODIGO_ALMACEN= :codigo_almacen
+               AND MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
                order by DEPO.ID asc";
+
+
 
                 $buscar_material = $connection->prepare($query);
                 $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
                 $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
+                $buscar_material->bindValue('codigo_almacen', $codigo_almacen);
                 $buscar_material->bindValue('CODIGOMATERIAL',  $id_material);
                 $buscar_material->execute();
                 $res = $buscar_material->fetchAll();
@@ -1395,6 +1403,4 @@ class EstoqueController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
-    
 }

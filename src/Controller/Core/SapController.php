@@ -617,7 +617,7 @@ class SapController extends AbstractController
     public function sapInsertCliente(Connection $connection, Request $request)
     {
         $helper = new Helper();
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true); dd($data);
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $verificarCliente = $helper->verificarCliente($connection, $data['codigo_cliente']);
         /*  $arrayUbicacion = [];
@@ -705,7 +705,7 @@ class SapController extends AbstractController
                         $insertCliente['data']['ciudad'] = $ubClie[0]['ciudad'];
                         /* dd($insertCliente); */
 
-
+                        
                         $data_cliente = [
                             "codigo_cliente" => $codigo_cliente,
                             "id_cliente" => $id_cliente,
@@ -725,6 +725,7 @@ class SapController extends AbstractController
                             "ubicacion" => $ubClie,
                             "contactos" => $contacto
                         ];
+                        
                         if (isset($ubClie)   &&   isset($contacto)) {
                             if ($swSap === true) {
 
@@ -744,7 +745,7 @@ class SapController extends AbstractController
                                     "ubicacion",
                                     /* "contactos" */
                                 ];
-
+                                
                                 $missing_fields = [];
                                 foreach ($required_fields as $field) {
                                     if (!array_key_exists($field, $data_cliente) || empty($data_cliente[$field])) {
@@ -787,7 +788,7 @@ class SapController extends AbstractController
                                         ];
                                     }
                                 } else {
-
+                                    
                                     $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
 
                                     if (isset($resp_sap['response']) && isset($resp_sap['detalle']) && $resp_sap['response'] == 200) {
