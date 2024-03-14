@@ -339,7 +339,7 @@ class CotacoesController extends AbstractController
 
             if (!isset($params['codVendedor'])) {
                 $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-                if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+                if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
                     $codVendedor =  (int)$infoUsuario->idVendedor;
                 }
             }
@@ -1257,23 +1257,98 @@ class CotacoesController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            dd($codCotacao, $idEmpresa);
-            $resProposta = $connection->query("
+            /* dd($codCotacao, $idEmpresa); */
+            /* $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
 								@ID_PARA = 2,
 								@ID_EMPR = '{$idEmpresa}',
 								@NR_PEDI = {$codCotacao}
-				")->fetchAll();
+				")->fetchAll(); */
 
+          
+                $resProposta = $connection->query("SELECT 
+                                    OFE.id AS nrPedido,
+                                    1 AS codEmpresa,
+                                    OFE.codigo_oferta AS codigo_oferta,
+                                    OFE.fecha_creacion AS fecha_oferta,
+                                    OFE.fecha_inicial AS fecha_cotizacion,
+                                    OFE.fecha_final AS fecha_validacion,
+                                    CLIE.codigo_cliente AS codCliente,
+                                    CLIE.id_cliente AS id_cliente,
+                                    CLIE.prim_nome,
+                                    TCLIE.nombre_tipo AS tipo_cliente, 
+                                    RUB.descricao AS rubro,
+                                    OCONT.descricao AS origen_cont,
+                                    FCONT.ds_form_cont AS forma_contacto,
+                                    CLIE.id_tipo_documento AS tipo_documento,
+                                    CLIE.cnpj_cpf AS numero_documento,
+                                    CLIE.nombre_factura AS nomb_factura,
+                                    OFE.monto_total_bruto,
+                                    LP.id,
+                                    LP.nombre_lista,
+                                    OFE.descuento_total,
+                                    OFE.cantidad_total,
+                                    OFE.peso_total,
+                                    ME.id,
+                                    OFE.descripcion AS descripcionofe,
+                                    ME.nombre_modo_entrega,
+                                    OFE.estado_oferta,
+                                    OFE.tipo_estado,
+                                    OFE.autorizacion,
+                                    CO.descripcion AS descripcion_cierre,
+                                    CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre,
+                                    0 AS pedidoTransferido,
+                                    0 AS pedidoEmLiberacao,
+                                    0 AS pedidoFaturado,
+                                    0 AS pedidoPreFaturado,
+                                    1 AS codSituacao
+                                FROM 
+                                    TB_OFERTA OFE
+                                INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
+                                INNER JOIN tb_tipo_cliente TCLIE ON CLIE.id_tipo_cliente = TCLIE.id
+                                INNER JOIN MTCORP_BASE_CNAE RUB ON CLIE.id_rubro = RUB.id_cnae
+                                INNER JOIN tb_core_agen_meio_cont OCONT ON OFE.origen_contacto = OCONT.id_meio_contato
+                                INNER JOIN tb_form_cont FCONT ON OFE.forma_contacto = FCONT.id
+                                INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
+                                INNER JOIN TB_MONEDA MONEDA ON OFE.id_moneda = MONEDA.id
+                                INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
+                                INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+                                INNER JOIN tb_cierre_oferta CO ON OFE.estado_oferta = CO.id
+                                where OFE.id = '{$codCotacao}' 
+                            ")->fetchAll();
+
+        
             if (count($resProposta) > 0 && !isset($resProposta[0]['message'])) {
 
                 $arrFinal = $resProposta;
-
+/* 
                 $resMateriais = $connection->query("
 							EXEC PRC_PEDI_MATE_CONS
 									@ID_EMPR = '{$idEmpresa}',
 									@NR_PEDI = {$codCotacao}
-						")->fetchAll();
+						")->fetchAll(); */
+                $resMateriais = $connection->query("SELECT 
+                                                        MATE.ID_CODIGOMATERIAL,
+                                                        MATE.DESCRICAO,
+                                                        OFEDETA.cantidad,
+                                                        PREMA.peso,
+                                                        PREMA.precio,
+                                                        UNI.siglas_uni,
+                                                        OFEDETA.percentualDesc,
+                                                        OFEDETA.subtotal_bruto,
+                                                        OFEDETA.subtotal,
+                                                        DEFIES.CODIGO_ALMACEN
+                                                    FROM 
+                                                        TB_OFERTA OFE
+                                                    INNER JOIN tb_oferta_detalle OFEDETA On OFEDETA.id_oferta = OFE.id
+                                                    INNER JOIN TB_MATE MATE ON OFEDETA.id_material = MATE.ID_CODIGOMATERIAL
+                                                    INNER JOIN tb_precio_material PREMA ON PREMA.id_material = MATE.ID_CODIGOMATERIAL
+                                                    INNER JOIN TB_LISTA_PRECIO LISP ON LISP.id = PREMA.id_lista
+                                                    INNER JOIN TB_LISTA_PRECIO LISP2 ON LISP2.id = OFE.id_lista_precio
+                                                    INNER JOIN UNIDADES UNI ON UNI.ID = MATE.unidade
+                                                    INNER JOIN TB_DEPO_FISI_ESTO DEFIES ON 	DEFIES.id = OFEDETA.id_almacen_carrito
+                                                    where LISP.id = 1
+                                                    and OFE.id = '{$codCotacao}'")->fetchAll();
 
                 if (count($resMateriais) > 0 && !isset($resMateriais[0]['message'])) {
                     $arrFinal[0]['carrinho'] = $resMateriais;
@@ -2571,7 +2646,6 @@ class CotacoesController extends AbstractController
                 }
                 if ($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200) {
                     if ($data_detalleoferta['autorizacion'] == 1) {
-
                         $message = [
                             "responseCode" => 200,
                             "message" => 'Registro Correctamente',
@@ -2668,7 +2742,6 @@ class CotacoesController extends AbstractController
 
         try {
             $oferata = $connection->insert('TB_OFERTA', $data_oferta);
-
             $id_oferta = $connection->lastInsertId();
 
             $message = array(
@@ -3351,13 +3424,13 @@ class CotacoesController extends AbstractController
     {
         $params = json_decode($request->getContent(), true);
         $helper = new Helper();
-        $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
         isset($params['codVendedor']) ? $id_vendedor  = $params['codVendedor'] : NULL;
         try {
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-            if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+            if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
                 $verificarOferta = $helper->verificarOferta($connection, $id_vendedor);
                 if ($verificarOferta[0] === true) {
                     $message = [
@@ -3374,7 +3447,6 @@ class CotacoesController extends AbstractController
                         'success' => false,
                         'pendiente' => false,
                         'ofertas' => $verificarOferta[1]
-
                     ];
                 }
             } else {

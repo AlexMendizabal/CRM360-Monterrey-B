@@ -347,7 +347,7 @@ class EstoqueController extends AbstractController
                 $id_lista_precio = $params['id_lista'] ?? '';
 
 
-                $codigo_almacen = $params['id_lista'] ?? '';
+                $codigo_almacen = $params['codigo_almacen'] ?? '';
 
                 $registros = $params['registros'] ?? '';
                 $estado_material = 1;
@@ -1248,11 +1248,12 @@ class EstoqueController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            $cargo = $infoUsuario->none_cargo;
             $idVendedor = $infoUsuario->idVendedor;
 
             if ($codMaterial != '' && $codMaterial != 0) {
                 $params = $request->query->all();
-
+                
                 $nombre_lista_precio = $params['nombre_lista'] ?? '';
                 $codigo_almacen = $params['codigo_almacen'] ?? '';
                 $nombre_almacen = $params['nombre_almacen'] ?? '';
@@ -1267,14 +1268,15 @@ class EstoqueController extends AbstractController
 
                 // Condiciones comunes para todos los casos
                 $conditions[] = " MATE.ID_CODIGOMATERIAL = :id_material";
-                $bindings['id_material'] = $codMaterial;
-
+                $bindings['id_material'] = $codMaterial; 
+                
                 // Si el idVendedor es 88, usar el parámetro id_lista_precio
-                if ($idVendedor == 88 && !empty($id_lista_precio)) {
+                if ($cargo == 1 && !empty($id_lista_precio)) {
                     $conditions[] = " LP.id = :id_lista";
                     $bindings['id_lista'] = (int) $id_lista_precio;
-                } elseif ($idVendedor != 88) {
-                    // Si el idVendedor es diferente a 88, buscar la lista del vendedor
+                } elseif ($cargo != 1) {
+                    // Si el idVendedor es diferente a 88, buscar la lista del vendedor 
+                    
                     $id_lista_precio = $connection->fetchOne('select TB_lista_precio.id as id_lista_precio
                     from 
                     TB_VEND
@@ -1289,7 +1291,7 @@ class EstoqueController extends AbstractController
                         $bindings['id_lista'] = (int) $id_lista_precio;
                     }
                 }
-
+                 
                 // Agregar condiciones según la presencia de valores
                 if (!empty($nombre_lista_precio)) {
                     $conditions[] = " LP.nombre_lista = :nombre_lista";
@@ -1338,7 +1340,7 @@ class EstoqueController extends AbstractController
                 $query .= " AND LP.id NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
 
                 $result = $connection->executeQuery($query, $bindings)->fetchAll();
-
+                
 
                 if (!empty($result)) {
                     $message = [

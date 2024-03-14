@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,17 +17,12 @@ use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Services\Helper;
 
-
-use PDO;
-
 /**
  * Class AutorizacionesController
  * @package App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones
  */
-
 class AutorizacionesController extends AbstractController
 {
-
     /**
      * @Route(
      * "/comercial/ciclo-vendas/autorizaciones/post_autorizaciones", 
@@ -41,27 +36,49 @@ class AutorizacionesController extends AbstractController
     public function post_autorizaciones(Connection $connection, Request $request)
     {
         $helper = new Helper();
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true); 
 
         $id_oferta = isset($data['id_oferta']) ? $data['id_oferta'] : null;
         $id_usuario =  0;
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
         $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : null;
-        $hora_solicitud = date('H:i:s') ;
+        $hora_solicitud = date('H:i:s');
         $estado = 10;
         $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
-        $respt = $helper->actualizaOfertaA($connection, $id_oferta);
         try {
-            $data_insert = [
+          
+            $respt = $helper->actualizaOfertaA($connection, $id_oferta);
+            $queryBuilder = $connection->createQueryBuilder();
+            $queryBuilder->insert('tb_autorizaciones')->values(
+                [
+                    'id_oferta' => '?',
+                    'fecha_solicitud' => '?',
+                    'descripcion_vend' => '?',
+                    'hora_solicitud' => '?',
+                    'estado' => '?',
+                ]
+                
+            )
+            ->setParameter(0, (int)$id_oferta)
+            ->setParameter(1, $fecha_solicitud)
+            ->setParameter(2, $descripcion_vend)
+            ->setParameter(3, $hora_solicitud)
+            ->setParameter(4, $estado);
+            $queryBuilder->execute();
+            $autorizacion = $connection->LastInsertId();
+
+            /*  $data_insert = [
                 'id_oferta' => (int)$id_oferta,
                 'fecha_solicitud' => $fecha_solicitud,
                 'descripcion_vend' => $descripcion_vend,
                 'hora_solicitud' => $hora_solicitud,
-                'estado' => $estado
+                'estado' => $estado,
             ];
-            $affectedRows = $connection->insert('tb_autorizaciones', $data_insert);
+       
+            $affectedRows = $connection->insert('tb_autorizaciones', $data_insert); */
+         
 
-            if (!empty($affectedRows) && $affectedRows > 0) {
+            if (!empty( $autorizacion ) &&  $autorizacion > 0) {
                 //$resp =  $this->enviarcorreo($connection, $helper, $id_oferta);
                 $message = array(
                     'responseCode' => 200,
@@ -76,7 +93,7 @@ class AutorizacionesController extends AbstractController
                 );
             }
         } catch (\Throwable $e) {
-            $connection->rollBack();
+     
             $message = array(
                 'responseCode' => $e->getCode(),
                 'message' => $e->getMessage(),
@@ -179,7 +196,7 @@ class AutorizacionesController extends AbstractController
 
         $resultSet = $connection->executeQuery(
             'SELECT NM_EMAI FROM TB_CORE_USUA WHERE NM_CARG_FUNC IN (?, ?, ?, ?)',
-            ['GERENTE', 'SUBGERENTE', 'SUPERVISOR', 'ADMINISTRADOR'],
+            [2,3, 4, 1],
             [
                 ParameterType::STRING,
                 ParameterType::STRING,
@@ -571,7 +588,7 @@ class AutorizacionesController extends AbstractController
 
         try {
 
-            if ($resultSet !== 'PROMOTOR' && $resultSet !== 'VENDEDOR' && !empty($resultSet)) {
+            if ($resultSet !== 6 && $resultSet !== 5 && !empty($resultSet)) {
                 if ($estado == 10) {
                     $message = array(
                         "responseCode" => 204,

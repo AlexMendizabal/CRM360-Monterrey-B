@@ -173,8 +173,8 @@ class ComercialController extends AbstractController
 
     /**
      * @Route(
-     *  "/comercial/almacen",
-     *  name="comercial.almacen",
+     *  "/comercial/estoque",
+     *  name="comercial.estoque",
      *  methods={"GET"}
      * )
      * @return JsonResponse

@@ -149,7 +149,7 @@ class PesquisaController extends AbstractController
 
             if ($id_vendedor == 0) {
                 $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-                if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+                if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
                     $id_vendedor =  (int)$infoUsuario->idVendedor;
                 }
             }
@@ -687,7 +687,7 @@ class PesquisaController extends AbstractController
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $nombre_cliente = !empty($params['nombre_cliente']) ? strtoupper($params['nombre_cliente']) : '';
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-            if ($buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+            if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
                 $id_vendedor =  (int)$infoUsuario->idVendedor;
                 $res = $connection->query("
                 EXEC [PRC_VENDEDOR_CLIEN] 

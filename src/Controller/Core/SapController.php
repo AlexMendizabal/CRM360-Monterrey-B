@@ -617,7 +617,7 @@ class SapController extends AbstractController
     public function sapInsertCliente(Connection $connection, Request $request)
     {
         $helper = new Helper();
-        $data = json_decode($request->getContent(), true); dd($data);
+        $data = json_decode($request->getContent(), true); 
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $verificarCliente = $helper->verificarCliente($connection, $data['codigo_cliente']);
         /*  $arrayUbicacion = [];

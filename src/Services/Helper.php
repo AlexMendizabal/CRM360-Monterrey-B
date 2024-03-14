@@ -313,7 +313,7 @@ class Helper
             $email  = isset($data['email']) ? $data['email'] : null;
             $nombre_factura = isset($data['nombre_factura']) ? $data['nombre_factura'] :  null;
             $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 0;
-            $fecha_creacion = datetime('Y/m/d H:i:s');
+            // $fecha_creacion = datetime('Y/m/d H:i:s');
             if (isset($data['frontend'])) {
                 $vendedor = isset($data['id_vendedor']) ? (int)$data['id_vendedor'] : null;
             } else {
@@ -342,7 +342,7 @@ class Helper
                     $rubro2 = $this->buscarRubro($connection, $id_setor_actividade);
                     $rubro = $rubro2[0]['descricao'];
                 }
-
+                //dd($data);
                 $queryClient = "INSERT INTO MTCORP_MODU_CLIE_BASE(
                     prim_nome, 
                     segu_nome, 
@@ -367,7 +367,7 @@ class Helper
                     created_at
                     )
                     VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,
-                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :tipo_documento, :fecha_creacion)";
+                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :tipo_documento, GETDATE())";
 
                 $stmt = $connection->prepare($queryClient);
                 $stmt->bindValue(":nombres", $nombres);
@@ -390,7 +390,8 @@ class Helper
                 $stmt->bindValue(":nombre_factura", $nombre_factura);
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
                 $stmt->bindValue(":tipo_documento", $tipo_documento);
-                $stmt->bindValue(":fecha_creacion", $fecha_creacion);
+                // $stmt->bindValue(":fecha_creacion", $fecha_creacion);
+               // dd($stmt);
                 $stmt->execute();
                 $id_cliente = $connection->lastInsertId();
                 /*  dd($id_cliente); */
@@ -922,7 +923,7 @@ class Helper
             $data_ejecutivo['TP_PESS'] = 'F';
             $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
             $data_ejecutivo['NM_DEPA'] = 'COMERCIAL';
-            $data_ejecutivo['NM_CARG_FUNC'] = 'PROMOTOR';
+            $data_ejecutivo['NM_CARG_FUNC'] = 6;
             $data_ejecutivo['ID_MODU'] = '3';
             isset($data['email']) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
 
@@ -4156,7 +4157,7 @@ class Helper
     public function almacenVendedorVenta($connection, int $id_vendedor, $nombre_cargo)
     {
         $almacenArray = array();
-        if ($nombre_cargo === 'PROMOTOR') {
+        if ($nombre_cargo === 6) {
             $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP INNER JOIN TB_ALMACEN_VENDEDOR AV ON (DP.CODIGO_ALMACEN = AV.id_almacen) 
         WHERE AV.id_vendedor = :id_vendedor AND DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' AND DP.CODIGO_ALMACEN != 'ALM-V-00'";
 

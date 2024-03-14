@@ -146,7 +146,7 @@ class VendedorController extends AbstractController
             }
 
             $stmt = $connection->prepare($query);
-            if ($cargo == 'PROMOTOR') {
+            if ($cargo == 6) {
                 $stmt->bindValue(':id',  $id_vendedor);
             }
 
@@ -212,7 +212,7 @@ class VendedorController extends AbstractController
 
 
             switch ($cargo) {
-                case 'PROMOTOR':
+                case 6:
                     $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
                         FROM TB_VEND 
                         WHERE ID = :id";
@@ -226,7 +226,7 @@ class VendedorController extends AbstractController
             }
 
             $stmt = $connection->prepare($query);
-            if ($cargo == 'PROMOTOR') {
+            if ($cargo == 6) {
                 $stmt->bindValue(':id',  $id_vendedor);
             }
 
@@ -292,7 +292,7 @@ class VendedorController extends AbstractController
             $idVendedor = '';
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-            if ($infoUsuario->matricula != 1 && $buscarUsuario['NM_CARG_FUNC'] == 'PROMOTOR') {
+            if ($infoUsuario->matricula != 1 && $buscarUsuario['NM_CARG_FUNC'] == 6) {
                 $idVendedor = $infoUsuario->matricula;
                 $res = $connection->query("
                 EXECUTE [PCR_CLIE_CONS3]
@@ -304,7 +304,7 @@ class VendedorController extends AbstractController
             ")->fetchAll();
             } else {
                 //dd($request);
-                if ($request->query->get("idVendedor") == '' && $buscarUsuario['NM_CARG_FUNC'] != 'PROMOTOR') {
+                if ($request->query->get("idVendedor") == '' && $buscarUsuario['NM_CARG_FUNC'] != 6) {
                     $res = $connection->query("
                         EXECUTE [PRC_CLIE_CONS]
                             @ID_PARAM = 6                        
@@ -366,7 +366,7 @@ class VendedorController extends AbstractController
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
 
-            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 'PROMOTOR')
+            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 6)
             {
                 $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]
