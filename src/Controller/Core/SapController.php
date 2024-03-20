@@ -1230,7 +1230,7 @@ class SapController extends AbstractController
     public function sapUpdateClienteSap(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-
+        
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
         $data_sap = array();
@@ -1264,10 +1264,10 @@ class SapController extends AbstractController
         }
 
 
-        $buscarRubro = $helper->buscarRubro($connection, $data['rubro']);
-        if ($buscarRubro !== false) {
-            $id_rubro = $buscarRubro[0]['id_cnae'];
-            $data['id_rubro'] = $id_rubro;
+        // $buscarRubro = $helper->buscarRubro($connection, $data['rubro']);dd($buscarRubro);
+        if (!empty($ubro2)) {
+            $id_rubro = $id_setor_actividade;
+            $data['id_rubro'] = $id_rubro; 
         }
 
         $buscarTipoPersona = [

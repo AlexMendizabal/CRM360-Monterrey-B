@@ -391,7 +391,7 @@ class Helper
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
                 $stmt->bindValue(":tipo_documento", $tipo_documento);
                 // $stmt->bindValue(":fecha_creacion", $fecha_creacion);
-               // dd($stmt);
+                // dd($stmt);
                 $stmt->execute();
                 $id_cliente = $connection->lastInsertId();
                 /*  dd($id_cliente); */
@@ -1556,18 +1556,21 @@ class Helper
     }
 
 
-    public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio)
+    public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen)
     {
-
         /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                     inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
                                     where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material */
 
-        $resp =  $connection->fetchOne('SELECT TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
+        $resp =  $connection->fetchAll('SELECT TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                         inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
                                         where TB_CROS_SELL.ID_MATE = ?', [$codMaterial]);
         $codigo = "A";
-        $res = $connection->fetchAllAssociative('SELECT distinct
+        if (count($resp) > 0) {
+            $respArray = array_column($resp, 'ID_MATE_ASSO');
+            $respString = implode(",", $respArray);
+
+            $res = $connection->fetchAll('SELECT distinct
                                                  MATE.ID_CODIGOMATERIAL as id_material,
                                                 PM.id as id_precio_material, 
                                                 MATE.CODIGOMATERIAL AS codigo_material, 
@@ -1598,13 +1601,21 @@ class Helper
                                                 inner JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
                                                 inner JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
                                                 inner JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
-                                        WHERE  DEPO.ESTADO_DEPOSITO = 1 
+                                        WHERE 
+                                         DEPO.ESTADO_DEPOSITO = 1 
                                         AND LP.id = ?
-                                        AND ID_CODIGOMATERIAL IN (?)
-                                        order by MATE.id_CODIGOMATERIAL asc', [$codigo, $id_lista_precio, $resp]);
+                                        AND DEPO.CODIGO_ALMACEN = ?
+                                        AND ID_CODIGOMATERIAL IN (' . $respString  . ')
 
-        if (count($res) > 0) {
-            return $res;
+                                        order by MATE.id_CODIGOMATERIAL asc', [$codigo, $id_lista_precio, $codigo_almacen]);
+            
+                                        
+
+            if (count($res) > 0) {
+                return $res;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

@@ -29,7 +29,6 @@ class ComercialController extends AbstractController
             @NR_MATR = {$matricula}, 
             @SG_PERF = '{$sigla}'
         ")->fetchAll();
-
         if (count($res) > 0) {
             return true;
         } else {
@@ -701,7 +700,6 @@ class ComercialController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $perfil = $this->checkPerfil($connection, $infoUsuario->matricula);
-
             $message = array(
                 'responseCode' => 200,
                 'result' => $perfil
@@ -789,7 +787,7 @@ class ComercialController extends AbstractController
         return $response;
     }
 
-    public function filtrarMaterialContratipo($connection, $codMaterial, $estado_material,  $id_lista_precio, $id_vendedor)
+    public function filtrarMaterialContratipo($connection, $codMaterial, $estado_material,  $id_lista_precio, $id_vendedor, $codigo_almacen)
     {   
          $query = "SELECT distinct 
                     MAT.ID_CODIGOMATERIAL as id_material, 
@@ -819,15 +817,17 @@ class ComercialController extends AbstractController
                 INNER JOIN TB_MONEDA as MONE ON MONE.id = PM.id_moneda
                 inner join TB_LISTA_PRECIO as LP On LP.id = PM.id_lista
                     where DEPO.estado_mostrar = 1 
-                    and VEND.id = :id_vendedor 
+                    AND DEPO.CODIGO_ALMACEN = :codigo_almacen
+                    AND VEND.id = :id_vendedor 
                     AND LP.id = :id_lista_precio
-                    and MAT.ID_CODIGOMATERIAL IN (SELECT ASSO.id_mate FROM TB_SIMI_MATE_ASSO ASSO
+                    AND MAT.ID_CODIGOMATERIAL IN (SELECT ASSO.id_mate FROM TB_SIMI_MATE_ASSO ASSO
                                                     LEFT JOIN TB_SIMI_MATE SIMI ON SIMI.ID = ASSO.ID_SIMI_MATE
                                                     WHERE SIMI.ID_MATE = :CODIGOMATERIAL 
                                                         AND SIMI.IN_SITU = :estado_material)
                     order by DEPO.ID asc";
 
         $buscar_material = $connection->prepare($query);
+        $buscar_material->bindValue('codigo_almacen', $codigo_almacen);
         $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
         $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
         $buscar_material->bindValue('CODIGOMATERIAL',  (int)$codMaterial);

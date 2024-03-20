@@ -129,25 +129,26 @@ class VendedorController extends AbstractController
             }
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
-            $cargo = $buscarUsuario['NM_CARG_FUNC'];
+            $cargo = $buscarUsuario['NM_CARG_FUNC']; 
 
             switch ($cargo) {
-                case 'PROMOTOR':
+                case '6':
+                case '5':
                     $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
-                          FROM TB_VEND 
-                          WHERE ID = :id";
+                              FROM TB_VEND 
+                              WHERE ID = :id";
                     break;
-
                 default:
                     $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
-                          FROM TB_VEND 
-                          ORDER BY nombre ASC";
+                              FROM TB_VEND 
+                              ORDER BY nombre ASC";
                     break;
             }
+            
 
             $stmt = $connection->prepare($query);
-            if ($cargo == 6) {
-                $stmt->bindValue(':id',  $id_vendedor);
+            if (in_array($cargo, ['6', '5'])) {
+                $stmt->bindValue(':id', $id_vendedor);
             }
 
             $stmt->execute();
@@ -420,7 +421,8 @@ class VendedorController extends AbstractController
                         "codigo_rubro" => $re["codigo_rubro"],
                         "tipo_documento" => $re["nombre_doc"],
                         "nombre_factura" => $nombre,
-                        "numero_documento" => $re["numero_documento"]
+                        "numero_documento" => $re["numero_documento"],
+                        "rubro" => $re["rubro"]
                     ];
                 }
                 $res = $resp;

@@ -42,7 +42,7 @@ class PesquisaController extends AbstractController
             $vendedor = $infoUsuario->idVendedor;
             $cargo = $infoUsuario->none_cargo;
             //dd($cargo);
-            if($cargo == 6){
+            if($cargo == 6 ||  $cargo == 5){
                 $res = $connection->query("
                 EXEC [PRC_CLIE_CONS]
                     @ID_VEND = '{$vendedor}', 
@@ -148,8 +148,8 @@ class PesquisaController extends AbstractController
 
 
             if ($id_vendedor == 0) {
-                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-                if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
+                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id); 
+                if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5 ) {
                     $id_vendedor =  (int)$infoUsuario->idVendedor;
                 }
             }

@@ -345,6 +345,7 @@ class EstoqueController extends AbstractController
                 $params = $request->query->all();
                 $id_material = $params['id_material'] ?? '';
                 $id_lista_precio = $params['id_lista'] ?? '';
+                $data = array();
 
 
                 $codigo_almacen = $params['codigo_almacen'] ?? '';
@@ -355,10 +356,10 @@ class EstoqueController extends AbstractController
 
                 $ComercialController = new ComercialController();
 
-                $upsell = $ComercialController->filtrarMaterialContratipo($connection, $id_material, 1, $id_lista_precio, $id_vendedor);
+                $upsell = $ComercialController->filtrarMaterialContratipo($connection, $id_material, 1, $id_lista_precio, $id_vendedor, $codigo_almacen);
 
-                $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio);
-
+                $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen);
+               
                 $query = "	SELECT
                distinct 
               MAT.ID_CODIGOMATERIAL as id_material, 
@@ -403,8 +404,11 @@ class EstoqueController extends AbstractController
                 $buscar_material->bindValue('CODIGOMATERIAL',  $id_material);
                 $buscar_material->execute();
                 $res = $buscar_material->fetchAll();
-
-
+                if(count($res) > 0){
+                    $data =  $res;
+                }else{
+                    $data = false;
+                }
                 if (count($res) > 0) {
                     $message = array(
                         'responseCode' => 200,
@@ -414,23 +418,42 @@ class EstoqueController extends AbstractController
                         'estado' => true
                     );
                 } else {
-                    $message = array(
-                        'responseCode' => 204,
-                        'result' => [],
-                        'estado' => false
-                    );
+                    
+                    if(count($upsell) > 0 || count($crosell) > 0) {
+                        $message = array(
+                            'responseCode' => 200,
+                            'material' => $data,
+                            'upsell' => $upsell,
+                            'crosell' => $crosell,
+                            'estado' => true
+                        );
+                    } else{
+                        $message = array(
+                            'responseCode' => 204,
+                            'material' => $data,
+                            'upsell' => $upsell,
+                            'crosell' => $crosell,
+                            'estado' => false
+                        );
+                    }
+                    
                 }
             } else {
                 $message = array(
                     'responseCode' => 204,
-                    'result' => [],
+                    'material' => false,
+                    'upsell' => false,
+                    'crosell' => false,
                     'estado' => false
                 );
             }
         } catch (DBALException $e) {
             $message = array(
-                'responseCode' => 204,
-                'result' => $e->getMessage(),
+                'responseCode' => $e->getCode(),
+                'material' => false,
+                'upsell' => false,
+                'crosell' => false,
+                'message' =>  $e->getMessage(),
                 'estado' => false
             );
         }
