@@ -367,7 +367,7 @@ class VendedorController extends AbstractController
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
 
-            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 6)
+            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 6 || $datosUsuario[0]['NM_CARG_FUNC'] == 5 )
             {
                 $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]

@@ -279,7 +279,7 @@ class CadastroController extends AbstractController
                 ) {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                   $contato = str_replace(' ', '', $contato);
-                  $contato = strlen($contato) == 11 ? FunctionsController::setMask($contato, '(##) #####-####') : FunctionsController::setMask($contato, '(##) ####-####');
+                  $contato = strlen($contato) == 11 ?  $contato : $contato;;
                 } else {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                 }
@@ -295,7 +295,7 @@ class CadastroController extends AbstractController
                 ) {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                   $contato = str_replace(' ', '', $contato);
-                  $contato = strlen($contato) == 11 ? FunctionsController::setMask($contato, '(##) ####-####') : FunctionsController::setMask($contato, '(##) ####-####');
+                  $contato = strlen($contato) == 11 ? $contato : $contato;;
                 } else {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                 }
@@ -324,7 +324,7 @@ class CadastroController extends AbstractController
                 ) {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                   $contato = str_replace(' ', '', $contato);
-                  $contato = strlen($contato) == 11 ? FunctionsController::setMask($contato, '(##) #####-####') : FunctionsController::setMask($contato, '(##) ####-####');
+                  $contato = strlen($contato) == 11 ?  $contato : $contato;;
                 } else {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                 }
@@ -340,7 +340,7 @@ class CadastroController extends AbstractController
                 ) {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                   $contato = str_replace(' ', '', $contato);
-                  $contato = strlen($contato) == 11 ? FunctionsController::setMask($contato, '(##) ####-####') : FunctionsController::setMask($contato, '(##) ####-####');
+                  $contato = strlen($contato) == 11 ? $contato : $contato;
                 } else {
                   $contato = trim($res[$i]['DS_CONT_MEIO']);
                 }

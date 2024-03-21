@@ -111,9 +111,7 @@ class PesquisaController extends AbstractController
             $registros = 50;
             $orderBy = '';
             $orderType = '';
-
-
-
+            
             if (isset($params['pesquisa']) && $params['pesquisa'] != 'null' && $params['pesquisa'] != null) {
                 $pesquisa = $params['pesquisa'];
             }

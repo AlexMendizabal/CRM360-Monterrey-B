@@ -338,12 +338,7 @@ class CotacoesController extends AbstractController
             isset($params['registros']) ? $registros = $params['registros'] : NULL;
             isset($params['codVendedor']) ? $codVendedor  = $params['codVendedor'] : NULL;
 
-            if (!isset($params['codVendedor'])) {
-                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-                if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5) {
-                    $codVendedor =  (int)$infoUsuario->idVendedor;
-                }
-            }
+            
             /* Fecha Inicial */
             if (!empty($dataInicial)) {
                 $fechaInicial1 = date('Y-m-d', strtotime($dataInicial));
@@ -352,58 +347,78 @@ class CotacoesController extends AbstractController
             if (!empty($fechaFinal)) {
                 $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
             }
+            // Verifica si el parámetro 'codVendedor' está establecido
+if (!isset($params['codVendedor'])) {
+    // Si el parámetro no está establecido, comprueba el rol del usuario
+    $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+    if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5) {
+        // Si el usuario tiene ciertos roles, establece el ID del vendedor
+        $codVendedor =  (int)$infoUsuario->idVendedor;
+    } else {
+        // Si el usuario no tiene los roles necesarios, establece el ID del vendedor como nulo
+        $codVendedor = null;
+    }
+        } else {
+            // Si el parámetro 'codVendedor' está establecido, toma su valor
+            $codVendedor = $params['codVendedor'];
+        }
 
+        // Crear el query builder
+        $queryOferta = $connection->CreateQueryBuilder();
+        $queryOferta->select(
+            'DISTINCT OFE.id as id_oferta',
+            'OFE.codigo_oferta as codigo_oferta',
+            'OFE.fecha_creacion as fecha_oferta',
+            'OFE.fecha_inicial',
+            'OFE.fecha_final',
+            'CLIE.id_cliente',
+            'CLIE.prim_nome',
+            'OFE.monto_total',
+            'OFE.monto_total_bruto',
+            'LP.id',
+            'LP.nombre_lista',
+            'OFE.descuento_total',
+            'OFE.cantidad_total',
+            'UNI.NOMBRE_UNI',
+            'OFE.peso_total',
+            'ME.id',
+            'OFE.descripcion as descripcionofe',
+            'ME.nombre_modo_entrega',
+            'OFE.estado_oferta',
+            'OFE.tipo_estado',
+            'OFE.autorizacion',
+            'CO.descripcion as descripcion_cierre',
+            'CO.descripcion',
+            'AU.id AS id_autorizacion',
+            'AU.estado AS id_estado_autorizacion',
+            'DAU.id_usuario AS id_usuario',
+            'USU.NM_COMP_RAZA_SOCI as nombre_usuario',
+            "CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre",
+        )->from('TB_OFERTA', 'OFE')
+        ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
+        ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
+        ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
+        ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
+        ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
+        ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
+        ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta = CO.id')
+        ->leftJoin('OFE', 'tb_autorizaciones', 'AU', 'AU.id_oferta = OFE.id')
+        ->leftJoin('AU', 'TB_DETALLE_AUTO', 'DAU', 'AU.id = DAU.id_autorizacion')
+        ->leftJoin('AU', 'TB_CORE_USUA', 'USU', 'DAU.id_usuario = USU.ID');
 
-            $queryOferta = $connection->CreateQueryBuilder();
-            $queryOferta->select(
-                'DISTINCT OFE.id as id_oferta',
-                'OFE.codigo_oferta as codigo_oferta',
-                'OFE.fecha_creacion as fecha_oferta',
-                'OFE.fecha_inicial',
-                'OFE.fecha_final',
-                'CLIE.id_cliente',
-                'CLIE.prim_nome',
-                'OFE.monto_total',
-                'OFE.monto_total_bruto',
-                'LP.id',
-                'LP.nombre_lista',
-                'OFE.descuento_total',
-                'OFE.cantidad_total',
-                'UNI.NOMBRE_UNI',
-                'OFE.peso_total',
-                'ME.id',
-                'OFE.descripcion as descripcionofe',
-                'ME.nombre_modo_entrega',
-                'OFE.estado_oferta',
-                'OFE.tipo_estado',
-                'OFE.autorizacion',
-                'CO.descripcion as descripcion_cierre',
-                'CO.descripcion',
-                'AU.id AS id_autorizacion',
-                'AU.estado AS id_estado_autorizacion',
-                'DAU.id_usuario AS id_usuario',
-                'USU.NM_COMP_RAZA_SOCI as nombre_usuario',
-                "CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre",
+        // Agregar la condición para el ID del vendedor
+        if ($codVendedor !== null) {
+            $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
+            $queryOferta->setParameter('id_vendedor', $codVendedor);
+        }
 
+        // Resto del código
+        $queryOferta
+        ->orderBy($orderBy,  $orderType)
+        ->setFirstResult($offset)
+        ->setMaxResults($registros)
+        ->where('1 = 1');
 
-
-            )->from('TB_OFERTA', 'OFE')
-                ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
-                ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
-                ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
-                ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
-                ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
-                ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
-                ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta = CO.id')
-                ->leftJoin('OFE', 'tb_autorizaciones', 'AU', 'AU.id_oferta = OFE.id')
-                ->leftJoin('AU', 'TB_DETALLE_AUTO', 'DAU', 'AU.id = DAU.id_autorizacion')
-                ->leftJoin('AU', 'TB_CORE_USUA', 'USU', 'DAU.id_usuario = USU.ID')
-
-
-                ->orderBy($orderBy,  $orderType)
-                ->setFirstResult($offset)
-                ->setMaxResults($registros)
-                ->where('1 = 1');
 
             if (!empty($fechaInicial1)) {
                 $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
@@ -610,7 +625,8 @@ class CotacoesController extends AbstractController
                AU.fecha_gestion as fecha_gestion,
                CU.NM_COMP_RAZA_SOCI as gestor,
                AU.descripcion_vend as obs_solicitante,
-               DAU.desc_vendedor as obs_gestor
+               DAU.desc_vendedor as obs_gestor,
+               CONCAT(OFE.latitud, ' ', OFE.longitud) AS ubicacion
 
                FROM TB_OFERTA OFE 
                    INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
@@ -1060,7 +1076,7 @@ class CotacoesController extends AbstractController
                 6 => "parcelas",
                 7 => "dadosVendedor"
             ];
-
+            
             foreach ($arrayParams as $key => $value) {
 
                 $arrayTemp = $connection->query("
@@ -1256,7 +1272,6 @@ class CotacoesController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            /* dd($codCotacao, $idEmpresa); */
             $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
 								@ID_PARA = 2,
@@ -1264,94 +1279,15 @@ class CotacoesController extends AbstractController
 								@NR_PEDI = {$codCotacao}
 				")->fetchAll();
 
-          /*   $resProposta = $connection->query("SELECT 
-            OFE.id AS nrPedido,
-            EMPR.ID_REFE_ERP AS id_empresa,
-            EMPR.NOMEFANTASIA AS nombre_empresa,
-            OFE.codigo_oferta AS codigo_oferta,
-            OFE.fecha_creacion AS fecha_oferta,
-            OFE.fecha_inicial AS fecha_cotizacion,
-            OFE.fecha_final AS fecha_validacion,
-            CLIE.codigo_cliente AS codigo_cliente,
-            CLIE.id_cliente AS id_cliente,
-            CLIE.prim_nome AS nomeCliente,
-            TCLIE.nombre_tipo AS tipo_cliente, 
-            RUB.id_cnae AS id_rubro,
-            RUB.descricao AS rubro,
-            OCONT.descricao AS origen_cont,
-            CLIE.celular,
-            CLIE.telefono,
-            CLIE.email AS correo,
-            CLIE.id_cliente AS tipoCotacao,
-            FCONT.ds_form_cont AS forma_contacto,
-            CLIE.id_tipo_documento AS tipo_documento,
-            CLIE.cnpj_cpf AS numero_documento, 
-            CLIE.nombre_factura AS nomb_factura,
-            OFE.monto_total_bruto,
-            LP.id,
-            LP.nombre_lista,
-            OFE.descuento_total,
-            OFE.cantidad_total,
-            OFE.descripcion AS descripcionofe,
-            OFE.id_persona_contacto,
-            ME.nombre_modo_entrega,
-            OFE.estado_oferta,
-            OFE.tipo_estado,
-            OFE.autorizacion,
-            ESCR.codigo_almacen AS codDeposito,
-            ESCR.nm_escr AS nomeDeposito,
-            CO.descripcion AS descripcion_cierre,
-            CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombreVendedor,
-            OFE.estado_oferta ,
-            OFE.tipo_estado,
-            OFE.id_direccion_cliente
-        FROM 
-            TB_OFERTA OFE
-        INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
-        INNER JOIN tb_tipo_cliente TCLIE ON CLIE.id_tipo_cliente = TCLIE.id
-        INNER JOIN MTCORP_BASE_CNAE RUB ON CLIE.id_rubro = RUB.id_cnae
-        INNER JOIN tb_core_agen_meio_cont OCONT ON OFE.origen_contacto = OCONT.id_meio_contato
-        INNER JOIN tb_form_cont FCONT ON OFE.forma_contacto = FCONT.id
-        INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
-        INNER JOIN tb_escr ESCR ON VEND.ID_ESCR = ESCR.id
-        INNER JOIN TB_EMPR EMPR ON ESCR.id_empr = EMPR.ID_REFE_ERP
-        INNER JOIN TB_MONEDA MONEDA ON OFE.id_moneda = MONEDA.id
-        INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
-        INNER JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
-        INNER JOIN tb_cierre_oferta CO ON OFE.estado_oferta = CO.id
-        where OFE.id ='{$codCotacao}'")->fetchAll(); */
-
             if (count($resProposta) > 0) {
 
                 $arrFinal = $resProposta;
-                /*  $resMateriais = $connection->query("
+                 $resMateriais = $connection->query("
 							EXEC PRC_PEDI_MATE_CONS
 									@ID_EMPR = '{$idEmpresa}',
 									@NR_PEDI = {$codCotacao}
-						")->fetchAll(); */
-                $resMateriais = $connection->query("SELECT 
-                                                        MATE.ID_CODIGOMATERIAL,
-                                                        MATE.DESCRICAO,
-                                                        OFEDETA.cantidad,
-                                                        PREMA.peso,
-                                                        PREMA.precio,
-                                                        UNI.siglas_uni,
-                                                        OFEDETA.percentualDesc,
-                                                        OFEDETA.subtotal_bruto,
-                                                        OFEDETA.subtotal,
-                                                        DEFIES.CODIGO_ALMACEN
-                                                    FROM 
-                                                        TB_OFERTA OFE
-                                                    INNER JOIN tb_oferta_detalle OFEDETA On OFEDETA.id_oferta = OFE.id
-                                                    INNER JOIN TB_MATE MATE ON OFEDETA.id_material = MATE.ID_CODIGOMATERIAL
-                                                    INNER JOIN tb_precio_material PREMA ON PREMA.id_material = MATE.ID_CODIGOMATERIAL
-                                                    INNER JOIN TB_LISTA_PRECIO LISP ON LISP.id = PREMA.id_lista
-                                                    INNER JOIN TB_LISTA_PRECIO LISP2 ON LISP2.id = OFE.id_lista_precio
-                                                    INNER JOIN UNIDADES UNI ON UNI.ID = MATE.unidade
-                                                    INNER JOIN TB_DEPO_FISI_ESTO DEFIES ON 	DEFIES.id = OFEDETA.id_almacen_carrito
-                                                    where LISP.id = 1
-                                                    and OFE.id = '{$codCotacao}'")->fetchAll();
-
+						")->fetchAll();
+               
                 if (count($resMateriais) > 0 && !isset($resMateriais[0]['message'])) {
                     $arrFinal[0]['carrinho'] = $resMateriais;
                 }
@@ -2618,6 +2554,55 @@ class CotacoesController extends AbstractController
         }
     }
 
+    public function editCotizacion(Connection $connection, Request $request){
+        
+        $data = json_decode($request->getContent(), true);
+
+        if(!empty($data))
+        {
+            !empty($data['codigo_oferta']) ? $data_oferta['codigo_oferta'] = $data['codigo_oferta'] : $data_error['codigo_oferta'] = 'es requerido';
+            !empty($data['nombre_oferta']) ? $data_oferta['nombre_oferta'] = $data['nombre_oferta'] : $data_error['nombre_oferta'] = 'es requerido'; 
+           
+            
+            !empty($data['monto_total']) ? $data_oferta['monto_total'] = $data['monto_total'] : $data_error['monto_total'] = 'es requerido'; 
+            !empty($data['monto_total_bruto']) ? $data_oferta['monto_total_bruto'] = $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es requerido'; 
+            !empty($data['peso_total']) ? $data_oferta['peso_total'] = $data['peso_total'] : $data_error['peso_total'] = 'es requerido';
+            !empty($data['cantidad_total']) ? $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es requerido'; 
+            //!empty($data['id_forma_pago']) ? $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_error['id_forma_pago'] = 'es requerido'; 
+            //!empty($data['id_cliente']) ? $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es requerido'; 
+            
+            //datos de vendedor
+            !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es requerido'; 
+            !empty($data['id_lista_precio']) ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es requerido'; 
+            
+            //datos de entrega
+            !empty($data['id_modo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['id_modo_entrega'] : $data_error['id_modo_entrega'] = 'es requerido'; 
+            !empty($data['observacion']) ? $data_oferta['observacion'] = $data['observacion'] : $data_error['observacion'] = 'es requerido'; 
+           
+            //fechas de la oferta
+            !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = $data['fecha_final'] : $data_error['fecha_final'] = 'es requerido'; 
+            !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = $data['fecha_inicial'] : $data_error['fecha_inicial'] = 'es requerido'; 
+            !empty($data['formaContacto']) ? $data_oferta['formaContacto'] = $data['formaContacto'] : $data_error['formaContacto'] = 'es requerido'; 
+           
+            
+            !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : $data_error['id_persona_contacto'] = 'es requerido'; 
+            //datos para cliente
+            !empty($data['nombre_factura']) ? $data_cliente['nombre_factura'] = $data['nombre_factura'] : $data_error['nombre_factura'] = 'es requerido'; 
+            /* !empty($data['carnet_cliente']) ? $data_oferta['carnet_cliente'] = $data['carnet_cliente'] : $data_error['carnet_cliente'] = 'es requerido';  */
+            !empty($data['tipoContacto']) ? $data_oferta['tipoContacto'] = $data['tipoContacto'] : $data_error['tipoContacto'] = 'es requerido'; 
+            
+
+            !empty($data['direccion_entrega']) ? $data_oferta['direccion_entrega'] = $data['direccion_entrega'] : $data_error['direccion_entrega'] = 'es requerido'; 
+           
+
+
+        }
+        else
+        {
+
+        }
+
+    }
 
     /**
      * @Route(
@@ -2636,6 +2621,19 @@ class CotacoesController extends AbstractController
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
+        if(!empty($data['id_oferta']))
+        {
+           $updateCotizacion =  $this->editCotizacion($connection,$request);
+
+        }
+        
+        if(!empty($data['celular']) || !empty($data['telefono']) || !empty($data['correo_electronico']) || !empty($data['nombre_factura']))
+        {
+            $repstClie = $this->modificarCliente($connection, $data);
+            $data_oferta = json_decode($repstClie->getContent(), true);
+            $id_cliente = $data_oferta['data'];
+        }
+    
         if (!empty($data)) {
             $resp = $this->insertaOferta($connection, $data);
             $data_oferta = json_decode($resp->getContent(), true);
@@ -2709,6 +2707,43 @@ class CotacoesController extends AbstractController
         return $response;
     }
 
+    public function modificarCliente($connection, $data){
+        
+        !empty($data['id_cliente']) ?  $data_id_cliente = $data['id_cliente'] : '';
+        !empty($data['nombre_factura']) ?  $data_cliente['segu_nome'] = $data['nombre_factura'] : '';
+        !empty($data['celular']) ?  $data_cliente['celular'] = $data['celular'] : '';
+        !empty($data['telefono']) ?  $data_cliente['telefono'] = $data['telefono'] : '';
+        !empty($data['correo_electronico']) ?  $data_cliente['email'] = $data['correo_electronico'] : '';
+        try {
+            $cliente = $connection->update('MTCORP_MODU_CLIE_BASE', $data_cliente, ['id_cliente' => (int)$data_id_cliente]);
+            if(!empty($cliente))
+            {
+                $message = array(
+                    "responseCode" => 200,
+                    "message" => "Modifico correctamente",
+                    "success" => true,
+                    "data" => $cliente
+                );
+            } 
+            else
+            {
+                $message = array(
+                    "responseCode" => 204,
+                    "message" => "No modifico correctamente",
+                    "success" => true
+                );
+            }
+          
+        } catch (\Throwable $e) {
+
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'success' => false
+            );
+        }
+        return new JsonResponse($message);
+    }
     public function insertaOferta($connection, $data)
     {
         !empty($data['id_forma_pago']) ?  $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
@@ -2719,6 +2754,8 @@ class CotacoesController extends AbstractController
         !empty($data['id_cliente']) ?  $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
         !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
         !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : $data_oferta['id_persona_contacto'] = null;
+        !empty($data['id_almacen']) ? $data_oferta['id_almacen'] = $data['id_almacen'] : $data_oferta['id_almacen'] = null;
+       
         $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
         !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
         !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
@@ -2730,11 +2767,12 @@ class CotacoesController extends AbstractController
         !empty($data['tipoContacto']) ? $data_oferta['origen_contacto'] = $data['tipoContacto'] : null;
 
         !empty($data['cantidad_total']) ?  $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
+        !empty($data['direccion_cliente']) ? $data_oferta['id_direccion_cliente'] = $data['direccion_cliente'] : null;
 
-        if (!empty($data['direccion'])) {
+        if (!empty($data['direccion_entrega'])) {
             !empty($data['latitud']) ? $data_oferta['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es necesario';
             !empty($data['longitud']) ? $data_oferta['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es necesario';
-            !empty($data['direccion']) ? $data_oferta['direccion'] = $data['direccion'] : $data_error['direccion'] = 'es necesario';
+            !empty($data['direccion_entrega']) ? $data_oferta['direccion'] = $data['direccion_entrega'] : $data_error['direccion'] = 'es necesario';
         }
         if (!empty($data['observacion'])) {
             $data_oferta['observacion'] = $data['observacion'];
