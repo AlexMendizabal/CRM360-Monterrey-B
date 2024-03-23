@@ -602,7 +602,7 @@ class ComercialController extends AbstractController
             $idSubLinea = isset($params['idClasse']) ? $params['idClasse'] : 0;
 
             $queryBuilder = $connection->createQueryBuilder();
-            $queryBuilder->select('id_linha as idSubLinea', 'descricao as descripcion', 'id_classe  as id_grupo')
+            $queryBuilder->select('id_linha', 'descricao', 'id_classe  as id_grupo')
                         ->from('MTCORP_BASE_LINHAS')
                         ->where('1 = 1');
              if (!empty($idSubLinea)) {

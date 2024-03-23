@@ -281,7 +281,6 @@ class VendedorController extends AbstractController
      */
     public function getClientesCarteira(Connection $connection, Request $request)
     {
-        
         try {
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -354,7 +353,7 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     public function getClientesCarteiraCotizacion(Connection $connection, Request $request)
-    {
+    { 
         try {
 
             $UsuarioController = new UsuarioController();
