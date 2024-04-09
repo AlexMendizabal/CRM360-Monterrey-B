@@ -6,6 +6,8 @@ $connectionOptions = array(
     "pwd" => "RIC0rp#2023"
 );
 
+
+
 function exception_handler($exception) {
     echo "<h1>Failure</h1>";
     echo "Uncaught exception: " , $exception->getMessage();

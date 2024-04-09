@@ -15,6 +15,7 @@ use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 use App\Controller\Core\SapController;
+use App\Controller\Core\SapController;
 use mysqli;
 
 /**
@@ -62,7 +63,9 @@ class PreCadastroController extends AbstractController
             $emailNfe = strtoupper($data['emailNfe']);
             $telefone = $data['telefone'];
             if (isset($data['tipo_persona'])) {
+            if (isset($data['tipo_persona'])) {
               $tipo_persona = $data['tipo_persona'];
+            } else {
             } else {
               $tipo_persona = "Privado";
             }
@@ -182,6 +185,7 @@ class PreCadastroController extends AbstractController
     }
   }
   /**
+  /**
    * @Route(
    *  "/comercial/clientes/postsap",
    *  name="comercial.clientes-postsap",
@@ -190,6 +194,7 @@ class PreCadastroController extends AbstractController
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
+   */
    */
   public function sapPostClient(Connection $connection, Request $request)
   {
@@ -242,183 +247,4 @@ class PreCadastroController extends AbstractController
     $response->setEncodingOptions(JSON_NUMERIC_CHECK);
     return $response;
   }
-
-
-   /**
-   * @Route(
-   *  "/comercial/clientes/tipo_persona",
-   *  name="comercial.clientes-tipo-persona",
-   *  methods={"GET"}
-   * )
-   * @param Connection $connection
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function obtenerTiposPersonas(Connection $connection, Request $request)
-  {
-     try {
-      //dd($helper);
-      $tipo_persona = $connection->fetchAllAssociative('SELECT * FROM TB_CLIE_TIPO_PERSONA');
-      //dd($tipo_persona);
-      if ($tipo_persona !== false) {
-        $message = array(
-          'responseCode' => 200,
-          'estado' => true,
-          'detalle' => 'Datos obtenidos exitosamente',
-          'result' => $tipo_persona
-          /* 'estado' => true */
-        );
-      } else {
-        $message = array(
-          'responseCode' => 204,
-          'estado' => false,
-          'detalle' => 'Error al obtener los datos',
-          'result' => null
-          /* 'estado' => true */
-        );
-      }
-    } catch (DBALException $e) {
-      $message = array(
-        'responseCode' => 204,
-        'estado' => false,
-        'detalle' => $e->getMessage(),
-        'result' => null
-      );
-    }
-    $response = new JsonResponse($message);
-    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-    return $response;
-  }
-
-  /**
-   * @Route(
-   *  "/comercial/clientes/tipo_documento",
-   *  name="comercial.clientes-tipo-documento",
-   *  methods={"GET"}
-   * )
-   * @param Connection $connection
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function obtenerTiposDocumentos(Connection $connection, Request $request)
-  {
-     try {
-      
-      $tipo_persona = $connection->fetchAllAssociative('SELECT * FROM tb_base_clie_doc where estado = 1');
-      
-      if ($tipo_persona !== false) {
-        $message = array(
-          'responseCode' => 200,
-          'estado' => true,
-          'detalle' => 'Datos obtenidos exitosamente',
-          'result' => $tipo_persona
-        );
-      } else {
-        $message = array(
-          'responseCode' => 204,
-          'estado' => false,
-          'detalle' => 'Error al obtener los datos',
-          'result' => null
-        );
-      }
-    } catch (DBALException $e) {
-      $message = array(
-        'responseCode' => 204,
-        'estado' => false,
-        'detalle' => $e->getMessage(),
-        'result' => null
-      );
-    }
-    $response = new JsonResponse($message);
-    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-    return $response;
-  }
-
-  /**
- * @Route(
- *  "/comercial/clientes/obtenerHistorial/{idCliente}",
- *  name="comercial.clientes-obtenerHistorial",
- *  methods={"GET"}
- * )
- * @param Connection $connection
- * @param Request $request
- * @return JsonResponse
- */
-public function obtenerHistorial(Connection $connection, Request $request, int $idCliente)
-  {
-    
-    try {
-        $idCliente = $request->get('idCliente'); // Asumiendo que el id_cliente se pasa como parámetro en la solicitud
-
-        // Obtener historial
-        $sqlHistorial = "
-            SELECT 
-                MCB.prim_nome as Cliente,
-                Vendedor = CONCAT(TV.NM_VEND, ' ', TV.NM_RAZA_SOCI),
-                AGT.DS_TITU as Titulo,
-                SUBSTRING(FORMAT(CAC.data_final, 'yyyy-MM-dd HH:mm'), 1, 19) as Fecha,
-                CAC.obs_final as Observacion
-            FROM 
-                TB_CORE_AGEN_COME CAC
-            INNER JOIN 
-                TB_AGEN_TITU AGT ON CAC.id_titulo = AGT.ID
-            INNER JOIN 
-                MTCORP_MODU_CLIE_BASE MCB ON CAC.id_cliente = MCB.id_cliente
-            INNER JOIN 
-                TB_VEND TV ON CAC.id_vendedor = TV.ID
-            WHERE 
-                MCB.id_cliente = :id_cliente";
-
-        $resultHistorial = $connection->fetchAllAssociative($sqlHistorial, ['id_cliente' => $idCliente]);
-
-        if ($resultHistorial !== false) {
-            // Contar la cantidad de registros por título
-            $tituloCount = [];
-            foreach ($resultHistorial as $historialItem) {
-                $titulo = $historialItem['Titulo'];
-                if (!isset($tituloCount[$titulo])) {
-                    $tituloCount[$titulo] = 1;
-                } else {
-                    $tituloCount[$titulo]++;
-                }
-            }
-
-            // Calcular la suma total de cantidades por título
-            $sumaTotalPorTitulo = [];
-            foreach ($tituloCount as $titulo => $cantidad) {
-                $sumaTotalPorTitulo[$titulo] = $cantidad;
-            }
-
-            // Agregar la suma total al resultado final
-            $message = [
-                'responseCode' => 200,
-                'estado' => true,
-                'detalle' => 'Datos obtenidos exitosamente',
-                'result' => $resultHistorial,
-                'sumaTotalPorTitulo' => $sumaTotalPorTitulo
-            ];
-        } else {
-            $message = [
-                'responseCode' => 204,
-                'estado' => false,
-                'detalle' => 'Error al obtener los datos',
-                'result' => null
-            ];
-        }
-    } catch (DBALException $e) {
-        $message = [
-            'responseCode' => 204,
-            'estado' => false,
-            'detalle' => $e->getMessage(),
-            'result' => null
-        ];
-    }
-
-    $response = new JsonResponse($message);
-    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-    return $response;
-  }
-
-
-
 }
