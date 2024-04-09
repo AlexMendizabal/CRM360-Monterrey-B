@@ -429,7 +429,7 @@ class PesquisaController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getDetalhes(Connection $connection, Request $request, $codCliente)
+    /* public function getDetalhes(Connection $connection, Request $request, $codCliente)
     {
         try {
             $query = "SELECT 
@@ -446,9 +446,7 @@ class PesquisaController extends AbstractController
             c.telefono,
             c.celular,
             c.codigo_cliente,
-            c.nit,
             c.id_rubro,
-            r.descricao as rubro,
             r.descricao as rubro,
             e.logradouro as direccion,
             ciudad.nombre_ciudad as ciudad
@@ -456,16 +454,13 @@ class PesquisaController extends AbstractController
         LEFT JOIN MTCORP_MODU_CLIE_BASE_ENDE e ON c.id_cliente = e.id_cliente
         LEFT JOIN TB_VEND v ON c.id_vendedor = v.ID
         LEFT JOIN MTCORP_BASE_CNAE r ON r.id_cnae = c.id_rubro
-        LEFT JOIN MTCORP_BASE_CNAE r ON r.id_cnae = c.id_rubro
         LEFT JOIN TB_ESCR escr ON v.id_escr = escr.id
         LEFT JOIN tb_ciudad ciudad ON escr.id_ciudad = ciudad.id
         WHERE c.id_cliente = :codCliente";
         
-        
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":codCliente", $codCliente);
             $stmt->execute();
-            $res = $stmt->fetch(); 
             $res = $stmt->fetch(); 
             
 
@@ -488,8 +483,6 @@ class PesquisaController extends AbstractController
                 $detalhes->direccion = $res['direccion'];
                 $detalhes->ciudad = $res['ciudad'];
                 $detalhes->id_rubro = $res['id_rubro'];
-                $detalhes->rubro = $res['rubro'];
-                $detalhes->codigo_cliente = $res['codigo_cliente'];
                 $detalhes->rubro = $res['rubro'];
                 $detalhes->codigo_cliente = $res['codigo_cliente'];
                 // ... Populate other properties similarly

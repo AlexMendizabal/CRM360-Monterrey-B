@@ -22,14 +22,13 @@ use App\Services\Helper;
 class ComercialController extends AbstractController
 {
     public function verificaSiglaPerfil($connection, $matricula, $sigla)
-    {   
+    {
         $res = $connection->query("
             EXEC [PRC_CORE_PERF] 
             @PARAMETRO = 2, 
             @NR_MATR = {$matricula}, 
             @SG_PERF = '{$sigla}'
         ")->fetchAll();
-
         if (count($res) > 0) {
             return true;
         } else {
@@ -50,7 +49,8 @@ class ComercialController extends AbstractController
                 @PARAMETRO = 4,
                 @NR_MATR = '{$matricula}'
         ")->fetchAll();
-        if (count($res) > 0) {
+     
+    if (count($res) > 0) {
             for ($i = 0; $i < count($res); $i++) {
                 if ($res[$i]['sigla_perfil'] == 'COME_VEND') {
                     $perfil->vendedor = true;
@@ -172,8 +172,8 @@ class ComercialController extends AbstractController
 
     /**
      * @Route(
-     *  "/comercial/almacen",
-     *  name="comercial.almacen",
+     *  "/comercial/estoque",
+     *  name="comercial.estoque",
      *  methods={"GET"}
      * )
      * @return JsonResponse
@@ -327,8 +327,34 @@ class ComercialController extends AbstractController
     public function getEscritorios(Connection $connection, Request $request)
     {
         try {
+            $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $res = $connection->query("
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+                if($buscarUsuario['NM_CARG_FUNC'] != 'PROMOTOR'){
+                    $buscarEscritorios = $helper->getEscritorios($connection);
+                    if($buscarEscritorios != false){
+
+                        for ($i = 0; $i < count($buscarEscritorios); $i++) {
+                            $escritorios[] = array(
+                                'id' => $buscarEscritorios[$i]['id_escritorio'],
+                                'nome' => trim($buscarEscritorios[$i]['nome_escritorio'])
+                            );
+                        }
+                        array_multisort(array_column($escritorios, 'nome'), SORT_ASC, $escritorios);
+
+                        $message = array(
+                            'responseCode' => 200,
+                            'result' => $escritorios
+                        );
+                    }else{
+                        $message = array(
+                            'responseCode' => 204,
+                            'result' => []
+                        );
+                    }
+                }
+           // dd( $infoUsuario);
+            /* $res = $connection->query("
                 EXEC [PRC_MTCORP_MODU_COME_ESCR_COOR_CONS]
                     @MATRICULA = '{$infoUsuario->matricula}'
             ")->fetchAll();
@@ -339,15 +365,15 @@ class ComercialController extends AbstractController
                         'nome' => trim($res[$i]['nome_escritorio'])
                     );
                 }
-                array_multisort(array_column($escritorios, 'nome'), SORT_ASC, $escritorios);
+                array_multisort(array_column($escritorios, 'nome'), SORT_ASC, $escritorios); */
 
-                $message = array(
+                /* $message = array(
                     'responseCode' => 200,
                     'result' => $escritorios
                 );
             } else {
                 $message = array('responseCode' => 204);
-            }
+            } */
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
@@ -523,32 +549,74 @@ class ComercialController extends AbstractController
      * @return JsonResponse
      */
     public function getClasses(Connection $connection, Request $request)
-    {
-        /**
-         * Enviar: 
-         *  idLinha - (opcional),
-         *  idCLasse - (opcional),
-         *  descClasse - (opcional),
-         *  descLinha - (opcional)
-         */
+    {  
         try {
             $params = $request->query->all();
             /* $idLinha = isset($params['idLinha']) ? $params['idLinha'] : 0; */
             $idClasse = isset($params['idClasse']) ? $params['idClasse'] : 0;
             $dsClasse = isset($params['descClasse']) ? $params['descClasse'] : '';
-            $dsLinha = isset($params['descLinha']) ? $params['descLinha'] : '';
-
+           
             $classes = $connection->query("
                 EXEC [PRC_MATE_CLASS_CONS]
                     @ID_CLASSE = {$idClasse},
-                    @DS_CLASSE = '{$dsClasse}',
-                    @DS_LINHA = '{$dsLinha}'
+                    @DS_CLASSE = '{$dsClasse}'
             ")->fetchAll();
 
             if (count($classes) > 0) {
                 $message = array(
                     'responseCode' => 200,
                     'result' => $classes
+                );
+            } else {
+                $message = array(
+                    'responseCode' => 204,
+                    'result' => 'No se encontraron registros.'
+                );
+            }
+        } catch (\Exception $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'result' => $e->getMessage()
+            );
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    
+    /**
+     * @Route(
+     *  "/comercial/grupos",
+     *  name="comercial.grupos",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getGrupo(Connection $connection, Request $request)
+    {  
+        try {
+            $params = $request->query->all();
+            /* $idLinha = isset($params['idLinha']) ? $params['idLinha'] : 0; */
+            $idSubLinea = isset($params['idClasse']) ? $params['idClasse'] : 0;
+
+            $queryBuilder = $connection->createQueryBuilder();
+            $queryBuilder->select('id_linha', 'descricao', 'id_classe  as id_grupo')
+                        ->from('MTCORP_BASE_LINHAS')
+                        ->where('1 = 1');
+             if (!empty($idSubLinea)) {
+                $queryBuilder->andWhere('id = :idSubLinea');
+                $queryBuilder->setParameter('idSubLinea', $idSubLinea);
+             }
+                        
+            $stmt = $queryBuilder->execute();
+            $grupos = $stmt->fetchAllAssociative();
+            
+            if (count($grupos) > 0) {
+                $message = array(
+                    'responseCode' => 200,
+                    'result' => $grupos
                 );
             } else {
                 $message = array(
@@ -582,8 +650,8 @@ class ComercialController extends AbstractController
     {
         try {
             $params = $request->query->all();
-
-            $codMaterial = isset($params['codMaterial']) ? $params['codMaterial'] : NULL;
+          
+            $codMaterial = isset($params['codMaterial']) ?(int) $params['codMaterial'] : NULL;
             $descMaterial = isset($params['descMaterial']) ? $params['descMaterial'] : NULL;
             $codLinha = isset($params['codLinha']) ? $params['codLinha'] : NULL;
             $codClasse = isset($params['codClasse']) ? $params['codClasse'] : NULL;
@@ -632,8 +700,8 @@ class ComercialController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $perfil = $this->checkPerfil($connection, $infoUsuario->matricula);
 
+            $perfil = $this->checkPerfil($connection, $infoUsuario->matricula);
             $message = array(
                 'responseCode' => 200,
                 'result' => $perfil
@@ -659,34 +727,29 @@ class ComercialController extends AbstractController
      */
     public function materialesContratipos(Connection $connection, Request $request)
     {
-
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $helper = new Helper();
             $params = $request->query->all();
             $id_material = $params['id_material'] ?? '';
             $id_lista_precio = $params['id_lista'] ?? '';
-            $registros = $params['registros'] ?? '';
+            //$registros = $params['registros'] ?? '';
             $estado_material = 1;
             $id_vendedor =  isset($params['id_vendedor']) ? $params['id_vendedor'] : $infoUsuario->idVendedor;
             $result = [];
-            /* dd($id_material);  */
 
             if (isset($id_material)) {
-                $query1 =  "SELECT MATE.ID_CODIGOMATERIAL AS id_codigo_material, MATE.CODIGOMATERIAL AS codigo_material, 
-                MATE.DESCRICAO AS nombre_material 
-                FROM TB_MATE MATE WHERE ID_CODIGOMATERIAL = :id_material";
-                $buscar_material_filtro = $connection->prepare($query1);
-                $buscar_material_filtro->bindValue('id_material', $id_material);
-                $buscar_material_filtro->execute();
-                $res1 = $buscar_material_filtro->fetchAll();
-                //dd($res1);
+             
+                $res1 = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE ID_CODIGOMATERIAL = ?', [$id_material]);
+
                 if (count($res1) > 0) {
-                    $material_filtro = $res1;
-                    $filtrar_material =  $this->filtrarMaterialContratipo($connection, $id_material, $estado_material, $id_vendedor);
+                    /* $material_filtro = $res1[0]['codigo_material']; */
+
+                    $filtrar_material = $this->filtrarMaterialContratipo($connection, $id_material, $estado_material, $id_lista_precio, $id_vendedor);
+
                     if ($filtrar_material != false) {
                         $result = $filtrar_material;
-                    /*     $result['filtro'] =  $res1; */
+                        /*     $result['filtro'] =  $res1; */
                         $message = array(
                             'responseCode' => 200,
                             'result' => $result,
@@ -725,47 +788,106 @@ class ComercialController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    
-    public function filtrarMaterialContratipo($connection, $codMaterial, $estado_material, $id_vendedor)
-    { 
-        $query = "SELECT  MATE.ID_CODIGOMATERIAL as id_material, PM.id as id_precio_material, MATE.CODIGOMATERIAL AS codigo_material, MATE.DESCRICAO AS nombre_material, DEPO.CODIGO_ALMACEN AS nombre_almacen,
-        DEPO.ID AS id_almacen, PM.peso AS peso, UNI.id as id_unidad,
-        UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
-        SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
-        BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-    
-        FROM TB_MATE MATE 
-        INNER JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.ID_CODIGOMATERIAL = MATDEP.id_material
-        INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
-        INNER JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
-        INNER JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
-        INNER JOIN TB_PRECIO_MATERIAL PM ON PM.id_material = MATE.ID_CODIGOMATERIAL
-        INNER JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
-        INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-        INNER JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-        INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
-        INNER JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
-        INNER JOIN TB_ALMACEN_VENDEDOR AV ON DEPO.id = AV.id_almacen
 
-        WHERE ID_CODIGOMATERIAL IN (SELECT TB_MATERIALES_CONTRATIPOS.id_material 
-        FROM TB_MATERIALES_CONTRATIPOS 
-        WHERE TB_MATERIALES_CONTRATIPOS.id_material = :id_material 
-        AND TB_MATERIALES_CONTRATIPOS.estado = :estado_material)
-        AND AV.id_vendedor = :id_vendedor";
-    
+    public function filtrarMaterialContratipo($connection, $codMaterial, $estado_material,  $id_lista_precio, $id_vendedor, $codigo_almacen)
+    {   
+         $query = "SELECT distinct 
+                    MAT.ID_CODIGOMATERIAL as id_material, 
+                    PM.id as id_precio_material,
+                    MAT.CODIGOMATERIAL AS codigo_material, 
+                    MAT.DESCRICAO AS nombre_material, 
+                    DEPO.CODIGO_ALMACEN AS nombre_almacen,
+                    DEPO.ID AS id_almacen, 
+                    PM.peso AS peso,
+                    UNI.id as id_unidad,
+                    UNI.NOMBRE_UNI AS unidad,
+                    MTD.cantidad AS cantidad, 
+                    PM.precio as precio, 
+                    0.00 as descuento, 
+                    PM.precio AS precio_neto, (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
+                    MONE.nombre_moneda,
+                    'A' AS codigo_situacion,
+                    MAT.largo_material as largo_material
+                from TB_VEND VEND
+                inner join tb_Escr as SCL on SCL.id = VEND.ID_ESCR
+                inner join tb_ciudad as CD on CD.iD = SCL.id_ciudad
+                inner join TB_DEPO_FISI_ESTO as DEPO on DEPO.id_ciudad = CD.id
+                inner join TB_MATERIAL_DEPOSITO as MTD on MTD.id_deposito = DEPO.CODIGO_ALMACEN
+                inner join tb_mate as MAT on MAT.CODIGOMATERIAL = MTD.mate_sap
+                inner join TB_PRECIO_MATERIAL as PM on PM.cod_mate = MAT.CODIGOMATERIAL
+                INNER JOIN UNIDADES as UNI ON UNI.ID = MAT.UNIDADE
+                INNER JOIN TB_MONEDA as MONE ON MONE.id = PM.id_moneda
+                inner join TB_LISTA_PRECIO as LP On LP.id = PM.id_lista
+                    where DEPO.estado_mostrar = 1 
+                    AND DEPO.CODIGO_ALMACEN = :codigo_almacen
+                    AND VEND.id = :id_vendedor 
+                    AND LP.id = :id_lista_precio
+                    AND MAT.ID_CODIGOMATERIAL IN (SELECT ASSO.id_mate FROM TB_SIMI_MATE_ASSO ASSO
+                                                    LEFT JOIN TB_SIMI_MATE SIMI ON SIMI.ID = ASSO.ID_SIMI_MATE
+                                                    WHERE SIMI.ID_MATE = :CODIGOMATERIAL 
+                                                        AND SIMI.IN_SITU = :estado_material)
+                    order by DEPO.ID asc";
 
         $buscar_material = $connection->prepare($query);
-        $buscar_material->bindValue('id_material', (int)$codMaterial);
-        $buscar_material->bindValue('estado_material', (int)$estado_material);
+        $buscar_material->bindValue('codigo_almacen', $codigo_almacen);
         $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
-
+        $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
+        $buscar_material->bindValue('CODIGOMATERIAL',  (int)$codMaterial);
+        $buscar_material->bindValue('estado_material', (int)$estado_material);
         $buscar_material->execute();
         $res = $buscar_material->fetchAll();
+        
         if (count($res) > 0) {
             return $res;
         } else {
             return false;
         }
     }
-    
+
+    /**
+     * @Route(
+     *  "/comercial/materiales/lista_almacen",
+     *  name="comercial.almacen",
+     *  methods={"GET"},
+     * )
+     * @return JsonResponse
+     */
+    public function getListaAlmacen(Connection $connection, Request $request)
+    {
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        //dd($infoUsuario);
+        $helper = new Helper();
+        $params = $request->query->all();
+        $id_vendedor = 0;
+        $nombreCargo = '';
+        try {
+            isset($params['id_vendedor']) ? $id_vendedor  = $params['id_vendedor'] : NULL;
+            $nombreCargo = $infoUsuario->none_cargo;
+
+            $almacenes = $helper->almacenVendedorVenta($connection, (int)$id_vendedor, $nombreCargo);
+            if ($almacenes != false) {
+                $message = [
+                    "response" => 200,
+                    "estado" => true,
+                    "data" => $almacenes
+                ];
+            } else {
+                $message = [
+                    "response" => 204,
+                    "estado" => false,
+                    "data" => []
+                ];
+            }
+        } catch (\Throwable $e) {
+            $message = [
+                "response" => 401,
+                "estado" => false,
+                "data" => $e->getMessage()
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
 }
