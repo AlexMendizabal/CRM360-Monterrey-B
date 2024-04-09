@@ -118,7 +118,7 @@ class UsuariosController
         try {
 
             $data = json_decode($request->getContent());
-
+          
             $id                         = $data->id                 ?? null;
             $nome                       = $data->nome               ?? null;
             $apelido                    = $data->apelido            ?? null;

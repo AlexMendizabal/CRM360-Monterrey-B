@@ -543,8 +543,16 @@ class VendedorController extends AbstractController
             $params = $request->query->all();
             $id_vendedor = $params['id_vendedor'] ?? null;
 
-            $query = "SELECT VEND.ID AS id_vendedor, CONCAT(VEND.NM_VEND + ' ', VEND.NM_RAZA_SOCI) as vendedor, ESCR.id as nombre_sucursal, 
-            ESCR.nm_escr AS nombre_sucursal, DEP.id as id_departamento, DEP.nombre_dep as nombre_departamento, LP.id as id_lista, lp.nombre_lista as nombre_lista
+            $query = "SELECT 
+                VEND.ID AS id_vendedor, 
+                CONCAT(VEND.NM_VEND + ' ', 
+                VEND.NM_RAZA_SOCI) as vendedor, 
+                VEND.ID_ESCR as id_almacen, 
+                ESCR.nm_escr AS nombre_sucursal, 
+                DEP.id as id_departamento, 
+                DEP.nombre_dep as nombre_departamento, 
+                LP.id as id_lista, 
+                lp.nombre_lista as nombre_lista
             from TB_VEND VEND 
             INNER JOIN TB_ESCR ESCR ON VEND.ID_ESCR = ESCR.id
             INNER JOIN TB_CIUDAD CIU ON ESCR.id_ciudad = CIU.id

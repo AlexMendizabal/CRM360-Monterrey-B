@@ -651,7 +651,7 @@ class ComercialController extends AbstractController
         try {
             $params = $request->query->all();
           
-            $codMaterial = isset($params['codMaterial']) ? $params['codMaterial'] : NULL;
+            $codMaterial = isset($params['codMaterial']) ?(int) $params['codMaterial'] : NULL;
             $descMaterial = isset($params['descMaterial']) ? $params['descMaterial'] : NULL;
             $codLinha = isset($params['codLinha']) ? $params['codLinha'] : NULL;
             $codClasse = isset($params['codClasse']) ? $params['codClasse'] : NULL;
@@ -660,6 +660,7 @@ class ComercialController extends AbstractController
             $situacao = isset($params['situacao']) ? $params['situacao'] : NULL;
             $comercializa = isset($params['comercializa']) ? $params['comercializa'] : NULL;
             $codEmpresa = isset($params['codEmpresa']) ? $params['codEmpresa'] : NULL;
+           
 
             $res = $connection->query("
                 EXECUTE [PRC_MTCORP_BASE_MATE_CONS]
@@ -674,12 +675,13 @@ class ComercialController extends AbstractController
                     ,@ID_EMPR = '{$codEmpresa}'
             ")->fetchAll();
 
+
             if (count($res) > 0 && !isset($res[0]['MSG'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['MSG'])) {
                 return FunctionsController::Retorno(false, $res[0]['MSG'], null, Response::HTTP_OK);
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, 'No se encontraron registros disponibles.', null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);

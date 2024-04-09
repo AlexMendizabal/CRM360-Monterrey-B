@@ -1608,8 +1608,8 @@ class Helper
                                         AND ID_CODIGOMATERIAL IN (' . $respString  . ')
 
                                         order by MATE.id_CODIGOMATERIAL asc', [$codigo, $id_lista_precio, $codigo_almacen]);
-            
-                                        
+
+
 
             if (count($res) > 0) {
                 return $res;
@@ -1741,6 +1741,28 @@ class Helper
             return false;
         }
     }
+
+    //Buscar por codigo o nombre de material
+    public function buscarMaterialCodigoNombre($connection, $material)
+    {
+        $query = "SELECT TOP 1 ID_CODIGOMATERIAL FROM tb_mate WHERE DESCRICAO LIKE :material";
+        $statement = $connection->prepare($query);
+        $statement->bindValue(':material',  '%' .  $material . '%');
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+    
+        if ($result !== false) {
+            return $result;
+        } else {
+            $buscarMaterial = $this->buscarMaterial($connection, $material);
+            if($buscarMaterial !== false) {
+                return $buscarMaterial;
+            }
+            return false;
+        }
+    }
+    
+
     public function buscarCodMaterial($connection, $id_material)
     {
         $query1 =  "SELECT TOP 1 MATE.CODIGOMATERIAL AS codigo_material 
@@ -4187,6 +4209,32 @@ class Helper
             return $almacenes;
         } else {
             return false;
+        }
+    }
+
+      //FUNCIONES PARA ACTUALIZAR MATERIALES UPSELL DEBE BORRARSE LA LISTA ACTUAL Y REEMPLAZARSE CON EL ARRAY
+      public function borrarMaterialAsociadoUpsell($connection, int $id_asociado){
+
+        $buscarAsociado = $this->buscarMaterialAsociadoUpsell($connection, $id_asociado);
+        if($buscarAsociado[0] === true){
+            $query = "DELETE FROM TB_SIMI_MATE_ASSO WHERE ID_SIMI_MATE = :id_asociado";
+            $stmt = $connection->prepare($query);
+            $stmt->bindValue(":id_asociado", $id_asociado, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        }
+        return false;
+    }
+    public function buscarMaterialAsociadoUpsell($connection, int $id_asociado){
+        $query = "SELECT * FROM TB_SIMI_MATE_ASSO WHERE ID_SIMI_MATE= :id_asociado";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(":id_asociado", $id_asociado, PDO::PARAM_INT);
+        $stmt->execute();
+        $asociados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($asociados) > 0) {
+            return array(true, $asociados);
+        } else {
+            return array(false, []);
         }
     }
 }

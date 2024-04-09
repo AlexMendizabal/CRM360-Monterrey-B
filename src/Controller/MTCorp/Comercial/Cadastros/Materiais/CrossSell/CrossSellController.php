@@ -12,6 +12,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
+use App\Services\Helper;
 
 /**
  * Class CrossSellController
@@ -32,6 +33,8 @@ class CrossSellController extends AbstractController
     public function getListaCrossSell(Connection $connection, Request $request)
     {
       try {
+        
+        $helper = new Helper();
         $params = $request->query->all();
         
         $material = NULL;
@@ -47,6 +50,17 @@ class CrossSellController extends AbstractController
         if (isset($params['registros'])) $registros = $params['registros'];
         if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
         if (isset($params['orderType'])) $orderType = $params['orderType'];
+
+        //En caso que se inserte como string utiliza el helper para obtener el id
+        if(!is_numeric($material) && $material != null){
+            $buscarMaterial = $helper->buscarMaterialCodigoNombre($connection, $material);
+            if($buscarMaterial['ID_CODIGOMATERIAL'] !== false){
+                $material = (int)$buscarMaterial['ID_CODIGOMATERIAL'];
+            }else{
+                $material = NULL;
+            }
+        }
+
         
         $res = $connection->query("
             EXEC [PRC_CROS_SELL_CONS]
@@ -93,7 +107,7 @@ class CrossSellController extends AbstractController
         $codMaterial = NULL;
         if (isset($params['codMaterial']));
 
-        $codMaterial = $this->buscaIDmate($connection, $params["codMaterial"]);
+        $codMaterial = (int)$params['codMaterial']/* $this->buscaIDmate($connection, $params["codMaterial"]) */;
                
         $res = $connection->query("
           EXEC PRC_CROS_SELL_CONS
@@ -240,7 +254,7 @@ class CrossSellController extends AbstractController
         $params = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        !empty($params['codMaterial']) ?  $codMaterial = $this->buscaIDmate($connection, $params["codMaterial"]) : null;
+        !empty($params['codMaterial']) ?  $codMaterial =  $this->buscaIDmate($connection, $params["codMaterial"])  : null;
 
         $codSituacao = $params['codSituacao'];
         $assocMateriais = $params['assocMateriais'];
@@ -248,10 +262,11 @@ class CrossSellController extends AbstractController
         $materiais = array();
 
         for ($i=0; $i < count($assocMateriais); $i++) {
-            $materiais[] = $this->buscaIDmate($connection, $assocMateriais[$i]['codMaterial']);
+            $materiais[] =  /*  $assocMateriais[$i]['codMaterial'] */$this->buscaIDmate($connection, $assocMateriais[$i]['codMaterial']) ;
         }
 
         $materiais = implode(',', $materiais);
+        /* dd($codMaterial); */
 
         $res = $connection->query("
             EXEC [PRC_CROS_SELL_CADA]

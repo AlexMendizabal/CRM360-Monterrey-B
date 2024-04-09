@@ -37,61 +37,56 @@ class AutorizacionesController extends AbstractController
     {
         $helper = new Helper();
         $data = json_decode($request->getContent(), true); 
-
         $id_oferta = isset($data['id_oferta']) ? $data['id_oferta'] : null;
-        $id_usuario =  0;
+       
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
         $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : null;
         $hora_solicitud = date('H:i:s');
-        $estado = 10;
-        $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
-        try {
-          
-            $respt = $helper->actualizaOfertaA($connection, $id_oferta);
-            $queryBuilder = $connection->createQueryBuilder();
-            $queryBuilder->insert('tb_autorizaciones')->values(
-                [
-                    'id_oferta' => '?',
-                    'fecha_solicitud' => '?',
-                    'descripcion_vend' => '?',
-                    'hora_solicitud' => '?',
-                    'estado' => '?',
-                ]
-                
-            )
-            ->setParameter(0, (int)$id_oferta)
-            ->setParameter(1, $fecha_solicitud)
-            ->setParameter(2, $descripcion_vend)
-            ->setParameter(3, $hora_solicitud)
-            ->setParameter(4, $estado);
-            $queryBuilder->execute();
-            $autorizacion = $connection->LastInsertId();
-
-            /*  $data_insert = [
-                'id_oferta' => (int)$id_oferta,
-                'fecha_solicitud' => $fecha_solicitud,
-                'descripcion_vend' => $descripcion_vend,
-                'hora_solicitud' => $hora_solicitud,
-                'estado' => $estado,
-            ];
        
-            $affectedRows = $connection->insert('tb_autorizaciones', $data_insert); */
-         
+        try {
 
-            if (!empty( $autorizacion ) &&  $autorizacion > 0) {
-                //$resp =  $this->enviarcorreo($connection, $helper, $id_oferta);
-                $message = array(
-                    'responseCode' => 200,
-                    'message' => 'Registrao correctamente',
-                    'estado' => true
-                );
-            } else {
-                $message = array(
-                    'responseCode' => 204,
-                    'message' => 'Le falta datos',
-                    'estado' => false
-                );
+            $autorizado = $connection->fetchOne('SELECT estado FROM tb_autorizaciones WHERE id_oferta = ?', [$data['id_oferta']]);
+            if($autorizado === 10)
+            {
+                $message = $this->actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend,$hora_solicitud, $estado, $id_oferta);
             }
+            else
+            {   
+                $estado = 10;
+                $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
+                $respt = $helper->actualizaOfertaA($connection, $id_oferta);
+                $queryBuilder = $connection->createQueryBuilder();
+                $queryBuilder->insert('tb_autorizaciones')->values(
+                    [
+                        'id_oferta' => '?',
+                        'fecha_solicitud' => '?',
+                        'descripcion_vend' => '?',
+                        'hora_solicitud' => '?',
+                        'estado' => '?',
+                    ])
+                ->setParameter(0, (int)$id_oferta)
+                ->setParameter(1, $fecha_solicitud)
+                ->setParameter(2, $descripcion_vend)
+                ->setParameter(3, $hora_solicitud)
+                ->setParameter(4, $estado);
+                $queryBuilder->execute();
+                $autorizacion = $connection->LastInsertId();
+
+                if (!empty( $autorizacion ) &&  $autorizacion > 0) {
+                    $message = array(
+                        'responseCode' => 200,
+                        'message' => 'Registrao correctamente',
+                        'estado' => true
+                    );
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'message' => 'Le falta datos',
+                        'estado' => false
+                    );
+                }
+            }
+           
         } catch (\Throwable $e) {
      
             $message = array(
@@ -103,6 +98,51 @@ class AutorizacionesController extends AbstractController
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
+    }
+
+    public function actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend,$hora_solicitud, $estado, $id_oferta){
+        $queryBuilder = $connection->createQueryBuilder();
+        try {
+                $queryBuilder->update('tb_autorizaciones')
+                    ->set('fecha_solicitud', '?')
+                    ->set('descripcion_vend', '?')
+                    ->set('hora_solicitud', '?')
+                    ->set('estado', '?')
+                    ->where('id_oferta = ?')
+                    ->setParameter(0, $fecha_solicitud)
+                    ->setParameter(1, $descripcion_vend)
+                    ->setParameter(2, $hora_solicitud)
+                    ->setParameter(3, $estado)
+                    ->setParameter(4, (int)$id_oferta);
+                    $queryBuilder->execute();
+
+                $autorizacion = $connection->LastInsertId();
+
+            if (!empty( $autorizacion ) &&  $autorizacion > 0) {
+                        $message = array(
+                            'responseCode' => 200,
+                            'message' => 'Modifico correctamente',
+                            'estado' => true
+                        );
+             } else {
+                        $message = array(
+                            'responseCode' => 204,
+                            'message' => 'Le falta datos',
+                            'estado' => false
+                        );
+                    }
+              
+            } 
+            catch (\PDOException $e)    
+            {
+                $message = array(
+                    'responseCode' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'estado' => false
+                );
+            }
+
+            return $message;
     }
     
     public function autorizacion_estado_sap($helper, $connection, $id_oferta)
