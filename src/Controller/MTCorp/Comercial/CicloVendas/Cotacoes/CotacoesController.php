@@ -2556,6 +2556,8 @@ if (!isset($params['codVendedor'])) {
     {
 
         $data = json_decode($request->getContent(), true);
+
+        dd($data);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $cargo = $infoUsuario->none_cargo;
         if (!empty($data)) {
