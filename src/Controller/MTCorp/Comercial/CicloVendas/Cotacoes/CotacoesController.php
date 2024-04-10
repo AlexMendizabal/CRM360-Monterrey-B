@@ -1,9 +1,5 @@
 <?php
-
-declare(strict_type=1);
-
 namespace App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +14,6 @@ use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 use App\Services\Helper;
-
 
 /**
  * Class CotacoesController
@@ -2552,51 +2547,68 @@ if (!isset($params['codVendedor'])) {
         }
     }
 
-    public function editCotizacion(Connection $connection, Request $request)
-    {
 
+     /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/editar",
+     *  name="comercial.ciclo-vendas-cotacoes-editar",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editCotizacion(Connection $connection, Request $request)
+    {   
         $data = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $cargo = $infoUsuario->none_cargo;
         if (!empty($data)) {
+            
             !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
             !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
             !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
+                // abierto y pendiente editar
+                // abierto y borrador editar
+                // cerrado y rechazado editar
+                //  tipo_estado = situacion
+                //  estado_oferta = estado
+                $situacion = $this->estadoOferta($connection, $id_oferta);
 
-            if (!empty($id_oferta) && !empty($codigo_oferta) && !empty($nombre_oferta)) {
+            if (!empty($id_oferta) && $situacion == true) {
+
                 $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
-                $oferta = json_decode($oferta->getContent(), true);
-
-                    // Obtener todos los materiales de la oferta para comparar
-                    $materials_oferta = $connection->fetchAll('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id = ?', [$id_oferta]);
-                    $materials_oferta = array_column($materials_oferta, 'id_material');
-                    // Recorrer los elementos de la oferta y eliminar los que no están en el carrito
-                    foreach ($materials_oferta as $material_oferta) {
-                        $found = false;
-                        foreach ($data['carrinho'] as $carrito) {
-                            if ($carrito['codMaterial'] == $material_oferta) {
-                                $found = true;
-                                break;
+                $oferta_realizada = json_decode($oferta->getContent(), true);
+                dd($oferta_realizada);
+                if($oferta_realizada['responseCode'] == 200)
+                {
+                   $detaEliminado = $this->eliminaItemsOferta($connection, $id_oferta);
+                   if($detaEliminado == true)
+                   {
+                        $detelle = $this->insertItemsOferta($connection, $data, $id_oferta);
+                        $detalleOferta = json_decode($detelle->getContent(), true);
+                        if ( $detalleOferta['responseCode'] == 200) {
+                            if ($detalleOferta['autorizacion'] == 1) {
+                                $message = [
+                                    "responseCode" => 200,
+                                    "message" => 'Actualizo Correctamente',
+                                    "success" => true,
+                                    "data" => $id_oferta
+                                ];
+                            } else {
+                               $con_sap = $this->envioSAp($connection, $id_oferta);
+                               $message = $con_sap;
                             }
+                        } else {
+                            $message = [
+                                "responseCode" => 500,
+                                "message" => 'No registro',
+                                "success" => false
+                            ];
                         }
-                        if (!$found) {
-                            // El material de la oferta no está presente en el carrito, eliminarlo
-                            $connection->delete('TB_OFERTA_DETALLE', ['id' => $id_oferta, 'id_material' => $material_oferta]);
-                        }
-                    }
-
-                    foreach($data['carrinho'] as $carrito)
-                    {   
-                        $codMaterial = $connection->fetchOne('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id = ? AND id_material = ?', [$id_oferta, $carrito['codMaterial']]);
-                        if(!empty($codMaterial))
-                        {
-                        $detalleOferta[] = $this->editDetalleOferta($connection, $carrito, $id_oferta);
-                        }
-                        else
-                        {
-                        $detalleOferta[] = $this->insertItemsOferta($connection, $carrito, $id_oferta);
-                        }
-                    }
+                   }
+                }
+                    
                 $message = [
                     "responseCode" => 200,
                     "message" => 'Registro Correctamente',
@@ -2610,6 +2622,30 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
+    public function estadoOferta($connection, $id_oferta)
+    {
+        $estados = $connection->fetchAssociative('SELECT tipo_estado, estado_oferta FROM tb_oferta WHERE id = ?', [$id_oferta]);
+        if(($estados['tipo_estado'] == 14 && $estados['estado_oferta'] == 10) || ($estados['tipo_estado'] == 14 && $estados['estado_oferta'] == 1) || $estados['tipo_estado'] == 13 && $estados['estado_oferta'] == 11)
+        {
+           $estado = true;
+        }
+        $estado =false;
+
+        return $estado;
+    }
+
+    public function eliminaItemsOferta($connection, $id_oferta)
+    {
+        $elimina = $connection->delete('tb_oferta', ['id_oferta' => $id_oferta]);
+        
+        if(!empty( $elimina ))
+        {
+            $estado = true;
+         }
+         $estado =false;
+ 
+         return $estado;
+    }
     
     public function editoferta($connection, $data,  $id_oferta, $cargo)
     {
@@ -2697,6 +2733,75 @@ if (!isset($params['codVendedor'])) {
 
     }
 
+    public function envioSAp($connection, $id_oferta)
+    { 
+        $helper = new Helper();
+        $envio_sap = $connection->fetchOne('SELECT envio_sap FROM tb_oferta WHERE id = ?', [$id_oferta]);
+
+        if($envio_sap == 1)
+        {
+            $repSap = $helper->editar_oferta_sap($connection, $id_oferta);
+            $sapresp = json_decode($repSap->getContent(), true);
+            
+            if ($sapresp['CodigoRespuesta'] == 200) {
+                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                $data_sap['envio_sap_edit'] = 1;
+                //cambia el estado si envio a sap 1 
+                $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+    
+                $message = [
+                    "responseCode" => 200,
+                    "message" => 'Actualizo Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                ];
+            } else {
+                //sino envio al sap 0
+                $connection->update('TB_OFERTA', ['envio_sap_edit' => 0], ['id' => (int)$id_oferta]);
+                $message = [
+                    "responseCode" => 200,
+                    "message" => 'Actualizo Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                ];
+            }
+        }
+        else
+        {
+            $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+            $sapresp = json_decode($repSap->getContent(), true);
+
+            if ($sapresp['CodigoRespuesta'] == 200) {
+                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                $data_sap['envio_sap'] = 1;
+                //cambia el estado si envio a sap 1 
+                $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+
+                $message = [
+                    "responseCode" => 200,
+                    "message" => 'Registro Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                ];
+            } else {
+                //sino envio al sap 0
+                $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+                $message = [
+                    "responseCode" => 200,
+                    "message" => 'Registro Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                ];
+            }
+        }
+        return $message;
+    }
+       
+    
     /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/guardar",
@@ -2714,7 +2819,6 @@ if (!isset($params['codVendedor'])) {
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        dd($data);
         if(!empty($data['id_oferta']))
         {
            $updateCotizacion =  $this->editCotizacion($connection,$request);
@@ -2748,7 +2852,6 @@ if (!isset($params['codVendedor'])) {
                                 "data" => $id_oferta
                             ];
                         } else {
-                            $dato = null;
                             $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
                             $sapresp = json_decode($repSap->getContent(), true);
     

@@ -3859,6 +3859,97 @@ class Helper
         return $response;
     }
 
+    public function editar_oferta_sap($connection, $id_oferta)
+    {
+        $obtenerOferta = $this->buscarOferta($connection, $id_oferta);
+
+        $resultSet = $connection->executeQuery('SELECT 
+                    TBU.NM_COMP_RAZA_SOCI AS nombres,
+                    TB_AUTORIZACIONES.fecha_solicitud as fecha_solicitud,
+                    TDA.fecha_solicitud as fecha_gestion,
+                    TB_AUTORIZACIONES.descripcion_vend as descripcion_vend ,
+                    TDA.desc_vendedor as descripcion_usua,
+                    TB_AUTORIZACIONES.estado as estado
+                    FROM TB_AUTORIZACIONES
+                    left join TB_CORE_USUA TBU on TBU.id = TB_AUTORIZACIONES.id_usuario
+                    left join tb_detalle_auto TDA on TB_AUTORIZACIONES.id = TDA.id_autorizacion
+                    WHERE 
+                    id_oferta = ?', [$id_oferta]);
+
+        $autorizacion = $resultSet->fetchAssociative();
+
+        $oferta = $obtenerOferta['oferta'];
+        $detalle_oferta = $obtenerOferta['analitico'];
+
+        foreach ($detalle_oferta as $detalle) {
+            $detalle_of[] = [
+                'item_code' => $detalle['codigo_material'],
+                'cantidad' => $detalle['cantidad'],
+                "porc_descuento" =>  $detalle['descuento_dado'],
+                "unidad" => $detalle['unidad'],
+                "precio" => $detalle['precio'],
+                "almacen" => $detalle['nombre_almacen'],
+                "cortes" => null,
+                'modo_entrega' => $detalle['modo_entrega']
+            ];
+        }
+        $arrayOFerta = ([
+            'docEntry' => $oferta['nomnbre_oferta'],
+            'numero_oferta' => $id_oferta,
+            'fecha_creacion' => date('Y-m-d', strtotime($oferta['fecha_creacion'])),
+            'fecha_validez' => date('Y-m-d', strtotime($oferta['fecha_final'])),
+            'card_code' =>  $oferta['codigo_cliente'],
+            'observaciones' => $oferta['observacion_value'],
+            'total_documento' => $oferta['monto_total'],
+            'nombre_factura' => $oferta['nombre_cliente'],
+            'ejecutivo_ventas' => $oferta['nombre_vendedor'],
+            'tipo_documento' => $oferta['tipo_documento'],
+            'numero_documento' => $oferta['numero_documento'],
+            'tipo_entrega' => $oferta['id_modo_entrega'],
+            'codigo_direccion' => $oferta['codigo_direccion'],
+            'porc_descuento' => null,
+            'direccion' => $oferta['direccion_entrega'],
+            'geolocalizacion' => $oferta['geolocalizacion'],
+            'detalle_pedido' => $detalle_of,
+        ]);
+
+        if (!empty($autorizacion)) {
+            $autorizaciones = [
+                "usuario_gestion" => $autorizacion['nombres'],
+                "fecha_solicitud" => $autorizacion['fecha_solicitud'],
+                "fecha_gestion" => $autorizacion['fecha_gestion'],
+                "observacion_usuario" => $autorizacion['descripcion_usua'],
+                "observacion_ejecutivo" => $autorizacion['descripcion_vend'],
+                "estado" => $autorizacion['estado']
+            ];
+
+            $arrayOFerta['autorizacion'] =  [$autorizaciones];
+        } else {
+            $arrayOFerta['autorizacion']  = [];
+        }
+        try {
+            $ruta = "/editarProforma";
+
+            $rsp = $this->insertarServicio($ruta, $arrayOFerta);
+            if ($rsp['CodigoRespuesta'] == 200) {
+                $message = $rsp;
+            } else {
+                $message = $rsp;
+            }
+        } catch (\Throwable $e) {
+            $message = array(
+                'responseCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'success' => false
+            );
+        }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+
+
     public function modificarCodigoOferta($connection, $data)
     {
         $data_oferta['codigo_sap'] = $sapresp['Mensaje'];
