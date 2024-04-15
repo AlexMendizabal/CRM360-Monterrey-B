@@ -1,9 +1,5 @@
 <?php
-
-declare(strict_type=1);
-
 namespace App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +14,6 @@ use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 use App\Services\Helper;
-
 
 /**
  * Class CotacoesController
@@ -2552,59 +2547,76 @@ if (!isset($params['codVendedor'])) {
         }
     }
 
+
+     /**
+     * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/editar",
+     *  name="comercial.ciclo-vendas-cotacoes-editar",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function editCotizacion(Connection $connection, Request $request)
-    {
-
+    {   
         $data = json_decode($request->getContent(), true);
-
-        dd($data);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $cargo = $infoUsuario->none_cargo;
+        $helper = new Helper();
+
         if (!empty($data)) {
             !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
             !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
             !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
-
-            if (!empty($id_oferta) && !empty($codigo_oferta) && !empty($nombre_oferta)) {
+                // abierto y pendiente editar
+                // abierto y borrador editar
+                // cerrado y rechazado editar
+                //  tipo_estado = situacion
+                //  estado_oferta = estado
+                $situacion = $this->estadoOferta($connection, $id_oferta);
+            if (!empty($id_oferta) && $situacion == true) {
                 $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
-                $oferta = json_decode($oferta->getContent(), true);
-
-                    // Obtener todos los materiales de la oferta para comparar
-                    $materials_oferta = $connection->fetchAll('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id = ?', [$id_oferta]);
-                    $materials_oferta = array_column($materials_oferta, 'id_material');
-                    // Recorrer los elementos de la oferta y eliminar los que no están en el carrito
-                    foreach ($materials_oferta as $material_oferta) {
-                        $found = false;
-                        foreach ($data['carrinho'] as $carrito) {
-                            if ($carrito['codMaterial'] == $material_oferta) {
-                                $found = true;
-                                break;
+                $oferta_realizada = json_decode($oferta->getContent(), true);
+              
+                if($oferta_realizada['responseCode'] == 200)
+                {
+                   $detaEliminado = $this->eliminaItemsOferta($connection, $id_oferta);
+                   //$detaEliminado = true;
+                   if($detaEliminado == true)
+                   {
+                    foreach ($data['carrinho'] as $items) {
+                        $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
+                        $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
+                    }
+                    $resp = false;
+                        foreach ($data_detalleoferta as $items) {
+                            if ($items['autorizacion'] == 1) {
+                                $resp = $helper->actualizaOfertaA($connection, $id_oferta);
+                                break; 
                             }
                         }
-                        if (!$found) {
-                            // El material de la oferta no está presente en el carrito, eliminarlo
-                            $connection->delete('TB_OFERTA_DETALLE', ['id' => $id_oferta, 'id_material' => $material_oferta]);
+                    if ($resp) {
+                        $message = [
+                            "responseCode" => 200,
+                            "message" => 'Actualizo Correctamente',
+                            "success" => true,
+                            "data" => $id_oferta
+                            ];
+                        } else {
+                            $sapmsj = $this->envioSAp($connection, $id_oferta);
+                            $message = json_decode($sapmsj->getContent(), true);
                         }
-                    }
-
-                    foreach($data['carrinho'] as $carrito)
-                    {   
-                        $codMaterial = $connection->fetchOne('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id = ? AND id_material = ?', [$id_oferta, $carrito['codMaterial']]);
-                        if(!empty($codMaterial))
-                        {
-                        $detalleOferta[] = $this->editDetalleOferta($connection, $carrito, $id_oferta);
-                        }
-                        else
-                        {
-                        $detalleOferta[] = $this->insertItemsOferta($connection, $carrito, $id_oferta);
-                        }
-                    }
-                $message = [
-                    "responseCode" => 200,
-                    "message" => 'Registro Correctamente',
-                    "success" => true,
-                    "data_sap" => $oferta
-                ];
+                   }
+                }
+                else
+                {
+                    $message = [
+                        "responseCode" => 204,
+                        "message" => 'No esta bien los datos!!!',
+                        "success" => false,
+                    ];
+                }
             }
         }
         $response = new JsonResponse($message);
@@ -2612,6 +2624,36 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
+    public function estadoOferta($connection, $id_oferta)
+    {
+        $estados = $connection->fetchAssociative('SELECT tipo_estado, estado_oferta FROM tb_oferta WHERE id = ?', [$id_oferta]);
+       
+        if(($estados['tipo_estado'] == "14" && $estados['estado_oferta'] == "10") || ($estados['tipo_estado'] == "14" && $estados['estado_oferta'] == "1") || $estados['tipo_estado'] == "13" && $estados['estado_oferta'] == "11")
+        {
+           $estado = true;
+        }
+        else
+        {
+            $estado =false;
+        }
+
+        return $estado;
+    }
+
+    public function eliminaItemsOferta($connection, $id_oferta)
+    {
+        $elimina = $connection->delete('tb_oferta_detalle', ['id_oferta' => $id_oferta]);
+      
+        if(!empty($elimina))
+        {
+            $estado = true;
+        }
+        else
+        {
+            $estado =false;
+        }
+         return $estado;
+    }
     
     public function editoferta($connection, $data,  $id_oferta, $cargo)
     {
@@ -2696,9 +2738,73 @@ if (!isset($params['codVendedor'])) {
             );
         }
         return new JsonResponse($message);
-
     }
 
+    public function envioSAp($connection, $id_oferta)
+    { 
+        $helper = new Helper();
+        $envio_sap = $connection->fetchOne('SELECT envio_sap FROM tb_oferta WHERE id = ?', [$id_oferta]);
+        if($envio_sap == 1)
+        {   
+            $repSap = $helper->editar_oferta_sap($connection, $id_oferta);
+            $sapresp = json_decode($repSap->getContent(), true);
+           
+            if ($sapresp['CodigoRespuesta'] == 200) {
+                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                $data_sap['envio_sap_edit'] = 1;
+                //cambia el estado si envio a sap 1 
+                $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+                $message = array(
+                    "responseCode" => 200,
+                    "message" => 'Actualizo Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                );
+            } else {
+                //sino envio al sap 0
+                $connection->update('TB_OFERTA', ['envio_sap_edit' => 0], ['id' => (int)$id_oferta]);
+                $message =  array(
+                    "responseCode" => 200,
+                    "message" => 'Actualizo Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                );
+            }
+        }
+        else
+        {
+            $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+            $sapresp = json_decode($repSap->getContent(), true);
+            if ($sapresp['CodigoRespuesta'] == 200) {
+                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                $data_sap['envio_sap'] = 1;
+                //cambia el estado si envio a sap 1 
+                $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+                $message =  array(
+                    "responseCode" => 200,
+                    "message" => 'Actualizar Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                );
+            } else {
+                //sino envio al sap 0
+                $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+                $message = array(
+                    "responseCode" => 200,
+                    "message" => 'Actualizar Correctamente',
+                    "success" => true,
+                    "data_sap" => $sapresp
+                );
+            }
+        }
+        return new JsonResponse($message);
+    }
+       
+    
     /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/guardar",
@@ -2716,11 +2822,11 @@ if (!isset($params['codVendedor'])) {
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        dd($data);
         if(!empty($data['id_oferta']))
         {
-           $updateCotizacion =  $this->editCotizacion($connection,$request);
-           dd($updateCotizacion);
+           $updateCotizacion = $this->editCotizacion($connection,$request);
+           $editadaOferta = json_decode($updateCotizacion->getContent(), true);
+           $message = $editadaOferta;
         }
         else
         {
@@ -2730,19 +2836,25 @@ if (!isset($params['codVendedor'])) {
                 $data_oferta = json_decode($repstClie->getContent(), true);
                 $id_cliente = $data_oferta['data'];
             }
-        
             if (!empty($data)) {
                 $resp = $this->insertaOferta($connection, $data);
                 $data_oferta = json_decode($resp->getContent(), true);
                 $id_oferta = $data_oferta['data'];
-    
+            
                 if ($data_oferta['success']) {
                     foreach ($data['carrinho'] as $items) {
                         $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
                         $data_detalleoferta = json_decode($data_detalle->getContent(), true);
                     }
-                    if ($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200) {
-                        if ($data_detalleoferta['autorizacion'] == 1) {
+                    
+                    $resp = false;
+                    foreach ($data_detalleoferta as $items) {
+                        if ($items['autorizacion'] == 1) {
+                            $resp = $helper->actualizaOfertaA($connection, $id_oferta);
+                            break; 
+                        }
+                    }
+                        if ($resp) {
                             $message = [
                                 "responseCode" => 200,
                                 "message" => 'Registro Correctamente',
@@ -2750,10 +2862,8 @@ if (!isset($params['codVendedor'])) {
                                 "data" => $id_oferta
                             ];
                         } else {
-                            $dato = null;
                             $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
                             $sapresp = json_decode($repSap->getContent(), true);
-    
                             if ($sapresp['CodigoRespuesta'] == 200) {
                                 $data_sap['codigo_oferta'] = $sapresp['Oferta'];
                                 $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
@@ -2761,7 +2871,6 @@ if (!isset($params['codVendedor'])) {
                                 $data_sap['envio_sap'] = 1;
                                 //cambia el estado si envio a sap 1 
                                 $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
-    
                                 $message = [
                                     "responseCode" => 200,
                                     "message" => 'Registro Correctamente',
@@ -2779,13 +2888,7 @@ if (!isset($params['codVendedor'])) {
                                 ];
                             }
                         }
-                    } else {
-                        $message = [
-                            "responseCode" => 500,
-                            "message" => 'No registro',
-                            "success" => false
-                        ];
-                    }
+                    
                 } else {
                     $message = [
                         "responseCode" => 204,
@@ -2802,8 +2905,6 @@ if (!isset($params['codVendedor'])) {
                 ];
             }
         }
-        
-       
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
@@ -2855,10 +2956,9 @@ if (!isset($params['codVendedor'])) {
         $data_oferta['id_iva'] = 1;
         !empty($data['id_cliente']) ?  $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
         !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
-        !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : $data_oferta['id_persona_contacto'] = null;
-        !empty($data['id_almacen']) ? $data_oferta['id_almacen'] = $data['id_almacen'] : $data_oferta['id_almacen'] = null;
+        !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : null;
+        !empty($data['id_almacen']) ? $data_oferta['id_almacen'] = $data['id_almacen'] : null;
         !empty($data['tipo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['tipo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
-        !empty($data['centroLogisticoControl']) ? $data_oferta['id_centro_logistico'] = $data['centroLogisticoControl'] : $data_error['id_centro_logistico'] = 'es necesario';
         $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
         !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
         !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
@@ -2868,11 +2968,10 @@ if (!isset($params['codVendedor'])) {
         !empty($data['descuento_total']) ? $data_oferta['descuento_total'] = $data['descuento_total'] : null;
         !empty($data['formaContacto']) ? $data_oferta['forma_contacto'] = $data['formaContacto'] : null;
         !empty($data['tipoContacto']) ? $data_oferta['origen_contacto'] = $data['tipoContacto'] : null;
-
         !empty($data['cantidad_total']) ?  $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
         !empty($data['direccion_cliente']) ? $data_oferta['id_direccion_cliente'] = $data['direccion_cliente'] : null;
-
         if (!empty($data['direccion_entrega'])) {
+            !empty($data['centroLogisticoControl']) ? $data_oferta['id_centro_logistico'] = $data['centroLogisticoControl'] : null;
             !empty($data['latitud']) ? $data_oferta['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es necesario';
             !empty($data['longitud']) ? $data_oferta['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es necesario';
             !empty($data['direccion_entrega']) ? $data_oferta['direccion'] = $data['direccion_entrega'] : $data_error['direccion'] = 'es necesario';
@@ -2882,13 +2981,10 @@ if (!isset($params['codVendedor'])) {
         }
         $data_oferta['estado_oferta'] = 1;
         $data_oferta['tipo_estado'] = 14;
-
         try {
-
             if(empty($data_error) ){
                 $oferata = $connection->insert('TB_OFERTA', $data_oferta);
                 $id_oferta = $connection->lastInsertId();
-
                 if($oferata === 1)
                 {
                     $message = array(
@@ -2907,20 +3003,17 @@ if (!isset($params['codVendedor'])) {
                         "data" => $id_oferta
                     );
                 }
-               
             }
             else
             {
                 $message = array(
-                    "responseCode" => 200,
-                    "message" => "Registro correctamente",
-                    "success" => true,
+                    "responseCode" => 204,
+                    "message" => "No Registro!",
+                    "success" => false,
                     "data" => $data_error
                 );
             }
-           
         } catch (\Throwable $e) {
-
             $message = array(
                 'responseCode' => $e->getCode(),
                 'message' => $e->getMessage(),
@@ -2936,21 +3029,16 @@ if (!isset($params['codVendedor'])) {
         $data_items['id_oferta'] = (int)$id_oferta;
         !empty($data['codMaterial']) ? $data_items['id_material'] = $data['codMaterial'] : $data_error['codMaterial'] = 'es necesario';
         !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
-        //$data_items['id_presentacion'] = !empty($data['codDeposito']) ? $data['codDeposito'] : $data_error['codDeposito'] = 'es necesario';
         !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
-
         if (!empty($data['percentualDesc'])) {
-            // $data_items['descuento'] = !empty($data['descuento']) ? $data['descuento'] : $data_error['descuento'] = 'es necesario';
             !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
             !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
             $autorizacion = 1;
         }
         !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
         !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
-
         try {
-            //dd($data_items, $data_error);
             $data_detalle = $connection->insert('TB_OFERTA_DETALLE', $data_items);
             if ($autorizacion == 1) {
                 $message = array(
