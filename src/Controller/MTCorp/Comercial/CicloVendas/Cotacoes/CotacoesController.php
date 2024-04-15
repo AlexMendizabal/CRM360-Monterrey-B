@@ -1266,14 +1266,14 @@ if (!isset($params['codVendedor'])) {
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
+            
             $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
 								@ID_PARA = 2,
 								@ID_EMPR = 1,
 								@NR_PEDI = {$codCotacao}
 				")->fetchAll();
-
+            
             if (count($resProposta) > 0) {
 
                 $arrFinal = $resProposta;
