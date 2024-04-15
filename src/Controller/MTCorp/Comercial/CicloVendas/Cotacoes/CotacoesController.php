@@ -2564,7 +2564,6 @@ if (!isset($params['codVendedor'])) {
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $cargo = $infoUsuario->none_cargo;
         if (!empty($data)) {
-            
             !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
             !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
             !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
@@ -2574,12 +2573,11 @@ if (!isset($params['codVendedor'])) {
                 //  tipo_estado = situacion
                 //  estado_oferta = estado
                 $situacion = $this->estadoOferta($connection, $id_oferta);
-
+                dd($situacion);
             if (!empty($id_oferta) && $situacion == true) {
-
                 $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
                 $oferta_realizada = json_decode($oferta->getContent(), true);
-                dd($oferta_realizada);
+              
                 if($oferta_realizada['responseCode'] == 200)
                 {
                    $detaEliminado = $this->eliminaItemsOferta($connection, $id_oferta);
@@ -2597,7 +2595,7 @@ if (!isset($params['codVendedor'])) {
                                 ];
                             } else {
                                $con_sap = $this->envioSAp($connection, $id_oferta);
-                               $message = $con_sap;
+                               $envio_sap = json_decode($con_sap->getContent(), true);
                             }
                         } else {
                             $message = [
@@ -2608,7 +2606,6 @@ if (!isset($params['codVendedor'])) {
                         }
                    }
                 }
-                    
                 $message = [
                     "responseCode" => 200,
                     "message" => 'Registro Correctamente',
@@ -2625,6 +2622,7 @@ if (!isset($params['codVendedor'])) {
     public function estadoOferta($connection, $id_oferta)
     {
         $estados = $connection->fetchAssociative('SELECT tipo_estado, estado_oferta FROM tb_oferta WHERE id = ?', [$id_oferta]);
+        dd($estados);
         if(($estados['tipo_estado'] == 14 && $estados['estado_oferta'] == 10) || ($estados['tipo_estado'] == 14 && $estados['estado_oferta'] == 1) || $estados['tipo_estado'] == 13 && $estados['estado_oferta'] == 11)
         {
            $estado = true;
@@ -2730,7 +2728,6 @@ if (!isset($params['codVendedor'])) {
             );
         }
         return new JsonResponse($message);
-
     }
 
     public function envioSAp($connection, $id_oferta)
@@ -2751,21 +2748,21 @@ if (!isset($params['codVendedor'])) {
                 //cambia el estado si envio a sap 1 
                 $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
     
-                $message = [
+                $message = array(
                     "responseCode" => 200,
                     "message" => 'Actualizo Correctamente',
                     "success" => true,
                     "data_sap" => $sapresp
-                ];
+                );
             } else {
                 //sino envio al sap 0
                 $connection->update('TB_OFERTA', ['envio_sap_edit' => 0], ['id' => (int)$id_oferta]);
-                $message = [
+                $message =  array(
                     "responseCode" => 200,
                     "message" => 'Actualizo Correctamente',
                     "success" => true,
                     "data_sap" => $sapresp
-                ];
+                );
             }
         }
         else
@@ -2781,24 +2778,24 @@ if (!isset($params['codVendedor'])) {
                 //cambia el estado si envio a sap 1 
                 $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
 
-                $message = [
+                $message =  array(
                     "responseCode" => 200,
-                    "message" => 'Registro Correctamente',
+                    "message" => 'Actualizar Correctamente',
                     "success" => true,
                     "data_sap" => $sapresp
-                ];
+                );
             } else {
                 //sino envio al sap 0
                 $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
-                $message = [
+                $message = array(
                     "responseCode" => 200,
-                    "message" => 'Registro Correctamente',
+                    "message" => 'Actualizar Correctamente',
                     "success" => true,
                     "data_sap" => $sapresp
-                ];
+                );
             }
         }
-        return $message;
+        return new JsonResponse($message);
     }
        
     

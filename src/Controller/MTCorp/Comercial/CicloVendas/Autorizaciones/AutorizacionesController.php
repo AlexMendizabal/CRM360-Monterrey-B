@@ -585,7 +585,7 @@ class AutorizacionesController extends AbstractController
 
     public function correoAutorizaciones($nombre_vendedor, $correo_auorizador, $correo_vendedor, $descripcion_usua, $estado)
     {
-        $url = 'http://localhost:4200/#/comercial/ciclo-vendas/23/autorizaciones/lista';
+        $url = 'http://23.254.204.187:4200/#/comercial/ciclo-vendas/23/autorizaciones/lista';
 
         $helper = new Helper();
         $contenido = $helper->correoEstado($nombre_vendedor, $estado, $url);
