@@ -883,7 +883,7 @@ class CadastroController extends AbstractController
       }
 
       if (isset($result) && !empty($result)) {
-          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);  
+          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
       } else {
           return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }

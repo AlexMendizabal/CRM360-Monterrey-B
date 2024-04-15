@@ -1,0 +1,24 @@
+doctrine:
+    dbal:
+        default_connection: MONTERREY
+        connections:
+            MONTERREY:
+                driver: 'pdo_sqlsrv'
+                host: 'localhost'
+                port: 1433       
+                dbname: 'CRM360'
+                user: 'user2023'
+                password: 'RIC0rp#2023'
+                charset: 'UTF-8'
+                
+    # orm:# 
+    #     auto_generate_proxy_classes: true
+    #     naming_strategy: doctrine.orm.naming_strategy.underscore
+    #     auto_mapping: true
+    #     mappings:
+    #         App:
+    #             is_bundle: false
+    #             type: annotation
+    #             dir: '%kernel.project_dir%/src/Entity'
+    #             prefix: 'App\Entity'
+    #             alias: App
