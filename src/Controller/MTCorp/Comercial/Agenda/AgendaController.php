@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-/* use Doctrine\DBAL\Connection; */
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ParameterType;
@@ -57,18 +56,14 @@ class AgendaController extends AbstractController
             );
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);
+                return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['message'])) {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
-                $FunctionsController = new FunctionsController();
-                return $FunctionsController->Retorno(false, null, null, Response::HTTP_OK);
+                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
         } catch (\Throwable $e) {
-            $FunctionsController = new FunctionsController();
-            return $FunctionsController->Retorno(
+            return FunctionsController::Retorno(
                 false,
                 'Erro ao retornar dados.',
                 $e->getMessage(),
@@ -1314,8 +1309,6 @@ class AgendaController extends AbstractController
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
-                'estado' => false,
-                'result' =>  $arrayVacio,
                 'message' => $e->getMessage()
             );
         }

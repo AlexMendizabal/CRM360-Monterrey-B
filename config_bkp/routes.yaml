@@ -1,0 +1,15 @@
+api.home:
+    path: /
+    methods: [GET]
+    controller: App\Controller\Core\HomeController::home
+
+api.usuario.login:
+    path: /usuario/login
+    methods: [POST]
+    controller: App\Controller\Core\LoginController::login
+
+
+api.core.sap.login:
+    path: /sap/login
+    methods: [POST]
+    controller: App\Controller\Core\SapController::loginSap

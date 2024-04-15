@@ -75,8 +75,7 @@ class VendedorController extends AbstractController
     public function getDetalhesCadastro(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             // $matricula = $infoUsuario->matricula;
             $matricula = 1642;
@@ -335,39 +334,12 @@ class VendedorController extends AbstractController
 
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
             }
-        } catch (DBALException $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-}
-}
-
-    /**
-     * @Route(
-     *  "/comercial/vendedor/allvendedor",
-     *  name="comercial.vendedor-allvendedor",
-     *  methods={"GET"}
-     * )
-     * @return JsonResponse
-     */
-    public function getVendedor(Connection $connection, Request $request)
-    {
-        try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
-            $res = $this->todosVendedores($connection);
-
-            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
-                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
-            } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+            if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
             }
         } catch (DBALException $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
-
 
 
     /**
@@ -506,7 +478,54 @@ class VendedorController extends AbstractController
         }
     }
 
-  
+    /**
+     * @Route(
+     *  "/comercial/vendedor/allvendedor",
+     *  name="comercial.vendedor-allvendedor",
+     *  methods={"GET"}
+     * )
+     * @return JsonResponse
+     */
+    public function getVendedor(Connection $connection, Request $request)
+    {
+        try {
+            $UsuarioController = new UsuarioController();
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+         
+
+            if ($infoUsuario->none_cargo != 1) {
+                $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
+                        from TB_VEND where id = :id_vendedor";
+                $statement = $connection->prepare($query);
+                $statement->bindValue('id_vendedor', $infoUsuario->idVendedor);
+                $statement->execute();
+                $res = $statement->fetchAll();
+                if (isset($res)) {
+                    return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                }
+                else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+                    return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+                } else {
+                    return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+                }
+            }else {
+                $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
+                        from TB_VEND ";
+                $statement = $connection->prepare($query);
+                $statement->execute();
+                $res = $statement->fetchAll();
+                if (count($res) > 0 && !isset($res[0]['ERROR'])) {
+                    return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
+                    return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+                } else {
+                    return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+                }
+            }
+        } catch (DBALException $e) {
+            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
 
     /**
      * @Route(
@@ -635,8 +654,7 @@ class VendedorController extends AbstractController
     public function getVinculoOperadores(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             $res = $connection->query("
                 EXEC [PRC_VINC_OPER_CONS] 
@@ -680,15 +698,15 @@ class VendedorController extends AbstractController
             @ESCRITORIO = '',
             @SITUACAO = '1'
     ")->fetchAll();
-    if (count($res) > 0) {
-        for ($i = 0; $i < count($res); $i++) {
-            $arrayVendedores[] = array(
-                'id' => $res[$i]['id'],
-                'idEscritorio' => $res[$i]['id_escritorio'],
-                'nome' => trim($res[$i]['nome'])
-            );
-        }
-        /*                 dd($vendedores);
+        if (count($res) > 0) {
+            for ($i = 0; $i < count($res); $i++) {
+                $arrayVendedores[] = array(
+                    'id' => $res[$i]['id'],
+                    'idEscritorio' => $res[$i]['id_escritorio'],
+                    'nome' => trim($res[$i]['nome'])
+                );
+            }
+            /*                 dd($vendedores);
 */
             array_multisort(array_column($arrayVendedores, 'nome'), SORT_ASC, $arrayVendedores);
         } else {
@@ -754,7 +772,7 @@ class VendedorController extends AbstractController
                 }
             }
             //dd($infoUsuario);
-        
+
         } catch (\PDOException $e) {
             return FunctionsController::Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
