@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -333,7 +335,7 @@ class CotacoesController extends AbstractController
             isset($params['registros']) ? $registros = $params['registros'] : NULL;
             isset($params['codVendedor']) ? $codVendedor  = $params['codVendedor'] : NULL;
 
-            
+
             /* Fecha Inicial */
             if (!empty($dataInicial)) {
                 $fechaInicial1 = date('Y-m-d', strtotime($dataInicial));
@@ -343,77 +345,77 @@ class CotacoesController extends AbstractController
                 $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
             }
             // Verifica si el parámetro 'codVendedor' está establecido
-if (!isset($params['codVendedor'])) {
-    // Si el parámetro no está establecido, comprueba el rol del usuario
-    $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-    if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5) {
-        // Si el usuario tiene ciertos roles, establece el ID del vendedor
-        $codVendedor =  (int)$infoUsuario->idVendedor;
-    } else {
-        // Si el usuario no tiene los roles necesarios, establece el ID del vendedor como nulo
-        $codVendedor = null;
-    }
-        } else {
-            // Si el parámetro 'codVendedor' está establecido, toma su valor
-            $codVendedor = $params['codVendedor'];
-        }
+            if (!isset($params['codVendedor'])) {
+                // Si el parámetro no está establecido, comprueba el rol del usuario
+                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+                if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5) {
+                    // Si el usuario tiene ciertos roles, establece el ID del vendedor
+                    $codVendedor =  (int)$infoUsuario->idVendedor;
+                } else {
+                    // Si el usuario no tiene los roles necesarios, establece el ID del vendedor como nulo
+                    $codVendedor = null;
+                }
+            } else {
+                // Si el parámetro 'codVendedor' está establecido, toma su valor
+                $codVendedor = $params['codVendedor'];
+            }
 
-        // Crear el query builder
-        $queryOferta = $connection->CreateQueryBuilder();
-        $queryOferta->select(
-            'DISTINCT OFE.id as id_oferta',
-            'OFE.codigo_oferta as codigo_oferta',
-            'OFE.fecha_creacion as fecha_oferta',
-            'OFE.fecha_inicial',
-            'OFE.fecha_final',
-            'CLIE.id_cliente',
-            'CLIE.prim_nome',
-            'OFE.monto_total',
-            'OFE.monto_total_bruto',
-            'LP.id',
-            'LP.nombre_lista',
-            'OFE.descuento_total',
-            'OFE.cantidad_total',
-            'UNI.NOMBRE_UNI',
-            'OFE.peso_total',
-            'ME.id',
-            'OFE.descripcion as descripcionofe',
-            'ME.nombre_modo_entrega',
-            'OFE.estado_oferta',
-            'OFE.tipo_estado',
-            'OFE.autorizacion',
-            'CO.descripcion as descripcion_cierre',
-            'CO.descripcion',
-            'AU.id AS id_autorizacion',
-            'AU.estado AS id_estado_autorizacion',
-            'DAU.id_usuario AS id_usuario',
-            'USU.NM_COMP_RAZA_SOCI as nombre_usuario',
-            "CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre",
-        )->from('TB_OFERTA', 'OFE')
-        ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
-        ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
-        ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
-        ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
-        ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
-        ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
-        ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta = CO.id')
-        ->leftJoin('OFE', 'tb_autorizaciones', 'AU', 'AU.id_oferta = OFE.id')
-        ->leftJoin('AU', 'TB_DETALLE_AUTO', 'DAU', 'AU.id = DAU.id_autorizacion')
-        ->leftJoin('AU', 'TB_CORE_USUA', 'USU', 'DAU.id_usuario = USU.ID');
+            // Crear el query builder
+            $queryOferta = $connection->CreateQueryBuilder();
+            $queryOferta->select(
+                'DISTINCT OFE.id as id_oferta',
+                'OFE.codigo_oferta as codigo_oferta',
+                'OFE.fecha_creacion as fecha_oferta',
+                'OFE.fecha_inicial',
+                'OFE.fecha_final',
+                'CLIE.id_cliente',
+                'CLIE.prim_nome',
+                'OFE.monto_total',
+                'OFE.monto_total_bruto',
+                'LP.id',
+                'LP.nombre_lista',
+                'OFE.descuento_total',
+                'OFE.cantidad_total',
+                'UNI.NOMBRE_UNI',
+                'OFE.peso_total',
+                'ME.id',
+                'OFE.descripcion as descripcionofe',
+                'ME.nombre_modo_entrega',
+                'OFE.estado_oferta',
+                'OFE.tipo_estado',
+                'OFE.autorizacion',
+                'CO.descripcion as descripcion_cierre',
+                'CO.descripcion',
+                'AU.id AS id_autorizacion',
+                'AU.estado AS id_estado_autorizacion',
+                'DAU.id_usuario AS id_usuario',
+                'USU.NM_COMP_RAZA_SOCI as nombre_usuario',
+                "CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) AS nombre",
+            )->from('TB_OFERTA', 'OFE')
+                ->leftJoin('OFE', 'MTCORP_MODU_CLIE_BASE', 'CLIE', 'OFE.id_cliente = CLIE.id_cliente')
+                ->leftJoin('OFE', 'TB_VEND', 'VEND', 'OFE.id_vendedor = VEND.ID')
+                ->leftJoin('OFE', 'TB_MONEDA', 'MONEDA', 'OFE.id_moneda = MONEDA.id')
+                ->leftJoin('OFE', 'TB_LISTA_PRECIO', 'LP', 'OFE.id_lista_precio = LP.id')
+                ->leftJoin('OFE', 'UNIDADES', 'UNI', 'OFE.id_unidad = UNI.ID')
+                ->leftJoin('OFE', 'TB_MODO_ENTREGA', 'ME', 'OFE.id_modo_entrega = ME.id')
+                ->leftJoin('OFE', 'tb_cierre_oferta', 'CO', 'OFE.estado_oferta = CO.id')
+                ->leftJoin('OFE', 'tb_autorizaciones', 'AU', 'AU.id_oferta = OFE.id')
+                ->leftJoin('AU', 'TB_DETALLE_AUTO', 'DAU', 'AU.id = DAU.id_autorizacion')
+                ->leftJoin('AU', 'TB_CORE_USUA', 'USU', 'DAU.id_usuario = USU.ID');
 
-        // Agregar la condición para el ID del vendedor
-        if ($codVendedor !== null) {
-            $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
-            $queryOferta->setParameter('id_vendedor', $codVendedor);
-        }
+            // Agregar la condición para el ID del vendedor
+            if ($codVendedor !== null) {
+                $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
+                $queryOferta->setParameter('id_vendedor', $codVendedor);
+            }
 
-        // Resto del código
-        $queryOferta
-        ->orderBy($orderBy,  $orderType)
-        ->setFirstResult($offset)
-        ->setMaxResults($registros)
-        ->where('1 = 1');
-
+            // Resto del código
+            $queryOferta
+                ->orderBy($orderBy,  $orderType)
+                ->setFirstResult($offset)
+                ->setMaxResults($registros)
+                ->where('1 = 1')
+                ->andWhere('AU.estado != 8');
 
             if (!empty($fechaInicial1)) {
                 $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
@@ -1071,7 +1073,7 @@ if (!isset($params['codVendedor'])) {
                 6 => "parcelas",
                 7 => "dadosVendedor"
             ];
-            
+
             foreach ($arrayParams as $key => $value) {
 
                 $arrayTemp = $connection->query("
@@ -1277,12 +1279,12 @@ if (!isset($params['codVendedor'])) {
             if (count($resProposta) > 0) {
 
                 $arrFinal = $resProposta;
-                 $resMateriais = $connection->query("
+                $resMateriais = $connection->query("
 							EXEC PRC_PEDI_MATE_CONS
 									@ID_EMPR = '{$idEmpresa}',
 									@NR_PEDI = {$codCotacao}
 						")->fetchAll();
-               
+
                 if (count($resMateriais) > 0 && !isset($resMateriais[0]['message'])) {
                     $arrFinal[0]['carrinho'] = $resMateriais;
                 }
@@ -2548,7 +2550,7 @@ if (!isset($params['codVendedor'])) {
     }
 
 
-     /**
+    /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/editar",
      *  name="comercial.ciclo-vendas-cotacoes-editar",
@@ -2559,7 +2561,7 @@ if (!isset($params['codVendedor'])) {
      * @return JsonResponse
      */
     public function editCotizacion(Connection $connection, Request $request)
-    {   
+    {
         $data = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $cargo = $infoUsuario->none_cargo;
@@ -2569,48 +2571,44 @@ if (!isset($params['codVendedor'])) {
             !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
             !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
             !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
-                // abierto y pendiente editar
-                // abierto y borrador editar
-                // cerrado y rechazado editar
-                //  tipo_estado = situacion
-                //  estado_oferta = estado
-                $situacion = $this->estadoOferta($connection, $id_oferta);
+            // abierto y pendiente editar
+            // abierto y borrador editar
+            // cerrado y rechazado editar
+            //  tipo_estado = situacion
+            //  estado_oferta = estado
+            $situacion = $this->estadoOferta($connection, $id_oferta);
             if (!empty($id_oferta) && $situacion == true) {
                 $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
                 $oferta_realizada = json_decode($oferta->getContent(), true);
-              
-                if($oferta_realizada['responseCode'] == 200)
-                {
-                   $detaEliminado = $this->eliminaItemsOferta($connection, $id_oferta);
-                   //$detaEliminado = true;
-                   if($detaEliminado == true)
-                   {
-                    foreach ($data['carrinho'] as $items) {
-                        $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
-                        $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
-                    }
-                    $resp = false;
+
+                if ($oferta_realizada['responseCode'] == 200) {
+                    $detaEliminado = $this->eliminaItemsOferta($connection, $id_oferta);
+                    //$detaEliminado = true;
+                    if ($detaEliminado == true) {
+                        foreach ($data['carrinho'] as $items) {
+                            $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
+                            $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
+                        }
+                        $resp = false;
                         foreach ($data_detalleoferta as $items) {
                             if ($items['autorizacion'] == 1) {
                                 $resp = $helper->actualizaOfertaA($connection, $id_oferta);
-                                break; 
+                                break;
                             }
                         }
-                    if ($resp) {
-                        $message = [
-                            "responseCode" => 200,
-                            "message" => 'Actualizo Correctamente',
-                            "success" => true,
-                            "data" => $id_oferta
+                        if ($resp) {
+                            $message = [
+                                "responseCode" => 200,
+                                "message" => 'Actualizo Correctamente',
+                                "success" => true,
+                                "data" => $id_oferta
                             ];
                         } else {
                             $sapmsj = $this->envioSAp($connection, $id_oferta);
                             $message = json_decode($sapmsj->getContent(), true);
                         }
-                   }
-                }
-                else
-                {
+                    }
+                } else {
                     $message = [
                         "responseCode" => 204,
                         "message" => 'No esta bien los datos!!!',
@@ -2627,14 +2625,11 @@ if (!isset($params['codVendedor'])) {
     public function estadoOferta($connection, $id_oferta)
     {
         $estados = $connection->fetchAssociative('SELECT tipo_estado, estado_oferta FROM tb_oferta WHERE id = ?', [$id_oferta]);
-       
-        if(($estados['tipo_estado'] == "14" && $estados['estado_oferta'] == "10") || ($estados['tipo_estado'] == "14" && $estados['estado_oferta'] == "1") || $estados['tipo_estado'] == "13" && $estados['estado_oferta'] == "11")
-        {
-           $estado = true;
-        }
-        else
-        {
-            $estado =false;
+
+        if (($estados['tipo_estado'] == "14" && $estados['estado_oferta'] == "10") || ($estados['tipo_estado'] == "14" && $estados['estado_oferta'] == "1") || $estados['tipo_estado'] == "13" && $estados['estado_oferta'] == "11") {
+            $estado = true;
+        } else {
+            $estado = false;
         }
 
         return $estado;
@@ -2643,18 +2638,15 @@ if (!isset($params['codVendedor'])) {
     public function eliminaItemsOferta($connection, $id_oferta)
     {
         $elimina = $connection->delete('tb_oferta_detalle', ['id_oferta' => $id_oferta]);
-      
-        if(!empty($elimina))
-        {
+
+        if (!empty($elimina)) {
             $estado = true;
+        } else {
+            $estado = false;
         }
-        else
-        {
-            $estado =false;
-        }
-         return $estado;
+        return $estado;
     }
-    
+
     public function editoferta($connection, $data,  $id_oferta, $cargo)
     {
         if ($cargo == 1) {
@@ -2671,7 +2663,7 @@ if (!isset($params['codVendedor'])) {
         !empty($data['tipoContacto']) ? $data_oferta['origen_contacto'] = $data['tipoContacto'] : null;
         !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : null;
         !empty($data['direccion_cliente']) ? $data_oferta['id_direccion_cliente'] = $data['direccion_cliente'] : null;
-        
+
         //datos de carrito del total
         !empty($data['monto_total']) ? $data_oferta['monto_total'] = $data['monto_total'] : $data_error['monto_total'] = 'es requerido';
         !empty($data['monto_total_bruto']) ? $data_oferta['monto_total_bruto'] = $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es requerido';
@@ -2683,8 +2675,7 @@ if (!isset($params['codVendedor'])) {
         !empty($data['id_modo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['id_modo_entrega'] : null;
         !empty($data['observacion']) ? $data_oferta['observacion'] = $data['observacion'] : null;
 
-        if($data_oferta['id_modo_entrega'] == 2)
-        {
+        if ($data_oferta['id_modo_entrega'] == 2) {
             //si la modod de entrega es 2 pasara latitud, logintud y direccion
             !empty($data['latitud']) ? $data_oferta['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es requerido';
             !empty($data['longitud']) ? $data_oferta['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es requerido';
@@ -2721,7 +2712,7 @@ if (!isset($params['codVendedor'])) {
         !empty($data['valorTotal']) ? $data_deta_oferta['subtotal'] = $data['valorTotal'] : $data_error['subtotal'] = 'es requerido';
         !empty($data['percuntualDesc']) ? $data_deta_oferta['percuntualDesc'] = $data['percuntualDesc'] : null;
         !empty($data['descuento_permitido']) ? $data_deta_oferta['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es requerido';
-        
+
         try {
             $edit_cotizacion = $connection->update('TB_OFERTA_DETALLE', $data_deta_oferta, ['id_oferta' => (int)$id_oferta]);
             $message = array(
@@ -2741,14 +2732,13 @@ if (!isset($params['codVendedor'])) {
     }
 
     public function envioSAp($connection, $id_oferta)
-    { 
+    {
         $helper = new Helper();
         $envio_sap = $connection->fetchOne('SELECT envio_sap FROM tb_oferta WHERE id = ?', [$id_oferta]);
-        if($envio_sap == 1)
-        {   
+        if ($envio_sap == 1) {
             $repSap = $helper->editar_oferta_sap($connection, $id_oferta);
             $sapresp = json_decode($repSap->getContent(), true);
-           
+
             if ($sapresp['CodigoRespuesta'] == 200) {
                 $data_sap['codigo_oferta'] = $sapresp['Oferta'];
                 $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
@@ -2772,9 +2762,7 @@ if (!isset($params['codVendedor'])) {
                     "data_sap" => $sapresp
                 );
             }
-        }
-        else
-        {
+        } else {
             $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
             $sapresp = json_decode($repSap->getContent(), true);
             if ($sapresp['CodigoRespuesta'] == 200) {
@@ -2803,8 +2791,8 @@ if (!isset($params['codVendedor'])) {
         }
         return new JsonResponse($message);
     }
-       
-    
+
+
     /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/guardar",
@@ -2822,16 +2810,12 @@ if (!isset($params['codVendedor'])) {
         "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        if(!empty($data['id_oferta']))
-        {
-           $updateCotizacion = $this->editCotizacion($connection,$request);
-           $editadaOferta = json_decode($updateCotizacion->getContent(), true);
-           $message = $editadaOferta;
-        }
-        else
-        {
-            if(!empty($data['celular']) || !empty($data['telefono']) || !empty($data['correo_electronico']) || !empty($data['nombre_factura']))
-            {
+        if (!empty($data['id_oferta'])) {
+            $updateCotizacion = $this->editCotizacion($connection, $request);
+            $editadaOferta = json_decode($updateCotizacion->getContent(), true);
+            $message = $editadaOferta;
+        } else {
+            if (!empty($data['celular']) || !empty($data['telefono']) || !empty($data['correo_electronico']) || !empty($data['nombre_factura'])) {
                 $repstClie = $this->modificarCliente($connection, $data);
                 $data_oferta = json_decode($repstClie->getContent(), true);
                 $id_cliente = $data_oferta['data'];
@@ -2840,55 +2824,54 @@ if (!isset($params['codVendedor'])) {
                 $resp = $this->insertaOferta($connection, $data);
                 $data_oferta = json_decode($resp->getContent(), true);
                 $id_oferta = $data_oferta['data'];
-            
+
                 if ($data_oferta['success']) {
                     foreach ($data['carrinho'] as $items) {
                         $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
                         $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
                     }
-                    
+
                     $resp = false;
                     foreach ($data_detalleoferta as $items) {
                         if ($items['autorizacion'] == 1) {
                             $resp = $helper->actualizaOfertaA($connection, $id_oferta);
-                            break; 
+                            break;
                         }
                     }
-                        if ($resp) {
+                    if ($resp) {
+                        $message = [
+                            "responseCode" => 200,
+                            "message" => 'Registro Correctamente',
+                            "success" => true,
+                            "data" => $id_oferta
+                        ];
+                    } else {
+                        $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+                        $sapresp = json_decode($repSap->getContent(), true);
+                        if ($sapresp['CodigoRespuesta'] == 200) {
+                            $data_sap['codigo_oferta'] = $sapresp['Oferta'];
+                            $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
+                            $data_sap['vencimiento'] = $sapresp['Vencimiento'];
+                            $data_sap['envio_sap'] = 1;
+                            //cambia el estado si envio a sap 1 
+                            $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
                             $message = [
                                 "responseCode" => 200,
                                 "message" => 'Registro Correctamente',
                                 "success" => true,
-                                "data" => $id_oferta
+                                "data_sap" => $sapresp
                             ];
                         } else {
-                            $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
-                            $sapresp = json_decode($repSap->getContent(), true);
-                            if ($sapresp['CodigoRespuesta'] == 200) {
-                                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
-                                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
-                                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
-                                $data_sap['envio_sap'] = 1;
-                                //cambia el estado si envio a sap 1 
-                                $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
-                                $message = [
-                                    "responseCode" => 200,
-                                    "message" => 'Registro Correctamente',
-                                    "success" => true,
-                                    "data_sap" => $sapresp
-                                ];
-                            } else {
-                                //sino envio al sap 0
-                                $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
-                                $message = [
-                                    "responseCode" => 200,
-                                    "message" => 'Registro Correctamente',
-                                    "success" => true,
-                                    "data_sap" => $sapresp
-                                ];
-                            }
+                            //sino envio al sap 0
+                            $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+                            $message = [
+                                "responseCode" => 200,
+                                "message" => 'Registro Correctamente',
+                                "success" => true,
+                                "data_sap" => $sapresp
+                            ];
                         }
-                    
+                    }
                 } else {
                     $message = [
                         "responseCode" => 204,
@@ -2910,8 +2893,9 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
-    public function modificarCliente($connection, $data){
-        
+    public function modificarCliente($connection, $data)
+    {
+
         !empty($data['id_cliente']) ?  $data_id_cliente = $data['id_cliente'] : '';
         !empty($data['nombre_factura']) ?  $data_cliente['segu_nome'] = $data['nombre_factura'] : '';
         !empty($data['celular']) ?  $data_cliente['celular'] = $data['celular'] : '';
@@ -2920,24 +2904,20 @@ if (!isset($params['codVendedor'])) {
 
         try {
             $cliente = $connection->update('MTCORP_MODU_CLIE_BASE', $data_cliente, ['id_cliente' => (int)$data_id_cliente]);
-            if(!empty($cliente))
-            {
+            if (!empty($cliente)) {
                 $message = array(
                     "responseCode" => 200,
                     "message" => "Modifico correctamente",
                     "success" => true,
                     "data" => $cliente
                 );
-            } 
-            else
-            {
+            } else {
                 $message = array(
                     "responseCode" => 204,
                     "message" => "No modifico correctamente",
                     "success" => true
                 );
             }
-          
         } catch (\Throwable $e) {
 
             $message = array(
@@ -2982,20 +2962,17 @@ if (!isset($params['codVendedor'])) {
         $data_oferta['estado_oferta'] = 1;
         $data_oferta['tipo_estado'] = 14;
         try {
-            if(empty($data_error) ){
+            if (empty($data_error)) {
                 $oferata = $connection->insert('TB_OFERTA', $data_oferta);
                 $id_oferta = $connection->lastInsertId();
-                if($oferata === 1)
-                {
+                if ($oferata === 1) {
                     $message = array(
                         "responseCode" => 200,
                         "message" => "Registro correctamente",
                         "success" => true,
                         "data" => $id_oferta
                     );
-                }
-                else
-                {
+                } else {
                     $message = array(
                         "responseCode" => 204,
                         "message" => "No registro",
@@ -3003,9 +2980,7 @@ if (!isset($params['codVendedor'])) {
                         "data" => $id_oferta
                     );
                 }
-            }
-            else
-            {
+            } else {
                 $message = array(
                     "responseCode" => 204,
                     "message" => "No Registro!",
