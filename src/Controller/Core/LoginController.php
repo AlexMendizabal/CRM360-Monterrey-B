@@ -24,6 +24,7 @@ class LoginController extends AbstractController
      */
     public function login(Connection $connection, Request $request): JsonResponse
     {
+        
         $JwtAplication = new JwtAplication();
         if ($request->isMethod('POST')) {
             try {
