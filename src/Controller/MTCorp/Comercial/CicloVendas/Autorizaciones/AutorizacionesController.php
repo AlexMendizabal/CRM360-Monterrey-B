@@ -48,10 +48,10 @@ class AutorizacionesController extends AbstractController
             $autorizado = $connection->fetchOne('SELECT estado FROM tb_autorizaciones WHERE id_oferta = ?', [$data['id_oferta']]);
             if($autorizado === 10)
             {
+                $estado = 8;
                 $message = $this->actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend, $hora_solicitud, $estado, $id_oferta);
             }
-            else
-            {   
+             
                 $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
                 $respt = $helper->actualizaOfertaA($connection, $id_oferta);
                 
@@ -85,7 +85,7 @@ class AutorizacionesController extends AbstractController
                         'estado' => false
                     );
                 }
-            }
+         
            
         } catch (\Throwable $e) {
      
