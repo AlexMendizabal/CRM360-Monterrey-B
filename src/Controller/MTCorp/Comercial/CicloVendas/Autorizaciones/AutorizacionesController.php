@@ -357,8 +357,8 @@ class AutorizacionesController extends AbstractController
             $params = $request->query->all();
 
             $cargo = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
-
-            if (in_array($cargo, [1, 2, 3, 4, 6])) {
+            //dd($cargo,$idVend,$id_usuario);
+            if (in_array($cargo, [1, 2, 3, 4,5, 6])) {
                 // Filtros
                 $orderBy = 'TB_OFERTA.id';
                 $orderType = 'DESC'; //filtaspo
@@ -399,7 +399,7 @@ class AutorizacionesController extends AbstractController
                     $bindings['codVendedor'] = $codVendedor;
                 } 
                 
-                if ($cargo == 6) {
+                if ($cargo == 6 || $cargo == 5) {
                     $conditions[] = "TB_VEND.ID = :idVendedorPromotor";
                     $bindings['idVendedorPromotor'] = $idVend;
                 }
