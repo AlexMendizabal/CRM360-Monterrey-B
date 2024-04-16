@@ -218,7 +218,7 @@ class NotificacionesController
 
             $id_vendedor = $data['codVendedor'];
             $titulo = 'Tiene ofertas pendientes de gestión';
-            $url = 'http://localhost:4200/#/comercial/ciclo-vendas/23/cotacoes-pedidos/lista';
+            $url = 'http://23.254.204.187:4200/#/comercial/ciclo-vendas/23/cotacoes-pedidos/lista';
             $fecha = date('Y-m-d H:i:s');
             $id_usuario = 0;
 

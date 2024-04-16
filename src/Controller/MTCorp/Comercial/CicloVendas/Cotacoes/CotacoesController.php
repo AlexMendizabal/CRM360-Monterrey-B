@@ -2844,7 +2844,7 @@ if (!isset($params['codVendedor'])) {
                 if ($data_oferta['success']) {
                     foreach ($data['carrinho'] as $items) {
                         $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
-                        $data_detalleoferta = json_decode($data_detalle->getContent(), true);
+                        $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
                     }
                     
                     $resp = false;
