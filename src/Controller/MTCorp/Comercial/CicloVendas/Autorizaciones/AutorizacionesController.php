@@ -42,19 +42,19 @@ class AutorizacionesController extends AbstractController
         $fecha_solicitud = isset($data['fecha_solicitud']) ? date('Y-m-d', strtotime($data['fecha_solicitud'])) : null;
         $descripcion_vend = isset($data['descripcion_vend']) ? $data['descripcion_vend'] : null;
         $hora_solicitud = date('H:i:s');
-        $estado = 10;
+   
         try {
-
             $autorizado = $connection->fetchOne('SELECT estado FROM tb_autorizaciones WHERE id_oferta = ?', [$data['id_oferta']]);
             if($autorizado === 10)
             {
                 $estado = 8;
-                $message = $this->actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend, $hora_solicitud, $estado, $id_oferta);
+                $connection->update('tb_autorizaciones', ['estado' => $estado], ['id_oferta' => $id_oferta]);
             }
              
+                $estado = 10;
                 $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
                 $respt = $helper->actualizaOfertaA($connection, $id_oferta);
-                
+                    
                 $queryBuilder = $connection->createQueryBuilder();
                 $queryBuilder->insert('tb_autorizaciones')->values(
                     [
@@ -100,7 +100,7 @@ class AutorizacionesController extends AbstractController
         return $response;
     }
 
-    public function actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend,$hora_solicitud, $estado, $id_oferta){
+    public function actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend, $hora_solicitud, $estado, $id_oferta){
         $queryBuilder = $connection->createQueryBuilder();
         try {
                 $queryBuilder->update('tb_autorizaciones')
@@ -403,6 +403,8 @@ class AutorizacionesController extends AbstractController
                     $conditions[] = "TB_VEND.ID = :idVendedorPromotor";
                     $bindings['idVendedorPromotor'] = $idVend;
                 }
+                 
+                $conditions[] = "TB_OFERTA.autorizacion = 1";
 
                 $query = "SELECT DISTINCT
                     TB_OFERTA.id AS id_oferta, 
