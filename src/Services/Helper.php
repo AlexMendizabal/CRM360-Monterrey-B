@@ -1558,6 +1558,7 @@ class Helper
 
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen)
     { 
+        //dd('CodMaterial: ',$codMaterial ,' Vendedor: ',$id_vendedor ,' ListaPrecio ',$id_lista_precio ,' CodigoAlmacen ',$codigo_almacen);
         /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                     inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
                                     where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material */
@@ -1568,8 +1569,9 @@ class Helper
         $codigo = "A";
         if (count($resp) > 0) {
             $respArray = array_column($resp, 'ID_MATE_ASSO');
-            $respString = implode(",", $respArray);
-
+            $respString = implode(",", $respArray); 
+             /* dd($respString);  */
+            //dd($resp);
             $res = $connection->fetchAll('SELECT distinct
                                                  MATE.ID_CODIGOMATERIAL as id_material,
                                                 PM.id as id_precio_material, 
@@ -1587,20 +1589,20 @@ class Helper
                                                 (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, 
                                                 MONE.nombre_moneda, 
                                                 ?  AS codigo_situacion,
-                                                BASE.id_classe AS id_linea, 
-                                                BASE.descricao as nombre_linea,
+                                               -- BASE.id_classe AS id_linea, 
+                                                --BASE.descricao as nombre_linea,
                                                 MATE.largo_material as largo_material
                                         FROM TB_MATE MATE 
                                                 inner JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
                                                 inner JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MATDEP.id_deposito
-                                                inner JOIN TB_CIUDAD  CIU ON depo.id_ciudad = CIU.id
-                                                inner JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = CIU.id
+                                                --inner JOIN TB_CIUDAD  CIU ON depo.id_ciudad = CIU.id
+                                                --inner JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = CIU.id
                                                 inner JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
                                                 inner JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
                                                 inner JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
                                                 inner JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-                                                inner JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
-                                                inner JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
+                                                --inner JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
+                                                --inner JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
                                         WHERE 
                                          DEPO.ESTADO_DEPOSITO = 1 
                                         AND LP.id = ?
