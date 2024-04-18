@@ -18,7 +18,7 @@ doctrine:
                 # password: "123"
                 # charset: "UTF-8"
                   driver: 'pdo_sqlsrv'
-                  host: 'localhost'
+                  host: '23.254.204.187'
                   port: 1433       
                   dbname: 'CRM360'
                   user: 'user2023'

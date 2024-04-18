@@ -1,12 +1,10 @@
 <?php
-$serverName = "localhost";
+$serverName = "23.254.204.187";
 $connectionOptions = array(
     "database" => "CRM360",
     "uid" => "user2023",
     "pwd" => "RIC0rp#2023"
 );
-
-
 
 function exception_handler($exception) {
     echo "<h1>Failure</h1>";
