@@ -414,8 +414,8 @@ class CotacoesController extends AbstractController
                 ->orderBy($orderBy,  $orderType)
                 ->setFirstResult($offset)
                 ->setMaxResults($registros)
-                ->where('1 = 1')
-                ->andWhere('AU.estado != 8');
+                ->where('1 = 1');
+                // ->andWhere('AU.estado != 8');
 
             if (!empty($fechaInicial1)) {
                 $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');

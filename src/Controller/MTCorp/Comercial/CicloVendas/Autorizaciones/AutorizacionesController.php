@@ -49,7 +49,7 @@ class AutorizacionesController extends AbstractController
             if($autorizado === 10)
             {
                 $estado = 8;
-                $message = $this->actualizaAutorizacion($connection, $fecha_solicitud, $descripcion_vend, $hora_solicitud, $estado, $id_oferta);
+                $connection->update('tb_autorizaciones', ['estado' => $estado], ['id_oferta' => $id_oferta]);
             }
              
                 $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
@@ -403,6 +403,8 @@ class AutorizacionesController extends AbstractController
                     $conditions[] = "TB_VEND.ID = :idVendedorPromotor";
                     $bindings['idVendedorPromotor'] = $idVend;
                 }
+
+                $conditions[] = "TB_OFERTA.autorizacion = 1";
 
                 $query = "SELECT DISTINCT
                     TB_OFERTA.id AS id_oferta, 
