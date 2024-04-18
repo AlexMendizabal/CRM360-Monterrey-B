@@ -86,6 +86,7 @@ class CrossSellController extends AbstractController
 
     public function buscaIDmate($connection, $data)
      {
+        
         $codMaterial =  $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$data]);
         return $codMaterial;
      }
@@ -253,7 +254,7 @@ class CrossSellController extends AbstractController
       try {
         $params = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
+       
         !empty($params['codMaterial']) ?  $codMaterial =  $this->buscaIDmate($connection, $params["codMaterial"])  : null;
 
         $codSituacao = $params['codSituacao'];
@@ -266,7 +267,7 @@ class CrossSellController extends AbstractController
         }
 
         $materiais = implode(',', $materiais);
-        /* dd($codMaterial); */
+        /* dd($codMaterial);  */
 
         $res = $connection->query("
             EXEC [PRC_CROS_SELL_CADA]
