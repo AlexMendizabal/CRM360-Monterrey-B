@@ -44,13 +44,7 @@ class AutorizacionesController extends AbstractController
         $hora_solicitud = date('H:i:s');
    
         try {
-            $autorizado = $connection->fetchOne('SELECT estado FROM tb_autorizaciones WHERE id_oferta = ?', [$data['id_oferta']]);
-            if($autorizado === 10)
-            {
-                $estado = 8;
-                $connection->update('tb_autorizaciones', ['estado' => $estado], ['id_oferta' => $id_oferta]);
-            }
-             
+                        
                 $estado = 10;
                 $autorizacion = 1; // 1 tiene autorizacion y si es null no tiene autorizacion
                 $respt = $helper->actualizaOfertaA($connection, $id_oferta);
@@ -229,7 +223,6 @@ class AutorizacionesController extends AbstractController
         return $response;
     }
 
-
     public function enviarcorreo($connection, $helper, $id_oferta)
     {
         $nombre_vendedor = $connection->fetchOne('SELECT CONCAT(TB_VEND.NM_VEND," ", TB_VEND.NM_RAZA_SOCI) AS nombre_vendedor FROM TB_OFERTA inner join TB_VEND on TB_VEND.id = TB_OFERTA.id_vendedor WHERE TB_OFERTA.id= ?', [$id_oferta]);
@@ -280,9 +273,6 @@ class AutorizacionesController extends AbstractController
         }
         return $message;
     }
-
-
-
 
     /**
      * @Route(
@@ -725,5 +715,11 @@ class AutorizacionesController extends AbstractController
         }
 
         return new JsonResponse($message);
+    }
+
+    //la autorizacion solo puede tener una oferta
+    public function anularAutorizacion(Connection $connection, $id_oferta)
+    {  
+       return $connection->update('tb_autorizaciones', ['estado' => 8], ['id_oferta' => $id_oferta]);
     }
 }

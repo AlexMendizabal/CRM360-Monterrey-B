@@ -3894,7 +3894,7 @@ class Helper
             ];
         }
         $arrayOFerta = ([
-            'docEntry' => $oferta['nomnbre_oferta'],
+            'DocEntry' => $oferta['nomnbre_oferta'],
             'numero_oferta' => $id_oferta,
             'fecha_creacion' => date('Y-m-d', strtotime($oferta['fecha_creacion'])),
             'fecha_validez' => date('Y-m-d', strtotime($oferta['fecha_final'])),
@@ -3929,7 +3929,6 @@ class Helper
         }
         try {
             $ruta = "/editarProforma";
-
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;

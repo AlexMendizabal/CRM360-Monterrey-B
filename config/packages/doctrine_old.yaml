@@ -3,7 +3,7 @@ doctrine:
         default_connection: MONTERREY
         connections:
             MONTERREY:
-                driver: "pdo_sqlsrv"
+                driver: "23.254.204.187"
                 host: 'localhost'
                 port: 1433
                 dbname: "CRM360"
