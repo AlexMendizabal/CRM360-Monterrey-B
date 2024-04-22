@@ -922,20 +922,44 @@ class CotacoesController extends AbstractController
             $params = json_decode($request->getContent(), true);
             $nrPedido = $params['id_oferta'];
             $datoOferta = $OfertaController->datoOferta($connection, $nrPedido);
-            if($datoOferta['autorizacion'] == 1)
+            if(!in_array($datoOferta['tipo_estado'], [8,9]))
             {
-                $ofertaAnulada = $OfertaController->anularOferta($connection, $nrPedido);
-                $autorizacionAnulada = $autorizacion->anularAutorizacion($connection, $nrPedido);
-                if(!empty($ofertaAnulada) && !empty($autorizacionAnulada)){
-                 $message = $this->postOferta($connection, $params);
+                if($datoOferta['autorizacion'] == 1)
+                {
+                    $estadoAutorizacion = $OfertaController->verificarAutorizacion($connection, $nrPedido);
+                    //estado 12 aprobada la autorizacion
+                    if($estadoAutorizacion['estado'] != 12)
+                    {
+                        $ofertaAnulada = $OfertaController->anularOferta($connection, $nrPedido);
+                        $autorizacionAnulada = $autorizacion->anularAutorizacion($connection, $nrPedido);
+                        if(!empty($ofertaAnulada) && !empty($autorizacionAnulada)){
+                         $message = $this->postOferta($connection, $params);
+                        }
+                    }
+                    else
+                    {
+                        $message = [
+                            "responseCode" => 204,
+                            "message" => 'La oferta ha sido aceptada',
+                            "success" => false,
+                        ];  
+                    }
+                }
+                else
+                {
+                    $updateCotizacion = $this->editCotizacion($connection, $request);
+                    $message = json_decode($updateCotizacion->getContent(), true);
                 }
             }
             else
             {
-                $updateCotizacion = $this->editCotizacion($connection, $request);
-                $message = json_decode($updateCotizacion->getContent(), true);
-                dd( $message);
+                $message = [
+                    "responseCode" => 204,
+                    "message" => 'Tienes los estados Aceptado o esta en proceso de venta',
+                    "success" => false,
+                ];
             }
+            
             return $message;
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
@@ -2737,11 +2761,7 @@ class CotacoesController extends AbstractController
         if ($envio_sap == 1) {
             $repSap = $helper->editar_oferta_sap($connection, $id_oferta);
             $sapresp = json_decode($repSap->getContent(), true);
-
             if ($sapresp['CodigoRespuesta'] == 200) {
-                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
-                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
-                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
                 $data_sap['envio_sap_edit'] = 1;
                 //cambia el estado si envio a sap 1 
                 $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
@@ -2810,8 +2830,7 @@ class CotacoesController extends AbstractController
         
         $data = json_decode($request->getContent(), true);
         if (!empty($data['id_oferta'])) {
-            $dataOferta = $this->postDuplicarProposta($connection, $request);
-            dd($dataOferta);
+            $message = $this->postDuplicarProposta($connection, $request);
         } else {
             $message = $this->postOferta($connection, $data);
         }

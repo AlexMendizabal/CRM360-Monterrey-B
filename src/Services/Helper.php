@@ -3864,7 +3864,6 @@ class Helper
     public function editar_oferta_sap($connection, $id_oferta)
     {
         $obtenerOferta = $this->buscarOferta($connection, $id_oferta);
-
         $resultSet = $connection->executeQuery('SELECT 
                     TBU.NM_COMP_RAZA_SOCI AS nombres,
                     TB_AUTORIZACIONES.fecha_solicitud as fecha_solicitud,
@@ -3879,10 +3878,8 @@ class Helper
                     id_oferta = ?', [$id_oferta]);
 
         $autorizacion = $resultSet->fetchAssociative();
-
         $oferta = $obtenerOferta['oferta'];
         $detalle_oferta = $obtenerOferta['analitico'];
-
         foreach ($detalle_oferta as $detalle) {
             $detalle_of[] = [
                 'item_code' => $detalle['codigo_material'],
@@ -3896,7 +3893,7 @@ class Helper
             ];
         }
         $arrayOFerta = ([
-            'DocEntry' => $oferta['nomnbre_oferta'],
+            'DocEntry' => $oferta['nombre_oferta'],
             'numero_oferta' => $id_oferta,
             'fecha_creacion' => date('Y-m-d', strtotime($oferta['fecha_creacion'])),
             'fecha_validez' => date('Y-m-d', strtotime($oferta['fecha_final'])),
@@ -3914,7 +3911,6 @@ class Helper
             'geolocalizacion' => $oferta['geolocalizacion'],
             'detalle_pedido' => $detalle_of,
         ]);
-
         if (!empty($autorizacion)) {
             $autorizaciones = [
                 "usuario_gestion" => $autorizacion['nombres'],
