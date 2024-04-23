@@ -1557,7 +1557,7 @@ class Helper
 
 
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen)
-    { 
+    {
         //dd('CodMaterial: ',$codMaterial ,' Vendedor: ',$id_vendedor ,' ListaPrecio ',$id_lista_precio ,' CodigoAlmacen ',$codigo_almacen);
         /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                     inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
@@ -1569,8 +1569,8 @@ class Helper
         $codigo = "A";
         if (count($resp) > 0) {
             $respArray = array_column($resp, 'ID_MATE_ASSO');
-            $respString = implode(",", $respArray); 
-             /* dd($respString);  */
+            $respString = implode(",", $respArray);
+            /* dd($respString);  */
             //dd($resp);
             $res = $connection->fetchAll('SELECT distinct
                                                  MATE.ID_CODIGOMATERIAL as id_material,
@@ -1752,18 +1752,18 @@ class Helper
         $statement->bindValue(':material',  '%' .  $material . '%');
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-    
+
         if ($result !== false) {
             return $result;
         } else {
             $buscarMaterial = $this->buscarMaterial($connection, $material);
-            if($buscarMaterial !== false) {
+            if ($buscarMaterial !== false) {
                 return $buscarMaterial;
             }
             return false;
         }
     }
-    
+
 
     public function buscarCodMaterial($connection, $id_material)
     {
@@ -1773,7 +1773,11 @@ class Helper
         $buscar_material_filtro->bindValue('id_material', $id_material);
         $buscar_material_filtro->execute();
         $res1 = $buscar_material_filtro->fetchAll();
-        return $res1[0]['codigo_material'];
+
+        if (count($res1) > 0) {
+            return $res1[0]['codigo_material'];
+        }
+        return false;
     }
 
     public function buscarNombre($connection, $NOMBRE_DEPOSITO = null, $id_almacen = null)
@@ -2574,15 +2578,18 @@ class Helper
         $id_almacen = $arrayStock['id_almacen'];
         $cantidad = $arrayStock['cantidad'];
         $id_unidad = $arrayStock['id_unidad'];
+        $codigo_material = $arrayStock['codigo_material'];
         $id = $arrayStock['id'];
         $query = "UPDATE TB_MATERIAL_DEPOSITO SET id_material = :id_material, id_deposito = :id_almacen, 
-        cantidad = :cantidad, id_unidad = :id_unidad WHERE id = :id";
+        cantidad = :cantidad, id_unidad = :id_unidad, mate_sap = :mate_sap WHERE id = :id";
 
         $stmt = $connection->prepare($query);
         $stmt->bindValue(":id_material", $id_material);
         $stmt->bindValue(":id_almacen", $id_almacen);
         $stmt->bindValue(":cantidad", $cantidad);
         $stmt->bindValue(":id_unidad", $id_unidad);
+        $stmt->bindValue(":mate_sap", $codigo_material);
+
         $stmt->bindValue(":id", $id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
@@ -2598,19 +2605,37 @@ class Helper
         $id_almacen = $arrayStock['id_almacen'];
         $cantidad = $arrayStock['cantidad'];
         $id_unidad = $arrayStock['id_unidad'];
+        $codigo_material = $arrayStock['codigo_material'];
 
-        $query = "INSERT INTO TB_MATERIAL_DEPOSITO VALUES (:id_material, :id_deposito, :cantidad, :id_unidad)";
+        $query = "INSERT INTO TB_MATERIAL_DEPOSITO VALUES (:id_material, :id_deposito, :cantidad, :id_unidad, :mate_sap)";
 
         $stmt = $connection->prepare($query);
         $stmt->bindValue(":id_material", $id_material);
         $stmt->bindValue(":id_deposito", $id_almacen);
         $stmt->bindValue(":cantidad", $cantidad);
         $stmt->bindValue(":id_unidad", $id_unidad);
+        $stmt->bindValue(":mate_sap", $codigo_material);
+
 
         $stmt->execute();
         $id = $connection->lastInsertId();
 
         if ($id > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function eliminarStock($connection, $id_stock)
+    {
+        $query = "DELETE FROM TB_MATERIAL_DEPOSITO WHERE id = :id";
+        $stament = $connection->prepare($query);
+        $stament->bindValue(':id',  $id_stock);
+        $stament->execute();
+        $affectedRows = $stament->rowCount();
+        if ($affectedRows > 0) {
             return true;
         } else {
             return false;
@@ -4300,11 +4325,12 @@ class Helper
         }
     }
 
-      //FUNCIONES PARA ACTUALIZAR MATERIALES UPSELL DEBE BORRARSE LA LISTA ACTUAL Y REEMPLAZARSE CON EL ARRAY
-      public function borrarMaterialAsociadoUpsell($connection, int $id_asociado){
+    //FUNCIONES PARA ACTUALIZAR MATERIALES UPSELL DEBE BORRARSE LA LISTA ACTUAL Y REEMPLAZARSE CON EL ARRAY
+    public function borrarMaterialAsociadoUpsell($connection, int $id_asociado)
+    {
 
         $buscarAsociado = $this->buscarMaterialAsociadoUpsell($connection, $id_asociado);
-        if($buscarAsociado[0] === true){
+        if ($buscarAsociado[0] === true) {
             $query = "DELETE FROM TB_SIMI_MATE_ASSO WHERE ID_SIMI_MATE = :id_asociado";
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":id_asociado", $id_asociado, PDO::PARAM_INT);
@@ -4313,7 +4339,8 @@ class Helper
         }
         return false;
     }
-    public function buscarMaterialAsociadoUpsell($connection, int $id_asociado){
+    public function buscarMaterialAsociadoUpsell($connection, int $id_asociado)
+    {
         $query = "SELECT * FROM TB_SIMI_MATE_ASSO WHERE ID_SIMI_MATE= :id_asociado";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(":id_asociado", $id_asociado, PDO::PARAM_INT);

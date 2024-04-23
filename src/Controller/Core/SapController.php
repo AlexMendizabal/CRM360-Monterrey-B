@@ -617,7 +617,7 @@ class SapController extends AbstractController
     public function sapInsertCliente(Connection $connection, Request $request)
     {
         $helper = new Helper();
-        $data = json_decode($request->getContent(), true); 
+        $data = json_decode($request->getContent(), true);
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $verificarCliente = $helper->verificarCliente($connection, $data['codigo_cliente']);
         /*  $arrayUbicacion = [];
@@ -705,7 +705,7 @@ class SapController extends AbstractController
                         $insertCliente['data']['ciudad'] = $ubClie[0]['ciudad'];
                         /* dd($insertCliente); */
 
-                        
+
                         $data_cliente = [
                             "codigo_cliente" => $codigo_cliente,
                             "id_cliente" => $id_cliente,
@@ -725,7 +725,7 @@ class SapController extends AbstractController
                             "ubicacion" => $ubClie,
                             "contactos" => $contacto
                         ];
-                        
+
                         if (isset($ubClie)   &&   isset($contacto)) {
                             if ($swSap === true) {
 
@@ -745,7 +745,7 @@ class SapController extends AbstractController
                                     "ubicacion",
                                     /* "contactos" */
                                 ];
-                                
+
                                 $missing_fields = [];
                                 foreach ($required_fields as $field) {
                                     if (!array_key_exists($field, $data_cliente) || empty($data_cliente[$field])) {
@@ -788,7 +788,7 @@ class SapController extends AbstractController
                                         ];
                                     }
                                 } else {
-                                    
+
                                     $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
 
                                     if (isset($resp_sap['response']) && isset($resp_sap['detalle']) && $resp_sap['response'] == 200) {
@@ -1230,7 +1230,7 @@ class SapController extends AbstractController
     public function sapUpdateClienteSap(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        
+
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
         $helper = new Helper();
         $data_sap = array();
@@ -1267,7 +1267,7 @@ class SapController extends AbstractController
         // $buscarRubro = $helper->buscarRubro($connection, $data['rubro']);dd($buscarRubro);
         if (!empty($ubro2)) {
             $id_rubro = $id_setor_actividade;
-            $data['id_rubro'] = $id_rubro; 
+            $data['id_rubro'] = $id_rubro;
         }
 
         $buscarTipoPersona = [
@@ -1822,7 +1822,7 @@ class SapController extends AbstractController
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
         $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
-       /*  $connection->beginTransaction(); */
+        /*  $connection->beginTransaction(); */
         try {
             if (empty($data_error)) {
                 if (!empty($data['codigo_sap']) && filter_var($data['codigo_sap'], FILTER_VALIDATE_INT)) {
@@ -1846,24 +1846,24 @@ class SapController extends AbstractController
                                 }
                                 $respVend = $helper->insertVendedor($connection, $data, $id_usuario, $id_sucursal);
                                 if ($resultPermiso['codigoRespuesta'] == 200 && $respVend['response'] == 200) {
-                                     //ENVIO CORREO CREDENCIALES
-                                     $url = 'http://23.254.204.187/assets/images/logo/crm-360.png';
-                                     $contenido = $helper->correoEnvioCredenciales($data['codigo_sap'], 'CRMTEMP', $url);
-                                     $arrayDatos = [
-                                         'remitente' => 'test.crm360@mtcorplatam.com',
-                                         'destinatario' =>  $data['email'],
-                                         'asunto' => 'Envío de credenciales CRM360 PRUEBA',
-                                         'contenido' => $contenido,
-                                     ];
-                                     $enviarCorreo = $helper->enviarCorreo($arrayDatos); 
-                                     //FIN ENVIO CORREO CREDENCIALES
-                                     /* $connection->rollBack(); */
-                                     $message = array(
-                                         'response' => 204,
-                                         'estado' => false,
-                                         'detalle' => 'No se registro',
-                                         'error' => $data_error
-                                     );
+                                    //ENVIO CORREO CREDENCIALES
+                                    $url = 'http://23.254.204.187/assets/images/logo/crm-360.png';
+                                    $contenido = $helper->correoEnvioCredenciales($data['codigo_sap'], 'CRMTEMP', $url);
+                                    $arrayDatos = [
+                                        'remitente' => 'test.crm360@mtcorplatam.com',
+                                        'destinatario' =>  $data['email'],
+                                        'asunto' => 'Envío de credenciales CRM360 PRUEBA',
+                                        'contenido' => $contenido,
+                                    ];
+                                    $enviarCorreo = $helper->enviarCorreo($arrayDatos);
+                                    //FIN ENVIO CORREO CREDENCIALES
+                                    /* $connection->rollBack(); */
+                                    $message = array(
+                                        'response' => 204,
+                                        'estado' => false,
+                                        'detalle' => 'No se registro',
+                                        'error' => $data_error
+                                    );
                                     $message = array(
                                         'response' => 200,
                                         'estado' => true,
@@ -1890,7 +1890,7 @@ class SapController extends AbstractController
                     } else {
                         $resps = $helper->updateUsuario($connection, $data);
                         if ($resps['response'] == 200) {
-                            
+
                             $message = $helper->updateVendedor($connection, $data);
                         } else {
                             $message = $resps;
@@ -1912,8 +1912,8 @@ class SapController extends AbstractController
             }
         } catch (\Throwable $th) {
             /* $connection->commit(); */
-          /*   dd($th); */
-            
+            /*   dd($th); */
+
             $message = array(
                 'response' => 401,
                 'estado' => false,
@@ -1941,84 +1941,134 @@ class SapController extends AbstractController
             $helper = new Helper();
             $jsonData = $request->getContent();
             $data = json_decode($jsonData, true);
-            $item_code = $data['item'];
-            $codigo_almacen = $data['almacen'];
-            $cantidad = $data['cantidad'];
-            $unidad = $data['unidad'];
-            $id_material = 0;
-            $id_almacen = 0;
+
+            $codigoMaterial = '';
+            $codigoUnidad = '';
             $id_unidad = 0;
-
-
-            $buscar_material = $helper->buscarItem($connection, $item_code);
-            if ($buscar_material !== false) {
-                $id_material = $buscar_material['ID_CODIGOMATERIAL'];
-            }
-            $buscar_almacen = $helper->buscarAlmacen($connection, $codigo_almacen);
-            if ($buscar_almacen !== false) {
-                $id_almacen = $buscar_almacen['id'];
-            }
-            $buscar_unidad = $helper->buscarUnidad($connection, $unidad);
-            if ($buscar_unidad !== false) {
-                $id_unidad = $buscar_unidad['ID'];
-            }
-
+            $cantidad = 0;
+            $arraySap = array();
             $arrayStock = array();
-            $arrayStock = ([
-                'codigo_item' => $id_material,
-                'codigo_almacen' => $id_almacen
-            ]);
+            $url = '/consultaStock';
 
-            $verificar_stock = $helper->verificarStock($connection, $arrayStock);
-            if ($verificar_stock !== false) {
-                $arrayStockActualizar = array();
-                $id_verificarStock = $verificar_stock['id'];
-                $arrayStockActualizar = ([
-                    'id_item' => $id_material,
-                    'id_almacen' => $id_almacen,
-                    'cantidad' => $cantidad,
-                    'id_unidad' => $id_unidad,
-                    'id' => $id_verificarStock
-                ]);
-                $actualizar_stock = $helper->actualizarStock($connection, $arrayStockActualizar);
-                if ($actualizar_stock !== false) {
-                    $message = array(
-                        'response' => 200,
-                        "estado" => true,
-                        "detalle" => "Se actualizo el registro exitosamente!."
-                    );
-                } else {
-                    $message = array(
-                        'response' => 400,
-                        "estado" => false,
-                        "detalle" => "No se puedo actualizar el registro"
-                    );
+            $id_material = !empty($data['id_material']) ? $data['id_material'] : 0;
+            $codigoAlmacen = !empty($data['codigo_almacen']) ? $data['codigo_almacen'] : '';
+
+            //RESPONSE DEFAULT
+            $message = array(
+                'responseCode' => 204,
+                "estado" => false,
+                "detalle" => "Error al actualizar el registro"
+            );
+
+            if ($id_material > 0) {
+                $buscarMaterial = $helper->buscarCodMaterial($connection, (int)$id_material);
+                if ($buscarMaterial !== false) {
+                    $codigoMaterial = $buscarMaterial;
                 }
-            } else {
-                $arrayStockInsertar = ([
-                    'id_item' => $id_material,
-                    'id_almacen' => $id_almacen,
-                    'cantidad' => $cantidad,
-                    'id_unidad' => $id_unidad
+            }
+
+            if ($codigoAlmacen  != '' &&  $codigoMaterial != '') {
+                $arraySap = ([
+                    'Almacen' => $codigoAlmacen,
+                    'Item' => $codigoMaterial
                 ]);
-                $agregar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
-                if ($agregar_stock !== false) {
-                    $message = array(
-                        'response' => 200,
-                        "estado" => true,
-                        "detalle" => "registro insertado exitosamente."
-                    );
+                $arrayStock = ([
+                    'codigo_item' => (int)$id_material,
+                    'codigo_almacen' => $codigoAlmacen
+                ]);
+
+                $conexionSap = $helper->conexionSap($url, $arraySap);
+                if ($conexionSap['CodigoRespuesta'] == 200) {
+                    $codigoUnidad = $conexionSap['Mensaje'][0]['Unidad'];
+                    $cantidad = $conexionSap['Mensaje'][0]['Disponible'];
+                    $buscar_almacen = $helper->buscarAlmacen($connection, $codigoAlmacen);
+                    if ($buscar_almacen !== false) {
+                        $id_almacen = $buscar_almacen['id'];
+                    }
+
+                    $buscar_unidad = $helper->buscarUnidad($connection, $codigoUnidad);
+                    if ($buscar_unidad !== false) {
+                        $id_unidad = $buscar_unidad['ID'];
+                    }
+
+                    $verificar_stock = $helper->verificarStock($connection, $arrayStock);
+                    if ($verificar_stock !== false) {
+                        $arrayStockActualizar = array();
+                        $id_verificarStock = $verificar_stock['id'];
+                        $arrayStockActualizar = ([
+                            'id_item' => (int)$id_material,
+                            'id_almacen' => $codigoAlmacen,
+                            'cantidad' => $cantidad,
+                            'id_unidad' => (int)$id_unidad,
+                            'codigo_material' => $codigoMaterial,
+                            'id' => (int)$id_verificarStock
+                        ]);
+
+                        $actualizar_stock = $helper->actualizarStock($connection, $arrayStockActualizar);
+                        if ($actualizar_stock !== false) {
+                            $message = array(
+                                'responseCode' => 200,
+                                "estado" => true,
+                                "detalle" => "Se actualizo el registro exitosamente!."
+                            );
+                        } else {
+                            $message = array(
+                                'responseCode' => 400,
+                                "estado" => false,
+                                "detalle" => "No se puedo actualizar el registro"
+                            );
+                        }
+                    } else {
+                        $arrayStockInsertar = ([
+                            'id_item' => (int)$id_material,
+                            'id_almacen' => $codigoAlmacen,
+                            'cantidad' => $cantidad,
+                            'id_unidad' => (int)$id_unidad,
+                            'codigo_material' => $codigoMaterial,
+
+                        ]);
+
+                        $agregar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
+                        if ($agregar_stock !== false) {
+                            $message = array(
+                                'responseCode' => 200,
+                                "estado" => true,
+                                "detalle" => "registro insertado exitosamente."
+                            );
+                        } else {
+                            $message = array(
+                                'responseCode' => 400,
+                                "estado" => false,
+                                "detalle" => "No se puedo insertar el registro"
+                            );
+                        }
+                    }
                 } else {
+                    
+                    $verificarStock = $helper->verificarStock($connection, $arrayStock);
+                    if ($verificarStock !== false) {
+                        $id_verificarStock = $verificarStock['id'];
+                        $eliminarStock = $helper->eliminarStock($connection, (int)$id_verificarStock);
+                        if ($eliminarStock !== false) {
+                            $message = array(
+                                'responseCode' => 200,
+                                "estado" => true,
+                                "detalle" => "registro actualizado exitosamente."
+                            );
+                        }
+                    }
                     $message = array(
-                        'response' => 400,
-                        "estado" => false,
-                        "detalle" => "No se puedo insertar el registro"
+                        'responseCode' => 200,
+                        "estado" => true,
+                        "detalle" => "registro actualizado exitosamente."
                     );
                 }
             }
+
+            
         } catch (DBALException $e) {
             $message = array(
-                'response' => 400,
+                'responseCode' => 400,
                 "estado" => false,
                 "detalle" => $e->getMessage()
             );
