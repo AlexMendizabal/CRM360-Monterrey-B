@@ -316,9 +316,15 @@ class CotacoesController extends AbstractController
             $offset = ($paginaActual - 1) * $tamanoPagina;
 
             isset($params['tipoData']) ? $tipoData = $params['tipoData'] : NULL;
-            isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
-            isset($params['dataInicial2']) ? $fechaFinal = $params['dataInicial2'] : NULL;
-
+            /* isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
+            isset($params['dataInicial2']) ? $dataFinal = $params['dataInicial2'] : NULL;
+             */
+            $dataInicial = isset($params['dataInicial1']) ? (strtotime($params['dataInicial1']) ? date('Y/m/d', strtotime($params['dataInicial1'])) : '') : '';
+            $dataFinal = isset($params['dataInicial2']) ? (strtotime($params['dataInicial2']) ? date('Y/m/d', strtotime($params['dataInicial2'])) : '') : '';
+            
+            $fechavalida = isset($params['datavalida1']) ? (strtotime($params['datavalida1']) ? date('Y/m/d', strtotime($params['datavalida1'])) : '') : '';
+            $fechavalida2 = isset($params['datavalida2']) ? (strtotime($params['datavalida2']) ? date('Y/m/d', strtotime($params['datavalida2'])) : '') : '';
+           
             /*   if (!empty($fechaFinal)) {
                 // Solo si la fecha final se pudo parsear correctamente
                 $fechaFinal->modify('+1 day');
@@ -337,15 +343,6 @@ class CotacoesController extends AbstractController
             isset($params['registros']) ? $registros = $params['registros'] : NULL;
             isset($params['codVendedor']) ? $codVendedor  = $params['codVendedor'] : NULL;
 
-
-            /* Fecha Inicial */
-            if (!empty($dataInicial)) {
-                $fechaInicial1 = date('Y-m-d', strtotime($dataInicial));
-            }
-            /* Fecha Final */
-            if (!empty($fechaFinal)) {
-                $fechaFinal1 =  date('Y-m-d', strtotime($fechaFinal));
-            }
             // Verifica si el parámetro 'codVendedor' está establecido
             if (!isset($params['codVendedor'])) {
                 // Si el parámetro no está establecido, comprueba el rol del usuario
@@ -404,30 +401,39 @@ class CotacoesController extends AbstractController
                 ->leftJoin('OFE', 'tb_autorizaciones', 'AU', 'AU.id_oferta = OFE.id')
                 ->leftJoin('AU', 'TB_DETALLE_AUTO', 'DAU', 'AU.id = DAU.id_autorizacion')
                 ->leftJoin('AU', 'TB_CORE_USUA', 'USU', 'DAU.id_usuario = USU.ID');
-
+            
+               // Resto del código
+            $queryOferta
+               ->orderBy($orderBy,  $orderType)
+               ->setFirstResult($offset)
+               ->setMaxResults($registros)
+               ->where('1 = 1');
+  
             // Agregar la condición para el ID del vendedor
             if ($codVendedor !== null) {
                 $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
                 $queryOferta->setParameter('id_vendedor', $codVendedor);
             }
 
-            // Resto del código
-            $queryOferta
-                ->orderBy($orderBy,  $orderType)
-                ->setFirstResult($offset)
-                ->setMaxResults($registros)
-                ->where('1 = 1');
-                // ->andWhere('AU.estado != 8');
-
-            if (!empty($fechaInicial1)) {
-                $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
-                $queryOferta->setParameter('fecha_inicial', $fechaInicial1);
+            if (!empty($dataInicial) && !empty($dataFinal)) {
+                $queryOferta->andWhere($queryOferta->expr()->between('OFE.fecha_inicial', ':fecha_inicial', ':fecha_inicial'));
+                $queryOferta->setParameter('fecha_inicial', $dataInicial);
+                $queryOferta->setParameter('fecha_inicial', $dataFinal);
             }
-            if (!empty($fechaFinal1)) {
+
+            if (!empty($fechavalida) && !empty($fechavalida2)) {
+                $queryOferta->andWhere($queryOferta->expr()->between('OFE.fecha_final', ':fecha_final', ':fecha_final'));
+                $queryOferta->setParameter('fecha_final', $fechavalida);
+                $queryOferta->setParameter('fecha_final', $fechavalida2);
+            }
+           /*  if (!empty($dataInicial)) {
+                $queryOferta->andWhere('OFE.fecha_inicial <= :fecha_inicial');
+                $queryOferta->setParameter('fecha_inicial', $dataInicial);
+            }
+            if (!empty($dataFinal)) {
                 $queryOferta->andWhere('OFE.fecha_final <= :fecha_final');
-                $queryOferta->setParameter('fecha_final', $fechaFinal1);
-            }
-
+                $queryOferta->setParameter('fecha_final', $dataFinal);
+            } */
             if (!empty($codSituacao)) {
                 $queryOferta->andWhere('OFE.tipo_estado = :codSituacao');
                 $queryOferta->setParameter('codSituacao', $codSituacao);
@@ -444,13 +450,13 @@ class CotacoesController extends AbstractController
                 $queryOferta->andWhere('OFE.codigo_oferta = :codigo_oferta');
                 $queryOferta->setParameter('codigo_oferta', $codigo_oferta);
             }
-
             if (!empty($codVendedor)) {
                 $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
                 $queryOferta->setParameter('id_vendedor',  (int)$codVendedor);
             }
-
+          
             $stmt = $queryOferta->execute();
+          /*   dd( $stmt); */
             $res = $stmt->fetchAllAssociative();
 
             if (count($res) > 0) {
@@ -1291,14 +1297,14 @@ class CotacoesController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            
+
             $resProposta = $connection->query("
 						EXEC PRC_PEDI_CONS
 								@ID_PARA = 2,
 								@ID_EMPR = 1,
 								@NR_PEDI = {$codCotacao}
 				")->fetchAll();
-            
+
             if (count($resProposta) > 0) {
 
                 $arrFinal = $resProposta;

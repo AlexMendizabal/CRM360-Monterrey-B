@@ -922,7 +922,7 @@ class Helper
             isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
             $data_ejecutivo['TP_PESS'] = 'F';
             $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
-            $data_ejecutivo['NM_DEPA'] = 'COMERCIAL';
+            $data_ejecutivo['NM_DEPA'] = 2;
             $data_ejecutivo['NM_CARG_FUNC'] = 6;
             $data_ejecutivo['ID_MODU'] = '3';
             isset($data['email']) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';

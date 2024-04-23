@@ -1817,8 +1817,8 @@ class SapController extends AbstractController
         isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
         $data_ejecutivo['TP_PESS'] = 'F';
         $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
-        $data_ejecutivo['NM_DEPA'] = 'COMERCIAL';
-        $data_ejecutivo['NM_CARG_FUNC'] = 'PROMOTOR';
+        $data_ejecutivo['NM_DEPA'] = 2;
+        $data_ejecutivo['NM_CARG_FUNC'] = 6;
         $data_ejecutivo['ID_MODU'] = '3';
         isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data_ejecutivo['NM_EMAI'] = $data['email'] : $data_error['correo'] = 'se requiere';
         $data_ejecutivo['DS_SENH'] = password_hash('CRMTEMP', PASSWORD_ARGON2I);
@@ -1831,14 +1831,10 @@ class SapController extends AbstractController
                         $id_sucursal = $connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
                         if (!empty($id_sucursal)) {
                             $data_ejecutivo['NR_MATR'] = $data['codigo_sap'];
-                            
-
                             $resp_usuario = $connection->insert('TB_CORE_USUA', $data_ejecutivo);
-
                             $id_usuario = $connection->lastInsertId();
                             if (!empty($resp_usuario)) {
                                 $resultPermiso = $helper->asignarPermisos($connection, $id_usuario);
-                                
                                 if ($resultPermiso['codigoRespuesta'] != 200) {
                                     $connection->rollBack();
                                     $message = array(
@@ -1849,8 +1845,6 @@ class SapController extends AbstractController
                                     );
                                 }
                                 $respVend = $helper->insertVendedor($connection, $data, $id_usuario, $id_sucursal);
-                                /* dd($respVend); */
-                                
                                 if ($resultPermiso['codigoRespuesta'] == 200 && $respVend['response'] == 200) {
                                      //ENVIO CORREO CREDENCIALES
                                      $url = 'http://23.254.204.187/assets/images/logo/crm-360.png';
