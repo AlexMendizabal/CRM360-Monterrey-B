@@ -360,42 +360,41 @@ class EstoqueController extends AbstractController
 
                 $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen);
                
-                $query = "	SELECT
-               distinct 
-              MAT.ID_CODIGOMATERIAL as id_material, 
-              PM.id as id_precio_material,
-              MAT.CODIGOMATERIAL AS codigo_material, 
-              MAT.DESCRICAO AS nombre_material, 
-              DEPO.CODIGO_ALMACEN AS nombre_almacen,
-              DEPO.ID AS id_almacen, 
-              PM.peso AS peso,
-              UNI.id as id_unidad,
-              UNI.NOMBRE_UNI AS unidad,
-              MTD.cantidad AS cantidad, 
-              PM.precio as precio, 
-              0.00 as descuento, 
-              PM.precio AS precio_neto, (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
-              MONE.nombre_moneda,
-              'A' AS codigo_situacion,
-              MAT.largo_material as largo_material
-            from TB_VEND VEND
-                 inner join tb_Escr as SCL on SCL.id = VEND.ID_ESCR
-                 inner join tb_ciudad as CD on CD.iD = SCL.id_ciudad
-                 inner join TB_DEPO_FISI_ESTO as DEPO on DEPO.id_ciudad = CD.id
-                 inner join TB_MATERIAL_DEPOSITO as MTD on MTD.id_deposito = DEPO.CODIGO_ALMACEN
-                 inner join tb_mate as MAT on MAT.CODIGOMATERIAL = MTD.mate_sap
-                 inner join TB_PRECIO_MATERIAL as PM on PM.cod_mate = MAT.CODIGOMATERIAL
-                 INNER JOIN UNIDADES as UNI ON UNI.ID = MAT.UNIDADE
-                 INNER JOIN TB_MONEDA as MONE ON MONE.id = PM.id_moneda
-                 inner join TB_LISTA_PRECIO as LP On LP.id = PM.id_lista
-               where VEND.id = :id_vendedor
-               AND LP.id = :id_lista_precio
-               AND DEPO.estado_mostrar = 1
-               AND DEPO.CODIGO_ALMACEN= :codigo_almacen
-               AND MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
-               order by DEPO.ID asc";
-
-
+                $query = 
+                "SELECT distinct 
+                    MAT.ID_CODIGOMATERIAL as id_material, 
+                    PM.id as id_precio_material,
+                    MAT.CODIGOMATERIAL AS codigo_material, 
+                    MAT.DESCRICAO AS nombre_material, 
+                    DEPO.CODIGO_ALMACEN AS nombre_almacen,
+                    DEPO.ID AS id_almacen, 
+                    PM.peso AS peso,
+                    UNI.id as id_unidad,
+                    UNI.NOMBRE_UNI AS unidad,
+                    MTD.cantidad AS cantidad, 
+                    PM.precio as precio, 
+                    0.00 as descuento, 
+                    PM.precio AS precio_neto, (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
+                    MONE.nombre_moneda,
+                    'A' AS codigo_situacion,
+                    MAT.largo_material as largo_material
+                FROM 
+                    tb_mate as MAT
+                    INNER JOIN TB_MATERIAL_DEPOSITO AS MTD ON MAT.ID_CODIGOMATERIAL = MTD.id_material
+                    INNER JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MTD.id_deposito
+                    INNER JOIN TB_PRECIO_MATERIAL AS PM ON PM.id_material = MAT.ID_CODIGOMATERIAL
+                    INNER JOIN UNIDADES AS UNI ON UNI.ID = MAT.UNIDADE
+                    INNER JOIN TB_MONEDA AS MONE ON MONE.id = PM.id_moneda
+                    INNER JOIN TB_LISTA_PRECIO AS LP ON LP.id = PM.id_lista
+					INNER JOIN TB_ALMACEN_VENDEDOR AS AV ON DEPO.CODIGO_ALMACEN = AV.id_almacen
+					iNNER JOIN TB_VEND AS VEND ON VEND.ID = AV.id_vendedor
+                WHERE 
+                    VEND.id = :id_vendedor
+                    AND LP.id = :id_lista_precio
+                    AND DEPO.estado_mostrar = 1
+                    AND DEPO.CODIGO_ALMACEN= :codigo_almacen
+                    AND MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
+                    order by DEPO.ID asc";
 
                 $buscar_material = $connection->prepare($query);
                 $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
@@ -436,7 +435,7 @@ class EstoqueController extends AbstractController
                             'estado' => false
                         );
                     }
-                    
+          
                 }
             } else {
                 $message = array(
@@ -1268,14 +1267,14 @@ class EstoqueController extends AbstractController
      * @return JsonResponse
      */
     public function getEstoqueAlmacen(Connection $connection, Request $request, $codMaterial)
-    {
+    { 
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $cargo = $infoUsuario->none_cargo;
             $idVendedor = $infoUsuario->idVendedor;
 
             if ($codMaterial != '' && $codMaterial != 0) {
-                $params = $request->query->all();
+                $params = $request->query->all();  
                 
                 $nombre_lista_precio = $params['nombre_lista'] ?? '';
                 $codigo_almacen = $params['codigo_almacen'] ?? '';
@@ -1290,16 +1289,16 @@ class EstoqueController extends AbstractController
                 $bindings = [];
 
                 // Condiciones comunes para todos los casos
-                $conditions[] = " MATE.ID_CODIGOMATERIAL = :id_material";
+                $conditions[] = " PM.id_material = :id_material";
                 $bindings['id_material'] = $codMaterial; 
                 
-                // Si el idVendedor es 88, usar el parámetro id_lista_precio
+                // Si el cargo es 1, que significa administrador usar el parámetro id_lista_precio
                 if ($cargo == 1 && !empty($id_lista_precio)) {
-                    $conditions[] = " LP.id = :id_lista";
+                    $conditions[] = " TLP.id = :id_lista";
                     $bindings['id_lista'] = (int) $id_lista_precio;
                 } elseif ($cargo != 1) {
-                    // Si el idVendedor es diferente a 88, buscar la lista del vendedor 
-                    
+                    // Si el idVendedor es diferente a 1, buscar la lista del vendedor 
+                   
                     $id_lista_precio = $connection->fetchOne('select TB_lista_precio.id as id_lista_precio
                     from 
                     TB_VEND
@@ -1317,7 +1316,7 @@ class EstoqueController extends AbstractController
                  
                 // Agregar condiciones según la presencia de valores
                 if (!empty($nombre_lista_precio)) {
-                    $conditions[] = " LP.nombre_lista = :nombre_lista";
+                    $conditions[] = " TLP.nombre_lista = :nombre_lista";
                     $bindings['nombre_lista'] = $nombre_lista_precio;
                 }
 
@@ -1333,34 +1332,27 @@ class EstoqueController extends AbstractController
 
 
                 $query = "
-                SELECT DISTINCT
-                    CLASE.descricao as familia,
-                    LINEA.descricao AS grupo,
-                    SUB.NM_SUB_LINH as linea,
-                    MATE.ID_CODIGOMATERIAL AS id_material, 
-                    MATE.CODIGOMATERIAL AS codigo_material, 
-                    MATE.DESCRICAO AS nombre,
-                    MAT_DEP.cantidad as cantidad, 
-                    UNI.SIGLAS_UNI AS sigla,
-                    DEPO.codigo_almacen as codigo_almacen, 
-                    DEPO.nombre_deposito as nombre_almacen,
-                    LP.nombre_lista as lista,
-                    PM.precio as precio
-                FROM TB_MATE MATE
-                INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
-                INNER JOIN MTCORP_BASE_LINHAS LINEA ON SUB.ID_CLASE = LINEA.id_linha
-                INNER JOIN MTCORP_BASE_LINHAS_CLASSE CLASE ON CLASE.id_classe = LINEA.id_classe
-                INNER JOIN TB_MATERIAL_DEPOSITO MAT_DEP ON MAT_DEP.mate_sap = MATE.CODIGOMATERIAL
-                INNER JOIN TB_DEPOSITO DEPO ON DEPO.codigo_almacen = MAT_DEP.id_deposito
-                INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
-                INNER JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
-                INNER JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
+                SELECT DISTINCT 
+                MD.id_deposito as codigo_almacen,
+                DFE.NOMBRE_DEPOSITO as nombre_almacen,
+                TLP.nombre_lista as lista,
+                PM.cod_mate,
+                pm.precio as precio,
+                MD.cantidad
+
+                FROM TB_PRECIO_MATERIAL PM 
+                INNER JOIN TB_MATERIAL_DEPOSITO MD ON MD.mate_sap = PM.cod_mate 
+                INNER JOIN TB_DEPOSITO DEP ON MD.id_deposito = DEP.codigo_almacen
+                INNER JOIN TB_DEPO_FISI_ESTO DFE ON MD.id_deposito = DFE.CODIGO_ALMACEN
+                INNER JOIN tb_ciudad CIU ON DFE.id_ciudad = CIU.ID 
+                INNER JOIN TB_DEPARTAMENTO DEPA ON CIU.id_departamento = DEPA.id
+                INNER JOIN TB_LISTA_PRECIO TLP ON DEPA.id = TLP.id_departamento
                 WHERE " . implode(' AND ', $conditions);
 
-                $bindings['codMaterial'] = $codMaterial;
+                $bindings['codMaterial'] = $codMaterial; 
 
                 // Agrega la paginación a la consulta SQL
-                $query .= " AND LP.id NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
+                $query .= " AND TLP.id_departamento IS NOT NULL AND PM.id_lista NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
 
                 $result = $connection->executeQuery($query, $bindings)->fetchAll();
                 
@@ -1407,7 +1399,7 @@ class EstoqueController extends AbstractController
     public function traerLista(Connection $connection, Request $request)
     {
         try {
-            $nombre_lista = $request->query->get('nombre_lista');
+            $nombre_lista = $request->query->get('nombre_lista'); 
 
             $listas_precios = $this->helper->buscarListaPrecio($connection, $nombre_lista);
 

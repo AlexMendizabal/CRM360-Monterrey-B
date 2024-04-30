@@ -254,7 +254,7 @@ class CotacoesController extends AbstractController
     {
         try {
             $params = $request->query->all();
-            isset($params['status']) ? $codSituacao = $params['status'] : NULL;
+            isset($params['status']) && ($params['status'] != 'undefined') ? $codSituacao = $params['status'] : NULL;
 
             $queryClient = $connection->CreateQueryBuilder();
             $queryClient
@@ -294,23 +294,19 @@ class CotacoesController extends AbstractController
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
-
-
+            /* dd( $params); */
             $dataInicial = NULL;
             $dataFinal = NULL;
             $codSituacao = 0;
             $nrPedido = NULL;
             $codEmpresa = NULL;
             $codDeposito = NULL;
-
             $pagina = NULL;
             $registros = NULL;
-
-            !empty($params['pagina']) ? $pagina = $params['pagina'] : $pagina = null;
-            !empty($params['registros']) ? $registros = $params['registros'] : $registros = null;
-            !empty($params['orderBy']) ? $orderBy = 'OFE.' . $params['orderBy'] : $orderBy = 'OFE.id';
-            !empty($params['orderType']) ? $orderType = $params['orderType'] : $orderType = 'DESC';
-
+            !empty($params['pagina']) && ($params['pagina'] != 'undefined') ? $pagina = $params['pagina'] : $pagina = null;
+            !empty($params['registros']) && ($params['registros'] != 'undefined') ? $registros = $params['registros'] : $registros = null;
+            !empty($params['orderBy']) && ($params['orderBy'] != 'undefined') ? $orderBy = 'OFE.' . $params['orderBy'] : $orderBy = 'OFE.id';
+            !empty($params['orderType']) && ($params['orderType'] != 'undefined') ? $orderType = $params['orderType'] : $orderType = 'DESC';
             $paginaActual =  (int)$pagina; // Página 2
             $tamanoPagina = (int)$registros; // 10 resultados por página
             $offset = ($paginaActual - 1) * $tamanoPagina;
@@ -319,32 +315,26 @@ class CotacoesController extends AbstractController
             /* isset($params['dataInicial1']) ? $dataInicial = $params['dataInicial1'] : NULL;
             isset($params['dataInicial2']) ? $dataFinal = $params['dataInicial2'] : NULL;
              */
-            $dataInicial = isset($params['dataInicial1']) ? (strtotime($params['dataInicial1']) ? date('Y/m/d', strtotime($params['dataInicial1'])) : '') : '';
-            $dataFinal = isset($params['dataInicial2']) ? (strtotime($params['dataInicial2']) ? date('Y/m/d', strtotime($params['dataInicial2'])) : '') : '';
-            
-            $fechavalida = isset($params['datavalida1']) ? (strtotime($params['datavalida1']) ? date('Y/m/d', strtotime($params['datavalida1'])) : '') : '';
-            $fechavalida2 = isset($params['datavalida2']) ? (strtotime($params['datavalida2']) ? date('Y/m/d', strtotime($params['datavalida2'])) : '') : '';
+            !empty($params['datacreacion1']) && ($params['datacreacion1'] != 'undefined') ? $dataInicial = date('Y/m/d',strtotime($params['datacreacion1'])) : '';
+            !empty($params['datacreacion2']) && ($params['datacreacion2'] != 'undefined') ? $dataFinal = date('Y/m/d', strtotime($params['datacreacion2'])) : '';
+          
+            !empty($params['datavalida1']) && ($params['datavalida1'] != 'undefined') ? $fechavalida = date('Y/m/d', strtotime($params['datavalida1'])) : '';
+            !empty($params['datavalida2']) && ($params['datavalida2'] != 'undefined') ? $fechavalida2 = date('Y/m/d', strtotime($params['datavalida2'])) : '';
            
-            /*   if (!empty($fechaFinal)) {
-                // Solo si la fecha final se pudo parsear correctamente
-                $fechaFinal->modify('+1 day');
-                $dataFinal = $fechaFinal->format('Y-m-d');
-            } else {
-                $dataFinal = NULL;
-            } */
+            
 
-            isset($params['status']) ? $codSituacao = $params['status'] : NULL;
-            isset($params['id_oferta']) ? $nrPedido = $params['id_oferta'] : NULL;
-            isset($params['codigo_oferta']) ? $codigo_oferta = $params['codigo_oferta'] : NULL;
-            isset($params['cliente']) ? $cliente = (int)$params['cliente'] : NULL;
+            isset($params['status']) && ($params['status'] != 'undefined') ? $codSituacao = $params['status'] : NULL;
+            isset($params['id_oferta']) && ($params['id_oferta'] != 'undefined') ? $nrPedido = $params['id_oferta'] : NULL;
+            isset($params['codigo_oferta']) && ($params['codigo_oferta'] != 'undefined') ? $codigo_oferta = $params['codigo_oferta'] : NULL;
+            isset($params['cliente']) && ($params['cliente'] != 'undefined') ? $cliente = (int)$params['cliente'] : NULL;
             /*   isset($params['orderBy']) ? $orderBy = $params['orderBy'] : NULL; */
             /* isset($params['orderType']) ? $orderType = $params['orderType'] : NULL; */
-            isset($params['pagina']) ? $pagina = $params['pagina'] : NULL;
-            isset($params['registros']) ? $registros = $params['registros'] : NULL;
-            isset($params['codVendedor']) ? $codVendedor  = $params['codVendedor'] : NULL;
+            isset($params['pagina']) && ($params['pagina'] != 'undefined') ? $pagina = $params['pagina'] : NULL;
+            isset($params['registros']) && ($params['registros'] != 'undefined') ? $registros = $params['registros'] : NULL;
+            isset($params['codVendedor']) && ($params['codVendedor'] != 'undefined') ? $codVendedor  = $params['codVendedor'] : NULL;
 
             // Verifica si el parámetro 'codVendedor' está establecido
-            if (!isset($params['codVendedor'])) {
+            if (!isset($params['codVendedor']) && ($params['codVendedor'] == 'undefined')) {
                 // Si el parámetro no está establecido, comprueba el rol del usuario
                 $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
                 if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5) {
@@ -356,7 +346,7 @@ class CotacoesController extends AbstractController
                 }
             } else {
                 // Si el parámetro 'codVendedor' está establecido, toma su valor
-                $codVendedor = $params['codVendedor'];
+                $codVendedor = null;
             }
 
             // Crear el query builder
@@ -409,21 +399,15 @@ class CotacoesController extends AbstractController
                ->setMaxResults($registros)
                ->where('1 = 1');
   
-            // Agregar la condición para el ID del vendedor
-            if ($codVendedor !== null) {
-                $queryOferta->andWhere('OFE.id_vendedor = :id_vendedor');
-                $queryOferta->setParameter('id_vendedor', $codVendedor);
-            }
-
             if (!empty($dataInicial) && !empty($dataFinal)) {
-                $queryOferta->andWhere($queryOferta->expr()->between('OFE.fecha_inicial', ':fecha_inicial', ':fecha_inicial'));
+                $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial AND OFE.fecha_inicial <= :fecha_final');
                 $queryOferta->setParameter('fecha_inicial', $dataInicial);
-                $queryOferta->setParameter('fecha_inicial', $dataFinal);
+                $queryOferta->setParameter('fecha_final', $dataFinal);
             }
 
             if (!empty($fechavalida) && !empty($fechavalida2)) {
-                $queryOferta->andWhere($queryOferta->expr()->between('OFE.fecha_final', ':fecha_final', ':fecha_final'));
-                $queryOferta->setParameter('fecha_final', $fechavalida);
+                $queryOferta->andWhere('OFE.fecha_final >= :fecha_inicial AND OFE.fecha_final <= :fecha_final');
+                $queryOferta->setParameter('fecha_inicial', $fechavalida);
                 $queryOferta->setParameter('fecha_final', $fechavalida2);
             }
            /*  if (!empty($dataInicial)) {
@@ -456,7 +440,6 @@ class CotacoesController extends AbstractController
             }
           
             $stmt = $queryOferta->execute();
-          /*   dd( $stmt); */
             $res = $stmt->fetchAllAssociative();
 
             if (count($res) > 0) {
@@ -2577,8 +2560,6 @@ class CotacoesController extends AbstractController
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
-
-
     /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/editar",
@@ -2609,10 +2590,8 @@ class CotacoesController extends AbstractController
             if (!empty($id_oferta) && $situacion == true) {
                 $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
                 $oferta_realizada = json_decode($oferta->getContent(), true);
-
                 if ($oferta_realizada['responseCode'] == 200) {
                     $detaEliminado = $this->eliminaItemsOferta($connection, $id_oferta);
-                    //$detaEliminado = true;
                     if ($detaEliminado == true) {
                         foreach ($data['carrinho'] as $items) {
                             $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
@@ -3036,7 +3015,7 @@ class CotacoesController extends AbstractController
         !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
         !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
-        if (!empty($data['percentualDesc'])) {
+        if (!empty($data['percentualDesc']) && $data['descuento_permitido'] <= $data['percentualDesc']) {
             !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
             !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
             $autorizacion = 1;

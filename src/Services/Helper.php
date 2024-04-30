@@ -1,5 +1,4 @@
 <?php
-// src/Service/DiscountHelper.php
 
 namespace App\Services;
 
@@ -18,7 +17,6 @@ use Symfony\Component\Serializer\Serializer\DateTimeNormalizer;
 use DateTime;
 
 date_default_timezone_set("America/la_paz");
-
 
 class Helper
 {
@@ -81,7 +79,6 @@ class Helper
 
         return $message;
     }
-
     public function idOferta($connection)
     {
         $query = "SELECT id AS id_oferta, codigo_oferta AS codigo_oferta FROM TB_OFERTA WHERE id = (SELECT MAX(id) AS id_oferta FROM TB_OFERTA);
@@ -95,7 +92,6 @@ class Helper
             return false;
         }
     }
-
     public function verificarUsuario($connection, $usuario)
     {
         $sql = "EXECUTE [dbo].[PRC_CORE_USUA_AUTE] 
@@ -133,7 +129,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarCiudad($connection, $nombre_ciudad)
     {
         $query = "select * from TB_CIUDAD where nombre_ciudad like :nombre_ciudad";
@@ -147,7 +142,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarCiudadId($connection, int $id_ciudad)
     {
         $query = "select * from TB_CIUDAD where id =  :id_ciudad";
@@ -161,7 +155,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarCiudadAbreviatura($connection, $sigla_ciudad)
     {
         $query = "select * from TB_CIUDAD where sigla like :sigla_ciudad";
@@ -175,7 +168,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarUnidad($connection, $codigo_unidad)
     {
         $query = "SELECT TOP 1 ID FROM UNIDADES WHERE SIGLAS_UNI LIKE :codigo_unidad";
@@ -189,8 +181,6 @@ class Helper
             return false;
         }
     }
-
-
     public function buscarCiudad2($connection, $nombre_ciudad)
     {
         if (is_int($nombre_ciudad)) {
@@ -212,7 +202,6 @@ class Helper
             }
         }
     }
-
     public function buscarRubro($connection, $data)
     {
         $query = "SELECT TOP 1 id_cnae, descricao FROM MTCORP_BASE_CNAE WHERE";
@@ -235,7 +224,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarClienteCarnet($connection, $data)
     {
         $query = "SELECT TOP 1 id_cliente FROM MTCORP_MODU_CLIE_BASE WHERE cnpj_cpf = :carnet";
@@ -249,7 +237,6 @@ class Helper
             return false;
         }
     }
-
     public function insertClient($connection, $data)
     {
         try {
@@ -442,7 +429,6 @@ class Helper
         }
         return $message;
     }
-
     public function obtenerUltimoCliente($connection)
     {
         try {
@@ -457,7 +443,6 @@ class Helper
             return null;
         }
     }
-
     public function insertarSapCliente($connection, $data)
     {
         $ruta = '/crearCliente';
@@ -621,7 +606,6 @@ class Helper
         //}
         return $message;
     }
-
     public function insertarUbicacionCliente($connection, $data = [], $id_cliente, $codigo_cliente)
     {
 
@@ -667,7 +651,6 @@ class Helper
             return false;
         }
     }
-
     public function insertContacto($connection, $data = [], $id_cliente)
     {
         try {
@@ -810,7 +793,6 @@ class Helper
         }
         return $res;
     }
-
     public function insertVendedor($connection, $data, $id_usuario, $id_sucursal)
     {
         $fechaActual = new \DateTime();
@@ -869,7 +851,6 @@ class Helper
 
         return $message;
     }
-
     public function updateVendedor($connection, $data)
     {
         $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
@@ -912,7 +893,6 @@ class Helper
         }
         return $message;
     }
-
     public function updateUsuario($connection, $data)
     {
         $data_vendedor['ID_ESCR'] = (int)$connection->fetchOne('SELECT id FROM tb_escr WHERE nm_escr = ?', [$data['sucursal']]);
@@ -952,7 +932,6 @@ class Helper
         }
         return $message;
     }
-
     function obtenerValorActualDeVendedor($connection, $id_cliente)
     {
         $query = "SELECT id_vendedor FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = :id_cliente";
@@ -967,7 +946,6 @@ class Helper
             return 88; // Valor predeterminado si no se encuentra un vendedor
         }
     }
-
     public function verificarCliente($connection, $data)
     {
         //dd($data);
@@ -986,7 +964,6 @@ class Helper
             return false;
         }
     }
-
     public function traerVendedor($connection, $data)
     {
         $query = "SELECT ID FROM TB_VEND WHERE codigo_sap = :codigo_sap";
@@ -1000,7 +977,6 @@ class Helper
             return false;
         }
     }
-
     public function traerVendedorSap($connection, $id_vendedor)
     {
 
@@ -1015,7 +991,6 @@ class Helper
             return false;
         }
     }
-
     public function traerContacto($connection, $id_contacto)
     {
         $query = "SELECT * FROM TB_CLIE_CONT WHERE id_cont = :id_contacto";
@@ -1029,7 +1004,6 @@ class Helper
             return false;
         }
     }
-
     public function traerCliente($connection, $id_cliente)
     {
         if (is_int($id_cliente)) {
@@ -1051,8 +1025,6 @@ class Helper
             return false;
         }
     }
-
-
     public function updateClient($connection, $data)
     {
 
@@ -1188,7 +1160,6 @@ class Helper
         }
         return $res;
     }
-
     public function actualizarClienteData($connection, $datosCliente, $cliente)
     {
 
@@ -1222,7 +1193,6 @@ class Helper
         }
         return $res;
     }
-
     public function direccionCliente($connection, $data = [])
     {
         //dd($data);
@@ -1271,7 +1241,6 @@ class Helper
 
         return $res;
     }
-
     public function contactoCliente($connection, $data = [], $id_cliente)
     {
         if (!empty($data['contacto'])) {
@@ -1332,7 +1301,6 @@ class Helper
         }
         return $res;
     }
-
     public function actualiza_client($connection, $idCliente)
     {
         $queryCliente = $connection->createQueryBuilder();
@@ -1416,8 +1384,6 @@ class Helper
         $res_sap = $this->insertarServicio($ruta, $dataClient[0]);
         return $res_sap;
     }
-
-
     public function verificarContato($connection, $data)
     {
         $id_contacto = $data['id_contacto'];
@@ -1427,7 +1393,6 @@ class Helper
         $stmt_contacto->execute();
         $resultados = $stmt_contacto->fetchAll(PDO::FETCH_ASSOC);
     }
-
     public function updateUbCliente($connection, $data = [], $id_cliente, $codigo_cliente)
     {
         try {
@@ -1480,7 +1445,6 @@ class Helper
         }
         return $res;
     }
-
     public function updateContacto($connection, $data = [], $id_cliente, $codigo_cliente)
     {
         try {
@@ -1554,8 +1518,6 @@ class Helper
         }
         return $res;
     }
-
-
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen)
     {
         //dd('CodMaterial: ',$codMaterial ,' Vendedor: ',$id_vendedor ,' ListaPrecio ',$id_lista_precio ,' CodigoAlmacen ',$codigo_almacen);
@@ -1622,8 +1584,17 @@ class Helper
             return false;
         }
     }
-
-
+    public function buscaCiudadListaPrecio($connection, $ciudad){
+        $ciudad = $connection->fetchAssociative('SELECT 
+                LP.id as id_lista, 
+                DP.id as id_departamento, 
+                C.id as id_ciudad 
+            FROM TB_LISTA_PRECIO LP 
+            INNER JOIN TB_DEPARTAMENTO AS DP ON  DP.id = LP.id_departamento
+            INNER JOIN tb_ciudad AS C ON C.id_departamento = DP.id
+             WHERE c.nombre_ciudad = ?', [$ciudad]); 
+        return $ciudad;
+    }
     public function buscarEscritorio($connection, $nm_escr)
     {
         $sucursal = strtoupper($nm_escr);
@@ -1635,7 +1606,6 @@ class Helper
             return 0;
         }
     }
-
     public function buscarEscriotorioEstado($connection, $id_situ)
     {
         $sucursal = strtoupper($id_situ);
@@ -1647,7 +1617,6 @@ class Helper
             return 0;
         }
     }
-
     public function buscarTipo($connection, $nombre)
     {
         $tipo = strtoupper($nombre);
@@ -1659,7 +1628,6 @@ class Helper
             return 0;
         }
     }
-
     public function buscarRegion($connection, $nombre_region)
     {
         $region = strtoupper($nombre_region);
@@ -1671,12 +1639,11 @@ class Helper
             return 0;
         }
     }
-
     public function buscarAlmacen($connection, $codigo_almacen = null, $id_almacen = null)
     {
         $query = "SELECT top 1 id FROM TB_DEPO_FISI_ESTO WHERE";
         $params = array();
-
+        
         if ($codigo_almacen !== null) {
             $query .= " codigo_almacen LIKE :codigo_almacen";
             $params[':codigo_almacen'] = '%' . $codigo_almacen . '%';
@@ -1697,7 +1664,7 @@ class Helper
         }
 
         $statement->execute();
-        $result = $statement->fetch();
+        $result = $statement->fetch(); 
 
         if (!empty($result)) {
             return $result;
@@ -1705,7 +1672,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarZona($connection, $zona = null)
     {
         if (empty($zona)) {
@@ -1726,7 +1692,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarMaterial($connection, $codigo_material)
     {
 
@@ -1743,7 +1708,6 @@ class Helper
             return false;
         }
     }
-
     //Buscar por codigo o nombre de material
     public function buscarMaterialCodigoNombre($connection, $material)
     {
@@ -1763,8 +1727,6 @@ class Helper
             return false;
         }
     }
-
-
     public function buscarCodMaterial($connection, $id_material)
     {
         $query1 =  "SELECT TOP 1 MATE.CODIGOMATERIAL AS codigo_material 
@@ -1779,7 +1741,6 @@ class Helper
         }
         return false;
     }
-
     public function buscarNombre($connection, $NOMBRE_DEPOSITO = null, $id_almacen = null)
     {
         $query = "SELECT * FROM TB_DEPO_FISI_ESTO WHERE";
@@ -1813,7 +1774,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarListaPrecio($connection, $nombre_lista = null)
     {
         if (empty($nombre_lista)) {
@@ -1839,8 +1799,6 @@ class Helper
             }
         }
     }
-
-
     public function buscarFamilia($connection, $data)
     {
         $query = "SELECT * FROM MTCORP_BASE_LINHAS_CLASSE WHERE  descricao LIKE :dato";
@@ -2064,7 +2022,6 @@ class Helper
         }
         return $respuesta;
     }
-
     public function buscarCodigoSap($connection, $dato_sap = null)
     {
         try {
@@ -2082,8 +2039,6 @@ class Helper
         }
         return $respuesta;
     }
-
-
     public function buscarNombreArea($connection, $nombre_areas = null)
     {
         try {
@@ -2150,8 +2105,6 @@ class Helper
             return false;
         }
     }
-
-
     public function actualizarItem($connection, $arrayItem)
     {
         $updateParts = [];
@@ -2226,7 +2179,6 @@ class Helper
             return false;
         }
     }
-
     public function insertarItem($connection, $arrayItem)
     {
         if (isset($arrayItem)) {
@@ -2280,7 +2232,6 @@ class Helper
             return false;
         }
     }
-
     public function insertAlmacen($connection, $data)
     {
         $dataCodigo['codigo_almacen'] = $this->buscarAlmacen($connection, $data['codigo_almacen'], null);
@@ -2369,7 +2320,6 @@ class Helper
         }
         return $message;
     }
-
     public function actualizaAlmacen($connection, $data)
     {
         if (!empty($data['codigo_almacen'])) {
@@ -2556,7 +2506,6 @@ class Helper
             ];
         }
     }
-
     public function verificarStock($connection, $arrayStock)
     {
         $query = "SELECT * FROM TB_MATERIAL_DEPOSITO WHERE id_material= :id_material AND id_deposito= :id_deposito";
@@ -2571,11 +2520,11 @@ class Helper
             return false;
         }
     }
-
     public function actualizarStock($connection, $arrayStock)
     {
-        $id_material = $arrayStock['id_item'];
         $id_almacen = $arrayStock['id_almacen'];
+        $id_material = $arrayStock['id_item'];
+       
         $cantidad = $arrayStock['cantidad'];
         $id_unidad = $arrayStock['id_unidad'];
         $codigo_material = $arrayStock['codigo_material'];
@@ -2598,7 +2547,11 @@ class Helper
             return false;
         }
     }
-
+    public function modificaMaterialDeposito($connection, $datos, $datosvalidos)
+    {
+        $materialDepo = $connection->update('TB_MATERIAL_DEPOSITO', $datos, $datosvalidos);
+        dd($materialDepo);
+    }
     public function insertarStock($connection, $arrayStock)
     {
         $id_material = $arrayStock['id_item'];
@@ -2626,8 +2579,6 @@ class Helper
             return false;
         }
     }
-
-
     public function eliminarStock($connection, $id_stock)
     {
         $query = "DELETE FROM TB_MATERIAL_DEPOSITO WHERE id = :id";
@@ -2641,7 +2592,6 @@ class Helper
             return false;
         }
     }
-
     public function guardarOfertaSap($array_oferta)
     {
         $api = '/crearProforma';
@@ -2676,11 +2626,6 @@ class Helper
             return false;
         }
     }
-
-    /*  public function buscarCorreo(){
-        NM_EMAI
-
-    } */
     public function enviarCorreo($arrayDatos)
     {
         $remitente = $arrayDatos['remitente'];
@@ -2727,13 +2672,9 @@ class Helper
             return false;
         }
     }
-
     public function buscarTipoCliente($connection, $id)
     {
-        //dd($id);
-
         $query = "SELECT * FROM TB_TIPO_CLIENTE WHERE ";
-
         if (is_int($id)) {
             $query .= " id =  :id";
             $stament = $connection->prepare($query);
@@ -2767,7 +2708,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarDescuento($connection, $buscar_descuento)
     {
         $id_material = $buscar_descuento['id_material'];
@@ -2820,7 +2760,6 @@ class Helper
             return false;
         }
     }
-
     public function guardarDescuento($connection, $arrayDescuento)
     {
         $datosDescuento = [
@@ -2843,7 +2782,6 @@ class Helper
             return false;
         }
     }
-
     public function emailEjecutivo($connection, $data)
     {
         try {
@@ -2859,7 +2797,6 @@ class Helper
             return false;
         }
     }
-
     public function autorizacionStado($connection, $data, $estado)
     {
 
@@ -2890,8 +2827,6 @@ class Helper
             ];
         }
     }
-
-
     public function insertarServicio($ruta, $data)
     {
         $client = HttpClient::create();
@@ -2912,7 +2847,6 @@ class Helper
         // Verifica si la solicitud fue exitosa (código de respuesta 200)
         return $responseData;
     }
-
     public function conexionSap($ruta, $data)
     {
         $url = $this->url_sap . $ruta;
@@ -2946,8 +2880,6 @@ class Helper
             return false;
         } */
     }
-
-
     public function correoAutorizacion($nombre_usuario, $url)
     {
         $contenido =
@@ -2983,7 +2915,6 @@ class Helper
                 </html>';
         return $contenido;
     }
-
     public function correoEnvioCredenciales($usuario, $password, $url)
     {
         $contenido =
@@ -3021,7 +2952,6 @@ class Helper
                 </html>';
         return $contenido;
     }
-
     public function correoEstado($nombre_usuario, $estado_oferta, $url)
     {
         $contenido =
@@ -3057,7 +2987,6 @@ class Helper
                 </html>';
         return $contenido;
     }
-
     public function buscarCiudadVendedor($connection, $id_vendedor)
     {
         $query = "SELECT DISTINCT VEND.ID AS id_vendedor, CIU.id AS id_ciudad, CIU.nombre_ciudad AS nombre_ciudad, ESCR.id as id_escritorio, ESCR.nm_escr AS nombre_escritorio  FROM TB_VEND VEND 
@@ -3077,7 +3006,6 @@ class Helper
             return false;
         }
     }
-
     public function obtenerJerarquia($connection, $data)
     {
         $rango =  (int)$data['rango'];
@@ -3193,7 +3121,6 @@ class Helper
             return false;
         }
     }
-
     public function verificarMultiple($connection, $data)
     {
         $arrayDatos = array();
@@ -3226,7 +3153,6 @@ class Helper
         }
         return $arrayDatos;
     }
-
     public function buscarAutorizacion($connection, $id)
     {
         $queryAutorizacion =
@@ -3241,7 +3167,6 @@ class Helper
             return false;
         }
     }
-
     public function traerAutorizacion($connection, $id_autorizacion)
     {
         try {
@@ -3314,7 +3239,6 @@ class Helper
         }
         return $message;
     }
-
     public function buscarOferta($connection, $id)
     {
         $arrFinal = array();
@@ -3427,7 +3351,6 @@ class Helper
             return false;
         }
     }
-
     public function buscarUsuario($connection, $id)
     {
         $query_usuario = "SELECT * FROM TB_CORE_USUA WHERE ID = :id";
@@ -3441,7 +3364,6 @@ class Helper
             return false;
         }
     }
-
     public function traerVendedorId($connection, $id_ejecutivo)
     {
         $query = "SELECT * FROM TB_VEND WHERE ID = :id_ejecutivo";
@@ -3468,7 +3390,6 @@ class Helper
             return false;
         }
     }
-
     public function traerMedioContacto($connection, $id_contacto)
     {
         $arrayMedioContacto = array();
@@ -3491,7 +3412,6 @@ class Helper
             return false;
         }
     }
-
     public function traerDireccionCliente($connection, $id_cliente)
     {
         $query = "SELECT * FROM MTCORP_MODU_CLIE_BASE_ENDE INNER JOIN TB_CIUDAD ON MTCORP_MODU_CLIE_BASE_ENDE.id_ciudad = TB_CIUDAD.id  WHERE id_cliente = :id_cliente";
@@ -3505,8 +3425,6 @@ class Helper
             return false;
         }
     }
-
-
     public function obtenerCliente($conecction, $id)
     {
         $array_final = array();
@@ -3654,7 +3572,6 @@ class Helper
         } else
             return false;
     }
-
     public function buscarTipoClienteId($connection, $id_tipo_cliente)
     {
         $query = "SELECT * FROM TB_TIPO_CLIENTE WHERE id = :id_tipo";
@@ -3724,8 +3641,6 @@ class Helper
             return false;
         }
     }
-
-
     public function borrarUbicaciones($connection, $id_cliente)
     {
         try {
@@ -3758,8 +3673,6 @@ class Helper
             return false;
         }
     }
-
-
     public function borrarClientes($connection, int $id_cliente)
     {
         $query = "DELETE FROM MTCORP_MODU_CLIE_BASE WHERE id_cliente = :id_cliente";
@@ -3773,7 +3686,6 @@ class Helper
             return false;
         }
     }
-
     public function actualizaOfertaA($connection, $id_oferta)
     {
         $affectedRows = $connection->update('TB_OFERTA', ['autorizacion' => 1, 'estado_oferta' => 10], ['id' => $id_oferta]);
@@ -3796,8 +3708,6 @@ class Helper
             return false;
         }
     }
-
-
     public function autorizacion_estado_sap($connection, $id_oferta)
     {
         $obtenerOferta = $this->buscarOferta($connection, $id_oferta);
@@ -3885,7 +3795,6 @@ class Helper
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
     public function editar_oferta_sap($connection, $id_oferta)
     {
         $obtenerOferta = $this->buscarOferta($connection, $id_oferta);
@@ -3969,9 +3878,6 @@ class Helper
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
-
-
     public function modificarCodigoOferta($connection, $data)
     {
         $data_oferta['codigo_sap'] = $sapresp['Mensaje'];
@@ -4022,7 +3928,6 @@ class Helper
         }
         return $message;
     }
-
     public function borrarClientesLocales($connection)
     {
         $query = "SELECT * FROM MTCORP_MODU_CLIE_BASE WHERE codigo_cliente IS NULL";
@@ -4076,8 +3981,6 @@ class Helper
         $stmt->bindValue(":tipo_estado", 14, PDO::PARAM_INT);
         $stmt->execute();
         $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //dd($ofertas);
-
 
         if (count($ofertas) > 0) {
             foreach ($ofertas as $oferta) {
@@ -4095,7 +3998,6 @@ class Helper
 
         return array(false, $arrayOferta);
     }
-
     public function verificarOfertaDias($connection, $id_vendedor)
     {
         $fechaActual = new DateTime();
@@ -4121,8 +4023,6 @@ class Helper
         }
         return false;
     }
-
-
     public function cierre_ofertea($connection, $data)
     {
         try {
@@ -4137,7 +4037,6 @@ class Helper
         }
         return $message;
     }
-
     public function crearOferta($conecction, $data)
     {
         $titulo = $data['titulo'];
@@ -4167,7 +4066,6 @@ class Helper
             return false;
         }
     }
-
     public function verificarNotificacionOferta($conexion, $data)
     {
         $titulo = $data['titulo'];
@@ -4193,9 +4091,6 @@ class Helper
             return false;
         }
     }
-
-
-
     public function getEscritorios($conecction)
     {
         $query = "SELECT ESCR.id [id_escritorio], ESCR.nm_escr [nome_escritorio] FROM TB_ESCR ESCR ORDER BY ESCR.id";
@@ -4208,7 +4103,6 @@ class Helper
             return false;
         }
     }
-
     public function verificarOfertaCliente($conecction, $data)
     {
         $id_cliente = $data['id_cliente'];
@@ -4249,7 +4143,6 @@ class Helper
 
         return $id_ubicacion_agenda > 0;
     }
-
     public function actualizarAgenda($connection, $data, int $id)
     {
         if (!empty($data)) {
@@ -4324,7 +4217,6 @@ class Helper
             return false;
         }
     }
-
     //FUNCIONES PARA ACTUALIZAR MATERIALES UPSELL DEBE BORRARSE LA LISTA ACTUAL Y REEMPLAZARSE CON EL ARRAY
     public function borrarMaterialAsociadoUpsell($connection, int $id_asociado)
     {

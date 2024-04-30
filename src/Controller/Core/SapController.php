@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace App\Controller\Core;
 
 use App\Services\Helper;
+use App\Services\HelperSap;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\DBALException;
 use App\Security\Core\JwtAplication;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
+
 
 /**
  * Class SapController
@@ -93,8 +96,6 @@ class SapController extends AbstractController
                         "moduloPrincipal" => $modulo_principal
                     );
                     $devolverArray = base64_encode(json_encode($datos));
-                    //dd($usuario);
-
                 }
             } catch (DBALException $e) {
                 return new JsonResponse([
@@ -126,7 +127,6 @@ class SapController extends AbstractController
                         'mensaje' => 'Error el usuario no se encuentra activo'
                     ], 401);
                 } else {
-                    /* dd($usuario); */
                     if (password_verify($data['password'], $usuario[0]['DS_SENH'])) {
                         $dadosUsuario = array(
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
@@ -223,7 +223,6 @@ class SapController extends AbstractController
                 }
                 $verificar_usuario = $helper->verificarUsuario($connection, $usuario);
                 if (count($verificar_usuario) > 0) {
-                    // dd($verificar_usuario);
                     if (password_verify($params['password'], $verificar_usuario[0]['DS_SENH'])) {
                         $dadosUsuario = array(
                             'ID_USUA' => $usuario[0]['UUID_USUA'],
@@ -270,7 +269,6 @@ class SapController extends AbstractController
 
                     ], 401);
                 }
-                /* dd($params['password']); */
             } catch (\Throwable $e) {
                 return new JsonResponse([
                     'response ' => 401,
@@ -454,7 +452,6 @@ class SapController extends AbstractController
                     ]);
                     //Helper insertar item
                     $insertarMaterial = $helper->insertarItem($connection, $arrayMaterial);
-                    //dd($insertarMaterial);
                     if (!empty($insertarMaterial)) {
                         $message = array(
                             'response' => 200,
@@ -692,7 +689,6 @@ class SapController extends AbstractController
                             $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
                         }
                         $borrarCliente = $helper->borrarClientes($connection, (int)$id_cliente);
-                        //dd($borrarCliente);
 
                         if ($borrarCliente !== false) {
                             $message = [
@@ -703,9 +699,6 @@ class SapController extends AbstractController
                         }
                     } else {
                         $insertCliente['data']['ciudad'] = $ubClie[0]['ciudad'];
-                        /* dd($insertCliente); */
-
-
                         $data_cliente = [
                             "codigo_cliente" => $codigo_cliente,
                             "id_cliente" => $id_cliente,
@@ -753,7 +746,6 @@ class SapController extends AbstractController
                                     }
                                 }
                                 if (!empty($missing_fields)) {
-                                    /* dd($missing_fields); */
                                     $traerUbicaciones = $helper->traerDireccionCliente($connection, $id_cliente);
                                     if ($traerUbicaciones !== false) {
                                         $eliminarDireccion = $helper->borrarUbicaciones($connection, $id_cliente);
@@ -765,7 +757,6 @@ class SapController extends AbstractController
                                                     $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
                                                 }
                                                 $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
-                                                //dd($borrarContactos);
                                             }
                                         }
                                     } else {
@@ -810,7 +801,6 @@ class SapController extends AbstractController
                                                         $borrarMedioContacto = $helper->borrarContactosMedioContacto($connection, (int)$traerContactos[0]['id_cont']);
                                                     }
                                                     $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
-                                                    //dd($borrarContactos);
                                                 }
                                             }
                                         } else {
@@ -823,9 +813,7 @@ class SapController extends AbstractController
                                                 $borrarContactos = $helper->borrarContactos($connection, (int)$id_cliente);
                                             }
                                         }
-                                        //dd((int)$id_cliente);
                                         $eliminarClientes = $helper->borrarClientes($connection, (int)$id_cliente);
-                                        //if ($eliminarClientes !== false) {
                                         $message = [
                                             "CodigoRespuesta" => 204,
                                             "Estado" => true,
@@ -884,8 +872,6 @@ class SapController extends AbstractController
         $rubro = '';
         $array_ubicaciones = array();
         $array_contactos = array();
-        //dd($data);
-
         if ($swSap == true) {
 
             $traerCodigoVendedor = $helper->traerVendedorSap($connection, $data['id_vendedor']);
@@ -1072,7 +1058,6 @@ class SapController extends AbstractController
                     }
                 }
                 $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
-                //dd($traerContactos);
                 if ($traerContactos !== false) {
                     foreach ($traerContactos as $contacto) {
                         $partes = explode(' ', $contacto['ds_cont']);
@@ -1170,11 +1155,9 @@ class SapController extends AbstractController
                         ];
                     } else {
                         $traerUbicaciones = $helper->traerDireccionCliente($connection, $data['id_cliente']);
-                        //dd($traerUbicaciones);
                         if (count($traerUbicaciones) > 0) {
                             $borrarUbicaciones = $helper->borrarUbicaciones($connection, $data['id_cliente']);
                         }
-                        //dd($array_ubicaciones_respaldo);
                         $insertarUbicaciones = $helper->insertUbClient($connection, $array_ubicaciones_respaldo, $data['id_cliente'],  $data['codigo_cliente']);
 
                         $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
@@ -1262,9 +1245,6 @@ class SapController extends AbstractController
             $buscarCiudad = $helper->buscarCiudad2($connection, (int)$data['ubicacion'][0]['id_ciudad']);
             $sigla_ciudad = $buscarCiudad['sigla'];
         }
-
-
-        // $buscarRubro = $helper->buscarRubro($connection, $data['rubro']);dd($buscarRubro);
         if (!empty($ubro2)) {
             $id_rubro = $id_setor_actividade;
             $data['id_rubro'] = $id_rubro;
@@ -1326,9 +1306,7 @@ class SapController extends AbstractController
 
             if ($resp_sap['response'] == 200) {
 
-                /* dd($data); */
                 $actualizarLocal = $this->actualizarClienteLocal($connection, $data, $helper);
-                //dd($actualizarLocal);
                 if ($actualizarLocal['Estado'] == true) {
                     $message = [
                         "CodigoRespuesta" => 200,
@@ -1416,13 +1394,10 @@ class SapController extends AbstractController
                     foreach ($data['ubicacion'] as $ubicacion) {
 
                         $buscarCiudad = $helper->buscarCiudadAbreviatura($connection, $ubicacion['ciudad']);
-                        //dd($buscarCiudad);
                         $ubicacion['ciudad_sigla'] = $buscarCiudad['sigla'];
                         $ubicacion['ciudad'] = $buscarCiudad['nombre_ciudad'];
                         $ubicacion['codigo_cliente'] = $data['codigo_cliente'];
                         $ubicacion['id_cliente'] = $data['id_cliente'];
-
-                        // dd($ubicacion);
 
                         $insertarUbicaciones = $helper->insertUbClient($connection, $ubicacion, (int)$data['id_cliente'],  $data['codigo_cliente']);
                         if ($insertarUbicaciones === false) {
@@ -1440,9 +1415,7 @@ class SapController extends AbstractController
                             $insertarUbicaciones = $helper->insertUbClient($connection, $array, (int)$data['id_cliente'],  $data['codigo_cliente']);
                         }
                     } else {
-                        //dd('aqui');
                         //$traerUbicaciones = $helper->traerDireccionCliente($connection, (int)$data['id_cliente']);
-
                         foreach ($array_ubicaciones_respaldo as $ubicacion) {
                             $borrarUbicaciones = $helper->borrarUbicacionesId($connection, (int)$ubicacion['id']);
                         }
@@ -1467,7 +1440,6 @@ class SapController extends AbstractController
             }
 
             $traerContactos =  $helper->traerContactoCliente($connection, (int)$data['id_cliente']);
-            //dd($traerContactos);
             if ($traerContactos !== false) {
                 foreach ($traerContactos as $contacto) {
                     $partes = explode(' ', $contacto['ds_cont']);
@@ -1711,7 +1683,6 @@ class SapController extends AbstractController
         $respuesta = $helper->asignarPermisos($connection, $data, $id_usuario);
         $response = new JsonResponse($respuesta);
         return $response;
-        //dd($response);
     }
 
     /**
@@ -1912,8 +1883,6 @@ class SapController extends AbstractController
             }
         } catch (\Throwable $th) {
             /* $connection->commit(); */
-            /*   dd($th); */
-
             $message = array(
                 'response' => 401,
                 'estado' => false,
@@ -1941,14 +1910,13 @@ class SapController extends AbstractController
             $helper = new Helper();
             $jsonData = $request->getContent();
             $data = json_decode($jsonData, true);
-
+            $url = '/consultaStock';
             $codigoMaterial = '';
             $codigoUnidad = '';
             $id_unidad = 0;
             $cantidad = 0;
             $arraySap = array();
             $arrayStock = array();
-            $url = '/consultaStock';
 
             $id_material = !empty($data['id_material']) ? $data['id_material'] : 0;
             $codigoAlmacen = !empty($data['codigo_almacen']) ? $data['codigo_almacen'] : '';
@@ -1985,12 +1953,10 @@ class SapController extends AbstractController
                     if ($buscar_almacen !== false) {
                         $id_almacen = $buscar_almacen['id'];
                     }
-
                     $buscar_unidad = $helper->buscarUnidad($connection, $codigoUnidad);
                     if ($buscar_unidad !== false) {
                         $id_unidad = $buscar_unidad['ID'];
                     }
-
                     $verificar_stock = $helper->verificarStock($connection, $arrayStock);
                     if ($verificar_stock !== false) {
                         $arrayStockActualizar = array();
@@ -2003,7 +1969,6 @@ class SapController extends AbstractController
                             'codigo_material' => $codigoMaterial,
                             'id' => (int)$id_verificarStock
                         ]);
-
                         $actualizar_stock = $helper->actualizarStock($connection, $arrayStockActualizar);
                         if ($actualizar_stock !== false) {
                             $message = array(
@@ -2029,6 +1994,7 @@ class SapController extends AbstractController
                         ]);
 
                         $agregar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
+
                         if ($agregar_stock !== false) {
                             $message = array(
                                 'responseCode' => 200,
@@ -2044,7 +2010,6 @@ class SapController extends AbstractController
                         }
                     }
                 } else {
-                    
                     $verificarStock = $helper->verificarStock($connection, $arrayStock);
                     if ($verificarStock !== false) {
                         $id_verificarStock = $verificarStock['id'];
@@ -2064,8 +2029,6 @@ class SapController extends AbstractController
                     );
                 }
             }
-
-            
         } catch (DBALException $e) {
             $message = array(
                 'responseCode' => 400,
@@ -2073,6 +2036,57 @@ class SapController extends AbstractController
                 "detalle" => $e->getMessage()
             );
         }
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/sap/actualizar_stock_todos",
+     *  name="core.sap.actualizar_stock_todos",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function actualizarStockTodos(Connection $connection, Request $request)
+    {
+        $helper = new Helper();
+        $helperSap = new HelperSap();
+        $jsonData = $request->getContent();
+        $data = json_decode($jsonData, true);
+        $url = '/consultaStock';
+        $almacenes = ($data['codigo_almacen'] !== 'TODOS' && !empty($data['codigo_almacen'])) ? $data['codigo_almacen'] : 'TODOS';
+        !empty($data['id_material']) ? $id_item = $data['id_material'] : $data_error['id_material'] = 'es requerido';
+
+        if (!empty($id_item)) {
+            $buscarMaterial = $helper->buscarCodMaterial($connection, (int)$id_item);
+            if (!empty($buscarMaterial)) {
+                $codigo_material = $buscarMaterial;
+            }
+        }
+        
+        $arraySap = ([
+            'Almacen' => $almacenes,
+            'Item' => $codigo_material
+        ]);
+        
+        $dataSap = $helper->conexionSap($url, $arraySap);
+        if ($dataSap['CodigoRespuesta'] == 200) {
+            $datos_actualizo[]=null;
+            foreach ($dataSap['Mensaje'] as $datos) {
+                $datos_actualizo['stocks'] = $helperSap->actualizaStock($connection,$dataSap['Almacen'],$dataSap['Disponible'],$dataSap['Unidad'],$codigo_material,$id_item);
+                $datos_actualizo['precios']= $helperSap->actualizarPrecio($connection,$id_item,$datos['Lugar'],$datos['Precio'],$datos['Disponible'],$codigo_material,$almacenes);
+            }
+         
+            $message = array(
+                    'responseCode' => 200,
+                    "estado" => true,
+                    "detalle" => $datos_actualizo
+                );
+      
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
