@@ -344,7 +344,7 @@ class AutorizacionesController extends AbstractController
             $id_usuario = $infoUsuario->id;
             $idVend = $infoUsuario->idVendedor;
 
-            $params = $request->query->all();
+            $params = $request->query->all(); 
 
             $cargo = $connection->fetchOne('SELECT NM_CARG_FUNC FROM TB_CORE_USUA WHERE  tb_core_usua.id = ?', [$id_usuario]);
 
@@ -359,6 +359,7 @@ class AutorizacionesController extends AbstractController
                 $dataFinal = isset($params['dataFinal']) ? (strtotime($params['dataFinal']) ? date('Y/m/d H:i:s', strtotime($params['dataFinal'])) : '') : '';
                 $estado_oferta = isset($params['estado_oferta']) ? $params['estado_oferta'] : 1;
                 //$nrPedido = isset($params['nrPedido']) ? $params['nrPedido'] :  $message = '';
+                $codigo_oferta = isset($params['codigo_oferta']) ? $params['codigo_oferta'] : '';
                 $codVendedor = isset($params['codVendedor']) ? $params['codVendedor'] : 0;
                 $orderType = isset($params['orderType']) ? $params['orderType'] : 'se requiere dato';
                 $pagina = isset($params['pagina']) ? $params['pagina'] : $message = '';
@@ -377,11 +378,11 @@ class AutorizacionesController extends AbstractController
                     $bindings['fecha_gestion'] = $dataFinal;
                 }
 
-                /* Número de pedido */
-                /*  if (!empty($nrPedido)) {
-                    $conditions[] = "TB_OFERTA.codigo_oferta LIKE :nro_pedido";
-                    $bindings['nro_pedido'] = '%' . $nrPedido . '%';
-                } */
+                /* Número de oferta */
+                  if (!empty($codigo_oferta)) {
+                    $conditions[] = "TB_OFERTA.codigo_oferta LIKE :codigo_oferta";
+                    $bindings['codigo_oferta'] = '%' . $codigo_oferta . '%';
+                } 
 
                 /* Vendedor */
                 if (!empty($codVendedor)) {
@@ -393,8 +394,8 @@ class AutorizacionesController extends AbstractController
                     $conditions[] = "TB_VEND.ID = :idVendedorPromotor";
                     $bindings['idVendedorPromotor'] = $idVend;
                 }
-                 
-                $conditions[] = "TB_OFERTA.autorizacion = 1";
+                
+                $conditions[] = "TB_OFERTA.autorizacion = 1"; 
 
                 $query = "SELECT DISTINCT
                     TB_OFERTA.id AS id_oferta, 
@@ -439,9 +440,9 @@ class AutorizacionesController extends AbstractController
                 }
 
 
-                $stmt = $connection->prepare($query);
+                $stmt = $connection->prepare($query); 
                 $stmt->execute($bindings);
-                $res = $stmt->fetchAll();
+                $res = $stmt->fetchAll(); 
 
 
                 if (count($res) > 0) {
