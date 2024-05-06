@@ -1662,10 +1662,9 @@ class Helper
         foreach ($params as $param => $value) {
             $statement->bindValue($param, $value);
         }
-
         $statement->execute();
         $result = $statement->fetch(); 
-
+    
         if (!empty($result)) {
             return $result;
         } else {
@@ -2559,17 +2558,13 @@ class Helper
         $cantidad = $arrayStock['cantidad'];
         $id_unidad = $arrayStock['id_unidad'];
         $codigo_material = $arrayStock['codigo_material'];
-
         $query = "INSERT INTO TB_MATERIAL_DEPOSITO VALUES (:id_material, :id_deposito, :cantidad, :id_unidad, :mate_sap)";
-
         $stmt = $connection->prepare($query);
         $stmt->bindValue(":id_material", $id_material);
         $stmt->bindValue(":id_deposito", $id_almacen);
         $stmt->bindValue(":cantidad", $cantidad);
         $stmt->bindValue(":id_unidad", $id_unidad);
         $stmt->bindValue(":mate_sap", $codigo_material);
-
-
         $stmt->execute();
         $id = $connection->lastInsertId();
 
@@ -3777,7 +3772,6 @@ class Helper
         }
         try {
             $ruta = "/crearProforma";
-
             $rsp = $this->insertarServicio($ruta, $arrayOFerta);
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;

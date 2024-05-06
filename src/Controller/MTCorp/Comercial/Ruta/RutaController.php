@@ -85,7 +85,7 @@ class RutaController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            dd($data);
+            
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $errors = [];
@@ -101,8 +101,8 @@ class RutaController extends AbstractController
                 $diaInteiro = 1;
                 $observacao = '';
                 $id_vendedor = $item['vendedor_id'];
-                $id_vendedor = $item['latitud']; 
-                $id_vendedor = $item['longitud'];
+                $latitud_inicial = $item['latitud']; 
+                $longitud_inicial = $item['longitud'];
 
                 $save = $connection->query("EXEC PRC_AGEN_VEND_CADA
                     @AGENDA = ''

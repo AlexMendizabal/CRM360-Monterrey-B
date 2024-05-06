@@ -2074,19 +2074,28 @@ class SapController extends AbstractController
         ]);
         
         $dataSap = $helper->conexionSap($url, $arraySap);
+      
+       /*  dd($dataSap); */
         if ($dataSap['CodigoRespuesta'] == 200) {
-            $datos_actualizo[]=null;
             foreach ($dataSap['Mensaje'] as $datos) {
-                $datos_actualizo['stocks'] = $helperSap->actualizaStock($connection,$dataSap['Almacen'],$dataSap['Disponible'],$dataSap['Unidad'],$codigo_material,$id_item);
-                $datos_actualizo['precios']= $helperSap->actualizarPrecio($connection,$id_item,$datos['Lugar'],$datos['Precio'],$datos['Disponible'],$codigo_material,$almacenes);
+                $actualizaStock = $helperSap->actualizaStock($connection, $datos['Almacen'], $datos['Disponible'], $datos['Unidad'], $codigo_material, $id_item);
+                empty($actualizaStock) ? $insertStock = $helperSap->insertarStock($connection, $datos['Almacen'], $datos['Disponible'], $datos['Unidad'], $codigo_material, $id_item) : $actualizaStock;
+                $resp['actualizacion'] = $actualizaStock;
+                $resp['inserto'] = $insertStock;
+
+                $actuazliPrecio = $helperSap->actualizarPrecio($connection, $id_item,$datos['Lugar'], $datos['Precio'], $datos['Disponible'], $codigo_material, $almacenes);
+                empty($actuazliPrecio) ? $insertPrecio = $helperSap->insertarPrecio($connection, $id_item,$datos['Lugar'], $datos['Precio'], $datos['Disponible'], $codigo_material, $almacenes) : $actualizaStock;
+                $resp['actualizacion'] = $actuazliPrecio;
+                $resp['inserto'] = $insertPrecio;
             }
-         
+           
             $message = array(
                     'responseCode' => 200,
                     "estado" => true,
-                    "detalle" => $datos_actualizo
+                    "detalle" => $resp
                 );
-      
+            }
+            
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;

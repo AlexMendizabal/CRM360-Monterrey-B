@@ -380,7 +380,7 @@ class AgendaController extends AbstractController
             $helper = new Helper();
             $data = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
+           
             $id_vendedor = 0;
             $cor = "";
             if ($infoUsuario->matricula == 1) {
@@ -393,7 +393,13 @@ class AgendaController extends AbstractController
             !empty($data['formContactId']) ?  $formaContato = $data['formContactId'] : $data_error_agenda['contacto'] = 'es nesesario';
             !empty($data['typeContactId']) ?  $meioContato = $data['typeContactId'] : $data_error_agenda['medio_contacto'] = 'es nesesario';
             !empty($data['start']) ? $dataInicial = date('Y/m/d H:i:s', strtotime($data['start'])) : $data_error_agenda['fecha_inicial'] = 'es nesesario';
-            !empty($data['end']) ? $dataFinal = date('Y/m/d H:i:s', strtotime($data['end'])) : !empty($data['allDay']) ?  $diaInteiro = $data['allDay'] == '1' ? 1 : 0 :  $data_error_agenda['fecha_final'] = 'es nesesario';
+            if (!empty($data['end'])) {
+                $dataFinal = date('Y/m/d H:i:s', strtotime($data['end']));
+            } elseif (!empty($data['allDay'])) {
+                $diaInteiro = ($data['allDay'] == '1') ? 1 : 0;
+            } else {
+                $data_error_agenda['fecha_final'] = 'es necesario';
+            }
             !empty($data['direccion']) ? $direccion = strtoupper($data['direccion']) : '';
             $observacao = !empty($data['description']) ? strtoupper($data['description']) : '';
             !empty($data['latitud']) ? $latitud =  $data['latitud'] : $data_error_agenda['latitud'] = 'es nesesario';
@@ -416,7 +422,7 @@ class AgendaController extends AbstractController
             
             if (empty($data_error_agenda)) {
                 $save = $connection->query("
-                EXEC [PRC_AGEN_VEND_CADA]
+                EXEC PRC_AGEN_VEND_CADA
                     @AGENDA = ''
                     ,@COR = '{$cor}'
                     ,@ID_TITULO = '{$codTitulo}'
@@ -601,6 +607,7 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
     /**
      * @Route(
      *  "/comercial/agenda/compromiso/eliminar",
@@ -617,10 +624,7 @@ class AgendaController extends AbstractController
             $id  = $data['id'];
             $delete = $connection->query("
                 EXEC [PRC_AGEN_VEND_CADA_DELETE]
-                    @AGENDA = '{$id}'
-                    
-             
-            ")->fetchAll();
+                    @AGENDA = '{$id}'")->fetchAll();
 
             if (($delete[0]['ID_AGENDA'] == $id) && ($delete[0]['MSG'] == 'TRUE')) {
                 $message = array('responseCode' => 200);
@@ -726,6 +730,8 @@ class AgendaController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     } */
+
+
     /**
      * @Route(
      *  "/comercial/agenda/compromisso/reagendar",
@@ -740,7 +746,6 @@ class AgendaController extends AbstractController
         $usuariocontroller = new UsuarioController();
         try {
             $data = json_decode($request->getContent(), true);
-            
             $infoUsuario = $usuariocontroller->infoUsuario($request->headers->get('X-User-Info'));
             !empty($data['rescheduleId']) ? $motivoReagendamento = $data['rescheduleId'] :  $data_error['motivo reprogramacion'] = 'es requerido';
            
