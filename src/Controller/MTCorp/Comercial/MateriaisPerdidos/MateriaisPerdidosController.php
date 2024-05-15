@@ -81,4 +81,157 @@ class MateriaisPerdidosController extends AbstractController
             );
         }
     }
+    /**
+    * @Route(
+    *  "/comercial/materiais/familia",
+    *  name="comercial.materiais-familia", 
+    *  methods={"POST"}
+    * )
+    * @param Connection $connection
+    * @param Request $request
+    * @return JsonResponse
+    */
+    public function insertFamilia(Connection $connection, Request $request){
+
+        $data = json_decode($request->getContent(), true);
+        $data_famila = [
+            "id_classe" => $data["id_classe"],
+            "descricao" => $data["descricao"],
+            "situacao" => $data["situacao"]
+        ];
+        $resp = $connection->insert("MTCORP_BASE_LINHAS_CLASSE", $data_famila);
+        !empty($resp)? $message = [
+            "responseCode" => 200,
+            "message" => 'Registro Correctamente',
+            "success" => true,
+         
+        ] : $message = [
+            "responseCode" => 204,
+            "message" => 'No registro Correctamente',
+            "success" => false
+        ];
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+     /**
+    * @Route(
+    *  "/comercial/materiais/grupo",
+    *  name="comercial.materiais-grupo", 
+    *  methods={"POST"}
+    * )
+    * @param Connection $connection
+    * @param Request $request
+    * @return JsonResponse
+    */
+    public function insertGrupo(Connection $connection, Request $request){
+
+        $data = json_decode($request->getContent(), true);
+        $data_grupo = [
+            "id_linha" => $data["id_linha"],
+            "descricao" => $data["descricao"],
+            "situacao" => $data["situacao"],
+            "id_classe" => $data["id_classe"],
+        ];
+        $resp = $connection->insert("MTCORP_BASE_LINHAS", $data_grupo);
+        !empty($resp)? $message = [
+            "responseCode" => 200,
+            "message" => 'Registro Correctamente',
+            "success" => true,
+         
+        ] : $message = [
+            "responseCode" => 204,
+            "message" => 'No registro Correctamente',
+            "success" => false
+        ];;
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+   /**
+    * @Route(
+    *   "/comercial/materiais/linea",
+    *   name="comercial.materiais-linea", 
+    *   methods={"POST"}
+    * )
+    * @param Connection $connection
+    * @param Request $request
+    * @return JsonResponse
+    */
+    public function insertLinea(Connection $connection, Request $request){
+
+        $data = json_decode($request->getContent(), true);
+        $data_grupo = [
+            "ID" => $data["ID"],
+            "NM_SUB_LINH" => $data["NM_SUB_LINH"],
+            "IN_STAT" => $data["IN_STAT"],
+            "ID_CLASE" => $data["ID_CLASE"],
+        ];
+        $resp = $connection->insert("TB_SUB_LINH", $data_grupo);
+        !empty($resp)? $message = [
+            "responseCode" => 200,
+            "message" => 'Registro Correctamente',
+            "success" => true,
+         
+        ] : $message = [
+            "responseCode" => 204,
+            "message" => 'No registro Correctamente',
+            "success" => false
+        ];;
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+    /**
+    * @Route(
+    *   "/comercial/materiais/insert",
+    *   name="comercial.materiais-insert", 
+    *   methods={"POST"}
+    * )
+    * @param Connection $connection
+    * @param Request $request
+    * @return JsonResponse
+    */
+    public function insertMaterial(Connection $connection, Request $request){
+
+        $data = json_decode($request->getContent(), true);
+        
+        $unidad = $connection->fetchOne('SELECT ID FROM UNIDADES WHERE SIGLAS_UNI = ?', [$data["Unidad"]]); 
+        if(!empty($unidad))
+        {
+            $data_mate = [
+                "DESCRICAO" => $data["Nombre"],
+                "UNIDADE" => $unidad,
+                "CODIGOCLASSE" =>(int)$data["CodigoClase"],
+                "CODIGOMATERIAL" => $data["CodigoMat"],
+            ];
+            $resp = $connection->insert("TB_MATE", $data_mate);
+            !empty($resp)? $message = [
+                "responseCode" => 200,
+                "message" => 'Registro Correctamente',
+                "success" => true,
+             
+            ] : $message = [
+                "responseCode" => 204,
+                "message" => 'No registro Correctamente',
+                "success" => false
+            ];
+        }
+        else
+        {
+            $message = [
+                "responseCode" => 204,
+                "message" => 'No hay Unidades',
+                "success" => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
 }
