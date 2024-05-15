@@ -81,11 +81,12 @@ class MateriaisPerdidosController extends AbstractController
             );
         }
     }
+
     /**
     * @Route(
-    *  "/comercial/materiais/familia",
-    *  name="comercial.materiais-familia", 
-    *  methods={"POST"}
+    *   "/comercial/materiais/familia",
+    *   name="comercial.materiais-familia", 
+    *   methods={"POST"}
     * )
     * @param Connection $connection
     * @param Request $request
@@ -109,13 +110,14 @@ class MateriaisPerdidosController extends AbstractController
             "responseCode" => 204,
             "message" => 'No registro Correctamente',
             "success" => false
-        ];
+        ];;
 
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-     /**
+
+    /**
     * @Route(
     *  "/comercial/materiais/grupo",
     *  name="comercial.materiais-grupo", 
@@ -151,7 +153,7 @@ class MateriaisPerdidosController extends AbstractController
         return $response;
     }
 
-   /**
+    /**
     * @Route(
     *   "/comercial/materiais/linea",
     *   name="comercial.materiais-linea", 
@@ -166,7 +168,7 @@ class MateriaisPerdidosController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $data_grupo = [
             "ID" => $data["ID"],
-            "NM_SUB_LINH" => $data["NM_SUB_LINH"],
+            "NM_SUB_LINH" => $data["descricao"],
             "IN_STAT" => $data["IN_STAT"],
             "ID_CLASE" => $data["ID_CLASE"],
         ];
@@ -186,6 +188,7 @@ class MateriaisPerdidosController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
     /**
     * @Route(
     *   "/comercial/materiais/insert",
@@ -200,16 +203,16 @@ class MateriaisPerdidosController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
         
-        $unidad = $connection->fetchOne('SELECT ID FROM UNIDADES WHERE SIGLAS_UNI = ?', [$data["Unidad"]]); 
+        $unidad = $connection->fetchOne('SELECT ID FROM  UNIDADES WHERE SIGLAS_UNI = ?', $data["Unidad"]);
         if(!empty($unidad))
         {
-            $data_mate = [
+            $data_grupo = [
                 "DESCRICAO" => $data["Nombre"],
                 "UNIDADE" => $unidad,
-                "CODIGOCLASSE" =>(int)$data["CodigoClase"],
+                "CODIGOCLASSE" => $data["Codigoclase"],
                 "CODIGOMATERIAL" => $data["CodigoMat"],
             ];
-            $resp = $connection->insert("TB_MATE", $data_mate);
+            $resp = $connection->insert("TB_SUB_LINH", $data_grupo);
             !empty($resp)? $message = [
                 "responseCode" => 200,
                 "message" => 'Registro Correctamente',
@@ -219,7 +222,7 @@ class MateriaisPerdidosController extends AbstractController
                 "responseCode" => 204,
                 "message" => 'No registro Correctamente',
                 "success" => false
-            ];
+            ];;
         }
         else
         {
@@ -234,4 +237,5 @@ class MateriaisPerdidosController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
+
 }

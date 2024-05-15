@@ -884,12 +884,12 @@ class AgendaController extends AbstractController
             $data = json_decode($request->getContent(), true);
             $array_vacio = [];
             $fecha_actual = date('Y-m-d');
-            $fecha_inicio = isset($data['fechaInicial']) && $data['fechaInicial'] !== "" ? date('Y-m-d', strtotime($data['fechaInicial'])) : date('Y-m-d', strtotime($fecha_actual));
-            $fecha_final = isset($data['fechaFinal']) && $data['fechaFinal'] !== "" ? date('Y-m-d', strtotime($data['fechaFinal'])) : date('Y-m-d', strtotime($fecha_actual));
-            $id_vendedor = isset($data['id_vendedor']) && $data['id_vendedor'] !== "" ? $data['id_vendedor'] : null;
-            $id_status = isset($data['estado']) && $data['estado'] !== "" ? $data['estado'] : null;
-            $motivo = isset($data['titulo']) && $data['titulo'] !== "" ? $data['titulo'] : null;
-            $sucursal = isset($data['sucursal']) && $data['sucursal'] !== "" ? $data['sucursal'] : null;
+            $fecha_inicio = isset($data['fechaInicial']) && !empty($data['fechaInicial']) ? date('Y-m-d', strtotime($data['fechaInicial'])) : date('Y-m-d', strtotime($fecha_actual));
+            $fecha_final = isset($data['fechaFinal']) && !empty($data['fechaFinal']) ? date('Y-m-d', strtotime($data['fechaFinal'])) : date('Y-m-d', strtotime($fecha_actual));
+            $id_vendedor = isset($data['id_vendedor']) && !empty($data['id_vendedor']) ? $data['id_vendedor'] : null;
+            $id_status = isset($data['estado']) && !empty($data['estado']) ? $data['estado'] : null;
+            $motivo = isset($data['titulo']) && !empty($data['titulo']) ? $data['titulo'] : null;
+            $sucursal = isset($data['sucursal']) && !empty($data['sucursal']) ? $data['sucursal'] : null;
 
             $stmt = $connection->prepare("EXEC [CRM360].[dbo].[PRC_MODU_AGE_REPORT] @vendedor = :id_vendedor, @fecha_inicio = :fecha_inicio, @fecha_final = :fecha_final, @estados = :id_status, @motivo = :motivo, @sucursal = :sucursal");
             $stmt->bindValue('id_vendedor', $id_vendedor, PDO::PARAM_INT);
@@ -942,7 +942,7 @@ class AgendaController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
             $array_vacio = [];
-            $id_cliente = isset($data['id']) && $data['id'] !== "" ? $data['id'] : null;
+            $id_cliente = isset($data['id']) && !empty($data['id']) ? $data['id'] : null;
 
             $stmt = $connection->prepare("EXEC [CRM360].[dbo].[PRC_MODU_AGE_REPORT_CLIENTE] @id_cliente = :id_cliente");
             $stmt->bindValue('id_cliente', $id_cliente, PDO::PARAM_INT);
@@ -1033,7 +1033,6 @@ class AgendaController extends AbstractController
      */
     public function getImagenes(Connection $connection, Request $request, $id)
     {
-
         try {
             $resLoop = [];
             $id_agenda = $id;
@@ -1042,19 +1041,13 @@ class AgendaController extends AbstractController
                 ['id_agenda' => $id_agenda]
             )->fetchAll();
 
-
-
             if (count($res) > 0) {
 
                 foreach ($res as $value) {
-
                     $file = $value['url_imagen'];
                     $response = new BinaryFileResponse($file);
-
                     $image = file_get_contents($value['url_imagen']);
-
                     $imagedata = base64_encode($image);
-
                     $resLoop[] = array(
                         'url_imagen' => $imagedata,
                         'url_web' => $value['url_web'],
@@ -1347,9 +1340,7 @@ class AgendaController extends AbstractController
             $obs_final = !empty($data['observacion_final']) ? strtoupper($data['observacion_final']) : '';
             //$fecha = date('d/m/Y H:i:s');
             $fecha = date('Y-m-d H:i:s');
-
             $destination = "";
-
 
             $stmt = $connection->prepare("EXEC [dbo].[PRC_AGEN_VEND_FIN]
                     @AGENDA = :id_agenda,

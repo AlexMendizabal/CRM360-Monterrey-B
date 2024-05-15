@@ -345,7 +345,10 @@ class ClientesController extends AbstractController
             return FunctionsController::Retorno(false, 'Error al retornar datos.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
-   /**
+
+
+    
+    /**
      * @Route(
      *  "/comercial/clientes/insertar",
      *  name="comercial.clientes-insertar",
@@ -358,40 +361,27 @@ class ClientesController extends AbstractController
     public function insertarCliente(Connection $connection, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        
-        !empty($data['CodSAPCliente']) ? $data_cliente['codigo_cliente'] = $data['CodSAPCliente'] : $data_error['CodSAPCliente'] = 'es necesario';   
-
-        if (!empty($data['idVendedor'])) {
-            $data_cliente['id_vendedor'] = $connection->fetchOne('SELECT ID FROM TB_VEND WHERE codigo_sap = ?', [$data['idVendedor']]);
-        } else {
-            $data_error['Vendedor'] = 'es necesario';
-        }
+                   
         !empty($data['PrimerNombre']) ? $data_cliente['prim_nome'] = $data['PrimerNombre'] : $data_error['nombre'] = 'es necesario';	
         !empty( $data['Documento']) ? $data_cliente['cnpj_cpf'] =  $data['Documento'] : $data_error['Documento'] = 'es necesario';	
         !empty($data['TipoPersona']) ? $data_cliente['tipo_pessoa'] = substr($data['TipoPersona'], 0, 1) : $data_error['TipoPersona'] = 'es necesario';	
+        !empty($data['idVendedor']) ? $data['idVendedor'] : $data_error['Vendedor'] = 'es necesario';
+        $data_cliente['id_vendedor'] = $connection->fetchOne('SELECT ID FROM tb_vend WHERE codigo_sap = ?', [ $data['idVendedor']]);
         !empty($data['Estado']) ? $data_cliente['situacao'] = $data['Estado'] : $data_error['Estado'] = 'es necesario';
+        !empty($data['CodSAPCliente']) ? $data_cliente['codigo_cliente'] = $data['CodSAPCliente'] : $data_error['CodSAPCliente'] = 'es necesario';          	
         !empty($data['Tipo_Persona']) ? $data_cliente['tipo_pessoa'] = $data['Tipo_Persona'] : $data_error['Tipo_Persona'] = 'es necesario';	          	
-        !empty($data['Telefono']) ? $data_cliente['telefono'] = $data['Telefono'] : null;	          	
-        !empty($data['Celular']) ? $data_cliente['celular'] = $data['Celular'] :null;	          	
-        !empty($data['Email']) ? $data_cliente['email'] = $data['Email'] : null;	          	
-        !empty($data['nombre_factura']) ? $data_cliente['nombre_factura'] = $data['NombreFactura'] : null;	          	
+        !empty($data['Telefono']) ? $data_cliente['telefono'] = $data['Telefono'] : $data_error['Telefono'] = 'es necesario';	          	
+        !empty($data['Celular']) ? $data_cliente['celular'] = $data['Celular'] : $data_error['Celular'] = 'es necesario';	          	
+        !empty($data['Email']) ? $data_cliente['email'] = $data['Email'] : $data_error['Email'] = 'es necesario';	          	
+        !empty($data['nombre_factura']) ? $data_cliente['email'] = $data['NombreFactura'] : $data_error['NombreFactura'] = 'es necesario';	          	
         !empty($data['id_rubro']) ? $data_cliente['id_rubro'] = $data['id_rubro'] : $data_error['id_rubro'] = 'es necesario';	          	
-        !empty($data['TipoDeDocumento']) ? $data_cliente['id_tipo_documento'] = $data['TipoDeDocumento'] : null; 
-        !empty($data['idTipoCliente']) ? $data_cliente['id_tipo_cliente'] = $data['idTipoCliente'] : null; 
-        !empty($data['FechaCreacion']) ? $data_cliente['created_at'] = $data['FechaCreacion'] : null; 
-    
+        !empty($data['TipoDeDocumento']) ? $data_cliente['id_tipo_documento'] = $data['TipoDeDocumento'] : $data_error['TipoDeDocumento'] = 'es necesario'; 
+        !empty($data['idTipoCliente']) ? $data_cliente['id_tipo_cliente'] = $data['idTipoCliente'] : $data_error['idTipoCliente'] = 'es necesario'; 
+        !empty($data['FechaCreacion']) ? $data_cliente['created_at'] = $data['FechaCreacion'] : $data_error['FechaCreacion'] = 'es necesario'; 
+       
         if(empty($data_error))
         {
-            $id_cliente = $connection->fetchOne('SELECT id_cliente FROM clientes WHERE codigo_cliente = ? or cnpj_cpf = ?',[ $data_cliente['codigo_cliente'],  $data_cliente['cnpj_cpf']]);
-            if(!empty($id_cliente))
-            {
-                $cliente = $connection->update('MTCORP_MODU_CLIE_BASE', $data_cliente, [$id_cliente]);
-            }
-            else
-            {
-                $cliente = $connection->insert('MTCORP_MODU_CLIE_BASE', $data_cliente);
-            }
-       
+          $cliente = $connection->insert('MTCORP_MODU_CLIE_BASE', $data_cliente);
           if(!empty($cliente)){
             $message = array(
                 'responseCode' => 200,
@@ -411,115 +401,25 @@ class ClientesController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    /**
-    * @Route(
-    *  "/comercial/clientes/direccion",
-    *  name="comercial.materiais-direcnion", 
-    *  methods={"POST"}
-    * )
-    * @param Connection $connection
-    * @param Request $request
-    * @return JsonResponse
-    */
-    public function insertDireccion(Connection $connection, Request $request){
 
-        $data = json_decode($request->getContent(), true);
-        !empty($data['CodSAPCliente']) ? (int)$id_cliente = $connection->fetchOne('SELECT id_cliente FROM MTCORP_MODU_CLIE_BASE WHERE codigo_cliente = ?', [$data['CodSAPCliente']]): $data_error['codigo cliente']='es necesario';
-        !empty($data['ciudad']) ? (int)$ciudad = $connection->fetchOne('SELECT id FROM tb_ciudad WHERE nombre_ciudad = ?', [$data['ciudad']]): $data_error['direccion']='es necesario';
-
-        if(empty($data_error))
-        {
-            $data_direccion = [
-                "id_endereco" => $data["id_endereco"],
-                "id_cliente" => $id_cliente,
-                "logradouro" => $data["direccion"],
-    /*             "latitude" => $data["latitud"],
-                "longitude" => $data["longitud"], */
-                "codigo_cliente" => $data["CodSAPCliente"],
-                "id_ciudad" =>  $ciudad,
-                "ubicacion" => $data["titulo_ubicacion"],
-            ];
-            $resp = $connection->insert("MTCORP_MODU_CLIE_BASE_ENDE", $data_direccion);
-            !empty($resp)? $message = [
-                "responseCode" => 200,
-                "message" => 'Registro Correctamente',
-                "success" => true,
-             
-            ] : $message = [
-                "responseCode" => 204,
-                "message" => 'No registro Correctamente',
-                "success" => false
-            ];
-        }
-        else
-        {
-            $message = [
-                "responseCode" => 204,
-                "message" => 'No registro Correctamente',
-                "success" => false,
-                "data" => $data_error
-            ];
-        }
-        
-
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
-    /**
-    * @Route(
-    *  "/comercial/clientes/contacto",
-    *  name="comercial.materiais-contacto", 
-    *  methods={"POST"}
-    * )
-    * @param Connection $connection
-    * @param Request $request
-    * @return JsonResponse
-    */
-    public function insertContacto(Connection $connection, Request $request){
-
+     /**
+     * @Route(
+     *  "/comercial/clientes/insertar_ubicacion",
+     *  name="comercial.clientes-insertar-ubicacion",
+     *  methods={"POST"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */    
+    public function insertar_ubicacion(Connection $connection, Request $request){
         $data = json_decode($request->getContent(), true);
 
-        $helper = New Helper();
-        !empty($data['CodSAPCliente']) ? $id_cliente = $connection->fetchOne('SELECT id_cliente FROM MTCORP_MODU_CLIE_BASE WHERE codigo_cliente = ',$data['CodSAPCliente']): $data_error['codigo cliente']='es necesario';
-        
-        $data_contacto = [
+        !empty( $data['CodSapCliente']) ? $data_cliente['codigo_cliente'] =  $data['CodSapCliente'] : $data_error['CodSapCliente'] = 'es necesario';       
+        !empty($data['Direccion']) ? $data_cliente['prim_nome'] = $data['Direccion'] : $data_error['Direccion'] = 'es necesario';	
+        !empty( $data['Situacion']) ? $data_cliente['cnpj_cpf'] =  $data['Situacion'] : $data_error['Situacion'] = 'es necesario';	
+        !empty( $data['Ciudad']) ? $data_cliente['cnpj_cpf'] =  $data['Ciudad'] : $data_error['Ciudad'] = 'es necesario';
 
-            "titulo_contacto" => $data["titulo_contacto"],
-            "nombres_contacto" => $data["DescripcionContacto"],
-            "codigo_cliente" => $data["CodigoClienteSAP"],
-            "celular_contacto" => $data["NumeroContacto"],
-        ];
-        
-       
-        if(empty($data_error))
-        {
-            $contacto = $helper->insertContacto($connection, $data_contacto, $id_cliente);
-
-            !empty($contacto) and $contacto["codigoRespuesta"] != 204 and $contacto["codigoRespuesta"] != 500 ? $message = [
-                "responseCode" => 200,
-                "message" => 'Registro Correctamente',
-                "success" => true,
-             
-            ] : $message = [
-                "responseCode" => 204,
-                "message" => 'No registro Correctamente',
-                "success" => false
-            ];
-        }
-        else
-        {
-            $message = [
-                "responseCode" => 204,
-                "message" => 'No registro Correctamente',
-                "success" => false,
-                "data" => $data_error
-            ];
-        }
-        
-
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
     }
+
 }

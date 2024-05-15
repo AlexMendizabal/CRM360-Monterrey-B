@@ -277,7 +277,7 @@ class AutorizacionesController extends AbstractController
     /**
      * @Route(
      * "/comercial/CicloVendas/autorizaciones/estado", 
-     * name="Autorizaciones-registrar",
+     * name="Autorizaciones-estado",
      * methods={"post"}
      * )
      * @param Connection $connection

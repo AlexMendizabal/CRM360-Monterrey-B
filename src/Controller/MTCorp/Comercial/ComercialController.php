@@ -859,12 +859,12 @@ class ComercialController extends AbstractController
         $helper = new Helper();
         $params = $request->query->all();
         $id_vendedor = 0;
-        
+        $nombreCargo = '';
         try {
             isset($params['id_vendedor']) ? $id_vendedor  = $params['id_vendedor'] : NULL;
             $nombreCargo = $infoUsuario->none_cargo;
 
-            $almacenes = $helper->almacenVendedorVenta($connection, (int)$id_vendedor, (int)$nombreCargo);
+            $almacenes = $helper->almacenVendedorVenta($connection, (int)$id_vendedor, $nombreCargo);
             if ($almacenes != false) {
                 $message = [
                     "response" => 200,
