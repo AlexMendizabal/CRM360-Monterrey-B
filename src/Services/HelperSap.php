@@ -31,7 +31,7 @@ class HelperSap
             $material_deposito = [
                 'cantidad' => (float)$cantidad
             ];
-            $affectedRows = $connection->update('TB_MATERIAL_DEPOSITO', $material_deposito, $datosCumplan);
+            $affectedRows = $connection->update('TB_MATERIAL_DEPOSITO', $material_deposito, $datosCumplan); 
             !empty($affectedRows) ? $message = true : $message = false;
         } else {
             $message = $data_error;
@@ -42,7 +42,7 @@ class HelperSap
     public function insertarStock($connection, $almacen, $cantidad,  $unidad, $codigo_material, $id_item)
     {
         $helper = new Helper();
-        $id_alma = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE codigo_almacen = ?', [$almacen]);
+        $id_alma = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE codigo_almacen = ?', [$almacen]); 
         !empty($id_alma) ? $id_almacen = $id_alma : $data_error['almacen'] = 'no existe almacen';
         $buscar_unidad = $helper->buscarUnidad($connection, $unidad);
         !empty($buscar_unidad) ? $id_unidad = $buscar_unidad['ID'] : $data_error['unidad'] = 'no existe unidad';
@@ -76,11 +76,12 @@ class HelperSap
                 'id_material' =>  (int)$id_item,
                 'id_lista' => $id_lista,
             ];
+
             $precio_material = [
                 'precio' => $precio,
                 'Peso' =>  (int)$cantidad,
             ];
-            $resp = $connection->update('tb_precio_material', $precio_material, $datosCumple);
+            $resp = $connection->update('TB_PRECIO_MATERIAL', $precio_material, $datosCumple);
             !empty($resp) ? $message = true : $message = false;
         }
         else
@@ -90,24 +91,23 @@ class HelperSap
         return $message;
     }
 
-    public function insertarPrecio($connection, $id_item, $lugar, $precio, $cantidad, $codigo_material, $almacen)
+    public function insertarPrecio($connection, $id_item, $lugar, $precio, $cantidad, $codigo_material, $id_unidad)
     {
         $helper = new Helper();
-        $id_alma = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE codigo_almacen = ?', [$almacen]);
-        !empty($id_alma) ? $id_almacen = $id_alma : $data_error['almacen'] = 'no existe almacen';
+        
         $datoCiudad = $helper->buscaCiudadListaPrecio($connection, $lugar);
-        !empty($datoCiudad) ? $id_lista = (int)$datoCiudad['id_lista'] : $data_error['ciudad'] = 'no existe ciudad';
+        !empty($datoCiudad) ? $id_lista = $datoCiudad['id_lista'] : $data_error['id_lista'] = 'no existe lista';
 
         if(empty($data_error))
         {
             $arrayPrecioInsertar = ([
                 'id_material' => (int)$id_item,
-                'id_lista' => (int)$id_almacen,
+                'id_lista' => (int)$id_lista,
                 'id_moneda' => 1,
                 'cod_mate' => $codigo_material,
-                'id_ciudad' => $id_lista,
                 'precio' => (float)$precio,
                 'peso' => (int)$cantidad,
+                'id_unidad' => (int)$id_unidad,
                 'fecha' => date("Y-m-d")
             ]);
             $insertaPrecio =  $connection->insert('tb_precio_material', $arrayPrecioInsertar);

@@ -144,19 +144,14 @@ class PesquisaController extends AbstractController
             } */
             /*   dd('aqui'); */
 
-
             if ($id_vendedor == 0) {
-                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id); 
-                if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5 ) {
+                $cargo = (int)$infoUsuario->none_cargo; 
+                if ($cargo == 6 || $cargo == 5  || $cargo == 11) {
                     $id_vendedor =  (int)$infoUsuario->idVendedor;
                 }
             }
-            
-            
-      //dd($params);
             $resLista = $connection->query(
-                "
-                EXEC [PRC_CLIE_CONS] 
+                "EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 1, 
                     @ID_VEND = '{$id_vendedor}',
                     @ID_LOCA = '{$buscarPor}',
@@ -172,19 +167,9 @@ class PesquisaController extends AbstractController
                     @DS_ORDE = '{$orderType}'
                 " . $carteiraParam
             )->fetchAll();
-            
-
-           //dd($resListaSr);
-            // if (count($resListaSr) > 0) {
-            //     $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
-            // }
-
-
-            //dd($resLista);
 
             $resStatus = $connection->query(
-                "
-                EXEC [PRC_CLIE_CONS] 
+                "EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 0, 
                     @ID_VEND = '{$id_vendedor}',
                     @ID_LOCA = '{$buscarPor}', 
@@ -200,14 +185,12 @@ class PesquisaController extends AbstractController
                     @DS_ORDE = '{$order}'
                     " . $carteiraParam
             )->fetchAll();
-            //dd($resStatus);
+           
             if (count($resLista) > 0 && count($resStatus) > 0) {
                 $usuariosLiberados = $comercial->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
                 $idVendedores = $vendedor->vinculoOperadores($connection, $infoUsuario);
-
                 for ($i = 0; $i < count($resLista); $i++) {
                     $podeAcessar = 0;
-
                     if (
                         $resLista[$i]['situacao'] == 'Arquivo' ||
                         $resLista[$i]['situacao'] == 'Inativo' ||
@@ -217,7 +200,6 @@ class PesquisaController extends AbstractController
                     ) {
                         $podeAcessar = 1;
                     }
-
                     $resLista[$i]['segurado'] = empty($resLista[$i]['segurado']) ? 0 : 1;
                     $resLista[$i]['podeAcessar'] = $podeAcessar;
                 }
