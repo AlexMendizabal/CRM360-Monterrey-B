@@ -3016,13 +3016,9 @@ class CotacoesController extends AbstractController
         !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
         !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
-        if (!empty($data['percentualDesc']) ) {
+        if (!empty($data['percentualDesc']) && $data['descuento_permitido'] <= $data['percentualDesc']) {
             !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
             !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
-            
-        }
-        if($data['descuento_permitido'] < $data['percentualDesc'])
-        {
             $autorizacion = 1;
         }
         !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';

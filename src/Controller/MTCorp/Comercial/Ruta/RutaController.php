@@ -37,7 +37,6 @@ class RutaController extends AbstractController
     { 
         try {
             $params = $request->query->all();
-            
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if ($infoUsuario->matricula == 1) {
                 $idSucursal = isset($params['idSucursal']) && $params['idSucursal'] !== '' ? $params['idSucursal'] : NULL;
@@ -86,13 +85,13 @@ class RutaController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-           
+            
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $id_vendedor = 0;
             $errors = [];
-         
+            
             foreach ($data as $item) {
-                $cor = '#0033ff';
+                $cor = null;
                 $codTitulo = $item['codTitulo'];
                 $codCliente = !empty($item['codClient']) ? $item['codClient'] : '';
                 $formaContato = 11;
