@@ -134,12 +134,12 @@ class VendedorController extends AbstractController
             switch ($cargo) {
                 case '6':
                 case '5':
-                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio , codigo_sap as codigoSAP
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
                               FROM TB_VEND 
                               WHERE ID = :id";
                     break;
                 default:
-                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio , codigo_sap as codigoSAP
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
                               FROM TB_VEND 
                               ORDER BY nombre ASC";
                     break;
@@ -151,7 +151,7 @@ class VendedorController extends AbstractController
                 $stmt->bindValue(':id', $id_vendedor);
             }
 
-            $stmt->execute(); 
+            $stmt->execute();
             $res = $stmt->fetchAll();
 
 
@@ -358,13 +358,15 @@ class VendedorController extends AbstractController
 
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $cargo = (int)$infoUsuario->none_cargo;
+            $helper = new Helper();
+            $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula);
+            
             $NR_MATR = $infoUsuario->matricula;
             $micliente = $request->query->get("MI_NM_CLIE");
-            $cliente   = $request->query->get("NM_CLIE"); 
+            $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
-            
-            if(!empty($micliente) && $cargo == 6 || !empty($micliente) &&  $cargo == 5 )
+
+            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 6 || $datosUsuario[0]['NM_CARG_FUNC'] == 5 )
             {
                 $res = $connection->query("
                 EXECUTE [PRC_CLIE_CONS5]
@@ -373,7 +375,7 @@ class VendedorController extends AbstractController
                     ,@ID_SITU = '{$situacao}'
                     ,@NR_MATR = '{$NR_MATR }'
                 ")->fetchAll();
-            
+         
             }
             else    
             {

@@ -336,8 +336,8 @@ class CotacoesController extends AbstractController
             // Verifica si el parámetro 'codVendedor' está establecido
             if (!isset($params['codVendedor']) && ($params['codVendedor'] == 'undefined')) {
                 // Si el parámetro no está establecido, comprueba el rol del usuario
-                $cargo = (int)$infoUsuario->none_cargo;
-                if ($cargo == 6 || $cargo == 5) {
+                $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
+                if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5) {
                     // Si el usuario tiene ciertos roles, establece el ID del vendedor
                     $codVendedor =  (int)$infoUsuario->idVendedor;
                 } else {
@@ -346,7 +346,7 @@ class CotacoesController extends AbstractController
                 }
             } else {
                 // Si el parámetro 'codVendedor' está establecido, toma su valor
-                $codVendedor =  (int)$infoUsuario->idVendedor;
+                $codVendedor = null;
             }
 
             // Crear el query builder
@@ -2814,7 +2814,6 @@ class CotacoesController extends AbstractController
         "tipo_estado" tiene el estado de cierre*/
         
         $data = json_decode($request->getContent(), true);
-      
         if (!empty($data['id_oferta'])) {
             $message = $this->postDuplicarProposta($connection, $request);
         } else {
@@ -3494,21 +3493,18 @@ class CotacoesController extends AbstractController
 
             if ($infoUsuario) {
                 $params = $request->query->all();
-                
                 $id_tipo_cliente = $params['id_tipo_cliente'] ?? null;
                 $cantidad = $params['cantidad'] ?? null;
                 $id_material = $params['id_material'] ?? null;
                 $id_ciudad = $params['id_ciudad'] ?? null;
-                $codigo_material = $connection->fetchOne('SELECT CODIGOMATERIAL FROM  TB_MATE WHERE ID_CODIGOMATERIAL = ?', [$id_material]);
-                
+
                 if ($id_tipo_cliente !== null || $cantidad !== null || $id_material !== null || $id_ciudad !== null) {
                     $calcularDescuento = $helper->calcularDesc(
                         $connection,
                         (int)$id_tipo_cliente,
                         (float)$cantidad,
                         (int)$id_material,
-                        (int)$id_ciudad,
-                        $codigo_material
+                        (int)$id_ciudad
                     );
                     $message = $calcularDescuento;
                 } else {
