@@ -280,7 +280,7 @@ class VendedorController extends AbstractController
      * @return JsonResponse
      */
     public function getClientesCarteira(Connection $connection, Request $request)
-    {
+    { 
         try {
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -289,7 +289,6 @@ class VendedorController extends AbstractController
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
             $idVendedor = '';
-
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
 
             if ($buscarUsuario['NM_CARG_FUNC'] == 5 || $buscarUsuario['NM_CARG_FUNC'] == 6 ||  $buscarUsuario['NM_CARG_FUNC'] == 9 ||  $buscarUsuario['NM_CARG_FUNC'] == 10 || $buscarUsuario['NM_CARG_FUNC'] == 11) {
@@ -359,34 +358,38 @@ class VendedorController extends AbstractController
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $helper = new Helper();
-            $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula);
-            
-            $NR_MATR = $infoUsuario->matricula;
-            $micliente = $request->query->get("MI_NM_CLIE");
-            $cliente   = $request->query->get("NM_CLIE");
-            $situacao = $request->query->get("situacao");
+            $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula); 
 
-            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 6 || $datosUsuario[0]['NM_CARG_FUNC'] == 5 )
-            {
-                $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
-                     @ID_PARAM = 6
-                    ,@NM_CLIE = '{$micliente }'
-                    ,@ID_SITU = '{$situacao}'
-                    ,@NR_MATR = '{$NR_MATR }'
-                ")->fetchAll();
-         
+            $codigo = 1;
+            $nombre = 2;
+            $documento = 3;
+
+            $matricula = $infoUsuario->matricula;
+            $cargoUsuario = (int)$datosUsuario[0]['NM_CARG_FUNC'];
+            $situacao = $request->query->get("situacao");
+            
+            $codigoCliente = $request->query->get("COD_CLIE");
+            $nombreCliente   = $request->query->get("NM_CLIE");
+            $documentoCliente = $request->query->get("DOC_CLIE");
+
+            if(!empty($codigoCliente)){
+                $buscarClientes = $helper->buscarCliente($connection, $codigo,$codigoCliente, $cargoUsuario, $matricula);
+                if($buscarClientes !== false){
+                    $res = $buscarClientes;
+                }
             }
-            else    
-            {
-                $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
-                     @ID_PARAM = 6
-                    ,@NM_CLIE = '{$cliente}'
-                    ,@ID_SITU = '{$situacao}'
-                ")->fetchAll();
+            if(!empty($nombreCliente)){
+                $buscarClientes = $helper->buscarCliente($connection, $nombre, $nombreCliente, $cargoUsuario, $matricula);
+                if($buscarClientes !== false){
+                    $res = $buscarClientes;
+                }
             }
-        
+            if(!empty($documentoCliente)){
+                $buscarClientes = $helper->buscarCliente($connection, $documento,$documentoCliente, $cargoUsuario, $matricula);
+                if($buscarClientes !== false){
+                    $res = $buscarClientes;
+                }
+            }
              
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                 foreach ($res as $re) {
@@ -421,7 +424,8 @@ class VendedorController extends AbstractController
                         "tipo_documento" => $re["nombre_doc"],
                         "nombre_factura" => $nombre,
                         "numero_documento" => $re["numero_documento"],
-                        "rubro" => $re["rubro"]
+                        "rubro" => $re["rubro"],
+                        "nombre_vendedor" => $re["nombre_vendedor"]
                     ];
                 }
                 $res = $resp;

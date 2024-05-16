@@ -184,10 +184,9 @@ class ComercialController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
-                $almacenes = $connection->query("
-                SELECT CONCAT(CODIGO_ALMACEN, '- ', NOMBRE_DEPOSITO) AS ALMACEN, *
+                $almacenes = $connection->query("SELECT CONCAT(CODIGO_ALMACEN, '- ', NOMBRE_DEPOSITO) AS ALMACEN, *
                 FROM TB_DEPO_FISI_ESTO
-                WHERE ESTADO_DEPOSITO = 1;                ")->fetchAll();
+                WHERE ESTADO_DEPOSITO = 1;")->fetchAll();
                 if (count($almacenes) > 0) {
                     $array_deposito = $almacenes;
                     $message = array(

@@ -1894,7 +1894,7 @@ class SapController extends AbstractController
         return $response;
     }
 
-    /**
+   /**
      * @Route(
      *  "/sap/actualizar_stock",
      *  name="core.sap.actualizar_stock",
@@ -1905,12 +1905,13 @@ class SapController extends AbstractController
      * @return JsonResponse
      */
     public function actualizarStock(Connection $connection, Request $request)
-    {
+    {  
         try {
             $helper = new Helper();
+            $helperSap = new HelperSap();
             $jsonData = $request->getContent();
-            $data = json_decode($jsonData, true);
-            $url = '/consultaStock';
+            $data = json_decode($jsonData, true); 
+            $url = '/consultaStock'; 
             $codigoMaterial = '';
             $codigoUnidad = '';
             $id_unidad = 0;
@@ -1918,21 +1919,19 @@ class SapController extends AbstractController
             $arraySap = array();
             $arrayStock = array();
 
-            $id_material = !empty($data['id_material']) ? $data['id_material'] : 0;
-            $codigoAlmacen = !empty($data['codigo_almacen']) ? $data['codigo_almacen'] : '';
-
+            $codigoMaterial = !empty($data['codigo_material']) ? $data['codigo_material'] : $data_error['codigo_material'] = 'es requerido';
+            $codigoAlmacen = !empty($data['codigo_almacen']) ? $data['codigo_almacen'] : $data_error['ALmacen'] = 'es requerido';
+           
             //RESPONSE DEFAULT
             $message = array(
                 'responseCode' => 204,
                 "estado" => false,
                 "detalle" => "Error al actualizar el registro"
             );
-
-            if ($id_material > 0) {
-                $buscarMaterial = $helper->buscarCodMaterial($connection, (int)$id_material);
-                if ($buscarMaterial !== false) {
-                    $codigoMaterial = $buscarMaterial;
-                }
+           
+            if (!empty($codigoMaterial)) {
+                $id_material = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$codigoMaterial]); 
+                
             }
 
             if ($codigoAlmacen  != '' &&  $codigoMaterial != '') {
@@ -1942,23 +1941,22 @@ class SapController extends AbstractController
                 ]);
                 $arrayStock = ([
                     'codigo_item' => (int)$id_material,
-                    'codigo_almacen' => $codigoAlmacen
+                    'codigo_almacen' => $codigoAlmacen,
+                    'codigo_material' => $codigoMaterial
                 ]);
-
                 $conexionSap = $helper->conexionSap($url, $arraySap);
                 if ($conexionSap['CodigoRespuesta'] == 200) {
                     $codigoUnidad = $conexionSap['Mensaje'][0]['Unidad'];
                     $cantidad = $conexionSap['Mensaje'][0]['Disponible'];
-                    $buscar_almacen = $helper->buscarAlmacen($connection, $codigoAlmacen);
-                    if ($buscar_almacen !== false) {
-                        $id_almacen = $buscar_almacen['id'];
-                    }
+                  
                     $buscar_unidad = $helper->buscarUnidad($connection, $codigoUnidad);
                     if ($buscar_unidad !== false) {
                         $id_unidad = $buscar_unidad['ID'];
                     }
+
                     $verificar_stock = $helper->verificarStock($connection, $arrayStock);
-                    if ($verificar_stock !== false) {
+                    
+                    if (!empty($verificar_stock)) {
                         $arrayStockActualizar = array();
                         $id_verificarStock = $verificar_stock['id'];
                         $arrayStockActualizar = ([
@@ -1970,19 +1968,6 @@ class SapController extends AbstractController
                             'id' => (int)$id_verificarStock
                         ]);
                         $actualizar_stock = $helper->actualizarStock($connection, $arrayStockActualizar);
-                        if ($actualizar_stock !== false) {
-                            $message = array(
-                                'responseCode' => 200,
-                                "estado" => true,
-                                "detalle" => "Se actualizo el registro exitosamente!."
-                            );
-                        } else {
-                            $message = array(
-                                'responseCode' => 400,
-                                "estado" => false,
-                                "detalle" => "No se puedo actualizar el registro"
-                            );
-                        }
                     } else {
                         $arrayStockInsertar = ([
                             'id_item' => (int)$id_material,
@@ -1990,24 +1975,31 @@ class SapController extends AbstractController
                             'cantidad' => $cantidad,
                             'id_unidad' => (int)$id_unidad,
                             'codigo_material' => $codigoMaterial,
-
                         ]);
 
-                        $agregar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
+                        $actualizar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
+                    }
 
-                        if ($agregar_stock !== false) {
-                            $message = array(
-                                'responseCode' => 200,
-                                "estado" => true,
-                                "detalle" => "registro insertado exitosamente."
-                            );
-                        } else {
-                            $message = array(
-                                'responseCode' => 400,
-                                "estado" => false,
-                                "detalle" => "No se puedo insertar el registro"
-                            );
-                        }
+                    $verificar_precio = $connection->fetchOne('SELECT id from TB_PRECIO_MATERIAL WHERE cod_mate = ?', [$codigoMaterial]);
+                    if(!empty($verificar_precio))
+                    { 
+                        $actuazliPrecio = $helperSap->actualizarPrecio($connection, $id_material, $conexionSap['Mensaje'][0]['Lugar'], $conexionSap['Mensaje'][0]['Precio'], $conexionSap['Mensaje'][0]['Disponible'], $codigoMaterial, null);
+                    } else {
+                        $actuazliPrecio = $helperSap->insertarPrecio($connection, $id_material, $conexionSap['Mensaje'][0]['Lugar'], $conexionSap['Mensaje'][0]['Precio'], $conexionSap['Mensaje'][0]['Disponible'], $codigoMaterial, $id_unidad);
+                    }
+
+                    if (!empty($actualizar_stock) && !empty($actuazliPrecio)) {
+                        $message = array(
+                            'responseCode' => 200,
+                            "estado" => true,
+                            "detalle" => "Modifico o insertado exitosamente."
+                        );
+                    } else {
+                        $message = array(
+                            'responseCode' => 400,
+                            "estado" => false,
+                            "detalle" => "No se puedo insertar el registro"
+                        );
                     }
                 } else {
                     $verificarStock = $helper->verificarStock($connection, $arrayStock);

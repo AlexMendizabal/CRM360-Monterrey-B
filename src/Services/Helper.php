@@ -1520,7 +1520,6 @@ class Helper
     }
     public function filtrarMaterial($connection, $codMaterial, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen)
     {
-        //dd('CodMaterial: ',$codMaterial ,' Vendedor: ',$id_vendedor ,' ListaPrecio ',$id_lista_precio ,' CodigoAlmacen ',$codigo_almacen);
         /*  select TB_CROS_SELL_ASSO.ID_MATE_ASSO from TB_CROS_SELL 
                                     inner join TB_CROS_SELL_ASSO on TB_CROS_SELL_ASSO.ID_CROS_SELL = TB_CROS_SELL.ID
                                     where TB_CROS_SELL.ID_MATE = :id_material AND TB_CROS_SELL.IN_SITU = :estado_material */
@@ -1532,8 +1531,6 @@ class Helper
         if (count($resp) > 0) {
             $respArray = array_column($resp, 'ID_MATE_ASSO');
             $respString = implode(",", $respArray);
-            /* dd($respString);  */
-            //dd($resp);
             $res = $connection->fetchAll('SELECT distinct
                                                  MATE.ID_CODIGOMATERIAL as id_material,
                                                 PM.id as id_precio_material, 
@@ -1584,7 +1581,9 @@ class Helper
             return false;
         }
     }
-    public function buscaCiudadListaPrecio($connection, $ciudad){
+
+    public function buscaCiudadListaPrecio($connection, $ciudad)
+    {
         $ciudad = $connection->fetchAssociative('SELECT 
                 LP.id as id_lista, 
                 DP.id as id_departamento, 
@@ -1592,7 +1591,7 @@ class Helper
             FROM TB_LISTA_PRECIO LP 
             INNER JOIN TB_DEPARTAMENTO AS DP ON  DP.id = LP.id_departamento
             INNER JOIN tb_ciudad AS C ON C.id_departamento = DP.id
-             WHERE c.nombre_ciudad = ?', [$ciudad]); 
+             WHERE c.nombre_ciudad = ?', [$ciudad]);
         return $ciudad;
     }
     public function buscarEscritorio($connection, $nm_escr)
@@ -1643,7 +1642,7 @@ class Helper
     {
         $query = "SELECT top 1 id FROM TB_DEPO_FISI_ESTO WHERE";
         $params = array();
-        
+
         if ($codigo_almacen !== null) {
             $query .= " codigo_almacen LIKE :codigo_almacen";
             $params[':codigo_almacen'] = '%' . $codigo_almacen . '%';
@@ -1663,8 +1662,8 @@ class Helper
             $statement->bindValue($param, $value);
         }
         $statement->execute();
-        $result = $statement->fetch(); 
-    
+        $result = $statement->fetch();
+
         if (!empty($result)) {
             return $result;
         } else {
@@ -2376,7 +2375,6 @@ class Helper
             !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_almacen['latitud']  = 0;
             !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] :  $data_almacen['longitud'] = 0;
 
-
             if ($data['estado_deposito'] == 'A') {
                 $data_almacen['ESTADO_DEPOSITO'] = 1;
             } else {
@@ -2523,7 +2521,7 @@ class Helper
     {
         $id_almacen = $arrayStock['id_almacen'];
         $id_material = $arrayStock['id_item'];
-       
+
         $cantidad = $arrayStock['cantidad'];
         $id_unidad = $arrayStock['id_unidad'];
         $codigo_material = $arrayStock['codigo_material'];
@@ -2546,11 +2544,7 @@ class Helper
             return false;
         }
     }
-    public function modificaMaterialDeposito($connection, $datos, $datosvalidos)
-    {
-        $materialDepo = $connection->update('TB_MATERIAL_DEPOSITO', $datos, $datosvalidos);
-        dd($materialDepo);
-    }
+
     public function insertarStock($connection, $arrayStock)
     {
         $id_material = $arrayStock['id_item'];
@@ -3346,7 +3340,7 @@ class Helper
             return false;
         }
     }
-    
+
     public function buscarUsuario($connection, $id)
     {
         $query_usuario = "SELECT * FROM TB_CORE_USUA WHERE ID = :id";
@@ -4199,7 +4193,7 @@ class Helper
             $stmt->bindValue(":id_vendedor", $id_vendedor, PDO::PARAM_INT);
         } else {
             $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP 
-        WHERE DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' AND DP.CODIGO_ALMACEN != 'ALM-V-00'";
+        WHERE DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' ORDER BY DP.CODIGO_ALMACEN ASC ";
             $stmt = $connection->prepare($query);
         }
 
@@ -4237,6 +4231,94 @@ class Helper
             return array(true, $asociados);
         } else {
             return array(false, []);
+        }
+    }
+
+    public function buscarCliente($connection, $parametro, $filtro, $usuario, $filtroUsuario)
+    {
+        $params = [];
+
+        $query = "SELECT distinct
+            codCliente = CLIE.id_cliente,
+            CLIE.codigo_cliente as codigo_cliente,
+            codRazaoSocial = CONCAT(CLIE.id_cliente ,' - ', LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), 
+                CHAR(129),'''')))),
+            razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''), CHAR(129),''))),
+            nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
+            tipoCliente = CLIE.id_tipo_cliente,
+            nombreTipo = TB_Tipo_Cliente.nombre_tipo,
+            nombreDepartamento = TB_DEPARTAMENTO.nombre_dep,
+            id_departamento_lista = TB_DEPARTAMENTO.id,
+            --uf = ENDE.uf,
+            TB_LISTA_PRECIO.nombre_lista as lista,
+            TB_LISTA_PRECIO.id as id_lista_precio,
+            VEND.ID as id_vendedor,
+            --nomeSituacao = SITU.descricao,
+            cobrancaSomenteCarteira = ISNULL(CLIE.is_carteira, 0),
+            --CONCAT(ENDE.logradouro, '' '',  ENDE.numero) AS direccion,
+            --ENDE.latitude as latitud,
+            --ENDE.longitude as longitud,
+            CLIE.email as correo_electronico,
+            CLIE.telefono  as telefono,
+            Clie.celular,
+            Clie.id_rubro as codigo_rubro,
+            --BCD.nombre_doc as tipo_documento,
+            Clie.nombre_factura as nombre_factura,
+            Clie.cnpj_cpf as numero_documento,
+            Doc.nombre_doc,
+            CNAE.descricao as rubro,
+            CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) as nombre_vendedor
+        FROM 
+            MTCORP_MODU_CLIE_BASE CLIE
+            LEFT JOIN TB_VEND VEND ON (CLIE.id_vendedor = VEND.ID)
+            LEFT JOIN TB_CORE_USUA USUA ON (USUA.id = VEND.id_usua)
+            LEFT JOIN TB_ESCR GERE ON (VEND.id_escr = GERE.id)
+            LEFT JOIN tb_ciudad on tb_ciudad.id = GERE.id_ciudad
+            LEFT JOIN TB_DEPARTAMENTO on TB_DEPARTAMENTO.id = tb_ciudad.id_departamento
+            LEFT JOIN TB_LISTA_PRECIO on TB_LISTA_PRECIO.id_departamento = TB_DEPARTAMENTO.id
+            LEFT JOIN TB_Tipo_Cliente on TB_Tipo_Cliente.id = CLIE.id_tipo_cliente
+            LEFT JOIN tb_base_clie_doc Doc on Doc.id = CLIE.id_tipo_documento
+            LEFT JOIN MTCORP_BASE_CNAE CNAE on CLIE.id_rubro = CNAE.id_cnae";
+
+
+        switch ($parametro) {
+
+            case 1:
+                $query .= " WHERE CLIE.codigo_cliente LIKE :codigo_cliente";
+                $params[':codigo_cliente'] = $filtro;
+                break;
+            case 2:
+                $query .= " WHERE Clie.prim_nome LIKE :nombre";
+                $params[':nombre'] = '%' . $filtro . '%';
+                break;
+            case 3:
+                $query .= " WHERE Clie.cnpj_cpf LIKE :cnpj_cpf";
+                $params[':cnpj_cpf'] = $filtro;
+                break;
+        }
+
+    // RESTRINGIR CARTERA DE CLIENTES A PROMOTORES
+        /* if ($usuario === 6) {
+            $query .= " AND USUA.NR_MATR = :matricula";
+            $params[':matricula'] = $filtroUsuario;
+        } */
+
+        $query .= " AND CLIE.situacao = :situacao";
+        $params[':situacao'] = 1;
+
+        $stmt = $connection->prepare($query);
+
+        foreach ($params as $param => &$value) {
+            $stmt->bindParam($param, $value);
+        }
+
+        $stmt->execute();
+        $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($clientes) > 0) {
+            return $clientes;
+        } else {
+            return false;
         }
     }
 }

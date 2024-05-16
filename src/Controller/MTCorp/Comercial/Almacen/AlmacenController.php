@@ -180,7 +180,7 @@ class AlmacenController extends AbstractController{
     public function getCentroLogistico(Connection $connection, Request $request)
     {
         try {
-            $res = $connection->query("select * from TB_DEPO_FISI_ESTO where id_tipo = 2")->fetchAll();
+            $res = $connection->query("SELECT * FROM TB_DEPO_FISI_ESTO WHERE id_tipo = 2")->fetchAll();
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $FunctionsController = new FunctionsController();
                 return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
