@@ -90,11 +90,9 @@ class HelperSap
         return $message;
     }
 
-    public function insertarPrecio($connection, $id_item, $lugar, $precio, $cantidad, $codigo_material, $almacen)
+    public function insertarPrecio($connection, $id_item, $lugar, $precio, $cantidad, $codigo_material, $id_unidad)
     {
         $helper = new Helper();
-        $id_alma = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE codigo_almacen = ?', [$almacen]);
-        !empty($id_alma) ? $id_almacen = $id_alma : $data_error['almacen'] = 'no existe almacen';
         $datoCiudad = $helper->buscaCiudadListaPrecio($connection, $lugar);
         !empty($datoCiudad) ? $id_lista = (int)$datoCiudad['id_lista'] : $data_error['ciudad'] = 'no existe ciudad';
 
@@ -102,10 +100,10 @@ class HelperSap
         {
             $arrayPrecioInsertar = ([
                 'id_material' => (int)$id_item,
-                'id_lista' => (int)$id_almacen,
+                'id_lista' => (int)$id_lista,
                 'id_moneda' => 1,
                 'cod_mate' => $codigo_material,
-                'id_ciudad' => $id_lista,
+                'id_unidad' =>(int)$id_unidad,
                 'precio' => (float)$precio,
                 'peso' => (int)$cantidad,
                 'fecha' => date("Y-m-d")

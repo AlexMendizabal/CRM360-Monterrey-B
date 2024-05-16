@@ -1921,7 +1921,7 @@ class SapController extends AbstractController
 
             $codigoMaterial = !empty($data['codigo_material']) ? $data['codigo_material'] : $data_error['codigo_material'] = 'es requerido';
             $codigoAlmacen = !empty($data['codigo_almacen']) ? $data['codigo_almacen'] : $data_error['ALmacen'] = 'es requerido';
-           
+            
             //RESPONSE DEFAULT
             $message = array(
                 'responseCode' => 204,
@@ -1931,7 +1931,7 @@ class SapController extends AbstractController
            
             if (!empty($codigoMaterial)) {
                 $id_material = $connection->fetchOne('SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?', [$codigoMaterial]); 
-                
+             
             }
 
             if ($codigoAlmacen  != '' &&  $codigoMaterial != '') {
@@ -1955,7 +1955,7 @@ class SapController extends AbstractController
                     }
 
                     $verificar_stock = $helper->verificarStock($connection, $arrayStock);
-                    
+                   
                     if (!empty($verificar_stock)) {
                         $arrayStockActualizar = array();
                         $id_verificarStock = $verificar_stock['id'];
@@ -1976,11 +1976,12 @@ class SapController extends AbstractController
                             'id_unidad' => (int)$id_unidad,
                             'codigo_material' => $codigoMaterial,
                         ]);
-
+                       
                         $actualizar_stock = $helper->insertarStock($connection, $arrayStockInsertar);
                     }
 
                     $verificar_precio = $connection->fetchOne('SELECT id from TB_PRECIO_MATERIAL WHERE cod_mate = ?', [$codigoMaterial]);
+                   
                     if(!empty($verificar_precio))
                     { 
                         $actuazliPrecio = $helperSap->actualizarPrecio($connection, $id_material, $conexionSap['Mensaje'][0]['Lugar'], $conexionSap['Mensaje'][0]['Precio'], $conexionSap['Mensaje'][0]['Disponible'], $codigoMaterial, null);
@@ -2067,16 +2068,29 @@ class SapController extends AbstractController
         
         $dataSap = $helper->conexionSap($url, $arraySap);
       
-       /*  dd($dataSap); */
         if ($dataSap['CodigoRespuesta'] == 200) {
             foreach ($dataSap['Mensaje'] as $datos) {
                 $actualizaStock = $helperSap->actualizaStock($connection, $datos['Almacen'], $datos['Disponible'], $datos['Unidad'], $codigo_material, $id_item);
-                empty($actualizaStock) ? $insertStock = $helperSap->insertarStock($connection, $datos['Almacen'], $datos['Disponible'], $datos['Unidad'], $codigo_material, $id_item) : $actualizaStock;
+                if (empty($actualizaStock)) {
+                    $insertStock = $helperSap->insertarStock($connection, $datos['Almacen'], $datos['Disponible'], $datos['Unidad'], $codigo_material, $id_item);
+                } else {
+                    $insertStock = null;
+                }
                 $resp['actualizacion'] = $actualizaStock;
                 $resp['inserto'] = $insertStock;
+            }
 
-                $actuazliPrecio = $helperSap->actualizarPrecio($connection, $id_item,$datos['Lugar'], $datos['Precio'], $datos['Disponible'], $codigo_material, $almacenes);
-                empty($actuazliPrecio) ? $insertPrecio = $helperSap->insertarPrecio($connection, $id_item,$datos['Lugar'], $datos['Precio'], $datos['Disponible'], $codigo_material, $almacenes) : $actualizaStock;
+            foreach ($dataSap['Mensaje'] as $datos) {
+                $buscar_unidad = $helper->buscarUnidad($connection, $datos['Unidad']);
+                if ($buscar_unidad !== false) {
+                    $id_unidad = $buscar_unidad['ID'];
+                }
+                $actuazliPrecio = $helperSap->actualizarPrecio($connection, $id_item, $datos['Lugar'], $datos['Precio'], $datos['Disponible'], $codigo_material, $id_unidad);
+                if (empty($actuazliPrecio)) {
+                    $insertPrecio = $helperSap->insertarPrecio($connection, $id_item, $datos['Lugar'], $datos['Precio'], $datos['Disponible'], $codigo_material, $id_unidad);
+                } else {
+                    $insertPrecio = null;
+                }
                 $resp['actualizacion'] = $actuazliPrecio;
                 $resp['inserto'] = $insertPrecio;
             }
