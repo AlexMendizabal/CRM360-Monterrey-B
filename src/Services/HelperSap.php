@@ -65,7 +65,7 @@ class HelperSap
         return $message;
     }
 
-    public function actualizarPrecio($connection, $id_item, $lugar, $precio, $cantidad, $codigo_material, $almacen)
+    public function actualizarPrecio($connection, $id_item, $lugar, $precio, $peso, $codigo_material, $almacen)
     { 
         $helper = new Helper();  
         $datoCiudad = $helper->buscaCiudadListaPrecio($connection, $lugar);
@@ -78,7 +78,7 @@ class HelperSap
             ];
             $precio_material = [
                 'precio' => $precio,
-                'Peso' =>  (int)$cantidad,
+                'Peso' =>  (float)$peso
             ];
             $resp = $connection->update('tb_precio_material', $precio_material, $datosCumple);
             !empty($resp) ? $message = true : $message = false;

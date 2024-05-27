@@ -856,11 +856,12 @@ class ComercialController extends AbstractController
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         //dd($infoUsuario);
         $helper = new Helper();
-        $params = $request->query->all();
+        $params = $request->query->all(); 
         $id_vendedor = 0;
         $nombreCargo = '';
         try {
             isset($params['id_vendedor']) ? $id_vendedor  = $params['id_vendedor'] : NULL;
+            isset($params['idListaPrecio']) ? $id_vendedor  = $params['idListaPrecio'] : NULL;
             $nombreCargo = $infoUsuario->none_cargo;
 
             $almacenes = $helper->almacenVendedorVenta($connection, (int)$id_vendedor, $nombreCargo);

@@ -25,52 +25,15 @@ class Helper
     {
         $conditions = [];
         $bindings = [];
-        $cantidadMayor =  $cantidad;
-
-        // Condiciones relacionadas con los parámetros
-        if (!empty($id_tipo_cliente) && is_numeric($id_tipo_cliente) && $id_tipo_cliente > 0) {
-            $conditions[] = "id_tipo_cliente = :id_tipo_cliente";
-            $bindings['id_tipo_cliente'] = $id_tipo_cliente;
-        }
-        if (!empty($cantidad) && is_numeric($cantidad) && $cantidad > 0) {
-            $conditions[] = "rango_inicial <= :cantidad";
-            $bindings['cantidad'] = $cantidad;
-        }
-        if (!empty($cantidadMayor) && is_numeric($cantidadMayor) && $cantidadMayor > 0) {
-            $conditions[] = "rango_final >= :cantidad_mayor";
-            $bindings['cantidad_mayor'] = $cantidadMayor;
-        }
-
-        if (!empty($id_material) && is_numeric($id_material) && $id_material > 0) {
-            $conditions[] = "id_material = :id_material";
-            $bindings['id_material'] = $id_material;
-        }
-
-        if (!empty($id_departamento) && is_numeric($id_departamento) && $id_departamento > 0) {
-            $conditions[] = "id_departamento = :id_departamento";
-            $bindings['id_departamento'] = $id_departamento;
-        }
-
-        // Condición adicional para estado
-        $conditions[] = "estado = :estado";
-        $bindings['estado'] = 1;
-
-        // Construir la consulta
-        $query = "SELECT TOP 1 * FROM TB_DESCUENTO";
-
-        if (!empty($conditions)) {
-            $conditionString = implode(' AND ', $conditions);
-            $query .= " WHERE $conditionString";
-        }
-        /*  DD($bindings); */
-        // Preparar y ejecutar la consulta
-        $stmt = $connection->prepare($query);
-        $stmt->execute($bindings);
-        $res = $stmt->fetch();
-
-        // Preparar la respuesta
-        $responseCode = (count($res) > 0) ? 200 : 204;
-        $estado = (count($res) > 0);
+        $number = $connection->fetchOne('SELECT descuento 
+                                                FROM TB_DESCUENTO  
+                                                WHERE ? BETWEEN rango_inicial AND rango_final
+                                                AND id_tipo_cliente = ?
+                                                AND id_departamento = ?
+                                                AND id_material  = ?', [$cantidad,  $id_tipo_cliente, $id_departamento, $id_material]);
+        $res = round($number, 1);
+        $responseCode = ($res> 0) ? 200 : 204;
+        $estado = ($res > 0);
         $message = [
             'responseCode' => $responseCode,
             'result' => $res,
@@ -299,7 +262,7 @@ class Helper
             $codigo_cliente = isset($data['codigo_cliente']) ? $data['codigo_cliente'] : null;
             $email  = isset($data['email']) ? $data['email'] : null;
             $nombre_factura = isset($data['nombre_factura']) ? $data['nombre_factura'] :  null;
-            $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 0;
+            $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 1;
             // $fecha_creacion = datetime('Y/m/d H:i:s');
             if (isset($data['frontend'])) {
                 $vendedor = isset($data['id_vendedor']) ? (int)$data['id_vendedor'] : null;
@@ -900,6 +863,13 @@ class Helper
         if (!empty($data_vendedor['ID_ESCR'])) {
             $data_usuario['id_usua'] = (int)$connection->fetchOne('SELECT ID FROM TB_CORE_USUA WHERE NR_MATR = ?', [$data['codigo_sap']]);
             isset($data['nombreUsuario']) ? $data_ejecutivo['NM_COMP_RAZA_SOCI'] = $data['nombreUsuario'] : $data_error['nombre ejecutivo'] = 'se requiere';
+            $partes = explode(' ',  $data['nombreUsuario']);
+            $primerasLetras = [];
+            foreach ($partes as $parte) {
+                $primerasLetras[] = mb_substr(trim($parte), 0, 1);
+            }
+            $iniciales = implode('', $primerasLetras);
+            $data_ejecutivo['NM_APEL_FANT'] =  $iniciales;
             $data_ejecutivo['TP_PESS'] = 'F';
             $data_ejecutivo['NM_EMPR'] = 'MONTERREY';
             $data_ejecutivo['NM_DEPA'] = 2;
@@ -948,7 +918,7 @@ class Helper
     }
     public function verificarCliente($connection, $data)
     {
-        //dd($data);
+        /* dd($data); */
         $query = "SELECT TOP 1 id_cliente FROM MTCORP_MODU_CLIE_BASE WHERE codigo_cliente like :codigo_cliente";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(':codigo_cliente', $data);
@@ -957,9 +927,23 @@ class Helper
         $ruta = "/verificaCliente";
         $codsap =  ["CodigoSAP" => $data];
         //$respuesta = $this->insertarServicio($ruta, $codsap);
-
+        
         if ($result && isset($result['id_cliente']) && $result['id_cliente'] > 0) {
             return $result['id_cliente'];
+        } else {
+            return false;
+        }
+    }
+
+    public function verificarDocumentoCliente($connection, $documento)
+    {
+        $query = "SELECT * FROM MTCORP_MODU_CLIE_BASE WHERE cnpj_cpf like :cnpj_cpf";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(':cnpj_cpf', $documento);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        if ($result) {
+            return true;
         } else {
             return false;
         }
@@ -2375,7 +2359,7 @@ class Helper
             !empty($data['latitud']) ?  $data_almacen['latitud'] = $data['latitud'] : $data_almacen['latitud']  = 0;
             !empty($data['longitud']) ?  $data_almacen['longitud'] = $data['longitud'] :  $data_almacen['longitud'] = 0;
 
-            if ($data['estado_deposito'] == 'A') {
+            if ($data['estado_deposito'] == 'N') {
                 $data_almacen['ESTADO_DEPOSITO'] = 1;
             } else {
                 $data_almacen['ESTADO_DEPOSITO'] = 0;
@@ -3767,7 +3751,7 @@ class Helper
         }
         try {
             $ruta = "/crearProforma";
-            $rsp = $this->insertarServicio($ruta, $arrayOFerta);
+            $rsp = $this->conexionSap($ruta, $arrayOFerta);
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;
             } else {
@@ -4182,30 +4166,27 @@ class Helper
             return array(false, $idArray);
         }
     }
-    public function almacenVendedorVenta($connection, int $id_vendedor, $nombre_cargo)
-    {
-        $almacenArray = array();
-        if ($nombre_cargo === 6) {
-            $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP INNER JOIN TB_ALMACEN_VENDEDOR AV ON (DP.CODIGO_ALMACEN = AV.id_almacen) 
-        WHERE AV.id_vendedor = :id_vendedor AND DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' AND DP.CODIGO_ALMACEN != 'ALM-V-00'";
+    public function almacenVendedorVenta($connection, int $idListaPrecio, $nombre_cargo)
+{
+    $almacenArray = array(); 
+    $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen, DP.id_ciudad 
+              FROM TB_DEPO_FISI_ESTO DP 
+              INNER JOIN TB_LISTA_PRECIO TLP on TLP.id_departamento = DP.id_ciudad 
+              WHERE TLP.id = :idListaPrecio AND DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%'";
 
-            $stmt = $connection->prepare($query);
-            $stmt->bindValue(":id_vendedor", $id_vendedor, PDO::PARAM_INT);
-        } else {
-            $query = "SELECT DP.id as id_almacen, DP.CODIGO_ALMACEN as codigo_almacen FROM TB_DEPO_FISI_ESTO DP 
-        WHERE DP.ESTADO_DEPOSITO = :estado_deposito AND DP.CODIGO_ALMACEN LIKE 'ALM-V-%' ORDER BY DP.CODIGO_ALMACEN ASC ";
-            $stmt = $connection->prepare($query);
-        }
-
-        $stmt->bindValue(":estado_deposito", 1, PDO::PARAM_INT);
-        $stmt->execute();
-        $almacenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (count($almacenes) > 0) {
-            return $almacenes;
-        } else {
-            return false;
-        }
+    $stmt = $connection->prepare($query);
+    $stmt->bindValue(":idListaPrecio", $idListaPrecio, PDO::PARAM_INT);
+    $stmt->bindValue(":estado_deposito", 1, PDO::PARAM_INT); 
+    $stmt->execute();
+    
+    $almacenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($almacenes) > 0) {
+        return $almacenes;
+    } else {
+        return false;
     }
+}
+
     //FUNCIONES PARA ACTUALIZAR MATERIALES UPSELL DEBE BORRARSE LA LISTA ACTUAL Y REEMPLAZARSE CON EL ARRAY
     public function borrarMaterialAsociadoUpsell($connection, int $id_asociado)
     {
@@ -4297,7 +4278,7 @@ class Helper
                 break;
         }
 
-    // RESTRINGIR CARTERA DE CLIENTES A PROMOTORES
+        // RESTRINGIR CARTERA DE CLIENTES A PROMOTORES
         /* if ($usuario === 6) {
             $query .= " AND USUA.NR_MATR = :matricula";
             $params[':matricula'] = $filtroUsuario;

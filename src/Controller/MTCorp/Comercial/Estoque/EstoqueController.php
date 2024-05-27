@@ -1270,89 +1270,92 @@ class EstoqueController extends AbstractController
             $idVendedor = $infoUsuario->idVendedor;
            
             if (!empty($codigo_material)) {
-                $params = $request->query->all();  
-                
+                $params = $request->query->all();
+            
                 $nombre_lista_precio = $params['nombre_lista'] ?? '';
                 $codigo_almacen = $params['codigo_almacen'] ?? '';
                 $nombre_almacen = $params['nombre_almacen'] ?? '';
-                $id_lista_precio = $params['id_lista_precio'] ?? '';
+                $id_lista_precio = $params['id_lista_precio'] ?? null; // Asegúrate de usar null si está vacío
                 $tamanoPagina = $params['registrosLista'] ?? 10;
                 $orderBy = 'nombre_almacen';
                 $orderType = 'ASC';
                 $offset = 0;
-                
+            
                 $conditions = [];
                 $bindings = [];
-
-                // Condiciones comunes para todos los casos
-                // $conditions[] = " PM.id_material = :id_material";
-                // $bindings['id_material'] = $codMaterial; 
-                
+            
                 // Si el cargo es 1, que significa administrador usar el parámetro id_lista_precio
                 if ($cargo != 1 && $cargo != 11) {
                     // Si el idVendedor es diferente a 1, buscar la lista del vendedor 
-                    $id_lista_precio = $connection->fetchOne('select TB_lista_precio.id as id_lista_precio
-                    from 
-                    TB_VEND
-                    inner join tb_escr on tb_escr.id = tb_vend.id_escr
-                    inner join tb_ciudad on tb_ciudad.id = tb_escr.id_ciudad
-                    inner join tb_departamento on tb_departamento.id = id_departamento
-                    inner join TB_lista_precio on TB_lista_precio.id_departamento = tb_departamento.id 
-                    where tb_vend.id =  ?', [$idVendedor]);
-
-                    if (!empty($id_lista_precio)) {
-                        $conditions[] = " PM.id_lista = :id_lista";
-                        $bindings['id_lista'] = (int)$id_lista_precio;
+                    $id_lista_precio_vendedor = $connection->fetchOne('SELECT TB_lista_precio.id AS id_lista_precio
+                        FROM 
+                        TB_VEND
+                        INNER JOIN tb_escr ON tb_escr.id = tb_vend.id_escr
+                        INNER JOIN tb_ciudad ON tb_ciudad.id = tb_escr.id_ciudad
+                        INNER JOIN tb_departamento ON tb_departamento.id = id_departamento
+                        INNER JOIN TB_lista_precio ON TB_lista_precio.id_departamento = tb_departamento.id 
+                        WHERE tb_vend.id = ?', [$idVendedor]);
+            
+                    if (!empty($id_lista_precio_vendedor)) {
+                        $conditions[] = "PM.id_lista = :id_lista_vendedor";
+                        $bindings['id_lista_vendedor'] = (int)$id_lista_precio_vendedor;
                     }
                 }
-                 
+            
                 // Agregar condiciones según la presencia de valores
                 if (!empty($nombre_lista_precio)) {
-                    $conditions[] = " TLP.nombre_lista = :nombre_lista";
+                    $conditions[] = "TLP.nombre_lista = :nombre_lista";
                     $bindings['nombre_lista'] = $nombre_lista_precio;
                 }
-
+            
                 if (!empty($codigo_almacen)) {
-                    $conditions[] = " DEPO.codigo_almacen LIKE :codigo_almacen";
+                    $conditions[] = "DEPO.codigo_almacen LIKE :codigo_almacen";
                     $bindings['codigo_almacen'] = '%' . $codigo_almacen . '%';
                 }
-
+            
                 if (!empty($nombre_almacen)) {
-                    $conditions[] = " DEPO.nombre_deposito LIKE :nombre_almacen";
+                    $conditions[] = "DEPO.nombre_deposito LIKE :nombre_almacen";
                     $bindings['nombre_almacen'] = '%' . $nombre_almacen . '%';
                 }
-               
+           
                 $query = "SELECT DISTINCT 
-                    MD.id_deposito as codigo_almacen,
-                    DFE.NOMBRE_DEPOSITO as nombre_almacen,
-                    TLP.nombre_lista as lista,
+                    MD.id_deposito AS codigo_almacen,
+                    DFE.NOMBRE_DEPOSITO AS nombre_almacen,
+                    TLP.nombre_lista AS lista,
                     PM.cod_mate,
-                    pm.precio as precio,
+                    PM.precio AS precio,
                     MD.cantidad
-                FROM TB_PRECIO_MATERIAL PM 
-                INNER JOIN TB_MATERIAL_DEPOSITO MD ON MD.mate_sap = PM.cod_mate 
-				INNER JOIN TB_DEPOSITO DEP ON MD.id_deposito = DEP.codigo_almacen
+                FROM TB_PRECIO_MATERIAL PM
+                INNER JOIN TB_MATERIAL_DEPOSITO MD ON MD.mate_sap = PM.cod_mate
+                INNER JOIN TB_DEPOSITO DEP ON MD.id_deposito = DEP.codigo_almacen
                 INNER JOIN TB_DEPO_FISI_ESTO DFE ON MD.id_deposito = DFE.CODIGO_ALMACEN
-                INNER JOIN tb_ciudad CIU ON DFE.id_ciudad = CIU.ID 
+                INNER JOIN tb_ciudad CIU ON DFE.id_ciudad = CIU.ID
                 INNER JOIN TB_LISTA_PRECIO TLP ON PM.id_lista = TLP.id
                 INNER JOIN TB_MATE MT ON PM.cod_mate = MT.CODIGOMATERIAL";
-
-            // Agregar condiciones solo si hay al menos una
+            
             if (!empty($conditions)) {
                 $query .= " WHERE " . implode(' AND ', $conditions);
-            } 
-            
-            $query .= " AND TLP.id_departamento IS NOT NULL 
+            }
+        
+            $query .= (empty($conditions) ? " WHERE" : " AND") . " TLP.id_departamento IS NOT NULL 
                         AND CIU.id = TLP.id_departamento
                         AND TLP.id NOT IN (7, 8, 9, 10, 11)  
-                        AND PM.cod_mate = :codigo_material
-                        ORDER BY {$orderBy} {$orderType} 
-                        OFFSET {$offset} 
-                        ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
-
-       
-            // Ejecutar la consulta con parámetros
-            $result = $connection->executeQuery($query, array_merge($bindings, [':codigo_material' => $codigo_material]))->fetchAll();
+                        AND PM.cod_mate = :codigo_material";
+            
+                        if (!empty($id_lista_precio)) {
+                            $query .= " AND PM.id_lista = :id_lista_precio";
+                            $bindings['id_lista_precio'] = $id_lista_precio;
+                        }
+                    
+                        $query .= " ORDER BY {$orderBy} {$orderType} 
+                                    OFFSET {$offset} 
+                                    ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
+                    
+                        // Ejecutar la consulta con parámetros
+                        $bindings['codigo_material'] = $codigo_material;
+                        $result = $connection->executeQuery($query, $bindings)->fetchAll();
+            
+            
             
 
                 if (!empty($result)) {
@@ -1397,7 +1400,7 @@ class EstoqueController extends AbstractController
     public function traerLista(Connection $connection, Request $request)
     {
         try {
-            $nombre_lista = $request->query->get('nombre_lista'); 
+            $nombre_lista = $request->query->get('nombre_lista');
 
             $listas_precios = $this->helper->buscarListaPrecio($connection, $nombre_lista);
 

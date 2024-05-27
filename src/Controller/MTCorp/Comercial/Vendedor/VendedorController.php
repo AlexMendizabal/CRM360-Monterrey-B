@@ -465,6 +465,7 @@ class VendedorController extends AbstractController
                 lista.id,
                 lista.nombre_lista
                 FROM TB_LISTA_PRECIO as lista
+                WHERE id_departamento != 0 
             ")->fetchAll();
 
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {

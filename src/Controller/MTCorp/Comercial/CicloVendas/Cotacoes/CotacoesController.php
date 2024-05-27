@@ -931,44 +931,46 @@ class CotacoesController extends AbstractController
         try {
             $params = json_decode($request->getContent(), true);
 
-            $codMaterial = $params['codMaterial'];
-            $codTipoLancamento = $params['codTipoLancamento'];
-            $tipoCalculo = $params['tipoCalculo'];
-            $codCliente = $params['codCliente'];
-            $tonelada = $params['codTipoLancamento'] === 6 ? $params['quantidade'] : 0;
-            $quantidade = $params['codTipoLancamento'] !== 6 ? $params['quantidade'] : 0;
-            $preco = $params['preco'];
-            $medida = $params['codTipoLancamento'] === 3 ? $params['medida'] : 0;
-            $codEmpresa = $params['codEmpresa'];
-            $codEndereco = $params['codEndereco'];
-
-            $aux = number_format($tonelada, 3);
-            $tonelada = $aux;
-
-            $res = $connection->query("
-                EXECUTE [PRC_TIPO_CALC_MATE_CONS]
-                    @ID_MATE = {$codMaterial}
-                    ,@TP_LANC = {$codTipoLancamento}
-                    ,@TP_CALC = {$tipoCalculo}
-                    ,@ID_CLIE = {$codCliente}
-                    ,@TONE = {$tonelada}
-                    ,@QTDE = {$quantidade}
-                    ,@VR_UNIT = {$preco}
-                    ,@MEDI = {$medida}
-                    ,@ID_EMPR = {$codEmpresa}
-                    ,@ID_ENDE_ENTR = {$codEndereco}
-            ")->fetchAll();
-
+           /*  ^ array:5 [
+                "codMaterial" => 301
+                "quantidade" => 55
+                "precio" => 21.73
+                "medida" => 0
+                "codEndereco" => "ALM-V-12"
+                "lista_precio" => 1
+              ] */
+              $codMaterial = $params['codMaterial'];
+                $codigo_material = $params['codigo_material'];
+                $lista_precio = $params['lista_precio'];
+                $cantidad = $params['quantidade'];
+                $preco = $params['precio'];
+                $codEmpresa = $params['codEndereco'];
+            $departamento = $connection->fetchOne('SELECT  id_ciudad  FROM tb_depo_fisi_esto WHERE codigo_almacen = ?', [$codEmpresa]);
+            
+            if(!empty($departamento))
+            {
+               
+                $number = $connection->fetchOne('SELECT descuento 
+                                                FROM TB_DESCUENTO  
+                                                WHERE ? BETWEEN rango_inicial AND rango_final
+                                                AND id_tipo_cliente = ?
+                                                AND id_departamento = ?
+                                                AND codigomaterial  = ?', [$cantidad,  $lista_precio, $departamento, $codigo_material]);
+                $res = round($number, 1);
+                if (count($res) > 0 && $res[0]['mensagem'] == null) {
+                    return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                 } else if (count($res) > 0 && isset($res[0]['mensagem'])) {
+                    return FunctionsController::Retorno(false, $res[0]['mensagem'], null, Response::HTTP_OK);
+                 } else {
+                   return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                }
+             } else {
+                    return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+             }
             // print_r($res);
             // exit(0);
 
-            if (count($res) > 0 && $res[0]['mensagem'] == null) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['mensagem'])) {
-                return FunctionsController::Retorno(false, $res[0]['mensagem'], null, Response::HTTP_OK);
-            } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
-            }
+            
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
@@ -1267,9 +1269,7 @@ class CotacoesController extends AbstractController
         /* "autorizacion", estado como se encuentre la oferta si es 1 tiene autorizacion y 2 no tiene autorizacion
         "estado_oferta",  el estado de la oferta borrador, pendiente  y cerrado
         "tipo_estado" tiene el estado de cierre*/
-        
         $data = json_decode($request->getContent(), true);
-      
         if (!empty($data['id_oferta'])) {
             $message = $this->postDuplicarProposta($connection, $request);
         } else {
@@ -1298,7 +1298,7 @@ class CotacoesController extends AbstractController
                     $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
                     $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
                 }
-
+              
                 $resp = false;
                 foreach ($data_detalleoferta as $items) {
                     if ($items['autorizacion'] == 1) {
@@ -1535,10 +1535,10 @@ class CotacoesController extends AbstractController
         !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
         !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
-        if (!empty($data['percentualDesc'])) {
-            !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
-            !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
-            $autorizacion = 1;
+        !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
+        !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
+        if ($data['descuento_permitido'] < $data['percentualDesc']) {
+          $autorizacion = 1;
         }
         !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
         !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
@@ -1589,7 +1589,6 @@ class CotacoesController extends AbstractController
         if (empty($oferta['codigo_oferta']) && (int)$oferta['tipo_estado'] == 14 && (int)$oferta['estado_oferta'] == 1) {
 
             $resp = $helper->autorizacion_estado_sap($connection, (int)$nrPedido);
-            //dd($resp);
             $sapresp = json_decode($resp->getContent(), true);
 
             if ($sapresp['CodigoRespuesta'] == 200) {
@@ -1695,21 +1694,21 @@ class CotacoesController extends AbstractController
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
             if ($infoUsuario) {
                 $params = $request->query->all();
                 $id_tipo_cliente = $params['id_tipo_cliente'] ?? null;
                 $cantidad = $params['cantidad'] ?? null;
                 $id_material = $params['id_material'] ?? null;
-                $id_ciudad = $params['id_ciudad'] ?? null;
-
-                if ($id_tipo_cliente !== null || $cantidad !== null || $id_material !== null || $id_ciudad !== null) {
+                $cod_almacen = $params['deposito'] ?? null;
+                $departamento = $connection->fetchOne('SELECT  id_ciudad  FROM tb_depo_fisi_esto WHERE codigo_almacen = ?', [$cod_almacen]);
+            
+                if ($id_tipo_cliente !== null || $cantidad !== null || $id_material !== null || $departamento !== null) {
                     $calcularDescuento = $helper->calcularDesc(
                         $connection,
                         (int)$id_tipo_cliente,
                         (float)$cantidad,
                         (int)$id_material,
-                        (int)$id_ciudad
+                        (int)$departamento
                     );
                     $message = $calcularDescuento;
                 } else {
