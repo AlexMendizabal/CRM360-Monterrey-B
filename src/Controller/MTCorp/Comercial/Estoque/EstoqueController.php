@@ -271,7 +271,8 @@ class EstoqueController extends AbstractController
                 }
                 $query = "SELECT MATE.ID_CODIGOMATERIAL AS id_material,
                     MATE.CODIGOMATERIAL AS codigo_material,
-                    MATE.DESCRICAO AS nombre
+                    MATE.DESCRICAO AS nombre,
+                    (MATE.CODIGOMATERIAL + ' - ' + MATE.DESCRICAO) AS Item
                 FROM TB_MATE MATE
                 INNER JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
                 INNER JOIN MTCORP_BASE_LINHAS LINEA ON SUB.ID_CLASE = LINEA.id_linha
