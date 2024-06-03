@@ -597,7 +597,7 @@ class CotacoesController extends AbstractController
                             ,@NR_PEDI = {$nrPedido}
                     ")->fetchAll();
 
-                $res += [$value => $arrayTemp];
+                $res += [$value => $arrayTemp]; 
             }
 
             if (count($res) > 0 && !isset($res[0]['message'])) {

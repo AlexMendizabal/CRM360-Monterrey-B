@@ -13,7 +13,7 @@ class JwtAplication
         $tokenParam = [
             'iat'   => $issuedAt,
             'iss'   => 'mtcorp.com.br',
-            'exp'   => $issuedAt + 3600,
+            'exp'   => $issuedAt + 28800,
             'nbf'   => $issuedAt - 1,
             'data'  => $options['userdata']
         ];

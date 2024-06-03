@@ -132,8 +132,7 @@ class VendedorController extends AbstractController
             $cargo = $buscarUsuario['NM_CARG_FUNC']; 
 
             switch ($cargo) {
-                case '6':
-                case '5':
+                   case '6':
                     $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
                               FROM TB_VEND 
                               WHERE ID = :id";
@@ -147,7 +146,7 @@ class VendedorController extends AbstractController
             
 
             $stmt = $connection->prepare($query);
-            if (in_array($cargo, ['6', '5'])) {
+            if (in_array($cargo, ['6'])) {
                 $stmt->bindValue(':id', $id_vendedor);
             }
 

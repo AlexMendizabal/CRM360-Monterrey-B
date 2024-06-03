@@ -384,17 +384,19 @@ class EstoqueController extends AbstractController
                     INNER JOIN UNIDADES AS UNI ON UNI.ID = MAT.UNIDADE
                     INNER JOIN TB_MONEDA AS MONE ON MONE.id = PM.id_moneda
                     INNER JOIN TB_LISTA_PRECIO AS LP ON LP.id = PM.id_lista
+					inner join TB_DEPARTAMENTO AS DP ON DP.id = LP.id_departamento
                 WHERE 
                     LP.id = :id_lista_precio
                     AND DEPO.estado_mostrar = 1
-                    AND DEPO.CODIGO_ALMACEN= :codigo_almacen
+                    AND LP.id_departamento = DEPO.id_ciudad
+                    AND DEPO.CODIGO_ALMACEN LIKE :codigo_almacen
                     AND MAT.CODIGOMATERIAL = :CODIGOMATERIAL
-                    order by DEPO.ID asc";
+                    order by DEPO.CODIGO_ALMACEN asc";
 
                 $buscar_material = $connection->prepare($query);
               
                 $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
-                $buscar_material->bindValue('codigo_almacen', $codigo_almacen);
+                $buscar_material->bindValue('codigo_almacen', '%ALM-V%');
                 $buscar_material->bindValue('CODIGOMATERIAL',  $codigo_material);
                 $buscar_material->execute();
                 $res = $buscar_material->fetchAll(); 
