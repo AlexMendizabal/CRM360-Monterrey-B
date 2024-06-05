@@ -203,8 +203,8 @@ class Helper
     public function insertClient($connection, $data)
     {
         try {
-            /* $buscarCliente = $this->obtenerUltimoCliente($connection);
-            dd($ultimoId); */
+            /* $buscarCliente = $this->obtenerUltimoCliente($connection);*/
+            /* dd($data);  */
             //dd($this->obtenerUltimoCliente($connection));
 
             //$helper = new Helper();
@@ -251,7 +251,7 @@ class Helper
 
             $tipo_pessoa = isset($data['tipo_pessoa']) ? $data['tipo_pessoa'] : 'S';
             $sap_vendedor = isset($data['sap_vendedor']) ? (int)$data['sap_vendedor'] : null;
-            $tipo_cliente  = isset($data['tipo_cliente']) ? (int)$data['tipo_cliente'] : 0;
+            $tipo_cliente  = isset($data['tipo_cliente']) ? (int)$data['tipo_cliente'] : 1;
             $id_vendedor_sap = 0;
             $limi_cred = isset($data['limi_cred']) ? $data['limi_cred'] : 0;
             $cred_segu = isset($data['cred_segu']) ? $data['cred_segu'] : 0;
@@ -309,15 +309,15 @@ class Helper
                     tipo_persona, 
                     telefono, 
                     celular,
-                    id_tipo_cliente, 
                     email, 
                     nombre_factura, 
                     id_rubro, 
                     id_tipo_documento,
+                    id_tipo_cliente, 
                     created_at
                     )
                     VALUES (:nombres,:segu_nome,:cnpj_cpf,:tipo_pessoa,:id_vendedor,:limi_cred,:cred_segu,:situacao,:email_nfe,:is_descontado,:id_regi_trib,:codigo_cliente,
-                                        :tipo_persona,:telefono,:celular, :id_tipo_cliente, :email,:nombre_factura,:id_rubro, :tipo_documento, GETDATE())";
+                                        :tipo_persona,:telefono,:celular,:email,:nombre_factura,:id_rubro,:tipo_documento,:id_tipo_cliente, GETDATE())";
 
                 $stmt = $connection->prepare($queryClient);
                 $stmt->bindValue(":nombres", $nombres);
@@ -335,16 +335,14 @@ class Helper
                 $stmt->bindValue(":tipo_persona", $tipo_persona);
                 $stmt->bindValue(":telefono", $telefono);
                 $stmt->bindValue(":celular", $celular);
-                $stmt->bindValue(":id_tipo_cliente", $id_tipo_cliente);
                 $stmt->bindValue(":email", $email);
                 $stmt->bindValue(":nombre_factura", $nombre_factura);
                 $stmt->bindValue(":id_rubro", (int)$id_setor_actividade);
-                $stmt->bindValue(":tipo_documento", $tipo_documento);
-                // $stmt->bindValue(":fecha_creacion", $fecha_creacion);
-                // dd($stmt);
+                $stmt->bindValue(":tipo_documento", (int)$tipo_documento);
+                $stmt->bindValue(":id_tipo_cliente", (int)$id_tipo_cliente);
                 $stmt->execute();
+            
                 $id_cliente = $connection->lastInsertId();
-                /*  dd($id_cliente); */
 
                 if ($id_cliente > 0) {
                     $message = [
@@ -3327,7 +3325,7 @@ class Helper
 
     public function buscarUsuario($connection, $id)
     {
-        $query_usuario = "SELECT * FROM TB_CORE_USUA WHERE ID = :id";
+        $query_usuario = "SELECT * FROM TB_CORE_USUA TCU INNER JOIN TB_VEND TV ON TV.ID_USUA = TCU.ID WHERE TCU.ID = :id";
         $stmt1 = $connection->prepare($query_usuario);
         $stmt1->bindValue(':id', $id);
         $stmt1->execute();
@@ -3954,13 +3952,13 @@ class Helper
         $stmt->bindValue(":tipo_estado", 14, PDO::PARAM_INT);
         $stmt->execute();
         $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        
         if (count($ofertas) > 0) {
             foreach ($ofertas as $oferta) {
                 $fechaCreacion = new DateTime($oferta['fecha_inicial']);
                 $diferencia = $fechaActual->diff($fechaCreacion)->days;
                 //dd($diferencia);
-                if ($diferencia > 7) {
+                if ($diferencia > 7){
                     $arrayOferta[] = $oferta['codigo_oferta'];
                 }
             }
@@ -4222,8 +4220,7 @@ class Helper
         $query = "SELECT distinct
             codCliente = CLIE.id_cliente,
             CLIE.codigo_cliente as codigo_cliente,
-            codRazaoSocial = CONCAT(CLIE.id_cliente ,' - ', LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), 
-                CHAR(129),'''')))),
+            codRazaoSocial = CONCAT(CLIE.id_cliente ,' - ', LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''''), CHAR(129),'''')))),
             razaoSocial = LTRIM(RTRIM(REPLACE(REPLACE(CLIE.prim_nome, CHAR(29), ''), CHAR(129),''))),
             nomeCliente = RTRIM(LTRIM(CLIE.prim_nome)),
             tipoCliente = CLIE.id_tipo_cliente,
@@ -4240,14 +4237,15 @@ class Helper
             --ENDE.latitude as latitud,
             --ENDE.longitude as longitud,
             CLIE.email as correo_electronico,
-            CLIE.telefono  as telefono,
+            CLIE.telefono as telefono,
             Clie.celular,
             Clie.id_rubro as codigo_rubro,
             --BCD.nombre_doc as tipo_documento,
-            Clie.nombre_factura as nombre_factura,
-            Clie.cnpj_cpf as numero_documento,
+            Clie.nombre_factura AS nombre_factura,
+            Clie.cnpj_cpf AS numero_documento,
             Doc.nombre_doc,
-            CNAE.descricao as rubro,
+            Doc.nombre_doc AS tipo_documento,
+            CNAE.descricao AS rubro,
             CONCAT(VEND.NM_VEND, ' ', VEND.NM_RAZA_SOCI) as nombre_vendedor
         FROM 
             MTCORP_MODU_CLIE_BASE CLIE
@@ -4261,9 +4259,7 @@ class Helper
             LEFT JOIN tb_base_clie_doc Doc on Doc.id = CLIE.id_tipo_documento
             LEFT JOIN MTCORP_BASE_CNAE CNAE on CLIE.id_rubro = CNAE.id_cnae";
 
-
         switch ($parametro) {
-
             case 1:
                 $query .= " WHERE CLIE.codigo_cliente LIKE :codigo_cliente";
                 $params[':codigo_cliente'] = $filtro;
@@ -4275,6 +4271,10 @@ class Helper
             case 3:
                 $query .= " WHERE Clie.cnpj_cpf LIKE :cnpj_cpf";
                 $params[':cnpj_cpf'] = $filtro;
+                break;
+            case 4:
+                $query .= " WHERE CLIE.id_cliente = :id_cliente";
+                $params[':id_cliente'] = $filtro;
                 break;
         }
 

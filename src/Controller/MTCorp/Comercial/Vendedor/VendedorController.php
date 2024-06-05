@@ -362,17 +362,63 @@ class VendedorController extends AbstractController
             $codigo = 1;
             $nombre = 2;
             $documento = 3;
+            $id = 4;
 
             $matricula = $infoUsuario->matricula;
             $cargoUsuario = (int)$datosUsuario[0]['NM_CARG_FUNC'];
             $situacao = $request->query->get("situacao");
             
+            $id_cliente = $request->query->get("id_cliente");
             $codigoCliente = $request->query->get("COD_CLIE");
             $nombreCliente   = $request->query->get("NM_CLIE");
             $documentoCliente = $request->query->get("DOC_CLIE");
 
+            if(!empty($id)){
+                $buscarClientes = $helper->buscarCliente($connection, $id, $id_cliente, $cargoUsuario, $matricula);
+                if($buscarClientes !== false){
+                    $re = $buscarClientes[0];
+
+                    if (empty($re["nombre_factura"])) {
+                        $nombre = $re["razaoSocial"];
+                    } else {
+                        $nombre = $re["nombre_factura"];
+                    }
+
+                    $res[] = [
+                        "codCliente" => $re["codCliente"],
+                        "codigo_cliente" => $re["codigo_cliente"],
+                        "codRazaoSocial" => $re["codRazaoSocial"],
+                        "razaoSocial" => $re["razaoSocial"],
+                        "nomeCliente" => $re["nomeCliente"],
+                        "tipoCliente" => $re["tipoCliente"],
+                        "nombreTipo" => $re["nombreTipo"],
+                        "nombreDepartamento" => $re["nombreDepartamento"],
+                        "id_departamento_lista" => $re["id_departamento_lista"],
+                        "uf" => $re["uf"],
+                        "lista" => $re["lista"],
+                        "id_lista_precio" => $re["id_lista_precio"],
+                        "id_vendedor" => $re["id_vendedor"],
+                        "nomeSituacao" => $re["nomeSituacao"],
+                        "cobrancaSomenteCarteira" => $re["cobrancaSomenteCarteira"],
+                        "direccion" => $re["direccion"],
+                        "latitud" => $re["latitud"],
+                        "longitud" => $re["longitud"],
+                        "correo_electronico" => $re["correo_electronico"],
+                        "telefono" => $re["telefono"],
+                        "celular" => $re["celular"],
+                        "codigo_rubro" => $re["codigo_rubro"],
+                        "tipo_documento" => $re["nombre_doc"],
+                        "nombre_factura" => $nombre,
+                        "numero_documento" => $re["numero_documento"],
+                        "rubro" => $re["rubro"],
+                        "nombre_vendedor" => $re["nombre_vendedor"]
+                    ];
+                    return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                }
+            }
+
             if(!empty($codigoCliente)){
-                $buscarClientes = $helper->buscarCliente($connection, $codigo,$codigoCliente, $cargoUsuario, $matricula);
+                $buscarClientes = $helper->buscarCliente($connection, $codigo, $codigoCliente, $cargoUsuario, $matricula);
                 if($buscarClientes !== false){
                     $res = $buscarClientes;
                 }
@@ -428,6 +474,7 @@ class VendedorController extends AbstractController
                     ];
                 }
                 $res = $resp;
+             
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
             } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
 

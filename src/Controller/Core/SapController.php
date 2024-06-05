@@ -617,7 +617,6 @@ class SapController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $swSap = isset($data['frontend']) && $data['frontend'] == 1  ? true : false;
 
-
         $verificarCliente = $helper->verificarCliente($connection, $data['codigo_cliente']);
         /*  $arrayUbicacion = [];
         $arrayContacto = [];
@@ -732,15 +731,15 @@ class SapController extends AbstractController
                             "razon_social" => $insertCliente['data']['razonSocial'],
                             "rubro" => $insertCliente['data']['rubro'],
                             "id_vendedor" => $insertCliente['data']['sap_vendedor'],
-                            "tipo_cliente" => $insertCliente['data']['tipo_cliente'],
+                            "tipo_cliente" => $insertCliente['data']['id_tipo_cliente'],
                             "tipo_persona" => $insertCliente['data']['tipo_persona'],
                             "ciudad" => $ciudadVendedor,
                             "condicion_pago" => "Contado",
                             "nombre_factura" => $insertCliente['data']['nombre_factura'],
                             "ubicacion" => $ubClie,
                             "contactos" => $contacto
-                        ];
-
+                        ];/* 
+                        dd($data_cliente, $insertCliente['data']); */
                         if (isset($ubClie)   &&   isset($contacto)) {
                             if ($swSap === true) {
 
@@ -804,10 +803,31 @@ class SapController extends AbstractController
                                     //dd($data_cliente);
                                     $resp_sap = $helper->insertarSapCliente($connection, $data_cliente);
                                     if (isset($resp_sap['response']) && isset($resp_sap['detalle']) && $resp_sap['response'] == 200) {
+                                        $insertCliente['data']['cliente'] = $connection->fetchAssociative('SELECT RTRIM(LTRIM(CLIE.prim_nome)) AS nomeCliente,
+                                                                                    RTRIM(LTRIM(CLIE.nombre_factura)) AS codRazaoSocial,
+                                                                                    CLIE.codigo_cliente AS codigo_cliente,
+                                                                                    CLIE.id_cliente AS codCliente,
+                                                                                    TCLIE.nombre_tipo AS tipo_cliente, 
+                                                                                    CLIE.id_tipo_cliente AS tipoCliente,
+                                                                                    CLIE.celular,
+                                                                                    CLIE.telefono,
+                                                                                    CLIE.email AS correo_electronico,
+                                                                                    CLIE.id_tipo_documento AS tipo_documento,
+                                                                                    DOC.nombre_doc AS nombre_documento,
+                                                                                    CLIE.cnpj_cpf AS numero_documento,
+                                                                                    CLIE.nombre_factura AS nomb_factura,
+                                                                                    CLIE.id_rubro AS rubro,
+                                                                                    RUB.descricao AS nombre_rubro
+                                                                                    FROM  MTCORP_MODU_CLIE_BASE CLIE 
+                                                                                    LEFT JOIN tb_tipo_cliente TCLIE ON CLIE.id_tipo_cliente = TCLIE.id
+                                                                                    LEFT JOIN MTCORP_BASE_CNAE RUB ON CLIE.id_rubro = RUB.id_cnae
+                                                                                    LEFT JOIN tb_base_clie_doc	DOC ON CLIE.id_tipo_documento = DOC.id
+                                                                                WHERE id_cliente = ?', [$id_cliente]);
                                         $message = [
                                             "CodigoRespuesta" => 200,
                                             "Estado" => true,
                                             "Mensaje" => "Se registro correctamente",
+                                            "Data" => $insertCliente['data']
                                         ];
                                     } else {
 
@@ -847,7 +867,8 @@ class SapController extends AbstractController
                                 $message = [
                                     "CodigoRespuesta" => 200,
                                     "Estado" => true,
-                                    "Mensaje" => "Registrado exitosamente en CRM360"
+                                    "Mensaje" => "Registrado exitosamente en CRM360",
+                                    "Data" => $insertCliente['data']
                                 ];
                             }
                         } else {

@@ -1919,13 +1919,13 @@ class CotacoesController extends AbstractController
     {
         $params = json_decode($request->getContent(), true);
         $helper = new Helper();
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));  
         isset($params['codVendedor']) ? $id_vendedor  = $params['codVendedor'] : NULL;
         try {
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-            if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
+            $id_vendedor = $buscarUsuario['ID']; 
+            if ($buscarUsuario['NM_CARG_FUNC'] == 6 || $buscarUsuario['NM_CARG_FUNC'] == 5 || $buscarUsuario['NM_CARG_FUNC'] == 9 || $buscarUsuario['NM_CARG_FUNC'] == 10 || $buscarUsuario['NM_CARG_FUNC'] == 11  ) {
                 $verificarOferta = $helper->verificarOferta($connection, $id_vendedor);
                 if ($verificarOferta[0] === true) {
                     $message = [
