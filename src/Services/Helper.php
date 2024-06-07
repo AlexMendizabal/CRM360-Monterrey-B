@@ -262,7 +262,7 @@ class Helper
             $codigo_cliente = isset($data['codigo_cliente']) ? $data['codigo_cliente'] : null;
             $email  = isset($data['email']) ? $data['email'] : null;
             $nombre_factura = isset($data['nombre_factura']) ? $data['nombre_factura'] :  null;
-            $id_tipo_cliente = isset($data['id_tipo_cliente']) ? (int)$data['id_tipo_cliente'] : 1;
+            !empty($data['id_tipo_cliente']) ?  $id_tipo_cliente = (int)$data['id_tipo_cliente'] :  $id_tipo_cliente = 1;
             // $fecha_creacion = datetime('Y/m/d H:i:s');
             if (isset($data['frontend'])) {
                 $vendedor = isset($data['id_vendedor']) ? (int)$data['id_vendedor'] : null;
@@ -417,7 +417,7 @@ class Helper
             $data_codigo['id_cliente'] = $data['id_cliente'];
             $data_codigo['interno'] = 1;
             $data_codigo['local'] = 1;
-            $data_codigo['id_tipo_cliente'] = 0;
+            $data_codigo['id_tipo_cliente'] = 1;
 
             $actualizarCliente = $this->updateClient($connection, $data_codigo);
             $message = [
@@ -962,13 +962,17 @@ class Helper
     public function traerVendedorSap($connection, $id_vendedor)
     {
 
-        $query = "SELECT codigo_sap FROM TB_VEND WHERE ID = :id_vendedor";
+        $query = $connection->fetchAssociative('SELECT tc.sigla, tv.codigo_sap  FROM TB_VEND as TV 
+        INNER JOIN tb_escr AS SUC ON SUC.id = TV.id_escr 
+        INNER JOIN tb_ciudad as tc on tc.id = SUC.id_ciudad where TV.ID = ?', [$id_vendedor]);
+       
+      /*  $query = "SELECT * FROM TB_VEND WHERE ID = :id_vendedor";
         $stament = $connection->prepare($query);
         $stament->bindValue('id_vendedor', $id_vendedor);
         $stament->execute();
-        $id_vendedor = $stament->fetchAll();
-        if ($id_vendedor > 0) {
-            return $id_vendedor;
+        $id_vendedor = $stament->fetchAll(); */
+        if(!empty($query)) {
+            return $query;
         } else {
             return false;
         }
@@ -1070,10 +1074,10 @@ class Helper
 
         } */
         /* dd($data['id_tipo_cliente']); */
-        if (!empty($data['id_tipo_cliente']) || $data['id_tipo_cliente'] == 0) {
+        if (!empty($data['id_tipo_cliente']) || $data['id_tipo_cliente'] == 1) {
             $cliente['id_tipo_cliente'] = $data['id_tipo_cliente'];
         } else {
-            $cliente['id_tipo_cliente'] = 0;
+            $cliente['id_tipo_cliente'] = 1;
         }
         if (!empty($data['nombre_factura'])) {
             $cliente['nombre_factura'] = $data['nombre_factura'];
@@ -1155,7 +1159,7 @@ class Helper
         $condition = ['id_cliente' => (int)$data['id_cliente']];
 
         if (!isset($cliente['id_tipo_cliente'])) {
-            $cliente['id_tipo_cliente'] = 0;
+            $cliente['id_tipo_cliente'] = 1;
         }
 
         $rowsAffected = $connection->update('MTCORP_MODU_CLIE_BASE', $cliente, $condition);
@@ -3465,7 +3469,7 @@ class Helper
             'tipo_cliente' => $tipo_cliente,
             'tipo_documento' => $tipo_documento
         ]);
-        $array_final['datos_cliente'] = $array_cliente;
+        $array_final['datos_cliente'] = $array_cliente; 
         if (count($array_cliente) > 0) {
 
             //Obtener Contactos
@@ -3849,26 +3853,13 @@ class Helper
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-    public function modificarCodigoOferta($connection, $data)
-    {
-        $data_oferta['codigo_sap'] = $sapresp['Mensaje'];
-        $resp2 = $connection->update('TB_OFERTA', ['codigo_oferta' => (int)$data['codigo_sap']], ['id' => (int)$data['id_oferta']]);
-        $connection->commit();
-        $message = [
-            "responseCode" => 200,
-            "message" => 'Registro Correctamente',
-            "success" => true,
-            "data_sap" => $sapresp
-        ];
-
-        return $message;
-    }
+  
     public function actualizarSapCliente($connection, $data)
     {
         $ruta = '/actualizarCliente';
         $respuesta = $this->conexionSap($ruta, $data);
         //dd($respuesta['CodigoRespuesta']);
-
+      
         if ($respuesta['CodigoRespuesta'] == 200) {
             //dd('aqui');
             /* $codigo_cliente_sap = $respuesta['Mensaje'];

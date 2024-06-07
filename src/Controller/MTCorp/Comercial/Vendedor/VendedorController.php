@@ -413,7 +413,7 @@ class VendedorController extends AbstractController
                         "rubro" => $re["rubro"],
                         "nombre_vendedor" => $re["nombre_vendedor"]
                     ];
-                    return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                    return FunctionsController::Retorno(true, $re["codigo_cliente"], $res, Response::HTTP_OK);
                 }
             }
 

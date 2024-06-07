@@ -744,13 +744,10 @@ class CotacoesController extends AbstractController
      */
     public function postMateriaisRelacionadosCliente(Connection $connection, Request $request)
     {
-
         try {
             $params = json_decode($request->getContent(), true);
-
             // print_r($params);
             // exit(0);
-
             $codEmpresa = $params['codEmpresa'];
             $codMaterial = $params['codMaterial'];
             $codCliente = $params['codCliente'];
@@ -1283,12 +1280,13 @@ class CotacoesController extends AbstractController
     public function postOferta(Connection $connection, $data)
     {
         $helper = new Helper();
+
         if (!empty($data['celular']) || !empty($data['telefono']) || !empty($data['correo_electronico']) || !empty($data['nombre_factura'])) {
             $repstClie = $this->modificarCliente($connection, $data);
             $data_oferta = json_decode($repstClie->getContent(), true);
             $id_cliente = $data_oferta['data'];
         }
-        if (!empty($data)) {
+        if (!empty($data) && isset($data)) {
             $resp = $this->insertaOferta($connection, $data);
             $data_oferta = json_decode($resp->getContent(), true);
             $id_oferta = $data_oferta['data'];
@@ -1358,7 +1356,6 @@ class CotacoesController extends AbstractController
         return $message;
     }
 
-
     public function modificarCliente($connection, $data)
     {
 
@@ -1397,15 +1394,14 @@ class CotacoesController extends AbstractController
     public function insertaOferta($connection, $data)
     {
         !empty($data['id_forma_pago']) ?  $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
-        !empty($data['id_lista_precio']) ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
+        !empty($data['id_lista_precio'])  ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
         $data_oferta['id_moneda'] = 1;
         $data_oferta['id_iva'] = 1;
         !empty($data['id_cliente']) ?  $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
         !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
         !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : null;
         !empty($data['id_almacen']) ? $data_oferta['id_almacen'] = $data['id_almacen'] : null;
-        !empty($data['tipo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['tipo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
-        $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
+         $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
         !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
         !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
         !empty($data['monto_total']) ? $data_oferta['monto_total'] = $data['monto_total'] : $data_error['monto_total'] = 'es necesario';
@@ -1416,11 +1412,13 @@ class CotacoesController extends AbstractController
         !empty($data['tipoContacto']) ? $data_oferta['origen_contacto'] = $data['tipoContacto'] : null;
         !empty($data['cantidad_total']) ?  $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
         !empty($data['direccion_cliente']) ? $data_oferta['id_direccion_cliente'] = $data['direccion_cliente'] : null;
-        if (!empty($data['direccion_entrega'])) {
-            !empty($data['centroLogisticoControl']) ? $data_oferta['id_centro_logistico'] = $data['centroLogisticoControl'] : $data_error['centroLogisticoControl'] = 'es necesario';
-            !empty($data['latitud']) ? $data_oferta['latitud'] = $data['latitud'] : $data_error['latitud'] = 'es necesario';
-            !empty($data['longitud']) ? $data_oferta['longitud'] = $data['longitud'] : $data_error['longitud'] = 'es necesario';
-            !empty($data['direccion_entrega']) ? $data_oferta['direccion'] = $data['direccion_entrega'] : $data_error['direccion'] = 'es necesario';
+        !empty($data['tipo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['tipo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
+       
+        if (!empty($data['direccion_entrega']) && $data['tipo_entrega']  == 2) {
+            !empty($data['centroLogisticoControl']) ? $data_oferta['id_centro_logistico'] = $data['centroLogisticoControl'] : $data_error['centroLogisticoControl'] = null;
+            !empty($data['latitud']) ? $data_oferta['latitud'] = $data['latitud'] : $data_error['latitud'] = null;
+            !empty($data['longitud']) ? $data_oferta['longitud'] = $data['longitud'] : $data_error['longitud'] = null;
+            !empty($data['direccion_entrega']) ? $data_oferta['direccion'] = $data['direccion_entrega'] : $data_error['direccion'] = null;
         }
         if (!empty($data['observacion'])) {
             $data_oferta['observacion'] = $data['observacion'];
@@ -1529,7 +1527,6 @@ class CotacoesController extends AbstractController
 
     public function insertItemsOferta($connection, $data, $id_oferta)
     {
-        $autorizacion = 0;
         $data_items['id_oferta'] = (int)$id_oferta;
         !empty($data['codMaterial']) ? $data_items['id_material'] = $data['codMaterial'] : $data_error['codMaterial'] = 'es necesario';
         !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
@@ -1537,11 +1534,14 @@ class CotacoesController extends AbstractController
         !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
         !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
         !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
-        if ($data['descuento_permitido'] < $data['percentualDesc']) {
-          $autorizacion = 1;
-        }
+        ($data['percentualDesc'] > $data['descuento_permitido']) ? $autorizacion = 1 : $autorizacion = 0; 
         !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
         !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
+        
+        !empty($data['precio']) ? $data_items['precio'] = $data['precio'] : $data_error['precio'] = null;
+        !empty($data['codigo_material']) ? $data_items['codigo_material'] = $data['codigo_material'] : $data_error['codigo_material'] = null;
+        !empty($data['codDeposito']) ? $data_items['codigo_almacen'] = $data['codDeposito'] : $data_error['codDeposito'] = null;
+        
         try {
             $data_detalle = $connection->insert('TB_OFERTA_DETALLE', $data_items);
             if ($autorizacion == 1) {
@@ -1643,9 +1643,23 @@ class CotacoesController extends AbstractController
         try {
             $ruta = "/estadoOferta";
             $message = $helper->insertarServicio($ruta, $estado);
+           
             if ($message['CodigoRespuesta'] == 200) {
                 $codigoEstado = $message['CodigoEstado'];
-                $oferte_vigencia = $connection->update('TB_OFERTA', ['estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);
+                //dd($codigoEstado);
+                if(!empty($codigoEstado) && $codigoEstado == 1)
+                {
+                    $oferte_vigencia = $connection->update('TB_OFERTA', ['tipo_estado' => 13, 'estado_oferta' => 18, 'estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);
+                }
+                if(!empty($codigoEstado) && $codigoEstado == 3)
+                {
+                    $oferte_vigencia = $connection->update('TB_OFERTA', ['tipo_estado' => 13, 'estado_oferta' => 15, 'estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);
+                }
+
+                if(empty($codigoEstado))
+                {
+                    $oferte_vigencia = $connection->update('TB_OFERTA', [ 'estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);
+                }
 
                 if (!empty($oferte_vigencia)) {
                     $message = [
@@ -1695,7 +1709,7 @@ class CotacoesController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if ($infoUsuario) {
-                $params = $request->query->all();
+                $params = $request->query->all(); 
                 $id_tipo_cliente = $params['id_tipo_cliente'] ?? null;
                 $cantidad = $params['cantidad'] ?? null;
                 $id_material = $params['id_material'] ?? null;
