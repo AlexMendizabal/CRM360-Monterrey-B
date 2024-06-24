@@ -598,52 +598,67 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/presentacion_materiales",
-     *  name="comercial.presentacion_materiales", 
-     *  methods={"GET"}
-     * )
-     * @return JsonResponse
-     */
-    public function getPresentacionMateriales(Connection $connection, Request $request)
-    {
-        try {
-            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            if (isset($infoUsuario)) {
-                $query =
-                    "SELECT * FROM TB_MATERIAL_PRESENTACION 
-                WHERE 
-                estado_mat_presentacion = 1";
+ * @Route(
+ *  "/comercial/presentacion_materiales",
+ *  name="comercial.presentacion_materiales", 
+ *  methods={"GET"}
+ * )
+ * @return JsonResponse
+ */
+public function getPresentacionMateriales(Connection $connection, Request $request)
+{
+    try {
+        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+        if (isset($infoUsuario)) {
+            // Obtener el parámetro codigo_material del request
+            $codigo_material = $request->query->get('codigo_material'); dd($codigo_material);
+
+            if ($codigo_material) {
+                $query = "SELECT * FROM TB_MATERIAL_PRESENTACION WHERE codigo_material = :codigo_material";
                 $stmt = $connection->prepare($query);
+                $stmt->bindValue('codigo_material', $codigo_material);
                 $stmt->execute();
                 $res = $stmt->fetchAll();
+
                 if (count($res) > 0) {
-                    /* dd($res); */
                     $message = array(
                         'responseCode' => 200,
                         'result' => $res,
                         'estado' => true
                     );
+                } else {
+                    $message = array(
+                        'responseCode' => 204,
+                        'result' => [],
+                        'estado' => false
+                    );
                 }
             } else {
                 $message = array(
-                    'responseCode' => 204,
-                    'result' => [],
+                    'responseCode' => 400,
+                    'result' => 'codigo_material es requerido',
                     'estado' => false
                 );
             }
-        } catch (DBALException $e) {
+        } else {
             $message = array(
                 'responseCode' => 204,
-                'result' => $e->getMessage(),
+                'result' => [],
                 'estado' => false
             );
         }
-
-        $response = new JsonResponse($message);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
+    } catch (DBALException $e) {
+        $message = array(
+            'responseCode' => 500,
+            'result' => $e->getMessage(),
+            'estado' => false
+        );
     }
+
+    $response = new JsonResponse($message);
+    $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+    return $response;
+}
 
 
 

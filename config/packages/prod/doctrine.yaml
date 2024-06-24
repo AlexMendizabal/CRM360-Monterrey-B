@@ -7,8 +7,8 @@ doctrine:
                 host: '23.254.204.187'
                 port: 1433       
                 dbname: 'CRM360'
-                user: 'user2023'
-                password: 'RIC0rp#2023'
+                user: 'srvIMTCorp'
+                password: 'b2moTkrDMcpqPD@QV'
                 charset: 'UTF-8'
  
     # orm:# 

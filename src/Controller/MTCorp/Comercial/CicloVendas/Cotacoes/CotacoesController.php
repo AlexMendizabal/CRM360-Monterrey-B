@@ -1393,6 +1393,7 @@ class CotacoesController extends AbstractController
     }
     public function insertaOferta($connection, $data)
     {
+   
         !empty($data['id_forma_pago']) ?  $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
         !empty($data['id_lista_precio'])  ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
         $data_oferta['id_moneda'] = 1;
@@ -1401,7 +1402,7 @@ class CotacoesController extends AbstractController
         !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
         !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : null;
         !empty($data['id_almacen']) ? $data_oferta['id_almacen'] = $data['id_almacen'] : null;
-         $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
+        $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
         !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
         !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
         !empty($data['monto_total']) ? $data_oferta['monto_total'] = $data['monto_total'] : $data_error['monto_total'] = 'es necesario';
@@ -1423,6 +1424,11 @@ class CotacoesController extends AbstractController
         if (!empty($data['observacion'])) {
             $data_oferta['observacion'] = $data['observacion'];
         }
+
+        !empty($data['codpagoqr']) ? $data_oferta['qr'] = $data['codpagoqr'] : $data_oferta['qr'] = 0;
+        !empty($data['almacendespacho']) ? $data_oferta['almacendespacho'] = $data['almacendespacho'] : $data_error['almacendespacho'] = 'es necesario';
+        !empty($data['totalBs']) ? $data_oferta['totalbs'] = $data['totalBs'] : $data_oferta['totalbs'] =  ($data['monto_total'] * 6.96);
+        
         $data_oferta['estado_oferta'] = 1;
         $data_oferta['tipo_estado'] = 14;
         try {
@@ -1568,7 +1574,7 @@ class CotacoesController extends AbstractController
         return new JsonResponse($message);
     }
 
-      /**
+    /**
      * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/enviar_sap/{nrPedido}",
      *  name="comercial.ciclo-vendas-cotacoes-sap",
@@ -1646,7 +1652,6 @@ class CotacoesController extends AbstractController
            
             if ($message['CodigoRespuesta'] == 200) {
                 $codigoEstado = $message['CodigoEstado'];
-                //dd($codigoEstado);
                 if(!empty($codigoEstado) && $codigoEstado == 1)
                 {
                     $oferte_vigencia = $connection->update('TB_OFERTA', ['tipo_estado' => 13, 'estado_oferta' => 18, 'estado_vigente' => $codigoEstado], ['codigo_oferta' => $codigo_oferta]);

@@ -3254,6 +3254,9 @@ class Helper
             DEPO.CODIGO_ALMACEN AS codigo_almacen,  
             LP.nombre_lista AS nombre_lista,
             CONCAT(OFE.latitud, ', ', OFE.longitud) AS geolocalizacion
+            OFE.qr AS qr,
+            DEPO2.CODIGO_ALMACEN AS almacendespacho,
+            OFE.totalbs AS totalba
             FROM TB_OFERTA OFE 
                 INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
                 left JOIN TB_CLIE_CONT TCC ON TCC.id_clie = OFE.id_cliente
@@ -3261,6 +3264,7 @@ class Helper
                 left JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
                 INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
                 LEFT JOIN TB_DEPO_FISI_ESTO AS DEPO ON OFE.id_almacen = DEPO.id
+                inner join TB_DEPO_FISI_ESTO AS DEPO2 ON OFE.almacendespacho = DEPO2.id
             WHERE  OFE.id = :id_oferta";
         $stmt1 = $connection->prepare($query_oferta);
         $stmt1->bindValue(':id_oferta', $id);
@@ -3735,6 +3739,10 @@ class Helper
             'direccion' => $oferta['direccion_entrega'],
             'geolocalizacion' => $oferta['geolocalizacion'],
             'detalle_pedido' => $detalle_of,
+            'qr' => $oferta['qr'],
+            'AlmacenDespacho' => $oferta['almacendespacho'],
+            'TotalBs' => $oferta['totalbs'],
+            
         ]);
 
         if (!empty($autorizacion)) {
@@ -3753,6 +3761,7 @@ class Helper
         }
         try {
             $ruta = "/crearProforma";
+            dd($arrayOFerta);
             $rsp = $this->conexionSap($ruta, $arrayOFerta);
             if ($rsp['CodigoRespuesta'] == 200) {
                 $message = $rsp;

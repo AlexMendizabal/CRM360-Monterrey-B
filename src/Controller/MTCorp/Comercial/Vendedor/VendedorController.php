@@ -133,12 +133,12 @@ class VendedorController extends AbstractController
 
             switch ($cargo) {
                    case '6':
-                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio , codigo_sap 
                               FROM TB_VEND 
                               WHERE ID = :id";
                     break;
                 default:
-                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
+                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio , codigo_sap
                               FROM TB_VEND 
                               ORDER BY nombre ASC";
                     break;

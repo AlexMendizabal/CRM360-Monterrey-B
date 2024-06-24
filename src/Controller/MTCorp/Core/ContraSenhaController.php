@@ -61,7 +61,7 @@ class ContraSenhaController
      * @return JsonResponse
      */
     public function store(Request $request, Connection $connection)
-    {
+    { 
 
         try {
             

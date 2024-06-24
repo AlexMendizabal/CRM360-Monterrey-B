@@ -172,6 +172,7 @@ class PesquisaController extends AbstractController
                     @DS_ORDE = '{$orderType}'
                 " . $carteiraParam
             )->fetchAll();
+         
             
 
            //dd($resListaSr);
@@ -320,6 +321,7 @@ class PesquisaController extends AbstractController
                     @DS_ORDE = '{$order}'
                 " . $carteiraParam
             )->fetchAll();
+            
 
             $resStatus = $connection->query(
                 "

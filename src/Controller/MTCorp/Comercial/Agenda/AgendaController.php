@@ -383,7 +383,7 @@ class AgendaController extends AbstractController
            
             $id_vendedor = 0;
             $cor = "";
-            if ($infoUsuario->matricula == 1) {
+            if ($infoUsuario->none_cargo == 1) {
                 $cor = "#0033ff";
             } else {
                 $cor = "#BC0BDF";
@@ -436,7 +436,6 @@ class AgendaController extends AbstractController
                     ,@OBSERVACAO = '{$observacao}'
                     ,@VENDEDOR = '{$id_vendedor}'
                     ,@id_vend_asig ='{$promotorasignado}'
-
             ")->fetchAll();
 
                 $id_agenda =  $connection->lastInsertId();
