@@ -3400,6 +3400,63 @@ if (!isset($params['codVendedor'])) {
 
     /**
      * @Route(
+     *  "/comercial/ciclo-vendas/cotacoes/descuentos/lista",
+     *  name="comercial.ciclo-vendas-cotacoes-descuentos-lista",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDescuentosLista(Connection $connection, Request $request)
+    {
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            if ($infoUsuario) {
+                $stmt = $connection->prepare("
+                    SELECT
+                        d.id,
+                        d.codigomaterial,
+                        d.id_material,
+                        d.id_departamento,
+                        d.id_tipo_cliente,
+                        d.rango_inicial,
+                        d.rango_final,
+                        d.descuento
+                    FROM TB_DESCUENTO d
+                    ORDER BY d.id_material, d.id_tipo_cliente, d.rango_inicial
+                ");
+                $stmt->executeQuery();
+                $result = $stmt->fetchAll();
+
+                $message = [
+                    'responseCode' => 200,
+                    'result' => $result,
+                    'estado' => true
+                ];
+            } else {
+                $message = [
+                    'responseCode' => 204,
+                    'result' => [],
+                    'estado' => false
+                ];
+            }
+        } catch (DBALException $e) {
+            $message = [
+                'responseCode' => 500,
+                'message' => 'Error en la base de datos: ' . $e->getMessage(),
+                'estado' => false
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
      *  "/comercial/ciclo-vendas/cotacoes/descuento_cliente",
      *  name="comercial.ciclo-vendas-cotacoes-descuento-cliente",
      *  methods={"GET"}

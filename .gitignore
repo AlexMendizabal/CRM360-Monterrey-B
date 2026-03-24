@@ -12,3 +12,5 @@
 /frontend/
 /V1.0.rar/
 ###< symfony/framework-bundle ###
+docker/apache/vhost.conf
+.env

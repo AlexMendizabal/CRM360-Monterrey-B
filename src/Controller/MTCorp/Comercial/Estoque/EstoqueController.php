@@ -357,8 +357,10 @@ class EstoqueController extends AbstractController
                 $ComercialController = new ComercialController();
 
                 $upsell = $ComercialController->filtrarMaterialContratipo($connection, $id_material, 1, $id_lista_precio, $id_vendedor, $codigo_almacen);
+                $upsell = is_array($upsell) ? $upsell : [];
 
                 $crosell = $helper->filtrarMaterial($connection, $id_material, $estado_material, $id_vendedor, $id_lista_precio, $codigo_almacen);
+                $crosell = is_array($crosell) ? $crosell : [];
                
                 $query = "	SELECT
                distinct 
@@ -1421,6 +1423,125 @@ class EstoqueController extends AbstractController
                 "response" => 401,
                 "estado" => false,
                 "detalle" => $e->getMessage()
+            ];
+        }
+
+        $response = new JsonResponse($message);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *  "/comercial/vendedor/lista_precio_completa",
+     *  name="comercial.vendedor-lista-precio-completa",
+     *  methods={"GET"}
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getListaPrecioCompletaVendedor(Connection $connection, Request $request)
+    {
+        try {
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+
+            if (isset($infoUsuario)) {
+                $params = $request->query->all();
+                $id_vendedor = isset($params['id_vendedor']) ? (int)$params['id_vendedor'] : (int)$infoUsuario->idVendedor;
+                $page        = isset($params['page'])       ? max(1, (int)$params['page']) : 1;
+                $per_page    = isset($params['per_page'])   ? min(500, max(1, (int)$params['per_page'])) : 200;
+                $offset      = ($page - 1) * $per_page;
+
+                $queryCount = "
+                    SELECT COUNT(*) AS total
+                    FROM (
+                        SELECT DISTINCT MAT.ID_CODIGOMATERIAL
+                        FROM TB_VEND VEND
+                            INNER JOIN tb_Escr               AS SCL  ON SCL.id             = VEND.ID_ESCR
+                            INNER JOIN tb_ciudad             AS CD   ON CD.iD              = SCL.id_ciudad
+                            INNER JOIN TB_DEPO_FISI_ESTO     AS DEPO ON DEPO.id_ciudad     = CD.id
+                            INNER JOIN TB_MATERIAL_DEPOSITO  AS MTD  ON MTD.id_deposito    = DEPO.CODIGO_ALMACEN
+                            INNER JOIN tb_mate               AS MAT  ON MAT.CODIGOMATERIAL = MTD.mate_sap
+                            INNER JOIN TB_PRECIO_MATERIAL    AS PM   ON PM.cod_mate        = MAT.CODIGOMATERIAL
+                        WHERE VEND.id = :id_vendedor
+                          AND DEPO.estado_mostrar = 1
+                    ) AS sub
+                ";
+                $stmtCount = $connection->prepare($queryCount);
+                $stmtCount->bindValue('id_vendedor', $id_vendedor);
+                $stmtCount->executeQuery();
+                $total = (int)$stmtCount->fetchOne();
+
+                $query = "
+                    SELECT DISTINCT
+                        MAT.ID_CODIGOMATERIAL AS id_material,
+                        MAT.CODIGOMATERIAL    AS codigo_material,
+                        MAT.DESCRICAO         AS nombre_material,
+                        DEPO.CODIGO_ALMACEN   AS nombre_almacen,
+                        DEPO.ID               AS id_almacen,
+                        PM.peso               AS peso,
+                        UNI.id                AS id_unidad,
+                        UNI.NOMBRE_UNI        AS unidad,
+                        MTD.cantidad          AS cantidad,
+                        PM.precio             AS precio,
+                        0.00                  AS descuento,
+                        PM.precio             AS precio_neto,
+                        (SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva,
+                        MONE.nombre_moneda,
+                        'A'                   AS codigo_situacion,
+                        MAT.largo_material    AS largo_material
+                    FROM TB_VEND VEND
+                        INNER JOIN tb_Escr               AS SCL  ON SCL.id             = VEND.ID_ESCR
+                        INNER JOIN tb_ciudad             AS CD   ON CD.iD              = SCL.id_ciudad
+                        INNER JOIN TB_DEPO_FISI_ESTO     AS DEPO ON DEPO.id_ciudad     = CD.id
+                        INNER JOIN TB_MATERIAL_DEPOSITO  AS MTD  ON MTD.id_deposito    = DEPO.CODIGO_ALMACEN
+                        INNER JOIN tb_mate               AS MAT  ON MAT.CODIGOMATERIAL = MTD.mate_sap
+                        INNER JOIN TB_PRECIO_MATERIAL    AS PM   ON PM.cod_mate        = MAT.CODIGOMATERIAL
+                        INNER JOIN UNIDADES              AS UNI  ON UNI.ID             = MAT.UNIDADE
+                        INNER JOIN TB_MONEDA             AS MONE ON MONE.id            = PM.id_moneda
+                    WHERE VEND.id = :id_vendedor
+                      AND DEPO.estado_mostrar = 1
+                    ORDER BY MAT.DESCRICAO ASC
+                    OFFSET $offset ROWS FETCH NEXT $per_page ROWS ONLY
+                ";
+
+                $stmt = $connection->prepare($query);
+                $stmt->bindValue('id_vendedor', $id_vendedor);
+                $stmt->executeQuery();
+                $res = $stmt->fetchAll();
+
+                if (count($res) > 0) {
+                    $message = [
+                        'responseCode' => 200,
+                        'estado'       => true,
+                        'total'        => $total,
+                        'page'         => $page,
+                        'per_page'     => $per_page,
+                        'material'     => $res,
+                    ];
+                } else {
+                    $message = [
+                        'responseCode' => 204,
+                        'estado'       => false,
+                        'total'        => 0,
+                        'page'         => $page,
+                        'per_page'     => $per_page,
+                        'material'     => [],
+                    ];
+                }
+            } else {
+                $message = [
+                    'responseCode' => 204,
+                    'estado'       => false,
+                    'material'     => [],
+                ];
+            }
+        } catch (DBALException $e) {
+            $message = [
+                'responseCode' => 500,
+                'estado'       => false,
+                'message'      => $e->getMessage(),
             ];
         }
 
