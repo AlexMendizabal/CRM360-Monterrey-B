@@ -342,34 +342,6 @@ class VendedorController extends AbstractController
 
     /**
      * @Route(
-     *  "/comercial/vendedor/allvendedor",
-     *  name="comercial.vendedor-allvendedor",
-     *  methods={"GET"}
-     * )
-     * @return JsonResponse
-     */
-    public function getVendedor(Connection $connection, Request $request)
-    {
-        try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
-            $res = $this->todosVendedores($connection);
-
-            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
-                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
-            } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
-            }
-        } catch (DBALException $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-}
-}
-
-    /**
-     * @Route(
      *  "/comercial/vendedor/lista_precio",
      *  name="comercial.vendedor-lista-precio",
      *  methods={"GET"}
@@ -507,15 +479,15 @@ class VendedorController extends AbstractController
 
     /**
      * @Route(
-     *  "/comercial/vendedor/lista_precio",
-     *  name="comercial.vendedor-lista-precio",
+     *  "/comercial/vendedor/listas_precio",
+     *  name="comercial.vendedor-listas-precio",
      *  methods={"GET"}
      * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
-    public function getlistaprecio(Connection $connection, Request $request)
+    public function getListasPrecio(Connection $connection, Request $request)
     {
         try {
             $UsuarioController = new UsuarioController();
@@ -523,7 +495,7 @@ class VendedorController extends AbstractController
 
             $idVendedor = $infoUsuario->idVendedor;
 
-            $res = $connection->query("SELECT 
+            $res = $connection->query("SELECT
                 lista.id,
                 lista.nombre_lista
                 FROM TB_LISTA_PRECIO as lista
