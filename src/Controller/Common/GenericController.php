@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\Common;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 
 /**
@@ -20,18 +20,13 @@ use App\Controller\Common\Services\FunctionsController;
 class GenericController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/common/empresas",
-   *  name="common.empresas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getEmpresas(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $empresas = $connection->query(
+        $empresas = $connection->executeQuery(
         "
           EXEC MTCORP.dbo.PRC_MTCORP_BASE_EMPR
           @CODIGO_EMPRESA = NULL,
@@ -40,7 +35,7 @@ class GenericController extends AbstractController
           @CNPJ = NULL,
           @TIPO = NULL;
         "
-        )->fetchAll();
+        )->fetchAllAssociative();
         foreach($empresas as $key => $value){
           $result[$key] = array(
             "codigoEmpresa" => $value['CODIGOEMPRESA'],
@@ -77,19 +72,13 @@ class GenericController extends AbstractController
   }
 
   /**
-  * @Route(
-  *  "/common/empresa/{id}",
-  *  name="common.empresa",
-  *  methods={"GET"},
-  *  requirements={"id"="\d+"}
-  * )
   * @return Response
   */
   public function getEmpresa(Connection $connection, Request $request, $id)
   {
     if ($request->isMethod('GET')) {
     try {
-      $empresa = $connection->query(
+      $empresa = $connection->executeQuery(
         "
           EXEC MTCORP.dbo.PRC_MTCORP_BASE_EMPR
           @CODIGO_EMPRESA = '{$id}',
@@ -98,7 +87,7 @@ class GenericController extends AbstractController
           @CNPJ = NULL,
           @TIPO = NULL;
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($empresa) > 0) {
         $message = array(
@@ -130,20 +119,15 @@ class GenericController extends AbstractController
   }
 
   /**
-  * @Route(
-  *   "/common/escritorios",
-  *   name="common.escritorios",
-  *   methods={"GET"}
-  * )
   * @return Response
   */
   public function getEscritorios(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXECUTE [dbo].[PRC_MTCORP_MODU_COME_ESCR_CONS]
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -174,11 +158,6 @@ class GenericController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/depositos/{empresa}",
-   *  name="common.depositos",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getDepositos(Connection $connection, int $empresa)
@@ -188,7 +167,7 @@ class GenericController extends AbstractController
                   @EMPRESA = $empresa, 
                   @DEBUG = NULL";
 
-      $message = $connection->query($query)->fetchAll();
+      $message = $connection->executeQuery($query)->fetchAllAssociative();
       foreach($message as $key => $value){
         $result[$key] = array(
           "depositoDescricao" => $value['DEPOSITO_DESCRICAO'],
@@ -223,17 +202,12 @@ class GenericController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/linhas",
-   *  name="common.linhas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getLinhas(Connection $connection){         
     try {
       $query ="EXEC MTCORP.dbo.PRC_MTCORP_BASE_MATE_LINH_CONS;";
-      $message = $connection->query($query)->fetchAll();
+      $message = $connection->executeQuery($query)->fetchAllAssociative();
       foreach($message as $key => $value){
         $result[$key] = array(
           "linha" => $value['linha']
@@ -267,11 +241,6 @@ class GenericController extends AbstractController
   }
   
    /**
-   * @Route(
-   *  "/common/classes",
-   *  name="common.classes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getClasses(Connection $connection, Request $request){      
@@ -283,7 +252,7 @@ class GenericController extends AbstractController
       $query = "EXEC PRC_MTCORP_BASE_CLASS_CONS
                   @LINHA       = '$linhas',
                   @ID_SUB_LINH = $subLinha";
-      $message = $connection->query($query)->fetchAll();
+      $message = $connection->executeQuery($query)->fetchAllAssociative();
 
       foreach($message as $key => $value){
         $result[$key] = array(
@@ -320,11 +289,6 @@ class GenericController extends AbstractController
 
   
     /**
-     * @Route(
-     *  "/common/sub-linhas",
-     *  name="common.sublinhas",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getSubLinhas(Connection $connection, Request $request)
@@ -338,7 +302,7 @@ class GenericController extends AbstractController
             @DS_LINH = $linha, 
             @DS_SITU = 'Ativo'";
 
-          $subLinhas = $connection->query($query)->fetchAll();
+          $subLinhas = $connection->executeQuery($query)->fetchAllAssociative();
 
           foreach ($subLinhas as $subLinha)
           {
@@ -359,11 +323,6 @@ class GenericController extends AbstractController
     }
 
    /**
-   * @Route(
-   *  "/common/materiais",
-   *  name="common.materiais",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getMateriais(Connection $connection, Request $request)
@@ -427,7 +386,7 @@ class GenericController extends AbstractController
                   @BOBINAS = {$somenteBobinas},
                   @DEBUG = {$debug};";
 
-      $materiais = $connection->query($query)->fetchAll();
+      $materiais = $connection->executeQuery($query)->fetchAllAssociative();
 
       if (count($materiais) > 0 ) {
         $materiais = array(
@@ -457,11 +416,6 @@ class GenericController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/top-desk/login",
-   *  name="common.top-desk.login",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function loginTopDesk(Request $request)
@@ -473,8 +427,8 @@ class GenericController extends AbstractController
       //GET Request
       $c = curl_init('https://topdesk.manetoni.com.br/tas/public/login/form');
       curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 0);
-      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
 
       $html = curl_exec($c);
       curl_close($c);
@@ -490,8 +444,8 @@ class GenericController extends AbstractController
       $c = curl_init();
 
       curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 0);
-      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
 
       curl_setopt($c, CURLOPT_URL, "https://topdesk.manetoni.com.br/tas/public/login/verify/");
       curl_setopt($c, CURLOPT_POST, 1);
@@ -499,7 +453,7 @@ class GenericController extends AbstractController
         http_build_query([
           "form_username" => $infoUsuario->matricula,
           "form_password" => $params["password"],
-          "csrf-token" => "c609bc3f-78c0-4631-a791-b4b033b46a3b:335405c0-0b67-44f6-a0d9-ae74d992da89"
+          "csrf-token" => bin2hex(random_bytes(32))
         ])
       );
 
@@ -510,41 +464,30 @@ class GenericController extends AbstractController
       //GET Request
       $c = curl_init('https://topdesk.manetoni.com.br/tas/public/ssp/');
       curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 0);
-      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
 
       $html = curl_exec($c);
       curl_close($c);
-      
-      print_r($html);
-      exit;
 
-      if ($server_output == "OK")
-        print_r("Sucesso");
-      else
-        print_r("Falha");
-
-      exit;
-
-      return new JsonResponse("Sucesso", Response::HTTP_OK);
+      if ($server_output == "OK") {
+        return new JsonResponse("Sucesso", Response::HTTP_OK);
+      } else {
+        return new JsonResponse("Falha", Response::HTTP_BAD_REQUEST);
+      }
     } catch (\Throwable $th) {
       return new JsonResponse($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
   }
 
   /**
-  * @Route(
-  *  "/common/situacoes",
-  *  name="common.situacoes", 
-  *  methods={"GET"}
-  * )
   * @param Connection $connection
   * @return JsonResponse
   */
   public function getSituacoes(Connection $connection)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           SELECT 
             id_situ [id],
@@ -552,7 +495,7 @@ class GenericController extends AbstractController
           FROM 
             tb_core_situ
         "
-      )->fetchAll(); 
+      )->fetchAllAssociative(); 
 
       if (count($res) > 0) {
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
@@ -570,11 +513,6 @@ class GenericController extends AbstractController
   }
 
   /**
-  * @Route(
-  *  "/common/materiais/tipos",
-  *  name="common.materiais.tipos", 
-  *  methods={"GET"}
-  * )
   * @return JsonResponse
   */
   public function getMateriaisTipos()
@@ -598,17 +536,12 @@ class GenericController extends AbstractController
   }
 
     /**
-  * @Route(
-  *  "/common/informacoes-adicionais",
-  *  name="common.informacoes-adicionais", 
-  *  methods={"GET"}
-  * )
   * @return JsonResponse
   */
   public function getInformacoesAdicionais(Connection $connection)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           SELECT
             ADIC.ID_INFO_ADIC AS id,
@@ -618,7 +551,7 @@ class GenericController extends AbstractController
           WHERE ADIC.IN_STAT = 1
             AND ADIC.ID_INFO_ADIC_REFE > 0
         "
-      )->fetchAll(); 
+      )->fetchAllAssociative(); 
 
       if (count($res) > 0) {
         return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);

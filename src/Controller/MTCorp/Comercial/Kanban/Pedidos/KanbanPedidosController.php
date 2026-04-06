@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Kanban\Pedidos;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 
 /**
@@ -20,11 +20,6 @@ use App\Controller\Common\Services\FunctionsController;
 class KanbanPedidosController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/kanban/pedidos/aberto",
-    *  name="comercial.kanban-pedidos-aberto", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -54,7 +49,7 @@ class KanbanPedidosController extends AbstractController
             if (isset($params['dataInicial'])) $dataInicial = $params['dataInicial'];
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
     
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_KANB
                     @ID_EMPR = {$codEmpresa},
                     @DS_CLIE = '{$cliente}',
@@ -64,7 +59,7 @@ class KanbanPedidosController extends AbstractController
                     @DT_INIC = '{$dataInicial}',
                     @DT_FINA = '{$dataFinal}',
                     @ID_SITU = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 for ($i=0; $i < count($res); $i++) {
@@ -89,13 +84,7 @@ class KanbanPedidosController extends AbstractController
           }
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/kanban/pedidos/transferidos",
-    *  name="comercial.kanban-pedidos-transferidos", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -123,7 +112,7 @@ class KanbanPedidosController extends AbstractController
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
     
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_KANB
                     @ID_EMPR = {$codEmpresa},
                     @DS_CLIE = '{$cliente}',
@@ -133,7 +122,7 @@ class KanbanPedidosController extends AbstractController
                     @DT_INIC = '{$dataInicial}',
                     @DT_FINA = '{$dataFinal}',
                     @ID_SITU = 2
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 for ($i=0; $i < count($res); $i++) {
@@ -159,11 +148,6 @@ class KanbanPedidosController extends AbstractController
     }
    
     /**
-     * @Route(
-     *  "/comercial/kanban/pedidos/em-liberacao",
-    *  name="comercial.kanban-pedidos-em-liberacao", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -191,7 +175,7 @@ class KanbanPedidosController extends AbstractController
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
     
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_KANB
                     @ID_EMPR = {$codEmpresa},
                     @DS_CLIE = '{$cliente}',
@@ -201,7 +185,7 @@ class KanbanPedidosController extends AbstractController
                     @DT_INIC = '{$dataInicial}',
                     @DT_FINA = '{$dataFinal}',
                     @ID_SITU = 3
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);
@@ -230,11 +214,6 @@ class KanbanPedidosController extends AbstractController
     }
 
        /**
-     * @Route(
-     *  "/comercial/kanban/pedidos/aguardando-faturamento",
-    *  name="comercial.kanban-pedidos-aguardando-faturamento", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -262,7 +241,7 @@ class KanbanPedidosController extends AbstractController
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
     
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_KANB
                     @ID_EMPR = {$codEmpresa},
                     @DS_CLIE = '{$cliente}',
@@ -272,7 +251,7 @@ class KanbanPedidosController extends AbstractController
                     @DT_INIC = '{$dataInicial}',
                     @DT_FINA = '{$dataFinal}',
                     @ID_SITU = 4
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 for ($i=0; $i < count($res); $i++) {
@@ -298,11 +277,6 @@ class KanbanPedidosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/kanban/pedidos/aguardando-entrega",
-    *  name="comercial.kanban-pedidos-aguardando-entrega", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -329,7 +303,7 @@ class KanbanPedidosController extends AbstractController
             if (isset($params['dataInicial'])) $dataInicial = $params['dataInicial'];
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_AGUAR_ENTR_KANB
                     @DT_INIC = '{$dataInicial}' ,
                     @DT_FINA = '{$dataFinal}',
@@ -338,7 +312,7 @@ class KanbanPedidosController extends AbstractController
                     @ID_GERE = {$codGerencia},
                     @ID_VEND = {$codVendedor},
                     @ID_EMPR = {$codEmpresa};
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);

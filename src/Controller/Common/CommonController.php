@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\Common;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 
 /**
  * Class CommonController
@@ -19,10 +19,6 @@ use Doctrine\DBAL\DBALException;
 class CommonController extends AbstractController
 {
     /**
-     * @Route(
-     * "/common/v2/grupos", name="common.grupos-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -70,8 +66,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $grupos = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $grupos = $result_stmt->fetchAllAssociative();
 
                 if (count($grupos) > 0) {
                     $result = array(
@@ -102,10 +98,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/empresas", name="common.empresas-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -173,8 +165,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(10, $ttRegiPagi);
                 $stmt->bindValue(11, $ordeBy);
                 $stmt->bindValue(12, $ordeType);
-                $stmt->execute();
-                $empresas = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $empresas = $result_stmt->fetchAllAssociative();
 
                 if (count($empresas) > 0) {
                     $result = array(
@@ -205,10 +197,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/depositos", name="common.depositos-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -268,8 +256,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(8, $ttRegiPagi);
                 $stmt->bindValue(9, $ordeBy);
                 $stmt->bindValue(10, $ordeType);
-                $stmt->execute();
-                $depositos = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $depositos = $result_stmt->fetchAllAssociative();
 
                 if (count($depositos) > 0) {
                     $result = array(
@@ -300,10 +288,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/tipos-material", name="common.tipos-material-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -351,8 +335,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $tiposMaterial = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $tiposMaterial = $result_stmt->fetchAllAssociative();
 
                 if (count($tiposMaterial) > 0) {
                     $result = array(
@@ -383,12 +367,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/linhas", 
-     * name="common.linhas-listar",
-     * methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -437,8 +415,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $linhas = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $linhas = $result_stmt->fetchAllAssociative();
 
                 if (count($linhas) > 0) {
                     $result = array(
@@ -470,12 +448,6 @@ class CommonController extends AbstractController
 
     
     /**
-     * @Route(
-     * "/common/v2/departamentos", 
-     * name="common.departamentos-listar",
-     * methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -518,10 +490,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/tipos-empresa", name="common.tipos-empresa-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -569,8 +537,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $tiposEmpresa = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $tiposEmpresa = $result_stmt->fetchAllAssociative();
 
                 if (count($tiposEmpresa) > 0) {
                     $result = array(
@@ -601,10 +569,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/tipos-deposito", name="common.tipos-deposito-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @param string $inStat
@@ -653,8 +617,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $tiposDeposito = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $tiposDeposito = $result_stmt->fetchAllAssociative();
 
                 if (count($tiposDeposito) > 0) {
                     $result = array(
@@ -685,10 +649,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/unidades-medida", name="common.unidades-medida-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -736,8 +696,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $unidadesMedida = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $unidadesMedida = $result_stmt->fetchAllAssociative();
 
                 if (count($unidadesMedida) > 0) {
                     $result = array(
@@ -768,12 +728,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/clasificacion", 
-     * name="common.unidades-medida-listar", 
-     * methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -812,10 +766,10 @@ class CommonController extends AbstractController
                     'id_linea' => $linea,
                 );
                 //dd($params);
-                $stmt->execute($params);
+                $_result = $stmt->executeQuery($params);
 
                 //$stmt->execute();
-                $unidadesMedida = $stmt->fetchAll();
+                $unidadesMedida = $_result->fetchAllAssociative();
 
                 if (count($unidadesMedida) > 0) {
                     $result = array(
@@ -846,10 +800,6 @@ class CommonController extends AbstractController
 }
 
     /**
-     * @Route(
-     * "/common/v2/sub-linhas", name="common.sub-linhas-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -897,8 +847,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $subLinhas = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $subLinhas = $result_stmt->fetchAllAssociative();
 
                 if (count($subLinhas) > 0) {
                     $result = array(
@@ -929,10 +879,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/classes", name="common.classes-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1029,7 +975,7 @@ class CommonController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -1038,7 +984,7 @@ class CommonController extends AbstractController
                 } else {
                     $sql =
                     "
-                        EXECUTE [dbo].[PRC_CLAS_CONS] 
+                        EXECUTE [dbo].[PRC_CLAS_CONS]
                         @ID_CLAS = ?
                         ,@NM_CLAS = ?
                         ,@ID_REFE_ERP = ?
@@ -1057,8 +1003,8 @@ class CommonController extends AbstractController
                     $stmt->bindValue(6, $ttRegiPagi);
                     $stmt->bindValue(7, $ordeBy);
                     $stmt->bindValue(8, $ordeType);
-                    $stmt->execute();
-                    $classes = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $classes = $result_stmt->fetchAllAssociative();
 
                     if (count($classes) > 0) {
                         $result = array(
@@ -1090,10 +1036,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/materiais", name="common.materiais-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1164,8 +1106,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(11, $ttRegiPagi);
                 $stmt->bindValue(12, $ordeBy);
                 $stmt->bindValue(13, $ordeType);
-                $stmt->execute();
-                $materiais = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $materiais = $result_stmt->fetchAllAssociative();
 
                 if (count($materiais) > 0) {
                     $result = array(
@@ -1196,11 +1138,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/informacoes-adicionais-atividade/{idAtiv}", name="common.informacoes-adicionais-atividade-listar", 
-     * methods={"GET"}, requirements={"idAtiv"="\d+"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1220,8 +1157,8 @@ class CommonController extends AbstractController
                 );
                 $stmt = $connection->prepare($sql);
                 $stmt->bindValue(1, $idAtiv);
-                $stmt->execute();
-                $informacoesAdicionaisAtividade = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $informacoesAdicionaisAtividade = $result_stmt->fetchAllAssociative();
 
                 foreach ($informacoesAdicionaisAtividade as $informacao) {
                     if ($informacao['ID_INFO_RAIZ'] == 0) {
@@ -1271,10 +1208,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/tipos-niveis-estoque", name="common.tipos-niveis-estoque-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1322,8 +1255,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $tiposNiveisEstoque = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $tiposNiveisEstoque = $result_stmt->fetchAllAssociative();
 
                 if (count($tiposNiveisEstoque) > 0) {
                     $result = array(
@@ -1354,10 +1287,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/integradores-pedidos", name="common.integradores-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1404,8 +1333,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $integradoresPedidos = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $integradoresPedidos = $result_stmt->fetchAllAssociative();
 
                 if (count($integradoresPedidos) > 0) {
                     $result = array(
@@ -1436,10 +1365,6 @@ class CommonController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/common/v2/fornecedores", name="common.fornecedore-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1502,8 +1427,8 @@ class CommonController extends AbstractController
                 $stmt->bindValue(8, $ttRegiPagi);
                 $stmt->bindValue(9, $ordeBy);
                 $stmt->bindValue(10, $ordeType);
-                $stmt->execute();
-                $forncecedores = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $forncecedores = $result_stmt->fetchAllAssociative();
 
                 if (count($forncecedores) > 0) {
                     $result = array(

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Relatorios\PosicaoDiaria;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\ComercialController;
@@ -22,11 +22,6 @@ use App\Controller\MTCorp\Comercial\ComercialController;
 class PosicaoDiariaController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/relatorios/posicao-diaria/perfis",
-     *  name="comercial.relatorios-posicao-diaria-perfis",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -50,11 +45,6 @@ class PosicaoDiariaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/relatorios/posicao-diaria/lista/{data}",
-     *  name="comercial.relatorios-posicao-diaria-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -62,10 +52,10 @@ class PosicaoDiariaController extends AbstractController
     public function getListaManetoni(Connection $connection, Request $request, $data)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_MTCORP_MODU_MKTG_RELA_POSI_DIAR]
                     @DATA_HOJE = '{$data}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 for ($i=0; $i < count($res); $i++) {
@@ -110,10 +100,10 @@ class PosicaoDiariaController extends AbstractController
                 $tratarRetornoTotal['toneladaMetaEditado'] = ($tratarRetornoTotal['toneladaMeta'] == 0) ? 0 : ($tratarRetornoTotal['toneladaEditado'] / $tratarRetornoTotal['toneladaMeta'] - 1) * 100;
                 $tratarRetornoTotal['valorMetaEditado'] = ($tratarRetornoTotal['valorMeta'] == 0) ? 0 : ($tratarRetornoTotal['valorEditado'] / $tratarRetornoTotal['valorMeta'] - 1) * 100;
 
-                $diasUteis = $connection->query("
+                $diasUteis = $connection->executeQuery("
                     EXEC [PRC_COME_QTDE_DIA_UTIL_CONS]
                         @DATA = '{$data}'
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 $diaAtual = $diasUteis[0]['diasUteisAteData'];
                 $diasTotal = $diasUteis[0]['diasUteisMes'];
@@ -142,11 +132,6 @@ class PosicaoDiariaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/relatorios/posicao-diaria/lista-dba/{data}",
-     *  name="comercial.relatorios-posicao-diaria-lista-dba",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -154,10 +139,10 @@ class PosicaoDiariaController extends AbstractController
     public function getListaDBA(Connection $connection, Request $request, $data)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COME_DASH_VEND_CONSUL_META_AM]
                     @DATA = '{$data}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && $res[0]['nomeEscritorio'] != 'TOTAL') {
                 for ($i=0; $i < count($res); $i++) {
@@ -198,11 +183,6 @@ class PosicaoDiariaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/relatorios/posicao-diaria/detalhes/{data}/{ordem}",
-     *  name="comercial.relatorios-posicao-diaria-detalhes",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -210,12 +190,12 @@ class PosicaoDiariaController extends AbstractController
     public function getDetalhesManetoni(Connection $connection, Request $request, $data, $ordem)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_MTCORP_MODU_MKTG_RELA_POSI_DIAR]
                     @DETALHE = 1, 
                     @SEQUENCIA = {$ordem},
                     @DATA_HOJE = '{$data}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 foreach($res as $key => $value) {
@@ -270,11 +250,6 @@ class PosicaoDiariaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/relatorios/posicao-diaria/salvar",
-     *  name="comercial.relatorios-posicao-diaria-salvar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -303,7 +278,7 @@ class PosicaoDiariaController extends AbstractController
                 $toneladaMeta = $value['toneladaMeta'];
                 $valorMeta = $value['valorMeta'];
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC [PRC_COME_META_CADA]
                         @ID_PARAM = 1,
                         @MetaReais = {$valorMeta},
@@ -313,7 +288,7 @@ class PosicaoDiariaController extends AbstractController
                         @EditadoToneladas = {$toneladaEditado},
                         @LINHA = '{$linhaCorrigida}',
                         @DEBUG = 1
-                ")->fetchAll();
+                ")->fetchAllAssociative();
             }
 
             if (isset($res[0]['MSG'])) {

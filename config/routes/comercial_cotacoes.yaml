@@ -1,0 +1,435 @@
+# Routes for Cotacoes module
+# Extracted from CotacoesController, OfertaController
+
+# =============================================================================
+# CotacoesController (44 routes)
+# =============================================================================
+
+comercial.ciclo-vendas-cotacoes-permissoes-acesso:
+    path: /comercial/ciclo-vendas/cotacoes/permissoes-acesso
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getPermissoesAcesso
+    methods: [GET]
+
+comercial.ciclo-vendas-verifica-oferta:
+    path: /comercial/ciclo-vendas/cotacoes/verifica-oferta/{idContato}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getVerificarOferta
+    methods: [GET]
+    requirements:
+        idContato: '\d+'
+
+comercial.ciclo-vendas-cotacoes-lista:
+    path: /comercial/ciclo-vendas/cotacoes/lista
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getCotacoes
+    methods: [GET]
+
+comercial.ciclo-vendas-cotizaciones-lienteoferta:
+    path: /comercial/ciclo-vendas/cotacoes/cliente_oferta
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postClienteOferta
+    methods: [POST]
+
+comercial.ciclo-vendas-cotizaciones-lista:
+    path: /comercial/ciclo-vendas/cotacoes/lista_cotizacion
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getCotizaciones
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-detalhes:
+    path: /comercial/ciclo-vendas/cotacoes/detalhes/{codEmpresa}/{nrPedido}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getDetalhesCotacoes
+    methods: [GET]
+    requirements:
+        codEmpresa: '\d+'
+        nrPedido: '\d+'
+
+comercial.ciclo-vendas-oferta_detalle:
+    path: /comercial/ciclo-vendas/cotacoes/oferta_detalle
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getDetalleOferta
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-materiais-detalhes:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/detalhes/{codEmpresa}/{nrPedido}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getMateriaisCotacao
+    methods: [GET]
+    requirements:
+        codEmpresa: '\d+'
+        nrPedido: '\d+'
+
+comercial.ciclo-vendas-cotacoes-situacao-liberacao:
+    path: /comercial/ciclo-vendas/cotacoes/situacao-liberacao
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getSituacaoLiberacao
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-transfere-faturamento:
+    path: /comercial/ciclo-vendas/cotacoes/transfere-faturamento
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postTransfereFaturamento
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-trocar-cliente:
+    path: /comercial/ciclo-vendas/cotacoes/trocar/cliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postTrocarCliente
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-duplicar-proposta:
+    path: /comercial/ciclo-vendas/cotacoes/duplicar-proposta
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postDuplicarProposta
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-desdobrar-proposta:
+    path: /comercial/ciclo-vendas/cotacoes/desdobrar-proposta
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postDesdobrarProposta
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-trocar-empresa:
+    path: /comercial/ciclo-vendas/cotacoes/trocar/empresa
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postTrocarEmpresa
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-imprimir-cotacao:
+    path: /comercial/ciclo-vendas/cotacoes/imprimir-cotacao/{nrPedido}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getImprimirCotacao
+    methods: [GET]
+    requirements:
+        nrPedido: '\d+'
+        codEmpresa: '\d+'
+
+comercial.ciclo-vendas-cotacoes-imprimir-separacao:
+    path: /comercial/ciclo-vendas/cotacoes/imprimir-separacao/{nrPedido}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getImprimirSeparacao
+    methods: [GET]
+    requirements:
+        nrPedido: '\d+'
+        codEmpresa: '\d+'
+
+comercial.ciclo-vendas-cotacoes-email-cotacao:
+    path: /comercial/ciclo-vendas/cotacoes/email-cotacao
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postEmailCotacao
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-reservar:
+    path: /comercial/ciclo-vendas/cotacoes/reservar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getReservarIdCotacao
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes:
+    path: /comercial/ciclo-vendas/cotacoes/{codCotacao}/{idEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getCotacao
+    methods: [GET]
+    requirements:
+        codCotacao: '\d+'
+
+comercial.ciclo-vendas-cotacoes-materiais:
+    path: /comercial/ciclo-vendas/cotacoes/materiais
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getMateriais
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-materiais-estoque-depositos:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/estoque-depositos/{codMaterial}/{codDeposito}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getEstoqueDepositos
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.ciclo-vendas-cotacoes-materiais-combo:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/combo/{codEmpresa}/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getMateriaisCombo
+    methods: [GET]
+    requirements:
+        codEmpresa: '\d+'
+        codMaterial: '\d+'
+
+comercial.ciclo-vendas-cotacoes-oferta-id:
+    path: /comercial/ciclo-vendas/cotacoes/oferta_id
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getIdOferta
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-materiais-relacionados-vendas:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/relacionados/vendas
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postMateriaisRelacionadosVendas
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-materiais-relacionados-cliente:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/relacionados/cliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postMateriaisRelacionadosCliente
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-materiais-relacionados:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/relacionados
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postMateriaisRelacionados
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-materiales-relacionados:
+    path: /comercial/ciclo-vendas/cotacoes/materiales/relacionados
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postMaterialesRelacionados
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-material-ficha-cadastral:
+    path: /comercial/ciclo-vendas/cotacoes/material/ficha-cadastral/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getFichaCadastralMaterial
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.ciclo-vendas-cotacoes-material-similaridade:
+    path: /comercial/ciclo-vendas/cotacoes/material/similaridade/{codEmpresa}/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getSimilaridadeMaterial
+    methods: [GET]
+    requirements:
+        codEmpresa: '\d+'
+        codMaterial: '\d+'
+
+comercial.ciclo-vendas-cotacoes-material-tipo-calculo:
+    path: /comercial/ciclo-vendas/cotacoes/material/tipo-calculo/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getTipoCalculoMaterial
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-material-calculo:
+    path: /comercial/ciclo-vendas/cotacoes/material/calculo
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postCalculoMaterial
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-calculadora:
+    path: /comercial/ciclo-vendas/cotacoes/calculadora
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postCalculoMaterial
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-historico-compras:
+    path: /comercial/ciclo-vendas/cotacoes/historico-compras
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getHistoricoCompras
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-duplicatas-gerar:
+    path: /comercial/ciclo-vendas/cotacoes/duplicatas/gerar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postGerarDuplicatas
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-duplicatas-alterar:
+    path: /comercial/ciclo-vendas/cotacoes/duplicatas/alterar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postAlterarDuplicata
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-duplicatas-consulta:
+    path: /comercial/ciclo-vendas/cotacoes/duplicatas/consulta
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getDuplicatas
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-materiais-excluir:
+    path: /comercial/ciclo-vendas/cotacoes/materiais/excluir
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::deleteMaterialCotacao
+    methods: [DELETE]
+
+comercial.ciclo-vendas-cotacoes-historico-exclusao:
+    path: /comercial/ciclo-vendas/cotacoes/historico-exclusao
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getHistoricoExclusao
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-salvar:
+    path: /comercial/ciclo-vendas/cotacoes/salvar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postCotacao
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-guardar:
+    path: /comercial/ciclo-vendas/cotacoes/guardar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::saveCotizacion
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-perdida-salvar:
+    path: /comercial/ciclo-vendas/cotacoes/perdida/salvar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postCotacaoPerdida
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-comissao:
+    path: /comercial/ciclo-vendas/cotacoes/comissao/{codCotacao}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getComissaoCotacao
+    methods: [GET]
+    requirements:
+        codCotacao: '\d+'
+
+comercial.ciclo-vendas-cotacoes-sap:
+    path: /comercial/ciclo-vendas/cotacoes/enviar_sap/{nrPedido}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::oferta_sap
+    methods: [GET]
+    requirements:
+        nrPedido: '\d+'
+
+comercial.ciclo-vendas-cotacoes-vigencia-estado:
+    path: /comercial/ciclo-vendas/cotacoes/vigencia_oferta/{codigo_oferta}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::actualizaofertaestado
+    methods: [GET]
+    requirements:
+        codigo_oferta: '\d+'
+
+comercial.ciclo-vendas-cotacoes-progresso:
+    path: /comercial/ciclo-vendas/cotacoes/progresso/{codCotacao}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getProgressoCotacao
+    methods: [GET]
+    requirements:
+        codCotacao: '\d+'
+
+comercial.ciclo-vendas-cotacoes-anexo-documentos:
+    path: /comercial/ciclo-vendas/cotacoes/anexo/documentos/{codCotacao}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getDocuments
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.ciclo-vendas-cotacoes-anexo-documentos-salvar:
+    path: /comercial/ciclo-vendas/cotacoes/anexo/documentos/salvar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::postAnexo
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-anexo-documentos-excluir:
+    path: /comercial/ciclo-vendas/cotacoes/anexo/documentos/excluir
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::delAnexo
+    methods: [PUT]
+
+comercial.ciclo-vendas-cotacoes-validade-duplicata:
+    path: /comercial/ciclo-vendas/cotacoes/validade-duplicata/{codCotacao}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getValidadeDuplicata
+    methods: [GET]
+    requirements:
+        codCotacao: '\d+'
+
+comercial.ciclo-vendas-cotacoes-material-lote:
+    path: /comercial/ciclo-vendas/cotacoes/material/lote/{codMaterial}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getLoteMaterial
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-descuentos-lista:
+    path: /comercial/ciclo-vendas/cotacoes/descuentos/lista
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getDescuentosLista
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-descuento-cliente:
+    path: /comercial/ciclo-vendas/cotacoes/descuento_cliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getDescuentoCliente
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-cierre:
+    path: /comercial/ciclo-vendas/cotacoes/cierre
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::getCierreOferta
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-post_cierre:
+    path: /comercial/ciclo-vendas/cotacoes/post_cierre
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::putModificarOferata
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-verificar_ofertas:
+    path: /comercial/ciclo-vendas/cotacoes/verificar_ofertas
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::verificarOfertas
+    methods: [POST]
+
+comercial.ciclo-vendas-cotacoes-verificar_ofertas_cliente:
+    path: /comercial/ciclo-vendas/cotacoes/verificar_ofertas_cliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\CotacoesController::verificarOfertasCliente
+    methods: [POST]
+
+# =============================================================================
+# OfertaController (20 routes)
+# =============================================================================
+
+comercial.ciclo-vendas-cotacoes-oferta:
+    path: /comercial/ciclo-vendas/ofeta/{codCotacao}/{idEmpresa}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getCotacao
+    methods: [GET]
+    requirements:
+        codCotacao: '\d+'
+
+comercial.ciclo-vendas-ofertas-getlistacliente:
+    path: /comercial/ciclo-vendas/ofertas/getlistsacliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getListaCliente
+    methods: [GET]
+
+comercial.ciclo-vendas-oferta-registrar:
+    path: /comercial/ciclo-vendas/oferta/registrar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::postOfertaRegistrar
+    methods: [POST]
+
+getlistamaterial:
+    path: /comercial/ciclo-vendas/ofertas/getlistamaterial
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getlistamaterial
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getlistaclienteCajaTexto:
+    path: /comercial/ciclo-vendas/ofertas/getlistsaclienteCajaTexto
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getListaClienteCajaTexto
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getListaMateriales:
+    path: /comercial/ciclo-vendas/ofertas/getListaMateriales
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getListaMateriales
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-insertClientesTemp:
+    path: /comercial/ciclo-vendas/ofertas/insertClientesTemp
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::insertClientesTemp
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-PostCodigoCliente:
+    path: /comercial/ciclo-vendas/ofertas/PostCodigoCliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::PostCodigoCliente
+    methods: [POST]
+
+comercial.ciclo-vendas-ofertas-getAlmacenes:
+    path: /comercial/ciclo-vendas/ofertas/getAlmacenes
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getAlmacenes
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getTipoContacto:
+    path: /comercial/ciclo-vendas/ofertas/getTipoContacto
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getTipoContacto
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getRubros:
+    path: /comercial/ciclo-vendas/ofertas/getRubros
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getRubros
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getCondicionPago:
+    path: /comercial/ciclo-vendas/ofertas/getCondicionPago
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getCondicionPago
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getEjecutivos:
+    path: /comercial/ciclo-vendas/ofertas/getEjecutivos
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getEjecutivos
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getStockMaterial:
+    path: /comercial/ciclo-vendas/ofertas/getStockMaterial
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getStockMaterial
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getMaterialDatosMaestros:
+    path: /comercial/ciclo-vendas/ofertas/getMaterialDatosMaestros
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getMaterialDatosMaestros
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-getStockAll:
+    path: /comercial/ciclo-vendas/ofertas/getStockAll
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getStockAll
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-listar:
+    path: /comercial/ciclo-vendas/ofertas/listar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::listarOfertas
+    methods: [POST]
+
+autorizaciones-historial_ofeta_cliente:
+    path: /comercial/ciclo-vendas/ofertas/get_historial_oferta_cliente
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getHistorialofertaCliente
+    methods: [GET]
+
+comercial.ciclo-vendas-ofertas-editar:
+    path: /comercial/ciclo-vendas/ofertas/get_oferta_editar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getOfertaEditar
+    methods: [GET]
+
+comercial.ciclo-vendas-cotacoes-editar:
+    path: /comercial/ciclo-vendas/cotacoes/editar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::editCotizacion
+    methods: [POST]
+
+comercial.ciclo-vendas-ofertas-getOfertaApp:
+    path: /comercial/ciclo-vendas/ofertas/getOfertaApp
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes\OfertaController::getOfertaApp
+    methods: [GET]

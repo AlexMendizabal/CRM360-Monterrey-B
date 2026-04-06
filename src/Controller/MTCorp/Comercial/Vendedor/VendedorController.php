@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Vendedor;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\ComercialController;
@@ -22,16 +22,16 @@ use App\Services\Helper;
  */
 class VendedorController extends AbstractController
 {
-    public function idVendedor($connection, $infoUsuario)
+    public static function idVendedor($connection, $infoUsuario)
     {
         if (
             (!isset($infoUsuario->idVendedor) || empty($infoUsuario->idVendedor)) &&
             !empty($infoUsuario->matricula)
         ) {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC PRC_VEND_CONS
             @ID_USUA = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $idVendedor = $res[0]['ID_VEND'];
@@ -45,12 +45,12 @@ class VendedorController extends AbstractController
         return !empty($idVendedor) ? $idVendedor : null;
     }
 
-    public function vinculoOperadores($connection, $infoUsuario)
+    public static function vinculoOperadores($connection, $infoUsuario)
     {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_VINC_OPER_CONS] 
                 @MATR = '{$infoUsuario->matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         $idVendedores = array();
 
@@ -63,11 +63,6 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/detalhes-cadastro",
-     *  name="comercial.vendedor-detalhes-cadastro",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -75,17 +70,16 @@ class VendedorController extends AbstractController
     public function getDetalhesCadastro(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             // $matricula = $infoUsuario->matricula;
             $matricula = 1642;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_VEND_ERP_CONS
                     @ID_MATR = {$matricula}
                     ,@ID_PARA = 2
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $detalhesCadastro = array();
@@ -109,11 +103,6 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/lista",
-     *  name="comercial.vendedor-lista",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getVendedores(Connection $connection, Request $request)
@@ -130,31 +119,21 @@ class VendedorController extends AbstractController
             }
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
-            $cargo = $buscarUsuario['NM_CARG_FUNC']; 
-
-            switch ($cargo) {
-                case '6':
-                case '5':
-                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
-                              FROM TB_VEND 
-                              WHERE ID = :id";
-                    break;
-                default:
-                    $query = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio 
-                              FROM TB_VEND 
-                              ORDER BY nombre ASC";
-                    break;
-            }
+            $cargo = is_array($buscarUsuario) ? ($buscarUsuario['NM_CARG_FUNC'] ?? null) : null; 
             
+            $queryBase = "SELECT ID, CONCAT(NM_VEND, ' ', NM_RAZA_SOCI) AS nombre, id_escr as idEscritorio FROM TB_VEND";
 
-            $stmt = $connection->prepare($query);
-            if (in_array($cargo, ['6', '5'])) {
+            if (in_array($cargo, ['6', '10', '11', '5'])) {
+                $query = $queryBase . " WHERE ID = :id";
+                $stmt = $connection->prepare($query);
                 $stmt->bindValue(':id', $id_vendedor);
+            } else {
+                $query = $queryBase . " ORDER BY nombre ASC";
+                $stmt = $connection->prepare($query);
             }
 
-            $stmt->execute();
-            $res = $stmt->fetchAll();
-
+            $result_stmt = $stmt->executeQuery();
+            $res = $result_stmt->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $message = [
@@ -189,11 +168,6 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/lista_app",
-     *  name="comercial.vendedor-lista-app",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getVendedoresApp(Connection $connection, Request $request)
@@ -211,7 +185,6 @@ class VendedorController extends AbstractController
 
             $buscarUsuario = $helper->buscarUsuario($connection, (int)$id_usuario);
             $cargo = $buscarUsuario['NM_CARG_FUNC'];
-
 
             switch ($cargo) {
                 case 6:
@@ -232,9 +205,8 @@ class VendedorController extends AbstractController
                 $stmt->bindValue(':id',  $id_vendedor);
             }
 
-            $stmt->execute();
-            $res = $stmt->fetchAll();
-
+            $result_stmt = $stmt->executeQuery();
+            $res = $result_stmt->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $message = [
@@ -268,61 +240,40 @@ class VendedorController extends AbstractController
         return $response;
     }
 
-
-
     /**
-     * @Route(
-     *  "/comercial/vendedor/carteira-clientes",
-     *  name="comercial.vendedor-carteira-clientes",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
     public function getClientesCarteira(Connection $connection, Request $request)
-    {
+    { 
         try {
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+            // Se verifica si el usuario tiene acceso para generar clientes (Admin)
             $acessoClientes = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
-            $matricula = $acessoClientes ? 0 : $infoUsuario->matricula;
             $cliente   = $request->query->get("NM_CLIE");
             $situacao = $request->query->get("situacao");
-         /*    dd($request->query->all()); */
-            $idVendedor = '';
-
-            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-            if ($infoUsuario->matricula != 1 && $buscarUsuario['NM_CARG_FUNC'] == 6) {
-                $idVendedor = $infoUsuario->matricula;
-                $res = $connection->query("
-                EXECUTE [PCR_CLIE_CONS3]
-                    @ID_PARAM = 6
-                    ,@NR_MATR = {$idVendedor}
-                    ,@NM_CLIE = '{$cliente}'
-                    ,@ID_SITU = '{$situacao}'
-                    ,@ID_DEBU = 0
-            ")->fetchAll();
+    
+            if ($acessoClientes) {
+                // Admin: trae TODOS los clientes sin filtrar por promotor
+                $res = $connection->executeQuery("
+                    EXECUTE [PRC_CLIE_CONS]
+                        @ID_PARAM = 6,                        
+                        @NM_CLIE = '{$cliente}',
+                        @ID_SITU = '{$situacao}'
+                ")->fetchAllAssociative();
             } else {
-                //dd($request);
-                if ($request->query->get("idVendedor") == '' && $buscarUsuario['NM_CARG_FUNC'] != 6) {
-                    $res = $connection->query("
-                        EXECUTE [PRC_CLIE_CONS]
-                            @ID_PARAM = 6                        
-                            ,@NM_CLIE = '{$cliente}'
-                            ,@ID_SITU = '{$situacao}'
-                    ")->fetchAll();
-                } else {
-                    $idVendedor = $request->query->get("idVendedor");
-                    $res = $connection->query("
+                // Usuario no Admin: se filtran los clientes según el promotor (usando su matrícula)
+                $idVendedor = $infoUsuario->matricula;
+                $res = $connection->executeQuery("
                     EXECUTE [PCR_CLIE_CONS3]
-                        @ID_PARAM = 6
-                        ,@NR_MATR = {$idVendedor}
-                        ,@NM_CLIE = '{$cliente}'
-                        ,@ID_SITU = '{$situacao}'
-                        ,@ID_DEBU = 0
-                    ")->fetchAll();
-                }
+                        @ID_PARAM = 6,
+                        @NR_MATR = {$idVendedor},
+                        @NM_CLIE = '{$cliente}',
+                        @ID_SITU = '{$situacao}',
+                        @ID_DEBU = 0
+                ")->fetchAllAssociative();
             }
             /* dd($res); */
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
@@ -335,104 +286,102 @@ class VendedorController extends AbstractController
 
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
             }
-        } catch (DBALException $e) {
-            return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
-}
-}
-
-    /**
-     * @Route(
-     *  "/comercial/vendedor/lista_precio",
-     *  name="comercial.vendedor-lista-precio",
-     *  methods={"GET"}
-     * )
-     * @param Connection $connection
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getlistaprecio(Connection $connection, Request $request)
-    {
-        try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-
-            $idVendedor = $infoUsuario->idVendedor;
-
-            $res = $connection->query("SELECT 
-                lista.id,
-                lista.nombre_lista
-             FROM TB_LISTA_PRECIO as lista
-            ")->fetchAll();
-
-            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
-
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
-
-                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
-            } else {
-
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+            if (!empty($infoUsuario->idVendedor) || $acessoClientes) {
             }
         } catch (DBALException $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/vendedor/carteira-clientes-cotizacion",
-     *  name="comercial.vendedor-carteira-clientes-cotizacion",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
-    public function getClientesCarteiraCotizacion(Connection $connection, Request $request)
-    { 
+    public function getClientescoreAtividadesCotizacion(Connection $connection, Request $request)
+    {
         try {
-
             $UsuarioController = new UsuarioController();
             $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $helper = new Helper();
             $datosUsuario = $helper->verificarUsuario($connection, $infoUsuario->matricula);
-            
-            $NR_MATR = $infoUsuario->matricula;
-            $micliente = $request->query->get("MI_NM_CLIE");
-            $cliente   = $request->query->get("NM_CLIE");
+
+            $codigo = 1;
+            $nombre = 2;
+            $documento = 3;
+            $id = 4;
+
+            $matricula = $infoUsuario->matricula;
+            $cargoUsuario = (int)$datosUsuario[0]['NM_CARG_FUNC'];
             $situacao = $request->query->get("situacao");
 
-            if(!empty($micliente) && $datosUsuario[0]['NM_CARG_FUNC'] == 6 || $datosUsuario[0]['NM_CARG_FUNC'] == 5 )
-            {
-                $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
-                     @ID_PARAM = 6
-                    ,@NM_CLIE = '{$micliente }'
-                    ,@ID_SITU = '{$situacao}'
-                    ,@NR_MATR = '{$NR_MATR }'
-                ")->fetchAll();
-         
+            $id_cliente = $request->query->get("id_cliente");
+            $codigoCliente = $request->query->get("COD_CLIE");
+            $nombreCliente = $request->query->get("NM_CLIE");
+            $documentoCliente = $request->query->get("DOC_CLIE");
+
+            $res = [];
+
+            if (!empty($id)) {
+                $buscarClientes = $helper->buscarCliente($connection, $id, $id_cliente, $cargoUsuario, $matricula);
+
+                if ($buscarClientes !== false) {
+                    $re = $buscarClientes[0];
+                    $nombre = empty($re["nombre_factura"]) ? $re["razaoSocial"] : $re["nombre_factura"];
+
+                    $res[] = [
+                        "codCliente" => $re["codCliente"],
+                        "codigo_cliente" => $re["codigo_cliente"],
+                        "codRazaoSocial" => $re["codRazaoSocial"],
+                        "razaoSocial" => $re["razaoSocial"],
+                        "nomeCliente" => $re["nomeCliente"],
+                        "tipoCliente" => $re["tipoCliente"],
+                        "nombreTipo" => $re["nombreTipo"],
+                        "nombreDepartamento" => $re["nombreDepartamento"],
+                        "id_departamento_lista" => $re["id_departamento_lista"],
+                        "sigla_dep" => $re["sigla_dep"],
+                        "uf" => $re["uf"],
+                        "lista" => $re["lista"],
+                        "id_lista_precio" => $re["id_lista_precio"],
+                        "id_vendedor" => $re["id_vendedor"],
+                        "nomeSituacao" => $re["nomeSituacao"],
+                        "cobrancaSomenteCarteira" => $re["cobrancaSomenteCarteira"],
+                        "direccion" => $re["direccion"],
+                        "latitud" => $re["latitud"],
+                        "longitud" => $re["longitud"],
+                        "correo_electronico" => $re["correo_electronico"],
+                        "telefono" => $re["telefono"],
+                        "celular" => $re["celular"],
+                        "codigo_rubro" => $re["codigo_rubro"],
+                        "tipo_documento" => $re["nombre_doc"],
+                        "nombre_factura" => $nombre,
+                        "numero_documento" => $re["numero_documento"],
+                        "rubro" => $re["rubro"],
+                        "nombre_vendedor" => $re["nombre_vendedor"]
+                    ];
+
+                    return FunctionsController::Retorno(true, $re["codigo_cliente"], $res, Response::HTTP_OK);
+                }
             }
-            else    
-            {
-                $res = $connection->query("
-                EXECUTE [PRC_CLIE_CONS5]
-                     @ID_PARAM = 6
-                    ,@NM_CLIE = '{$cliente}'
-                    ,@ID_SITU = '{$situacao}'
-                ")->fetchAll();
+
+            if (!empty($codigoCliente)) {
+                $res = $helper->buscarCliente($connection, $codigo, $codigoCliente, $cargoUsuario, $matricula) ?: [];
             }
-        
-             
-            if (count($res) > 0 && !isset($res[0]['ERROR'])) {
+            if (!empty($nombreCliente)) {
+                $res = $helper->buscarCliente($connection, $nombre, $nombreCliente, $cargoUsuario, $matricula) ?: [];
+            }
+            if (!empty($documentoCliente)) {
+                $res = $helper->buscarCliente($connection, $documento, $documentoCliente, $cargoUsuario, $matricula) ?: [];
+            }
+
+            if (count($res) > 0) {
+                if (isset($res[0]['ERROR'])) {
+                    return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
+                }
+
+                $resp = [];
                 foreach ($res as $re) {
-                    if (empty($re["nombre_factura"])) {
-                        $nombre = $re["razaoSocial"];
-                    } else {
-                        $nombre = $re["nombre_factura"];
-                    }
+                    $nombre = empty($re["nombre_factura"]) ? $re["razaoSocial"] : $re["nombre_factura"];
                     $resp[] = [
                         "codCliente" => $re["codCliente"],
                         "codigo_cliente" => $re["codigo_cliente"],
@@ -459,35 +408,28 @@ class VendedorController extends AbstractController
                         "tipo_documento" => $re["nombre_doc"],
                         "nombre_factura" => $nombre,
                         "numero_documento" => $re["numero_documento"],
-                        "rubro" => $re["rubro"]
+                        "rubro" => $re["rubro"],
+                        "nombre_vendedor" => $re["nombre_vendedor"]
                     ];
                 }
-                $res = $resp;
-                return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
-
-                return FunctionsController::Retorno(false, $res[0]['ERROR'], null, Response::HTTP_OK);
-            } else {
-
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
+                return FunctionsController::Retorno(true, null, $resp, Response::HTTP_OK);
             }
+
+            return FunctionsController::Retorno(false, null, null, Response::HTTP_NO_CONTENT);
         } catch (DBALException $e) {
             return FunctionsController::Retorno(false, 'Erro ao retornar dados.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
+    
+    
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/listas_precio",
-     *  name="comercial.vendedor-listas-precio",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
-    public function getListasPrecio(Connection $connection, Request $request)
+    public function getlistaprecio(Connection $connection, Request $request)
     {
         try {
             $UsuarioController = new UsuarioController();
@@ -495,11 +437,12 @@ class VendedorController extends AbstractController
 
             $idVendedor = $infoUsuario->idVendedor;
 
-            $res = $connection->query("SELECT
+            $res = $connection->executeQuery("SELECT 
                 lista.id,
                 lista.nombre_lista
                 FROM TB_LISTA_PRECIO as lista
-            ")->fetchAll();
+                WHERE id_departamento != 0 
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['ERROR'])) {
 
@@ -517,27 +460,22 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/allvendedor",
-     *  name="comercial.vendedor-allvendedor",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getVendedor(Connection $connection, Request $request)
     {
         try {
             $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info')); 
          
 
-            if ($infoUsuario->none_cargo != 1) {
+            if ($infoUsuario->none_cargo != 1 && $infoUsuario->none_cargo != 12 ) {
                 $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
                         from TB_VEND where id = :id_vendedor";
                 $statement = $connection->prepare($query);
                 $statement->bindValue('id_vendedor', $infoUsuario->idVendedor);
-                $statement->execute();
-                $res = $statement->fetchAll();
+                $result_statement = $statement->executeQuery();
+                $res = $result_statement->fetchAllAssociative();
                 if (isset($res)) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 }
@@ -550,8 +488,8 @@ class VendedorController extends AbstractController
                 $query = "select ID as id, NULL as idEscritorio, concat(NM_VEND + ' ', NM_RAZA_SOCI) as nome
                         from TB_VEND ";
                 $statement = $connection->prepare($query);
-                $statement->execute();
-                $res = $statement->fetchAll();
+                $result_statement = $statement->executeQuery();
+                $res = $result_statement->fetchAllAssociative();
                 if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 } else if (count($res) > 0 && isset($res[0]['ERROR'])) {
@@ -566,11 +504,6 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/detalles_vendedor",
-     *  name="comercial.vendedor-detalles_vendedor",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getDetalleVendedor(Connection $connection, Request $request)
@@ -626,14 +559,7 @@ class VendedorController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/vendedor/valida-cliente-carteira/{codCliente}",
-     *  name="comercial.vendedor-valida-cliente-carteira",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -650,14 +576,14 @@ class VendedorController extends AbstractController
                 } else if (!empty($infoUsuario->idVendedor)) {
                     $idVendedor = $infoUsuario->idVendedor;
 
-                    $res = $connection->query("
+                    $res = $connection->executeQuery("
                         EXEC [PRC_CLIE_CONS] 
                             @ID_PARAM = 1,
                             @ID_LOCA = '1',
                             @ID_WHER = '{$codCliente}',
                             @ID_CART = 'S',
                             @ID_VEND = '{$idVendedor}'
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
                     if (count($res) > 0 && !isset($res[0]['MSG'])) {
                         $podeAcessar = true;
@@ -682,23 +608,17 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/vinculo-operadores",
-     *  name="comercial.vendedor-vinculo-operadores",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getVinculoOperadores(Connection $connection, Request $request)
     {
         try {
-            $UsuarioController = new UsuarioController();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
+            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_VINC_OPER_CONS] 
                     @MATR = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $vendedores = array();
@@ -727,25 +647,27 @@ class VendedorController extends AbstractController
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
-
+    /**
+     * @return JsonResponse
+     */
 
     public function todosVendedores($connection)
     {
         $arrayVendedores = [];
-        $res = $connection->query("
+        $res = $connection->executeQuery("
         EXEC [PRC_COME_VEND_ESCR_CONS]
             @ESCRITORIO = '',
             @SITUACAO = '1'
-    ")->fetchAll();
-    if (count($res) > 0) {
-        for ($i = 0; $i < count($res); $i++) {
-            $arrayVendedores[] = array(
-                'id' => $res[$i]['id'],
-                'idEscritorio' => $res[$i]['id_escritorio'],
-                'nome' => trim($res[$i]['nome'])
-            );
-        }
-        /*                 dd($vendedores);
+    ")->fetchAllAssociative();
+        if (count($res) > 0) {
+            for ($i = 0; $i < count($res); $i++) {
+                $arrayVendedores[] = array(
+                    'id' => $res[$i]['id'],
+                    'idEscritorio' => $res[$i]['id_escritorio'],
+                    'nome' => trim($res[$i]['nome'])
+                );
+            }
+            /*                 dd($vendedores);
 */
             array_multisort(array_column($arrayVendedores, 'nome'), SORT_ASC, $arrayVendedores);
         } else {
@@ -753,13 +675,7 @@ class VendedorController extends AbstractController
         return $arrayVendedores;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/vendedor/datosvendedor/{id}",
-     *  name="comercial.vendedor-datosvendedor",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getVend(Connection $connection, $id)
@@ -769,8 +685,8 @@ class VendedorController extends AbstractController
             $query = "SELECT * FROM TB_VEND WHERE ID = :id";
             $stmt = $connection->prepare($query);
             $stmt->bindValue(':id', $id);
-            $stmt->execute();
-            $res = $stmt->fetch();
+            $result_stmt = $stmt->executeQuery();
+            $res = $result_stmt->fetchAssociative();
 
             return $FunctionsController->Retorno(true, null, $res, Response::HTTP_OK);
         } catch (\PDOException $e) {
@@ -779,28 +695,23 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/sucursal-vendedor/{id}",
-     *  name="comercial.vendedor-sucursal-vendedor",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function FiltrarSucursalVendedor(Connection $connection, Request $request, $id)
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            
-            if ($infoUsuario->none_cargo != 1) {
+        
+            if ($infoUsuario->none_cargo != 1 && $infoUsuario->none_cargo != 2 ) {
 
             } else {
                 if ($id == 0) {
                     $res = $this->todosVendedores($connection);
                 } else {
-                    $res = $connection->query("
+                    $res = $connection->executeQuery("
                     EXEC [PRC_SUCURSAL_VEND] 
-                    @ID_ESCR = '{$id}'")->fetchAll();
-                }
+                    @ID_ESCR = '{$id}'")->fetchAllAssociative();
+                } 
 
                 if (count($res) > 0 && !isset($res[0]['ERROR'])) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -811,18 +722,13 @@ class VendedorController extends AbstractController
                 }
             }
             //dd($infoUsuario);
-        
+
         } catch (\PDOException $e) {
             return FunctionsController::Retorno(false, 'Error al ejecutar la consulta', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/rubros",
-     *  name="comercial.vendedor-rubros",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getRubros(Connection $connection, Request $request)
@@ -835,8 +741,8 @@ class VendedorController extends AbstractController
 
             $statement = $connection->prepare($query);
             $statement->bindValue('rubro_activo', $rubro_activo);
-            $statement->execute();
-            $res = $statement->fetchAll();
+            $result_statement = $statement->executeQuery();
+            $res = $result_statement->fetchAllAssociative();
             if (count($res) > 0) {
                 $message = array(
                     'responseCode' => 200,
@@ -863,15 +769,10 @@ class VendedorController extends AbstractController
         return $response;
     }
     /**
-     * @Route(
-     *  "/comercial/clientes/vendedor/ciudad",
-     *  name="comercial.vendedor-ciudad",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getVendedorCiudad(Connection $connection, Request $request)
-    {
+    { 
         try {
             $usuarioController = new UsuarioController();
             $helper = new Helper();
@@ -882,7 +783,6 @@ class VendedorController extends AbstractController
 
             $latitud = 0;
             $longitud = 0;
-
 
             $vendedor = $helper->buscarCiudadVendedor($connection, $id_vendedor);
             if ($vendedor != false) {
@@ -975,17 +875,11 @@ class VendedorController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/cliente/ubicacionescliente/{codCliente}",
-     *  name="comercial.vendedor-cliente-ubicacionescliente",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function clientUbicacion(Connection $connection, $codCliente)
-    {
-        $resultado = $connection->fetchAllAssociative('SELECT logradouro, latitude, longitude, codigo_cliente, ubicacion FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$codCliente]);
+    {  
+        $resultado = $connection->fetchAllAssociative('SELECT TOP 3 direccion, latitud_final, longitud_final, id_cliente, data_final FROM TB_CORE_AGEN_COME WHERE id_cliente = ?', [$codCliente]);
         if (!empty($resultado)) {
             $message = array(
                 "responseCode" => 200,
@@ -999,12 +893,11 @@ class VendedorController extends AbstractController
                 "success" => false
             );
         }
-        $response = new JsonResponse($message);
+        $response = new JsonResponse($message); 
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
 }
-
 
  ///////////////////////////MÉTODO ORIGINAL DE getVendedores////////////////////////////
     /*  public function getVendedores(Connection $connection, Request $request)
@@ -1017,18 +910,18 @@ class VendedorController extends AbstractController
             $id_usuario = $infoUsuario->id;
             // dd($id_usuario);
             if ($id_usuario  == 1) {
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC [PRC_COME_VEND_ESCR_CONS]
                         @ESCRITORIO = '',
                         @SITUACAO = '1'
-                ")->fetchAll();
+                ")->fetchAllAssociative();
             } else {
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                 EXEC [PRC_COME_VEND_ESCR_CONS1]
                     @ESCRITORIO = '',
                     @SITUACAO = '1',
                     @IDVEN = '$id_usuario'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             }
 
                      //dd($res);

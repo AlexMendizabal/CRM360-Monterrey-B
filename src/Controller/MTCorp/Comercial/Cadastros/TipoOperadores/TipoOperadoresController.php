@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class TipoOperadoresController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/lista",
-     *  name="comercial.cadastros-tipo-operador-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -44,13 +39,13 @@ class TipoOperadoresController extends AbstractController
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
             
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CONS] 
                     @DS_TIPO = '{$tipo}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ORDE_BY = '{$orderBy}'
                     ,@ORDE_TYPE = '{$orderType}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -65,12 +60,6 @@ class TipoOperadoresController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/alteracoes/{codTipoOperador}",
-     *  name="comercial.cadastros-tipo-operador-alteracoes",
-     *  methods={"GET"},
-     *  requirements={"codTipoOperador"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -78,10 +67,10 @@ class TipoOperadoresController extends AbstractController
     public function getAlteracoes(Connection $connection, Request $request, $codTipoOperador)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_LOG_CONS]
                     @ID_TIPO_OPER = '{$codTipoOperador}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -97,12 +86,6 @@ class TipoOperadoresController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/detalhes/{codTipoOperador}",
-     *  name="comercial.cadastros-tipo-operador-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codTipoOperador"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -110,10 +93,10 @@ class TipoOperadoresController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codTipoOperador)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CONS] 
                     @ID_TIPO_OPER = '{$codTipoOperador}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -127,11 +110,6 @@ class TipoOperadoresController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/salvar",
-     *  name="comercial.cadastros-tipo-operador-salvar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postTipoOperador(Connection $connection, Request $request)
@@ -146,13 +124,13 @@ class TipoOperadoresController extends AbstractController
             if (isset($params['tipo'])) $tipo = $params['tipo'];
             if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
             
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CADA] 
                     @ID_PARA = 1
                     ,@DS_TIPO = '{$tipo}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codTipoOperador'])) {
                 return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -167,11 +145,6 @@ class TipoOperadoresController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/atualizar",
-     *  name="comercial.cadastros-tipo-operador-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putTipoOperador(Connection $connection, Request $request)
@@ -188,14 +161,14 @@ class TipoOperadoresController extends AbstractController
             if (isset($params['tipo'])) $tipo = $params['tipo'];
             if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
             
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CADA] 
                     @ID_PARA = 2
                     ,@ID_TIPO_OPER = '{$codTipoOperador}'
                     ,@DS_TIPO = '{$tipo}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codTipoOperador']) && $res[0]['codTipoOperador'] == $codTipoOperador) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -210,11 +183,6 @@ class TipoOperadoresController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/ativar",
-     *  name="comercial.cadastros-tipo-operador-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activateTipoOperador(Connection $connection, Request $request)
@@ -223,13 +191,13 @@ class TipoOperadoresController extends AbstractController
             $codTipoOperador = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CADA] 
                     @ID_PARA = 3
                     ,@ID_TIPO_OPER = '{$codTipoOperador}'
                     ,@ID_SITU = 2
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codTipoOperador']) && $codTipoOperador == $res[0]['codTipoOperador']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -244,11 +212,6 @@ class TipoOperadoresController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/tipo-operador/inativar",
-     *  name="comercial.cadastros-tipo-operador-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactivateTipoOperador(Connection $connection, Request $request)
@@ -257,13 +220,13 @@ class TipoOperadoresController extends AbstractController
             $codTipoOperador = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_TIPO_OPER_CADA] 
                     @ID_PARA = 3
                     ,@ID_TIPO_OPER = '{$codTipoOperador}'
                     ,@ID_SITU = 2
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codTipoOperador']) && $codTipoOperador == $res[0]['codTipoOperador']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

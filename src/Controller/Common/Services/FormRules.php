@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Common\Services;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
 class FormRules
 {
     /**
-     * @Route(
-     *  "/common/services/form-rules/{formRef}",
-     *  name="common-services-form-rules",
-     *  methods={"GET"},
-     *  requirements={"formRef"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -35,12 +29,12 @@ class FormRules
             // Instancia FunctionsController aquí o utiliza el objeto existente si está disponible
             $FunctionsController = new FunctionsController(); 
             
-            $res = $connection->query(
+            $res = $connection->executeQuery(
                 "
                     EXECUTE [dbo].[PRC_NOME_TAMA_CAMP_CONS] 
                         @ID_PARA = '{$formRef}'
                 "
-            )->fetchAll();
+            )->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return $FunctionsController->Retorno(true, null, $res[0], Response::HTTP_OK);

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Core;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -18,11 +18,6 @@ class ContraSenhaController
     use ResponseTrait;
 
     /**
-     * @Route(
-     *  "/core/contra-senha",
-     *  name="core.contra-senha.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -33,13 +28,6 @@ class ContraSenhaController
     }
 
     /**
-     * 
-     * @Route(
-     *  "/core/contra-senha/{uuid}",
-     *  name="core.contra-senha.uuid.show",
-     *  requirements={"uuid"="[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}"},
-     *  methods={"GET"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -49,13 +37,7 @@ class ContraSenhaController
         return $this->index($connection, $request, $uuid, true);
     }
 
-
     /**
-     * @Route(
-     *  "/core/contra-senha",
-     *  name="core.contra-senha.store",
-     *  methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -102,7 +84,7 @@ class ContraSenhaController
             
             $senhaValida = isPasswordValid($novaSenha) && isPasswordValid($confirmarNovaSenha);
             $query = "SELECT DS_SENH FROM TB_CORE_USUA WHERE NR_MATR = $matricula";
-            $hash_password = ($connection->query($query)->fetch())['DS_SENH'];
+            $hash_password = ($connection->executeQuery($query)->fetchAssociative())['DS_SENH'];
 
             //SE TIPO INVÁLIDO, OU SENHA ATUAL INCORRETA, OU NOVAS SENHAS NÃO COINCIDEM
             if ($senhaValida == false || !password_verify($senha, $hash_password) || ($novaSenha !== $confirmarNovaSenha)){
@@ -140,9 +122,9 @@ class ContraSenhaController
             $stmt->bindValue(":novaSenha",               $hash_nova_senha);
             $stmt->bindValue(":confirmarNovaSenha",      $hash_nova_senha);
             $stmt->bindValue(":ip",                      $ip);
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response   = $stmt->fetchAssociative();
+            $response   = $result_stmt->fetchAssociative();
 
             return $this
                 ->setData($response)
@@ -168,11 +150,6 @@ class ContraSenhaController
     }
 
     /**
-     * @Route(
-     *  "/core/contra-senha",
-     *  name="core.contra-senha.update",
-     *  methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

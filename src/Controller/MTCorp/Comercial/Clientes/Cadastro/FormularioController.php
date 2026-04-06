@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\Cadastro;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController;
@@ -23,22 +23,17 @@ use App\Controller\Common\Services\ParseFileFromRequestController;
 class FormularioController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/tipos-cadastro",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-tipos-cadastro",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getTiposCadastro(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        /* $res = $connection->query(
+        /* $res = $connection->executeQuery(
           "
 
           "
-        )->fetchAll(); */
+        )->fetchAllAssociative(); */
 
         $res = array(
           array(
@@ -77,21 +72,16 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/ciudades",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-ciudades",
-   *  methods={"GET"}
-   * )
-   * @return JsonResponse
+      * @return JsonResponse
    */
   public function getCiudades(Connection $connection, Request $request)
 {
   //dd('aqui');
     if ($request->isMethod('GET')) {
         try {
-            $res = $connection->query(
+            $res = $connection->executeQuery(
                 "SELECT id, nombre_ciudad FROM tb_ciudad"
-            )->fetchAll();
+            )->fetchAllAssociative();
 
             if (count($res) > 0) {
                 // Aquí puedes realizar cualquier otra manipulación de los datos si es necesario
@@ -116,18 +106,13 @@ class FormularioController extends AbstractController
 }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/regimes-tributacao",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-regimes-tributacao",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getRegimesTributacao(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_REGI_TRIB [id],
@@ -137,7 +122,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -161,18 +146,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/contribuintes",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-contribuintes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getContribuintes(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id_icms [id],
@@ -182,7 +162,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -206,18 +186,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/setor-atividades",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-setor-atividades",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getSetorAtividades(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
           EXEC PRC_SETO_ATIV_CONS
           @ID_PARAM = NULL
@@ -227,7 +202,7 @@ class FormularioController extends AbstractController
           ,@ORDE_BY = NULL
           ,@ORDE_TYPE = NULL
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -251,18 +226,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/finalidades-material",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-finalidades-material",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getFinalidadesMaterial(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_FINALIDADE [id],
@@ -274,7 +244,7 @@ class FormularioController extends AbstractController
             ORDER BY
               DESCRICAO
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -298,22 +268,17 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-faturamento/cnaes",
-   *  name="comercial.clientes-cadastro-formulario-dados-faturamento-cnaes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getCnaes(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_CNAE_CONS]
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -354,11 +319,6 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/regioes-atuacao-comercial",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-regioes-atuacao-comercial",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getRegioesAtuacaoComercial(Connection $connection, Request $request)
@@ -389,11 +349,6 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/ibge",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-ibge",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function getIbgeCidades(Connection $connection, Request $request)
@@ -406,12 +361,12 @@ class FormularioController extends AbstractController
         $cidade = $data['cidade'];
         $cidade = strtoupper(FunctionsController::limpaCaracteresEspeciais($cidade));
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT CODIGOIBGE FROM LS_TIDSOFTWARE.EXETPS.dbo.Cidades
             WHERE NOMECIDADES = '{$cidade}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (isset($res[0]['CODIGOIBGE'])) {
 
@@ -436,23 +391,18 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/regioes-entrega",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-regioes-entrega",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getRegioesEntrega(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_REGI_ENTR_CONS]
             @PARAM = 0
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -487,19 +437,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/regiao-entrega/{codIBGE}",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-regiao-entrega",
-   *  methods={"GET"},
-   *  requirements={"codIBGE"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getRegiaoEntrega(Connection $connection, Request $request, $codIBGE)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               CODIGOREGIAOENTREGA [idRegiaoEntrega]
@@ -508,7 +452,7 @@ class FormularioController extends AbstractController
             WHERE
               CODIGOIBGE = '{$codIBGE}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -532,18 +476,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/tipos-material",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-tipos-material",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getTiposMaterial(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_TIPO_ENDE_MATE [id],
@@ -555,7 +494,7 @@ class FormularioController extends AbstractController
             ORDER BY
               DESCRICAO
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -579,18 +518,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/tipos-descarga",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-tipos-descarga",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getTiposDescarga(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_TIPO_DESC [id],
@@ -602,7 +536,7 @@ class FormularioController extends AbstractController
             ORDER BY
               DESCRICAO
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -626,18 +560,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/modos-descarga",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-modos-descarga",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getModosDescarga(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_MODO_DESC [id],
@@ -649,7 +578,7 @@ class FormularioController extends AbstractController
             ORDER BY
               DESCRICAO
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -673,18 +602,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/tipos-veiculos",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-tipos-veiculos",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getTiposVeiculos(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_TIPO_VEIC [id],
@@ -696,7 +620,7 @@ class FormularioController extends AbstractController
             ORDER BY
               DESCRICAO
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -720,18 +644,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/dados-especiais",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-dados-especiais",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getDadosEspeciais(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               ID_TIPO_ESPC [id],
@@ -743,7 +662,7 @@ class FormularioController extends AbstractController
             ORDER BY
               DESCRICAO
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -767,12 +686,6 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/anexos/{codEndereco}",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-anexos",
-   *  methods={"GET"},
-   *  requirements={"codEndereco"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -780,16 +693,16 @@ class FormularioController extends AbstractController
   public function getAnexos(Connection $connection, Request $request, $codEndereco)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_CLIE_ENDE_ENTR_ANEX_CONS
             @ID_ENDE = {$codEndereco},
             @IN_SITU = 1
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
 
             foreach ($res as $key => $value) {
-                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
+                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
                 $res[$key]["linkAnexo"] = str_replace("\\", "/", $res[$key]["linkAnexo"] );
                 $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"]; 
             }
@@ -805,18 +718,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/contatos/funcoes",
-   *  name="comercial.clientes-cadastro-formulario-contatos-funcoes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getFuncoes(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
           SELECT
           id_carg
@@ -824,7 +732,7 @@ class FormularioController extends AbstractController
           FROM TB_CORE_CARG
           ORDER BY ds_carg
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -848,18 +756,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/contatos/setores",
-   *  name="comercial.clientes-cadastro-formulario-contatos-setores",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getSetores(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
           SELECT
           id_setr
@@ -867,7 +770,7 @@ class FormularioController extends AbstractController
           FROM TB_CORE_SETR
           ORDER BY ds_setr
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -893,18 +796,13 @@ class FormularioController extends AbstractController
   
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/contatos/times-futebol",
-   *  name="comercial.clientes-cadastro-formulario-contatos-times-futebol",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getTimesFutebol(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id,
@@ -914,7 +812,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -938,18 +836,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-relacionamento/tipos-atendimento",
-   *  name="comercial.clientes-cadastro-formulario-dados-relacionamento-tipos-atendimento",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getTiposAtendimento(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id_tipo_atendimento[id],
@@ -959,7 +852,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -983,18 +876,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-relacionamento/periodos",
-   *  name="comercial.clientes-cadastro-formulario-dados-relacionamento-periodos",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getPeriodos(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id_periodo [id],
@@ -1004,7 +892,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -1028,18 +916,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-relacionamento/frequencia-contatos",
-   *  name="comercial.clientes-cadastro-formulario-dados-relacionamento-frequencia-contatos",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getFrequenciaContatos(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id_freq_contato [id],
@@ -1049,7 +932,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -1073,18 +956,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-relacionamento/frequencia-visitas",
-   *  name="comercial.clientes-cadastro-formulario-dados-relacionamento-frequencia-visitas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getFrequenciaVisitas(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id_freq_contato [id],
@@ -1094,7 +972,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -1118,18 +996,13 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/dados-relacionamento/origens-contato",
-   *  name="comercial.clientes-cadastro-formulario-dados-relacionamento-origens-contato",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getOrigensContato(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             SELECT
               id_orig_contato [id],
@@ -1139,7 +1012,7 @@ class FormularioController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -1163,11 +1036,6 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/anexos/salvar",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-anexos-salvar",
-   *  methods={"POST"}
-   * )
    * 
    * @param Connection $connection
    * @param Request $request
@@ -1182,7 +1050,7 @@ class FormularioController extends AbstractController
       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       $document   = new ParseFileFromRequestController();
-      $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\comercial\\clientes\\" . $codCliente . "\\cadastros\\enderecos\\" . $codEndereco . "\\";
+      $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\clientes\\" . $codCliente . "\\cadastros\\enderecos\\" . $codEndereco . "\\";
       
       $document
           ->setRequest($request)
@@ -1192,12 +1060,11 @@ class FormularioController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $linkAnexo       = $document->getFileLink();
 
-
       $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXECUTE [dbo].[PRC_CLIE_ENDE_ENTR_ANEX_CADA] 
           @ID_PARA = 1
           ,@ID_ENDE = {$codEndereco}
@@ -1205,7 +1072,7 @@ class FormularioController extends AbstractController
           ,@LINK_ANEX = '{$linkAnexo}'
           ,@IN_SITU = 1,
           @ID_USUA = {$infoUsuario->matricula}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAnexo'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -1220,11 +1087,6 @@ class FormularioController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/formulario/enderecos/anexos/excluir",
-   *  name="comercial.clientes-cadastro-formulario-enderecos-anexos-excluir",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function delAnexo(Connection $connection, Request $request)
@@ -1237,13 +1099,13 @@ class FormularioController extends AbstractController
 
       if (isset($params['codAnexo'])) $codAnexo = $params['codAnexo'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_CLIE_ENDE_ENTR_ANEX_CADA 
           @ID_PARA = 3,
           @ID_ANEX = {$codAnexo},
           @IN_SITU = 0,
           @ID_USUA = {$infoUsuario->matricula};
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       
 

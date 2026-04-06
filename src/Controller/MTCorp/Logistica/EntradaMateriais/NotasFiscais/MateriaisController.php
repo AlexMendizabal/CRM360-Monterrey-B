@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
@@ -21,8 +21,6 @@ class MateriaisController
     use ResponseTrait;
 
     /**
-     * @Route("/logistica/entrada-materiais/notas-fiscais/materiais", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -141,22 +139,22 @@ class MateriaisController
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       0);
             
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
 
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = (int) $stmt->fetchOne();
+            $total = (int) $result_stmt->fetchOne();
 
             $stmt->bindValue(":inFicha",            1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $notConform = (int) $stmt->fetchOne();
+            $notConform = (int) $result_stmt->fetchOne();
 
             return $this
                 ->setData($response)
@@ -175,11 +173,7 @@ class MateriaisController
         }
     }
 
-
-
     /**
-     * @Route("/logistica/entrada-materiais/notas-fiscais/materiais", methods={"POST", "PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -224,7 +218,7 @@ class MateriaisController
                     ,@IP_USUA		            = '{$usuarioIP}'
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!filter_var($response['success'], FILTER_VALIDATE_BOOLEAN)){
                 

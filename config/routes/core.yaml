@@ -1,0 +1,261 @@
+core.atividades.index:
+    path: /core/atividades
+    controller: App\Controller\MTCorp\Core\Atividades\AtividadesController::index
+    methods: [GET]
+
+core.atividades.store:
+    path: /core/atividades
+    controller: App\Controller\MTCorp\Core\Atividades\AtividadesController::store
+    methods: [POST]
+
+core.atividades.tipos.index:
+    path: /core/atividades/tipos
+    controller: App\Controller\MTCorp\Core\Atividades\TiposController::index
+    methods: [GET]
+
+core.contra-senha.index:
+    path: /core/contra-senha
+    controller: App\Controller\MTCorp\Core\ContraSenhaController::index
+    methods: [GET]
+
+core.contra-senha.uuid.show:
+    path: /core/contra-senha/{uuid}
+    controller: App\Controller\MTCorp\Core\ContraSenhaController::show
+    methods: [GET]
+    requirements:
+        uuid: '[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}'
+
+core.contra-senha.store:
+    path: /core/contra-senha
+    controller: App\Controller\MTCorp\Core\ContraSenhaController::store
+    methods: [POST]
+
+core.contra-senha.update:
+    path: /core/contra-senha
+    controller: App\Controller\MTCorp\Core\ContraSenhaController::update
+    methods: [PUT]
+
+core.modulos.getModulos:
+    path: /core/modulos
+    controller: App\Controller\MTCorp\Core\ModulosController::getModulos
+    methods: [GET]
+
+core.modulos.postModulos:
+    path: /core/modulos
+    controller: App\Controller\MTCorp\Core\ModulosController::postModulos
+    methods: [POST]
+
+core.perfis.atividades.store:
+    path: /core/perfis/atividades
+    controller: App\Controller\MTCorp\Core\Perfis\AtividadesController::store
+    methods: [POST]
+
+core.perfis.index:
+    path: /core/perfis
+    controller: App\Controller\MTCorp\Core\Perfis\PerfisController::index
+    methods: [GET]
+
+core.perfis.id.show:
+    path: /core/perfis/{id}
+    controller: App\Controller\MTCorp\Core\Perfis\PerfisController::show
+    methods: [GET]
+    requirements:
+        id: '\d'
+
+core.perfis.store:
+    path: /core/perfis
+    controller: App\Controller\MTCorp\Core\Perfis\PerfisController::store
+    methods: [POST]
+
+core.perfis.update:
+    path: /core/perfis
+    controller: App\Controller\MTCorp\Core\Perfis\PerfisController::update
+    methods: [PUT]
+
+core.submodulos.index:
+    path: /core/submodulos
+    controller: App\Controller\MTCorp\Core\SubmodulosController::index
+    methods: [GET]
+
+core.submodulos.id.show:
+    path: /core/submodulos/{id}
+    controller: App\Controller\MTCorp\Core\SubmodulosController::show
+    methods: [GET]
+    requirements:
+        id: '\d'
+
+core.submodulos.store:
+    path: /core/submodulos
+    controller: App\Controller\MTCorp\Core\SubmodulosController::store
+    methods: [POST]
+
+core.usuarios.perfis.index:
+    path: /core/usuarios/perfis
+    controller: App\Controller\MTCorp\Core\Usuarios\PerfisController::index
+    methods: [GET]
+
+core.usuarios.perfis.store:
+    path: /core/usuarios/perfis
+    controller: App\Controller\MTCorp\Core\Usuarios\PerfisController::store
+    methods: [POST]
+
+core.usuarios.index:
+    path: /core/usuarios
+    controller: App\Controller\MTCorp\Core\Usuarios\UsuariosController::index
+    methods: [GET]
+
+core.usuarios.store:
+    path: /core/usuarios
+    controller: App\Controller\MTCorp\Core\Usuarios\UsuariosController::store
+    methods: [POST]
+
+core.usuarios.cargos:
+    path: /core/usuarios/cargos
+    controller: App\Controller\MTCorp\Core\Usuarios\UsuariosController::cargos
+    methods: [GET]
+
+core.usuarios.departamentos:
+    path: /core/usuarios/departamentos
+    controller: App\Controller\MTCorp\Core\Usuarios\UsuariosController::departamentos
+    methods: [GET]
+
+core.notificaciones.getNotificaciones:
+    path: /core/notificaciones
+    controller: App\Controller\MTCorp\Core\NotificacionesController::getNotificaciones
+    methods: [GET]
+
+core.notificaciones.updateNotificacion:
+    path: /core/notificaciones/update
+    controller: App\Controller\MTCorp\Core\NotificacionesController::updateNotificacion
+    methods: [POST]
+
+core.notificaciones.leerNotificacion:
+    path: /core/notificaciones/leerNotificaciones
+    controller: App\Controller\MTCorp\Core\NotificacionesController::leerNotificacion
+    methods: [POST]
+
+core.notificaciones.crearNotificaciones:
+    path: /core/notificaciones/crearNotificaciones
+    controller: App\Controller\MTCorp\Core\NotificacionesController::crearNotificaciones
+    methods: [POST]
+
+core.notificaciones.verificarNotificacionOferta:
+    path: /core/notificaciones/verificar_oferta
+    controller: App\Controller\MTCorp\Core\NotificacionesController::verificarNotificacionOferta
+    methods: [POST]
+
+core.acessos.gravarLogAcessos:
+    path: /core/registrar-acesso
+    controller: App\Controller\MTCorp\Core\Acessos\AcessosController::gravarLogAcessos
+    methods: [POST]
+
+core.acessos.logAcessos:
+    path: /core/acessos
+    controller: App\Controller\MTCorp\Core\Acessos\AcessosController::logAcessos
+    methods: [GET]
+
+# SAP Controller routes
+core.sap.verificar-conexion:
+    path: /sap/verificar_conexion
+    controller: App\Controller\Core\SapController::verificarConectividad
+    methods: [POST]
+
+core.sap.verificar-conexion-sap:
+    path: /sap/verificar_conexion_sap
+    controller: App\Controller\Core\SapController::verificaConectionSAp
+    methods: [POST]
+
+core.sap.agregar-item:
+    path: /sap/agregar_item
+    controller: App\Controller\Core\SapController::agregarItem
+    methods: [POST]
+
+core.sap.actualizar-item:
+    path: /sap/actualizar_item
+    controller: App\Controller\Core\SapController::actualizarItem
+    methods: [POST]
+
+core.sap.cliente-insert:
+    path: /sap/cliente_insert
+    controller: App\Controller\Core\SapController::sapInsertCliente
+    methods: [POST]
+
+core.sap.cliente-insert2:
+    path: /sap/cliente_insert2
+    controller: App\Controller\Core\SapController::InsertarCliente
+    methods: [POST]
+
+core.sap.client-actualizar-ubicacion:
+    path: /sap/client_actualizar_ubicacion
+    controller: App\Controller\Core\SapController::ClientUbicacionActualizar
+    methods: [POST]
+
+core.sap.cliente-update-sap:
+    path: /sap/cliente_updateSap
+    controller: App\Controller\Core\SapController::sapUpdateCliente
+    methods: [POST]
+
+core.sap.cliente-update:
+    path: /sap/cliente_update
+    controller: App\Controller\Core\SapController::sapUpdateClienteSap
+    methods: [POST]
+
+core.sap.almacen-insert:
+    path: /sap/almacen_insert
+    controller: App\Controller\Core\SapController::sapAlmacenInsert
+    methods: [POST]
+
+core.sap.almacen-update:
+    path: /sap/almacen_update
+    controller: App\Controller\Core\SapController::sapAlmacenUpdate
+    methods: [POST]
+
+core.sap.precios-insert:
+    path: /sap/precios_insert
+    controller: App\Controller\Core\SapController::insertPrecios
+    methods: [POST]
+
+core.sap.precios-update:
+    path: /sap/precios_update
+    controller: App\Controller\Core\SapController::actualizarPrecios
+    methods: [POST]
+
+core.sap.asignar-permisos:
+    path: /sap/asignar_permisos
+    controller: App\Controller\Core\SapController::sapAsignarPermisos
+    methods: [POST]
+
+core.sap.actualizar-vendedor:
+    path: /sap/actualizar_vendedor
+    controller: App\Controller\Core\SapController::updateVendedor
+    methods: [POST]
+
+core.sap.consulta-vendedor:
+    path: /sap/consulta/vendedor
+    controller: App\Controller\Core\SapController::consultaUsuario
+    methods: [POST]
+
+core.sap.insertar-ejecutivo:
+    path: /sap/insertar_ejecutivo
+    controller: App\Controller\Core\SapController::insertUsuario
+    methods: [POST]
+
+core.sap.actualizar-stock:
+    path: /sap/actualizar_stock
+    controller: App\Controller\Core\SapController::actualizarStock
+    methods: [POST]
+
+core.sap.actualizar-stock-todos:
+    path: /sap/actualizar_stock_todos
+    controller: App\Controller\Core\SapController::actualizarStockTodos
+    methods: [POST]
+
+core.sap.actualizar-descuentos:
+    path: /sap/actualizar_descuentos
+    controller: App\Controller\Core\SapController::actualizarDescuentos
+    methods: [POST]
+
+core.sap.actualiza-oferta-estado:
+    path: /sap/actualiza/ofetaestado
+    controller: App\Controller\Core\SapController::actualizaofertaestado
+    methods: [POST]

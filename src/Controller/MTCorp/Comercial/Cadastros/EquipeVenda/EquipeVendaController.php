@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class EquipeVendaController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/lista",
-   *  name="comercial.cadastros-equipe-venda-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -45,13 +40,13 @@ class EquipeVendaController extends AbstractController
         if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
         if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_EQUI_VEND_CONS]
                 @DS_EQUI = '{$dsEquipeVenda}'
                 ,@ID_SITU = '{$codSituacao}'
                 ,@ORDE_BY = '{$orderBy}'
                 ,@ORDE_TYPE = '{$orderType}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0 && !isset($res[0]['msg'])) {
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -66,12 +61,6 @@ class EquipeVendaController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/alteracoes/{codEquipeVenda}",
-   *  name="comercial.cadastros-equipe-venda-alteracoes",
-   *  methods={"GET"},
-   *  requirements={"codEquipeVenda"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -80,10 +69,10 @@ class EquipeVendaController extends AbstractController
   {
     try {
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXECUTE [dbo].[PRC_EQUI_VEND_LOG_CONS] 
               @ID_EQUI = '{$codEquipeVenda}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -99,12 +88,6 @@ class EquipeVendaController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/detalhes/{codEquipeVenda}",
-   *  name="comercial.cadastros-equipe-venda-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codEquipeVenda"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -112,10 +95,10 @@ class EquipeVendaController extends AbstractController
   public function getDetalhes(Connection $connection, Request $request, $codEquipeVenda)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_EQUI_VEND_CONS] 
                 @ID_EQUI = '{$codEquipeVenda}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -129,11 +112,6 @@ class EquipeVendaController extends AbstractController
   }
 
    /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/salvar",
-   *  name="comercial.cadastros-equipe-venda-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postEquipeVenda(Connection $connection, Request $request)
@@ -149,13 +127,13 @@ class EquipeVendaController extends AbstractController
         if (isset($params['dsEquipeVenda'])) $dsEquipeVenda = $params['dsEquipeVenda'];
         if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
         
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_EQUI_VEND_CADA] 
                 @ID_PARA = 1
                 ,@DS_EQUI = '{$dsEquipeVenda}'
                 ,@ID_SITU = '{$codSituacao}'
                 ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codEquipeVenda'])) {
             return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -170,11 +148,6 @@ class EquipeVendaController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/atualizar",
-   *  name="comercial.cadastros-equipe-venda-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putEquipeVenda(Connection $connection, Request $request)
@@ -188,12 +161,11 @@ class EquipeVendaController extends AbstractController
         $codSituacao = null;
         $codReferenteErp = $params['codReferenteErp'];
 
-
         if (isset($params['codEquipeVenda'])) $codEquipeVenda = $params['codEquipeVenda'];
         if (isset($params['dsEquipeVenda'])) $dsEquipeVenda = $params['dsEquipeVenda'];
         if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_EQUI_VEND_CADA] 
                 @ID_PARA = 2
                 ,@ID_EQUI = '{$codEquipeVenda}'
@@ -201,7 +173,7 @@ class EquipeVendaController extends AbstractController
                 ,@ID_SITU = '{$codSituacao}'
                 ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
                 ,@ID_REFE_ERP = {$codReferenteErp}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codEquipeVenda']) && $res[0]['codEquipeVenda'] == $codEquipeVenda) {
             return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -216,11 +188,6 @@ class EquipeVendaController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/ativar",
-   *  name="comercial.cadastros-equipe-venda-ativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function activeEquipeVenda(Connection $connection, Request $request)
@@ -229,13 +196,13 @@ class EquipeVendaController extends AbstractController
         $codEquipeVenda = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_EQUI_VEND_CADA] 
                 @ID_PARA = 3
                 ,@ID_EQUI = '{$codEquipeVenda}'
                 ,@ID_SITU = '1'
                 ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codEquipeVenda']) && $codEquipeVenda == $res[0]['codEquipeVenda']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -250,11 +217,6 @@ class EquipeVendaController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/equipe-venda/inativar",
-   *  name="comercial.cadastros-equipe-venda-inativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function inactiveEquipeVenda(Connection $connection, Request $request)
@@ -263,13 +225,13 @@ class EquipeVendaController extends AbstractController
         $codEquipeVenda = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_EQUI_VEND_CADA] 
                 @ID_PARA = 3
                 ,@ID_EQUI = '{$codEquipeVenda}'
                 ,@ID_SITU = '2'
                 ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codEquipeVenda']) && $codEquipeVenda == $res[0]['codEquipeVenda']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -284,11 +246,6 @@ class EquipeVendaController extends AbstractController
   }
 
    /**
-     * @Route(
-     *  "/comercial/cadastros/equipe-venda/erp/lista",
-     *  name="comercial.cadastros-equipe-venda-erp-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -296,9 +253,9 @@ class EquipeVendaController extends AbstractController
     public function getListaEquipeERP(Connection $connection, Request $request)
     {
       try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             PRC_ERP_EQUI_VEND_CONS
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Common;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 
 /**
@@ -19,11 +19,6 @@ use App\Controller\Common\UsuarioController;
 class AtividadesController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/common/atividades/registrar-acesso",
-   *  name="common.atividades-registrar-acesso",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function registrarAcesso(Connection $connection, Request $request)
@@ -36,7 +31,7 @@ class AtividadesController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $routerUrl = $data['routerUrl'];
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             INSERT INTO
               tb_mtcorp_log_acessos (matricula, data, ip, tipo, acao, rota)
@@ -60,12 +55,6 @@ class AtividadesController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/atividades/listar/{idModulo}",
-   *  name="common.atividades-listar",
-   *  methods={"GET"},
-   *  requirements={"idModulo"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getAtividades(Connection $connection, Request $request, $idModulo)
@@ -82,7 +71,7 @@ class AtividadesController extends AbstractController
             ,@NR_MATR   = '{$infoUsuario->matricula}'
         SQL;
 
-        $res = $connection->query($query)->fetchAll();
+        $res = $connection->executeQuery($query)->fetchAllAssociative();
         
         if (count($res) > 0) {
           $message = array(
@@ -106,12 +95,6 @@ class AtividadesController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/atividades/atividade/{idAtividade}",
-   *  name="common.atividades-atividade",
-   *  methods={"GET"},
-   *  requirements={"idAtividade"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getAtividade(Connection $connection, Request $request, $idAtividade)
@@ -128,7 +111,7 @@ class AtividadesController extends AbstractController
             ,@NR_MATR   = '{$infoUsuario->matricula}'
         SQL;
 
-        $res = $connection->query($query)->fetchAll();
+        $res = $connection->executeQuery($query)->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -152,12 +135,6 @@ class AtividadesController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/atividades/internas/listar/{idSubModulo}",
-   *  name="common.atividades/internas-listar",
-   *  methods={"GET"},
-   *  requirements={"idSubModulo"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getAtividadesInternas(Connection $connection, Request $request, $idSubModulo)
@@ -172,7 +149,7 @@ class AtividadesController extends AbstractController
             ,@ID_SUB    = '{$idSubModulo}'
             ,@NR_MATR   = '{$infoUsuario->matricula}'
         SQL;
-        $res = $connection->query($query)->fetchAll();
+        $res = $connection->executeQuery($query)->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(

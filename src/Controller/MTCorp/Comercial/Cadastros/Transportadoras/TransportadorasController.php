@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Transportadoras;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class TransportadorasController extends AbstractController
 {
    /**
-   * @Route(
-   *  "/comercial/cadastros/transportadora/lista",
-   *  name="comercial.cadastros-transportadora-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -46,14 +41,14 @@ class TransportadorasController extends AbstractController
       if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXECUTE [PRC_TRAN_CONS] 
             @ID_PARA = {$tipoConsulta}
             ,@ID_TRAN_ERP = '{$id}'
             ,@NM_TRAN = '{$nome}'
             ,@ORDE_BY = '{$orderBy}'
             ,@ORDE_TYPE = '{$orderType}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       
       if (count($res) > 0 && !isset($res[0]['MSG'])) {
@@ -73,12 +68,6 @@ class TransportadorasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/transportadora/editar/{id}",
-   *  name="comercial.cadastros-transportadora-editar",
-   *  methods={"GET"},
-   *  requirements={"id"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -86,21 +75,21 @@ class TransportadorasController extends AbstractController
   public function editarTransportadora(Connection $connection, Request $request, $id)
   {
     try {
-      $transportadoras = $connection->query(
+      $transportadoras = $connection->executeQuery(
         "
           EXECUTE [PRC_TRAN_CONS] 
             @ID_PARA = 1,
             @ID_TRAN = '{$id}'
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($transportadoras) > 0) {
-        $contatos = $connection->query(
+        $contatos = $connection->executeQuery(
           "
             EXECUTE [PRC_TRAN_CONT_CONS] 
               @ID_TRAN = '{$id}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $transp = $transportadoras[0];
 
@@ -141,11 +130,6 @@ class TransportadorasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/transportadora/salvar",
-   *  name="comercial.cadastros-transportadora-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postTransportadora(Connection $connection, Request $request)
@@ -188,7 +172,7 @@ class TransportadorasController extends AbstractController
       $recebeCotacaoFrete = $params['recebeCotacaoFrete'] ? 1 : 0;
       $autorizaDownloadXml = $params['autorizaDownloadXml'] ? 1 : 0;
 
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXECUTE [PRC_TRAN_CADA] 
             @ID_TRAN_ERP = '{$id}',
@@ -207,7 +191,7 @@ class TransportadorasController extends AbstractController
             @AUTO_DOWN_XML = '{$autorizaDownloadXml}',
             @ID_USUA_CADA = '{$infoUsuario->matricula}'
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       
 
@@ -215,7 +199,7 @@ class TransportadorasController extends AbstractController
 
       foreach($contatos as $key => $value){
       
-        $connection->query(
+        $connection->executeQuery(
           "
             EXECUTE [PRC_TRAN_CONT_CADA] 
               @ID_TRAN = '{$idTransp}',
@@ -243,24 +227,18 @@ class TransportadorasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/transportadora/contato/excluir/{codTransportadora}/{codSequencia}",
-   *  name="comercial.cadastros-transportadora-contato-excluir",
-   *  methods={"DELETE"},
-   *  requirements={"codTransportadora"="\d+", "codSequencia"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function deleteContato(Connection $connection, Request $request, $codTransportadora, $codSequencia)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXECUTE [PRC_TRAN_CONT_EXCL] 
             @ID_TRAN= '{$codTransportadora}',
             @ID_SEQU = '{$codSequencia}'
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (isset($res[0]['SEQ']) && $res[0]['SEQ'] == $codSequencia) {
         $msg = 'Contato excluído com sucesso.';        

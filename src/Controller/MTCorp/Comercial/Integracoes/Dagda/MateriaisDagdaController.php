@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\Dagda;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Logistica\Services\Traits\RequestTrait;
@@ -18,8 +18,6 @@ class MateriaisDagdaController extends AbstractController
     use RequestTrait;
     /**
      * Consultar Materiais Dagda
-     * @Route("/comercial/integracoes/dagda/materiais-dagda", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -31,7 +29,6 @@ class MateriaisDagdaController extends AbstractController
             $this->setRequest($request);
 
             $idMatDag  = $request->query->get("cdDagda") ?? null;
-
 
             /* $query = <<<SQL
                 EXECUTE PRC_MATE_DAGD_CONS
@@ -47,9 +44,9 @@ class MateriaisDagdaController extends AbstractController
 
             $stmt->bindValue(":idMatDag", $idMatDag);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
 
             if (empty($response)) {
                 return (new FunctionsController)->Retorno(false, "A requisição não retornou informações", null, Response::HTTP_NO_CONTENT);

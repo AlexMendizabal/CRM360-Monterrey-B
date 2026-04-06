@@ -2,12 +2,12 @@
 
 namespace App\Controller\MTCorp\Logistica\FormacaoCarga;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 use App\Controller\MTCorp\Logistica\Motoristas\MotoristaController;
 use App\Controller\MTCorp\Logistica\Veiculos\VeiculoController;
@@ -19,7 +19,6 @@ class RomaneiosController
 {
     /**
      * Cadastra um romaneio
-     * @Route("/logistica/entrega/formacao-carga/romaneio", methods={"POST"})
      * @return JsonResponse
      */
     public function postRomaneio(Connection $connection, Request $request): JsonResponse
@@ -57,7 +56,7 @@ class RomaneiosController
                     ,@DS_OBSE           = '{$observacao}'
             SQL;
             
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if (!is_array($response))
                 throw new \Exception($response);
@@ -92,7 +91,6 @@ class RomaneiosController
 
     /**
      * Retorna os romaneios criados
-     * @Route("/logistica/entrega/formacao-carga/romaneios", methods={"GET"})
      * @return JsonResponse
      */
     public function getRomaneios(Connection $connection, Request $request): JsonResponse
@@ -128,7 +126,7 @@ class RomaneiosController
                     ,@CD_PEDI           = '{$pedido}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (!is_array($response))
                 throw new \Exception($response);

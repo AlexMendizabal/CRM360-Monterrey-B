@@ -2,21 +2,18 @@
 
 namespace App\Controller\MTCorp\Logistica\PainelRomaneios;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
 
 class PedidosController
 {
 
     /**
      * consulta pedidos
-     * @route("/logistica/painel-romaneios/romaneios/pedidos",
-     * methods={"GET"})
      * @return Response
      */
     public function getPedidos(Connection $connection, Request $request)
@@ -60,7 +57,7 @@ class PedidosController
                     ,@ORDE_TYPE         = '{$orderType}'
             SQL;
             
-            $res = $connection->query($query)->fetchAll();
+            $res = $connection->executeQuery($query)->fetchAllAssociative();
     
             if(!is_array($res))
                 throw new \Exception($res);

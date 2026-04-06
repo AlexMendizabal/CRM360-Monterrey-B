@@ -2,19 +2,17 @@
 
 namespace App\Controller\MTCorp\Logistica\Coletas;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 
 class ColetasController
 {
 
     /**
-     * @Route("/logistica/coletas", methods={"POST"})
-     *
      * @return JsonResponse
      */
     function postPedido(Connection $connection, Request $request)
@@ -164,7 +162,7 @@ class ColetasController
                     @NM_USUA_RESP_LOG		    = '{$usuarioMatricula}'
             SQL;
             
-            $response    = $connection->query($query)->fetch();
+            $response    = $connection->executeQuery($query)->fetchAssociative();
 
             if (is_array($response)) {
                 $message    = $response['message'];
@@ -190,10 +188,7 @@ class ColetasController
         }
     }
 
-
     /**
-     * @Route("/logistica/coletas", methods={"GET"})
-     *
      * @return JsonResponse
      */
     function getPedidos(Connection $connection, Request $request)
@@ -264,7 +259,7 @@ class ColetasController
                     @PAGINA                 = '{$pagina}'
             SQL;
             
-            $response    = $connection->query($query)->fetchAll();
+            $response    = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (!is_array($response))
                 throw new \Exception($response);
@@ -303,7 +298,7 @@ class ColetasController
                     @IN_COUNT               = 1
             SQL;
 
-            $total = ($connection->query($query)->fetch())["qtItens"];
+            $total = ($connection->executeQuery($query)->fetchAssociative())["qtItens"];
 
             return new JsonResponse([
                 "data"      => $response,

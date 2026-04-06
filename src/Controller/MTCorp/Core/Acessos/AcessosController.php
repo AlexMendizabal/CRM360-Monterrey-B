@@ -2,10 +2,11 @@
 
 namespace App\Controller\MTCorp\Core\Acessos;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Controller\Common\UsuarioController;
@@ -18,7 +19,6 @@ class AcessosController
     use TrataValoresInvalidosTrait;
 
     /**
-     * @Route("/core/registrar-acesso", methods={"POST"})
      * @return JsonResponse
      */
     public function gravarLogAcessos(Request $request, Connection $connection): JsonResponse
@@ -54,7 +54,7 @@ class AcessosController
                     ,@P_ACAO		 = '{$acao}'
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
             
             if(!is_array($response))
                 throw new \Exception($response);
@@ -75,7 +75,6 @@ class AcessosController
     }
 
     /**
-     * @Route("/core/acessos", methods={"GET"})
      * @return JsonResponse
      */
     public function logAcessos(Request $request, Connection $connection): JsonResponse
@@ -100,7 +99,7 @@ class AcessosController
                     ,@P_ACAO	= '{$acao}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $code = empty($response) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
 

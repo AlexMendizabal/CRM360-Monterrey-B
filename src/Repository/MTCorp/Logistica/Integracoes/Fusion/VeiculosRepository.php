@@ -5,7 +5,6 @@ namespace App\Repository\MTCorp\Logistica\Integracoes\Fusion;
 class VeiculosRepository
 {
 
-
     /**
      * Número de registros trazidos por execução
      *
@@ -64,7 +63,7 @@ class VeiculosRepository
                 ,@NM_PLAC           = '{$this->placa}'
         SQL;
 
-        $this->veiculos = $this->connection->query($query)->fetchAll();
+        $this->veiculos = $this->connection->executeQuery($query)->fetchAllAssociative();
         return $this->veiculos;
     }
 
@@ -82,7 +81,7 @@ class VeiculosRepository
                 ,@NM_PLAC           = '{$this->placa}'
         SQL;
 
-        $this->veiculo = $this->connection->query($query)->fetch();
+        $this->veiculo = $this->connection->executeQuery($query)->fetchAssociative();
         return $this->veiculo;
     }
 

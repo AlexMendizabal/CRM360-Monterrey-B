@@ -2,21 +2,16 @@
 
 namespace App\Controller\MTCorp\Core\Perfis;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class PerfisController
 {
 
   /**
-   * @Route(
-   *  "/core/perfis",
-   *  name="core.perfis.index",
-   *  methods={"GET"})
-   *
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -70,16 +65,16 @@ class PerfisController
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       "0");
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $show_route ? $stmt->fetchAssociative() : $stmt->fetchAllAssociative();
+            $response = $show_route ? $result_stmt->fetchAssociative() : $result_stmt->fetchAllAssociative();
 
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = $stmt->fetchOne();
+            $total = $result_stmt->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -108,13 +103,6 @@ class PerfisController
   }
 
     /**
-     * 
-     * @Route(
-     *  "/core/perfis/{id}",
-     *  name="core.perfis.id.show",
-     *  requirements={"id"="\d"},
-     *  methods={"GET"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -125,7 +113,6 @@ class PerfisController
     }
 
   /**
-   * @Route("/core/perfis", methods={"POST"})
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -158,9 +145,9 @@ class PerfisController
             $stmt->bindValue(":sigla",      $sigla);
             $stmt->bindValue(":situacao",   $situacao);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -196,11 +183,6 @@ class PerfisController
     }
 
     /**
-     * @Route(
-     *  "/core/perfis",
-     *  name="core.perfis.update",
-     *  methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

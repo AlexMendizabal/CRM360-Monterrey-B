@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\RestricoesTransporte;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
@@ -15,11 +15,6 @@ class RestricoesTransporteController
 {
 
     /**
-     * @Route(
-     *  "/logistica/restricoes-transporte",
-     *  name="logistica.restricoes-transporte.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -66,16 +61,16 @@ class RestricoesTransporteController
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       0);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $uuid ? $stmt->fetch() : $stmt->fetchAll();
+            $response = $uuid ? $result_stmt->fetchAssociative() : $result_stmt->fetchAllAssociative();
 
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = $stmt->fetchOne();
+            $total = $result_stmt->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -104,13 +99,6 @@ class RestricoesTransporteController
     }
 
     /**
-     * 
-     * @Route(
-     *  "/logistica/restricoes-transporte/{uuid}",
-     *  name="logistica.restricoes-transporte_uuid.show",
-     *  methods={"GET"},
-     * requirements={"uuid"="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -120,13 +108,7 @@ class RestricoesTransporteController
         return $this->index($connection, $request, $uuid);
     }
 
-
     /**
-     * @Route(
-     *  "/logistica/restricoes-transporte",
-     *  name="logistica.restricoes-transporte.store",
-     *  methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -146,7 +128,6 @@ class RestricoesTransporteController
             
             $nome       = str_replace("'", "''", $nome);
             $observacao = str_replace("'", "''", $observacao);
-
 
             $headers    = $request->headers->get('X-User-Info');
 
@@ -191,9 +172,9 @@ class RestricoesTransporteController
             $stmt->bindValue(":usuarioNome",        $usuarioNome);
             $stmt->bindValue(":usuarioIP",          $usuarioIP);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetch();
+            $response = $result_stmt->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -232,11 +213,6 @@ class RestricoesTransporteController
     }
 
     /**
-     * @Route(
-     *  "/logistica/restricoes-transporte",
-     *  name="logistica.restricoes-transporte.update",
-     *  methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Relatorios\FaturamentoDetalhadoDuque;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 
 /**
@@ -19,11 +19,6 @@ use App\Controller\Common\Services\FunctionsController;
 class FaturamentoDetalhadoDuqueController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/relatorios/faturamento-detalhado-duque/lista/{data}",
-   *  name="comercial.relatorios-faturamento-detalhado-duque-lista",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getLinhas(Connection $connection, Request $request, $data)
@@ -31,13 +26,13 @@ class FaturamentoDetalhadoDuqueController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
 
-        $linhasGeral = $connection->query(
+        $linhasGeral = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_MKTG_RELA_POSI_DIAR]
             @DATA_HOJE = '{$data}',
             @DEPOSITO = '60'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         foreach($linhasGeral as $key => $value) {
           if ($value['LINHA'] != 'TOTAL GERAL') {
@@ -83,12 +78,12 @@ class FaturamentoDetalhadoDuqueController extends AbstractController
           $tratarRetornoTotal['valorMetaEditado'] = ($value['valorMeta'] == 0) ? 0 : ($value['valorEditado'] / $value['valorMeta'] - 1) * 100;
         }
 
-        $diasUteis = $connection->query(
+        $diasUteis = $connection->executeQuery(
           "
             EXEC [PRC_COME_QTDE_DIA_UTIL_CONS]
             @DATA = '{$data}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $diaAtual = $diasUteis[0]['diasUteisAteData'];
         $diasTotal = $diasUteis[0]['diasUteisMes'];
@@ -127,11 +122,6 @@ class FaturamentoDetalhadoDuqueController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/relatorios/faturamento-detalhado-duque/detalhes/{data}/{ordem}",
-   *  name="comercial.relatorios-faturamento-detalhado-duque-detalhes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getDetalhesLinhas(Connection $connection, Request $request, $data, $ordem)
@@ -139,7 +129,7 @@ class FaturamentoDetalhadoDuqueController extends AbstractController
    if ($request->isMethod('GET')) {
       try {
 
-        $linhasGeral = $connection->query(
+        $linhasGeral = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_MKTG_RELA_POSI_DIAR]
             @DETALHE = 1, 
@@ -147,7 +137,7 @@ class FaturamentoDetalhadoDuqueController extends AbstractController
             @SEQUENCIA = {$ordem},
             @DATA_HOJE = '{$data}' 
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($linhasGeral) > 1) {
           foreach($linhasGeral as $key => $value) {

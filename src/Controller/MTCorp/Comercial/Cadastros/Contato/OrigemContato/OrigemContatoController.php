@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class OrigemContatoController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/origem-contato/lista",
-   *  name="comercial.cadastros-contato-origem-contato-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -33,7 +28,6 @@ class OrigemContatoController extends AbstractController
   {
     try {
       $params = $request->query->all();
-
 
       $origemContato = NULL;
       $codSituacao = 'NULL';
@@ -45,15 +39,14 @@ class OrigemContatoController extends AbstractController
       if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_ORIG_CONT_CONS]
           @ID_PARAM = 1
           ,@ORIG_CONT = '{$origemContato}'
           ,@IN_SITU = {$codSituacao}
           ,@ORDE_BY = '{$orderBy}'
           ,@ORDE_TYPE = '{$orderType}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       for ($x = 0; $x < count($res); $x++) {
         foreach ($res[$x] as $key => $value) {
@@ -62,7 +55,6 @@ class OrigemContatoController extends AbstractController
           }
         }
         }
-
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -77,12 +69,6 @@ class OrigemContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/origem-contato/alteracoes/{codOrigemContato}",
-   *  name="comercial.cadastros-contato-origem-contato-alteracoes",
-   *  methods={"GET"},
-   *  requirements={"codOrigemContato"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -90,11 +76,11 @@ class OrigemContatoController extends AbstractController
   public function getAlteracoes(Connection $connection, Request $request, $codOrigemContato)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXEC [PRC_ORIG_CONT_LOG_CONS] 
             @ID_PARAM = 1
             ,@ID_ORIG_CONT = '{$codOrigemContato}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -110,12 +96,6 @@ class OrigemContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/origem-contato/detalhes/{codOrigemContato}",
-   *  name="comercial.cadastros-contato-origem-contato-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codOrigemContato"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -123,11 +103,11 @@ class OrigemContatoController extends AbstractController
   public function getDetalhes(Connection $connection, Request $request, $codOrigemContato)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_ORIG_CONT_CONS]
           @ID_PARAM = 1
           ,@ORIG_CONT = '{$codOrigemContato}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       for ($x = 0; $x < count($res); $x++) {
         foreach ($res[$x] as $key => $value) {
@@ -149,11 +129,6 @@ class OrigemContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/origem-contato/salvar",
-   *  name="comercial.cadastros-contato-origem-contato-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postOrigemContato(Connection $connection, Request $request)
@@ -166,13 +141,13 @@ class OrigemContatoController extends AbstractController
       $codSituacao = $params['codSituacao'];
       // $codReferenteErp = $params['codReferenteErp'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_ORIG_CONT_CADA]
           @ID_PARAM = 1,
           @DS_ORIG_CONT = '{$descricao}',
           @IN_SITU = {$codSituacao},
           @ID_USUA_CADA = '{$infoUsuario->matricula}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codOrigemContato'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -187,11 +162,6 @@ class OrigemContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/origem-contato/atualizar",
-   *  name="comercial.cadastros-contato-origem-contato-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putOrigemContato(Connection $connection, Request $request)
@@ -205,7 +175,7 @@ class OrigemContatoController extends AbstractController
       $codSituacao = $params['codSituacao'];
       $codReferenteErp = $params['codReferenteErp'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_ORIG_CONT_CADA]
           @ID_PARAM = 2,
           @ID_ORIG_CONT = '{$codOrigemContato}',
@@ -213,7 +183,7 @@ class OrigemContatoController extends AbstractController
           @IN_SITU = {$codSituacao},
           @ID_USUA_CADA = '{$infoUsuario->matricula}',
           @ID_REFE_ERP =  {$codReferenteErp}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codOrigemContato']) && $res[0]['codOrigemContato'] == $codOrigemContato) {
           return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -228,11 +198,6 @@ class OrigemContatoController extends AbstractController
   }
 
   /**
-     * @Route(
-     *  "/comercial/cadastros/contato/origem-contato/ativar",
-     *  name="comercial.cadastros-contato-origem-contato-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeOrigemContato(Connection $connection, Request $request)
@@ -241,13 +206,13 @@ class OrigemContatoController extends AbstractController
           $codOrigemContato = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_ORIG_CONT_CADA]
               @ID_PARAM = 3,
               @ID_ORIG_CONT = '{$codOrigemContato}',
               @IN_SITU = 1,
               @ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codOrigemContato']) && $codOrigemContato == $res[0]['codOrigemContato']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -262,11 +227,6 @@ class OrigemContatoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/contato/origem-contato/inativar",
-     *  name="comercial.cadastros-contato-origem-contato-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveOrigemContato(Connection $connection, Request $request)
@@ -275,13 +235,13 @@ class OrigemContatoController extends AbstractController
           $codOrigemContato = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_ORIG_CONT_CADA]
               @ID_PARAM = 3,
               @ID_ORIG_CONT = '{$codOrigemContato}',
               @IN_SITU = 0,
               @ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codOrigemContato']) && $codOrigemContato == $res[0]['codOrigemContato']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -296,11 +256,6 @@ class OrigemContatoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/contato/origem-contato/erp/lista",
-     *  name="comercial.cadastros-contato-origem-contato-erp-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -308,9 +263,9 @@ class OrigemContatoController extends AbstractController
     public function getListaOrigemERP(Connection $connection, Request $request)
     {
       try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_ERP_ORIG_CONT_CONS
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);

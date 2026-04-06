@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class TipoComissionamentoController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/lista",
-   *  name="comercial.cadastros-tipo-comissionamento-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -43,12 +38,12 @@ class TipoComissionamentoController extends AbstractController
 
       $order = $orderBy . ' ' . $orderType;
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_TIPO_PAGA_COMI_VEND_CONS
           @DS_TIPO_PAGA_COMI_VEND    = '{$dsTiposComissionamento}',
           @IN_STAT                   = {$codSituacao},
           @DS_ORDE_BY                = '{$order}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       foreach($res as $key => $value) { 
         $resLoop[] = array(
@@ -71,12 +66,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/detalhes/{codTipoComissionamento}",
-   *  name="comercial.cadastros-tipo-comissionamento-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codTipoComissionamento"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -88,12 +77,10 @@ class TipoComissionamentoController extends AbstractController
       $resLoopFaixa = [];
       $grupos = [];
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_TIPO_PAGA_COMI_VEND_CONS
               @ID_TIPO_PAGA_COMI_VEND    = '{$codTipoComissionamento}'
-        ")->fetchAll();
-
-
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
           foreach($res as $key => $value) {
@@ -104,11 +91,11 @@ class TipoComissionamentoController extends AbstractController
             );
           };
   
-          $resFaixa = $connection->query("
+          $resFaixa = $connection->executeQuery("
             EXECUTE [dbo].[PRC_FAIX_COMI_VEND_CONS]
               @ID_FAIX_COMI_VEND        = NULL,
               @ID_TIPO_PAGA_COMI_VEND    = {$res[0]['ID_TIPO_PAGA_COMI_VEND']}
-          ")->fetchAll();
+          ")->fetchAllAssociative();
   
           foreach($resFaixa as $key => $value) {
             $resLoopFaixa[] = array(
@@ -159,11 +146,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/salvar",
-   *  name="comercial.cadastros-tipo-comissionamento-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postFormasPagamento(Connection $connection, Request $request)
@@ -175,14 +157,13 @@ class TipoComissionamentoController extends AbstractController
         $dsTipoComissionamento = $params['dsTipoComissionamento'];
         $codSituacao = $params['codSituacao'];
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_TIPO_PAGA_COMI_VEND_GRAV
             @ID_PARA                   = 1,
             @DS_TIPO_PAGA_COMI_VEND    = '{$dsTipoComissionamento}',
             @IN_STAT                   = '{$codSituacao}',
             @ID_USUA                   = '{$infoUsuario->id}'
-        ")->fetchAll();
-
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($params['linhas']); $i++) {
@@ -194,7 +175,7 @@ class TipoComissionamentoController extends AbstractController
               $percDescontoAte = $params['linhas'][$i]['percentual'][$index]['percDescontoAte'];
               $percPago = $params['linhas'][$i]['percentual'][$index]['percPago'];
 
-              $resPercentual = $connection->query("
+              $resPercentual = $connection->executeQuery("
                 EXEC PRC_FAIX_COMI_VEND_GRAV 
                     @ID_PARA                   = 1,
                     @ID_TIPO_PAGA_COMI_VEND    = {$res[0]['ID_TIPO_PAGA_COMI_VEND']},
@@ -204,7 +185,7 @@ class TipoComissionamentoController extends AbstractController
                     @PERC_DESC_ATE             = '{$percDescontoAte}',
                     @PERC_COMI_VEND            = '{$percPago}',
                     @ID_USUA                   = '{$infoUsuario->id}'
-              ")->fetchAll();
+              ")->fetchAllAssociative();
             }
           }
         }
@@ -222,11 +203,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/atualizar",
-   *  name="comercial.cadastros-tipo-comissionamento-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putFormasPagamento(Connection $connection, Request $request)
@@ -239,14 +215,14 @@ class TipoComissionamentoController extends AbstractController
       $codTipoComissionamento = $params['codTipoComissionamento'];
       $codSituacao = $params['codSituacao'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_TIPO_PAGA_COMI_VEND_GRAV
           @ID_PARA                   = 1,
           @ID_TIPO_PAGA_COMI_VEND    = '{$codTipoComissionamento}',
           @DS_TIPO_PAGA_COMI_VEND    = '{$dsTipoComissionamento}',
           @IN_STAT                   = '{$codSituacao}',
           @ID_USUA                   = '{$infoUsuario->id}'
-      ")->fetchAll(); 
+      ")->fetchAllAssociative(); 
 
       if (count($res) > 0) {
         for ($i=0; $i < count($params['linhas']); $i++) {
@@ -260,7 +236,7 @@ class TipoComissionamentoController extends AbstractController
             $percPago = $params['linhas'][$i]['percentual'][$index]['percPago'];
             if ($codFaixa == '') {$codFaixa = 'NULL';}
 
-            $resPercentual = $connection->query("
+            $resPercentual = $connection->executeQuery("
               EXEC PRC_FAIX_COMI_VEND_GRAV 
                   @ID_PARA                   = 1,
                   @ID_FAIX_COMI_VEND         = {$codFaixa},
@@ -271,7 +247,7 @@ class TipoComissionamentoController extends AbstractController
                   @PERC_DESC_ATE             = '{$percDescontoAte}',
                   @PERC_COMI_VEND            = '{$percPago}',
                   @ID_USUA                   = '{$infoUsuario->id}'
-              ")->fetchAll();
+              ")->fetchAllAssociative();
             }
           }
         }
@@ -289,11 +265,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
    /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/delete",
-   *  name="comercial.cadastros-tipo-comissionamento-delete",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function deleteFaixaPercentual(Connection $connection, Request $request)
@@ -305,12 +276,12 @@ class TipoComissionamentoController extends AbstractController
         for ($i=0; $i < count($params); $i++) {
           $codFaixa = $params[$i]['codFaixa'];     
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC PRC_FAIX_COMI_VEND_GRAV
               @ID_PARA    = 2,
               @ID_FAIX_COMI_VEND = '{$codFaixa}',
               @ID_USUA = '{$infoUsuario->id}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
         }
 
         if (isset($res[0]['ID_FAIX_COMI_VEND'])) {
@@ -324,11 +295,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/linhas",
-   *  name="comercial.cadastros-tipo-comissionamento-linhas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getLinhas(Connection $connection, Request $request)
@@ -336,7 +302,7 @@ class TipoComissionamentoController extends AbstractController
     try {
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_LINH_CONS
               @ID_LINH            = NULL,
               @NM_LINH            = NULL,
@@ -345,7 +311,7 @@ class TipoComissionamentoController extends AbstractController
               @TT_REGI_PAGI    = NULL,
               @ORDE_BY            = NULL,
               @ORDE_TYPE        = 'NM_LINH'
-          ")->fetchAll();   
+          ")->fetchAllAssociative();   
 
           foreach($res as $key => $value) { 
           $resLoop[] = array(
@@ -367,11 +333,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/classes",
-   *  name="comercial.cadastros-tipo-comissionamento-classes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getClasses(Connection $connection, Request $request)
@@ -379,7 +340,7 @@ class TipoComissionamentoController extends AbstractController
     try {
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_CLAS_CONS
             @ID_CLAS            = NULL,
             @ID_LINH            = NULL,
@@ -391,7 +352,7 @@ class TipoComissionamentoController extends AbstractController
             @TT_REGI_PAGI       = NULL,
             @ORDE_BY            = NULL,
             @ORDE_TYPE          = NULL
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           foreach($res as $key => $value) { 
             $resLoop[] = array(
@@ -416,11 +377,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
    /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/faixa-percentual/{codTipoComissionamento}",
-   *  name="comercial.cadastros-tipo-comissionamento-faixa-percentual",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getDetailTipoComissionamento(Connection $connection, Request $request, $codTipoComissionamento)
@@ -428,10 +384,10 @@ class TipoComissionamentoController extends AbstractController
     try {
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
         EXEC PRC_TIPO_PAGA_COMI_VEND_CONS
             @ID_TIPO_PAGA_COMI_VEND    = '{$codTipoComissionamento}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0) {
         foreach($res as $key => $value) {
@@ -442,11 +398,11 @@ class TipoComissionamentoController extends AbstractController
           );
         };
 
-        $resFaixa = $connection->query("
+        $resFaixa = $connection->executeQuery("
           EXECUTE [dbo].[PRC_FAIX_COMI_VEND_CONS]
             @ID_FAIX_COMI_VEND        = NULL,
             @ID_TIPO_PAGA_COMI_VEND    = '{$codTipoComissionamento}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         foreach($resFaixa as $key => $value) {
           $resLoopFaixa[] = array(
@@ -494,11 +450,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/ativar",
-   *  name="comercial.cadastros-tipo-comissionamento-ativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function activeFormasPagamento(Connection $connection, Request $request)
@@ -507,13 +458,13 @@ class TipoComissionamentoController extends AbstractController
         $codTipoComissionamento = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        // $res = $connection->query("
+        // $res = $connection->executeQuery("
         //   EXECUTE [dbo].[PRC_FORM_PAGA_CADA]
         //     @ID_PARA = 3,
         //     @ID_FORM_PAGA = {$codTipoComissionamento},
         //     @IN_SITU = 1, 
         //     @ID_USUA = {$infoUsuario->matricula}
-        // ")->fetchAll();
+        // ")->fetchAllAssociative();
 
         if (isset($res[0]['codTipoComissionamento']) && $codTipoComissionamento == $res[0]['codTipoComissionamento']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -528,11 +479,6 @@ class TipoComissionamentoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipo-comissionamento/inativar",
-   *  name="comercial.cadastros-tipo-comissionamento-inativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function inactiveFormasPagamento(Connection $connection, Request $request)
@@ -541,13 +487,13 @@ class TipoComissionamentoController extends AbstractController
         $codTipoComissionamento = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        // $res = $connection->query("
+        // $res = $connection->executeQuery("
         //   EXECUTE [dbo].[PRC_FORM_PAGA_CADA]
         //     @ID_PARA = 3,
         //     @ID_FORM_PAGA = {$codTipoComissionamento},
         //     @IN_SITU = 0, 
         //     @ID_USUA = {$infoUsuario->matricula}
-        // ")->fetchAll();
+        // ")->fetchAllAssociative();
 
         if (isset($res[0]['codTipoComissionamento']) && $codTipoComissionamento == $res[0]['codTipoComissionamento']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller\Common\Services;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,10 +15,6 @@ class GoogleApiService extends AbstractController
   
 
   /**
-   * @Route(
-   *  "/common/services/google-api/getLatLong",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function ConsultaLatitudeLongitude($end)
@@ -53,7 +48,8 @@ class GoogleApiService extends AbstractController
 
       $ch = curl_init(); 
       curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 
       $output = curl_exec($ch);

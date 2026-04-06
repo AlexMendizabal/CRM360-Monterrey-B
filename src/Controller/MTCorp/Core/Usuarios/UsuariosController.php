@@ -2,21 +2,16 @@
 
 namespace App\Controller\MTCorp\Core\Usuarios;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class UsuariosController
 {
 
     /**
-     * @Route(
-     *  "/core/usuarios",
-     *  name="core.usuarios.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -66,16 +61,16 @@ class UsuariosController
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       "0");
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
 
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = $stmt->fetchOne();
+            $total = $result_stmt->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -104,11 +99,6 @@ class UsuariosController
     }
 
     /**
-     * @Route(
-     *  "/core/usuarios",
-     *  name="core.usuarios.store",
-     *  methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -188,9 +178,9 @@ class UsuariosController
             $stmt->bindValue(":moduloId",           $moduloId);
             $stmt->bindValue(":situacao",           $situacao);
            
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -226,11 +216,6 @@ class UsuariosController
     }
 
     /**
-     * @Route(
-     *  "/core/usuarios/cargos",
-     *  name="core.usuarios.cargos",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -267,11 +252,6 @@ class UsuariosController
     }
 
     /**
-     * @Route(
-     *  "/core/usuarios/departamentos",
-     *  name="core.usuarios.departamentos",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

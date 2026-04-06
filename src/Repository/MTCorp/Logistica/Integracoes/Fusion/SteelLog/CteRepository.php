@@ -15,7 +15,7 @@ class CteRepository
               ,@P_NR_MANI = '{$codigoManifesto}'
         SQL;
         
-        $response = $connection->query($query)->fetchAll();
+        $response = $connection->executeQuery($query)->fetchAllAssociative();
 
         return $response;
     }

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Abastecimento\Estoque;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 
 /**
  * Class EstoqueAnaliseComprasController
@@ -19,10 +20,6 @@ use Doctrine\DBAL\DBALException;
 class EstoqueAnaliseComprasController extends AbstractController
 {
     /**
-     * @Route(
-     * "/abastecimento/estoque/analise-compras", name="abastecimento.estoque.analise-compras", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -210,7 +207,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -256,8 +253,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmt->bindValue(15, $ttRegiPagi);
                     $stmt->bindValue(16, $ordeBy);
                     $stmt->bindValue(17, $ordeType);
-                    $stmt->execute();
-                    $estoqueAnaliseCompras = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $estoqueAnaliseCompras = $result_stmt->fetchAllAssociative();
 
                     if (count($estoqueAnaliseCompras) > 1) {
                         $result = array(
@@ -289,10 +286,6 @@ class EstoqueAnaliseComprasController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/estoque/vendas-realizadas/detalhes", name="abastecimento.estoque.vendas-realizadas-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -481,7 +474,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -525,8 +518,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmt->bindValue(14, $ttRegiPagi);
                     $stmt->bindValue(15, $ordeBy);
                     $stmt->bindValue(16, $ordeType);
-                    $stmt->execute();
-                    $vendasRealizadas = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $vendasRealizadas = $result_stmt->fetchAllAssociative();
 
                     if (count($vendasRealizadas) > 1) {
                         $result = array(
@@ -558,10 +551,6 @@ class EstoqueAnaliseComprasController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/estoque/vendas-perdidas/detalhes", name="abastecimento.estoque.vendas-perdidas-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -754,7 +743,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -800,8 +789,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmt->bindValue(15, $ttRegiPagi);
                     $stmt->bindValue(16, $ordeBy);
                     $stmt->bindValue(17, $ordeType);
-                    $stmt->execute();
-                    $vendasPerdidas = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $vendasPerdidas = $result_stmt->fetchAllAssociative();
 
                     if (count($vendasPerdidas) > 1) {
                         $result = array(
@@ -833,10 +822,6 @@ class EstoqueAnaliseComprasController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/estoque/carteira-em-aberto/detalhes", name="abastecimento.estoque.carteira-em-aberto-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -975,7 +960,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -1017,8 +1002,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                     $stmt->bindValue(13, $ttRegiPagi);
                     $stmt->bindValue(14, $ordeBy);
                     $stmt->bindValue(15, $ordeType);
-                    $stmt->execute();
-                    $carteiraEmAberto = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $carteiraEmAberto = $result_stmt->fetchAllAssociative();
 
                     $carteiraEmAbertoTratada = array();
 
@@ -1065,10 +1050,6 @@ class EstoqueAnaliseComprasController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/estoque/situacao-material-deposito/detalhes", name="abastecimento.estoque.situacao-material-deposito-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1146,8 +1127,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                 $stmt->bindValue(2, $idDepo);
                 $stmt->bindValue(3, $dtInic);
                 $stmt->bindValue(4, $dtFina);
-                $stmt->execute();
-                $situacaoEstoqueMaterialDeposito = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $situacaoEstoqueMaterialDeposito = $result_stmt->fetchAllAssociative();
 
                 if (count($situacaoEstoqueMaterialDeposito) > 0) {
                     $result = array(
@@ -1178,10 +1159,6 @@ class EstoqueAnaliseComprasController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/estoque/comprometido-pedido-venda/detalhes", name="abastecimento.estoque.comprometido-pedido-venda-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1300,7 +1277,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                      $stmtGravParaRelaServ->bindValue(7, $idUsua);
                      $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                     $stmtGravParaRelaServ->execute();
+                     $stmtGravParaRelaServ->executeStatement();
  
                      $result = array(
                          'responseCode' => 200,
@@ -1340,8 +1317,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmt->bindValue(12, $ttRegiPagi);
                      $stmt->bindValue(13, $ordeBy);
                      $stmt->bindValue(14, $ordeType);
-                     $stmt->execute();
-                     $comprometidoPedidoVenda = $stmt->fetchAll();
+                     $result_stmt = $stmt->executeQuery();
+                     $comprometidoPedidoVenda = $result_stmt->fetchAllAssociative();
 
                      if (count($comprometidoPedidoVenda) > 1) {
                          $result = array(
@@ -1373,10 +1350,6 @@ class EstoqueAnaliseComprasController extends AbstractController
      }
  
      /**
-     * @Route(
-     * "/abastecimento/estoque/comprometido-plano-corte/detalhes", name="abastecimento.estoque.comprometido-plano-corte-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1483,7 +1456,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                      $stmtGravParaRelaServ->bindValue(7, $idUsua);
                      $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                     $stmtGravParaRelaServ->execute();
+                     $stmtGravParaRelaServ->executeStatement();
  
                      $result = array(
                          'responseCode' => 200,
@@ -1517,8 +1490,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmt->bindValue(9, $ttRegiPagi);
                      $stmt->bindValue(10, $ordeBy);
                      $stmt->bindValue(11, $ordeType);
-                     $stmt->execute();
-                     $comprometidoPlanoCorte = $stmt->fetchAll();
+                     $result_stmt = $stmt->executeQuery();
+                     $comprometidoPlanoCorte = $result_stmt->fetchAllAssociative();
 
                      if (count($comprometidoPlanoCorte) > 1) {
                          $result = array(
@@ -1550,10 +1523,6 @@ class EstoqueAnaliseComprasController extends AbstractController
      }
 
      /**
-     * @Route(
-     * "/abastecimento/estoque/suspenso-entrada/detalhes", name="abastecimento.estoque.suspenso-entrada-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1672,7 +1641,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                      $stmtGravParaRelaServ->bindValue(7, $idUsua);
                      $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                     $stmtGravParaRelaServ->execute();
+                     $stmtGravParaRelaServ->executeStatement();
  
                      $result = array(
                          'responseCode' => 200,
@@ -1712,8 +1681,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmt->bindValue(12, $ttRegiPagi);
                      $stmt->bindValue(13, $ordeBy);
                      $stmt->bindValue(14, $ordeType);
-                     $stmt->execute();
-                     $suspensoEntrada = $stmt->fetchAll();
+                     $result_stmt = $stmt->executeQuery();
+                     $suspensoEntrada = $result_stmt->fetchAllAssociative();
 
                      if (count($suspensoEntrada) > 1) {
                          $result = array(
@@ -1745,10 +1714,6 @@ class EstoqueAnaliseComprasController extends AbstractController
      }
 
      /**
-     * @Route(
-     * "/abastecimento/estoque/suspenso-geral/detalhes", name="abastecimento.estoque.suspenso-geral-detalhes", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1851,7 +1816,7 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                      $stmtGravParaRelaServ->bindValue(7, $idUsua);
                      $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                     $stmtGravParaRelaServ->execute();
+                     $stmtGravParaRelaServ->executeStatement();
  
                      $result = array(
                          'responseCode' => 200,
@@ -1883,8 +1848,8 @@ class EstoqueAnaliseComprasController extends AbstractController
                      $stmt->bindValue(8, $ttRegiPagi);
                      $stmt->bindValue(9, $ordeBy);
                      $stmt->bindValue(10, $ordeType);
-                     $stmt->execute();
-                     $suspensoGeral = $stmt->fetchAll();
+                     $result_stmt = $stmt->executeQuery();
+                     $suspensoGeral = $result_stmt->fetchAllAssociative();
 
                      if (count($suspensoGeral) > 1) {
                          $result = array(

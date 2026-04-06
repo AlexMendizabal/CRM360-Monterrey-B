@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 
 class DocumentosController
 {
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/documentos", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -37,7 +35,7 @@ class DocumentosController
                 ], Response::HTTP_BAD_REQUEST);
 
             $document   = new ParseFileFromRequestController();
-            $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\logistica\\entrada-materiais\\ficha-nao-conformidade\\anexos\\" . $id . "\\";
+            $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\logistica\\entrada-materiais\\ficha-nao-conformidade\\anexos\\" . $id . "\\";
             
             $document
                 ->setRequest($request)
@@ -58,7 +56,7 @@ class DocumentosController
 
             $documentoTipo  = $match ? "IMAGEM" : "DOCUMENTO";
 
-            $link           = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER['LOCAL_ADDR'], $documentoLocalFisico);
+            $link           = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER['LOCAL_ADDR'], $documentoLocalFisico);
             $link           = str_replace("\\", "/", $link);
             $link           = $_SERVER["HTTPS"] == "off" ? "http://" . $link : "https://" . $link;
 
@@ -77,7 +75,7 @@ class DocumentosController
                     ,@IN_STAT                   = 1
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -108,8 +106,6 @@ class DocumentosController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/documentos", methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -146,7 +142,7 @@ class DocumentosController
                     ,@IP_USUA                   = '{$usuarioIP}'
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -177,8 +173,6 @@ class DocumentosController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/documentos", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -203,7 +197,7 @@ class DocumentosController
                     ,@IN_STAT				 = '{$inStat}'	
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);

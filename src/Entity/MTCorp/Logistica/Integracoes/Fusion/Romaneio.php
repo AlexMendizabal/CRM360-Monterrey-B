@@ -54,7 +54,7 @@ class Romaneio implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array(
             "codigo_erp"        => $this->codigo_erp,

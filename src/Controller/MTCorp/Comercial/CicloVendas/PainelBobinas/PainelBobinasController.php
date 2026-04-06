@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\CicloVendas\PainelBobinas;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -22,11 +22,6 @@ class PainelBobinasController extends AbstractController
 {
 
   /**
-   * @Route(
-   * "/comercial/ciclo-vendas/painel-bobinas/lista",
-   * name="comercial.ciclo-vendas-painel-bobinas-lista",
-   *  methods={"GET"}
-   * ) 
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -42,12 +37,12 @@ class PainelBobinasController extends AbstractController
         if (isset($params['lote'])) $lote = $params['lote'];
         if (isset($params['empresa'])) $empresa = $params['empresa'];
         
-        $res = $connection->query("
+        $res = $connection->executeQuery("
               EXEC PRC_PEDI_BOBI_CONS 
                   @ID_PARA = 1,
                   @DS_LOTE = '{$lote}',
                   @ID_EMPR = {$empresa}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0 && !isset($res[0]['message'])) {
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -64,11 +59,6 @@ class PainelBobinasController extends AbstractController
 	
 
   /**
-   * @Route(
-   *  "/comercial/ciclo-vendas/painel-bobinas/salvar",
-   *  name="comercial.ciclo-vendas-painel-bobinas-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postPainelBobinas(Connection $connection, Request $request)
@@ -109,7 +99,7 @@ class PainelBobinasController extends AbstractController
         //  ");
         // exit(0);
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
                   EXEC PRC_PEDI_BOBI_CADA 
                       @ID_PARA = 1,
                       @ID_EMPR = {$empresa},
@@ -119,8 +109,7 @@ class PainelBobinasController extends AbstractController
                       @ID_ENDE_ENTR = {$codEndereco},
                       @ALIQ_ICMS = {$aliquotaIcms},
                       @VR_UNIT = {$valorUnitario}
-          ")->fetchAll();
-
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codSequenciaLote']) && $seqLote == $res[0]['codSequenciaLote']) {
               return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);

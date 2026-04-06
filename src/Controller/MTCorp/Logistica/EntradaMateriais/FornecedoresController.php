@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
@@ -15,8 +15,6 @@ class FornecedoresController
 {
 
     /**
-     * @Route("/logistica/entrada-materiais/fornecedores", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -50,7 +48,7 @@ class FornecedoresController
                     ,@IN_PAGI                   = '{$inPagi}'
             SQL;
             
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query  = <<<SQL
                 EXECUTE PRC_LOGI_ENMA
@@ -62,7 +60,7 @@ class FornecedoresController
                     ,@IN_TT_REGI                = 1
             SQL;
 
-            $total = $connection->query($query)->fetchOne();
+            $total = $connection->executeQuery($query)->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);

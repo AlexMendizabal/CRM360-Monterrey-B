@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Common;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception;
 use Symfony\Component\Filesystem\Filesystem;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 
 /**
@@ -22,12 +22,6 @@ use App\Controller\Common\UsuarioController;
 class ModulosController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/common/modulo/{rotaModulo}",
-   *  name="common.modulo",
-   *  methods={"GET"},
-   *  requirements={"rotaModulo"=".*"}
-   * )
    * @return JsonResponse
    */
   public function getModulo(Connection $connection, Request $request, $rotaModulo)
@@ -41,7 +35,7 @@ class ModulosController extends AbstractController
             ,@NR_MATR   = '{$infoUsuario->matricula}'
             ,@DS_ROTA   = '{$rotaModulo}' 
         SQL;
-        $res = $connection->query($query)->fetchAll();
+        $res = $connection->executeQuery($query)->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -65,11 +59,6 @@ class ModulosController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/common/modulos",
-   *  name="common.modulos",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getModulos(Connection $connection, Request $request)
@@ -83,7 +72,7 @@ class ModulosController extends AbstractController
              @PARAMETRO = 3
             ,@NR_MATR   = '{$infoUsuario->matricula}'
         SQL;
-        $res = $connection->query($query)->fetchAll();
+        $res = $connection->executeQuery($query)->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(

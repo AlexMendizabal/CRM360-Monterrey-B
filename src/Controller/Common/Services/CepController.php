@@ -5,18 +5,12 @@ declare(strict_types=1);
 namespace App\Controller\Common\Services;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CepController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/common/services/cep/{cep}",
-   *  methods={"GET"},
-   *  requirements={"cep"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function ConsultaCep($cep): Response

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\Pedidos;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -19,11 +19,6 @@ class TipoOperacaoController
     use ResponseTrait;
 
     /**
-     * @Route(
-     *  "/logistica/pedidos/tipo-operacao",
-     *  name="logistica.pedidos.tipo-operacao.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -38,9 +33,9 @@ class TipoOperacaoController
             
             $stmt = $connection->prepare($query);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $show_route ? $stmt->fetchAssociative() : $stmt->fetchAllAssociative();
+            $response = $show_route ? $result_stmt->fetchAssociative() : $result_stmt->fetchAllAssociative();
             
             $total = count($response);
 

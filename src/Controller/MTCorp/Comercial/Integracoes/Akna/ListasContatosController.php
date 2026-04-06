@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\Akna;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,11 +24,6 @@ class ListasContatosController extends AknaConfig
     }
 
     /**
-     * @Route(
-     *  "/comercial/integracoes/akna/listas-contatos",
-     *  name="comercial.integracoes-akna-listas-contatos",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getListasContatos(Request $request)
@@ -41,7 +36,7 @@ class ListasContatosController extends AknaConfig
 
             if ($statusCode === 200) {
                 $content = $response->getContent();
-                $xmlContent= simplexml_load_string($content);
+                $xmlContent= simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_NONET);
 
                 foreach($xmlContent->EMKT[0]->LISTA as $item) {
                     $id = strval($item->attributes()["ID"]);
@@ -69,8 +64,6 @@ class ListasContatosController extends AknaConfig
 
     /**
    * Cadastrar lista de contatos
-   * @Route("/comercial/integracoes/akna/listas-contatos", 
-   * methods={"POST"})
    * @param Request $request
    * @param Connection $connection
    * @return Response
@@ -97,7 +90,7 @@ class ListasContatosController extends AknaConfig
                     @P_NOME_LIST_CONT = '{$nomeListaContatos}';
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             /* INSERT INTO TB_COME_INTE_AKNA_LIST_CONT_ASSO_CONT (ID_LIST_CONT, CD_CLIE) VALUES (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855), (15, 3456855);' */
             $idListaContatos = $response['ID'];
@@ -129,7 +122,7 @@ class ListasContatosController extends AknaConfig
                     @P_SCRI_VINC_CLIE = '{$script}';
                 SQL;
           
-                $response = $connection->query($query)->fetch();
+                $response = $connection->executeQuery($query)->fetchAssociative();
             }
 
             if ($response['SUCCESS'] == 200)

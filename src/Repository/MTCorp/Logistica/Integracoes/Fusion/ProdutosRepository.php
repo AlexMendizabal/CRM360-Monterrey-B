@@ -33,7 +33,7 @@ class ProdutosRepository
                     ,@IN_PROP   = '$this->proposta'
             SQL;
 
-            $produtos = $this->connection->query($query)->fetchAll();
+            $produtos = $this->connection->executeQuery($query)->fetchAllAssociative();
         } catch (\Throwable $th) { }
 
         return $produtos;

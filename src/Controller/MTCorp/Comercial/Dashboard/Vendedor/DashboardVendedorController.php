@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Dashboard\Vendedor;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\DateController;
 use App\Controller\Common\Services\FunctionsController;
@@ -29,13 +29,6 @@ class DashboardVendedorController extends AbstractController
   use ResponseTrait;
   
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/desempenho/toneladas/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-desempenho-toneladas",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDesempenhoToneladas(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -91,7 +84,7 @@ class DashboardVendedorController extends AbstractController
           $firstDateCorrentePresente = DateController::getPrimeiroDiaMes($currMonth, $currYear);
           $lastDateCorrentePresente = date('Y/m/d');
           
-          $faturasCorrentePassado = $connection->query( 
+          $faturasCorrentePassado = $connection->executeQuery( 
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
                 @DT_INIC = '{$firstDateCorrentePassado}',
@@ -100,9 +93,9 @@ class DashboardVendedorController extends AbstractController
                 @ID_ESCR = '{$idEscritorio}',
                 @ID_PARA = '1'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
           
-          $faturasCorrentePresente = $connection->query(
+          $faturasCorrentePresente = $connection->executeQuery(
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
                 @DT_INIC = '{$firstDateCorrentePresente}',
@@ -111,7 +104,7 @@ class DashboardVendedorController extends AbstractController
                 @ID_ESCR = '{$idEscritorio}',
                 @ID_PARA = '1'
             "
-          )->fetchAll();     
+          )->fetchAllAssociative();     
         
           if ((count($faturasCorrentePassado) > 0) && (count($faturasCorrentePresente) > 0)) {
             $totalPassado = 0;
@@ -177,7 +170,7 @@ class DashboardVendedorController extends AbstractController
           $correnteFirstDate = DateController::getPrimeiroDiaMes($pastMonth, $currYear);
           $correnteLastDate = DateController::getUltimoDiaMes($pastMonth, $currYear);
          
-          $faturasPassadoPassado = $connection->query(
+          $faturasPassadoPassado = $connection->executeQuery(
 
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
@@ -187,9 +180,9 @@ class DashboardVendedorController extends AbstractController
                 @ID_ESCR = '{$idEscritorio}',
                 @ID_PARA = '1'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
           
-          $faturasPassadoPresente = $connection->query(
+          $faturasPassadoPresente = $connection->executeQuery(
             "
               EXEC [PRC_COME_INAD_FATU_CONS]
                 @DT_INIC = '{$correnteFirstDate}',
@@ -198,7 +191,7 @@ class DashboardVendedorController extends AbstractController
                 @ID_ESCR = '{$idEscritorio}',
                 @ID_PARA = '1'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
           
           
           if ((count($faturasPassadoPassado) > 0) && (count($faturasPassadoPresente) > 0)) {
@@ -269,182 +262,155 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/desempenho/linhas/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-desempenho-linhas",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
-   * @return JsonResponse
+   * @return JsonResponse 
    */
   public function getDesempenhoLinhas(Connection $connection, Request $request, $idEscritorio, $idVendedor)
-  {
-    if ($request->isMethod('GET')) {
-      try {
-        $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
+  { 
+      if ($request->isMethod('GET')) {
+          try {
+              $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        if ($idEscritorio == null || $idEscritorio == 'null') {
-          $idEscritorio = '';
-        }
-        if ($idVendedor == null || $idVendedor == 'null') {
-          $idVendedor = VendedorController::idVendedor($connection, $infoUsuario);
+              if ($idEscritorio == null || $idEscritorio == 'null') {
+                  $idEscritorio = '';
+              }
+              if ($idVendedor == null || $idVendedor == 'null') {
+                  $idVendedor = VendedorController::idVendedor($connection, $infoUsuario);
+                  $podeAcessar = !empty($idVendedor);
+              } else {
+                  $podeAcessar = $this->verificaPermissaoVendedor($connection, $infoUsuario, $idVendedor);
+              }
 
-          if (empty($idVendedor) || $idVendedor == null || $idVendedor == 'null') {
-            $podeAcessar = false;
-          } else {
-            $podeAcessar = true;
-          }
-        } else {
-          if ($infoUsuario->idVendedor == $idVendedor) {
-            $podeAcessar = true;
-          } else {
-            $perfil = ComercialController::checkPerfil($connection, $infoUsuario->matricula);
-            $operadoresVinculados = VendedorController::vinculoOperadores($connection, $infoUsuario);
-  
-            if ($perfil->coordenador || $perfil->gestor) {
-              $podeAcessar = true;
-            } else {
-              if (count($operadoresVinculados) > 0) {
-                for ($i=0; $i < count($operadoresVinculados); $i++) {
-                  if ($operadoresVinculados[$i] == $idVendedor) {
-                    $podeAcessar = true;
+              if ($podeAcessar) {
+                  $currMonth  = date('n');
+                  $pastMonth  = date('n', strtotime('-1 month'));
+                  $currYear   = date('Y');
+                  $pastYear   = date('Y') - 1;
+
+                  $firstDateCorrente = DateController::getPrimeiroDiaMes($currMonth, $currYear);
+                  $lastDateCorrente  = DateController::getUltimoDiaMes($currMonth, $currYear);
+                 // dd($idVendedor);
+                  $sql = "
+                      EXEC [PRC_COME_INAD_FATU_CONS]
+                          @DT_INIC = '{$firstDateCorrente}',
+                          @DT_FINA = '{$lastDateCorrente}',
+                          @ID_VEND = '{$idVendedor}',
+                          @ID_ESCR = '{$idEscritorio}',
+                          @ID_PARA = '2'
+                  ";
+
+                  $params = [
+                      'firstDateCorrente' => $firstDateCorrente,
+                      'lastDateCorrente' => $lastDateCorrente,
+                      'idVendedor' =>(int)$idVendedor,
+                      'idEscritorio' => (int)$idEscritorio,
+                  ];
+                  
+                  $linhasCorrente = $connection->executeQuery($sql, $params)->fetchAllAssociative();
+                  //dd($linhasCorrente);
+                 
+                  $arrLinhasCorrente = $this->processaLinhas($linhasCorrente);
+
+                  if ($currMonth == '1') {
+                      $pastYear--;
+                      $currYear--;
                   }
-                }
+
+                  $firstDate = DateController::getPrimeiroDiaMes($pastMonth, $currYear);
+                  $lastDate  = DateController::getUltimoDiaMes($pastMonth, $currYear);
+
+                  $linhasPassado = $connection->executeQuery(
+                      "
+                      EXEC [PRC_COME_INAD_FATU_CONS]
+                          @DT_INIC = '{$firstDate}',
+                          @DT_FINA = '{$lastDate}',
+                          @ID_VEND = '{$idVendedor}',
+                          @ID_ESCR = '{$idEscritorio}',
+                          @ID_PARA = '2'
+                      "
+                  )->fetchAllAssociative();
+
+                  $arrLinhasPassado = $this->processaLinhas($linhasPassado);
+
+                  $message = $this->preparaResposta($arrLinhasCorrente, $arrLinhasPassado);
               } else {
-                $podeAcessar = false;
-              }              
-            }
-          }
-        }
-
-        if ($podeAcessar) {
-          $currMonth  = date('n');
-          $pastMonth  = date('n', strtotime('-1 month'));
-          $currYear   = date('Y');
-          $pastYear   = date('Y') - 1;
-  
-          $firstDateCorrente = DateController::getPrimeiroDiaMes($currMonth, $currYear);
-          $lastDateCorrente  = DateController::getUltimoDiaMes($currMonth, $currYear);
-          $linhasCorrente = $connection->query(
-
-            "
-              EXEC [PRC_COME_INAD_FATU_CONS]
-                @DT_INIC = '{$firstDateCorrente}',
-                @DT_FINA = '{$lastDateCorrente}',
-                @ID_VEND = '{$idVendedor}',
-                @ID_ESCR = '{$idEscritorio}',
-                @ID_PARA = '2'
-            "
-          )->fetchAll();
-
-         
-  
-          if (count($linhasCorrente) > 0) {
-            $arrLinhasCorrente = array();
-  
-            for ($i=0; $i < count($linhasCorrente); $i++) {
-              if ($linhasCorrente[$i]['LINHA'] != 'Total') {
-                $arrLinhasCorrente['analitico'][] = array(
-                  'linha' => $linhasCorrente[$i]['LINHA'],
-                  'ton'   => (float)$linhasCorrente[$i]['TON'],
-                  'valor' => (float)$linhasCorrente[$i]['VALOR']
-                );
-              } else {
-                $arrLinhasCorrente['total'] = array(
-                  'linha' => $linhasCorrente[$i]['LINHA'],
-                  'ton'   => (float)$linhasCorrente[$i]['TON'],
-                  'valor' => (float)$linhasCorrente[$i]['VALOR']
-                );
+                  $message = array('responseCode' => 401);
               }
-            }
+          } catch (DBALException $e) {
+              $message = array(
+                  'responseCode' => $e->getCode(),
+                  'message' => $e->getMessage()
+              );
           }
-  
-          if ($currMonth == '1') {
-            $pastYear = $pastYear - 1;
-            $currYear = $currYear - 1;
-          }
-  
-          $firstDate = DateController::getPrimeiroDiaMes($pastMonth, $currYear);
-          $lastDate  = DateController::getUltimoDiaMes($pastMonth, $currYear);
-  
-          $linhasPassado = $connection->query(
 
-            "
-              EXEC [PRC_COME_INAD_FATU_CONS]
-                @DT_INIC = '{$firstDate}',
-                @DT_FINA = '{$lastDate}',
-                @ID_VEND = '{$idVendedor}',
-                @ID_ESCR = '{$idEscritorio}',
-                @ID_PARA = '2'
-            "
-          )->fetchAll();
-  
-          if (count($linhasPassado) > 0) {
-            $arrLinhasPassado = array();
-  
-            for ($i=0; $i < count($linhasPassado); $i++) {
-              if ($linhasPassado[$i]['LINHA'] != 'Total') {
-                $arrLinhasPassado['analitico'][] = array(
-                  'linha' => $linhasPassado[$i]['LINHA'],
-                  'ton'   => (float)$linhasPassado[$i]['TON'],
-                  'valor' => (float)$linhasPassado[$i]['VALOR']
-                );
-              } else {
-                $arrLinhasPassado['total'] = array(
-                  'linha' => $linhasPassado[$i]['LINHA'],
-                  'ton'   => (float)$linhasPassado[$i]['TON'],
-                  'valor' => (float)$linhasPassado[$i]['VALOR']
-                );
-              }
-            }
-          }
-  
-          if ((empty($arrLinhasCorrente)) && empty($arrLinhasPassado)) {
-            $message = array('responseCode' => 204);
-          } else {
-            $arrLinhas = array();
-  
-            if (!empty($arrLinhasCorrente)) {
-              $arrLinhas['corrente'] = $arrLinhasCorrente;
-            } else {
-              $arrLinhas['corrente'] = '';
-            }
-  
-            if (!empty($arrLinhasPassado)) {
-              $arrLinhas['passado'] = $arrLinhasPassado;
-            } else {
-              $arrLinhas['passado'] = '';
-            }
-  
-            $message = array(
-              'responseCode' => 200,
-              'result' => $arrLinhas
-            );
-          }
-        } else {
-          $message = array('responseCode' => 401);
-        }
-      } catch (DBALException $e) {
-        $message = array(
-          'responseCode' => $e->getCode(),
-          'message' => $e->getMessage()
-        );
+          $response = new JsonResponse($message);
+          $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+          return $response;
       }
-
-      $response = new JsonResponse($message);
-      $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-      return $response;
-    }
   }
 
+/**
+ * Verifica si el usuario tiene permiso para acceder a los datos del vendedor.
+ */
+private function verificaPermissaoVendedor($connection, $infoUsuario, $idVendedor)
+{
+    if ($infoUsuario->idVendedor == $idVendedor) {
+        return true;
+    } else {
+        $perfil = ComercialController::checkPerfil($connection, $infoUsuario->matricula);
+        $operadoresVinculados = VendedorController::vinculoOperadores($connection, $infoUsuario);
+
+        if ($perfil->coordenador || $perfil->gestor) {
+            return true;
+        } else {
+            return in_array($idVendedor, $operadoresVinculados);
+        }
+    }
+}
+
+/**
+ * Procesa las líneas recibidas para estructurarlas en el formato esperado.
+ */
+private function processaLinhas($linhas)
+{
+    $arrLinhas = array();
+
+    foreach ($linhas as $linha) {
+        if ($linha['LINHA'] !== 'Total') {
+            $arrLinhas['analitico'][] = array(
+                'descricao' => $linha['DESCRICAO'],
+                'ton'       => (float)$linha['TON'],
+                'valor'     => (float)$linha['VALOR']
+            );
+        } else {
+            $arrLinhas['total'] = array(
+                'descricao' => $linha['DESCRICAO'],
+                'ton'       => (float)$linha['TON'],
+                'valor'     => (float)$linha['VALOR']
+            );
+        }
+    }
+    return $arrLinhas;
+}
+
+/**
+ * Prepara la respuesta basada en las líneas de los meses actual y pasado.
+ */
+private function preparaResposta($arrLinhasCorrente, $arrLinhasPassado)
+{
+    if (empty($arrLinhasCorrente) && empty($arrLinhasPassado)) {
+        return array('responseCode' => 204);
+    } else {
+        return array(
+            'responseCode' => 200,
+            'result' => array(
+                'corrente' => $arrLinhasCorrente ?: '',
+                'passado'  => $arrLinhasPassado ?: ''
+            )
+        );
+    }
+}
+
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/concentracao-vendas/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-concentracao-vendas",
-   *  methods={"GET"},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return
@@ -493,14 +459,14 @@ class DashboardVendedorController extends AbstractController
         $lastDate = date('Y-m-d', strtotime('last day of ' . $currYear . '-' . $curMonth));
         
 
-        $concentracaoCorrente = $connection->query(
+        $concentracaoCorrente = $connection->executeQuery(
           "
             EXEC [PRC_CONC_VEND]
             @IDVENDEDOR = '{$idVendedor}',
             @DTINICIAL = '{$firstDate}',	
             @DTFINAL = '{$lastDate}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $pastMonth = date('n', strtotime('-1 month'));
         $currYear = date('Y');
@@ -509,17 +475,17 @@ class DashboardVendedorController extends AbstractController
           $currYear = $currYear - 1;
         }
 
-        $firstDate = date('Y-m-d', strtotime('first day of ' . $currYear . '-' . $curMonth));
-        $lastDate = date('Y-m-d', strtotime('last day of ' . $currYear . '-' . $curMonth));
+        $firstDate = date('Y-m-d', strtotime('first day of ' . $currYear . '-' . $pastMonth));
+        $lastDate = date('Y-m-d', strtotime('last day of ' . $currYear . '-' . $pastMonth));
 
-        $concentracaoPassado = $connection->query(
+        $concentracaoPassado = $connection->executeQuery(
           "
             EXEC [PRC_CONC_VEND]
             @IDVENDEDOR = '{$idVendedor}',
             @DTINICIAL = '{$firstDate}',	
             @DTFINAL = '{$lastDate}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($concentracaoCorrente) == 0 && count($concentracaoPassado) == 0) {
           return FunctionsController::Retorno(false, 'Dados não localizados.', null, Response::HTTP_OK);
@@ -547,13 +513,6 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/metas/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-metas",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getMetas(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -610,14 +569,14 @@ class DashboardVendedorController extends AbstractController
           $fim = date('Y/m/d', strtotime($lastDate)) . ' 23:59:59';
           */
 
-          $metasCorrente = $connection->query(
+          $metasCorrente = $connection->executeQuery(
             "EXEC [PRC_MTCORP_MODU_COME_VEND_META_CONS]
               @DTINI = '{$firstDate}',
               @DTFIM = '{$lastDate}',
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
               
         
           if (count($metasCorrente) > 0) {
@@ -673,7 +632,7 @@ class DashboardVendedorController extends AbstractController
           $firstDate = DateController::getPrimeiroDiaMes($pastMonth, $currYear);
           $lastDate  = DateController::getUltimoDiaMes($pastMonth, $currYear);
   
-          $metasPassado = $connection->query(
+          $metasPassado = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_COME_VEND_META_CONS]
               @DTINI = '{$firstDate}',
@@ -681,7 +640,7 @@ class DashboardVendedorController extends AbstractController
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
           
           if (count($metasPassado) > 0) {          
             $arrMetasPassado = array(
@@ -768,13 +727,6 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/carteira-clientes/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-carteira-clientes",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getCarteiraClientes(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -825,7 +777,7 @@ class DashboardVendedorController extends AbstractController
           $fechaInicioStr = $fechaInicio->format('Y-m-d');
           $fechaActualStr = $fechaActual->format('Y-m-d');
           
-          $res = $connection->query( 
+          $res = $connection->executeQuery( 
               "
               EXEC [PRC_MTCORP_MODU_COME_CLIE_CONS]
               @DTINI = '{$fechaInicioStr}',
@@ -833,58 +785,57 @@ class DashboardVendedorController extends AbstractController
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
               "
-          )->fetchAll();
+          )->fetchAllAssociative();
           if (count($res) > 0) {
             $ativos = new \stdClass;
-            $ativos->tipo = 'Ativos';
+            $ativos->tipo = 'Activos';
             $ativos->quantidade = 0;
             $ativos->cor = '#4dcc71';
             $ativos->data = array();
-  
             $comCompra = new \stdClass;
-            $comCompra->tipo = 'Com compra';
+            $comCompra->tipo = 'Con compra';
             $comCompra->quantidade = 0;
             $comCompra->cor = '#5690ff';
             $comCompra->data = array();
   
             $semCompra = new \stdClass;
-            $semCompra->tipo = 'Sem compra';
+            $semCompra->tipo = 'Sin compra';
             $semCompra->quantidade = 0;
             $semCompra->cor = '#ff8429';
             $semCompra->data = array();
   
             $potenciais = new \stdClass;
-            $potenciais->tipo = 'Potenciais';
+            $potenciais->tipo = 'Potenciales';
             $potenciais->quantidade = 0;
             $potenciais->cor = '#790aa3';
             $potenciais->data = array();
   
             $novosComCompra = new \stdClass;
-            $novosComCompra->tipo = 'Novos c/ compra';
+            $novosComCompra->tipo = 'Nuevos con compra';
             $novosComCompra->quantidade = 0;
             $novosComCompra->cor = '#ffea00';
             $novosComCompra->data = array();
   
             $reativados = new \stdClass;
-            $reativados->tipo = 'Reativados';
+            $reativados->tipo = 'Reactivados';
             $reativados->quantidade = 0;
             $reativados->cor = '#00e0d8';
             $reativados->data = array();
   
             $inativar = new \stdClass;
-            $inativar->tipo = 'À inativar';
+            $inativar->tipo = 'A Inactivar';
             $inativar->quantidade = 0;
             $inativar->cor = '#ff4343';
             $inativar->data = array();
   
             $inativos = new \stdClass;
-            $inativos->tipo = 'Inativos';
+            $inativos->tipo = 'Inactivos';
             $inativos->quantidade = 0;
             $inativos->cor = '#000000';
             $inativos->data = array();
   
             $inativados = new \stdClass;
-            $inativados->tipo = 'Inativados';
+            $inativados->tipo = 'Inactivados';
             $inativados->quantidade = 0;
             $inativados->cor = '#5a5a5a';
             $inativados->data = array();
@@ -898,7 +849,7 @@ class DashboardVendedorController extends AbstractController
               'INATIVOS'      => array(),
               'INATIVADOS'    => array(),
             );
-  
+            
             for ($i=0; $i < count($res); $i++) {
               if ($res[$i]['SITUACAO'] == 'A') {
                 $clientes['ATIVOS'][$res[$i]['CODIGOCLIENTE']] = $res[$i];
@@ -927,12 +878,13 @@ class DashboardVendedorController extends AbstractController
             $clientesComSemCompra = $this->clientesComSemCompra($connection, $idEscritorio, $idVendedor);
             $clientes['COMCOMPRA'] = $clientesComSemCompra['COMCOMPRA'];
             $clientes['SEMCOMPRA'] = $clientesComSemCompra['SEMCOMPRA'];
-  
+            
             if (count($clientes['ATIVOS']) > 0) {
-              $ativos->quantidade = count($clientes['ATIVOS']);
+              $ativos->quantidade = count($clientes['ATIVOS']);  
               for ($i=0; $i < count($clientes['ATIVOS']); $i++) {
                 $ativos->data[] = array(
                   'codCliente' => (int)$clientes['ATIVOS'][$i]['CODIGOCLIENTE'],
+                  'codigo_cliente' => (int)$clientes['ATIVOS'][$i]['codigo_cliente'],
                   'razaoSocial' => $clientes['ATIVOS'][$i]['RAZAOSOCIAL'],
                   'situacao' => $clientes['ATIVOS'][$i]['SITUACAO'],
                   'data' => $clientes['ATIVOS'][$i]['DATA'],
@@ -1079,14 +1031,14 @@ class DashboardVendedorController extends AbstractController
 
   public function clientesInativar(Connection $connection, $idEscritorio, $idVendedor)
   { 
-    $clientes = $connection->query(
+    $clientes = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_COME_CLIE_INAT]
         @IDVEND = '{$idVendedor}',
         @IDESCRITORIO = '{$idEscritorio}',
         @MODULO = '1'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
     //dd($clientes);
     if (count($clientes) > 0) {
       return $clientes;
@@ -1097,23 +1049,23 @@ class DashboardVendedorController extends AbstractController
 
   public function clientesComSemCompra(Connection $connection,  $idEscritorio, $idVendedor)
   {
-    $semCompra = $connection->query(
+    $semCompra = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_COME_CLIE_INAT]
         @IDVEND = '{$idVendedor}',
         @IDESCRITORIO = '{$idEscritorio}',
         @MODULO = '2'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
-    $comCompra = $connection->query(
+    $comCompra = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_COME_CLIE_INAT]
         @IDVEND = '{$idVendedor}',
         @IDESCRITORIO = '{$idEscritorio}',
         @MODULO = '3'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     $clientes = array(
       'COMCOMPRA' => array(),
@@ -1127,18 +1079,10 @@ class DashboardVendedorController extends AbstractController
     if (count($comCompra) > 0) {
       $clientes['COMCOMPRA'] = $comCompra;
     }
-    
     return $clientes;
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/registro-ocorrencias/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-registro-ocorrencias",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getRegistroOcorrencias(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -1186,7 +1130,7 @@ class DashboardVendedorController extends AbstractController
           $firstDate = '01/01/2010';
           $lastDate = date('d/m/Y');
   
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_COME_CLIE_CONS_RO]
               @DTINI = '{$firstDate}',
@@ -1194,7 +1138,7 @@ class DashboardVendedorController extends AbstractController
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
   
           if (count($res) > 0) {
             $analise = new \stdClass;
@@ -1336,23 +1280,16 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/financeiro/representantes/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-representantes",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getComissaoRepresentante(Connection $connection, Request $request, $idVendedor)
     {
         try {
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
               EXEC PRC_COMI_VEND_DASH_CONS
                 @ID_VEND_REFE_ERP = '{$idVendedor}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
               foreach($res as $key => $value) { 
@@ -1377,13 +1314,6 @@ class DashboardVendedorController extends AbstractController
     }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/financeiro/inadimplentes/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-financeiro-inadimplentes",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFinanceiroInadimplentes(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -1428,14 +1358,14 @@ class DashboardVendedorController extends AbstractController
         }
 
         if ($podeAcessar) {
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_FINA_CLIE_INAD_CONS]
               @IDVEND = '{$idVendedor}',
               @TIPOSAIDA = '11',
               @GERENCIA = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
   
           if (count($res) > 0) {
             $inadimplentes = new \stdClass;
@@ -1482,13 +1412,6 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/financeiro/notas-debito/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-financeiro-notas-debito",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFinanceiroNotasDebito(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -1535,19 +1458,19 @@ class DashboardVendedorController extends AbstractController
         }
 
         if ($podeAcessar) {
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_FINA_CLIE_NOTA_DEBT]
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
   
           if (count($res) > 0) {
             $notasDebito = new \stdClass;
             $notasDebito->valor = 0;
             $notasDebito->quantidade = count($res);
-            $notasDebito->tipo = 'Clientes com nota de débito';
+            $notasDebito->tipo = 'Clientes con nota de debito';
             $notasDebito->data = array();
   
             for ($i=0; $i < count($res); $i++) {
@@ -1582,16 +1505,7 @@ class DashboardVendedorController extends AbstractController
     }
   }
 
-
-
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/representante/valor-manetoni/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-representante-valor-manetoni",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getRepresentanteValorManetoni(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -1636,14 +1550,14 @@ class DashboardVendedorController extends AbstractController
         }
 
         if ($podeAcessar) {
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_FINA_CLIE_INAD_CONS]
               @IDVEND = '{$idVendedor}',
               @TIPOSAIDA = '11',
               @GERENCIA = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
   
           if (count($res) > 0) {
             $inadimplentes = new \stdClass;
@@ -1690,13 +1604,6 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/representante/valor-dba/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-representante-valor-dba",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getRepresentanteValorDba(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -1741,13 +1648,13 @@ class DashboardVendedorController extends AbstractController
         }
 
         if ($podeAcessar) {
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_FINA_CLIE_NOTA_DEBT]
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
   
           if (count($res) > 0) {
             $notasDebito = new \stdClass;
@@ -1789,13 +1696,6 @@ class DashboardVendedorController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/dashboard/vendedor/representante/valor-total/{idEscritorio}/{idVendedor}",
-   *  name="comercial.dashboard-vendedor-representante-valor-total",
-   *  methods={"GET"},
-   *  defaults={"idEscritorio"=null},
-   *  requirements={"idVendedor"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getRepresentanteValorTotal(Connection $connection, Request $request, $idEscritorio, $idVendedor)
@@ -1840,13 +1740,13 @@ class DashboardVendedorController extends AbstractController
         }
 
         if ($podeAcessar) {
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_FINA_CLIE_NOTA_DEBT]
               @IDVEND = '{$idVendedor}',
               @IDESCRITORIO = '{$idEscritorio}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
   
           if (count($res) > 0) {
             $notasDebito = new \stdClass;

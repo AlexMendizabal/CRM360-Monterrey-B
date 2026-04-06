@@ -2,23 +2,18 @@
 
 namespace App\Controller\MTCorp\Core;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class SubmodulosController
 {
 
     /**
-     * 
-     * @Route(
-     *  "/core/submodulos",
-     *  name="core.submodulos.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -68,16 +63,16 @@ class SubmodulosController
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       "0");
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $show_route ? $stmt->fetchAssociative() : $stmt->fetchAllAssociative();
+            $response = $show_route ? $result_stmt->fetchAssociative() : $result_stmt->fetchAllAssociative();
 
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = $stmt->fetchOne();
+            $total = $result_stmt->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -106,13 +101,6 @@ class SubmodulosController
     }
 
     /**
-     * 
-     * @Route(
-     *  "/core/submodulos/{id}",
-     *  name="core.submodulos.id.show",
-     *  requirements={"id"="\d"},
-     *  methods={"GET"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -122,10 +110,7 @@ class SubmodulosController
         return $this->index($connection, $request, $id, true);
     }
 
-
     /**
-     * 
-     * @Route("/core/submodulos", methods={"POST"})
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -183,9 +168,9 @@ class SubmodulosController
             $stmt->bindValue(":usuarioId",  $usuarioId);
             $stmt->bindValue(":usuarioIP",  $usuarioIP);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Comissoes\Representantes\ProgramacaoPagamentos;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -26,11 +26,6 @@ class ProgramacaoPagamentosController extends AbstractController
     use ResponseTrait;
     
     /**
-     * @Route(
-     *  "/comercial/comissoes/representantes/programacao-pagamentos/lista",
-    *  name="comercial.comissoes-representantes-programacao-pagamentos-lista", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -48,14 +43,14 @@ class ProgramacaoPagamentosController extends AbstractController
 
             $order = $orderBy . ' ' . $orderType;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_PAGA_CONS
                     @ID_VEND        = {$codRepresentante},
                     @ID_SITU        = '{$codStatus}',
                     @NR_PAGE_INIC    = NULL,
                     @TT_REGI_PAGI    = NULL,
                     @ORDE_BY        = '{$order}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 foreach($res as $key => $value) { 
@@ -98,11 +93,6 @@ class ProgramacaoPagamentosController extends AbstractController
     }
 
        /**
-     * @Route(
-     *  "/comercial/comissoes/representantes/programacao-pagamentos/situacao",
-    *  name="comercial.comissoes-representantes-programacao-pagamentos-situacao", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -117,10 +107,10 @@ class ProgramacaoPagamentosController extends AbstractController
          
             // if (isset($params['codProgramacao'])) $codProgramacao = $params['codProgramacao'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_SITU_COMI_CONS
                     @ID_SITU = '7,8,9'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // @ID_SITU = '6,7,8';
 
@@ -141,11 +131,6 @@ class ProgramacaoPagamentosController extends AbstractController
     }
 
      /**
-     * @Route(
-     *  "/comercial/comissoes/representantes/programacao-pagamentos/conta/{codRepresentante}",
-    *  name="comercial.comissoes-representantes-programacao-pagamentos", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -156,11 +141,11 @@ class ProgramacaoPagamentosController extends AbstractController
         try {
             $params = $request->query->all();
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PROG_PAGA_REPR_CONS
                     @ID_PARA = 2,
                     @ID_REPR = {$codRepresentante};
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             
             if (count($res) > 0 && !isset($res[0]['msg'])) {
@@ -179,11 +164,6 @@ class ProgramacaoPagamentosController extends AbstractController
     }
 
     /**
-    * @Route(
-    *  "/comercial/comissoes/representantes/programacao-pagamentos/programacao-datas/salvar",
-    *  name="comercial.comissoes-representantes-programacao-pagamentos-programacao-datas-salvar", 
-    *  methods={"POST"}
-    * )
     * @return JsonResponse
     */
     public function postProgramacaoDatas(Connection $connection, Request $request)
@@ -195,14 +175,14 @@ class ProgramacaoPagamentosController extends AbstractController
             $codComissaoRepresentante = $params['codComissaoRepresentante'] ?? 0;
             $dataProgramacao = $params['dataProgramacao'] ?? 'NULL';
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_APRO_REPR_GRAV
                     @ID_COMI_VEND    = {$codComissaoRepresentante},
                     @DT_PROG_PAGA    = '{$dataProgramacao}',
                     @DT_PAGA        = NULL,
                     @IN_APRO        = 1,
                     @ID_USUA        = '{$infoUsuario->id}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['ID_COMI_VEND'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -220,11 +200,6 @@ class ProgramacaoPagamentosController extends AbstractController
     }
 
     /**
-    * @Route(
-    *  "/comercial/comissoes/representantes/programacao-pagamentos/pagamento/salvar",
-    *  name="comercial.comissoes-representantes-programacao-pagamentos-pagamento-salvar", 
-    *  methods={"POST"}
-    * )
     * @return JsonResponse
     */
     public function postPagamento(Connection $connection, Request $request)
@@ -237,14 +212,14 @@ class ProgramacaoPagamentosController extends AbstractController
             $dataProgramacao = $params['dataProgramacao'] ?? 'NULL';
             $dataPagamento = $params['dataPagamento'] ?? 'NULL';
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_APRO_REPR_GRAV
                     @ID_COMI_VEND    = {$codComissaoRepresentante},
                     @DT_PROG_PAGA    = NULL,
                     @DT_PAGA        = '{$dataPagamento}',
                     @IN_APRO        = 1,
                     @ID_USUA        = '{$infoUsuario->id}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['ID_COMI_VEND'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);

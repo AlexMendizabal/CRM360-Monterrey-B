@@ -39,7 +39,7 @@ class ManifestoRepository
                 ,@P_NR_MANI = '{$this->nrManifesto}'
         SQL;
         
-        $response = $connection->query($query)->fetchAll();
+        $response = $connection->executeQuery($query)->fetchAllAssociative();
 
         return $response;
     }

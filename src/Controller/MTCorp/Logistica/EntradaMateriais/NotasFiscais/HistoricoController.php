@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
 class HistoricoController
 {
     /**
-     * @Route("/logistica/entrada-materiais/notas-fiscais/historico", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -71,7 +69,7 @@ class HistoricoController
                     ,@IN_PAGI                   = '{$inPagi}'
             SQL;
             
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query  = <<<SQL
                 EXECUTE PRC_LOGI_ENMA_NOFI
@@ -95,7 +93,7 @@ class HistoricoController
                     ,@IN_TT_REGI                = 1
             SQL;
 
-            $total = $connection->query($query)->fetchOne();
+            $total = $connection->executeQuery($query)->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -122,8 +120,6 @@ class HistoricoController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/notas-fiscais/materiais/historico", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -171,7 +167,7 @@ class HistoricoController
                     ,@IN_PAGI                   = '{$inPagi}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query  = <<<SQL
                 EXECUTE PRC_LOGI_ENMA_NOFI_MATE
@@ -191,7 +187,7 @@ class HistoricoController
                     ,@IN_TT_REGI                = 1
             SQL;
 
-            $total = $connection->query($query)->fetchOne();
+            $total = $connection->executeQuery($query)->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);

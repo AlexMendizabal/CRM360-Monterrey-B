@@ -5,18 +5,12 @@ declare(strict_types=1);
 namespace App\Controller\Common\Services;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CnpjController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/common/services/cnpj/{cnpj}",
-     *  methods={"GET"},
-     *  requirements={"cnpj"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function ConsultaCnpj($cnpj): Response
@@ -32,7 +26,8 @@ class CnpjController extends AbstractController
             $url = "https://receitaws.com.br/v1/cnpj/{$cnpj}";
             $ch = curl_init(); 
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $output = curl_exec($ch);
             curl_close($ch);

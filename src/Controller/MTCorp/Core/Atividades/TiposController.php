@@ -2,20 +2,15 @@
 
 namespace App\Controller\MTCorp\Core\Atividades;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class TiposController
 {
     /**
-     * @Route(
-     *  "/core/atividades/tipos",
-     *  name="core.atividades.tipos.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -31,9 +26,9 @@ class TiposController
 
             $stmt = $connection->prepare($query);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);

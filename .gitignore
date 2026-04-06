@@ -6,11 +6,33 @@
 /public/bundles/
 /var/
 /vendor/
-/config/
 /public/
 /config_bkp/
 /frontend/
 /V1.0.rar/
 ###< symfony/framework-bundle ###
-docker/apache/vhost.conf
-.env
+
+# Docker volumes
+/docker/mssql/data/
+
+# IDE
+.idea/
+.vs/
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# PHP
+info.php
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

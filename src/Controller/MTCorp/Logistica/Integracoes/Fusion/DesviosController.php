@@ -3,16 +3,14 @@
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
 use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DesviosController extends FusionController
 {
     /**
-     * @Route("/logistica/integracoes/fusion/desvios", methods={"POST"})
-     *
      * @return JsonResponse
      */
     public function store(Request $request, Connection $connection)
@@ -81,7 +79,7 @@ class DesviosController extends FusionController
                             ,@ID_DESV			= '{$desvioId}' 
                     SQL;
 
-                    $cons = $connection->query($query)->fetch(); */
+                    $cons = $connection->executeQuery($query)->fetchAssociative(); */
 
                     $query = <<<SQL
                         EXEC PRC_LOGI_FUSI_DESV
@@ -115,7 +113,7 @@ class DesviosController extends FusionController
                             ,@CD_CLIE			= '{$entregaCliente}' 
                     SQL;
 
-                    $db = $connection->query($query)->fetch();
+                    $db = $connection->executeQuery($query)->fetchAssociative();
                     
                     $res[] = [$desvio, $db];
                 

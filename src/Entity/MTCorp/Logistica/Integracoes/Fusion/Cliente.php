@@ -176,7 +176,7 @@ class Cliente
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array(
             "id_cliente"                => $this->id_cliente,

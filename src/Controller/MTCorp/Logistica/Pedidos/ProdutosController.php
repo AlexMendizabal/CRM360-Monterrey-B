@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\Pedidos;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -19,11 +19,6 @@ class ProdutosController
     use ResponseTrait;
 
     /**
-     * @Route(
-     *  "/logistica/pedidos/produtos",
-     *  name="logistica.pedidos.produtos.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -73,16 +68,16 @@ class ProdutosController
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       0);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $show_route ? $stmt->fetchAssociative() : $stmt->fetchAllAssociative();
+            $response = $show_route ? $result_stmt->fetchAssociative() : $result_stmt->fetchAllAssociative();
             
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = (int) $stmt->fetchOne();
+            $total = (int) $result_stmt->fetchOne();
 
             return $this
                 ->setData($response)

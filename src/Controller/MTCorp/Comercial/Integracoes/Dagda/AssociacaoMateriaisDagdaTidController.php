@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\Dagda;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
@@ -22,8 +22,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
     
     /**
      * Consultar associação de Materiais
-     * @Route("/comercial/integracoes/dagda/associacao", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -39,7 +37,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $nomMaterial       = $request->query->get("nomMaterial");
             $id_departamento   = $request->query->get("id_dep");
             $status            = $request->query->get("status");
-
 
             $inCada         = $request->query->get("inCada") ?? null;
             $orderBy        = $request->query->get("orderBy");
@@ -81,7 +78,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
                     $queryDescuento->andWhere('DS.estado = :'); 
                     $queryDescuento->setParameter('estado', $status);
                 }
-            $response = $queryDescuento->execute()->fetchAll();
+            $response = $queryDescuento->executeQuery()->fetchAllAssociative();
 
             if (empty($response)) {
                 return (new FunctionsController)->Retorno(false, "La solicitud no devolvió información", null, Response::HTTP_NO_CONTENT);
@@ -94,8 +91,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
 
     /**
      * Consultar associação de Materiais
-     * @Route("/comercial/integracoes/dagda/detalhes", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -110,7 +105,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $idMatTid   = $request->query->get("codigoMaterial");
             $idMatDagd  = $request->query->get("cdDagda");
 
-
             $query = <<<SQL
                 EXEC PRC_ASSO_MATE_TID_DAGD
                     @PARAMETRO      = 'C2'
@@ -123,9 +117,9 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $stmt->bindValue(":idMatTid",   $idMatTid);
             $stmt->bindValue(":idMatDagd",  $idMatDagd);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
 
             if (empty($response)) {
                 return (new FunctionsController)->Retorno(false, "A requisição não retornou informações", null, Response::HTTP_NO_CONTENT);
@@ -138,8 +132,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
 
     /**
      * Cadastrar associação de Materiais
-     * @Route("/comercial/integracoes/dagda/associacao-altera-integracao", 
-     * methods={"POST"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -169,8 +161,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
 
     /**
      * Cadastrar associação de Materiais
-     * @Route("/comercial/integracoes/dagda/associacao", 
-     * methods={"POST"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -188,9 +178,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $user           = $params->user           ?? null;
             $stat           = $params->stat           ?? null;
 
-
             foreach ($idMatDagda as $matDagda) {
-
 
                 $query = <<<SQL
                     EXECUTE PRC_ASSO_MATE_TID_DAGD_GRAV
@@ -206,7 +194,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
                 $stmt->bindValue(":matDagda",       $matDagda->codMaterial);
                 $stmt->bindValue(":user",           $user);
 
-                $stmt->execute();
+                $stmt->executeStatement();
             }
 
             $query = <<<SQL
@@ -225,9 +213,9 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $stmt->bindValue(":user",           $user);
             $stmt->bindValue(":stat",           $stat);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchOne();
+            $response = $result_stmt->fetchOne();
 
             if ($response != true) {
                 return (new FunctionsController)->Retorno(false, "Erro ao tentar gravar", null, Response::HTTP_NO_CONTENT);
@@ -240,8 +228,6 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
 
     /**
      * Cadastrar associação de Materiais
-     * @Route("/comercial/integracoes/dagda/delete-associacao", 
-     * methods={"post"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -282,7 +268,7 @@ class AssociacaoMateriaisDagdaTidController extends AbstractController
             $stmt->bindValue(":idMateDagda",    $idMateDagda);
             $stmt->bindValue(":idUser",         $idUser);
 
-            $stmt->execute();
+            $stmt->executeStatement();
 
             $connection->commit();
 

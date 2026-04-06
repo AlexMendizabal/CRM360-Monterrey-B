@@ -3,7 +3,6 @@
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Mailson Teles Borges <mailson.borges@mtcorp.com.br>
@@ -62,8 +61,6 @@ class FusionController
   }
 
   /**
-   * @Route("/logistica/integracoes/fusion/wdsl/funcoes", methods={"GET"})
-   *
    * @return JsonResponse
    */
   public function getFunctionsWsdl(): JsonResponse

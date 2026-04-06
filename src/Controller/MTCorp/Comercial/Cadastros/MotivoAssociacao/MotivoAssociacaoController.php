@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class MotivoAssociacaoController extends AbstractController
 { 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/lista",
-     *  name="comercial.cadastros-motivo-associacao-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -45,14 +40,13 @@ class MotivoAssociacaoController extends AbstractController
           if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
           if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CONS]
                   @DS_MOTI = '{$motivoAssociacao}'
                   ,@ID_SITU = '{$codSituacao}'
                   ,@ORDE_BY = '{$orderBy}'
                   ,@ORDE_TYPE = '{$orderType}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (count($res) > 0 && !isset($res[0]['msg'])) {
               return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -67,12 +61,6 @@ class MotivoAssociacaoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/alteracoes/{codMotivoAssociacao}",
-     *  name="comercial.cadastros-motivo-associacao-alteracoes",
-     *  methods={"GET"},
-     *  requirements={"codMotivoAssociacao"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -81,10 +69,10 @@ class MotivoAssociacaoController extends AbstractController
     {
       try {
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_LOG_CONS] 
                   @ID_MOTI = '{$codMotivoAssociacao}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (count($res) > 0 && !isset($res[0]['msg'])) {
               return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -100,12 +88,6 @@ class MotivoAssociacaoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/detalhes/{codMotivoAssociacao}",
-     *  name="comercial.cadastros-motivo-associacao-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codMotivoAssociacao"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -113,10 +95,10 @@ class MotivoAssociacaoController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codMotivoAssociacao)
     {
       try {
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CONS] 
                   @ID_MOTI = '{$codMotivoAssociacao}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (count($res) > 0) {
               return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -130,11 +112,6 @@ class MotivoAssociacaoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/salvar",
-     *  name="comercial.cadastros-motivo-associacao-salvar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postMotivoAssociacao(Connection $connection, Request $request)
@@ -149,13 +126,13 @@ class MotivoAssociacaoController extends AbstractController
           if (isset($params['motivoAssociacao'])) $motivoAssociacao = $params['motivoAssociacao'];
           if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
           
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CADA] 
                   @ID_PARA = 1
                   ,@DS_MOTI = '{$motivoAssociacao}'
                   ,@ID_SITU = '{$codSituacao}'
                   ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codMotivoAssociacao'])) {
               return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -170,11 +147,6 @@ class MotivoAssociacaoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/atualizar",
-     *  name="comercial.cadastros-motivo-associacao-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putMotivoAssociacao(Connection $connection, Request $request)
@@ -188,19 +160,18 @@ class MotivoAssociacaoController extends AbstractController
           $codSituacao = null;
           
 
-
           if (isset($params['codMotivoAssociacao'])) $codMotivoAssociacao = $params['codMotivoAssociacao'];
           if (isset($params['motivoAssociacao'])) $motivoAssociacao = $params['motivoAssociacao'];
           if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CADA] 
                   @ID_PARA = 2
                   ,@ID_MOTI = '{$codMotivoAssociacao}'
                   ,@DS_MOTI = '{$motivoAssociacao}'
                   ,@ID_SITU = '{$codSituacao}'
                   ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codMotivoAssociacao']) && $res[0]['codMotivoAssociacao'] == $codMotivoAssociacao) {
               return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -215,11 +186,6 @@ class MotivoAssociacaoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/ativar",
-     *  name="comercial.cadastros-motivo-associacao-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeMotivoAssociacao(Connection $connection, Request $request)
@@ -228,13 +194,13 @@ class MotivoAssociacaoController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CADA] 
                   @ID_PARA = 3
                   ,@ID_MOTI = '{$codigo}'
                   ,@ID_SITU = '1'
                   ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -249,11 +215,6 @@ class MotivoAssociacaoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/motivo-associacao/inativar",
-     *  name="comercial.cadastros-motivo-associacao-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveMotivoAssociacao(Connection $connection, Request $request)
@@ -262,13 +223,13 @@ class MotivoAssociacaoController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_MOTI_ASSO_CADA] 
                   @ID_PARA = 3
                   ,@ID_MOTI = '{$codigo}'
                   ,@ID_SITU = '2'
                   ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

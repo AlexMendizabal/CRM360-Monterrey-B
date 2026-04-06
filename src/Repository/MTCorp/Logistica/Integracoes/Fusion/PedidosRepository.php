@@ -103,7 +103,7 @@ class PedidosRepository
                 ,@IN_TRAN           = '{$this->transferencia}'
         SQL;
         
-        $this->pedidos = $this->connection->query($query)->fetchAll();
+        $this->pedidos = $this->connection->executeQuery($query)->fetchAllAssociative();
 
         return $this->pedidos;
     }

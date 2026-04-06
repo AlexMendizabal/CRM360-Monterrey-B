@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class OperadoresComerciaisController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/lista",
-     *  name="comercial.cadastros-operador-comercial-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -54,7 +49,7 @@ class OperadoresComerciaisController extends AbstractController
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CONS]
                     @NM_OPER = '{$nomeOperador}'
                     ,@NR_CPF_CNPJ = '{$cpfCnpj}'
@@ -65,7 +60,7 @@ class OperadoresComerciaisController extends AbstractController
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ORDE_BY = '{$orderBy}'
                     ,@ORDE_TYPE = '{$orderType}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -80,12 +75,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/detalhes/{codOperador}",
-     *  name="comercial.cadastros-operador-comercial-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codOperador"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -93,10 +82,10 @@ class OperadoresComerciaisController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codOperador)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CONS]
                     @ID_OPER = '{$codOperador}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 if ($res[0]['tipoPessoa'] === 'F') {
@@ -124,7 +113,6 @@ class OperadoresComerciaisController extends AbstractController
                     $res[0]['cep'] = FunctionsController::setMask($res[0]['cep'], '##.###-###');
                 }
 
-
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
             } else {
                 return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
@@ -136,11 +124,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/salvar",
-     *  name="comercial.cadastros-operador-comercial-salvar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postOperadorComercial(Connection $connection, Request $request)
@@ -180,7 +163,7 @@ class OperadoresComerciaisController extends AbstractController
                 $rgIe = FunctionsController::limpaMascara($params['ie']);
             }
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CADA] 
                     @ID_PARA = 1
                     ,@NM_OPER = '{$nomeOperador}'
@@ -208,7 +191,7 @@ class OperadoresComerciaisController extends AbstractController
                     ,@DT_FINA_CONT = '{$dataFinalContrato}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codOperador'])) {
                 return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0]['codOperador'], Response::HTTP_OK);
@@ -223,11 +206,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/atualizar",
-     *  name="comercial.cadastros-operador-comercial-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putOperadorComercial(Connection $connection, Request $request)
@@ -268,7 +246,7 @@ class OperadoresComerciaisController extends AbstractController
                 $rgIe = FunctionsController::limpaMascara($params['ie']);
             }
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CADA] 
                     @ID_PARA = 2
                     ,@ID_OPER = '{$codOperador}'
@@ -297,7 +275,7 @@ class OperadoresComerciaisController extends AbstractController
                     ,@DT_FINA_CONT = '{$dataFinalContrato}'
                     ,@ID_SITU = '{$codSituacao}'
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codOperador']) && $res[0]['codOperador'] == $codOperador) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -312,11 +290,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/ativar",
-     *  name="comercial.cadastros-operador-comercial-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activateperadorComercial(Connection $connection, Request $request)
@@ -325,13 +298,13 @@ class OperadoresComerciaisController extends AbstractController
             $codOperador = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CADA] 
                     @ID_PARA = 3
                     ,@ID_OPER = '{$codOperador}'
                     ,@ID_SITU = 1
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codOperador']) && $codOperador == $res[0]['codOperador']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -346,11 +319,6 @@ class OperadoresComerciaisController extends AbstractController
     }
     
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/inativar",
-     *  name="comercial.cadastros-operador-comercial-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactivateOperadorComercial(Connection $connection, Request $request)
@@ -359,13 +327,13 @@ class OperadoresComerciaisController extends AbstractController
             $codOperador = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_CADA] 
                     @ID_PARA = 3
                     ,@ID_OPER = '{$codOperador}'
                     ,@ID_SITU = 2
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codOperador']) && $codOperador == $res[0]['codOperador']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -380,12 +348,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/associacoes/{codOperador}",
-     *  name="comercial.cadastros-operador-comercial-associacoes",
-     *  methods={"GET"},
-     *  requirements={"codOperador"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -393,10 +355,10 @@ class OperadoresComerciaisController extends AbstractController
     public function getAssociacoes(Connection $connection, Request $request, $codOperador)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_ASSO_CONS] 
                     @ID_OPER = '{$codOperador}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -410,12 +372,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/historico-associacoes/{codOperador}",
-     *  name="comercial.cadastros-operador-comercial-historico-associacoes",
-     *  methods={"GET"},
-     *  requirements={"codOperador"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -423,7 +379,7 @@ class OperadoresComerciaisController extends AbstractController
     public function getHistoricoAssociacoes(Connection $connection, Request $request, $codOperador)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_LOG_CONS]
                     @ID_LOG = NULL
                     ,@ID_ASSO = NULL
@@ -433,7 +389,7 @@ class OperadoresComerciaisController extends AbstractController
                     ,@DT_FINA_LOG = NULL
                     ,@ORDE_BY = NULL
                     ,@ORDE_TYPE = NULL
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -447,11 +403,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/salvar-associacao",
-     *  name="comercial.cadastros-operador-comercial-salvar-associacao",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postAssociacaoOperador(Connection $connection, Request $request)
@@ -472,7 +423,7 @@ class OperadoresComerciaisController extends AbstractController
                 }
                 $listaOperadores = implode(',', $arrOperadores);
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXECUTE [dbo].[PRC_COME_OPER_VEND_ASSO_CADA] 
                         @ID_PARA = 1
                         ,@ID_OPER = '{$codOperador}'
@@ -481,7 +432,7 @@ class OperadoresComerciaisController extends AbstractController
                         ,@DT_INIC_ASSO = '{$dataInicio}'
                         ,@DT_FINA_ASSO = '{$dataTermino}'
                         ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 if (isset($res[0]['codOperador']) && $codOperador == $res[0]['codOperador']) {
                     return FunctionsController::Retorno(true, 'Associação efetuada com sucesso.', null, Response::HTTP_OK);
@@ -499,11 +450,6 @@ class OperadoresComerciaisController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/operador-comercial/excluir-associacao",
-     *  name="comercial.cadastros-operador-comercial-excluir-associacao",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function deleteAssociacaoOperador(Connection $connection, Request $request)
@@ -515,12 +461,12 @@ class OperadoresComerciaisController extends AbstractController
             $codAssociacao = $params['codAssociacao'];
             $codOperador = $params['codOperador'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_COME_OPER_VEND_ASSO_CADA] 
                     @ID_PARA = 2
                     ,@ID_ASSO = '{$codAssociacao}'
                     ,@ID_USUA_CADA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codOperador']) && $codOperador == $res[0]['codOperador']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

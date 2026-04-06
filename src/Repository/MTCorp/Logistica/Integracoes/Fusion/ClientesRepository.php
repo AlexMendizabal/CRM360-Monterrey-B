@@ -2,7 +2,7 @@
 
 namespace App\Repository\MTCorp\Logistica\Integracoes\Fusion;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
 class ClientesRepository
 {
@@ -56,12 +56,15 @@ class ClientesRepository
                 INNER JOIN	LS_TIDSOFTWARE.EXETPS.dbo.CadastroRegioesEntrega	REGI ON REGI.CodigoRegiaoEntrega	= OBRA.CODIGOREGIAOENTREGA
                 INNER JOIN	LS_TIDSOFTWARE.EMP18.dbo.ClientesPropostas			PROP ON PROP.CODIGOCLIENTE			= CLIE.CODIGOCLIENTE
             WHERE
-                PROP.NUMEROPROPOSTA IN('{$pedidos}')
+                PROP.NUMEROPROPOSTA IN(:pedidos)
         SQL;
-        
+
         return $query;
 
-        $cliente = $connection->query($query)->fetch();
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(':pedidos', $pedidos);
+        $result_stmt = $stmt->executeQuery();
+        $cliente = $result_stmt->fetchAssociative();
 
         return $cliente;
     }

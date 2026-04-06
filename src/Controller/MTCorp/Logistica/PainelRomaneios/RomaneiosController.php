@@ -2,20 +2,17 @@
 
 namespace App\Controller\MTCorp\Logistica\PainelRomaneios;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
 
 class RomaneiosController
 {
     /**
      * Consultar romaneios
-     * @Route("/logistica/painel-romaneios/romaneios", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -65,7 +62,7 @@ class RomaneiosController
                     ,@DEBUG                 = 0
             SQL;
 
-            $res = $connection->query($query)->fetchAll();
+            $res = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query = <<<SQL
                 EXECUTE PRC_LOGI_PAIN_ROMA
@@ -87,7 +84,7 @@ class RomaneiosController
                     ,@IN_PAGI               = '0'
             SQL;
 
-            $total = ($connection->query($query)->fetch())['TT_REGI'];
+            $total = ($connection->executeQuery($query)->fetchAssociative())['TT_REGI'];
 
             if (!is_array($res))
                 throw new \Exception($res);
@@ -115,8 +112,6 @@ class RomaneiosController
 
     /**
      * Altera o status do romaneio
-     * @route("/logistica/painel-romaneios/finaliza-romaneio",
-     * methods={"POST"})
      * @return Response
      */
     public function finalizaRomaneio(Connection $connection, Request $request)
@@ -147,7 +142,7 @@ class RomaneiosController
                     ,@IP_USUA		        = '{$usuarioIP}'
             SQL;
 
-            $res = $connection->query($query)->fetch();
+            $res = $connection->executeQuery($query)->fetchAssociative();
 
             if (!is_array($res))
                 throw new \Exception($res);
@@ -175,8 +170,6 @@ class RomaneiosController
 
     /**
      * Envia o romaneio para faturamento
-     * @route("/logistica/painel-romaneios/romaneio/faturamento",
-     * methods={"POST"})
      * @return Response
      */
     public function enviarParaFaturamento(Connection $connection, Request $request)
@@ -201,7 +194,7 @@ class RomaneiosController
                     ,@NM_USUA           = '{$infoUsuario->nomeCompleto}'
             SQL;
 
-            $res = $connection->query($query)->fetch();
+            $res = $connection->executeQuery($query)->fetchAssociative();
 
             if (!is_array($res))
                 throw new \Exception($res);

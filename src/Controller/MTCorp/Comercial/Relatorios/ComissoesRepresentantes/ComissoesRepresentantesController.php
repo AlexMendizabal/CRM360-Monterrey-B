@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Relatorios\ComissoesRepresentantes;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -21,11 +21,6 @@ class ComissoesRepresentantesController extends AbstractController
     use ResponseTrait;
 
    /**
-     * @Route(
-     *  "/comercial/relatorios/comissoes-representantes/dados-representante",
-    *  name="comercialrelatorios-comissoes-representantes-dados-representante", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -47,12 +42,12 @@ class ComissoesRepresentantesController extends AbstractController
             $codRepresentante = $params['codRepresentante'];
             
             // NOME E COMISSIONAMENTO
-            $resRepresentante = $connection->query("
+            $resRepresentante = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_DETA_CONS
                     @ID_COMI_VEND    = NULL,
                     @ID_VEND        = '{$codRepresentante}',
                     @DT_INIC        = '{$periodo}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($resRepresentante) > 0) {
                 foreach($resRepresentante as $key => $value) {
@@ -77,12 +72,12 @@ class ComissoesRepresentantesController extends AbstractController
 
             // ROS E CLIENTE 
 
-            $resRos = $connection->query("
+            $resRos = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_RO_CONS
                     @ID_COMI_VEND    = NULL,
                     @ID_VEND        = '{$codRepresentante}',
                     @DT_INIC        = '{$periodo}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             
             if (count($resRos) > 0) {
                 foreach($resRos as $key => $value) {
@@ -95,12 +90,12 @@ class ComissoesRepresentantesController extends AbstractController
             }
 
             // FAIXA COMISSIONAMENTO 
-            $resFaixa = $connection->query("
+            $resFaixa = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_FAIX_COMI_CONS
                     @ID_COMI_VEND    = NULL,
                     @ID_VEND        = '{$codRepresentante}',
                     @DT_INIC        = '{$periodo}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($resFaixa) > 0) {
                 foreach($resFaixa as $key => $value) {
@@ -132,12 +127,12 @@ class ComissoesRepresentantesController extends AbstractController
            
 
             // DETALHES
-            $resDetalhes = $connection->query("
+            $resDetalhes = $connection->executeQuery("
                 EXEC PRC_COMI_VEND_ITEM_DETA_CONS
                     @ID_COMI_VEND    = NULL,
                     @ID_VEND        = '{$codRepresentante}',
                     @DT_INIC        = '{$periodo}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($resDetalhes) > 0) {
                 foreach($resDetalhes as $key => $value) {

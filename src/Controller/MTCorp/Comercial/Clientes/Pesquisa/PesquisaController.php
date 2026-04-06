@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\Pesquisa;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Services\Helper;
-
 
 /**
  * Class PesquisaController
@@ -25,11 +24,6 @@ use App\Services\Helper;
 class PesquisaController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/status",
-     *  name="comercial.clientes-pesquisa-status",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getStatus(Connection $connection, Request $request)
@@ -43,19 +37,19 @@ class PesquisaController extends AbstractController
             $cargo = $infoUsuario->none_cargo;
             //dd($cargo);
             if($cargo == 6 ||  $cargo == 5){
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                 EXEC [PRC_CLIE_CONS]
                     @ID_VEND = '{$vendedor}', 
                     @ID_PARAM = 0
                     
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             
             }
             else{
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 0
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             } 
             
             if (count($res) > 0) {
@@ -79,21 +73,17 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/lista",
-     *  name="comercial.clientes-pesquisa-lista",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getClientes(Connection $connection, Request $request)
     {
         try {
             //dd('aqui');
+            
             $params = $request->query->all();
             $usuario = new usuarioController();
             $vendedor =  new VendedorController();
-            $comercial = new ComercialController();
+
             $helper = new Helper();
             $infoUsuario = $usuario->infoUsuario($request->headers->get('X-User-Info'));
             $resLista = array();
@@ -128,22 +118,8 @@ class PesquisaController extends AbstractController
             if (isset($params['registros'])) $registros = $params['registros'];
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
-            $carteiraParam = null;
+            $carteiraParam = '';
             $order = $orderBy . ' ' . $orderType;
-            /* if (empty($infoUsuario->idVendedor)) {
-                $idVendedor = (int)$vendedor->idVendedor($connection, $infoUsuario);
-            } else {
-                $idVendedor = (int)$infoUsuario->idVendedor;
-            } */
-            //dd($idVendedor);
-
-            /*  if ($carteira == 'S') {
-                $carteiraParam = ", @ID_VEND = '{$idVendedor}'";
-            } else {
-                $carteiraParam = '';
-            } */
-            /*   dd('aqui'); */
-
 
             if ($id_vendedor == 0) {
                 $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id); 
@@ -153,8 +129,8 @@ class PesquisaController extends AbstractController
             }
             
             
-      //dd($params);
-            $resLista = $connection->query(
+            //dd($params);
+            $resLista = $connection->executeQuery(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 1, 
@@ -170,19 +146,11 @@ class PesquisaController extends AbstractController
                     @ID_PAGI = '{$pagina}',
                     @QT_REGI = '{$registros}',
                     @DS_ORDE = '{$orderType}'
-                " . $carteiraParam
-            )->fetchAll();
+                "
+            )->fetchAllAssociative();
             
 
-           //dd($resListaSr);
-            // if (count($resListaSr) > 0) {
-            //     $resLista = $helper->removeDuplicatesByCodCliente($resListaSr);
-            // }
-
-
-            //dd($resLista);
-
-            $resStatus = $connection->query(
+            $resStatus = $connection->executeQuery(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 0, 
@@ -199,10 +167,10 @@ class PesquisaController extends AbstractController
                     @QT_REGI = '{$registros}',
                     @DS_ORDE = '{$order}'
                     " . $carteiraParam
-            )->fetchAll();
+            )->fetchAllAssociative();
             //dd($resStatus);
             if (count($resLista) > 0 && count($resStatus) > 0) {
-                $usuariosLiberados = $comercial->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
+             
                 $idVendedores = $vendedor->vinculoOperadores($connection, $infoUsuario);
 
                 for ($i = 0; $i < count($resLista); $i++) {
@@ -212,8 +180,7 @@ class PesquisaController extends AbstractController
                         $resLista[$i]['situacao'] == 'Arquivo' ||
                         $resLista[$i]['situacao'] == 'Inativo' ||
                         $idVendedores == $resLista[$i]['codVendedor'] ||
-                        in_array($resLista[$i]['codVendedor'], $idVendedores) ||
-                        $usuariosLiberados
+                        in_array($resLista[$i]['codVendedor'], $idVendedores) 
                     ) {
                         $podeAcessar = 1;
                     }
@@ -244,11 +211,6 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/lista_api",
-     *  name="comercial.clientes_api",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getClientes_api(Connection $connection, Request $request)
@@ -303,7 +265,7 @@ class PesquisaController extends AbstractController
             }
 
             /*   dd('aqui'); */
-            $resLista = $connection->query(
+            $resLista = $connection->executeQuery(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 1, 
@@ -319,9 +281,9 @@ class PesquisaController extends AbstractController
                     @QT_REGI = '{$registros}',
                     @DS_ORDE = '{$order}'
                 " . $carteiraParam
-            )->fetchAll();
+            )->fetchAllAssociative();
 
-            $resStatus = $connection->query(
+            $resStatus = $connection->executeQuery(
                 "
                 EXEC [PRC_CLIE_CONS] 
                     @ID_PARAM = 0, 
@@ -337,7 +299,7 @@ class PesquisaController extends AbstractController
                     @QT_REGI = '{$registros}',
                     @DS_ORDE = '{$order}'
                     " . $carteiraParam
-            )->fetchAll();
+            )->fetchAllAssociative();
 
             if (count($resLista) > 0 && count($resStatus) > 0) {
                 $usuariosLiberados = $comercial->verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
@@ -382,12 +344,6 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/grupo-economico/{codCliente}",
-     *  name="comercial.clientes-pesquisa-grupo-economico",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -395,10 +351,10 @@ class PesquisaController extends AbstractController
     public function getClientesGrupoEconomico(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_CLIE_GRUP_ECON_CONS
                     @ID_CLIE = '{$codCliente}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $FunctionsController = new FunctionsController();
@@ -419,12 +375,6 @@ class PesquisaController extends AbstractController
     }
 
     /* *
-     * @Route(
-     *  "/comercial/clientes/pesquisa/detalhes/{codCliente}",
-     *  name="comercial.clientes-pesquisa-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -432,40 +382,37 @@ class PesquisaController extends AbstractController
     /* public function getDetalhes(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $query = "SELECT 
-            c.id_cliente,
-            c.prim_nome as nombres,
-            c.segu_nome as razaoSocial,
-            c.tipo_pessoa,
-            c.cnpj_cpf,
-            CONCAT(v.nm_vend, ' ', v.nm_raza_soci) as NombreVendedor,
-            c.id_vendedor,
-            escr.nm_escr as sucursal,
-            c.id_setor_atividade,
-            c.tipo_persona,
-            c.telefono,
-            c.celular,
-            c.codigo_cliente,
-            c.id_rubro,
-            r.descricao as rubro,
-            e.logradouro as direccion,
-            ciudad.nombre_ciudad as ciudad
-        FROM MTCORP_MODU_CLIE_BASE c
-        LEFT JOIN MTCORP_MODU_CLIE_BASE_ENDE e ON c.id_cliente = e.id_cliente
-        LEFT JOIN TB_VEND v ON c.id_vendedor = v.ID
-        LEFT JOIN MTCORP_BASE_CNAE r ON r.id_cnae = c.id_rubro
-        LEFT JOIN TB_ESCR escr ON v.id_escr = escr.id
-        LEFT JOIN tb_ciudad ciudad ON escr.id_ciudad = ciudad.id
-        WHERE c.id_cliente = :codCliente";
+                $query = "SELECT 
+                c.id_cliente,
+                c.prim_nome as nombres,
+                c.segu_nome as razaoSocial,
+                c.tipo_pessoa,
+                c.cnpj_cpf,
+                CONCAT(v.nm_vend, ' ', v.nm_raza_soci) as NombreVendedor,
+                c.id_vendedor,
+                escr.nm_escr as sucursal,
+                c.id_setor_atividade,
+                c.tipo_persona,
+                c.telefono,
+                c.celular,
+                c.codigo_cliente,
+                c.id_rubro,
+                r.descricao as rubro,
+                e.logradouro as direccion,
+                ciudad.nombre_ciudad as ciudad
+            FROM MTCORP_MODU_CLIE_BASE c
+            LEFT JOIN MTCORP_MODU_CLIE_BASE_ENDE e ON c.id_cliente = e.id_cliente
+            LEFT JOIN TB_VEND v ON c.id_vendedor = v.ID
+            LEFT JOIN MTCORP_BASE_CNAE r ON r.id_cnae = c.id_rubro
+            LEFT JOIN TB_ESCR escr ON v.id_escr = escr.id
+            LEFT JOIN tb_ciudad ciudad ON escr.id_ciudad = ciudad.id
+            WHERE c.id_cliente = :codCliente";
         
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":codCliente", $codCliente);
-            $stmt->execute();
-            $res = $stmt->fetch(); 
-            
-
+            $result_stmt = $stmt->executeQuery();
+            $res = $result_stmt->fetchAssociative(); 
             if ($res) {
-
                 $detalhes = new \stdClass;
 
                 // Populate $detalhes with the data from $res
@@ -524,12 +471,6 @@ class PesquisaController extends AbstractController
     } */
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/detalhes/{codCliente}",
-     *  name="comercial.clientes-pesquisa-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -570,12 +511,6 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/verificaoferta/{codCliente}",
-     *  name="comercial.clientes-pesquisa-verificaoferta",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @param $codCliente
@@ -619,26 +554,17 @@ class PesquisaController extends AbstractController
         return $response;
     }
 
-
-
-
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/contatos/{codCliente}",
-     *  name="comercial.clientes-pesquisa-contatos",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getContatos(Connection $connection, Request $request, $codCliente)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_MTCORP_MODU_COME_CADA_CLIE_CONS]
                     @PARAM = 3,
                     @IDCLIENTE = '{$codCliente}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 for ($i = 0; $i < count($res); $i++) {
@@ -669,35 +595,36 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/buscador-clientes",
-     *  name="comercial.vendedor-buscador-clientes",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getBuscadorDeClientes(Connection $connection, Request $request)
-    {
+    {  
         $UsuarioController = new UsuarioController();
         $helper = new Helper();
         try {
-            $params = $request->query->all();
-            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info'));
-            $nombre_cliente = !empty($params['nombre_cliente']) ? strtoupper($params['nombre_cliente']) : '';
-            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-            if ($buscarUsuario['NM_CARG_FUNC'] == 6) {
-                $id_vendedor =  (int)$infoUsuario->idVendedor;
-                $res = $connection->query("
-                EXEC [PRC_VENDEDOR_CLIEN] 
-                    @id_vendedor = '{$infoUsuario->idVendedor}',
-                    @nombre_cliente ='{$nombre_cliente}'
-            ")->fetchAll();
-            }else{
-                $res = $connection->query("
-                EXEC [PRC_VENDEDOR_CLIEN_USUA] 
-                    @nombre_cliente ='{$nombre_cliente}'
-            ")->fetchAll();
-            }
+            $params = $request->query->all(); 
+            $infoUsuario = $UsuarioController->infoUsuario($request->headers->get('X-User-Info')); 
+            $nombre_cliente = !empty($params['buscar']) ? strtoupper($params['buscar']) : '';
+            $buscar = !empty($params['filtro']) ? strtoupper($params['filtro']) : '';
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id); 
+            $id_vendedor = isset($buscarUsuario['NR_MATR']) ? (int)$buscarUsuario['NR_MATR'] : 0;
+            //dd($params);
+            // Utilizamos parámetros vinculados para la consulta
+            $sql = "
+            EXEC [PRC_VENDEDOR_CLIEN_USUA] 
+                @nombre_cliente = :nombre_cliente, 
+                @id_vendedor = :id_vendedor, 
+                @filtro = :filtro
+            ";
+
+            // Preparar la consulta y pasar los parámetros de manera segura
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':nombre_cliente', $nombre_cliente);
+            $stmt->bindValue(':id_vendedor', $id_vendedor);
+            $stmt->bindValue(':filtro', $buscar);
+            $result_stmt = $stmt->executeQuery();
+
+            $res = $result_stmt->fetchAllAssociative(); 
 
             if (count($res) > 0) {
                 $clientes = array();
@@ -710,10 +637,6 @@ class PesquisaController extends AbstractController
                     $clientes[$i]['latitud'] = $res[$i]['latitud'];
                     $clientes[$i]['longitud'] = $res[$i]['longitud'];
                     $clientes[$i]['direccion'] = $res[$i]['direccion'];
-
-
-
-                    // $vendedores[$i]['idEscritorio'] = $res[$i]['codEscritorio'];
                 }
 
                 $message = array(
@@ -736,12 +659,6 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/contactodetalle/{codCliente}",
-     *  name="comercial.clientes-pesquisa-contactodetalle",
-     *  methods={"GET"},
-     *  requirements={"codCliente"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -766,8 +683,8 @@ class PesquisaController extends AbstractController
 
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":codCliente", $codCliente);
-            $stmt->execute();
-            $res = $stmt->fetchAll(); // Fetch all rows
+            $result_stmt = $stmt->executeQuery();
+            $res = $result_stmt->fetchAllAssociative(); // Fetch all rows
 
             if ($res) {
                 $contactos = array();
@@ -806,11 +723,6 @@ class PesquisaController extends AbstractController
         return $response;
     }
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/updatesap",
-     *  name="comercial.clientes-updatesap",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -827,11 +739,6 @@ class PesquisaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/clientes/pesquisa/updatesapcontacto",
-     *  name="comercial.clientes-updatesapcontacto",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

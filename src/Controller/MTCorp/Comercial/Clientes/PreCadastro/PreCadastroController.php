@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\PreCadastro;
 
+use Doctrine\DBAL\Connection;
+
 use App\Services\Helper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 use App\Controller\Core\SapController;
-use mysqli;
 
 /**
  * Class PreCadastroController
@@ -24,11 +23,6 @@ use mysqli;
 class PreCadastroController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/clientes/pre-cadastro",
-   *  name="comercial.clientes-pre-cadastro",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postCliente(Connection $connection, Request $request)
@@ -40,7 +34,6 @@ class PreCadastroController extends AbstractController
         $usuarioController = new UsuarioController();
         $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
         $functionsController = new FunctionsController();
-
 
         if (!isset($data['vendedor'])) {
           if (!empty($infoUsuario->idVendedor)) {
@@ -70,8 +63,8 @@ class PreCadastroController extends AbstractController
           } else if (isset($data['cnpj'])) {
             $tipoPessoa = 2;
             $documento = $data['cnpj'];
-            $primeiroNome = strtoupper(utf8_encode($functionsController->limpaCaracteresEspeciais($data['razaoSocial'])));
-            $segundoNome = strtoupper(utf8_encode($functionsController::limpaCaracteresEspeciais($data['nomeFantasia'])));
+            $primeiroNome = strtoupper(mb_convert_encoding($functionsController->limpaCaracteresEspeciais($data['razaoSocial']), 'UTF-8', 'ISO-8859-1'));
+            $segundoNome = strtoupper(mb_convert_encoding($functionsController::limpaCaracteresEspeciais($data['nomeFantasia']), 'UTF-8', 'ISO-8859-1'));
             $cnae = $functionsController->completaZeroEsquerda($data['cnae'], 7);
             $emailNfe = strtoupper($data['emailNfe']);
             $telefone = $data['telefone'];
@@ -94,9 +87,9 @@ class PreCadastroController extends AbstractController
               for ($i = 0; $i < count($arrCnaes); $i++) {
                 $codCnae = $functionsController->limpaMascara($arrCnaes[$i]['cnae']);
                 $codCnae = $functionsController->completaZeroEsquerda($codCnae, 7);
-                $descricao = strtoupper(utf8_encode($arrCnaes[$i]['descricao']));
+                $descricao = strtoupper(mb_convert_encoding($arrCnaes[$i]['descricao'], 'UTF-8', 'ISO-8859-1'));
 
-                $connection->query(
+                $connection->executeQuery(
                   "
                     EXEC [PRC_MTCORP_BASE_CNAE_CONS]
                       @CNAE = '{$codCnae}',
@@ -123,7 +116,7 @@ class PreCadastroController extends AbstractController
             }
           }
 
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_CLIE_DADO_FATU_CADA] 
                 @PRIM_NOME = '{$primeiroNome}',             
@@ -137,7 +130,7 @@ class PreCadastroController extends AbstractController
                 @COD_CLI = '{$numero_cliente_registro}'
             "
 
-          )->fetchAll();
+          )->fetchAllAssociative();
           /*   dd($res); */
           if (isset($res[0]['ID'])) {
 
@@ -147,7 +140,7 @@ class PreCadastroController extends AbstractController
                 $codCnae = FunctionsController::limpaMascara($arrCnaes[$i]['cnae']);
                 $tipo = ($i === 0) ? 1 : 0;
 
-                $connection->query(
+                $connection->executeQuery(
                   "
                     EXEC [PRC_MTCORP_MODU_CLIE_CNAE_CADA]
                       @CLIENTE = '{$codCliente}',
@@ -182,11 +175,6 @@ class PreCadastroController extends AbstractController
     }
   }
   /**
-   * @Route(
-   *  "/comercial/clientes/postsap",
-   *  name="comercial.clientes-postsap",
-   *  methods={"POST"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -198,11 +186,6 @@ class PreCadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/tipo_cliente",
-   *  name="comercial.clientes-tipo-cliente",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -243,13 +226,7 @@ class PreCadastroController extends AbstractController
     return $response;
   }
 
-
    /**
-   * @Route(
-   *  "/comercial/clientes/tipo_persona",
-   *  name="comercial.clientes-tipo-persona",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -291,11 +268,6 @@ class PreCadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/tipo_documento",
-   *  name="comercial.clientes-tipo-documento",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -335,20 +307,13 @@ class PreCadastroController extends AbstractController
   }
 
   /**
- * @Route(
- *  "/comercial/clientes/obtenerHistorial/{idCliente}",
- *  name="comercial.clientes-obtenerHistorial",
- *  methods={"GET"}
- * )
  * @param Connection $connection
  * @param Request $request
  * @return JsonResponse
  */
 public function obtenerHistorial(Connection $connection, Request $request, int $idCliente)
   {
-    
     try {
-        $idCliente = $request->get('idCliente'); // Asumiendo que el id_cliente se pasa como parámetro en la solicitud
 
         // Obtener historial
         $sqlHistorial = "
@@ -418,7 +383,5 @@ public function obtenerHistorial(Connection $connection, Request $request, int $
     $response->setEncodingOptions(JSON_NUMERIC_CHECK);
     return $response;
   }
-
-
 
 }

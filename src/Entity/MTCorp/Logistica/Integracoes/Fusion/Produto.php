@@ -43,7 +43,7 @@ class Produto implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array(
             "cod_produto_erp"   => $this->cod_produto_erp,

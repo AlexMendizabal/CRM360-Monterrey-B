@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Core;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Security\Core\JwtAplication;
 
 /**
@@ -64,8 +65,8 @@ class LoginController extends AbstractController
                 
                 $stmt = $connection->prepare($sql);
                 $stmt->bindValue(1, $nrMatrUsua);
-                $stmt->executeQuery();
-                $usuario = $stmt->fetchAll();
+                $result = $stmt->executeQuery();
+                $usuario = $result->fetchAllAssociative();
                 //dd($usuario);
                 if(count($usuario) > 0){
                     $datos = [];

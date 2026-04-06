@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Comissoes\VendedoresInternos\GestaoComissionamentos;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
@@ -24,11 +24,6 @@ class GestaoComissionamentosController extends AbstractController
 {
 
     /**
-     * @Route(
-     *  "/comercial/comissoes/vendedores-internos/gestao-comissionamentos/permissoes-acesso",
-     *  name="comercial.comissoes-vendedores-internos-gestao-comissionamentos-permissoes-acesso",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -70,6 +65,5 @@ class GestaoComissionamentosController extends AbstractController
             );
         }
     }
-
 
 }

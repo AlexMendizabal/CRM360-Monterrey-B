@@ -3,10 +3,10 @@
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
 use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Mailson Teles Borges <mailson.borges@mtcorp.com.br>
@@ -15,8 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventosController extends FusionController
 {
     /**
-     * @Route("/logistica/integracoes/fusion/eventos", methods={"GET"})
-     *
      * @return JsonResponse
      */
     public function getEventos(Request $request, Connection $connection): JsonResponse
@@ -74,7 +72,7 @@ class EventosController extends FusionController
                         ,@LINK_FOTO				= '{$value["t15_link_foto"]}'
                 SQL;
 
-                $req = $connection->query($query)->fetch();
+                $req = $connection->executeQuery($query)->fetchAssociative();
 
                 if(in_array($value["t15_tipo"], ["10", "9"])){
                     $this->getDevolucoes($connection, $value["t15_id"]);
@@ -162,7 +160,7 @@ class EventosController extends FusionController
                 $stmt->bindValue(":devolucaoId",            $devolucaoId);
                 $stmt->bindValue(":devolucaoDescricao",     $devolucaoDescricao);
                 
-                $stmt->execute();
+                $stmt->executeStatement();
             }
         }
     }

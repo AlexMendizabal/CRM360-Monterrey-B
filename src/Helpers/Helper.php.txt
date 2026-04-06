@@ -1,0 +1,55 @@
+<?php
+// src/Helper/MyHelper.php
+
+namespace App\Helper;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class MyHelper
+{
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /* public function obtenerToken($connection)
+    {
+        $usuario = "crm360";
+        $contrasenia = "M1ddlewareCRM360$/";
+
+        $query =
+            "SELECT TOP 1  FROM mtcorp_loginSAp where usuario = :usuario and  contrasehna= : contrasehna order by id desc";
+
+        $statement = $connection->prepare($query);
+        $statement->bindValue('usuario', $usuario);
+        $statement->bindValue('contrasehna', $contrasenia);
+        $statement->execute();
+
+        if (count($statement) > 0) {
+            return true;
+        } else {
+        }
+    } */
+    public function guardarDatos($usuario, $contrasenia, $token, $connection)
+    {
+        $query = "INSERT INTO mtcorp_loginSAp VALUES (:user,:contrasenia,:fecha,:token)";
+        $statement = $connection->prepare($query);
+        $statement->bindValue('user', $usuario);
+        $statement->bindValue('contrasenia', $contrasenia);
+        $statement->bindValue('fecha', date('Y-m-d H:i:s'));
+        $statement->bindValue('token', $token);
+        try {
+            $statement->execute();
+            $rowCount = $statement->rowCount();
+            if ($rowCount > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}

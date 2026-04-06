@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
 class ResponsavelController{
 
-
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/responsaveis", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -49,7 +46,7 @@ class ResponsavelController{
                     ,@IN_PAGI                   = '{$inPagi}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query  = <<<SQL
                 EXECUTE PRC_LOGI_ENMA_FHNC_OCRE
@@ -62,7 +59,7 @@ class ResponsavelController{
                     ,@IN_TT_REGI                  = 1
             SQL;
 
-            $total = $connection->query($query)->fetchOne();
+            $total = $connection->executeQuery($query)->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -89,8 +86,6 @@ class ResponsavelController{
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/responsaveis", methods={"POST", "PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -128,7 +123,7 @@ class ResponsavelController{
                     ,@IP_USUA                   = '{$usuarioIP}'
             SQL;
             
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!filter_var($response['success'], FILTER_VALIDATE_BOOLEAN)){
                 

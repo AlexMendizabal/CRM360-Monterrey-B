@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\Pedidos;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -19,11 +19,6 @@ class DesmembramentoController
     use ResponseTrait;
 
     /**
-     * @Route(
-     *  "/logistica/pedidos/desmembramento",
-     *  name="logistica.pedidos.desmembramento.store",
-     *  methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -100,9 +95,9 @@ class DesmembramentoController
                     SQL;
 
                     $stmt = $connection->prepare($query);
-                    $stmt->execute();
+                    $result_stmt = $stmt->executeQuery();
 
-                    $id = $stmt->fetchOne();
+                    $id = $result_stmt->fetchOne();
 
                     foreach ($produtos as $produto) {
                         $query = <<<SQL
@@ -170,11 +165,6 @@ class DesmembramentoController
     }
 
     /**
-     * @Route(
-     *  "/logistica/pedidos/desmembramento",
-     *  name="logistica.pedidos.desmembramento.update",
-     *  methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -211,7 +201,7 @@ class DesmembramentoController
             $stmt->bindValue(":status",         $status);
             $stmt->bindValue(":tipoOperacao",   $tipoOperacao);
 
-            $stmt->execute();
+            $stmt->executeStatement();
 
             return $this
                 ->setData(null)

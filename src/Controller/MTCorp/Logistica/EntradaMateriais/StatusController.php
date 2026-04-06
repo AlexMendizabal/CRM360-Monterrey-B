@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
@@ -15,8 +15,6 @@ class StatusController
 {
 
     /**
-     * @Route("/logistica/entrada-materiais/status", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -52,7 +50,7 @@ class StatusController
                     ,@IN_PAGI                   = '{$inPagi}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query  = <<<SQL
                 EXECUTE PRC_LOGI_ENMA_STAT
@@ -66,7 +64,7 @@ class StatusController
                     ,@IN_TT_REGI                  = 1
             SQL;
 
-            $total = $connection->query($query)->fetchOne();
+            $total = $connection->executeQuery($query)->fetchOne();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -93,8 +91,6 @@ class StatusController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/status", methods={"POST", "PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -134,7 +130,7 @@ class StatusController
                     ,@IP_USUA                   = '{$usuarioIP}'
             SQL;
             
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!filter_var($response['success'], FILTER_VALIDATE_BOOLEAN)){
                 

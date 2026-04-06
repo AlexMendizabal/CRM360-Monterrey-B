@@ -3,8 +3,8 @@
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
 use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Factory\MTCorp\Logistica\Integracoes\Fusion\VeiculoFactory;
 use App\Repository\MTCorp\Logistica\Integracoes\Fusion\VeiculosRepository;
@@ -17,8 +17,6 @@ class VeiculosController extends FusionController
 {
 
     /**
-     * @Route("/logistica/integracoes/fusion/veiculos", methods={"POST"})
-     *
      * @return void
      */
     public function sendVeiculos(Connection $connection): JsonResponse
@@ -75,7 +73,7 @@ class VeiculosController extends FusionController
                             @DS_PLAC = '{$placa}'
                     SQL;
 
-                    $connection->query($query)->fetch();
+                    $connection->executeQuery($query)->fetchAssociative();
                 }
 
                 return new JsonResponse([
@@ -99,8 +97,6 @@ class VeiculosController extends FusionController
     }
 
     /**
-     * @Route("/logistica/integracoes/fusion/sincroniza-veiculos", methods={"POST"})
-     *
      * @return JsonResponse
      */
     public function sincronizaVeiculosComAFusion(Request $request, Connection $connection):JsonResponse{
@@ -142,7 +138,7 @@ class VeiculosController extends FusionController
                     SQL;
 
                     $res[] = array_merge(  [ "placa"=> $veiculo["placa"]],
-                                            $connection->query($query)->fetch());
+                                            $connection->executeQuery($query)->fetchAssociative());
                 }   
             }
 

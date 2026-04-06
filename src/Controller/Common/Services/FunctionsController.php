@@ -1,4 +1,5 @@
 <?php
+// TODO: Este archivo deberia ser un Service, no un Controller. Mover a src/Services/ o src/Module/Shared/Service/
 
 declare(strict_types=1);
 
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class FunctionsController extends AbstractController
 {
-  public function completaZeroEsquerda($valor, $tamanho)
+  public static function completaZeroEsquerda($valor, $tamanho)
   {
     if ($valor == null) return 0;
     
@@ -28,12 +29,12 @@ class FunctionsController extends AbstractController
     return $valor;
   }
 
-  public function setMask($valor, $mask)
+  public static function setMask($valor, $mask)
   {
     $maskared = '';
     $k = 0;
 
-    for ($i = 0; $i<=strlen($mask)-1; $i++) {
+    for ($i = 0; $i<=strlen($mask ?? '')-1; $i++) {
       if ($mask[$i] == '#') {
         if(isset($valor[$k])) $maskared .= $valor[$k++];
       } else {
@@ -44,15 +45,15 @@ class FunctionsController extends AbstractController
     return $maskared;
   }
 
-  public function limpaMascara($numero)
+  public static function limpaMascara($numero)
   {
     $caracteres = array(".", ",", " ", "/", "-", "(", ")", "=", "#", "*", "\"", "'", "?", "[", "]", "{", "}", "|");	
-    $numero = str_replace($caracteres, "", $numero);	
+    $numero = str_replace($caracteres, "", $numero ?? '');
 
     return $numero;
   }
 
-  public function limpaCaracteresEspeciais($str)
+  public static function limpaCaracteresEspeciais($str)
   {
     if ($str != null && !empty($str) && !is_int($str)) {
       $str = preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($str)));
@@ -62,9 +63,9 @@ class FunctionsController extends AbstractController
     return $str;
   }
 
-  public function diasUteisPeriodo ($startDate, $dataFimDate, $arrFeriados) {
-      $dataInicio = strtotime($startDate);
-      $dataFim    = strtotime($dataFimDate);
+  public static function diasUteisPeriodo ($startDate, $dataFimDate, $arrFeriados) {
+      $dataInicio = strtotime($startDate ?? '');
+      $dataFim    = strtotime($dataFimDate ?? '');
   
       if ($dataInicio > $dataFim) {
           return 0;
@@ -125,7 +126,7 @@ class FunctionsController extends AbstractController
       }
   }
 
-  public function Retorno ($success, $mensagem, $data, $code)
+  public static function Retorno ($success, $mensagem, $data, $code)
   {
       $arrFinal = [
         'success' => $success,
@@ -138,89 +139,87 @@ class FunctionsController extends AbstractController
       return $response;
   }
 
-  public function sendSwiftMailAttachment($isHtml, $body, $msg, $emails, $path) 
+  /**
+   * Envia email con archivo adjunto via Symfony Mailer.
+   * @deprecated Usar App\Services\MailerService directamente via inyeccion de dependencias.
+   */
+  public static function sendSwiftMailAttachment($isHtml, $body, $msg, $emails, $path)
   {
-    
-    $host       = "outlook.office365.com";
-    $port       = 587;
-    $encryption = "tls";
-        
-    if ($isHtml)
-        $contentType = "text/html";
-    else
-        $contentType = "text/plain";
+      $recipients = is_array($emails) ? $emails : [$emails];
+      if (empty($recipients)) {
+          return;
+      }
 
-    if (count($emails) > 0) {
-   
-      // Create the Transport
-      $transport = (new \Swift_SmtpTransport($host, $port, $encryption))
-          ->setUsername('ws@manetoni.com.br')
-          ->setPassword('oo@!sspp88ngj5');
+      $contentType = $isHtml ? 'text/html' : 'text/plain';
 
-      // Create the Mailer using your created Transport
-      $mailer = new \Swift_Mailer($transport);
-      // print_r($emails);
-      // exit(0);
-      // Create a message
-      $message = (new \Swift_Message())
-          ->setSubject($msg)
-          ->setFrom(array('ws@manetoni.com.br'))
-          ->setTo($emails)
-          ->setBody($body, $contentType)
-          ->attach( \Swift_Attachment::fromPath($path));
+      $email = (new \Symfony\Component\Mime\Email())
+          ->from(new \Symfony\Component\Mime\Address('ws@manetoni.com.br'))
+          ->subject($msg);
 
-      // Send the message
-      $mailer->send($message);
+      foreach ($recipients as $recipient) {
+          $email->addTo($recipient);
+      }
 
-      return $mailer;
-    }
+      if ($isHtml) {
+          $email->html($body);
+      } else {
+          $email->text($body);
+      }
+
+      if (file_exists($path)) {
+          $email->attachFromPath($path);
+      }
+
+      $dsn = $_ENV['MAILER_DSN'] ?? 'smtp://ws@manetoni.com.br:oo%40%21sspp88ngj5@outlook.office365.com:587';
+      $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
+      $mailer = new \Symfony\Component\Mailer\Mailer($transport);
+      $mailer->send($email);
   }
 
-
-  public function sendSwiftMail($isHtml, $body, $msg, $emails) 
+  /**
+   * Envia email sin adjunto via Symfony Mailer.
+   * @deprecated Usar App\Services\MailerService directamente via inyeccion de dependencias.
+   */
+  public static function sendSwiftMail($isHtml, $body, $msg, $emails)
   {
-    $host       = "outlook.office365.com";
-    $port       = 587;
-    $encryption = "tls";
-        
-    if ($isHtml)
-        $contentType = "text/html";
-    else
-        $contentType = "text/plain";
+      $recipients = isset($emails['to']) ? $emails['to'] : $emails;
+      if (empty($recipients) || (is_array($recipients) && count($recipients) === 0)) {
+          return;
+      }
 
-    if (count($emails["to"]) > 0) {
-   
-      // Create the Transport
-      $transport = (new \Swift_SmtpTransport($host, $port, $encryption))
-          ->setUsername('ws@manetoni.com.br')
-          ->setPassword('oo@!sspp88ngj5');
+      $email = (new \Symfony\Component\Mime\Email())
+          ->from(new \Symfony\Component\Mime\Address('ws@manetoni.com.br'))
+          ->subject($msg);
 
-      // Create the Mailer using your created Transport
-      $mailer = new \Swift_Mailer($transport);
+      if (is_array($recipients)) {
+          foreach ($recipients as $recipient) {
+              $email->addTo($recipient);
+          }
+      } else {
+          $email->to($recipients);
+      }
 
-      // Create a message
-      $message = (new \Swift_Message())
-          ->setSubject($msg)
-          ->setFrom(array('ws@manetoni.com.br'))
-          ->setTo($emails["to"])
-          ->setBody($body, $contentType);
+      if ($isHtml) {
+          $email->html($body);
+      } else {
+          $email->text($body);
+      }
 
-      // Send the message
-      $mailer->send($message);
-
-      return $mailer;
-    }
+      $dsn = $_ENV['MAILER_DSN'] ?? 'smtp://ws@manetoni.com.br:oo%40%21sspp88ngj5@outlook.office365.com:587';
+      $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
+      $mailer = new \Symfony\Component\Mailer\Mailer($transport);
+      $mailer->send($email);
   }
 
-  public function obtenerNumeroCliente($connection)
+  public static function obtenerNumeroCliente($connection)
   {
     /* Se obtiene el ultimo numero registrado en la base de datos */
     $query_codigo_cliente = "SELECT TOP 1 CAST(codigo_cliente AS VARCHAR(MAX)) AS codigo_cliente 
     FROM MTCORP_MODU_CLIE_BASE 
     ORDER BY codigo_cliente DESC";
-    $obtener_ultimo_codigo = $connection->query($query_codigo_cliente);
-    $ultimo_codigo_cliente = $obtener_ultimo_codigo->fetchColumn();
-    $num_anterior = (int)substr($ultimo_codigo_cliente, 2);
+    $obtener_ultimo_codigo = $connection->executeQuery($query_codigo_cliente);
+    $ultimo_codigo_cliente = $obtener_ultimo_codigo->fetchOne();
+    $num_anterior = (int)substr($ultimo_codigo_cliente ?? '', 2);
 
     /* Se agrega + 1 al numero obtenido */
     $nuevo_num =  strval($num_anterior + 1);
@@ -228,11 +227,11 @@ class FunctionsController extends AbstractController
     return $nuevo_codigo;
   }
 
-  public function verificarNumeroCliente($connection, $numero_verificar)
+  public static function verificarNumeroCliente($connection, $numero_verificar)
   {
     $query_codigo_cliente = "SELECT * FROM MTCORP_MODU_CLIE_BASE WHERE codigo_cliente LIKE  '$numero_verificar'";
-    $verificar_numero = $connection->query($query_codigo_cliente);
-    $verificar_numero_bd = $verificar_numero->fetchColumn();
+    $verificar_numero = $connection->executeQuery($query_codigo_cliente);
+    $verificar_numero_bd = $verificar_numero->fetchOne();
     if ($verificar_numero_bd > 0) {
       return true;
     } else {

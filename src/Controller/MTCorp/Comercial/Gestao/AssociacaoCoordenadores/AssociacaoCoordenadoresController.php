@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Gestao\AssociacaoCoordenadores;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 
 /**
@@ -20,11 +20,11 @@ class AssociacaoCoordenadoresController extends AbstractController
 {
   public function coordenadores($connection)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_ASSO_COOR_CONS]
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i=0; $i < count($res); $i++) {
@@ -43,11 +43,11 @@ class AssociacaoCoordenadoresController extends AbstractController
 
   public function escritorios($connection)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_COME_ESCR_CONS]
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i=0; $i < count($res); $i++) {
@@ -66,11 +66,6 @@ class AssociacaoCoordenadoresController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/gestao/associacao-coordenadores/lista",
-   *  name="comercial.gestao/associacao-coordenadores-lista",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getAssociacoesCoordenadores(Connection $connection, Request $request)
@@ -130,11 +125,6 @@ class AssociacaoCoordenadoresController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/gestao/associacao-coordenadores/salvar",
-   *  name="comercial.gestao/associacao-coordenadores-salvar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putAssociacaoCoordenador(Connection $connection, Request $request)
@@ -147,7 +137,7 @@ class AssociacaoCoordenadoresController extends AbstractController
         $coordenador = $data['coordenador'];
         $escritorios = implode(',', $data['escritorios']);
 
-        $connection->query(
+        $connection->executeQuery(
           "
             EXEC [PRC_ASSO_COOR_CADA]
             @ID_MATR = '{$coordenador}',

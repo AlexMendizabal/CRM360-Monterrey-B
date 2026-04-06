@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Kanban\Contratos;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 
 /**
@@ -20,11 +20,6 @@ use App\Controller\Common\Services\FunctionsController;
 class KanbanContratosController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/kanban/contratos/contratos-vigentes",
-    *  name="comercial.kanban-contratos-contratos-vigentes", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -52,7 +47,7 @@ class KanbanContratosController extends AbstractController
             if (isset($params['cor'])) $cor = $params['cor'];
             if (isset($params['tempo'])) $tempo = $params['tempo'];
 
-            // $res = $connection->query("
+            // $res = $connection->executeQuery("
             //     EXEC [PRC_COME_ESTO_CONS]
             //         @ID_EMPR = '{$deposito}'
             //         ,@ID_LINHA = '{$linha}'
@@ -63,7 +58,7 @@ class KanbanContratosController extends AbstractController
             //         ,@DS_MATE = '{$descMaterial}'
             //         ,@ID_PARAM = 2
             //         ,@ORDER = 2
-            // ")->fetchAll();
+            // ")->fetchAllAssociative();
 
             $res = [
                 [
@@ -108,11 +103,6 @@ class KanbanContratosController extends AbstractController
     }
 
           /**
-     * @Route(
-     *  "/comercial/kanban/contratos/quantidade-faturada",
-    *  name="comercial.kanban-contratos-quantidade-faturada", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -129,7 +119,7 @@ class KanbanContratosController extends AbstractController
 
             if (isset($params['quantidade'])) $quantidade = $params['quantidade'];
           
-            // $res = $connection->query("
+            // $res = $connection->executeQuery("
             //     EXEC [PRC_COME_ESTO_CONS]
             //         @ID_EMPR = '{$deposito}'
             //         ,@ID_LINHA = '{$linha}'
@@ -140,7 +130,7 @@ class KanbanContratosController extends AbstractController
             //         ,@DS_MATE = '{$descMaterial}'
             //         ,@ID_PARAM = 2
             //         ,@ORDER = 2
-            // ")->fetchAll();
+            // ")->fetchAllAssociative();
 
             $res = [
                 [
@@ -167,11 +157,6 @@ class KanbanContratosController extends AbstractController
     }
 
         /**
-     * @Route(
-     *  "/comercial/kanban/contratos/quantidade-pendente",
-    *  name="comercial.kanban-contratos-quantidade-pendente", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -188,7 +173,7 @@ class KanbanContratosController extends AbstractController
 
             if (isset($params['quantidade'])) $quantidade = $params['quantidade'];
           
-            // $res = $connection->query("
+            // $res = $connection->executeQuery("
             //     EXEC [PRC_COME_ESTO_CONS]
             //         @ID_EMPR = '{$deposito}'
             //         ,@ID_LINHA = '{$linha}'
@@ -199,7 +184,7 @@ class KanbanContratosController extends AbstractController
             //         ,@DS_MATE = '{$descMaterial}'
             //         ,@ID_PARAM = 2
             //         ,@ORDER = 2
-            // ")->fetchAll();
+            // ")->fetchAllAssociative();
 
             $res = [
                 [

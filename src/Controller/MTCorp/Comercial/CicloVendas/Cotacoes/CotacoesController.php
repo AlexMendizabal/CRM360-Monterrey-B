@@ -1,14 +1,15 @@
 <?php
 
-declare(strict_type=1);
+declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\CicloVendas\Cotacoes;
+
+use Doctrine\DBAL\Connection;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ParameterType;
@@ -18,7 +19,7 @@ use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 use App\Services\Helper;
-
+use Doctrine\DBAL\Exception as DBALException;
 
 /**
  * Class CotacoesController
@@ -27,11 +28,6 @@ use App\Services\Helper;
 class CotacoesController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/permissoes-acesso",
-     *  name="comercial.ciclo-vendas-cotacoes-permissoes-acesso",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -73,14 +69,7 @@ class CotacoesController extends AbstractController
         }
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/verifica-oferta/{idContato}",
-     *  name="comercial.ciclo-vendas-verifica-oferta",
-     *  methods={"GET"},
-     *  requirements={"idContato"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -100,11 +89,6 @@ class CotacoesController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/lista",
-     *  name="comercial.ciclo-vendas-cotacoes-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -155,7 +139,6 @@ class CotacoesController extends AbstractController
             // Calcula el offset (desplazamiento)
             $offset = ($paginaActual - 1) * $tamanoPagina;
 
-
             if (!$acessoClientes && $codVendedor == NULL) {
                 return FunctionsController::Retorno(false, "Favor selecionar o vendedor", null, Response::HTTP_OK);
                 exit(0);
@@ -163,7 +146,7 @@ class CotacoesController extends AbstractController
 
             if ($codDeposito == null) {
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_CONS]
                      @ID_PARA = 1
                     ,@NR_PEDI = '{$nrPedido}'
@@ -178,10 +161,10 @@ class CotacoesController extends AbstractController
                     ,@DS_ORDE = '{$order}'
                     ,@ID_PAGI = '{$pagina}'
                     ,@QT_REGI = '{$registros}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             } else {
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_CONS]
                      @ID_PARA = 1
                     ,@NR_PEDI = '{$nrPedido}'
@@ -196,20 +179,20 @@ class CotacoesController extends AbstractController
                     ,@DS_ORDE = '{$order}'
                     ,@ID_PAGI = '{$pagina}'
                     ,@QT_REGI = '{$registros}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             }
 
             if (count($res) > 0) {
 
                 for ($i = 0; $i < count($res); $i++) {
 
-                    $res[$i]['travas'] = $connection->query("
+                    $res[$i]['travas'] = $connection->executeQuery("
                         EXEC PRC_PEDI_LIBE_CONS
                             @ID_PARA = 1, 
                             @ID_EMPR = {$codEmpresa},
                             @NR_PEDI = {$res[$i]['nrPedido']},
                             @IN_AGUA_LIBE = 1
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
                     $res[$i]['imprimirSeparacao'] = 0;
 
@@ -222,7 +205,6 @@ class CotacoesController extends AbstractController
                     }
                 }
             }
-
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -242,11 +224,6 @@ class CotacoesController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/cliente_oferta",
-     *  name="comercial.ciclo-vendas-cotizaciones-lienteoferta",
-     *  methods={"post"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -265,10 +242,10 @@ class CotacoesController extends AbstractController
                 ->innerJoin('TBO', 'MTCORP_MODU_CLIE_BASE', 'MCB', 'MCB.id_cliente = TBO.id_cliente')
                 ->where('1 = 1');
             if (!empty($codSituacao)) {
-                $queryClient->andWhere('OFE.tipo_estado = :codSituacao');
+                $queryClient->andWhere('TBO.tipo_estado = :codSituacao');
                 $queryClient->setParameter('codSituacao', $codSituacao);
             }
-            $response = $queryClient->execute()->fetchAll();
+            $response = $queryClient->executeQuery()->fetchAllAssociative();
             if (empty($response)) {
                 return (new FunctionsController)->Retorno(false, "La solicitud no devolvió información", null, Response::HTTP_NO_CONTENT);
             } else
@@ -279,11 +256,6 @@ class CotacoesController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/lista_cotizacion",
-     *  name="comercial.ciclo-vendas-cotizaciones-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -295,7 +267,6 @@ class CotacoesController extends AbstractController
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $params = $request->query->all();
-
 
             $dataInicial = NULL;
             $dataFinal = NULL;
@@ -309,8 +280,11 @@ class CotacoesController extends AbstractController
 
             !empty($params['pagina']) ? $pagina = $params['pagina'] : $pagina = null;
             !empty($params['registros']) ? $registros = $params['registros'] : $registros = null;
-            !empty($params['orderBy']) ? $orderBy = 'OFE.' . $params['orderBy'] : $orderBy = 'OFE.id';
-            !empty($params['orderType']) ? $orderType = $params['orderType'] : $orderType = 'DESC';
+
+            $allowedOrderColumns = ['id', 'fecha_creacion', 'monto_total', 'codigo_oferta', 'peso_total', 'cantidad_total'];
+            $orderByParam = $params['orderBy'] ?? 'id';
+            $orderBy = in_array($orderByParam, $allowedOrderColumns) ? 'OFE.' . $orderByParam : 'OFE.id';
+            $orderType = isset($params['orderType']) && in_array(strtoupper($params['orderType']), ['ASC', 'DESC']) ? strtoupper($params['orderType']) : 'DESC';
 
             $paginaActual =  (int)$pagina; // Página 2
             $tamanoPagina = (int)$registros; // 10 resultados por página
@@ -419,7 +393,6 @@ if (!isset($params['codVendedor'])) {
         ->setMaxResults($registros)
         ->where('1 = 1');
 
-
             if (!empty($fechaInicial1)) {
                 $queryOferta->andWhere('OFE.fecha_inicial >= :fecha_inicial');
                 $queryOferta->setParameter('fecha_inicial', $fechaInicial1);
@@ -451,7 +424,7 @@ if (!isset($params['codVendedor'])) {
                 $queryOferta->setParameter('id_vendedor',  (int)$codVendedor);
             }
 
-            $stmt = $queryOferta->execute();
+            $stmt = $queryOferta->executeQuery();
             $res = $stmt->fetchAllAssociative();
 
             if (count($res) > 0) {
@@ -484,14 +457,13 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
-
     private function contatosProposta($connection, $codEmpresa, $nrPedido)
     {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_PEDI_CONT_CONS]
                 @NR_PEDI = {$nrPedido},
                 @ID_EMPR = {$codEmpresa}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return $res;
@@ -502,11 +474,11 @@ if (!isset($params['codVendedor'])) {
 
     private function materiaisProposta($connection, $codEmpresa, $nrPedido)
     {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_PEDI_MATE_CONS]
                 @NR_PEDI = {$nrPedido},
                 @ID_EMPR = {$codEmpresa}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             for ($i = 0; $i < count($res); $i++) {
@@ -524,12 +496,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/detalhes/{codEmpresa}/{nrPedido}",
-     *  name="comercial.ciclo-vendas-cotacoes-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codEmpresa"="\d+", "nrPedido"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -575,11 +541,6 @@ if (!isset($params['codVendedor'])) {
         }
     }
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/oferta_detalle",
-     *  name="comercial.ciclo-vendas-oferta_detalle",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -641,8 +602,8 @@ if (!isset($params['codVendedor'])) {
                WHERE  OFE.id = :id_oferta";
             $stmt1 = $connection->prepare($query_oferta);
             $stmt1->bindValue(':id_oferta', $tipoData);
-            $stmt1->execute();
-            $res1 = $stmt1->fetchAll();
+            $result_stmt1 = $stmt1->executeQuery();
+            $res1 = $result_stmt1->fetchAllAssociative();
 
             if (count($res1) > 0) {
                 $arrFinal['oferta'] = $res1;
@@ -673,13 +634,13 @@ if (!isset($params['codVendedor'])) {
 
                 $stmt = $connection->prepare($query);
                 $stmt->bindValue(':id_oferta', $tipoData);
-                $stmt->execute();
-                $res = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $res = $result_stmt->fetchAllAssociative();
 
                 if (count($res) > 0) {
                     $arrFinal['analitico'] = $res;
                     $arrFinal['total'] = array(
-                        'quantidade' => 0
+                        'cantidad' => 0
                     );
                     for ($i = 0; $i < count($res); $i++) {
                         $arrFinal['total']['cantidad'] += $res[$i]['total_bruto'];
@@ -716,12 +677,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/detalhes/{codEmpresa}/{nrPedido}",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codEmpresa"="\d+", "nrPedido"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -733,8 +688,6 @@ if (!isset($params['codVendedor'])) {
 
             if (count($res) > 0) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
@@ -745,11 +698,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/situacao-liberacao",
-     *  name="comercial.ciclo-vendas-cotacoes-situacao-liberacao",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -763,24 +711,24 @@ if (!isset($params['codVendedor'])) {
             $nrPedido = $params['nrPedido'];
             $codEmpresa = $params['codEmpresa'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC PRC_PEDI_LIBE_CONS
                 @ID_PARA = 2
                 ,@ID_EMPR = {$codEmpresa}
                 ,@NR_PEDI = {$nrPedido}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
 
                 for ($i = 0; $i < count($res); $i++) {
 
-                    $res[$i]['travas'] = $connection->query("
+                    $res[$i]['travas'] = $connection->executeQuery("
                 EXEC PRC_PEDI_LIBE_CONS
                     @ID_PARA = 1, 
                     @ID_EMPR = {$codEmpresa},
                     @NR_PEDI = {$nrPedido},
                     @IN_AGUA_LIBE = 0
-            ")->fetchAll();
+            ")->fetchAllAssociative();
                 }
             }
 
@@ -802,11 +750,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/transfere-faturamento",
-     *  name="comercial.ciclo-vendas-cotacoes-transfere-faturamento",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -833,13 +776,13 @@ if (!isset($params['codVendedor'])) {
                 // ");
                 // exit(0);
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC [LS_TIDSOFTWARE].[EXETPS].[dbo].rotinaSQL_SSV_VerificacoesAntesTransferenciaProposta
                         @PAR_Matricula = {$infoUsuario->matriculaTid},
                         @PAR_CodigoEmpresa = {$codEmpresa},
                         @PAR_NrProposta = {$nrPedido},
                         @PAR_Linha = '{$nomeLinha}'
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 if (count($res) > 0 && isset($res[0]['id'])) {
                     return FunctionsController::Retorno(true, null, $res[0]['id'], Response::HTTP_OK);
@@ -857,11 +800,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/trocar/cliente",
-     *  name="comercial.ciclo-vendas-cotacoes-trocar-cliente",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -880,14 +818,14 @@ if (!isset($params['codVendedor'])) {
             $codEmpresa = $params['codEmpresa'];
             $codCliente = $params['selectedCodCliente'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [PRC_PEDI_CADA]
                      @ID_PARA = 3
                     ,@ID_DEPO = {$codEmpresa}
                     ,@NR_PEDI = {$nrPedido}
                     ,@ID_CLIE = {$codCliente}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);
@@ -905,11 +843,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/duplicar-proposta",
-     *  name="comercial.ciclo-vendas-cotacoes-duplicar-proposta",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -919,20 +852,18 @@ if (!isset($params['codVendedor'])) {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-
             $params = json_decode($request->getContent(), true);
 
             $nrPedido = $params['nrPedido'];
             $codEmpresa = $params['codEmpresa'];
 
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_CADA]
                     @ID_PARA = 5
                     ,@ID_DEPO = {$codEmpresa}
                     ,@NR_PEDI = {$nrPedido}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrProposta'])) {
                 return FunctionsController::Retorno(true, null, $res[0]['nrProposta'], Response::HTTP_OK);
@@ -947,11 +878,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/desdobrar-proposta",
-     *  name="comercial.ciclo-vendas-cotacoes-desdobrar-proposta",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -960,8 +886,6 @@ if (!isset($params['codVendedor'])) {
     {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-
-
 
             $params = json_decode($request->getContent(), true);
             $codDeposito = $params['codDeposito'];
@@ -985,15 +909,14 @@ if (!isset($params['codVendedor'])) {
             //    ,@ID_MATE = '{$materiais}'
             //    ,@ID_USUA = {$infoUsuario->matricula}");
             //    die();
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_CADA]
                      @ID_PARA = 6
                     ,@ID_DEPO = {$codDeposito}
                     ,@NR_PEDI = {$nrPedido}
                     ,@ID_MATE = '{$materiais}'
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrProposta']) && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0]['nrProposta'], Response::HTTP_OK);
@@ -1008,11 +931,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/trocar/empresa",
-     *  name="comercial.ciclo-vendas-cotacoes-trocar-empresa",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1028,16 +946,14 @@ if (!isset($params['codVendedor'])) {
             $selectedCodEmpresa = $params['selectedCodEmpresa'];
             $selectedCodDeposito = $params['selectedCodDeposito'];
 
-
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_CADA] 
                      @ID_PARA = 4
                     ,@ID_DEPO = {$codDeposito}
                     ,@NR_PEDI = {$nrPedido}
                     ,@ID_DEPO_DEST = {$selectedCodDeposito}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrProposta']) && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0]['nrProposta'], Response::HTTP_OK);
@@ -1052,12 +968,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/imprimir-cotacao/{nrPedido}",
-     *  name="comercial.ciclo-vendas-cotacoes-imprimir-cotacao",
-     *  methods={"GET"},
-     *  requirements={"nrPedido"="\d+", "codEmpresa"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1066,39 +976,185 @@ if (!isset($params['codVendedor'])) {
     {
         try {
             $res = [];
+            $idOferta = (int)$nrPedido;
 
-            $arrayParams = [
-                1 => "dadosManetoni",
-                2 => "pedido",
-                3 => "contatos",
-                4 => "enderecos",
-                5 => "materiais",
-                6 => "parcelas",
-                7 => "dadosVendedor"
-            ];
-            
-            foreach ($arrayParams as $key => $value) {
+            // Detectar si es oferta (TB_OFERTA) o pedido legacy
+            $esOferta = $connection->fetchOne('SELECT id FROM TB_OFERTA WHERE id = ?', [$idOferta]);
 
-                $arrayTemp = $connection->query("
-                        EXEC [PRC_PEDI_IMPR_CONS]
-                             @ID_PARA = {$key}
-                            ,@NR_PEDI = {$nrPedido}
-                    ")->fetchAll();
+            if ($esOferta) {
+                // --- Sistema nuevo: consultar TB_OFERTA directamente ---
 
-                $res += [$value => $arrayTemp];
-            }
+                // 1. Datos empresa (dadosManetoni)
+                $res['dadosManetoni'] = $connection->fetchAllAssociative("
+                    SELECT TOP 1
+                        'CRM360 Monterrey' AS empresa,
+                        'Av. Principal S/N' AS direccion,
+                        'Santa Cruz - Bolivia' AS ciudad,
+                        '(+591) 3-000-0000' AS telefono
+                ");
 
-            if (count($res) > 0 && !isset($res[0]['message'])) {
+                // 2. Datos del pedido/oferta
+                $res['pedido'] = $connection->fetchAllAssociative("
+                    SELECT
+                        OFE.id AS nrPedido,
+                        OFE.codigo_oferta,
+                        FORMAT(OFE.fecha_creacion, 'yyyy-MM-dd HH:mm:ss.fff') AS fecha_inicial,
+                        FORMAT(OFE.fecha_final, 'yyyy-MM-dd') AS fecha_final,
+                        FORMAT(OFE.fecha_creacion, 'yyyy-MM-dd HH:mm:ss.fff') AS fecha_creacion,
+                        CLIE.prim_nome AS nombre_cliente,
+                        CLIE.codigo_cliente,
+                        CLIE.cnpj_cpf AS documento,
+                        CLIE.nombre_factura AS razon_social,
+                        CLIE.email_nfe AS email,
+                        CLIE.telefono,
+                        CLIE.celular,
+                        CAST(OFE.monto_total AS DECIMAL(18,2)) AS monto_total,
+                        CAST(OFE.monto_total AS DECIMAL(18,2)) AS total,
+                        OFE.monto_total_bruto,
+                        OFE.peso_total,
+                        OFE.cantidad_total,
+                        OFE.descuento_total,
+                        OFE.observacion,
+                        OFE.totalbs,
+                        DEPO.CODIGO_ALMACEN AS codigo_almacen,
+                        DEPO.CODIGO_ALMACEN AS nombre_almacen,
+                        COALESCE(ME.nombre_modo_entrega, '') AS nombre_modo_entrega,
+                        '7 dias' AS vencimiento,
+                        LP.nombre_lista,
+                        CO.descripcion AS estado,
+                        OFE.destino,
+                        OFE.destinarioFactura,
+                        OFE.despachoMercaderia,
+                        OFE.fechaEntrega,
+                        OFE.qr
+                    FROM TB_OFERTA OFE
+                        INNER JOIN MTCORP_MODU_CLIE_BASE CLIE ON OFE.id_cliente = CLIE.id_cliente
+                        LEFT JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+                        INNER JOIN TB_LISTA_PRECIO LP ON OFE.id_lista_precio = LP.id
+                        LEFT JOIN tb_cierre_oferta CO ON OFE.tipo_estado = CO.id
+                        LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OFE.id_almacen
+                    WHERE OFE.id = ?
+                ", [$idOferta]);
+
+                // 3. Contactos del cliente
+                $res['contatos'] = $connection->fetchAllAssociative("
+                    SELECT
+                        CC.ds_cont AS nombre,
+                        CC.contacto,
+                        CC.direccion,
+                        CC.codigo_cliente
+                    FROM TB_CLIE_CONT CC
+                    WHERE CC.id_clie = (SELECT id_cliente FROM TB_OFERTA WHERE id = ?)
+                ", [$idOferta]);
+
+                // 4. Direcciones (de la oferta + del cliente)
+                $res['enderecos'] = $connection->fetchAllAssociative("
+                    SELECT
+                        COALESCE(OFE.destino, CC.direccion) AS direccion,
+                        OFE.cordenadas AS geolocalizacion,
+                        OFE.despachoMercaderia AS despacho,
+                        ME.nombre_modo_entrega AS tipo_entrega,
+                        OFE.fechaEntrega AS fecha_entrega
+                    FROM TB_OFERTA OFE
+                        LEFT JOIN TB_MODO_ENTREGA ME ON OFE.id_modo_entrega = ME.id
+                        LEFT JOIN TB_CLIE_CONT CC ON CC.id_clie = OFE.id_cliente
+                    WHERE OFE.id = ?
+                ", [$idOferta]);
+
+                // 5. Materiales/items
+                $res['materiais'] = $connection->fetchAllAssociative("
+                    SELECT
+                        MATE.CODIGOMATERIAL AS codigo_material,
+                        MATE.DESCRICAO AS descripcion,
+                        UNI.SIGLAS_UNI AS unidad,
+                        OD.cantidad AS cantidad,
+                        CAST(OD.precio AS DECIMAL(18,4)) AS precio,
+                        CAST(OD.percentualDesc AS DECIMAL(18,4)) AS descuento,
+                        CAST(OD.subtotal AS DECIMAL(18,4)) AS subtotal,
+                        CAST(OD.subtotal_bruto AS DECIMAL(18,4)) AS total,
+                        OD.peso AS preso,
+                        OD.peso_total,
+                        CAST(OD.descuento_permitido AS DECIMAL(18,4)) AS descuento_permitido,
+                        DEPO.CODIGO_ALMACEN AS almacen
+                    FROM TB_OFERTA_DETALLE OD
+                        INNER JOIN TB_MATE MATE ON OD.id_material = MATE.ID_CODIGOMATERIAL
+                        LEFT JOIN UNIDADES UNI ON UNI.ID = OD.id_unidad
+                        LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OD.id_almacen_carrito
+                    WHERE OD.id_oferta = ?
+                ", [$idOferta]);
+
+                // 6. Parcelas (datos de entrega y forma de pago para el PDF)
+                $res['parcelas'] = $connection->fetchAllAssociative("
+                    SELECT
+                        COALESCE(OFE.destino, CC.direccion, '') AS direccion_entrega,
+                        CASE OFE.id_forma_pago
+                            WHEN 1 THEN 'Contado'
+                            WHEN 2 THEN 'Credito'
+                            WHEN 3 THEN 'Anticipado'
+                            ELSE 'Contado'
+                        END AS forma_pago,
+                        CASE OFE.id_forma_pago
+                            WHEN 1 THEN 'Contado'
+                            WHEN 2 THEN 'Credito'
+                            WHEN 3 THEN 'Anticipado'
+                            ELSE 'Contado'
+                        END AS formaPagamento,
+                        1 AS qtdeParcelas
+                    FROM TB_OFERTA OFE
+                        LEFT JOIN TB_CLIE_CONT CC ON CC.id_clie = OFE.id_cliente
+                    WHERE OFE.id = ?
+                ", [$idOferta]);
+
+                // 7. Datos del vendedor
+                $res['dadosVendedor'] = $connection->fetchAllAssociative("
+                    SELECT
+                        VEND.ID AS id_vendedor,
+                        VEND.NM_VEND AS nombre_vendedor,
+                        VEND.NM_RAZA_SOCI AS apellido_vendedor,
+                        USU.NM_EMAI AS email_vendedor,
+                        USU.NR_TELE_COME AS telefono_vendedor
+                    FROM TB_OFERTA OFE
+                        INNER JOIN TB_VEND VEND ON OFE.id_vendedor = VEND.ID
+                        LEFT JOIN TB_CORE_USUA USU ON USU.SlpCode = VEND.codigo_sap
+                    WHERE OFE.id = ?
+                ", [$idOferta]);
+
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+
             } else {
-                return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                // --- Sistema legacy: usar SP original ---
+                $arrayParams = [
+                    1 => "dadosManetoni",
+                    2 => "pedido",
+                    3 => "contatos",
+                    4 => "enderecos",
+                    5 => "materiais",
+                    6 => "parcelas",
+                    7 => "dadosVendedor"
+                ];
+
+                foreach ($arrayParams as $key => $value) {
+                    $stmt = $connection->prepare("
+                        EXEC [PRC_PEDI_IMPR_CONS]
+                            @ID_PARA = :id_para
+                            ,@NR_PEDI = :nr_pedi
+                    ");
+                    $stmt->bindValue(':id_para', $key);
+                    $stmt->bindValue(':nr_pedi', $nrPedido);
+                    $arrayTemp = $stmt->executeQuery()->fetchAllAssociative();
+                    $res[$value] = $arrayTemp;
+                }
+
+                if (count($res) > 0) {
+                    return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
+                } else {
+                    return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+                }
             }
         } catch (\Throwable $e) {
             return FunctionsController::Retorno(
                 false,
-                'Erro al retornar dados.',
+                'Error al retornar datos.',
                 $e->getMessage(),
                 Response::HTTP_BAD_REQUEST
             );
@@ -1106,12 +1162,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/imprimir-separacao/{nrPedido}/{codEmpresa}",
-     *  name="comercial.ciclo-vendas-cotacoes-imprimir-separacao",
-     *  methods={"GET"},
-     *  requirements={"nrPedido"="\d+", "codEmpresa"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1121,21 +1171,20 @@ if (!isset($params['codVendedor'])) {
         try {
             $res = [];
 
-            $dados = $connection->query("
+            $dados = $connection->executeQuery("
                 EXEC PRC_PEDI_SEPA_IMPR_CONS
                     @ID_EMPR = {$codEmpresa},
                     @NR_PEDI = {$nrPedido}          
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
-            $materiais = $connection->query("
+            $materiais = $connection->executeQuery("
             EXEC PRC_PEDI_MATE_SEPA_IMPR_CONS
                 @ID_EMPR = {$codEmpresa},
                 @NR_PEDI = {$nrPedido}          
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             $res['dados'] = $dados[0];
             $res['materiais'] = $materiais;
-
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -1154,13 +1203,7 @@ if (!isset($params['codVendedor'])) {
         }
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/email-cotacao",
-     *  name="comercial.ciclo-vendas-cotacoes-email-cotacao",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1185,8 +1228,7 @@ if (!isset($params['codVendedor'])) {
                 $emailsCliente[$key] = $data['emails'][$key]['email'];
             }
 
-
-            $path = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\comercial\\ciclo-vendas\\cotacoes\\" . $codCotacao . "\\anexos\\";
+            $path = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\ciclo-vendas\\cotacoes\\" . $codCotacao . "\\anexos\\";
             $file = $path . $codCotacao . '.pdf';
 
             if (file_exists($file)) {
@@ -1219,11 +1261,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/reservar",
-     *  name="comercial.ciclo-vendas-cotacoes-reservar",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1234,15 +1271,12 @@ if (!isset($params['codVendedor'])) {
             $empresa = $request->query->get("codEmpresa");
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_CADA
                      @ID_PARA = 1
                     ,@ID_EMPR = {$empresa}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -1257,12 +1291,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/{codCotacao}/{idEmpresa}",
-     *  name="comercial.ciclo-vendas-cotacoes",
-     *  methods={"GET"},
-     *  requirements={"codCotacao"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1272,29 +1300,29 @@ if (!isset($params['codVendedor'])) {
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $resProposta = $connection->query("
+            $resProposta = $connection->executeQuery("
 						EXEC PRC_PEDI_CONS
 								@ID_PARA = 2,
 								@ID_EMPR = 1,
 								@NR_PEDI = {$codCotacao}
-				")->fetchAll();
+				")->fetchAllAssociative();
 
             if (count($resProposta) > 0) {
 
                 $arrFinal = $resProposta;
-                 $resMateriais = $connection->query("
+                 $resMateriais = $connection->executeQuery("
 							EXEC PRC_PEDI_MATE_CONS
 									@ID_EMPR = '{$idEmpresa}',
 									@NR_PEDI = {$codCotacao}
-						")->fetchAll();
+						")->fetchAllAssociative();
                
                 if (count($resMateriais) > 0 && !isset($resMateriais[0]['message'])) {
                     $arrFinal[0]['carrinho'] = $resMateriais;
                 }
 
                 return FunctionsController::Retorno(true, null, $arrFinal[0], Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['message'])) {
-                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
+            } else if (count($resProposta) > 0 && isset($resProposta[0]['message'])) {
+                return FunctionsController::Retorno(false, $resProposta[0]['message'], null, Response::HTTP_OK);
             } else {
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
@@ -1304,11 +1332,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1329,7 +1352,7 @@ if (!isset($params['codVendedor'])) {
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
             $orderBy = isset($params['orderBy']) && $params['orderBy'] == 'nrPedido' ?  1 : 2;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [PRC_COME_ESTO_CONS]
                     @ID_PARAM = 8,
                     @ID_LINHA = '{$codLinha}',
@@ -1342,7 +1365,7 @@ if (!isset($params['codVendedor'])) {
                     @IN_ESTO_DISP = '{$comEstoque}',
                     @ID_FORM_PAGA = {$codFormaPagamento},
                     @ORDER = {$orderBy}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             //     print_r("
             //     EXECUTE [PRC_COME_ESTO_CONS]
@@ -1372,12 +1395,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/estoque-depositos/{codMaterial}/{codDeposito}",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-estoque-depositos",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1387,13 +1404,13 @@ if (!isset($params['codVendedor'])) {
         try {
             $codDeposito = $codDeposito == 'null' ? NULL : $codDeposito;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [PRC_COME_ESTO_CONS]
                     @ID_PARAM = 3,
                     @ID_MATE = '{$codMaterial}',
                     @ID_EMPR = '{$codDeposito}',
                     @IN_ESTO_DISP = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $estoque = array();
@@ -1419,12 +1436,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/combo/{codEmpresa}/{codMaterial}",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-combo",
-     *  methods={"GET"},
-     *  requirements={"codEmpresa"="\d+", "codMaterial"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1438,7 +1449,7 @@ if (!isset($params['codVendedor'])) {
             $codFormaPagamento = $request->query->get("codFormaPagamento");
             $freteConta = $request->query->get("freteConta");
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CONS]
                     @ID_PARA = 2
                     ,@ID_MATE = {$codMaterial}
@@ -1448,7 +1459,7 @@ if (!isset($params['codVendedor'])) {
                     ,@ID_FORM_PAGA = {$codFormaPagamento}
                     ,@ID_TIPO_FRET = {$freteConta}
                     ,@IN_SITU = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(false, $res[0]['msg'], null, Response::HTTP_BAD_REQUEST);
@@ -1464,11 +1475,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/oferta_id",
-     *  name="comercial.ciclo-vendas-cotacoes-oferta-id",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1505,11 +1511,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/relacionados/vendas",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-relacionados-vendas",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1519,7 +1520,6 @@ if (!isset($params['codVendedor'])) {
         try {
             $params = json_decode($request->getContent(), true);
 
-
             $codEmpresa = $params['codEmpresa'];
             $codMaterial = $params['codMaterial'];
             $codCliente = $params['codCliente'];
@@ -1528,15 +1528,14 @@ if (!isset($params['codVendedor'])) {
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
 
             if (isset($codMaterial) && isset($codEmpresa)) {
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                       EXEC [PRC_CROS_SELL_CONS]
                           @ID_PARA = 3
                           ,@TOP = 4
                           ,@ID_MATE = {$codMaterial}
                           ,@ID_EMPR = '{$codEmpresa}'
                           ,@IN_SITU = 1
-                  ")->fetchAll();
-
+                  ")->fetchAllAssociative();
 
                 // print_r($res);
                 // exit(0);
@@ -1578,11 +1577,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/relacionados/cliente",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-relacionados-cliente",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1604,7 +1598,7 @@ if (!isset($params['codVendedor'])) {
             $freteConta = isset($params['freteConta']) ? $params['freteConta'] : NULL;
 
             if (isset($codMaterial) && isset($codEmpresa) && isset($codCliente)) {
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                       EXEC [PRC_CROS_SELL_CONS]
                           @ID_PARA = 3
                           ,@TOP = 4
@@ -1612,7 +1606,7 @@ if (!isset($params['codVendedor'])) {
                           ,@ID_EMPR = '{$codEmpresa}'
                           ,@ID_CLIE = {$codCliente}
                           ,@IN_SITU = 1
-                  ")->fetchAll();
+                  ")->fetchAllAssociative();
 
                 if (count($res) > 0) {
                     for ($i = 0; $i < count($res); $i++) {
@@ -1648,11 +1642,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/relacionados",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-relacionados",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1673,7 +1662,7 @@ if (!isset($params['codVendedor'])) {
             if (isset($codMaterial) && isset($codEmpresa)) {
                 /* $materiais = array(); */
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC [PRC_CROS_SELL_CONS]
                         @ID_PARA = 2
                         ,@TOP = 4
@@ -1684,7 +1673,7 @@ if (!isset($params['codVendedor'])) {
                         ,@ID_FORM_PAGA = {$codFormaPagamento}
                         ,@ID_TIPO_FRET = {$freteConta}
                         ,@IN_SITU = 1
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 // print_r($res);
                 // exit(0);
@@ -1704,7 +1693,6 @@ if (!isset($params['codVendedor'])) {
                     }
                 }
 
-
                 if (count($res) > 0 && count($material) > 0) {
                     return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
                 } else {
@@ -1718,13 +1706,7 @@ if (!isset($params['codVendedor'])) {
         }
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiales/relacionados",
-     *  name="comercial.ciclo-vendas-cotacoes-materiales-relacionados",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1801,12 +1783,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/material/ficha-cadastral/{codMaterial}",
-     *  name="comercial.ciclo-vendas-cotacoes-material-ficha-cadastral",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1814,12 +1790,12 @@ if (!isset($params['codVendedor'])) {
     public function getFichaCadastralMaterial(Connection $connection, Request $request, $codMaterial)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_FICH_CADA_MATE_CONS]
                     @ID_PARAM = 1
                     ,@MATE = {$codMaterial}
                     ,@IN_SITU = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $codLink = $res[0]['codMaterial'];
@@ -1837,12 +1813,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/material/similaridade/{codEmpresa}/{codMaterial}",
-     *  name="comercial.ciclo-vendas-cotacoes-material-similaridade",
-     *  methods={"GET"},
-     *  requirements={"codEmpresa"="\d+", "codMaterial"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1855,13 +1825,13 @@ if (!isset($params['codVendedor'])) {
             $codFormaPagamento = $request->query->get("codFormaPagamento");
             $freteConta = $request->query->get("freteConta");
 
-            $materialPrincipal = $connection->query("
+            $materialPrincipal = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CONS]
                     @ID_PARA = 1
                     ,@MATE_DE = {$codMaterial}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
-            $materiaisSimilares = $connection->query("
+            $materiaisSimilares = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CONS]
                     @ID_PARA = 2
                     ,@MATE_DE = {$codMaterial}
@@ -1871,7 +1841,7 @@ if (!isset($params['codVendedor'])) {
                     ,@ID_FORM_PAGA = {$codFormaPagamento}
                     ,@ID_TIPO_FRET = {$freteConta}
                     ,@IN_SITU = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (
                 (count($materialPrincipal) > 0 && !isset($res[0]['message'])) &&
@@ -1899,11 +1869,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/material/tipo-calculo/{codMaterial}",
-     *  name="comercial.ciclo-vendas-cotacoes-material-tipo-calculo",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1914,11 +1879,11 @@ if (!isset($params['codVendedor'])) {
 
             $codFormaPagamento = $request->query->get("codFormaPagamento");
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [PRC_TIPO_CALC_MATE_CONS] 
                     @ID_MATE = {$codMaterial},
                     @ID_FORM_PAGA = {$codFormaPagamento}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -1933,11 +1898,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/material/calculo",
-     *  name="comercial.ciclo-vendas-cotacoes-material-calculo",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1946,22 +1906,45 @@ if (!isset($params['codVendedor'])) {
     {
         try {
             $params = json_decode($request->getContent(), true);
+            if (!is_array($params)) {
+                $params = $request->request->all();
+            }
 
-            $codMaterial = $params['codMaterial'];
-            $codTipoLancamento = $params['codTipoLancamento'];
-            $tipoCalculo = $params['tipoCalculo'];
-            $codCliente = $params['codCliente'];
-            $tonelada = $params['codTipoLancamento'] === 6 ? $params['quantidade'] : 0;
-            $quantidade = $params['codTipoLancamento'] !== 6 ? $params['quantidade'] : 0;
-            $preco = $params['preco'];
-            $medida = $params['codTipoLancamento'] === 3 ? $params['medida'] : 0;
-            $codEmpresa = $params['codEmpresa'];
-            $codEndereco = $params['codEndereco'];
+            $codMaterialParam = $params['codMaterial'] ?? $params['codigo_material'] ?? '';
+            $codTipoLancamento = (int)($params['codTipoLancamento'] ?? $params['lista_precio'] ?? 0);
+            $tipoCalculo = (int)($params['tipoCalculo'] ?? $params['id_tipo_cliente'] ?? 0);
+            $codCliente = (int)($params['codCliente'] ?? $params['id_tipo_cliente'] ?? 0);
+            $tonelada = $codTipoLancamento == 6 ? (float)($params['quantidade'] ?? 0) : 0;
+            $quantidade = $codTipoLancamento != 6 ? (float)($params['quantidade'] ?? 0) : 0;
+            $preco = (float)($params['preco'] ?? $params['valorUnitario'] ?? $params['totalbruto'] ?? 0);
+            $medida = $codTipoLancamento == 3 ? (float)($params['medida'] ?? 0) : 0;
+            $codEmpresa = (int)($params['codEmpresa'] ?? 0);
+            $codEndereco = (int)($params['codEndereco'] ?? 0);
 
-            $aux = number_format($tonelada, 3);
-            $tonelada = $aux;
+            // Si el material es un código alfanumérico, buscar su ID numérico
+            if (!is_numeric($codMaterialParam)) {
+                $codMaterial = (int)$connection->fetchOne(
+                    'SELECT ID_CODIGOMATERIAL FROM TB_MATE WHERE CODIGOMATERIAL = ?',
+                    [$codMaterialParam]
+                );
+            } else {
+                $codMaterial = (int)$codMaterialParam;
+            }
 
-            $res = $connection->query("
+            // Si no se envió precio, obtenerlo de la lista de precios
+            if ($preco == 0 && !empty($codMaterialParam) && $codTipoLancamento > 0) {
+                $precioDb = $connection->fetchOne(
+                    'SELECT TOP 1 precio FROM TB_PRECIO_MATERIAL WHERE cod_mate = ? AND id_lista = ?',
+                    [$codMaterialParam, $codTipoLancamento]
+                );
+                if ($precioDb) {
+                    $preco = (float)$precioDb;
+                }
+            }
+
+            $tonelada = number_format($tonelada, 3, '.', '');
+
+            $res = $connection->executeQuery("
                 EXECUTE [PRC_TIPO_CALC_MATE_CONS]
                     @ID_MATE = {$codMaterial}
                     ,@TP_LANC = {$codTipoLancamento}
@@ -1973,15 +1956,15 @@ if (!isset($params['codVendedor'])) {
                     ,@MEDI = {$medida}
                     ,@ID_EMPR = {$codEmpresa}
                     ,@ID_ENDE_ENTR = {$codEndereco}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);
 
-            if (count($res) > 0 && $res[0]['mensagem'] == null) {
+            if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
-            } else if (count($res) > 0 && isset($res[0]['mensagem'])) {
-                return FunctionsController::Retorno(false, $res[0]['mensagem'], null, Response::HTTP_OK);
+            } else if (count($res) > 0 && isset($res[0]['message'])) {
+                return FunctionsController::Retorno(false, $res[0]['message'], null, Response::HTTP_OK);
             } else {
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
             }
@@ -1991,11 +1974,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/historico-compras",
-     *  name="comercial.ciclo-vendas-cotacoes-historico-compras",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2034,7 +2012,6 @@ if (!isset($params['codVendedor'])) {
             // print_r($res);
             // exit(0);
 
-
             if (count($ultimasCompras) > 0) $res[0]['ultimasCompras'] = $ultimasCompras;
             if (count($maisComprados) > 0) $res[0]['maisComprados'] = $maisComprados;
 
@@ -2055,12 +2032,12 @@ if (!isset($params['codVendedor'])) {
     public function ultimasCompras($connection, $codEmpresa, $codCliente, $codEndereco, $codFormaPagamento, $freteConta)
     {
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_ULTI_PEDI_CLIE_CONS] 
                 @ID_CLIE = {$codCliente}
                 ,@IN_GRUP_ECON = 0
                 ,@NR_REGI = 10
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         // print_r($res);
         // exit(0);
@@ -2103,12 +2080,11 @@ if (!isset($params['codVendedor'])) {
         // print_r($data);
         // exit(0);
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_CLIE_FATU_MATE]
                 @ID_CLIENTE = {$codCliente}
                 ,@DTINI = '{$data}'
-        ")->fetchAll();
-
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             $maisComprados = array();
@@ -2144,8 +2120,7 @@ if (!isset($params['codVendedor'])) {
             $freteConta = 'NULL';
         }
 
-
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [PRC_COME_ESTO_CONS]
                 @ID_PARAM = 8,
                 @ID_MATE = '{$codMaterial}',
@@ -2155,7 +2130,7 @@ if (!isset($params['codVendedor'])) {
                 @IN_ESTO_DISP = 0,
                 @ID_FORM_PAGA = {$codFormaPagamento},
                 @ID_TIPO_FRET = {$freteConta}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return $res[0];
@@ -2165,11 +2140,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/duplicatas/gerar",
-     *  name="comercial.ciclo-vendas-cotacoes-duplicatas-gerar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2197,7 +2167,7 @@ if (!isset($params['codVendedor'])) {
             // ");
             // exit(0);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_DUPL_CADA
                     @ID_EMPR = '{$codEmpresa}',
                     @NR_PEDI = {$codCotacao},
@@ -2205,7 +2175,7 @@ if (!isset($params['codVendedor'])) {
                     @VR_TOTA  = {$valorProposta},
                     @ID_USUA = {$infoUsuario->matricula},
                     @VR_ICMS_ST = {$valorIcmsSt};
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -2220,11 +2190,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/duplicatas/alterar",
-     *  name="comercial.ciclo-vendas-cotacoes-duplicatas-alterar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2242,14 +2207,13 @@ if (!isset($params['codVendedor'])) {
 
             $parcela = $parcelaIndex + 1;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_DUPL_PARC
                     @ID_EMPR = '{$codEmpresa}',
                     @NR_PEDI = {$codCotacao},
                     @DT_PARC = '{$dataVencimento}',
                     @NR_PARC = {$parcela}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -2264,11 +2228,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/duplicatas/consulta",
-     *  name="comercial.ciclo-vendas-cotacoes-duplicatas-consulta",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2289,11 +2248,11 @@ if (!isset($params['codVendedor'])) {
             // ");
             // exit(0);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_DUPL_CONS
                     @ID_EMPR = '{$codEmpresa}',
                     @NR_PEDI = {$codCotacao}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -2308,11 +2267,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/materiais/excluir",
-     *  name="comercial.ciclo-vendas-cotacoes-materiais-excluir",
-     *  methods={"DELETE"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2337,14 +2291,14 @@ if (!isset($params['codVendedor'])) {
                 @ID_USUA = {$infoUsuario->matricula}");
             exit(0); */
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC PRC_PEDI_MATE_CADA
                 @ID_PARA = 2,
                 @ID_EMPR = {$codDeposito},
                 @NR_PEDI = {$nrPedido},
                 @ID_ITEM_PEDI={$codMaterial},
                 @ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             // print_r($res);
 
             if ($res[0]['NR_PEDI'] == $nrPedido && $res[0]['ID_EMPR'] == $codDeposito) {
@@ -2358,11 +2312,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/historico-exclusao",
-     *  name="comercial.ciclo-vendas-cotacoes-historico-exclusao",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2377,12 +2326,11 @@ if (!isset($params['codVendedor'])) {
         if (isset($params['codEmpresa'])) $codEmpresa = $params['codEmpresa'];
 
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
              EXEC PRC_PEDI_HIST_EXCL_CONS
                 @ID_EMPR = {$codEmpresa},
                 @NR_PEDI = {$nrPedido}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -2396,11 +2344,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/salvar",
-     *  name="comercial.ciclo-vendas-cotacoes-salvar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2439,8 +2382,7 @@ if (!isset($params['codVendedor'])) {
             $quantidade = isset($carrinho['quantidade']) ? $carrinho['quantidade'] : null;
             $valor = isset($carrinho['valor']) ? $carrinho['valor'] : null;
 
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
               EXEC PRC_PEDI_CADA
                 @ID_PARA = 2,                
                 @ID_EMPR = {$codEmpresa},
@@ -2462,7 +2404,7 @@ if (!isset($params['codVendedor'])) {
                 @ID_FRET_CONT = {$freteConta},
                 @ID_TRAN = {$codTransportadora},
                 @ID_USUA = {$matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
 
@@ -2495,7 +2437,7 @@ if (!isset($params['codVendedor'])) {
                     $codItemPedidoCliente = isset($carrinho[$i]['codItemPedidoCliente']) ? $carrinho[$i]['codItemPedidoCliente'] : '';
                     $codProdutoCliente = isset($carrinho[$i]['codProdutoCliente']) ? $carrinho[$i]['codProdutoCliente'] : '';
 
-                    $resCarrinho = $connection->query("
+                    $resCarrinho = $connection->executeQuery("
                   EXEC PRC_PEDI_MATE_CADA
                     @ID_PARA = 1,
                     @ID_EMPR = {$codDeposito},
@@ -2518,7 +2460,7 @@ if (!isset($params['codVendedor'])) {
 
                     @ID_LOTE = {$lote},
                     @ID_USUA = {$matricula}
-                ")->fetchAll();
+                ")->fetchAllAssociative();
                 }
 
                 // @ID_EMPR --ID EMPRESA
@@ -2554,6 +2496,11 @@ if (!isset($params['codVendedor'])) {
 
     public function editCotizacion(Connection $connection, Request $request)
     {
+        $message = [
+            'responseCode' => 400,
+            'message' => 'Datos insuficientes para editar la cotizacion',
+            'success' => false
+        ];
 
         $data = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
@@ -2568,7 +2515,7 @@ if (!isset($params['codVendedor'])) {
                 $oferta = json_decode($oferta->getContent(), true);
 
                     // Obtener todos los materiales de la oferta para comparar
-                    $materials_oferta = $connection->fetchAll('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id = ?', [$id_oferta]);
+                    $materials_oferta = $connection->fetchAllAssociative('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id_oferta = ?', [$id_oferta]);
                     $materials_oferta = array_column($materials_oferta, 'id_material');
                     // Recorrer los elementos de la oferta y eliminar los que no están en el carrito
                     foreach ($materials_oferta as $material_oferta) {
@@ -2585,23 +2532,56 @@ if (!isset($params['codVendedor'])) {
                         }
                     }
 
+                    $tieneAutorizacion = false;
                     foreach($data['carrinho'] as $carrito)
-                    {   
-                        $codMaterial = $connection->fetchOne('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id = ? AND id_material = ?', [$id_oferta, $carrito['codMaterial']]);
+                    {
+                        $codMaterial = $connection->fetchOne('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id_oferta = ? AND id_material = ?', [$id_oferta, $carrito['codMaterial']]);
                         if(!empty($codMaterial))
                         {
-                        $detalleOferta[] = $this->editDetalleOferta($connection, $carrito, $id_oferta);
+                        $data_edit = $this->editDetalleOferta($connection, $carrito, $id_oferta);
+                        $detalleOferta[] = $data_edit;
+                        $data_editResp = json_decode($data_edit->getContent(), true);
+                        if (!empty($data_editResp['autorizacion']) && $data_editResp['autorizacion'] == 1) {
+                            $tieneAutorizacion = true;
+                        }
                         }
                         else
                         {
-                        $detalleOferta[] = $this->insertItemsOferta($connection, $carrito, $id_oferta);
+                        $data_detalle = $this->insertItemsOferta($connection, $carrito, $id_oferta);
+                        $detalleOferta[] = $data_detalle;
+                        $data_detalleResp = json_decode($data_detalle->getContent(), true);
+                        if (!empty($data_detalleResp['autorizacion']) && $data_detalleResp['autorizacion'] == 1) {
+                            $tieneAutorizacion = true;
+                        }
                         }
                     }
+
+                    // Si algún item requiere autorización, actualizar oferta y crear solicitud
+                    if ($tieneAutorizacion) {
+                        // Verificar si ya existe una autorización pendiente para esta oferta
+                        $autorizacionExistente = $connection->fetchOne(
+                            'SELECT id FROM tb_autorizaciones WHERE id_oferta = ? AND estado = 10',
+                            [$id_oferta]
+                        );
+                        $helper = new \App\Services\Helper();
+                        $helper->actualizaOfertaA($connection, $id_oferta);
+                        if (!$autorizacionExistente) {
+                            $autorizacionesController = new \App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController();
+                            $autorizacionesController->post_autorizacion($connection, [
+                                'id_oferta' => $id_oferta,
+                                'fecha_solicitud' => date('Y-m-d H:i:s'),
+                                'descripcion_vend' => $data['observacion'] ?? 'Descuento requiere autorizacion',
+                                'autorizacion' => 1
+                            ]);
+                        }
+                    }
+
                 $message = [
                     "responseCode" => 200,
                     "message" => 'Registro Correctamente',
                     "success" => true,
-                    "data_sap" => $oferta
+                    "data_sap" => $oferta,
+                    "autorizacion" => $tieneAutorizacion ? 1 : 0
                 ];
             }
         }
@@ -2611,8 +2591,23 @@ if (!isset($params['codVendedor'])) {
     }
 
     
+
+    public function estadoOferta($connection, $id_oferta)
+    {
+        $res = $connection->fetchOne('SELECT id FROM TB_OFERTA WHERE id = ?', [$id_oferta]);
+        return (!empty($res)) ? true : false;
+    }
+
+    public function eliminaItemsOferta($connection, $id_oferta)
+    {
+        return $connection->delete('TB_OFERTA_DETALLE', ['id_oferta' => (int)$id_oferta]);
+    }
+
     public function editoferta($connection, $data,  $id_oferta, $cargo)
     {
+        $data_oferta = [];
+        $data_error = [];
+
         if ($cargo == 1) {
             //datos de vendedor caundo sea administrador modificara vendedor
             !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es requerido';
@@ -2667,6 +2662,7 @@ if (!isset($params['codVendedor'])) {
 
     public function editDetalleOferta($connection, $data, $id_oferta)
     {
+        $autorizacion = 0;
         !empty($data['codMaterial']) ? $data_deta_oferta['id_material'] = $data['codMaterial'] : $data_error['codMaterial'] = 'es requerido';
         !empty($data['id_almacen_carrito']) ? $data_deta_oferta['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es requerido';
         !empty($data['id_presntacion']) ? $data_deta_oferta['id_presntacion'] = $data['id_presntacion'] : null;
@@ -2677,15 +2673,25 @@ if (!isset($params['codVendedor'])) {
         !empty($data['valorTotal']) ? $data_deta_oferta['subtotal'] = $data['valorTotal'] : $data_error['subtotal'] = 'es requerido';
         !empty($data['percuntualDesc']) ? $data_deta_oferta['percuntualDesc'] = $data['percuntualDesc'] : null;
         !empty($data['descuento_permitido']) ? $data_deta_oferta['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es requerido';
-        
+
+        // Detectar si requiere autorización: descuento excede el permitido
+        $descuentoSolicitado = (float)($data['percentualDesc'] ?? $data['percuntualDesc'] ?? $data['descuento'] ?? 0);
+        $descuentoPermitido = (float)($data['descuento_permitido_valor'] ?? $data['descuento_permitido'] ?? 0);
+        if ($descuentoSolicitado > 0 && $descuentoSolicitado > $descuentoPermitido) {
+            $autorizacion = 1;
+        }
+
         try {
-            $edit_cotizacion = $connection->update('TB_OFERTA_DETALLE', $data_deta_oferta, ['id_oferta' => (int)$id_oferta]);
+            $edit_cotizacion = $connection->update('TB_OFERTA_DETALLE', $data_deta_oferta, ['id_oferta' => (int)$id_oferta, 'id_material' => (int)$data['codMaterial']]);
             $message = array(
                 "responseCode" => 200,
                 "message" => "Modifico correctamente",
                 "success" => true,
                 "data" => $edit_cotizacion
             );
+            if ($autorizacion == 1) {
+                $message['autorizacion'] = 1;
+            }
         } catch (\Throwable $e) {
             $message = array(
                 'responseCode' => $e->getCode(),
@@ -2698,110 +2704,140 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/guardar",
-     *  name="comercial.ciclo-vendas-cotacoes-guardar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
      */
     public function saveCotizacion(Connection $connection, Request $request)
     {
-        /* "autorizacion", estado como se encuentre la oferta si es 1 tiene autorizacion y 2 no tiene autorizacion
-        "estado_oferta",  el estado de la oferta borrador, pendiente  y cerrado
-        "tipo_estado" tiene el estado de cierre*/
         $helper = new Helper();
         $data = json_decode($request->getContent(), true);
-        dd($data);
-        if(!empty($data['id_oferta']))
-        {
-           $updateCotizacion =  $this->editCotizacion($connection,$request);
-           dd($updateCotizacion);
+
+        if (empty($data)) {
+            return new JsonResponse([
+                'responseCode' => 400,
+                'message' => 'No hay datos',
+                'success' => false
+            ]);
         }
-        else
-        {
-            if(!empty($data['celular']) || !empty($data['telefono']) || !empty($data['correo_electronico']) || !empty($data['nombre_factura']))
-            {
+
+        // Si es edicion, delegar
+        if (!empty($data['id_oferta'])) {
+            return $this->editCotizacion($connection, $request);
+        }
+
+        // --- INICIO TRANSACCION: oferta + items son atomicos ---
+        $connection->beginTransaction();
+
+        try {
+            // 1. Modificar cliente si hay datos de contacto
+            if (!empty($data['celular']) || !empty($data['telefono']) || !empty($data['correo_electronico']) || !empty($data['nombre_factura'])) {
                 $repstClie = $this->modificarCliente($connection, $data);
-                $data_oferta = json_decode($repstClie->getContent(), true);
-                $id_cliente = $data_oferta['data'];
+                $clienteResp = json_decode($repstClie->getContent(), true);
             }
-        
-            if (!empty($data)) {
-                $resp = $this->insertaOferta($connection, $data);
-                $data_oferta = json_decode($resp->getContent(), true);
-                $id_oferta = $data_oferta['data'];
-    
-                if ($data_oferta['success']) {
-                    foreach ($data['carrinho'] as $items) {
-                        $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
-                        $data_detalleoferta = json_decode($data_detalle->getContent(), true);
+
+            // 2. Insertar oferta
+            $resp = $this->insertaOferta($connection, $data);
+            $data_oferta = json_decode($resp->getContent(), true);
+
+            if (!$data_oferta['success']) {
+                $connection->rollBack();
+                return new JsonResponse([
+                    'responseCode' => $data_oferta['responseCode'],
+                    'message' => 'Error al registrar oferta: ' . ($data_oferta['message'] ?? ''),
+                    'success' => false,
+                    'data' => $data_oferta['data'] ?? null
+                ]);
+            }
+
+            $id_oferta = $data_oferta['data'];
+            $tieneAutorizacion = false;
+
+            // 3. Insertar items del carrito
+            if (!empty($data['carrinho'])) {
+                foreach ($data['carrinho'] as $items) {
+                    $data_detalle = $this->insertItemsOferta($connection, $items, $id_oferta);
+                    $data_detalleoferta = json_decode($data_detalle->getContent(), true);
+
+                    if ($data_detalleoferta['responseCode'] != 200) {
+                        // Fallo un item: ROLLBACK de todo (oferta + items previos)
+                        $connection->rollBack();
+                        return new JsonResponse([
+                            'responseCode' => 500,
+                            'message' => 'Error al registrar item: ' . ($data_detalleoferta['message'] ?? 'desconocido'),
+                            'success' => false,
+                            'data' => $data_detalleoferta
+                        ]);
                     }
-                    if ($data_oferta['responseCode'] == 200 && $data_detalleoferta['responseCode'] == 200) {
-                        if ($data_detalleoferta['autorizacion'] == 1) {
-                            $message = [
-                                "responseCode" => 200,
-                                "message" => 'Registro Correctamente',
-                                "success" => true,
-                                "data" => $id_oferta
-                            ];
-                        } else {
-                            $dato = null;
-                            $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
-                            $sapresp = json_decode($repSap->getContent(), true);
-    
-                            if ($sapresp['CodigoRespuesta'] == 200) {
-                                $data_sap['codigo_oferta'] = $sapresp['Oferta'];
-                                $data_sap['nombre_oferta'] = $sapresp['Mensaje'];
-                                $data_sap['vencimiento'] = $sapresp['Vencimiento'];
-                                $data_sap['envio_sap'] = 1;
-                                //cambia el estado si envio a sap 1 
-                                $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
-    
-                                $message = [
-                                    "responseCode" => 200,
-                                    "message" => 'Registro Correctamente',
-                                    "success" => true,
-                                    "data_sap" => $sapresp
-                                ];
-                            } else {
-                                //sino envio al sap 0
-                                $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
-                                $message = [
-                                    "responseCode" => 200,
-                                    "message" => 'Registro Correctamente',
-                                    "success" => true,
-                                    "data_sap" => $sapresp
-                                ];
-                            }
-                        }
-                    } else {
-                        $message = [
-                            "responseCode" => 500,
-                            "message" => 'No registro',
-                            "success" => false
-                        ];
+
+                    if (!empty($data_detalleoferta['autorizacion']) && $data_detalleoferta['autorizacion'] == 1) {
+                        $tieneAutorizacion = true;
                     }
-                } else {
-                    $message = [
-                        "responseCode" => 204,
-                        "message" => 'Error en registro',
-                        "success" => false,
-                        "data" => $data_oferta["data"]
-                    ];
                 }
-            } else {
+            }
+
+            // 4. COMMIT: oferta + todos los items insertados correctamente
+            $connection->commit();
+
+            // 5. Post-commit: autorizacion o SAP
+            if ($tieneAutorizacion) {
+                // Descuento excede el permitido: cambiar estado y crear solicitud de autorizacion
+                $helper->actualizaOfertaA($connection, $id_oferta);
+                $autorizacionesController = new \App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController();
+                $autorizacionesController->post_autorizacion($connection, [
+                    'id_oferta' => $id_oferta,
+                    'fecha_solicitud' => date('Y-m-d H:i:s'),
+                    'descripcion_vend' => $data['observacion'] ?? 'Descuento requiere autorizacion',
+                    'autorizacion' => 1
+                ]);
+
                 $message = [
-                    "responseCode" => 204,
-                    "message" => 'No hay datos',
-                    "success" => false
+                    'responseCode' => 200,
+                    'message' => 'Oferta registrada. Requiere autorizacion por descuento.',
+                    'success' => true,
+                    'data' => $id_oferta,
+                    'requiere_autorizacion' => true
+                ];
+            } else {
+                try {
+                    $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+                    $sapresp = json_decode($repSap->getContent(), true);
+
+                    if (isset($sapresp['CodigoRespuesta']) && $sapresp['CodigoRespuesta'] == 200) {
+                        $data_sap = [
+                            'codigo_oferta' => $sapresp['Oferta'],
+                            'nombre_oferta' => $sapresp['Mensaje'],
+                            'vencimiento' => $sapresp['Vencimiento'],
+                            'envio_sap' => 1
+                        ];
+                        $connection->update('TB_OFERTA', $data_sap, ['id' => (int)$id_oferta]);
+                    } else {
+                        $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+                    }
+                } catch (\Throwable $sapError) {
+                    $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+                }
+
+                $message = [
+                    'responseCode' => 200,
+                    'message' => 'Registro Correctamente',
+                    'success' => true,
+                    'data' => $id_oferta,
+                    'data_sap' => $sapresp ?? null
                 ];
             }
+        } catch (\Throwable $e) {
+            // Rollback si la transaccion sigue activa
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
+            }
+            $message = [
+                'responseCode' => 500,
+                'message' => $e->getMessage(),
+                'success' => false
+            ];
         }
-        
-       
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
@@ -2847,27 +2883,36 @@ if (!isset($params['codVendedor'])) {
     }
     public function insertaOferta($connection, $data)
     {
-        !empty($data['id_forma_pago']) ?  $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
+        $data_oferta = [];
+        $data_error = [];
+
+        !empty($data['id_forma_pago']) ? $data_oferta['id_forma_pago'] = $data['id_forma_pago'] : $data_oferta['id_forma_pago'] = 1;
         !empty($data['id_lista_precio']) ? $data_oferta['id_lista_precio'] = $data['id_lista_precio'] : $data_error['id_lista_precio'] = 'es necesario';
         $data_oferta['id_moneda'] = 1;
         $data_oferta['id_iva'] = 1;
-        !empty($data['id_cliente']) ?  $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
+        !empty($data['id_cliente']) ? $data_oferta['id_cliente'] = $data['id_cliente'] : $data_error['id_cliente'] = 'es necesario';
         !empty($data['id_vendedor']) ? $data_oferta['id_vendedor'] = $data['id_vendedor'] : $data_error['id_vendedor'] = 'es necesario';
-        !empty($data['id_persona_contacto']) ? $data_oferta['id_persona_contacto'] = $data['id_persona_contacto'] : $data_oferta['id_persona_contacto'] = null;
-        !empty($data['id_almacen']) ? $data_oferta['id_almacen'] = $data['id_almacen'] : $data_oferta['id_almacen'] = null;
+        $data_oferta['id_persona_contacto'] = !empty($data['id_persona_contacto']) ? $data['id_persona_contacto'] : null;
+        $data_oferta['id_almacen'] = !empty($data['id_almacen']) ? $data['id_almacen'] : null;
         !empty($data['tipo_entrega']) ? $data_oferta['id_modo_entrega'] = $data['tipo_entrega'] : $data_error['id_modo_entrega'] = 'es necesario';
-        !empty($data['centroLogisticoControl']) ? $data_oferta['id_centro_logistico'] = $data['centroLogisticoControl'] : $data_error['id_centro_logistico'] = 'es necesario';
+        $data_oferta['id_centro_logistico'] = !empty($data['centroLogisticoControl']) ? $data['centroLogisticoControl'] : null;
         $data_oferta['fecha_creacion'] = date('Y-m-d H:i:s');
         !empty($data['fecha_final']) ? $data_oferta['fecha_final'] = date('Y-m-d', strtotime($data['fecha_final'])) : $data_error['fecha_final'] = 'es necesario';
         !empty($data['fecha_inicial']) ? $data_oferta['fecha_inicial'] = date('Y-m-d', strtotime($data['fecha_inicial'])) : $data_error['fecha_inicial'] = 'es necesario';
-        !empty($data['monto_total']) ? $data_oferta['monto_total'] = $data['monto_total'] : $data_error['monto_total'] = 'es necesario';
-        !empty($data['monto_total_bruto']) ? $data_oferta['monto_total_bruto'] = $data['monto_total_bruto'] : $data_error['monto_total_bruto'] = 'es necesario';
-        !empty($data['peso_total']) ? $data_oferta['peso_total'] = $data['peso_total'] : $data_error['peso_total'] = 'es necesario';
-        !empty($data['descuento_total']) ? $data_oferta['descuento_total'] = $data['descuento_total'] : null;
+
+        // Campos numericos: usar isset() en vez de !empty() para permitir 0.0
+        $data_oferta['monto_total'] = isset($data['monto_total']) ? round((float)$data['monto_total'], 4) : null;
+        $data_oferta['monto_total_bruto'] = isset($data['monto_total_bruto']) ? round((float)$data['monto_total_bruto'], 4) : null;
+        $data_oferta['peso_total'] = isset($data['peso_total']) ? round((float)$data['peso_total'], 4) : 0;
+        $data_oferta['descuento_total'] = isset($data['descuento_total']) ? round((float)$data['descuento_total'], 4) : 0;
+        $data_oferta['cantidad_total'] = isset($data['cantidad_total']) ? round((float)$data['cantidad_total'], 4) : null;
+
+        if ($data_oferta['monto_total'] === null) $data_error['monto_total'] = 'es necesario';
+        if ($data_oferta['monto_total_bruto'] === null) $data_error['monto_total_bruto'] = 'es necesario';
+        if ($data_oferta['cantidad_total'] === null) $data_error['cantidad_total'] = 'es necesario';
+
         !empty($data['formaContacto']) ? $data_oferta['forma_contacto'] = $data['formaContacto'] : null;
         !empty($data['tipoContacto']) ? $data_oferta['origen_contacto'] = $data['tipoContacto'] : null;
-
-        !empty($data['cantidad_total']) ?  $data_oferta['cantidad_total'] = $data['cantidad_total'] : $data_error['cantidad_total'] = 'es necesario';
         !empty($data['direccion_cliente']) ? $data_oferta['id_direccion_cliente'] = $data['direccion_cliente'] : null;
 
         if (!empty($data['direccion_entrega'])) {
@@ -2880,24 +2925,21 @@ if (!isset($params['codVendedor'])) {
         }
         $data_oferta['estado_oferta'] = 1;
         $data_oferta['tipo_estado'] = 14;
+        $data_oferta['autorizacion'] = 0;
 
         try {
-
-            if(empty($data_error) ){
+            if (empty($data_error)) {
                 $oferata = $connection->insert('TB_OFERTA', $data_oferta);
                 $id_oferta = $connection->lastInsertId();
 
-                if($oferata === 1)
-                {
+                if ($oferata === 1) {
                     $message = array(
                         "responseCode" => 200,
                         "message" => "Registro correctamente",
                         "success" => true,
                         "data" => $id_oferta
                     );
-                }
-                else
-                {
+                } else {
                     $message = array(
                         "responseCode" => 204,
                         "message" => "No registro",
@@ -2905,22 +2947,17 @@ if (!isset($params['codVendedor'])) {
                         "data" => $id_oferta
                     );
                 }
-               
-            }
-            else
-            {
+            } else {
                 $message = array(
-                    "responseCode" => 200,
-                    "message" => "Registro correctamente",
-                    "success" => true,
+                    "responseCode" => 400,
+                    "message" => "Faltan datos requeridos",
+                    "success" => false,
                     "data" => $data_error
                 );
             }
-           
         } catch (\Throwable $e) {
-
             $message = array(
-                'responseCode' => $e->getCode(),
+                'responseCode' => 500,
                 'message' => $e->getMessage(),
                 'success' => false
             );
@@ -2931,24 +2968,65 @@ if (!isset($params['codVendedor'])) {
     public function insertItemsOferta($connection, $data, $id_oferta)
     {
         $autorizacion = 0;
+        $data_items = [];
+        $data_error = [];
+
         $data_items['id_oferta'] = (int)$id_oferta;
         !empty($data['codMaterial']) ? $data_items['id_material'] = $data['codMaterial'] : $data_error['codMaterial'] = 'es necesario';
-        !empty($data['id_almacen_carrito']) ? $data_items['id_almacen_carrito'] = $data['id_almacen_carrito'] : $data_error['id_almacen_carrito'] = 'es necesario';
-        //$data_items['id_presentacion'] = !empty($data['codDeposito']) ? $data['codDeposito'] : $data_error['codDeposito'] = 'es necesario';
-        !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
-        !empty($data['qtdeItem']) ? $data_items['cantidad'] = $data['qtdeItem'] : $data_error['qtdeItem'] = 'es necesario';
 
-        if (!empty($data['percentualDesc'])) {
-            // $data_items['descuento'] = !empty($data['descuento']) ? $data['descuento'] : $data_error['descuento'] = 'es necesario';
-            !empty($data['percentualDesc']) ? $data_items['percentualDesc'] =  $data['percentualDesc'] : $data_error['percentualDesc'] = 'es necesario';
-            !empty($data['descuento_permitido']) ? $data_items['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es necesario';
-            $autorizacion = 1;
+        // id_almacen_carrito: si es string (codigo), convertir a ID numerico
+        if (!empty($data['id_almacen_carrito'])) {
+            $almacenValue = $data['id_almacen_carrito'];
+            if (is_numeric($almacenValue)) {
+                $data_items['id_almacen_carrito'] = (int)$almacenValue;
+            } else {
+                $almacenId = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO WHERE CODIGO_ALMACEN = ?', [$almacenValue]);
+                $data_items['id_almacen_carrito'] = !empty($almacenId) ? (int)$almacenId : null;
+                if ($data_items['id_almacen_carrito'] === null) {
+                    $data_error['id_almacen_carrito'] = 'almacen no encontrado: ' . $almacenValue;
+                }
+            }
+        } else {
+            $data_error['id_almacen_carrito'] = 'es necesario';
         }
-        !empty($data['valorTotalBruto']) ? $data_items['subtotal_bruto'] = $data['valorTotalBruto'] : $data_error['valorTotalBruto'] = 'es necesario';
-        !empty($data['valorTotal']) ? $data_items['subtotal'] = $data['valorTotal'] : $data_error['valorTotal'] = 'es necesario';
+
+        !empty($data['id_unidad']) ? $data_items['id_unidad'] = $data['id_unidad'] : $data_error['id_unidad'] = 'es necesario';
+
+        // Campos numericos: isset() para permitir 0, redondeo a 4 decimales
+        $data_items['cantidad'] = isset($data['qtdeItem']) ? round((float)$data['qtdeItem'], 4) : null;
+        if ($data_items['cantidad'] === null) $data_error['qtdeItem'] = 'es necesario';
+
+        $descuentoSolicitado = round((float)($data['percentualDesc'] ?? $data['descuento'] ?? 0), 4);
+        $descuentoPermitido = round((float)($data['descuento_permitido_valor'] ?? $data['descuento_permitido'] ?? 0), 4);
+
+        // Si descuento_permitido es string no numerico ("Invalido", "Valido"), extraer el valor numerico
+        if (isset($data['descuento_permitido']) && !is_numeric($data['descuento_permitido'])) {
+            $descuentoPermitido = round((float)($data['descuento_permitido_valor'] ?? 0), 4);
+        }
+
+        $data_items['percentualDesc'] = $descuentoSolicitado;
+        $data_items['descuento_permitido'] = $descuentoPermitido;
+
+        // Detectar si requiere autorizacion: descuento excede el permitido
+        if ($descuentoSolicitado > 0 && $descuentoSolicitado > $descuentoPermitido) {
+            $autorizacion = 1; // Requiere autorizacion
+        }
+
+        // Redondeo de montos a 4 decimales
+        $data_items['subtotal_bruto'] = isset($data['valorTotalBruto']) ? round((float)$data['valorTotalBruto'], 4) : null;
+        $data_items['subtotal'] = isset($data['valorTotal']) ? round((float)$data['valorTotal'], 4) : null;
+        if ($data_items['subtotal_bruto'] === null) $data_error['valorTotalBruto'] = 'es necesario';
+        if ($data_items['subtotal'] === null) $data_error['valorTotal'] = 'es necesario';
 
         try {
-            //dd($data_items, $data_error);
+            if (!empty($data_error)) {
+                return new JsonResponse([
+                    'responseCode' => 400,
+                    'message' => 'Faltan datos en item: ' . json_encode($data_error),
+                    'success' => false
+                ]);
+            }
+
             $data_detalle = $connection->insert('TB_OFERTA_DETALLE', $data_items);
             if ($autorizacion == 1) {
                 $message = array(
@@ -2974,13 +3052,7 @@ if (!isset($params['codVendedor'])) {
         return new JsonResponse($message);
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/perdida/salvar",
-     *  name="comercial.ciclo-vendas-cotacoes-perdida-salvar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -2991,8 +3063,8 @@ if (!isset($params['codVendedor'])) {
             $params = json_decode($request->getContent(), true);
             $x14 = null;
             /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $res = $connection->query("
-            ")->fetchAll(); */
+            $res = $connection->executeQuery("
+            ")->fetchAllAssociative(); */
             $res = array(
                 array(
                     'codMaterial' => 0
@@ -3012,12 +3084,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/comissao/{codCotacao}/{codEmpresa}",
-     *  name="comercial.ciclo-vendas-cotacoes-comissao",
-     *  methods={"GET"},
-     *  requirements={"codCotacao"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3026,12 +3092,12 @@ if (!isset($params['codVendedor'])) {
     {
         try {
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
               EXEC PRC_PEDI_VIEW
                   @ID_PARA = 1,
                   @ID_EMPR = {$codEmpresa},
                   @NR_PEDI = {$codCotacao}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -3046,12 +3112,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/enviar_sap/{nrPedido}",
-     *  name="comercial.ciclo-vendas-cotacoes-sap",
-     *  methods={"GET"},
-     *  requirements={"nrPedido"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3101,14 +3161,7 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/vigencia_oferta/{codigo_oferta}",
-     *  name="comercial.ciclo-vendas-cotacoes-vigencia-estado",
-     *  methods={"GET"},
-     *  requirements={"codigo_oferta"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3160,12 +3213,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/progresso/{codCotacao}/{codEmpresa}",
-     *  name="comercial.ciclo-vendas-cotacoes-progresso",
-     *  methods={"GET"},
-     *  requirements={"codCotacao"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3173,13 +3220,12 @@ if (!isset($params['codVendedor'])) {
     public function getProgressoCotacao(Connection $connection, Request $request, $codCotacao, $codEmpresa)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC PRC_PEDI_VIEW
               @ID_PARA = 1,
               @ID_EMPR = {$codEmpresa},
               @NR_PEDI = {$codCotacao}
-          ")->fetchAll();
-
+          ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $resFinal = array(
@@ -3202,12 +3248,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/anexo/documentos/{codCotacao}",
-     *  name="comercial.ciclo-vendas-cotacoes-anexo-documentos",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -3215,15 +3255,15 @@ if (!isset($params['codVendedor'])) {
     public function getDocuments(Connection $connection, Request $request, $codCotacao)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
           EXEC PRC_PEDI_ANEX_CONS
             @NR_PEDI = {$codCotacao}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
             if (count($res) > 0) {
 
                 foreach ($res as $key => $value) {
-                    $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
+                    $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
                     $res[$key]["linkAnexo"] = str_replace("\\", "/", $res[$key]["linkAnexo"]);
                     $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"];
                 }
@@ -3239,11 +3279,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/anexo/documentos/salvar",
-     *  name="comercial.ciclo-vendas-cotacoes-anexo-documentos-salvar",
-     *  methods={"POST"}
-     * )
      * 
      * @param Connection $connection
      * @param Request $request
@@ -3256,9 +3291,8 @@ if (!isset($params['codVendedor'])) {
             $codCotacao = $request->query->get("codCotacao");
             /* $codFichaCadastral = $request->query->get("codFichaCadastral"); */
 
-            //   $document   = new ParseFi
-            leFromRequestController();
-            $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\comercial\\ciclo-vendas\\cotacoes\\" . $codCotacao . "\\";
+            $document   = new ParseFileFromRequestController();
+            $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\ciclo-vendas\\cotacoes\\" . $codCotacao . "\\";
 
             $document
                 ->setRequest($request)
@@ -3268,12 +3302,11 @@ if (!isset($params['codVendedor'])) {
             $descAnexo     = $document->getFileName();
             $linkAnexo       = $document->getFileLink();
 
-
             $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             $matricula      = $infoUsuario->matricula;
             $nomeUsuario    = $infoUsuario->nomeCompleto;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                     EXEC PRC_PEDI_ANEX_CADA
                     @ID_PARA = 1,
                     @NR_PEDI = {$codCotacao},
@@ -3281,7 +3314,7 @@ if (!isset($params['codVendedor'])) {
                     @URL_ANEX = '{$linkAnexo}',
                     @EXTE_ANEX = 'JPEG',
                     @ID_USUA = {$matricula};
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
             if (isset($res[0]['codAnexo'])) {
                 return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -3296,11 +3329,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/anexo/documentos/excluir",
-     *  name="comercial.ciclo-vendas-cotacoes-anexo-documentos-excluir",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function delAnexo(Connection $connection, Request $request)
@@ -3313,12 +3341,12 @@ if (!isset($params['codVendedor'])) {
 
             if (isset($params['codAnexo'])) $codAnexo = $params['codAnexo'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [dbo].[PRC_PEDI_ANEX_CADA] 
                 @ID_PARA = 3
                 ,@ID_ANEX = {$codAnexo}
                 ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codAnexo']) && $res[0]['codAnexo'] == $codAnexo) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -3333,12 +3361,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/validade-duplicata/{codCotacao}/{codEmpresa}",
-     *  name="comercial.ciclo-vendas-cotacoes-validade-duplicata",
-     *  methods={"GET"},
-     *  requirements={"codCotacao"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3347,12 +3369,11 @@ if (!isset($params['codVendedor'])) {
     {
         try {
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC PRC_PEDI_DUPL_VALI_VENC
                 @ID_EMPR = {$codEmpresa},
                 @NR_PEDI = {$codCotacao}
-          ")->fetchAll();
-
+          ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -3367,11 +3388,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/material/lote/{codMaterial}/{codEmpresa}",
-     *  name="comercial.ciclo-vendas-cotacoes-material-lote",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3379,11 +3395,11 @@ if (!isset($params['codVendedor'])) {
     public function getLoteMaterial(Connection $connection, Request $request, $codMaterial, $codEmpresa)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_LOTE_FABR_CONS
                     @ID_EMPR = {$codEmpresa}
                     ,@ID_MATE = {$codMaterial}                    
-              ")->fetchAll();
+              ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -3397,13 +3413,7 @@ if (!isset($params['codVendedor'])) {
         }
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/descuentos/lista",
-     *  name="comercial.ciclo-vendas-cotacoes-descuentos-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3414,7 +3424,34 @@ if (!isset($params['codVendedor'])) {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
             if ($infoUsuario) {
-                $stmt = $connection->prepare("
+                $params = $request->query->all();
+                $pageIndex = max(0, (int)($params['pageIndex'] ?? 0));
+                $pageSize = min(500, max(1, (int)($params['pageSize'] ?? 100)));
+                $offset = $pageIndex * $pageSize;
+
+                // Filtros opcionales
+                $where = [];
+                $bindings = [];
+
+                if (!empty($params['id_material'])) {
+                    $where[] = 'd.id_material = ?';
+                    $bindings[] = (int)$params['id_material'];
+                }
+                if (!empty($params['id_tipo_cliente'])) {
+                    $where[] = 'd.id_tipo_cliente = ?';
+                    $bindings[] = (int)$params['id_tipo_cliente'];
+                }
+                if (!empty($params['id_departamento'])) {
+                    $where[] = 'd.id_departamento = ?';
+                    $bindings[] = (int)$params['id_departamento'];
+                }
+
+                $whereClause = count($where) > 0 ? 'WHERE ' . implode(' AND ', $where) : '';
+
+                $countSql = "SELECT COUNT(*) FROM TB_DESCUENTO d {$whereClause}";
+                $total = (int)$connection->fetchOne($countSql, $bindings);
+
+                $sql = "
                     SELECT
                         d.id,
                         d.codigomaterial,
@@ -3425,15 +3462,24 @@ if (!isset($params['codVendedor'])) {
                         d.rango_final,
                         d.descuento
                     FROM TB_DESCUENTO d
+                    {$whereClause}
                     ORDER BY d.id_material, d.id_tipo_cliente, d.rango_inicial
-                ");
-                $stmt->executeQuery();
-                $result = $stmt->fetchAll();
+                    OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+                ";
+
+                $paginationBindings = array_merge($bindings, [$offset, $pageSize]);
+                $bindingTypes = array_fill(0, count($bindings), \Doctrine\DBAL\ParameterType::INTEGER);
+                $bindingTypes[] = \Doctrine\DBAL\ParameterType::INTEGER;
+                $bindingTypes[] = \Doctrine\DBAL\ParameterType::INTEGER;
+                $result = $connection->fetchAllAssociative($sql, $paginationBindings, $bindingTypes);
 
                 $message = [
                     'responseCode' => 200,
                     'result' => $result,
-                    'estado' => true
+                    'estado' => true,
+                    'total' => $total,
+                    'pageIndex' => $pageIndex,
+                    'pageSize' => $pageSize
                 ];
             } else {
                 $message = [
@@ -3456,11 +3502,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/descuento_cliente",
-     *  name="comercial.ciclo-vendas-cotacoes-descuento-cliente",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3477,7 +3518,7 @@ if (!isset($params['codVendedor'])) {
                 $id_material = $params['id_material'] ?? null;
                 $id_ciudad = $params['id_ciudad'] ?? null;
 
-                if ($id_tipo_cliente !== null || $cantidad !== null || $id_material !== null || $id_ciudad !== null) {
+                if ($id_tipo_cliente !== null && $cantidad !== null && $id_material !== null && $id_ciudad !== null) {
                     $calcularDescuento = $helper->calcularDesc(
                         $connection,
                         (int)$id_tipo_cliente,
@@ -3513,13 +3554,7 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/cierre",
-     *  name="comercial.ciclo-vendas-cotacoes-cierre",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3527,7 +3562,7 @@ if (!isset($params['codVendedor'])) {
     public function getCierreOferta(Connection $connection)
     {
         try {
-            $res = $connection->query("SELECT * FROM tb_cierre_oferta Where tipo_estado = 1")->fetchAll();
+            $res = $connection->executeQuery("SELECT * FROM tb_cierre_oferta Where tipo_estado = 1")->fetchAllAssociative();
             $message = [
                 'responseCode' => 200, // No Content
                 'result' => $res,
@@ -3547,11 +3582,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/post_cierre",
-     *  name="comercial.ciclo-vendas-cotacoes-post_cierre",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3586,8 +3616,8 @@ if (!isset($params['codVendedor'])) {
                         $data_oferta['estado_oferta'] = (int)$params['estadoOfert'];
                         $resp = $connection->update('TB_OFERTA', $data_oferta, ['id' => $id_oferta]);
                         if (!empty($resp)) {
-                            $qra = $connection->query("SELECT TOP 1 autorizacion FROM TB_OFERTA WHERE ID = {$id_oferta}");
-                            $row = $qra->fetch();
+                            $qra = $connection->executeQuery("SELECT TOP 1 autorizacion FROM TB_OFERTA WHERE ID = {$id_oferta}");
+                            $row = $qra->fetchAssociative();
 
                             if ($row['autorizacion'] == 1) {
                                 $connection->update('TB_autorizaciones', ['estado' => 13], ['id_oferta' => $id_oferta]);
@@ -3635,11 +3665,6 @@ if (!isset($params['codVendedor'])) {
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/verificar_ofertas",
-     *  name="comercial.ciclo-vendas-cotacoes-verificar_ofertas",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -3681,7 +3706,6 @@ if (!isset($params['codVendedor'])) {
                     'pendiente' => false,
                     'ofertas' => []
 
-
                 ];
             }
         } catch (\Exception $e) {
@@ -3699,13 +3723,7 @@ if (!isset($params['codVendedor'])) {
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/cotacoes/verificar_ofertas_cliente",
-     *  name="comercial.ciclo-vendas-cotacoes-verificar_ofertas_cliente",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

@@ -2,21 +2,19 @@
 
 namespace App\Controller\MTCorp\Core;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use App\Services\Helper;
-
 
 class NotificacionesController
 {
 
     /**
-     * @Route("/core/notificaciones", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -32,9 +30,9 @@ class NotificacionesController
             $stmt->bindValue(":id_usuario", $id_usuario);
             $stmt->bindValue(":leido", 0);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $notificaciones = $stmt->fetchAll();
+            $notificaciones = $result_stmt->fetchAllAssociative();
             $message = array(
                 'responseCode' => 200,
                 'estado' => true,
@@ -53,8 +51,6 @@ class NotificacionesController
     }
 
     /**
-     * @Route("/core/notificaciones/update", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -68,8 +64,8 @@ class NotificacionesController
             $stmt = $connection->prepare($query);
             $stmt->bindValue(":leido", 1);
             $stmt->bindValue(":id", $id);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
+            $affectedRows = $stmt->executeStatement();
+            if ($affectedRows > 0) {
                 $message = array(
                     'responseCode' => 200,
                     'estado' => true,
@@ -95,8 +91,6 @@ class NotificacionesController
     }
 
     /**
-     * @Route("/core/notificaciones/leerNotificaciones", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -130,11 +124,7 @@ class NotificacionesController
         return $response;
     }
 
-
-
     /**
-     * @Route("/core/notificaciones/crearNotificaciones", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -200,10 +190,7 @@ class NotificacionesController
         return $response;
     }
 
-
     /**
-     * @Route("/core/notificaciones/verificar_oferta", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -218,7 +205,8 @@ class NotificacionesController
 
             $id_vendedor = $data['codVendedor'];
             $titulo = 'Tiene ofertas pendientes de gestión';
-            $url = 'http://localhost:4200/#/comercial/ciclo-vendas/23/cotacoes-pedidos/lista';
+            // ip de frondend para redireccionar a la vista de ofertas pendientes
+            $url = 'http://23.254.204.187:4200/#/comercial/ciclo-vendas/23/cotacoes-pedidos/lista';
             $fecha = date('Y-m-d H:i:s');
             $id_usuario = 0;
 

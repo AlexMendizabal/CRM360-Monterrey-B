@@ -2,8 +2,6 @@
 
 namespace App\Controller\Common\Traits;
 
-date_default_timezone_set("America/Fortaleza");
-
 /**
  * @author Mailson Teles Borges <mailson.borges@mtcorp.com.br>
  */

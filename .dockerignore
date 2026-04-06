@@ -1,25 +1,36 @@
-**/.classpath
-**/.dockerignore
-**/.env
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/.vscode
-**/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/bin
-**/charts
-**/docker-compose*
-**/compose*
-**/Dockerfile*
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-LICENSE
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vs
+.vscode
+
+# Docker (no copiarse a si mismo)
+docker-compose.yml
+compose-dev.yaml
+
+# Documentacion
+docs/
 README.md
+
+# Frontend
+frontend/
+
+# Temporales y cache
+var/cache
+var/log
+node_modules
+
+# Backup de config
+config_bkp/
+
+# Archivos sensibles
+.env.local
+.env.*.local
+.env.docker
+
+# Otros
+V1.0.rar
+info.php

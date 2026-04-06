@@ -1,4 +1,5 @@
 <?php
+// TODO: Este archivo deberia ser un Service, no un Controller. Mover a src/Services/ o src/Module/Shared/Service/
 
 declare(strict_types=1);
 
@@ -12,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class DateController extends AbstractController
 {
-  public function getPrimeiroDiaMes($mes, $ano)
+  public static function getPrimeiroDiaMes($mes, $ano)
   {
     if ($mes < 10)
       $mes = '0' . $mes;
@@ -20,7 +21,7 @@ class DateController extends AbstractController
       return $ano . '-' . $mes . '-01';
   }
 
-  public function getUltimoDiaMes($mes, $ano)
+  public static function getUltimoDiaMes($mes, $ano)
   {
     $dia = cal_days_in_month(CAL_GREGORIAN, (int)$mes, (int)$ano);
 
@@ -32,7 +33,7 @@ class DateController extends AbstractController
     return $data;
   }
 
-  public function mysqlDate($data)
+  public static function mysqlDate($data)
   {
     // Recebe uma data no formato dd/mm/aaaa e converte para uma data aaaa-mm-dd.    
     $d = explode('/', $data);	
@@ -48,7 +49,7 @@ class DateController extends AbstractController
     return $d[0].'/'.$d[1].'/'.$d[2];
   }
 
-  public function mexExtenso($mes)
+  public static function mexExtenso($mes)
   {
     switch ($mes) {
       case 1: $mes = "Enero"; break;

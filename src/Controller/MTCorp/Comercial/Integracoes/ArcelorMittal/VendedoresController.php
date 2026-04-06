@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class VendedoresController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/vendedores/lista",
-   *  name="comercial.integracoes-arcelor-mittal-vendedores-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -49,7 +44,7 @@ class VendedoresController extends AbstractController
       if (isset($params['orderType'])) $orderType = $params['orderType'];
       if (isset($params['registros'])) $registros = $params['registros'];
 
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
         EXEC PRC_INTE_AM_CONS
           @ID_PARA = 2,
@@ -59,7 +54,7 @@ class VendedoresController extends AbstractController
           @DS_ORDE = '{$orderBy} {$orderType}',
           @QT_REGI = {$registros}
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['message'])) {
         return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -74,12 +69,6 @@ class VendedoresController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/vendedores/associacoes/{idArcelorMittal}",
-   *  name="comercial.integracoes-arcelor-mittal-vendedores-associacoes",
-   *  methods={"GET"}, 
-   *  requirements={"idArcelorMittal"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -88,13 +77,13 @@ class VendedoresController extends AbstractController
   {
     try {
 
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
         EXEC PRC_INTE_AM_CONS
           @ID_PARA = 2, 
           @ID_ARCE = {$idArcelorMittal}
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['message'])) {
         return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -109,11 +98,6 @@ class VendedoresController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/vendedores/vendedores",
-   *  name="comercial.integracoes-arcelor-mittal-vendedores-vendedores",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -121,13 +105,13 @@ class VendedoresController extends AbstractController
   public function getVendedores(Connection $connection, Request $request)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
         EXEC [PRC_COME_VEND_ESCR_CONS] 
           @SITUACAO = 1, 
           @MODELO = 2
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['message'])) {
         return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -143,11 +127,6 @@ class VendedoresController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/vendedores/salvar",
-   *  name="comercial.integracoes-arcelor-mittal-vendedores-salvar",
-   *  methods={"PUT"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -167,7 +146,7 @@ class VendedoresController extends AbstractController
       if (isset($data['vendManetoni'])) $vendManetoni = $data['vendManetoni'];
       if (isset($data['escritorio'])) $escritorio = $data['escritorio'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_INTE_AM_CADA
           @ID_PARA = 2,
           @ID_ARCE = '{$idArcelorMittal}',
@@ -175,7 +154,7 @@ class VendedoresController extends AbstractController
           @ID_ESCR = '{$escritorio}',
           @ID_USUA = {$infoUsuario->matricula},
           @IN_DELE = 1
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codArcelorMittal'])) {
           return FunctionsController::Retorno(true, 'Associação realizada com sucesso.', null, Response::HTTP_OK);

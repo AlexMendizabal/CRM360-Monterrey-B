@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 
 /**
  * Class HistoricoFinanceiroController
@@ -20,13 +20,13 @@ class HistoricoFinanceiroController extends AbstractController
   public function clientesGrupoEconomico($connection, $codCliente, $grupoEconomico)
   {
     if ($grupoEconomico) {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_CLIE_GRUP_CONS]
           @ID_CLIENTE = '{$codCliente}',
           @ID_PARAM = 2
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
       
       if (count($res) > 0) {
         $a = 0;
@@ -56,20 +56,20 @@ class HistoricoFinanceiroController extends AbstractController
     return 0;
   }
 
-  public function totalAtraso($connection, $clientes)
+  public static function totalAtraso($connection, $clientes)
   {
     $clientesExp = explode(',', $clientes);
     $totalAtraso = 0;
    
     if (count($clientesExp) > 0) {
       for ($i=0; $i < count($clientesExp); $i++) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_DUPL_ABER_CONS]
             @ID_CLIENTE = '{$clientesExp[$i]}',
             @ID_PARAM = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
           
         $totalAtraso += $res[0]['VALOR'];
       }
@@ -82,7 +82,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $pagtoAntecipado = 0;
 
-    /* $res = $connection->query(
+    /* $res = $connection->executeQuery(
       "
         SELECT
           TOP 1 SALDO
@@ -93,15 +93,15 @@ class HistoricoFinanceiroController extends AbstractController
         ORDER BY
           NUMEROLANCTO DESC
       "
-    )->fetchAll(); */
+    )->fetchAllAssociative(); */
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC PRC_PGTO_CONS
           @ID_CLIENTE = '{$codCliente}',
           @PARAM = 1
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       $pagtoAntecipado = $res[0]['SALDO'];
@@ -117,7 +117,7 @@ class HistoricoFinanceiroController extends AbstractController
       'credito' => 0
     );
 
-    /* $res = $connection->query(
+    /* $res = $connection->executeQuery(
     "
       SELECT
         TOP 1
@@ -133,15 +133,15 @@ class HistoricoFinanceiroController extends AbstractController
         DATAAJUSTE DESC,
         HORAAJUSTE DESC
     "
-    )->fetchAll(); */
+    )->fetchAllAssociative(); */
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
     "
       EXEC [PRC_LIMI_CRED_CONS_DASH_CLIE]
         @ID_CLIENTES = '$clientes',
         @PARAM = 1
     "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       if ($res[0]['LIMITE_CREDITO_SEGURADORA'] > 0) {
@@ -163,13 +163,13 @@ class HistoricoFinanceiroController extends AbstractController
     
     if (count($clientesExp) > 0) {
       for ($i=0; $i < count($clientesExp); $i++) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_FINA_DUPL_ABER_CONS]
             @IDCLIENTE = '{$clientesExp[$i]}',
             @PARAM = 2
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $duplicatasVencer += $res[0]['VALOR'];
       }
@@ -178,20 +178,20 @@ class HistoricoFinanceiroController extends AbstractController
     return $duplicatasVencer;
   }
 
-  public function notasDebito($connection, $clientes)
+  public static function notasDebito($connection, $clientes)
   {
     $clientesExp = explode(',', $clientes);
     $notasDebito = 0;
 
     if (count($clientesExp) > 0) {
       for ($i=0; $i < count($clientesExp); $i++) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_NOTA_DEBT_CONS]
             @ID_CLIENTE = '{$clientesExp[$i]}',
             @ID_PARAM = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
        
         if (count($res) > 0) { 
           $notasDebito += $res[0]['total'];
@@ -206,7 +206,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $notasPromissorias = 0;
 
-    /* $res = $connection->query(
+    /* $res = $connection->executeQuery(
       "
         SELECT
           SUM(VALORDUPLICATA) [VALOR_DUPLICATA]
@@ -217,15 +217,15 @@ class HistoricoFinanceiroController extends AbstractController
         AND
           (DATABAIXA = 0 OR DATABAIXA IS NULL)
       "
-    )->fetchAll(); */
+    )->fetchAllAssociative(); */
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC PRC_NOTA_PROM_CONS
           @ID_CLIENTES = '{$clientes}',
           @PARAM = 1
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       $promissorias = $res[0]['VALOR_DUPLICATA'];
@@ -241,13 +241,13 @@ class HistoricoFinanceiroController extends AbstractController
 
     if (count($clientesExp) > 0) {
       for ($i=0; $i < count($clientesExp); $i++) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CORT_DOBR_ABER]
             @ID_CLIENTE = '{$clientesExp[$i]}',
             @ID_PARAM = 2
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $corteDobra += $res[0]['valor'];
       }
@@ -260,7 +260,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $reservaBobinas = 0;
 
-    /* $resFilial = $connection->query(
+    /* $resFilial = $connection->executeQuery(
       "
         SELECT
           CAST(SUM(ESTOQUE * ValorUnitario * (AliquotaIPI / 100) + (ESTOQUE * ValorUnitario)) AS DECIMAL(15, 2)) [QTD] 
@@ -273,17 +273,17 @@ class HistoricoFinanceiroController extends AbstractController
         AND
           est_lot_res.CODIGOCLIENTE IN ({$clientes})
       "
-    )->fetchAll(); */
+    )->fetchAllAssociative(); */
 
-    $resFilial = $connection->query(
+    $resFilial = $connection->executeQuery(
       "
         EXEC PRC_RESE_BOBI_CONS
           @ID_CLIENTES = '{$clientes}',
           @PARAM = 1
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
     
-    /* $resMatriz = $connection->query(
+    /* $resMatriz = $connection->executeQuery(
       "
         SELECT
           CAST(SUM(ESTOQUE * ValorUnitario * (AliquotaIPI / 100) + (ESTOQUE * ValorUnitario)) AS DECIMAL(15, 2)) [QTD] 
@@ -296,15 +296,15 @@ class HistoricoFinanceiroController extends AbstractController
         AND
           est_lot_res.CODIGOCLIENTE IN ({$clientes})
       "
-    )->fetchAll(); */
+    )->fetchAllAssociative(); */
 
-    $resMatriz = $connection->query(
+    $resMatriz = $connection->executeQuery(
       "
         EXEC PRC_RESE_BOBI_CONS
           @ID_CLIENTES = '{$clientes}',
           @PARAM = 2
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
     
     if (count($resFilial) > 0) {
       $reservaBobinas += $resFilial[0]['QTD'];
@@ -321,13 +321,13 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $maiorFatura = array();
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_FINA_ACUM_MENS]
         @IDCLIENTE = '{$codCliente}',
         @PARAM  = 2
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i=0; $i < count($res); $i++) {
@@ -347,7 +347,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $cobrancas = array();
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_FINA_DUPL_DETA_CONS]
         @EMPRESA = '{$codEmpresa}',
@@ -355,7 +355,7 @@ class HistoricoFinanceiroController extends AbstractController
         @SEQUENCIA = '{$sequencia}',
         @PARAM = 1
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i=0; $i < count($res); $i++) {
@@ -376,7 +376,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $ocorrenciasDuplicata = array();
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_FINA_DUPL_DETA_CONS]
         @EMPRESA = '{$codEmpresa}',
@@ -384,7 +384,7 @@ class HistoricoFinanceiroController extends AbstractController
         @SEQUENCIA = '{$sequencia}',
         @PARAM = 2
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i=0; $i < count($res); $i++) {
@@ -404,7 +404,7 @@ class HistoricoFinanceiroController extends AbstractController
   {
     $ocorrenciasComerciais = array();
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_FINA_DUPL_DETA_CONS]
         @EMPRESA = '{$codEmpresa}',
@@ -412,7 +412,7 @@ class HistoricoFinanceiroController extends AbstractController
         @SEQUENCIA = '{$sequencia}',
         @PARAM = 3
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i=0; $i < count($res); $i++) {
@@ -431,12 +431,6 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/resumo/sintetico/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-resumo-sintetico",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getResumoSintetico(Connection $connection, Request $request, $codCliente)
@@ -511,25 +505,19 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/grupo-economico/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-grupo-economico",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getGrupoEconomico(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_GRUP_CONS]
             @IDCLIENTE = {$codCliente},
             @PARAM = 2
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -561,12 +549,6 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/resumo/pedidos/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-resumo-pedidos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getResumoPedidos(Connection $connection, Request $request, $codCliente)
@@ -577,14 +559,14 @@ class HistoricoFinanceiroController extends AbstractController
         $grupoEconomico = filter_var($params['grupoEconomico'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         $clientes = $this->clientesGrupoEconomico($connection, $codCliente, $grupoEconomico);
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_FINA_CLIE_HIST_CONS]
             @IDCLIENTE = '{$clientes}',
             @PARAM = '1',
             @RESUMIDO = '1'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -627,12 +609,6 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/detalhes/pedidos/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-detalhes-pedidos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDetalhesPedidos(Connection $connection, Request $request, $codCliente)
@@ -643,14 +619,14 @@ class HistoricoFinanceiroController extends AbstractController
         $grupoEconomico = filter_var($params['grupoEconomico'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         $clientes = $this->clientesGrupoEconomico($connection, $codCliente, $grupoEconomico);
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_FINA_CLIE_HIST_CONS]
             @IDCLIENTE = '{$clientes}',
             @PARAM = '1',
             @RESUMIDO = '2'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -698,11 +674,6 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/materiais-duplicata",
-   *  name="comercial.clientes-historico-financeiro-materiais-duplicata",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getMateriaisDuplicata(Connection $connection, Request $request)
@@ -714,14 +685,14 @@ class HistoricoFinanceiroController extends AbstractController
         $numPedido = $params['numPedido'];
         $sequencia = $params['sequencia'];
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_COME_NOTA_DETA_CONS]
             @NUMERO_PEDIDO = '{$numPedido}',
             @EMPRESA = '{$codEmpresa}',
             @FINALIDADE = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $historicoCobrancas = $this->historicoCobrancas($connection, $codEmpresa, $numPedido, $sequencia);
         $ocorrenciasDuplicatas = $this->ocorrenciasDuplicata($connection, $codEmpresa, $numPedido, $sequencia);
@@ -811,24 +782,18 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/acumulos-mensais/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-acumulos-mensais",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getAcumulosMensais(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "EXEC [PRC_MTCORP_MODU_FINA_ACUM_MENS]
           @IDCLIENTE = '{$codCliente}',
           @PARAM  = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
         $maiorFatura = $this->maiorFatura($connection, $codCliente);
 
         if (count($res) > 0) {
@@ -864,19 +829,13 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/notas-promissorias/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-notas-promissorias",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getNotasPromissorias(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        /* $res = $connection->query(
+        /* $res = $connection->executeQuery(
           "
             SELECT 
               CONCAT(NRREGISTRO, ' ', SEQUENCIA) [NUM_REGISTRO],
@@ -893,15 +852,15 @@ class HistoricoFinanceiroController extends AbstractController
             WHERE
               CODIGOCLIENTE = '{$codCliente}'
           "
-        )->fetchAll(); */
+        )->fetchAllAssociative(); */
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC PRC_NOTA_PROM_CONS
               @ID_CLIENTES = '{$codCliente}',
               @PARAM = 2
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -937,25 +896,19 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/debitos/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-debitos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDebitos(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_FINA_CLIE_NOTA_DEBT]
             @IDCLIENTE = '{$codCliente}',
             @PARAM = 2
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {
@@ -994,25 +947,19 @@ class HistoricoFinanceiroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/historico-financeiro/corte-dobra/{codCliente}",
-   *  name="comercial.clientes-historico-financeiro-corte-dobra",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getCorteDobra(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_FINA_CORT_ABER]
             @IDCLIENTE = '{$codCliente}',
             @PARAM = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i=0; $i < count($res); $i++) {

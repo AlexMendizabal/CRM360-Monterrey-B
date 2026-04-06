@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\TiposFrete;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class TiposFreteController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipos-frete/lista",
-   *  name="comercial.cadastros-tipos-frete-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -44,13 +39,13 @@ class TiposFreteController extends AbstractController
       if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_TIPO_FRET_CONS]
           @ID_PARAM = 1,
           @DS_TIPO_FRET = '{$tipoFrete}',
           @ORDE_BY = '{$orderBy} {$orderType}',
           @ID_SITU = {$codSituacao}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -65,12 +60,6 @@ class TiposFreteController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipos-frete/detalhes/{codigo}",
-   *  name="comercial.cadastros-tipos-frete-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codigo"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -78,11 +67,11 @@ class TiposFreteController extends AbstractController
   public function getDetalhes(Connection $connection, Request $request, $codigo)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
         EXEC [PRC_TIPO_FRET_CONS]
             @ID_PARAM = 1,
 			      @ID = '{$codigo}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -96,11 +85,6 @@ class TiposFreteController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipos-frete/salvar",
-   *  name="comercial.cadastros-tipos-frete-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postTipoFrete(Connection $connection, Request $request)
@@ -118,14 +102,14 @@ class TiposFreteController extends AbstractController
       if (isset($params['descricao'])) $descricao = $params['descricao'];
       if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
               
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_TIPO_FRET_CADA]
           @ID_PARAM = 1,
           @ID_TIPO_FRET = '{$codTipoFrete}',
           @DS_TIPO_FRET = '{$descricao}',
           @ID_SITU = '{$codSituacao}',
           @ID_USUA_CADA = '{$infoUsuario->matricula}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codigo'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -140,11 +124,6 @@ class TiposFreteController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipos-frete/atualizar",
-   *  name="comercial.cadastros-tipos-frete-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putTipoFrete(Connection $connection, Request $request)
@@ -163,7 +142,7 @@ class TiposFreteController extends AbstractController
         if (isset($params['descricao'])) $descricao = $params['descricao'];
         if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
         EXEC [PRC_TIPO_FRET_CADA]
           @ID_PARAM = 2,
           @ID = '{$codigo}',
@@ -171,7 +150,7 @@ class TiposFreteController extends AbstractController
           @DS_TIPO_FRET = '{$descricao}',
           @ID_SITU = '{$codSituacao}',
           @ID_USUA_CADA = '{$infoUsuario->matricula}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
         if (isset($res[0]['codigo']) && $res[0]['codigo'] == $codigo) {
             return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -186,11 +165,6 @@ class TiposFreteController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipos-frete/ativar",
-   *  name="comercial.cadastros-tipos-frete-ativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function activeTipoFrete(Connection $connection, Request $request)
@@ -199,13 +173,13 @@ class TiposFreteController extends AbstractController
         $codigo = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC [PRC_TIPO_FRET_CADA]
             @ID_PARAM = 3,
             @ID = '{$codigo}',
             @ID_SITU = 1,
             @ID_USUA_CADA = '{$infoUsuario->matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -220,11 +194,6 @@ class TiposFreteController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/tipos-frete/inativar",
-   *  name="comercial.cadastros-tipos-frete-inativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function inactiveTipoFrete(Connection $connection, Request $request)
@@ -233,13 +202,13 @@ class TiposFreteController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_TIPO_FRET_CADA]
               @ID_PARAM = 3,
               @ID = '{$codigo}',
               @ID_SITU = 2,
               @ID_USUA_CADA = '{$infoUsuario->matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

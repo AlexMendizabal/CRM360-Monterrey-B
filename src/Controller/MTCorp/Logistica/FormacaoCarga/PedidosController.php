@@ -2,12 +2,12 @@
 
 namespace App\Controller\MTCorp\Logistica\FormacaoCarga;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Mailson Teles Borges <mailson.borges@mtcorp.com.br>
@@ -15,8 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class PedidosController
 {
     /**
-     * @Route("/logistica/entrega/formacao-carga/pedidos", methods={"GET"})
-     * 
      * @param Request $request
      * @param Connection $connection
      * @return JsonResponse
@@ -51,7 +49,7 @@ class PedidosController
                     ,@DS_CIDA           = '{$cidade}'
             SQL;
             
-            $response   = $connection->query($query)->fetchAll();
+            $response   = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (!is_array($response))
                 throw new \Exception($response);
@@ -80,7 +78,6 @@ class PedidosController
 
         /**
      * Cadastra os pedidos do romaneio
-     * @Route("/logistica/entrega/formacao-carga/romaneio/pedidos", methods={"POST"})
      * @return JsonResponse
      */
     public function postPedidos(Connection $connection, Request $request): JsonResponse
@@ -121,7 +118,7 @@ class PedidosController
                 SELECT @@ROWCOUNT
             SQL;
 
-            $connection->query($query)->fetch();
+            $connection->executeQuery($query)->fetchAssociative();
 
             $data = [];
 
@@ -138,7 +135,7 @@ class PedidosController
                             ,@IN_STAT       = 1
                 SQL;
 
-                $response = $connection->query($query)->fetch();
+                $response = $connection->executeQuery($query)->fetchAssociative();
 
                 if (!filter_var($response["success"], FILTER_VALIDATE_BOOLEAN)) {
 

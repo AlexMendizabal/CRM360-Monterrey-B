@@ -2,11 +2,11 @@
 
 namespace App\Controller\MTCorp\Logistica\FormacaoCarga;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Mailson Teles Borges <mailson.borges@mtcorp.com.br>
@@ -15,8 +15,6 @@ class MateriaisController
 {
 
     /**
-     * @Route("/logistica/entrega/formacao-carga/pedido/{pedido}/materiais", methods={"GET"})
-     * 
      * @param Request $request
      * @param Connection $connection
      * @return JsonResponse
@@ -42,7 +40,7 @@ class MateriaisController
                     ,@CD_PEDI   = '{$pedido}'
             SQL;
             
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (!is_array($response))
                 throw new \Exception($response);

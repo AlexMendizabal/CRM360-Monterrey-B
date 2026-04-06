@@ -1,0 +1,228 @@
+# Routes extracted from src/Controller/Common/
+
+# AtividadesController
+common.atividades-registrar-acesso:
+    path: /common/atividades/registrar-acesso
+    controller: App\Controller\Common\AtividadesController::registrarAcesso
+    methods: [PUT]
+
+common.atividades-listar:
+    path: /common/atividades/listar/{idModulo}
+    controller: App\Controller\Common\AtividadesController::getAtividades
+    methods: [GET]
+    requirements:
+        idModulo: '\d+'
+
+common.atividades-atividade:
+    path: /common/atividades/atividade/{idAtividade}
+    controller: App\Controller\Common\AtividadesController::getAtividade
+    methods: [GET]
+    requirements:
+        idAtividade: '\d+'
+
+common.atividades/internas-listar:
+    path: /common/atividades/internas/listar/{idSubModulo}
+    controller: App\Controller\Common\AtividadesController::getAtividadesInternas
+    methods: [GET]
+    requirements:
+        idSubModulo: '\d+'
+
+# CommonController
+common.grupos-listar:
+    path: /common/v2/grupos
+    controller: App\Controller\Common\CommonController::getGrupos
+    methods: [GET]
+
+common.empresas-listar:
+    path: /common/v2/empresas
+    controller: App\Controller\Common\CommonController::getEmpresas
+    methods: [GET]
+
+common.depositos-listar:
+    path: /common/v2/depositos
+    controller: App\Controller\Common\CommonController::getDepositos
+    methods: [GET]
+
+common.tipos-material-listar:
+    path: /common/v2/tipos-material
+    controller: App\Controller\Common\CommonController::getTiposMaterial
+    methods: [GET]
+
+common.linhas-listar:
+    path: /common/v2/linhas
+    controller: App\Controller\Common\CommonController::getLinhas
+    methods: [GET]
+
+common.departamentos-listar:
+    path: /common/v2/departamentos
+    controller: App\Controller\Common\CommonController::getDepartamento
+    methods: [GET]
+
+common.tipos-empresa-listar:
+    path: /common/v2/tipos-empresa
+    controller: App\Controller\Common\CommonController::getTiposEmpresa
+    methods: [GET]
+
+common.tipos-deposito-listar:
+    path: /common/v2/tipos-deposito
+    controller: App\Controller\Common\CommonController::getTiposDeposito
+    methods: [GET]
+
+common.unidades-medida-listar:
+    path: /common/v2/unidades-medida
+    controller: App\Controller\Common\CommonController::getUnidadesMedida
+    methods: [GET]
+
+common.clasificacion:
+    path: /common/clasificacion
+    controller: App\Controller\Common\CommonController::getClasificacion
+    methods: [GET]
+
+common.sub-linhas-listar:
+    path: /common/v2/sub-linhas
+    controller: App\Controller\Common\CommonController::getSubLinhas
+    methods: [GET]
+
+common.classes-listar:
+    path: /common/v2/classes
+    controller: App\Controller\Common\CommonController::getClasses
+    methods: [GET]
+
+common.materiais-listar:
+    path: /common/v2/materiais
+    controller: App\Controller\Common\CommonController::getMateriais
+    methods: [GET]
+
+common.informacoes-adicionais-atividade-listar:
+    path: /common/v2/informacoes-adicionais-atividade/{idAtiv}
+    controller: App\Controller\Common\CommonController::getInformacoesAdicionaisAtividade
+    methods: [GET]
+    requirements:
+        idAtiv: '\d+'
+
+common.tipos-niveis-estoque-listar:
+    path: /common/v2/tipos-niveis-estoque
+    controller: App\Controller\Common\CommonController::getTiposNiveisEstoque
+    methods: [GET]
+
+common.integradores-listar:
+    path: /common/v2/integradores-pedidos
+    controller: App\Controller\Common\CommonController::getIntegradoresPedidos
+    methods: [GET]
+
+common.fornecedore-listar:
+    path: /common/v2/fornecedores
+    controller: App\Controller\Common\CommonController::getFornecedores
+    methods: [GET]
+
+# GenericController
+common.empresas:
+    path: /common/empresas
+    controller: App\Controller\Common\GenericController::getEmpresas
+    methods: [GET]
+
+common.empresa:
+    path: /common/empresa/{id}
+    controller: App\Controller\Common\GenericController::getEmpresa
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+common.escritorios:
+    path: /common/escritorios
+    controller: App\Controller\Common\GenericController::getEscritorios
+    methods: [GET]
+
+common.depositos:
+    path: /common/depositos/{empresa}
+    controller: App\Controller\Common\GenericController::getDepositos
+    methods: [GET]
+
+common.linhas:
+    path: /common/linhas
+    controller: App\Controller\Common\GenericController::getLinhas
+    methods: [GET]
+
+common.classes:
+    path: /common/classes
+    controller: App\Controller\Common\GenericController::getClasses
+    methods: [GET]
+
+common.sublinhas:
+    path: /common/sub-linhas
+    controller: App\Controller\Common\GenericController::getSubLinhas
+    methods: [GET]
+
+common.materiais:
+    path: /common/materiais
+    controller: App\Controller\Common\GenericController::getMateriais
+    methods: [GET]
+
+common.top-desk.login:
+    path: /common/top-desk/login
+    controller: App\Controller\Common\GenericController::loginTopDesk
+    methods: [POST]
+
+common.situacoes:
+    path: /common/situacoes
+    controller: App\Controller\Common\GenericController::getSituacoes
+    methods: [GET]
+
+common.materiais.tipos:
+    path: /common/materiais/tipos
+    controller: App\Controller\Common\GenericController::getMateriaisTipos
+    methods: [GET]
+
+common.informacoes-adicionais:
+    path: /common/informacoes-adicionais
+    controller: App\Controller\Common\GenericController::getInformacoesAdicionais
+    methods: [GET]
+
+# ModulosController
+common.modulo:
+    path: /common/modulo/{rotaModulo}
+    controller: App\Controller\Common\ModulosController::getModulo
+    methods: [GET]
+    requirements:
+        rotaModulo: '.*'
+
+common.modulos:
+    path: /common/modulos
+    controller: App\Controller\Common\ModulosController::getModulos
+    methods: [GET]
+
+# UsuarioController
+usuario.check-token:
+    path: /usuario/check-token
+    controller: App\Controller\Common\UsuarioController::checkToken
+    methods: [GET]
+
+# Services/CepController
+common.services.cep:
+    path: /common/services/cep/{cep}
+    controller: App\Controller\Common\Services\CepController::ConsultaCep
+    methods: [GET]
+    requirements:
+        cep: '\d+'
+
+# Services/CnpjController
+common.services.cnpj:
+    path: /common/services/cnpj/{cnpj}
+    controller: App\Controller\Common\Services\CnpjController::ConsultaCnpj
+    methods: [GET]
+    requirements:
+        cnpj: '\d+'
+
+# Services/GoogleApiService
+common.services.google-api.getLatLong:
+    path: /common/services/google-api/getLatLong
+    controller: App\Controller\Common\Services\GoogleApiService::ConsultaLatitudeLongitude
+    methods: [GET]
+
+# Services/FormRules
+common-services-form-rules:
+    path: /common/services/form-rules/{formRef}
+    controller: App\Controller\Common\Services\FormRules::getRules
+    methods: [GET]
+    requirements:
+        formRef: '\d+'

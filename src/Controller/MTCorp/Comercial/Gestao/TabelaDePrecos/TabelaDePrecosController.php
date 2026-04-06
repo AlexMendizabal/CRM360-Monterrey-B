@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -21,20 +21,15 @@ class TabelaDePrecosController extends AbstractController
 {
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/tabelas",
-     *  name="comercial.gestao-tabela-precos-tabelas",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @return 
      */
     public function getTabelas(Connection $connection)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PREC_VIGE_CONS
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -49,11 +44,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/lista/grupos",
-     *  name="comercial.gestao-tabela-precos-lista-grupos",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -84,13 +74,13 @@ class TabelaDePrecosController extends AbstractController
         // ");
         //     exit(0);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PREC_CONS 
                     @ID_PARA = 1, 
                     @DS_GRUP = '{$grupo}',
                     @IN_SITU = {$situacao},
                     @DS_ORDE = '{$order}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -105,11 +95,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/lista",
-     *  name="comercial.gestao-tabela-precos-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -146,7 +131,7 @@ class TabelaDePrecosController extends AbstractController
             if ($params['dataFinalVigencia'] == ''){
                 $dataFinalVigencia = 'NULL';
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC PRC_PREC_CONS 
                         @ID_PARA = 3, 
                         @DS_PREC = '{$descTabela}', 
@@ -156,11 +141,11 @@ class TabelaDePrecosController extends AbstractController
                         @ID_PAGI = {$pagina}, 
                         @DS_ORDE = '{$order}',
                         @DS_MATE = '{$codMaterial}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             } else {
                 if (isset($params['dataFinalVigencia'])) $dataFinalVigencia = $params['dataFinalVigencia'];
                 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                 EXEC PRC_PREC_CONS 
                     @ID_PARA = 3, 
                     @DS_PREC = '{$descTabela}', 
@@ -170,7 +155,7 @@ class TabelaDePrecosController extends AbstractController
                     @ID_PAGI = {$pagina}, 
                     @DS_ORDE = '{$order}',
                     @DS_MATE = '{$codMaterial}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             }
             // @QT_REGI = {$registros},
 
@@ -187,11 +172,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/detail-panel",
-     *  name="comercial.gestao-tabela-precos-detail-panel",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -205,13 +185,12 @@ class TabelaDePrecosController extends AbstractController
             
             if (isset($params['codGrupo'])) $codGrupo = $params['codGrupo']; 
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PREC_CONS
                     @ID_PARA = 2,
                     @DS_GRUP = '{$codGrupo}',
                     @DS_ORDE = 'codGrupo, codMaterial'
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -226,12 +205,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/detalhes/{codPreco}",
-     *  name="comercial.gestao-tabela-precos-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codTabela"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -240,28 +213,28 @@ class TabelaDePrecosController extends AbstractController
     {
 			try {
 
-				$res = $connection->query("
+				$res = $connection->executeQuery("
 						EXEC PRC_PREC_CONS 
 								@ID_PARA = 3, 
 								@DS_PREC = '{$codPreco}'
-				")->fetchAll();
+				")->fetchAllAssociative();
 
 				if (count($res) > 0) {
-					$resGrupos = $connection->query("
+					$resGrupos = $connection->executeQuery("
 							EXEC PRC_PREC_CONS 
 									@ID_PARA = 4, 
 									@ID_PREC = '{$codPreco}'
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
 					if (count($resGrupos) > 0) {
 							foreach ($resGrupos as $key => $value) {
 
-									$resPrecos = $connection->query("
+									$resPrecos = $connection->executeQuery("
 											EXEC PRC_PREC_CONS 
 													@ID_PARA = 5, 
 													@ID_PREC = '{$codPreco}',
 													@ID_GRUP = {$value['codGrupo']}
-									")->fetchAll();
+									")->fetchAllAssociative();
 
 									$resGrupos[$key]['precos'] = $resPrecos;
 							}
@@ -285,11 +258,6 @@ class TabelaDePrecosController extends AbstractController
     
         
 	 /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/salvar",
-     *  name="comercial.gestao-tabela-precos-salvar",
-     *  methods={"POST"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -329,7 +297,7 @@ class TabelaDePrecosController extends AbstractController
                 $dataFinalVigencia = 'NULL';
                
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC PRC_PREC_CADA
                         @ID_PARA        = 3,
                         @ID_PREC        = '{$codPreco}',
@@ -343,13 +311,13 @@ class TabelaDePrecosController extends AbstractController
                         @FX_DESC_GERE   = '{$faixaDescontoGerencial}',
                         @VL_PERC_ACRE   = '{$percentualAcrescimo}',
                         @VL_PERC_DESC   = '{$percentualDesconto}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             
             } else {
                 if (isset($params['dataFinalVigencia'])) $dataFinalVigencia = $params['dataFinalVigencia'];
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC PRC_PREC_CADA
                         @ID_PARA        = 3,
                         @ID_PREC        = '{$codPreco}',
@@ -363,7 +331,7 @@ class TabelaDePrecosController extends AbstractController
                         @FX_DESC_GERE   = '{$faixaDescontoGerencial}',
                         @VL_PERC_ACRE   = '{$percentualAcrescimo}',
                         @VL_PERC_DESC   = '{$percentualDesconto}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             }
 
             if(empty($assocGrupos) && isset($res[0]["codigo"])){
@@ -386,7 +354,7 @@ class TabelaDePrecosController extends AbstractController
                     }
 
                     foreach ($precos as $preco) {
-                        $resPrecos = $connection->query("
+                        $resPrecos = $connection->executeQuery("
                             EXEC PRC_PREC_CADA
                                 @ID_PARA = 4,
                                 @ID_ASSO = '{$preco['codAssociacao']}',
@@ -396,7 +364,7 @@ class TabelaDePrecosController extends AbstractController
                                 @UF_DEST = '{$preco['ufDestino']}',
                                 @VR_MATE = '{$preco['valorMaterial']}',
                                 @ID_USUA = '{$infoUsuario->matricula}'
-                        ")->fetchAll();
+                        ")->fetchAllAssociative();
                     }
                 }
             }                
@@ -409,11 +377,6 @@ class TabelaDePrecosController extends AbstractController
 	}
 		
 		/**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/atualizar",
-     *  name="comercial.gestao-tabela-precos-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putTabelaPrecos(Connection $connection, Request $request)
@@ -446,7 +409,7 @@ class TabelaDePrecosController extends AbstractController
             if($params['dataFinalVigencia'] == ''){
                 $dataFinalVigencia = 'NULL';
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC PRC_PREC_CADA
                         @ID_PARA        = 3,
                         @ID_PREC        = '{$codPreco}',
@@ -460,11 +423,11 @@ class TabelaDePrecosController extends AbstractController
                         @FX_DESC_GERE   = '{$faixaDescontoGerencial}',
                         @VL_PERC_ACRE   = '{$percentualAcrescimo}',
                         @VL_PERC_DESC   = '{$percentualDesconto}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             } else {
                 if (isset($params['dataFinalVigencia'])) $dataFinalVigencia = $params['dataFinalVigencia'];
 
-                $res = $connection->query("
+                $res = $connection->executeQuery("
                     EXEC PRC_PREC_CADA
                         @ID_PARA        = 3,
                         @ID_PREC        = '{$codPreco}',
@@ -478,7 +441,7 @@ class TabelaDePrecosController extends AbstractController
                         @FX_DESC_GERE   = '{$faixaDescontoGerencial}',
                         @VL_PERC_ACRE   = '{$percentualAcrescimo}',
                         @VL_PERC_DESC   = '{$percentualDesconto}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             }
 
             if(empty($assocGrupos) && isset($res[0]["codigo"])){
@@ -501,7 +464,7 @@ class TabelaDePrecosController extends AbstractController
                     }
 
                     foreach ($precos as $preco) {
-                        $resPrecos = $connection->query("
+                        $resPrecos = $connection->executeQuery("
                             EXEC PRC_PREC_CADA
                                 @ID_PARA = 4,
                                 @ID_ASSO = '{$preco['codAssociacao']}',
@@ -511,7 +474,7 @@ class TabelaDePrecosController extends AbstractController
                                 @UF_DEST = '{$preco['ufDestino']}',
                                 @VR_MATE = '{$preco['valorMaterial']}',
                                 @ID_USUA = '{$infoUsuario->matricula}'
-                        ")->fetchAll();
+                        ")->fetchAllAssociative();
                     }
                 }
             }                
@@ -523,11 +486,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
    /**
-    * @Route(
-    *  "/comercial/gestao/tabela-precos/grupo/remover/{codGrupo}/{codTabela}",
-    *  name="comercial.gestao-tabela-precos-grupo-remover",
-    *  methods={"DELETE"}
-    * )
     * @return JsonResponse
     */
    public function deleteAssociacaoGrupo(Connection $connection, Request $request, $codGrupo, $codTabela)
@@ -535,13 +493,13 @@ class TabelaDePrecosController extends AbstractController
        try {
            $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-           $res = $connection->query("
+           $res = $connection->executeQuery("
 							EXEC PRC_PREC_CADA
 								@ID_PARA = 5,
 								@ID_PREC = {$codTabela},
 								@ID_GRUP = {$codGrupo},
 								@ID_USUA = '{$infoUsuario->matricula}'
-						")->fetchAll();
+						")->fetchAllAssociative();
 
            if (isset($res[0]['codigo']) && $res[0]['codigo'] == $codGrupo) {
                return FunctionsController::Retorno(true, 'Grupo removido com sucesso.', null, Response::HTTP_OK);
@@ -555,13 +513,7 @@ class TabelaDePrecosController extends AbstractController
        }
    }
 
-
      /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/associacao-precos/remover/{codAssociacao}/{codTabela}/{codGrupo}",
-     *  name="comercial.gestao-tabela-precos-associacao-precos-remover",
-     *  methods={"DELETE"}
-     * )
      * @return JsonResponse
      */
     public function deleteAssociacaoPreco(Connection $connection, Request $request, $codAssociacao, $codTabela, $codGrupo)
@@ -571,14 +523,14 @@ class TabelaDePrecosController extends AbstractController
 
 						if (isset($params['codAssociacao'])) $codAssociacao = $params['codAssociacao'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
 							EXEC PRC_PREC_CADA
 								@ID_PARA = 5,
 								@ID_PREC = {$codTabela},
 								@ID_GRUP = {$codGrupo},
 								@ID_ASSO = {$codAssociacao},
 								@ID_USUA = '{$infoUsuario->matricula}'
-						")->fetchAll();
+						")->fetchAllAssociative();
 
             if (isset($res[0]['codigo']) && $res[0]['codigo'] == $codGrupo) {
                 return FunctionsController::Retorno(true, 'Preço associado ao grupo foi deletado.', null, Response::HTTP_OK);
@@ -593,11 +545,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
       /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/ativar",
-     *  name="comercial.gestao-tabela-precos-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeGrupo(Connection $connection, Request $request)
@@ -606,13 +553,13 @@ class TabelaDePrecosController extends AbstractController
             $codPreco = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PREC_CADA
                     @ID_PARA = 3,
                     @ID_PREC = '{$codPreco}',
                     @ID_SITU = 1,
                     @ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codigo']) && $codPreco == $res[0]['codigo']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -627,11 +574,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/inativar",
-     *  name="comercial.gestao-tabela-precos-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveGrupo(Connection $connection, Request $request)
@@ -640,13 +582,13 @@ class TabelaDePrecosController extends AbstractController
             $codPreco = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PREC_CADA
                     @ID_PARA = 3,
                     @ID_PREC = '{$codPreco}',
                     @ID_SITU = 2,
                     @ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codigo']) && $codPreco == $res[0]['codigo']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -661,11 +603,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/materiais",
-     *  name="comercial.gestao-tabela-precos-materiais",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -700,7 +637,7 @@ class TabelaDePrecosController extends AbstractController
                 $codLinha = NULL;
             }
 
-            $response = $connection->query("
+            $response = $connection->executeQuery("
                 EXEC PRC_PREC_CONS
                     @ID_PARA       = 7
                     ,@ID_PREC       = '{$codPreco}'
@@ -718,7 +655,7 @@ class TabelaDePrecosController extends AbstractController
                     ,@ID_PAGI       = '{$pagina}'
                     ,@QT_REGI       = '{$registros}'
                     ,@ID_SITU       = '{$codSituacao}'
-           ")->fetchAll();           
+           ")->fetchAllAssociative();           
         
             if(empty($response)){
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
@@ -736,11 +673,6 @@ class TabelaDePrecosController extends AbstractController
     }
 
      /**
-     * @Route(
-     *  "/comercial/gestao/tabela-precos/materiais/detalhes",
-     *  name="comercial.gestao-tabela-precos-materiais-detalhes",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -759,11 +691,11 @@ class TabelaDePrecosController extends AbstractController
 
             $tabela = $codTabela == 0 ? 'NULL' : $codTabela;
 
-            $response = $connection->query("
+            $response = $connection->executeQuery("
                 EXEC PRC_PREC_DETA_CONS
                     @ID_PREC = {$tabela}
                     ,@ID_MATE = '{$codMaterial}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if(empty($response)){
                 return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);

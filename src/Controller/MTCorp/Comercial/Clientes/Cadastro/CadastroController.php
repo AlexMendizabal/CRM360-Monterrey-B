@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\Cadastro;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Filesystem\Filesystem;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\Services\FunctionsController;
@@ -27,13 +27,13 @@ class CadastroController extends AbstractController
 {
   public function tipoCliente($connection, $codCliente)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_DETA_CONS]
         @ID_PARAM = 2,
         @ID_CLIENTE = {$codCliente}
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       return $res[0]['tipo'];
@@ -44,12 +44,12 @@ class CadastroController extends AbstractController
 
   public function atividadesSecundarias($connection, $codCliente)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_MTCORP_MODU_CLIE_CNAE_CONS]
         @CLIENTE = {$codCliente}
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       $atividadesSecundarias = array();
@@ -76,7 +76,7 @@ class CadastroController extends AbstractController
 
   public function regioesAtuacaoComercial($connection)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         SELECT
           id_regi_atua [id],
@@ -86,7 +86,7 @@ class CadastroController extends AbstractController
         ORDER BY
           descricao
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       return $res;
@@ -97,13 +97,13 @@ class CadastroController extends AbstractController
 
   public function diasEntrega($connection, $codCliente, $idEndereco)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_ENDE_DIAS_CONS]
         @ID_CLIENTE = {$codCliente},
         @ID_ENDERECO = {$idEndereco}
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     return count($res) > 0 ? $res : [];
   }
@@ -119,7 +119,7 @@ class CadastroController extends AbstractController
         $idParam = $i == 0 ? 1 : 0;
 
         /*
-        $connection->query(
+        $connection->executeQuery(
           "
             EXEC [PRC_CLIE_ENDE_DIAS_CADA] 
             @ID_CLIENTE = {$codCliente},
@@ -132,7 +132,7 @@ class CadastroController extends AbstractController
         );
         */
 
-        $connection->query(
+        $connection->executeQuery(
           "
             EXEC [PRC_CLIE_ENDE_DIAS_CADA] 
             @ID_CLIENTE = {$codCliente},
@@ -152,7 +152,7 @@ class CadastroController extends AbstractController
   public function tiposVeiculos($connection, $codCliente, $idEndereco)
   {
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_ENDE_CONS]
         @ID_CLIE = {$codCliente},
@@ -160,7 +160,7 @@ class CadastroController extends AbstractController
         @ID_SEQU_ENDE = '$idEndereco',
         @PARAM = '2'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i = 0; $i < count($res); $i++) {
@@ -177,7 +177,7 @@ class CadastroController extends AbstractController
 
   public function dadosEspeciais($connection, $codCliente, $idEndereco)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_ENDE_CONS]
         @ID_CLIE = $codCliente,
@@ -185,7 +185,7 @@ class CadastroController extends AbstractController
         @ID_SEQU_ENDE = '$idEndereco',
         @PARAM = '3'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       $dadosEspeciais = array();
@@ -204,12 +204,12 @@ class CadastroController extends AbstractController
 
   public function filhos($connection, $idContato)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_CONT_FILH_CONS]
         @ID_CONT = '{$idContato}'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       for ($i = 0; $i < count($res); $i++) {
@@ -227,7 +227,7 @@ class CadastroController extends AbstractController
 
   public function limparFilhos($connection, $id)
   {
-    $connection->query(
+    $connection->executeQuery(
       "
         DELETE
         FROM
@@ -244,7 +244,7 @@ class CadastroController extends AbstractController
       $nomeFilho = strtoupper(FunctionsController::limpaCaracteresEspeciais($filhos[$i]['nome']));
       $idadeFilho = $filhos[$i]['idade'];
 
-      $connection->query(
+      $connection->executeQuery(
         "
           EXEC [PRC_CLIE_CONT_FILH_CADA]
           @ID_CONT = '{$id}',
@@ -257,12 +257,12 @@ class CadastroController extends AbstractController
 
   public function meiosContato($connection, $codCliente, $id, $idSeqTid)
   {
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_CONT_CONS]
         @ID_CLIE = {$codCliente}
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       $meiosContato = array();
@@ -423,7 +423,7 @@ class CadastroController extends AbstractController
       $idSeqTid = $meiosContato->contatos[$i]['id'];
       $descricao = strtoupper(FunctionsController::limpaCaracteresEspeciais($meiosContato->contatos[$i]['contato']));
 
-      $connection->query(
+      $connection->executeQuery(
         "
           EXEC [PRC_CLIE_CONT_MEIO_CADA]
           @ID_CLIE = {$codCliente},
@@ -438,23 +438,17 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/dados-faturamento/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-dados-faturamento",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDadosFaturamento(Connection $connection, Request $request, $codCliente)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_CLIE_DADO_FATU_CONS]
           @ID_CLIE = {$codCliente}
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0) {
         $dadosFaturamento = new \stdClass;
@@ -522,11 +516,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/salvar/dados-faturamento",
-   *  name="comercial.clientes-cadastro-salvar-dados-faturamento",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putDadosFaturamento(Connection $connection, Request $request)
@@ -557,8 +546,6 @@ class CadastroController extends AbstractController
         if (isset($data['notaCliente'])) $notaCliente = $data['notaCliente'];
       }
 
-
-
       $codCliente = $data['codCliente'];
       $tipoPessoa = $data['tipoPessoa'];
       $tipoCadastro = $data['tipoCadastro'];
@@ -575,8 +562,7 @@ class CadastroController extends AbstractController
 
       //obs: autoUpdateNota:  1 = altera nota automatico.
 
-
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_CLIE_DADO_FATU_UPDT] 
           @ID_CLIE = {$codCliente},
@@ -600,11 +586,11 @@ class CadastroController extends AbstractController
           @NR_NOTA = {$notaCliente},
           @IN_NOTA_AUTO = {$autoUpdateNota}
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if ($res[0]['MSG'] == 'OK') {
         if ($tipoPessoa == 'J') {
-          $connection->query(
+          $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_CLIE_CNAE_CADA]
               @CLIENTE = '{$codCliente}',
@@ -618,7 +604,7 @@ class CadastroController extends AbstractController
             $codCnae = FunctionsController::limpaMascara($atividadesSecundarias[$i]['idCnae']);
             $codCnae = FunctionsController::completaZeroEsquerda($codCnae, 7);
 
-            $connection->query(
+            $connection->executeQuery(
               "
                 EXEC [PRC_MTCORP_MODU_CLIE_CNAE_CADA]
                 @CLIENTE = '{$codCliente}',
@@ -647,12 +633,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/excluir/atividade-secundaria/{codCliente}/{codCnae}",
-   *  name="comercial.clientes-cadastro-excluir-atividade-secundaria",
-   *  methods={"DELETE"},
-   *  requirements={"codCliente"="\d+", "codCnae"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function deleteAtividadeSecundaria(Connection $connection, Request $request, $codCliente, $codCnae)
@@ -661,14 +641,14 @@ class CadastroController extends AbstractController
       $codCnae = trim($codCnae);
       $codCnae = FunctionsController::completaZeroEsquerda($codCnae, 7);
 
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_MTCORP_MODU_CLIE_CNAE_CADA]
           @CNAE = {$codCnae},
           @CLIENTE = '{$codCliente}',
           @PARAM = 2
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if ($res[0]['codCnae'] == $codCnae) {
         $message = array('responseCode' => 200);
@@ -687,15 +667,7 @@ class CadastroController extends AbstractController
     return $response;
   }
 
-
-
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/enderecos/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-enderecos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -707,7 +679,7 @@ class CadastroController extends AbstractController
     isset($params['localEntrega']) ? $id_cliente = $params['localEntrega'] : null;
     try {
 
-      $result = $connection->fetchAllAssociative('SELECT id_endereco as id, logradouro as enderecos FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$id_cliente]);
+      $result = $connection->fetchAllAssociative('SELECT id_endereco as id, logradouro as enderecos, id_cliente FROM MTCORP_MODU_CLIE_BASE_ENDE WHERE id_cliente = ?', [$id_cliente]);
 
       if (isset($result) && !empty($result)) {
         return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
@@ -727,11 +699,11 @@ class CadastroController extends AbstractController
       $e = 0;
       
       while ($tipoEndereco <= 3) {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_CLIE_ENDE_CONS]
               @ID_CLIE = {$codCliente},
               @ID_TIPO_ENDE = {$tipoEndereco}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
           if (
             count($res) > 0 &&
             !isset($res[0]['MSG']) &&
@@ -883,7 +855,7 @@ class CadastroController extends AbstractController
       }
 
       if (isset($result) && !empty($result)) {
-          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);  
+          return FunctionsController::Retorno(true, null, $result, Response::HTTP_OK);
       } else {
           return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
       }
@@ -897,13 +869,13 @@ class CadastroController extends AbstractController
     $e = 0;
     $enderecosAguardandoAprovacao = array();
 
-    $resAguardandoAprovacao = $connection->query(
+    $resAguardandoAprovacao = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_ENDE_ENTR_CONS]
         @ID_CLIE = {$codCliente},
         @ID_SITU = 3
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (
       count($resAguardandoAprovacao) > 0 &&
@@ -1019,13 +991,13 @@ class CadastroController extends AbstractController
     $e = 0;
     $enderecosInativos = array();
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_ENDE_ENTR_CONS]
         @ID_CLIE = {$codCliente},
         @ID_SITU = '2,4'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (
       count($res) > 0 &&
@@ -1140,12 +1112,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/endereco/{codCliente}/{idEndereco}/{idSituacao}",
-   *  name="comercial.clientes-cadastro-carregar-endereco",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+", "idEndereco"="\d+", "idSituacao"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getEndereco(Connection $connection, Request $request, $codCliente, $idEndereco, $idSituacao)
@@ -1156,23 +1122,23 @@ class CadastroController extends AbstractController
       $hasAcessoAlterarStatus = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'COME_INAT_ENDE_ENTR');
 
       if ($idSituacao == 1) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_ENDE_CONS]
               @ID_CLIE = {$codCliente},
               @ID_TIPO_ENDE = 3,
               @ID_SEQU_ENDE = {$idEndereco}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
       } else {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_ENDE_ENTR_CONS]
               @ID_CLIE = {$codCliente},
               @ID_ENDE = {$idEndereco},
               @ID_SITU = {$idSituacao}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
       }
 
       if (count($res) > 0) {
@@ -1306,7 +1272,6 @@ class CadastroController extends AbstractController
           $endereco['dadosEspeciais'] = $dadosEspeciais;
         }
 
-
         $message = array(
           'responseCode' => 200,
           'result' => $endereco
@@ -1327,11 +1292,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/salvar/endereco",
-   *  name="comercial.clientes-cadastro-salvar-endereco",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putEndereco(Connection $connection, Request $request)
@@ -1413,7 +1373,7 @@ class CadastroController extends AbstractController
           $aprovaEnderecos = 0;
         }
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_CONT_ENDE_CADA]
             @CLIENTE = '{$codCliente}',
@@ -1443,7 +1403,7 @@ class CadastroController extends AbstractController
             @IN_APRO_AUTO = {$aprovaEnderecos},
             @DS_OBSE_LIBE = '{$observacao}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (isset($res[0]['ID'])) {
           $this->gravarDiasEntrega($connection, $codCliente, $res[0]['ID'], $data['diasEntrega']);
@@ -1479,26 +1439,20 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/excluir/endereco/{codCliente}/{id}",
-   *  name="comercial.clientes-cadastro-excluir-endereco",
-   *  methods={"DELETE"},
-   *  requirements={"codCliente"="\d+", "id"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function deleteEndereco(Connection $connection, Request $request, $codCliente, $id)
   {
     if ($request->isMethod('DELETE')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_CONT_ENDE_CADA]
             @CLIENTE = {$codCliente},
             @ENDERECO = {$id},
             @SITUACAO = '0'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if ($res[0]['ID'] == $id) {
           $message = array('responseCode' => 200);
@@ -1519,12 +1473,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/contatos/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-contatos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -1532,10 +1480,10 @@ class CadastroController extends AbstractController
   public function getContatos(Connection $connection, Request $request, $codCliente)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXEC [PRC_CLIE_CONT_CONS]
             @ID_CLIE = {$codCliente}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0) {
         for ($i = 0; $i < count($res); $i++) {
@@ -1599,12 +1547,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/contato/{codCliente}/{idContato}",
-   *  name="comercial.clientes-cadastro-carregar-contato",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+", "idContato"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -1612,11 +1554,11 @@ class CadastroController extends AbstractController
   public function getContato(Connection $connection, Request $request, $codCliente, $idContato)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
               EXEC [PRC_CLIE_CONT_CONS]
                 @ID_CLIE = '{$idContato}',
                 @ID_SEQU_CONT =  '{$codCliente}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
       if (count($res) > 0) {
 
@@ -1664,11 +1606,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/salvar/contato",
-   *  name="comercial.clientes-cadastro-salvar-contato",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putContato(Connection $connection, Request $request)
@@ -1694,7 +1631,7 @@ class CadastroController extends AbstractController
         $qtdeFilhos = isset($data['filhos']) ? count($data['filhos']) : 0;
         $observacoes = !empty($data['observacoes']) ? strtoupper(FunctionsController::limpaCaracteresEspeciais($data['observacoes'])) : null;
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_CONT_CADA]
             @ID_CLIE = {$codCliente},
@@ -1713,7 +1650,7 @@ class CadastroController extends AbstractController
             @QT_FILH = {$qtdeFilhos},
             @DS_OBSE = '{$observacoes}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (!empty($id) || isset($res[0]['ID'])) {
           $id = empty($id) ? $res[0]['ID'] : $id;
@@ -1751,20 +1688,13 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/excluir/contato/{codCliente}/{id}/{idSeqTid}",
-   *  name="comercial.clientes-cadastro-excluir-contato",
-   *  methods={"DELETE"},
-   *  requirements={"codCliente"="\d+", "idSeqTid"="\d+"},
-   *  defaults={"id"=null}
-   * )
    * @return JsonResponse
    */
   public function deleteContato(Connection $connection, Request $request, $codCliente, $id, $idSeqTid)
   {
     if ($request->isMethod('DELETE')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_CONT_CADA]
             @ID_CLIE = {$codCliente},
@@ -1772,7 +1702,7 @@ class CadastroController extends AbstractController
             @ID_SEQ_ERP = {$idSeqTid},
             @ID_SITU = '0'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (isset($res[0]['RET']) && $res[0]['RET'] === 'FALSE') {
           $message = array(
@@ -1801,19 +1731,13 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/excluir/meio-contato/{codCliente}/{id}/{idSeqTid}",
-   *  name="comercial.clientes-cadastro-excluir-meio-contato",
-   *  methods={"DELETE"},
-   *  requirements={"codCliente"="\d+", "id"="\d+", "idSeqTid"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function deleteMeioContato(Connection $connection, Request $request, $codCliente, $id, $idSeqTid)
   {
     if ($request->isMethod('DELETE')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_CONT_CADA]
             @ID_CLIE = {$codCliente},
@@ -1821,7 +1745,7 @@ class CadastroController extends AbstractController
             @ID_SEQ_ERP = {$idSeqTid},
             @ID_SITU = '0'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (
           isset($res[0]['ID_SEQ_ERP']) &&
@@ -1847,25 +1771,19 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/excluir/filho/{idFilho}",
-   *  name="comercial.clientes-cadastro-excluir-filho",
-   *  methods={"DELETE"},
-   *  requirements={"idFilho"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function deleteFilho(Connection $connection, Request $request, $idFilho)
   {
     if ($request->isMethod('DELETE')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_CONT_FILH_CADA]
             @ID_FILH = {$idFilho}
             @ID_SITU = 0
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -1889,12 +1807,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/dados-relacionamento/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-dados-relacionamento",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDadosRelacionamento(Connection $connection, Request $request, $codCliente)
@@ -1902,12 +1814,12 @@ class CadastroController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_DADO_RELA_CONS]
             @ID_CLIE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $dadosRelacionamento = new \stdClass;
         $dadosRelacionamento->idTipoAtendimento = !empty($res[0]['TIPO_ATENDIMENTO_ID']) ? $res[0]['TIPO_ATENDIMENTO_ID'] : null;
@@ -1949,11 +1861,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/salvar/dados-relacionamento",
-   *  name="comercial.clientes-cadastro-salvar-dados-relacionamento",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putDadosRelacionamento(Connection $connection, Request $request)
@@ -1969,7 +1876,7 @@ class CadastroController extends AbstractController
           $obsPropostas = '';
         }
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_CONT_DADO_RELAC_CADA] 
             @CLIENTE = {$data['codCliente']},
@@ -1987,7 +1894,7 @@ class CadastroController extends AbstractController
             @WEB_SITE = '{$data['website']}',
             @OBS_PROPOSTA = '{$obsPropostas}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if ($res[0]['MSG'] == 'OK') {
           $message = array('responseCode' => 200);
@@ -2008,25 +1915,19 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/potencial-compra/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-potencial-compra",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getPotencialCompra(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_POTN_VEND_CONS]
             @ID_CLIE = {$codCliente},
             @PARAM = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           for ($i = 0; $i < count($res); $i++) {
@@ -2059,11 +1960,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/salvar/potencial-compra",
-   *  name="comercial.clientes-cadastro-salvar-potencial-compra",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putPotencialCompra(Connection $connection, Request $request)
@@ -2077,7 +1973,7 @@ class CadastroController extends AbstractController
           $pesoDe = !empty($data[$i]['de']) ? $data[$i]['de'] : 0;
           $pesoAte = !empty($data[$i]['ate']) ? $data[$i]['ate'] : 0;
 
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
               EXEC [PRC_MTCORP_MODU_CLIE_POTN_VEND_CADA]
               @CLIENTE = {$data[$i]['codCliente']},
@@ -2085,7 +1981,7 @@ class CadastroController extends AbstractController
               @PESO_DE = {$pesoDe},
               @PESO_ATE = {$pesoAte}
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
 
           if ($res[0]['MSG'] == 'OK') {
             $arrValidacao[$i]['validacao'] = true;
@@ -2120,12 +2016,6 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/anexos/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-anexos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getAnexos(Connection $connection, Request $request, $codCliente)
@@ -2133,13 +2023,12 @@ class CadastroController extends AbstractController
     try {
       $params = $request->query->all();
       $resLoop = [];
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
             EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CONS]
             @CLIENTE = {$codCliente}
           "
-      )->fetchAll();
-
+      )->fetchAllAssociative();
 
       if (count($res) > 0) {
         foreach ($res as $key => $value) {
@@ -2158,7 +2047,7 @@ class CadastroController extends AbstractController
         if (count($resLoop) > 0) {
 
           // foreach ($resLoop as $key => $value) {
-          //     $resLoop[$key]["urlAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["urlAnexo"]);
+          //     $resLoop[$key]["urlAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER["SERVER_NAME"], $value["urlAnexo"]);
           //     $resLoop[$key]["urlAnexo"] = str_replace("\\", "/", $resLoop[$key]["urlAnexo"] );
           //     $resLoop[$key]["urlAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $resLoop[$key]["urlAnexo"] : "https://" . $resLoop[$key]["urlAnexo"]; 
           // }
@@ -2182,7 +2071,6 @@ class CadastroController extends AbstractController
     }
   }
 
-
   // /**
   //  * @Route(
   //  *  "/comercial/clientes/cadastro/carregar/anexos/{codCliente}",
@@ -2196,12 +2084,12 @@ class CadastroController extends AbstractController
   // {
   //   if ($request->isMethod('GET')) {
   //     try {
-  //       $res = $connection->query(
+  //       $res = $connection->executeQuery(
   //         "
   //           EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CONS]
   //           @CLIENTE = {$codCliente}
   //         "
-  //       )->fetchAll();
+  //       )->fetchAllAssociative();
 
   //       if (count($res) > 0) {
   //         for ($i=0; $i < count($res); $i++) {
@@ -2240,13 +2128,7 @@ class CadastroController extends AbstractController
   //   }
   // }
 
-
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/upload/anexo",
-   *  name="comercial.clientes-cadastro-upload-anexo",
-   *  methods={"POST"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -2294,9 +2176,8 @@ class CadastroController extends AbstractController
 
       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-      $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\clientes\\cadastros\\" .  $codCliente  . "\\" . $tipoAnexo . "\\";
+      $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\clientes\\cadastros\\" .  $codCliente  . "\\" . $tipoAnexo . "\\";
       //  $webPath = '/uploads/comercial/clientes/cadastros/' . $codCliente . '/' ;
-
 
       if (file_exists($path . $file)) {
         $file = rand() . '-' . $file;
@@ -2310,7 +2191,7 @@ class CadastroController extends AbstractController
 
       //  $data = base64_encode($urlAnexo);
       file_put_contents($caminho, base64_decode($urlAnexo));
-      $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $caminho);
+      $webPath = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER['LOCAL_ADDR'], $caminho);
       $webPath = str_replace("\\", "/", $webPath);
       $webPath = $_SERVER["HTTPS"] == "off" ? "http://" . $webPath : "https://" . $webPath;
       //  print_r($webPath);
@@ -2319,7 +2200,7 @@ class CadastroController extends AbstractController
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
                    EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CADA]
                    @CLIENTE = {$codCliente},
@@ -2331,7 +2212,7 @@ class CadastroController extends AbstractController
                    @NOME_EXIBICAO = '{$descAnexo}',
                    @USUARIO_CADASTRO = '{$matricula}'
                  "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (isset($res[0])) {
         return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -2344,8 +2225,6 @@ class CadastroController extends AbstractController
       return FunctionsController::Retorno(false, 'Erro ao realizar cadastro.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
     }
   }
-
-
 
   // /**
   //  * @Route(
@@ -2396,7 +2275,7 @@ class CadastroController extends AbstractController
   //             $urlArquivoServ = $uploadPath . $tipoAnexo . $fileExtension;
   //             $urlArquivoWeb = $webPath . $tipoAnexo . $fileExtension;
 
-  //             $res = $connection->query(
+  //             $res = $connection->executeQuery(
   //               "
   //                 EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CADA]
   //                 @CLIENTE = {$codCliente},
@@ -2408,7 +2287,7 @@ class CadastroController extends AbstractController
   //                 @NOME_EXIBICAO = '{$tipoAnexo}',
   //                 @USUARIO_CADASTRO = '{$idVendedor}'
   //               "
-  //             )->fetchAll();
+  //             )->fetchAllAssociative();
 
   //             if ($res[0]['ARQUIVO_ID']) {
   //               $message = array('responseCode' => 200);
@@ -2438,24 +2317,18 @@ class CadastroController extends AbstractController
   // }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/excluir/anexo/{id}",
-   *  name="comercial.clientes-cadastro-excluir-anexo",
-   *  methods={"DELETE"},
-   *  requirements={"id"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function deleteAnexo(Connection $connection, Request $request, $id)
   {
     if ($request->isMethod('DELETE')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_ANEX_CADA]
             @ANEXO = {$id}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if ($res[0]['ID_ANEXO'] == $id) {
           $message = array('responseCode' => 200);
@@ -2476,24 +2349,18 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/filial/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-filial",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFilial(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_FILI_CONS]
             @ID_CLIE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $filial = new \stdClass;
@@ -2537,33 +2404,27 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/travas/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-travas",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getTravas(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_TRAVA_CONS]
             @CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) == 0) {
-          $res = $connection->query(
+          $res = $connection->executeQuery(
             "
             EXEC PRC_MTCORP_MODU_CLIE_TRAVA_CONS
             @ID_TRAVA = NULL
             ,@CLIENTE = {$codCliente}
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
         }
 
         if (count($res) > 0) {
@@ -2597,25 +2458,18 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/informacoes-financeiras/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-informacoes-financeiras",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getInformacoesFinanceiras(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_HIST_CONS]
             @CLIENTE = {$codCliente}
           "
-        )->fetchAll();
-
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $res[0]['HISTORICO_FINANCEIRO'] = str_replace("\r\n=", '\\', $res[0]['HISTORICO_FINANCEIRO']);
@@ -2654,24 +2508,18 @@ class CadastroController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/cadastro/carregar/informacoes-comerciais/{codCliente}",
-   *  name="comercial.clientes-cadastro-carregar-informacoes-comerciais",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getInformacoesComerciais(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_HIST_CONS]
             @CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $res[0]['HISTORICO_COMERCIAL'] = str_replace("\r\n=", '\\', $res[0]['HISTORICO_COMERCIAL']);
@@ -2709,7 +2557,6 @@ class CadastroController extends AbstractController
       return $response;
     }
   }
-
 
   
 

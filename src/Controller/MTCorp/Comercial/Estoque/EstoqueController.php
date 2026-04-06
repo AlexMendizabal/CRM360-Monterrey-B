@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Estoque;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use PDO;
 use App\Services\Helper;
-
-
 
 /**
  * Class EstoqueController
@@ -26,11 +24,6 @@ use App\Services\Helper;
 class EstoqueController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/estoque/estoque-atual",
-     *  name="comercial.estoque-estoque-atual", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getEstoqueAtual(Connection $connection, Request $request)
@@ -54,7 +47,7 @@ class EstoqueController extends AbstractController
             if (isset($params['codMaterial'])) $codMaterial = $params['codMaterial'];
             if (isset($params['descMaterial'])) $descMaterial = base64_decode($params['descMaterial']);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COME_ESTO_CONS]
                     @ID_EMPR = '{$deposito}'
                     ,@ID_LINHA = '{$linha}'
@@ -65,7 +58,7 @@ class EstoqueController extends AbstractController
                     ,@DS_MATE = '{$descMaterial}'
                     ,@ID_PARAM = 2
                     ,@ORDER = 2
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 foreach ($res as $key => $value) {
@@ -104,11 +97,6 @@ class EstoqueController extends AbstractController
         $this->helper = new Helper();
     }
     /**
-     * @Route(
-     *  "/comercial/materiales",
-     *  name="comercial.materiales", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getMateriales(Connection $connection, Request $request)
@@ -184,9 +172,8 @@ class EstoqueController extends AbstractController
                 $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
                 OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
                 $stmt = $connection->prepare($query);
-                $stmt->execute($bindings);
-                $res = $stmt->fetchAll();
-
+                $_result = $stmt->executeQuery($bindings);
+                $res = $_result->fetchAllAssociative();
 
                 if (count($res) > 0) {
                     $message = array(
@@ -222,11 +209,6 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/materiales/lista",
-     *  name="comercial.materiales/lista", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getMaterialesLista(Connection $connection, Request $request)
@@ -279,8 +261,6 @@ class EstoqueController extends AbstractController
                 INNER JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
                 ";
 
-
-
                 if (!empty($conditions)) {
                     $conditionString = implode(' AND ', $conditions);
                     $query .= " WHERE $conditionString";
@@ -289,9 +269,8 @@ class EstoqueController extends AbstractController
                 $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
                 OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
                 $stmt = $connection->prepare($query);
-                $stmt->execute($bindings);
-                $res = $stmt->fetchAll();
-
+                $_result = $stmt->executeQuery($bindings);
+                $res = $_result->fetchAllAssociative();
 
                 if (count($res) > 0) {
                     $message = array(
@@ -326,13 +305,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/materiales_lista_precio_vendedor",
-     *  name="comercial.materiales_lista_precio_vendedor", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getMaterialesPrecioVendedor(Connection $connection, Request $request)
@@ -346,7 +319,6 @@ class EstoqueController extends AbstractController
                 $id_material = $params['id_material'] ?? '';
                 $id_lista_precio = $params['id_lista'] ?? '';
                 $data = array();
-
 
                 $codigo_almacen = $params['codigo_almacen'] ?? '';
 
@@ -397,15 +369,13 @@ class EstoqueController extends AbstractController
                AND MAT.ID_CODIGOMATERIAL = :CODIGOMATERIAL
                order by DEPO.ID asc";
 
-
-
                 $buscar_material = $connection->prepare($query);
                 $buscar_material->bindValue('id_vendedor', (int)$id_vendedor);
                 $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
                 $buscar_material->bindValue('codigo_almacen', $codigo_almacen);
                 $buscar_material->bindValue('CODIGOMATERIAL',  $id_material);
-                $buscar_material->execute();
-                $res = $buscar_material->fetchAll();
+                $result_buscar_material = $buscar_material->executeQuery();
+                $res = $result_buscar_material->fetchAllAssociative();
                 if(count($res) > 0){
                     $data =  $res;
                 }else{
@@ -466,11 +436,6 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/materiales_lista_precio",
-     *  name="comercial.materiales_lista_precio", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getMaterialesPrecio(Connection $connection, Request $request)
@@ -482,6 +447,8 @@ class EstoqueController extends AbstractController
                 $id_material = $params['id_material'] ?? '';
                 $id_lista_precio = $params['id_lista'] ?? '';
                 $registros = $params['registros'] ?? '';
+                $page = isset($params['page']) ? max(1, (int)$params['page']) : null;
+                $per_page = isset($params['per_page']) ? max(1, min(1000, (int)$params['per_page'])) : null;
 
                 $conditions = [];
                 $bindings = [];
@@ -503,44 +470,76 @@ class EstoqueController extends AbstractController
                 UNI.NOMBRE_UNI AS unidad, MATDEP.cantidad AS cantidad, PM.precio as precio, 0.00 as descuento, PM.precio AS precio_neto, (
                 SELECT TOP 1 PERCENTUALIMPOSTONACIONAL FROM TB_CLAS_FISC) AS iva, MONE.nombre_moneda, 'A' AS codigo_situacion,
 				BASE.id_classe AS id_linea, BASE.descricao as nombre_linea,MATE.largo_material as largo_material
-                
-                FROM TB_MATE MATE 
+
+                FROM TB_MATE MATE
                 LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
-                LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = MATDEP.id_deposito
+                LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MATDEP.id_deposito
 				LEFT JOIN TB_CIUDAD  CIU ON depo.id_ciudad =CIU.id
 				LEFT JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
                 LEFT JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
                 LEFT JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista
                 LEFT JOIN UNIDADES UNI ON UNI.ID = MATE.UNIDADE
                 LEFT JOIN TB_MONEDA MONE ON MONE.id = PM.id_moneda
-				LEFT JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID 
+				LEFT JOIN TB_SUB_LINH SUB ON MATE.CODIGOCLASSE = SUB.ID
 				LEFT JOIN MTCORP_BASE_LINHAS_CLASSE BASE ON SUB.ID_CLASE = BASE.id_classe
                 ";
 
+                $whereClause = '';
                 if (!empty($conditions)) {
                     $conditionString = implode(' AND ', $conditions);
-                    $query .= " WHERE $conditionString AND DEPO.CODIGO_ALMACEN NOT LIKE '%00'";
+                    $whereClause = " WHERE $conditionString AND DEPO.estado_mostrar = 1";
                 } else {
-                    $query .= " WHERE DEPO.CODIGO_ALMACEN NOT LIKE '%00'";
+                    $whereClause = " WHERE DEPO.estado_mostrar = 1";
                 }
 
+                if ($page !== null && $per_page !== null) {
+                    $offset = ($page - 1) * $per_page;
+                    $limit = $per_page;
+                } else {
+                    $offset = isset($params['offset']) ? max(0, (int)$params['offset']) : 0;
+                    $limit = !empty($registros) ? (int)$registros : 50;
+                }
+
+                $countQuery = "SELECT COUNT(*) as total FROM TB_MATE MATE
+                LEFT JOIN TB_MATERIAL_DEPOSITO MATDEP ON MATE.CODIGOMATERIAL = MATDEP.mate_sap
+                LEFT JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.CODIGO_ALMACEN = MATDEP.id_deposito
+                LEFT JOIN TB_CIUDAD CIU ON depo.id_ciudad = CIU.id
+                LEFT JOIN TB_DEPARTAMENTO DEP ON CIU.id_departamento = DEP.id
+                LEFT JOIN TB_PRECIO_MATERIAL PM ON PM.cod_mate = MATE.CODIGOMATERIAL
+                LEFT JOIN TB_LISTA_PRECIO LP ON LP.id = PM.id_lista" . $whereClause;
+
+                $stmtCount = $connection->prepare($countQuery);
+                $totalResult = $stmtCount->executeQuery($bindings);
+                $total = (int)$totalResult->fetchOne();
+
+                $query .= $whereClause;
                 $query .= " ORDER BY MATE.ID_CODIGOMATERIAL
-                OFFSET 0 ROWS FETCH NEXT " . $registros . " ROWS ONLY";
+                OFFSET " . $offset . " ROWS FETCH NEXT " . $limit . " ROWS ONLY";
 
                 $stmt = $connection->prepare($query);
-                $stmt->execute($bindings);
-                $res = $stmt->fetchAll();
+                $_result = $stmt->executeQuery($bindings);
+                $res = $_result->fetchAllAssociative();
+
+                $totalPages = ($page !== null && $per_page !== null) ? (int)ceil($total / $per_page) : null;
+
                 if (count($res) > 0) {
                     $message = array(
                         'responseCode' => 200,
                         'result' => $res,
-                        'estado' => true
+                        'estado' => true,
+                        'total' => $total,
                     );
+                    if ($totalPages !== null) {
+                        $message['page'] = $page;
+                        $message['per_page'] = $per_page;
+                        $message['total_pages'] = $totalPages;
+                    }
                 } else {
                     $message = array(
                         'responseCode' => 204,
                         'result' => [],
-                        'estado' => false
+                        'estado' => false,
+                        'total' => $total,
                     );
                 }
             } else {
@@ -563,13 +562,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/sincronizar",
-     *  name="comercial.sincronizar", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function sincMateriales(Connection $connection, Request $request)
@@ -577,7 +570,7 @@ class EstoqueController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
-                $sincronizar = $connection->query("")->fetchAll();
+                $sincronizar = $connection->executeQuery("")->fetchAllAssociative();
                 if (count($sincronizar) > 0) {
                 } else {
                 }
@@ -602,11 +595,6 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/presentacion_materiales",
-     *  name="comercial.presentacion_materiales", 
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getPresentacionMateriales(Connection $connection, Request $request)
@@ -619,8 +607,8 @@ class EstoqueController extends AbstractController
                 WHERE 
                 estado_mat_presentacion = 1";
                 $stmt = $connection->prepare($query);
-                $stmt->execute();
-                $res = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $res = $result_stmt->fetchAllAssociative();
                 if (count($res) > 0) {
                     /* dd($res); */
                     $message = array(
@@ -649,26 +637,18 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
-
     /**
-     * @Route(
-     *  "/comercial/estoque/outras-unidades/{codMaterial}",
-     *  name="comercial.estoque-outrasUnidades",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getEstoqueOutrasUnidades(Connection $connection, Request $request, $codMaterial)
     {
         try {
             if ($codMaterial != '' && $codMaterial != 0) {
-                $estoqueUnidades = $connection->query("
+                $estoqueUnidades = $connection->executeQuery("
                     EXEC [PRC_COME_ESTO_CONS] 
                         @ID_MATE = {$codMaterial}
                         ,@ID_PARAM = 3
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 if (count($estoqueUnidades) > 0) {
                     $message = array(
@@ -705,24 +685,18 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/estoque/pedidos-compra/{codMaterial}/{idEmpresa}",
-     *  name="comercial.estoque-pedidosCompra",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+", "idEmpresa"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getPedidosCompra(Connection $connection, Request $request, $codMaterial, $idEmpresa)
     {
         try {
             if (($codMaterial != '' && $codMaterial != 0) || ($idEmpresa != '' && $idEmpresa != 0)) {
-                $pedidosCompra = $connection->query("
+                $pedidosCompra = $connection->executeQuery("
                     EXEC [PRC_COME_ESTO_CONS]
                         @ID_MATE = {$codMaterial}
                         ,@ID_EMPR = {$idEmpresa}
                         ,@ID_PARAM = 5
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 $arrFinal['analitico'] = $pedidosCompra;
 
@@ -773,24 +747,18 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/estoque/estoque-comprometido/{codMaterial}/{idEmpresa}",
-     *  name="comercial.estoque-estoqueComprometido",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+", "idEmpresa"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getEstoqueComprometido(Connection $connection, Request $request, $codMaterial, $idEmpresa)
     {
         try {
             if (($codMaterial != '' && $codMaterial != 0) || ($idEmpresa != '' && $idEmpresa != 0)) {
-                $estoqueComprometido = $connection->query("
+                $estoqueComprometido = $connection->executeQuery("
                     EXEC [PRC_COME_ESTO_CONS]
                         @ID_MATE = {$codMaterial}
                         ,@ID_EMPR = {$idEmpresa}
                         ,@ID_PARAM = 4
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 $arrFinal['analitico'] = $estoqueComprometido;
 
@@ -837,24 +805,18 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/estoque/lote/{codMaterial}/{idEmpresa}",
-     *  name="comercial.estoque-lote",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+", "idEmpresa"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getEstoqueLote(Connection $connection, Request $request, $codMaterial, $idEmpresa)
     {
         try {
             if (($codMaterial != '' && $codMaterial != 0) || ($idEmpresa != '' && $idEmpresa != 0)) {
-                $estoqueLote = $connection->query("
+                $estoqueLote = $connection->executeQuery("
                     EXEC [PRC_COME_ESTO_CONS]
                         @ID_MATE = {$codMaterial}
                         ,@ID_EMPR = {$idEmpresa}
                         ,@ID_PARAM = 6
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 foreach ($estoqueLote as $key => $value) {
                     $arrFinal['analitico'][$key] = array(
@@ -907,29 +869,21 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/estoque/estoque-suspenso/{codMaterial}/{idEmpresa}",
-     *  name="comercial.estoque-estoqueSuspenso",
-     *  methods={"GET"},
-     *   requirements={"codMaterial"="\d+", "idEmpresa"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getEstoqueSuspenso(Connection $connection, Request $request, $codMaterial, $idEmpresa)
     {
         try {
             if (($codMaterial != '' && $codMaterial != 0) || ($idEmpresa != '' && $idEmpresa != 0)) {
-                $estoqueSuspenso = $connection->query("
+                $estoqueSuspenso = $connection->executeQuery("
                     EXEC [PRC_COME_ESTO_CONS]
                         @ID_MATE = {$codMaterial}
                         ,@ID_EMPR = {$idEmpresa}
                         ,@ID_PARAM = 7
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 if (count($estoqueSuspenso) > 0) {
-
 
                     $message = array(
                         'responseCode' => 200,
@@ -964,13 +918,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/estoque/actualizar_item",
-     *  name="comercial.estoque-actualizar_item",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function actualizarItem(Connection $connection, Request $request)
@@ -994,9 +942,9 @@ class EstoqueController extends AbstractController
                 $buscar_item = $connection->prepare($query_verificar);
                 $buscar_item->bindValue('item_code', $item_code);
                 $buscar_item->bindValue('estado', 1);
-                $buscar_item->execute();
+                $_resultBuscar = $buscar_item->executeQuery();
 
-                if ($buscar_item->rowCount() > 0) {
+                if ($_resultBuscar->rowCount() > 0) {
                     $query_material = "UPDATE TB_MATE 
                     SET DESCRICAO = :item_name,
                         CODIGOUNIDADSAP = :unidad, PESOESPECIFICO = :peso, CODIGOCLASSESAP = :clase,
@@ -1009,7 +957,7 @@ class EstoqueController extends AbstractController
                     $actualizar_material->bindValue('clase', $clase);
                     $actualizar_material->bindValue('estado', $estado);
                     $actualizar_material->bindValue('item_code', $item_code);
-                    $actualizar_material->execute();
+                    $actualizar_material->executeStatement();
                     if ($actualizar_material->rowCount() > 0) {
                         $message = array(
                             'CodigoRespuesta' => true,
@@ -1027,20 +975,20 @@ class EstoqueController extends AbstractController
                     $query_unidad = "SELECT * FROM UNIDADES WHERE CODIGO_UNIDAD = :unidad";
                     $buscar_unidad = $connection->prepare($query_unidad);
                     $buscar_unidad->bindValue('unidad', $unidad);
-                    $buscar_unidad->execute();
+                    $_resultUnidad = $buscar_unidad->executeQuery();
 
-                    if ($buscar_unidad->rowCount() > 0) {
-                        $unidad_row = $buscar_unidad->fetch();
+                    if ($_resultUnidad->rowCount() > 0) {
+                        $unidad_row = $_resultUnidad->fetchAssociative();
                         $id_unidad = $unidad_row['ID'];
                     }
 
                     $query_clase = "SELECT * FROM TB_SUB_LINH WHERE CODIGO_SUB_LINH = :clase";
                     $buscar_clase = $connection->prepare($query_clase);
                     $buscar_clase->bindValue('clase', $clase);
-                    $buscar_clase->execute();
+                    $_resultClase = $buscar_clase->executeQuery();
 
-                    if ($buscar_clase->rowCount() > 0) {
-                        $clase_row = $buscar_clase->fetch();
+                    if ($_resultClase->rowCount() > 0) {
+                        $clase_row = $_resultClase->fetchAssociative();
                         $id_clase = $clase_row['ID'];
                     }
 
@@ -1056,7 +1004,7 @@ class EstoqueController extends AbstractController
                     $guardar_material->bindValue('item_code', $item_code);
                     $guardar_material->bindValue('id_clase', $id_clase);
                     $guardar_material->bindValue('clase', $clase);
-                    $guardar_material->execute();
+                    $guardar_material->executeStatement();
                 }
 
                 if ($guardar_material->rowCount() > 0) {
@@ -1092,14 +1040,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/estoque/estoquesuspenso/{codMaterial}",
-     *  name="comercial.estoque-estoque.Suspenso",
-     *  methods={"GET"},
-     *   requirements={"codMaterial"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getEstockSuspenso(Connection $connection, Request $request, $codMaterial)
@@ -1124,13 +1065,12 @@ class EstoqueController extends AbstractController
                 $statement->bindValue('codMaterial', $codMaterial);
                 $statement->bindValue('estado', 1);
 
-                $statement->execute();
+                $result_statement = $statement->executeQuery();
 
-                $estoqueSuspenso = $statement->fetchAll();
+                $estoqueSuspenso = $result_statement->fetchAllAssociative();
                 foreach ($estoqueSuspenso as &$row) {
                     $row['fecha'] = date('d-m-Y H:i:s', strtotime($row['fecha']));
                 }
-
 
                 if (count($estoqueSuspenso) > 0) {
                     $arrFinal['analitico'] = $estoqueSuspenso;
@@ -1174,12 +1114,6 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/estoque/estoquecomprometido/{codMaterial}",
-     *  name="comercial.estoque.estoqueComprometido",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getStockComprometido(Connection $connection, Request $request, $codMaterial)
@@ -1204,13 +1138,13 @@ class EstoqueController extends AbstractController
                         left JOIN UNIDADES uni on uni.ID = od.id_unidad
                         left join MTCORP_MODU_CLIE_BASE CLIE on OFE.id_cliente = CLIE.id_cliente
                         left JOIN TB_VEND VEND on VEND.ID = OFE.id_vendedor
-                        left JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.ID = OD.id_almacen_carrito
+                        left JOIN TB_DEPO_FISI_ESTO DEPO ON DEPO.DEPO.CODIGO_ALMACEN = OD.id_almacen_carrito
                         WHERE OD.id_material = :codMaterial";
 
                 $statement = $connection->prepare($query);
                 $statement->bindValue('codMaterial', $codMaterial);
-                $statement->execute();
-                $estoqueComprometido = $statement->fetchAll();
+                $result_statement = $statement->executeQuery();
+                $estoqueComprometido = $result_statement->fetchAllAssociative();
                 foreach ($estoqueComprometido as &$row) {
                     $row['fecha_oferta'] = date('d-m-Y H:i:s', strtotime($row['fecha_oferta']));
                 }
@@ -1261,12 +1195,6 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/estoque/estoquealmacen/{codMaterial}",
-     *  name="comercial.estoque.estoquealmacen",
-     *  methods={"GET"},
-     *  requirements={"codMaterial"="\d+"}
-     * )
      * @return JsonResponse
      */
     public function getEstoqueAlmacen(Connection $connection, Request $request, $codMaterial)
@@ -1333,7 +1261,6 @@ class EstoqueController extends AbstractController
                     $bindings['nombre_almacen'] = '%' . $nombre_almacen . '%';
                 }
 
-
                 $query = "
                 SELECT DISTINCT
                     CLASE.descricao as familia,
@@ -1364,7 +1291,7 @@ class EstoqueController extends AbstractController
                 // Agrega la paginación a la consulta SQL
                 $query .= " AND LP.id NOT IN (8, 9, 10) ORDER BY {$orderBy} {$orderType} OFFSET {$offset} ROWS FETCH NEXT {$tamanoPagina} ROWS ONLY";
 
-                $result = $connection->executeQuery($query, $bindings)->fetchAll();
+                $result = $connection->executeQuery($query, $bindings)->fetchAllAssociative();
                 
 
                 if (!empty($result)) {
@@ -1397,13 +1324,7 @@ class EstoqueController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/estoque/lista-precio",
-     *  name="comercial.estoque.lista_precio",
-     *  methods={"GET"},
-     * )
      * @return JsonResponse
      */
     public function traerLista(Connection $connection, Request $request)
@@ -1432,11 +1353,6 @@ class EstoqueController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/vendedor/lista_precio_completa",
-     *  name="comercial.vendedor-lista-precio-completa",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1470,8 +1386,8 @@ class EstoqueController extends AbstractController
                 ";
                 $stmtCount = $connection->prepare($queryCount);
                 $stmtCount->bindValue('id_vendedor', $id_vendedor);
-                $stmtCount->executeQuery();
-                $total = (int)$stmtCount->fetchOne();
+                $countResult = $stmtCount->executeQuery();
+                $total = (int)$countResult->fetchOne();
 
                 $query = "
                     SELECT DISTINCT
@@ -1508,8 +1424,8 @@ class EstoqueController extends AbstractController
 
                 $stmt = $connection->prepare($query);
                 $stmt->bindValue('id_vendedor', $id_vendedor);
-                $stmt->executeQuery();
-                $res = $stmt->fetchAll();
+                $resultSet = $stmt->executeQuery();
+                $res = $resultSet->fetchAllAssociative();
 
                 if (count($res) > 0) {
                     $message = [

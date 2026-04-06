@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Services\Helper;
@@ -21,14 +21,14 @@ use App\Services\Helper;
  */
 class ComercialController extends AbstractController
 {
-    public function verificaSiglaPerfil($connection, $matricula, $sigla)
+    public static function verificaSiglaPerfil($connection, $matricula, $sigla)
     {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_CORE_PERF] 
             @PARAMETRO = 2, 
             @NR_MATR = {$matricula}, 
             @SG_PERF = '{$sigla}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
         if (count($res) > 0) {
             return true;
         } else {
@@ -36,7 +36,7 @@ class ComercialController extends AbstractController
         }
     }
 
-    public function checkPerfil($connection, $matricula)
+    public static function checkPerfil($connection, $matricula)
     {
         $perfil = new \stdClass;
         $perfil->vendedor = true;
@@ -44,11 +44,11 @@ class ComercialController extends AbstractController
         $perfil->gestor = false;
         $perfil->hasVinculoOperadores = false;
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_CORE_PERF]
                 @PARAMETRO = 4,
                 @NR_MATR = '{$matricula}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
      
     if (count($res) > 0) {
             for ($i = 0; $i < count($res); $i++) {
@@ -70,16 +70,15 @@ class ComercialController extends AbstractController
             }
         }
 
-
         if (
             $perfil->vendedor === true &&
             $perfil->coordenador === false &&
             $perfil->gestor === false
         ) {
-            $resVinculoOperadores = $connection->query("
+            $resVinculoOperadores = $connection->executeQuery("
                 EXEC [PRC_VINC_OPER_CONS] 
                     @MATR = '{$matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($resVinculoOperadores) > 0) {
                 $perfil->hasVinculoOperadores = true;
@@ -90,11 +89,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/empresas",
-     *  name="comercial.empresas",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getEmpresas(Connection $connection, Request $request)
@@ -126,13 +120,12 @@ class ComercialController extends AbstractController
                 $consultaEmps = '';
             }
 
-
             if ($consultaEmps != 'false') {
-                $empresas = $connection->query("
+                $empresas = $connection->executeQuery("
                     EXEC [PRC_MTCORP_BASE_EMPR] 
                         @PARAM = 1, 
                         @EMPRESAS = '{$consultaEmps}'
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
                 foreach ($empresas as $key => $value) {
                     $arrFinal[$key] = array(
@@ -171,11 +164,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/estoque",
-     *  name="comercial.estoque",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getAlmacen(Connection $connection, Request $request)
@@ -184,10 +172,9 @@ class ComercialController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
-                $almacenes = $connection->query("
-                SELECT CONCAT(CODIGO_ALMACEN, '- ', NOMBRE_DEPOSITO) AS ALMACEN, *
+                $almacenes = $connection->executeQuery("SELECT CONCAT(CODIGO_ALMACEN, '- ', NOMBRE_DEPOSITO) AS ALMACEN, *
                 FROM TB_DEPO_FISI_ESTO
-                WHERE ESTADO_DEPOSITO = 1;                ")->fetchAll();
+                WHERE ESTADO_DEPOSITO = 1;")->fetchAllAssociative();
                 if (count($almacenes) > 0) {
                     $array_deposito = $almacenes;
                     $message = array(
@@ -216,13 +203,7 @@ class ComercialController extends AbstractController
         return $response;
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/depositos",
-     *  name="comercial.depositos",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getDepositos(Connection $connection, Request $request)
@@ -275,8 +256,7 @@ class ComercialController extends AbstractController
                 if ($grupoManetoni != '') $query = $query . ", @GRUPO_MANETONI = '{$grupoManetoni}', @DEPOSITO = '{$depositosFat}'";
                 if ($depositosSSV != '') $query = $query . ", @DEPOSITO = '{$depositosSSV}'";
 
-
-                $res = $connection->query($query)->fetchAll();
+                $res = $connection->executeQuery($query)->fetchAllAssociative();
 
                 if (count($res) > 0) {
                     foreach ($res as $key => $value) {
@@ -300,7 +280,7 @@ class ComercialController extends AbstractController
                 }
             } else {
                 $message = array(
-                    'responseCode' => 401,
+                    'responseCode' => 400,
                     'result' => 'Favor informar o(s) codigo(s) da(s) empresa(s) a consultar.'
                 );
             }
@@ -317,11 +297,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/escritorios",
-     *  name="comercial.escritorios",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getEscritorios(Connection $connection, Request $request)
@@ -329,8 +304,8 @@ class ComercialController extends AbstractController
         try {
             $helper = new Helper();
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
-            $buscarUsuario = $helper->buscarUsuario($connection, (int)$infoUsuario->id);
-                if($buscarUsuario['NM_CARG_FUNC'] != 'PROMOTOR'){
+            $buscarUsuario = $helper->buscarUsuario($connection, (int)($infoUsuario->id ?? 0));
+                if(($buscarUsuario['NM_CARG_FUNC'] ?? '') != 'PROMOTOR'){
                     $buscarEscritorios = $helper->getEscritorios($connection);
                     if($buscarEscritorios != false){
 
@@ -354,10 +329,10 @@ class ComercialController extends AbstractController
                     }
                 }
            // dd( $infoUsuario);
-            /* $res = $connection->query("
+            /* $res = $connection->executeQuery("
                 EXEC [PRC_MTCORP_MODU_COME_ESCR_COOR_CONS]
                     @MATRICULA = '{$infoUsuario->matricula}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             if (count($res) > 0) {
                 for ($i = 0; $i < count($res); $i++) {
                     $escritorios[] = array(
@@ -387,11 +362,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/linhas",
-     *  name="comercial.linhas",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getLinhas(Connection $connection, Request $request)
@@ -405,11 +375,11 @@ class ComercialController extends AbstractController
             $idLinha = isset($params['idLinha']) ? $params['idLinha'] : 0;
             $dsLinha = isset($params['descLinha']) ? $params['descLinha'] : '';
 
-            $linhas = $connection->query("
+            $linhas = $connection->executeQuery("
                 EXEC [PRC_MATE_LINH_CONS] 
                     @ID_LINHA = {$idLinha},
                     @DS_LINHA = '{$dsLinha}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($linhas) > 0) {
                 $message = array(
@@ -435,11 +405,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/linhas/{id}",
-     *  name="comercial.linhas_id",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getLinhasId(Connection $connection, Request $request, $id)
@@ -449,13 +414,13 @@ class ComercialController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
                 if ($id == 0 || $id == '') {
-                    $lineas = $connection->query("
+                    $lineas = $connection->executeQuery("
                     SELECT * FROM MTCORP_BASE_LINHAS
-                ")->fetchAll();
+                ")->fetchAllAssociative();
                 } else {
-                    $lineas = $connection->query("
+                    $lineas = $connection->executeQuery("
                         SELECT * FROM MTCORP_BASE_LINHAS WHERE id_classe = {$id}
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
                 }
 
                 if (count($lineas) > 0) {
@@ -488,11 +453,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/sublineas/{id}",
-     *  name="comercial.sublineas",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getSubLineasId(Connection $connection, Request $request, $id)
@@ -502,13 +462,13 @@ class ComercialController extends AbstractController
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
             if (isset($infoUsuario)) {
                 if ($id == 0 || $id == '') {
-                    $sublineas = $connection->query("
+                    $sublineas = $connection->executeQuery("
                         SELECT * FROM TB_SUB_LINH
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
                 } else {
-                    $sublineas = $connection->query("
+                    $sublineas = $connection->executeQuery("
                         SELECT * FROM TB_SUB_LINH WHERE ID_CLASE = {$id}
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
                 }
 
                 if (count($sublineas) > 0) {
@@ -541,11 +501,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/classes",
-     *  name="comercial.classes",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getClasses(Connection $connection, Request $request)
@@ -556,11 +511,11 @@ class ComercialController extends AbstractController
             $idClasse = isset($params['idClasse']) ? $params['idClasse'] : 0;
             $dsClasse = isset($params['descClasse']) ? $params['descClasse'] : '';
            
-            $classes = $connection->query("
+            $classes = $connection->executeQuery("
                 EXEC [PRC_MATE_CLASS_CONS]
                     @ID_CLASSE = {$idClasse},
                     @DS_CLASSE = '{$dsClasse}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($classes) > 0) {
                 $message = array(
@@ -587,11 +542,6 @@ class ComercialController extends AbstractController
 
     
     /**
-     * @Route(
-     *  "/comercial/grupos",
-     *  name="comercial.grupos",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getGrupo(Connection $connection, Request $request)
@@ -610,7 +560,7 @@ class ComercialController extends AbstractController
                 $queryBuilder->setParameter('idSubLinea', $idSubLinea);
              }
                         
-            $stmt = $queryBuilder->execute();
+            $stmt = $queryBuilder->executeQuery();
             $grupos = $stmt->fetchAllAssociative();
             
             if (count($grupos) > 0) {
@@ -637,11 +587,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/materiais",
-     *  name="comercial.materiais",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -662,7 +607,7 @@ class ComercialController extends AbstractController
             $codEmpresa = isset($params['codEmpresa']) ? $params['codEmpresa'] : NULL;
            
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXECUTE [PRC_MTCORP_BASE_MATE_CONS]
                      @CODIGO_MATERIAL = '{$codMaterial}'
                     ,@DESCRICAO = '{$descMaterial}'
@@ -673,8 +618,7 @@ class ComercialController extends AbstractController
                     ,@SITUACAO = '{$situacao}'
                     ,@COMERCIALIZA = '{$comercializa}'
                     ,@ID_EMPR = '{$codEmpresa}'
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['MSG'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -689,11 +633,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/perfil",
-     *  name="comercial.perfil",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getPerfil(Connection $connection, Request $request)
@@ -718,11 +657,6 @@ class ComercialController extends AbstractController
         return $response;
     }
     /**
-     * @Route(
-     *  "/comercial/materiales_suplementarios",
-     *  name="comercial.materiales_suplementarios",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function materialesContratipos(Connection $connection, Request $request)
@@ -834,8 +768,8 @@ class ComercialController extends AbstractController
         $buscar_material->bindValue('id_lista_precio', (int)$id_lista_precio);
         $buscar_material->bindValue('CODIGOMATERIAL',  (int)$codMaterial);
         $buscar_material->bindValue('estado_material', (int)$estado_material);
-        $buscar_material->execute();
-        $res = $buscar_material->fetchAll();
+        $result_buscar_material = $buscar_material->executeQuery();
+        $res = $result_buscar_material->fetchAllAssociative();
         
         if (count($res) > 0) {
             return $res;
@@ -845,11 +779,6 @@ class ComercialController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/materiales/lista_almacen",
-     *  name="comercial.almacen",
-     *  methods={"GET"},
-     * )
      * @return JsonResponse
      */
     public function getListaAlmacen(Connection $connection, Request $request)
@@ -857,11 +786,12 @@ class ComercialController extends AbstractController
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         //dd($infoUsuario);
         $helper = new Helper();
-        $params = $request->query->all();
+        $params = $request->query->all(); 
         $id_vendedor = 0;
         $nombreCargo = '';
         try {
             isset($params['id_vendedor']) ? $id_vendedor  = $params['id_vendedor'] : NULL;
+            isset($params['idListaPrecio']) ? $id_vendedor  = $params['idListaPrecio'] : NULL;
             $nombreCargo = $infoUsuario->none_cargo;
 
             $almacenes = $helper->almacenVendedorVenta($connection, (int)$id_vendedor, $nombreCargo);

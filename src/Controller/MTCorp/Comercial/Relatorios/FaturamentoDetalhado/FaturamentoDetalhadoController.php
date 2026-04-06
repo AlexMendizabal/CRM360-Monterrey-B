@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Relatorios\FaturamentoDetalhado;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 
 /**
  * Class FaturamentoDetalhadoController
@@ -18,11 +18,6 @@ use Doctrine\DBAL\DBALException;
 class FaturamentoDetalhadoController extends AbstractController
 {
   /**
-  * @Route(
-  *  "/comercial/relatorios/faturamento-detalhado/lista",
-  *  name="comercial.relatorios-faturamento-detalhado-lista",
-  *  methods={"GET"}
-  * )
   * @return JsonResponse
   */
   public function getFaturamentoDetalhado (Connection $connection, Request $request)
@@ -46,7 +41,7 @@ class FaturamentoDetalhadoController extends AbstractController
         $codAlvo = '';
       }
 
-      $faturamentoDetalhado = $connection->query(
+      $faturamentoDetalhado = $connection->executeQuery(
         "
           EXEC [PRC_MTCORP_MODU_FATU_COMP_PERI]
           @ALVO = '{$alvo}',
@@ -56,7 +51,7 @@ class FaturamentoDetalhadoController extends AbstractController
           @DTFIM = '{$dataFim}',
           @COMPARATIVO = '{$comparativo}'
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($faturamentoDetalhado) > 1) {
         for ($x = 0; $x < count($faturamentoDetalhado); $x++) {

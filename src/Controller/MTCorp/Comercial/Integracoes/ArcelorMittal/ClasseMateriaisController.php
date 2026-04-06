@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 
 /**
@@ -19,22 +19,17 @@ use App\Controller\Common\UsuarioController;
 class ClasseMateriaisController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/classes-materiais/lista",
-   *  name="comercial.integracoes-arcelor-mittal-classes-materiais-lista",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getLista(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
           EXEC [PRC_INTE_AM_CONS] @ID_PARA = 1
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array('responseCode' => 200, 'result' => $res);
@@ -55,12 +50,6 @@ class ClasseMateriaisController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/classes-materiais/associacoes/{idArcelorMittal}",
-   *  name="comercial.integracoes-arcelor-mittal-classes-materiais-associacoes",
-   *  methods={"GET"}, 
-   *  requirements={"idArcelorMittal"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getAssociacoes(Connection $connection, Request $request, $idArcelorMittal)
@@ -68,13 +57,13 @@ class ClasseMateriaisController extends AbstractController
     if ($request->isMethod('GET')) {
       try {        
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
           EXEC PRC_INTE_AM_CONS
             @ID_PARA = 1, 
             @ID_ARCE = {$idArcelorMittal}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $saida = array();
         if (count($res) > 0) {
@@ -105,23 +94,18 @@ class ClasseMateriaisController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/classes-materiais/classes",
-   *  name="comercial.integracoes-arcelor-mittal-classes-materiais-classes",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getClasses(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
           EXEC PRC_MATE_CLASS_CONS 
             @SOURCE = 'Manetoni'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array('responseCode' => 200, 'result' => $res);
@@ -142,11 +126,6 @@ class ClasseMateriaisController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/integracoes/arcelor-mittal/classes-materiais/salvar",
-   *  name="comercial.integracoes-arcelor-mittal-classes-materiais-salvar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putAssociacao(Connection $connection, Request $request)
@@ -174,7 +153,7 @@ class ClasseMateriaisController extends AbstractController
         ";
         
         try {
-          $res = $connection->query($query)->fetchAll();
+          $res = $connection->executeQuery($query)->fetchAllAssociative();
 
           if (isset($res[0]['MSG'])) {
             $message = array('responseCode' => 200);

@@ -16,7 +16,7 @@ class NotaFiscalRepository
                 ,@P_NR_SEQU_CONT = $nrSeqControle
         SQL;
 
-        $response = $connection->query($query)->fetchAll();
+        $response = $connection->executeQuery($query)->fetchAllAssociative();
 
         return $response;
     }

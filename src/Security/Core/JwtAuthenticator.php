@@ -20,8 +20,11 @@ class JwtAuthenticator implements EventSubscriberInterface
 
         // Verificar si la ruta actual es diferente de 'api.core.sap.login' y 'api.usuario.login'
         if ($currentRoute !== 'api.core.sap.login' && $currentRoute !== 'api.usuario.login'){
-            $authorization = $event->getRequest()->headers->get('Authorization');
-            list($jwt) = sscanf($authorization, 'Bearer %s');
+            $authorization = $event->getRequest()->headers->get('Authorization', '');
+            $jwt = null;
+            if (!empty($authorization)) {
+                list($jwt) = sscanf($authorization, 'Bearer %s');
+            }
             if ($jwt) {
                 try {
                     JwtAplication::decode($jwt);

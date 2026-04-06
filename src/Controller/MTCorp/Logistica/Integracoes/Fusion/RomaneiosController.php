@@ -2,10 +2,10 @@
 
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
+use Doctrine\DBAL\Connection;
+
 use App\Repository\MTCorp\Logistica\Integracoes\Fusion\PedidosRepository;
 
-use Doctrine\DBAL\Connection;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +25,6 @@ class RomaneiosController extends FusionController
     }
 
     /**
-     * @Route("/logistica/integracoes/fusion/romaneios", methods={"POST"})
-     *
      * @return JsonResponse
      */
     public function romaneiosFusion(Connection $connection): JsonResponse
@@ -76,8 +74,6 @@ class RomaneiosController extends FusionController
     }
 
     /**
-     * @Route("/logistica/integracoes/fusion/romaneios", methods={"PUT"})
-     *
      * @return JsonResponse
      */
     public function putRomaneio(Connection $connection, Request $request): JsonResponse
@@ -241,8 +237,8 @@ class RomaneiosController extends FusionController
         SQL;
 
         $stmt = $connection->prepare($query);
-        $stmt->execute();
-        $response   = $stmt->fetchAssociative();
+        $result_stmt = $stmt->executeQuery();
+        $response   = $result_stmt->fetchAssociative();
 
         $id         = null;
 
@@ -323,8 +319,8 @@ class RomaneiosController extends FusionController
             SQL;
 
             $stmt = $connection->prepare($query);
-            $stmt->execute();
-            $res[] = $stmt->fetchAssociative();
+            $result_stmt = $stmt->executeQuery();
+            $res[] = $result_stmt->fetchAssociative();
         }
 
         return $res;

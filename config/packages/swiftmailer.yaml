@@ -1,0 +1,13 @@
+swiftmailer:
+
+    default_mailer: noroaco
+    mailers:
+        noroaco:
+            transport: smtp
+            host: smtp.noroaco.com.br
+            port: 587
+            username: noroaco@noroaco.com.br
+            password: 
+            encryption: tls
+            auth_mode: login
+            spool: { type: 'memory' }

@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Sucursal;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController; 
 
 class SucursalController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/sucursal/generar_sucursal",
-     *  name="comercial.sucursal.lista_sucursal",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -62,7 +57,6 @@ class SucursalController extends AbstractController
                 $id_deposito = (int)$params['id_deposito'];
             }
 
-
             $query = "
                 EXEC [dbo].[PRC_SUC_COTI]
                     @nomeEscritorio = :nomeEscritorio,
@@ -84,8 +78,8 @@ class SucursalController extends AbstractController
             $stmt->bindValue(':id_ciudad', $id_ciudad);
             $stmt->bindValue(':deposito', $deposito);
             $stmt->bindValue(':id_deposito', $id_deposito);
-            $stmt->execute();
-            $res = $stmt->fetchAll();
+            $result_stmt = $stmt->executeQuery();
+            $res = $result_stmt->fetchAllAssociative();
 
             $functionsController = $this->get(FunctionsController::class);
 

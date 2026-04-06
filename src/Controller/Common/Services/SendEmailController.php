@@ -1,4 +1,5 @@
 <?php
+// TODO: Este archivo deberia ser un Service, no un Controller. Mover a src/Services/ o src/Module/Shared/Service/
 
 namespace App\Controller\Common\Services;
 

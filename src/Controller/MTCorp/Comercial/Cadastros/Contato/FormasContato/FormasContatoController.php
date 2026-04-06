@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class FormasContatoController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/forma-contato/lista",
-   *  name="comercial.cadastros-contato-forma-contato-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -44,14 +39,14 @@ class FormasContatoController extends AbstractController
       if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_FORM_CONT_CONS]
           @ID_PARAM = 1
           ,@FORM_CONT = '{$formaContato}'
           ,@IN_SITU = {$codSituacao}
           ,@ORDE_BY = '{$orderBy}'
           ,@ORDE_TYPE = '{$orderType}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -66,12 +61,6 @@ class FormasContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/forma-contato/alteracoes/{codFormaContato}",
-   *  name="comercial.cadastros-contato-forma-contato-alteracoes",
-   *  methods={"GET"},
-   *  requirements={"codFormaContato"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -79,11 +68,11 @@ class FormasContatoController extends AbstractController
   public function getAlteracoes(Connection $connection, Request $request, $codFormaContato)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXEC [PRC_FORM_CONT_LOG_CONS] 
             @ID_PARAM = 1
             ,@ID_FORM_CONT = '{$codFormaContato}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -99,12 +88,6 @@ class FormasContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/forma-contato/detalhes/{codFormaContato}",
-   *  name="comercial.cadastros-contato-forma-contato-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codFormaContato"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -112,11 +95,11 @@ class FormasContatoController extends AbstractController
   public function getDetalhes(Connection $connection, Request $request, $codFormaContato)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_FORM_CONT_CONS]
           @ID_PARAM = 1
           ,@FORM_CONT = '{$codFormaContato}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0) {
           return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -130,11 +113,6 @@ class FormasContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/forma-contato/salvar",
-   *  name="comercial.cadastros-contato-forma-contato-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postFormaContato(Connection $connection, Request $request)
@@ -147,13 +125,13 @@ class FormasContatoController extends AbstractController
       $codSituacao = $params['codSituacao'];
       // $codReferenteErp = $params['codReferenteErp'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_FORM_CONT_CADA]
           @ID_PARAM = 1,
           @DS_FORM_CONT = '{$descricao}',
           @IN_SITU = {$codSituacao},
           @ID_USUA_CADA = '{$infoUsuario->matricula}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codFormaContato'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -168,11 +146,6 @@ class FormasContatoController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/contato/forma-contato/atualizar",
-   *  name="comercial.cadastros-contato-forma-contato-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putFormaContato(Connection $connection, Request $request)
@@ -186,7 +159,7 @@ class FormasContatoController extends AbstractController
       $codSituacao = $params['codSituacao'];
       $codReferenteErp = $params['codReferenteErp'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_FORM_CONT_CADA]
           @ID_PARAM = 2,
           @ID_FORM_CONT = '{$codFormaContato}',
@@ -195,7 +168,7 @@ class FormasContatoController extends AbstractController
           @ID_USUA_CADA = '{$infoUsuario->matricula}',
           @ID_REFE_ERP =  {$codReferenteErp}
 
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codFormaContato']) && $res[0]['codFormaContato'] == $codFormaContato) {
           return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -210,11 +183,6 @@ class FormasContatoController extends AbstractController
   }
 
   /**
-     * @Route(
-     *  "/comercial/cadastros/contato/forma-contato/ativar",
-     *  name="comercial.cadastros-contato-forma-contato-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeFormaContato(Connection $connection, Request $request)
@@ -223,13 +191,13 @@ class FormasContatoController extends AbstractController
           $codFormaContato = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_FORM_CONT_CADA]
               @ID_PARAM = 3,
               @ID_FORM_CONT = '{$codFormaContato}',
               @IN_SITU = 1,
               @ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codFormaContato']) && $codFormaContato == $res[0]['codFormaContato']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -244,11 +212,6 @@ class FormasContatoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/contato/forma-contato/inativar",
-     *  name="comercial.cadastros-contato-forma-contato-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveFormaContato(Connection $connection, Request $request)
@@ -257,13 +220,13 @@ class FormasContatoController extends AbstractController
           $codFormaContato = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_FORM_CONT_CADA]
               @ID_PARAM = 3,
               @ID_FORM_CONT = '{$codFormaContato}',
               @IN_SITU = 0,
               @ID_USUA_CADA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codFormaContato']) && $codFormaContato == $res[0]['codFormaContato']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -278,11 +241,6 @@ class FormasContatoController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/contato/forma-contato/erp/lista",
-     *  name="comercial.cadastros-contato-forma-contato-erp-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -290,9 +248,9 @@ class FormasContatoController extends AbstractController
     public function getListaFormasERP(Connection $connection, Request $request)
     {
       try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_ERP_FORM_CONT_CONS
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);

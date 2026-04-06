@@ -71,7 +71,7 @@ class Veiculo implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array(
             "campo_alt"             => $this->campo_alt,

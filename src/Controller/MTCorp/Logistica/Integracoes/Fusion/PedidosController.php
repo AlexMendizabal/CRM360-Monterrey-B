@@ -2,9 +2,8 @@
 
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,8 +24,6 @@ class PedidosController extends FusionController
     }
 
     /**
-     * @Route("/logistica/integracoes/fusion/pedidos", methods={"POST"})
-     *
      * @param Connection $connection
      * @return JsonResponse
      */
@@ -62,7 +59,7 @@ class PedidosController extends FusionController
                     ,@IN_STAT           = '{$status}'
             SQL;
 
-            $dados = $connection->query($query)->fetchAll();
+            $dados = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (empty($dados)) {
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);
@@ -117,7 +114,7 @@ class PedidosController extends FusionController
                         @ID_LOGI_FUSI_PEDI = '{$value["ID_LOGI_FUSI_PEDI"]}'
                 SQL;
 
-                $dadosProdutos  = $connection->query($query)->fetchAll();
+                $dadosProdutos  = $connection->executeQuery($query)->fetchAllAssociative();
 
                 $produtos       = ProdutoFactory::create($dadosProdutos);
 
@@ -170,7 +167,7 @@ class PedidosController extends FusionController
                             ,@IN_INTE               = 1
                     SQL;
                     
-                    $res = $connection->query($query)->fetch();
+                    $res = $connection->executeQuery($query)->fetchAssociative();
 
                     if(!isset($res["success"]))
                         throw new \Exception("Erro ao gravar o pedido $pedido no MTCorp");
@@ -198,7 +195,7 @@ class PedidosController extends FusionController
                             ,@IN_INTE               = 1
                     SQL;
 
-                    $connection->query($query)->fetch();
+                    $connection->executeQuery($query)->fetchAssociative();
 
                 }
 
@@ -229,8 +226,6 @@ class PedidosController extends FusionController
     }
 
     /**
-     * @Route("/logistica/integracoes/fusion/pedidos", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -298,7 +293,7 @@ class PedidosController extends FusionController
                     ,@TP_OPER           = '{$tipoOperacao}'
             SQL;
 
-            $response   = $connection->query($query)->fetchAll();
+            $response   = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (empty($response)) {
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);
@@ -325,7 +320,7 @@ class PedidosController extends FusionController
                     ,@IN_TT_REGI        = 1
             SQL;
 
-            $total          = ($connection->query($query)->fetch())["TT_REGI"];
+            $total          = ($connection->executeQuery($query)->fetchAssociative())["TT_REGI"];
             $integrados     = $response[0]["TT_INTE"];
             $naoIntegrados  = $response[0]["TT_INTE_PEND"];
             $comErro        = $response[0]["TT_INTE_ERRO"];

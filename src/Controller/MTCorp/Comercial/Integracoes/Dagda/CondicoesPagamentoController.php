@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\Dagda;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\RequestTrait;
@@ -22,8 +22,6 @@ class CondicoesPagamentoController extends AbstractController
     use ResponseTrait;
     /**
      * Consultar Integrações de Condições de Pagamentos
-     * @Route("/comercial/integracoes/dagda/condicao-pagamento",
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -54,9 +52,9 @@ class CondicoesPagamentoController extends AbstractController
             $stmt->bindValue(":codigoDagda",          $codigoDagda);
             $stmt->bindValue(":descricaoDagda",       $descricaoDagda);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $result = $stmt->fetchAllAssociative();
+            $result = $result_stmt->fetchAllAssociative();
 
             $response = array_map(function ($item) {
                 return [
@@ -90,8 +88,6 @@ class CondicoesPagamentoController extends AbstractController
 
     /**
      * Consulta de condições de pagamento Tid
-     * @Route("/comercial/integracoes/dagda/condicao-pagamento-tid",
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -111,10 +107,10 @@ class CondicoesPagamentoController extends AbstractController
             $stmt->bindValue(":situacao",  1);
             $stmt->bindValue(":associacao",  0);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
             // // Pega os valores que vocês filtraram e foram devolvidos
-            $result = $stmt->fetchAllAssociative();
+            $result = $result_stmt->fetchAllAssociative();
 
             //muda o nome da procedure para o nome desejado
             $response = array_map(function ($item) {
@@ -140,8 +136,6 @@ class CondicoesPagamentoController extends AbstractController
 
     /**
      * Consulta de condições de pagamento Dagda
-     * @Route("/comercial/integracoes/dagda/condicao-pagamento-dagda",
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -159,10 +153,10 @@ class CondicoesPagamentoController extends AbstractController
 
             $stmt->bindValue(":associacao",  0);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
             // // Pega os valores que vocês filtraram e foram devolvidos
-            $result = $stmt->fetchAllAssociative();
+            $result = $result_stmt->fetchAllAssociative();
 
             //muda o nome da procedure para o nome desejado
             $response = array_map(function ($item) {
@@ -187,8 +181,6 @@ class CondicoesPagamentoController extends AbstractController
     
     /**
      * Gravar dados da associacao.
-     * @Route("/comercial/integracoes/dagda/condicao-pagamento",
-     * methods={"POST"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -222,10 +214,10 @@ class CondicoesPagamentoController extends AbstractController
             $stmt->bindValue(":exclusao",           $exclusao);
             $stmt->bindValue(":matricula",          $matricula);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
             // Pega os valores que vocês filtraram e foram devolvidos
-            $result = $stmt->fetchOne();
+            $result = $result_stmt->fetchOne();
 
             return $this
                 ->setData($result)

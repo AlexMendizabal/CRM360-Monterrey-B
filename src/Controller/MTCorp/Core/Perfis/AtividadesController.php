@@ -2,18 +2,17 @@
 
 namespace App\Controller\MTCorp\Core\Perfis;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class AtividadesController
 {
 
     
     /**
-   * @Route("/core/perfis/atividades", methods={"POST"})
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -43,9 +42,9 @@ class AtividadesController
             $stmt->bindValue(":perfilId",       $perfilId);
             $stmt->bindValue(":situacao",         $situacao);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);

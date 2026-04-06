@@ -27,9 +27,9 @@ class AknaConfig extends AbstractController
     public function __construct()
     {
         $this->httpClient = HttpClient::create();
-        $this->user     = 'paulo.mota@mtcorp.com.br';
-        $this->password = '57b609e138732ebeaea7d77acdaad016';
-        $this->client   = '22671';
+        $this->user     = $_ENV['AKNA_USER'] ?? '';
+        $this->password = $_ENV['AKNA_PASSWORD'] ?? '';
+        $this->client   = $_ENV['AKNA_CLIENT'] ?? '';
         $this->url      = 'https://app.akna.com.br/emkt/int/integracao.php';
     }
 

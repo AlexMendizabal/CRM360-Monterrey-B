@@ -1,0 +1,134 @@
+abastecimento.cadastros.depositos-associados-materiais-listar:
+    path: /abastecimento/cadastros/depositos-associados-materiais
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\MaterialAssociadoDepositoController::getDepositosAssociadosMateriais
+    methods: [GET]
+
+abastecimento.cadastros.deposito-associado-material-gravar:
+    path: /abastecimento/cadastros/deposito-associado-material
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\MaterialAssociadoDepositoController::postDepositoAssociadoMaterial
+    methods: [POST]
+
+abastecimento.cadastros.deposito-associado-material-alterar:
+    path: /abastecimento/cadastros/deposito-associado-material-alterar
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\MaterialAssociadoDepositoController::postDepositoAssociadoMaterialAlterar
+    methods: [POST]
+
+abastecimento.cadastros.materiais-disponiveis-associacao-depositos-listar:
+    path: /abastecimento/cadastros/materiais-disponiveis-associacao-depositos
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\MaterialAssociadoDepositoController::getMateriaisDisponiveisAssociacaoDepositos
+    methods: [GET]
+
+abastecimento.cadastros.deposito-associado-material-excluir:
+    path: /abastecimento/cadastros/deposito-associado-material
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\MaterialAssociadoDepositoController::deleteDepositoAssociadoMaterial
+    methods: [DELETE]
+
+abastecimento.cadastros.depositos-associados-materiais-auditoria-listar:
+    path: /abastecimento/cadastros/depositos-associados-materiais-auditoria
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\MaterialAssociadoDepositoController::getDepositosAssociadosMateriaisAuditoria
+    methods: [GET]
+
+abastecimento.cadastros.nivel-estoque-materiais-listar:
+    path: /abastecimento/cadastros/nivel-estoque-materiais
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getNivelEstoqueMateriais
+    methods: [GET]
+
+"abastecimento.cadastros.nivel-estoque-classes-dep\xF3sitos-listar":
+    path: /abastecimento/cadastros/nivel-estoque-classes-depositos
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getNivelEstoqueClassesDepositos
+    methods: [GET]
+
+"abastecimento.cadastros.nivel-estoque-material-dep\xF3sitos-listar":
+    path: /abastecimento/cadastros/nivel-estoque-material-depositos
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getNivelEstoqueMaterialDepositos
+    methods: [GET]
+
+"abastecimento.cadastros.nivel-estoque-material-dep\xF3sitos-gravar":
+    path: /abastecimento/cadastros/nivel-estoque-material-depositos
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::postNivelEstoqueMaterialDepositos
+    methods: [POST]
+
+"abastecimento.cadastros.nivel-estoque-materiais-dep\xF3sito-listar":
+    path: /abastecimento/cadastros/nivel-estoque-materiais-deposito
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getNivelEstoqueMateriaisDeposito
+    methods: [GET]
+
+"abastecimento.cadastros.nivel-estoque-material-dep\xF3sito-gravar":
+    path: /abastecimento/cadastros/nivel-estoque-material-deposito
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::postNivelEstoqueMaterialDeposito
+    methods: [POST]
+
+abastecimento.cadastros.nivel-estoque-totais-gravar:
+    path: /abastecimento/cadastros/nivel-estoque-totais
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::postNivelEstoqueTotais
+    methods: [POST]
+
+abastecimento.cadastros.nivel-estoque-material-deposito-excluir:
+    path: /abastecimento/cadastros/nivel-estoque-material-deposito
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::deleteCadastroNivelEstoqueMaterialDeposito
+    methods: [DELETE]
+
+abastecimento.cadastros.nivel-estoque-material-deposito-auditoria-listar:
+    path: /abastecimento/cadastros/nivel-estoque-material-deposito-auditoria
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getNivelEstoqueMaterialDepositoAuditoria
+    methods: [GET]
+
+abastecimento.cadastros.vendas-realizadas-classe-periodo:
+    path: /abastecimento/cadastros/vendas-realizadas-classe-periodo
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getVendasRealizadasClassePeriodo
+    methods: [GET]
+
+abastecimento.cadastros.vendas-realizadas-classe-material-periodo:
+    path: /abastecimento/cadastros/vendas-realizadas-classe-material-periodo
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getVendasRealizadasClasseMaterialPeriodo
+    methods: [GET]
+
+abastecimento.cadastros.vendas-realizadas-material-periodo:
+    path: /abastecimento/cadastros/vendas-realizadas-material-periodo
+    controller: App\Controller\MTCorp\Abastecimento\Cadastros\NivelEstoqueMaterialDepositoController::getVendasRealizadasMaterialPeriodo
+    methods: [GET]
+
+abastecimento.estoque.analise-compras:
+    path: /abastecimento/estoque/analise-compras
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getEstoqueAnaliseCompras
+    methods: [GET]
+
+abastecimento.estoque.vendas-realizadas-detalhes:
+    path: /abastecimento/estoque/vendas-realizadas/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getVendasRealizadasDetalhes
+    methods: [GET]
+
+abastecimento.estoque.vendas-perdidas-detalhes:
+    path: /abastecimento/estoque/vendas-perdidas/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getVendasPerdidasDetalhes
+    methods: [GET]
+
+abastecimento.estoque.carteira-em-aberto-detalhes:
+    path: /abastecimento/estoque/carteira-em-aberto/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getCarteiraEmAbertoDetalhes
+    methods: [GET]
+
+abastecimento.estoque.situacao-material-deposito-detalhes:
+    path: /abastecimento/estoque/situacao-material-deposito/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getSituacaoEstoqueMaterialDepositoDetalhes
+    methods: [GET]
+
+abastecimento.estoque.comprometido-pedido-venda-detalhes:
+    path: /abastecimento/estoque/comprometido-pedido-venda/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getEstoqueComprometidoPedidoVendaDetalhes
+    methods: [GET]
+
+abastecimento.estoque.comprometido-plano-corte-detalhes:
+    path: /abastecimento/estoque/comprometido-plano-corte/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getEstoqueComprometidoPlanoCorteDetalhes
+    methods: [GET]
+
+abastecimento.estoque.suspenso-entrada-detalhes:
+    path: /abastecimento/estoque/suspenso-entrada/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getEstoqueSuspensoEntradaDetalhes
+    methods: [GET]
+
+abastecimento.estoque.suspenso-geral-detalhes:
+    path: /abastecimento/estoque/suspenso-geral/detalhes
+    controller: App\Controller\MTCorp\Abastecimento\Estoque\EstoqueAnaliseComprasController::getEstoqueSuspensoGeralDetalhes
+    methods: [GET]

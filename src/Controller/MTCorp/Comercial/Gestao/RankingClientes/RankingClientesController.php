@@ -4,30 +4,81 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Gestao\RankingClientes;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
+use OpenApi\Annotations as OA;
 
 /**
  * Class RankingClientesController
  * @package App\Controller\MTCorp\Comercial\Gestao\RankingClientes
+ *
+ * @OA\Tag(name="Comercial - Ranking Clientes", description="Gestao de ranking de clientes")
  */
 class RankingClientesController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/gestao/ranking-clientes/lista",
-   *  name="comercial.gestao-ranking-clientes-lista",
-   *  methods={"GET"}
+   * @OA\Get(
+   *     path="/comercial/gestao/ranking-clientes/lista",
+   *     tags={"Comercial - Ranking Clientes"},
+   *     summary="Retorna lista de rankings de clientes",
+   *     description="Consulta rankings de clientes com filtros opcionais e ordenacao",
+   *     @OA\Parameter(
+   *         name="parametro",
+   *         in="query",
+   *         required=false,
+   *         description="Parametro de busca pelo nome da classificacao",
+   *         @OA\Schema(type="string")
+   *     ),
+   *     @OA\Parameter(
+   *         name="codSituacao",
+   *         in="query",
+   *         required=false,
+   *         description="Codigo da situacao (ativo/inativo)",
+   *         @OA\Schema(type="string")
+   *     ),
+   *     @OA\Parameter(
+   *         name="orderBy",
+   *         in="query",
+   *         required=false,
+   *         description="Campo para ordenacao (padrao: codigo)",
+   *         @OA\Schema(type="string", default="codigo")
+   *     ),
+   *     @OA\Parameter(
+   *         name="orderType",
+   *         in="query",
+   *         required=false,
+   *         description="Tipo de ordenacao (padrao: ASC)",
+   *         @OA\Schema(type="string", default="ASC", enum={"ASC", "DESC"})
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Lista de rankings retornada com sucesso",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean"),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="array", @OA\Items(type="object"), nullable=true)
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=400,
+   *         description="Erro ao retornar dados",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean", example=false),
+   *             @OA\Property(property="mensagem", type="string", example="Erro ao retornar dados."),
+   *             @OA\Property(property="data", type="string", nullable=true)
+   *         )
+   *     )
    * )
+   *
    * @param Connection $connection
    * @param Request $request
-   * @return 
+   * @return JsonResponse
    */
   public function getListaRanking(Connection $connection, Request $request)
   {
@@ -44,12 +95,16 @@ class RankingClientesController extends AbstractController
       if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-      $res = $connection->query("
+      $stmt = $connection->prepare("
         EXEC [PRC_CONF_CLAS_CLIE_CONS]
             @ID_PARA = 1,
-            @NM_CLAS = '{$parametro}',
-            @IN_SITU = {$codSituacao}
-      ")->fetchAll();
+            @NM_CLAS = :parametro,
+            @IN_SITU = :codSituacao
+      ");
+      $stmt->bindValue(':parametro', $parametro);
+      $stmt->bindValue(':codSituacao', $codSituacao);
+      $result_stmt = $stmt->executeQuery();
+      $res = $result_stmt->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -63,35 +118,72 @@ class RankingClientesController extends AbstractController
     }
   }
 
-
   /**
-   * @Route(
-   *  "/comercial/gestao/ranking-clientes/detalhes/{codigo}",
-   *  name="comercial.gestao-ranking-clientes-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codigo"="\d+"}
+   * @OA\Get(
+   *     path="/comercial/gestao/ranking-clientes/detalhes/{codigo}",
+   *     tags={"Comercial - Ranking Clientes"},
+   *     summary="Retorna detalhes de um ranking de cliente",
+   *     description="Consulta os detalhes de uma classificacao especifica pelo codigo",
+   *     @OA\Parameter(
+   *         name="codigo",
+   *         in="path",
+   *         required=true,
+   *         description="Codigo da classificacao",
+   *         @OA\Schema(type="integer")
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Detalhes do ranking retornados com sucesso",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean"),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="object", nullable=true,
+   *                 @OA\Property(property="codClassificacao", type="integer"),
+   *                 @OA\Property(property="nomeClassificacao", type="string"),
+   *                 @OA\Property(property="peso", type="number"),
+   *                 @OA\Property(property="nota1Fim", type="number"),
+   *                 @OA\Property(property="nota2Inicio", type="number"),
+   *                 @OA\Property(property="nota2Fim", type="number"),
+   *                 @OA\Property(property="nota3Inicio", type="number"),
+   *                 @OA\Property(property="nota3Fim", type="number"),
+   *                 @OA\Property(property="nota4Inicio", type="number"),
+   *                 @OA\Property(property="nota4Fim", type="number"),
+   *                 @OA\Property(property="nota5Inicio", type="number")
+   *             )
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=400,
+   *         description="Erro ao retornar dados",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean", example=false),
+   *             @OA\Property(property="mensagem", type="string", example="Erro ao retornar dados"),
+   *             @OA\Property(property="data", type="string", nullable=true)
+   *         )
+   *     )
    * )
+   *
    * @param Connection $connection
    * @param Request $request
-   * @return 
+   * @param int $codigo
+   * @return JsonResponse
    */
   public function getDetalhes(Connection $connection, Request $request, $codigo)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
         EXEC [PRC_CONF_CLAS_CLIE_CONS]
             @ID_PARA = 2,
             @ID_CLAS = {$codigo}
-        ")->fetchAll();
-
+        ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
 
-        $resClass = $connection->query("
+        $resClass = $connection->executeQuery("
           EXEC [PRC_CONF_CLAS_CLIE_CONS]
               @ID_PARA = 1,
               @ID_CLAS = {$codigo}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         // print_r($res);
         // print_r($resClass);
@@ -121,13 +213,49 @@ class RankingClientesController extends AbstractController
     }
   }
 
-
   /**
-   * @Route(
-   *  "/comercial/gestao/ranking-clientes/salvar",
-   *  name="comercial.gestao-ranking-clientes-salvar",
-   *  methods={"POST"}
+   * @OA\Post(
+   *     path="/comercial/gestao/ranking-clientes/salvar",
+   *     tags={"Comercial - Ranking Clientes"},
+   *     summary="Cadastra um novo ranking de cliente",
+   *     description="Cria uma nova classificacao de ranking com as notas e pesos informados",
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(
+   *             required={"nomeClassificacao", "peso", "situacao", "nota1Fim", "nota2Inicio", "nota2Fim", "nota3Inicio", "nota3Fim", "nota4Inicio", "nota4Fim", "nota5Inicio"},
+   *             @OA\Property(property="nomeClassificacao", type="string", description="Nome da classificacao"),
+   *             @OA\Property(property="peso", type="number", description="Peso da classificacao"),
+   *             @OA\Property(property="situacao", type="integer", description="Situacao (1=ativo, 0=inativo)"),
+   *             @OA\Property(property="nota1Fim", type="number", description="Valor maximo da nota 1"),
+   *             @OA\Property(property="nota2Inicio", type="number", description="Valor minimo da nota 2"),
+   *             @OA\Property(property="nota2Fim", type="number", description="Valor maximo da nota 2"),
+   *             @OA\Property(property="nota3Inicio", type="number", description="Valor minimo da nota 3"),
+   *             @OA\Property(property="nota3Fim", type="number", description="Valor maximo da nota 3"),
+   *             @OA\Property(property="nota4Inicio", type="number", description="Valor minimo da nota 4"),
+   *             @OA\Property(property="nota4Fim", type="number", description="Valor maximo da nota 4"),
+   *             @OA\Property(property="nota5Inicio", type="number", description="Valor minimo da nota 5")
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Cadastro realizado com sucesso",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean"),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="object", nullable=true)
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=400,
+   *         description="Erro ao realizar cadastro",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean", example=false),
+   *             @OA\Property(property="mensagem", type="string", example="Erro ao realizar cadastro."),
+   *             @OA\Property(property="data", type="string", nullable=true)
+   *         )
+   *     )
    * )
+   *
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -168,21 +296,21 @@ class RankingClientesController extends AbstractController
       if (isset($params['peso'])) $peso = $params['peso'];
       if (isset($params['situacao'])) $situacao = $params['situacao'];
               
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_CONF_CLAS_CLIE_CADA]
             @ID_PARA = 1,
             @NM_CLAS = '{$nomeClassificacao}',
             @PESO = {$peso},
             @IN_SITU = {$situacao},
             @ID_USUA = {$infoUsuario->matricula}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       $cod = $res[0]['codClassificacao'];
 
       for ($i=0; $i < count($notas); $i++) { 
         $nota = $i+1;
 
-        $resNota = $connection->query("
+        $resNota = $connection->executeQuery("
           EXEC [PRC_CONF_CLAS_CLIE_CADA]
               @ID_PARA = 2,
               @ID_CLAS = {$cod},
@@ -190,7 +318,7 @@ class RankingClientesController extends AbstractController
               @VR_MINI = {$notas[$i]['min']},
               @VR_MAXI ={$notas[$i]['max']},
               @ID_USUA = {$infoUsuario->matricula}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
       }
 
       if (isset($resNota[0]['codNota'])) {
@@ -205,13 +333,50 @@ class RankingClientesController extends AbstractController
     }
   }
 
-
-   /**
-   * @Route(
-   *  "/comercial/gestao/ranking-clientes/atualizar",
-   *  name="comercial.gestao-ranking-clientes-atualizar",
-   *  methods={"PUT"}
+  /**
+   * @OA\Put(
+   *     path="/comercial/gestao/ranking-clientes/atualizar",
+   *     tags={"Comercial - Ranking Clientes"},
+   *     summary="Atualiza um ranking de cliente existente",
+   *     description="Atualiza os dados de uma classificacao de ranking existente",
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(
+   *             required={"codClassificacao", "nomeClassificacao", "peso", "situacao", "nota1Fim", "nota2Inicio", "nota2Fim", "nota3Inicio", "nota3Fim", "nota4Inicio", "nota4Fim", "nota5Inicio"},
+   *             @OA\Property(property="codClassificacao", type="integer", description="Codigo da classificacao a ser atualizada"),
+   *             @OA\Property(property="nomeClassificacao", type="string", description="Nome da classificacao"),
+   *             @OA\Property(property="peso", type="number", description="Peso da classificacao"),
+   *             @OA\Property(property="situacao", type="integer", description="Situacao (1=ativo, 0=inativo)"),
+   *             @OA\Property(property="nota1Fim", type="number", description="Valor maximo da nota 1"),
+   *             @OA\Property(property="nota2Inicio", type="number", description="Valor minimo da nota 2"),
+   *             @OA\Property(property="nota2Fim", type="number", description="Valor maximo da nota 2"),
+   *             @OA\Property(property="nota3Inicio", type="number", description="Valor minimo da nota 3"),
+   *             @OA\Property(property="nota3Fim", type="number", description="Valor maximo da nota 3"),
+   *             @OA\Property(property="nota4Inicio", type="number", description="Valor minimo da nota 4"),
+   *             @OA\Property(property="nota4Fim", type="number", description="Valor maximo da nota 4"),
+   *             @OA\Property(property="nota5Inicio", type="number", description="Valor minimo da nota 5")
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Atualizacao realizada com sucesso",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean"),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="object", nullable=true)
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=400,
+   *         description="Erro ao realizar cadastro",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean", example=false),
+   *             @OA\Property(property="mensagem", type="string", example="Erro ao realizar cadastro."),
+   *             @OA\Property(property="data", type="string", nullable=true)
+   *         )
+   *     )
    * )
+   *
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -254,7 +419,7 @@ class RankingClientesController extends AbstractController
       if (isset($params['peso'])) $peso = $params['peso'];
       if (isset($params['situacao'])) $situacao = $params['situacao'];
               
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_CONF_CLAS_CLIE_CADA]
             @ID_PARA = 1,
             @ID_CLAS = {$codClassificacao},
@@ -262,14 +427,14 @@ class RankingClientesController extends AbstractController
             @PESO = {$peso},
             @IN_SITU = {$situacao},
             @ID_USUA = {$infoUsuario->matricula}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       $cod = $res[0]['codClassificacao'];
 
       for ($i=0; $i < count($notas); $i++) { 
         $nota = $i+1;
 
-        $resNota = $connection->query("
+        $resNota = $connection->executeQuery("
           EXEC [PRC_CONF_CLAS_CLIE_CADA]
               @ID_PARA = 2,
               @ID_CLAS = {$cod},
@@ -277,7 +442,7 @@ class RankingClientesController extends AbstractController
               @VR_MINI = {$notas[$i]['min']},
               @VR_MAXI ={$notas[$i]['max']},
               @ID_USUA = {$infoUsuario->matricula}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
       }
 
       if (isset($resNota[0]['codNota'])) {
@@ -292,13 +457,39 @@ class RankingClientesController extends AbstractController
     }
   }
 
-
   /**
-   * @Route(
-   *  "/comercial/gestao/ranking-clientes/ativar",
-   *  name="comercial.gestao-ranking-clientes-ativar",
-   *  methods={"POST"}
+   * @OA\Post(
+   *     path="/comercial/gestao/ranking-clientes/ativar",
+   *     tags={"Comercial - Ranking Clientes"},
+   *     summary="Ativa um ranking de cliente",
+   *     description="Altera a situacao de um ranking para ativo",
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(
+   *             required={"codigo"},
+   *             @OA\Property(property="codigo", type="integer", description="Codigo da classificacao a ser ativada")
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Ranking ativado com sucesso",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean"),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="object", nullable=true)
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=400,
+   *         description="Erro ao ativar ranking",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean", example=false),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="string", nullable=true)
+   *         )
+   *     )
    * )
+   *
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -309,13 +500,13 @@ class RankingClientesController extends AbstractController
         $codigo = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
         EXEC [PRC_CONF_CLAS_CLIE_CADA]
             @ID_PARA = 1,
             @ID_CLAS = {$codigo},
             @IN_SITU = 1,
             @ID_USUA = {$infoUsuario->matricula}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -330,11 +521,38 @@ class RankingClientesController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/gestao/ranking-clientes/inativar",
-   *  name="comercial.gestao-ranking-clientes-inativar",
-   *  methods={"POST"}
+   * @OA\Post(
+   *     path="/comercial/gestao/ranking-clientes/inativar",
+   *     tags={"Comercial - Ranking Clientes"},
+   *     summary="Inativa um ranking de cliente",
+   *     description="Altera a situacao de um ranking para inativo",
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(
+   *             required={"codigo"},
+   *             @OA\Property(property="codigo", type="integer", description="Codigo da classificacao a ser inativada")
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Ranking inativado com sucesso",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean"),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="object", nullable=true)
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=400,
+   *         description="Erro ao inativar ranking",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="success", type="boolean", example=false),
+   *             @OA\Property(property="mensagem", type="string", nullable=true),
+   *             @OA\Property(property="data", type="string", nullable=true)
+   *         )
+   *     )
    * )
+   *
    * @param Connection $connection
    * @param Request $request
    * @return JsonResponse
@@ -345,13 +563,13 @@ class RankingClientesController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_CONF_CLAS_CLIE_CADA]
                 @ID_PARA = 1,
                 @ID_CLAS = {$codigo},
                 @IN_SITU = 0,
                 @ID_USUA = {$infoUsuario->matricula}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

@@ -1,0 +1,2855 @@
+openapi: 3.0.3
+info:
+  title: CRM360 Monterrey - API Cotizaciones (Ciclo de Ventas)
+  description: |
+    API REST para la gestion de cotizaciones y ofertas del ciclo de ventas del CRM360 Monterrey.
+    Incluye gestion de cotizaciones, materiales, duplicatas, descuentos, ofertas y envio a SAP.
+
+    **Autenticacion:** Todas las rutas requieren el header `X-User-Info` con token JWT
+    y `Authorization: Bearer {token}`.
+  version: 1.0.0
+  contact:
+    name: CRM360 Monterrey
+servers:
+  - url: http://172.20.20.12
+    description: Servidor de Produccion (IIS - Windows Server)
+
+security:
+  - bearerAuth: []
+  - userInfo: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    userInfo:
+      type: apiKey
+      in: header
+      name: X-User-Info
+      description: Token JWT con informacion del usuario
+
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        mensagem:
+          type: string
+          nullable: true
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        mensagem:
+          type: string
+        data:
+          type: string
+
+    Cotizacion:
+      type: object
+      properties:
+        nrPedido:
+          type: integer
+          description: Numero del pedido/cotizacion
+        codEmpresa:
+          type: integer
+          description: Codigo de empresa
+        codDeposito:
+          type: integer
+          description: Codigo del deposito/almacen
+        codSituacao:
+          type: integer
+          description: Codigo de situacion
+        codVendedor:
+          type: integer
+        nomeVendedor:
+          type: string
+        codCliente:
+          type: integer
+        nomeCliente:
+          type: string
+        dataEmissao:
+          type: string
+          format: date
+        dataEntrega:
+          type: string
+          format: date
+        valorProposta:
+          type: number
+          format: double
+        travas:
+          type: array
+          items:
+            type: object
+        imprimirSeparacao:
+          type: integer
+          enum: [0, 1]
+
+    Oferta:
+      type: object
+      properties:
+        id_oferta:
+          type: integer
+        codigo_oferta:
+          type: string
+        fecha_oferta:
+          type: string
+          format: date-time
+        id_cliente:
+          type: integer
+        nombre_cliente:
+          type: string
+        id_vendedor:
+          type: integer
+        nombre_vendedor:
+          type: string
+        monto_total:
+          type: number
+          format: double
+        monto_total_bruto:
+          type: number
+          format: double
+        peso_total:
+          type: number
+          format: double
+        cantidad_total:
+          type: number
+          format: double
+        descuento_total:
+          type: number
+          format: double
+        estado_oferta:
+          type: integer
+        tipo_estado:
+          type: integer
+        descripcion_estado:
+          type: string
+
+    Material:
+      type: object
+      properties:
+        codMaterial:
+          type: integer
+        nomeMaterial:
+          type: string
+        unidade:
+          type: string
+        quantidade:
+          type: number
+        valor:
+          type: number
+          format: double
+        valorTotal:
+          type: number
+          format: double
+        percentualIcms:
+          type: number
+        percentualIpi:
+          type: number
+        valorIcms:
+          type: number
+        valorIpi:
+          type: number
+        valorIcmsSt:
+          type: number
+
+    MaterialCarrinho:
+      type: object
+      required:
+        - codMaterial
+        - quantidade
+        - valor
+      properties:
+        codMaterial:
+          type: integer
+        quantidade:
+          type: number
+        valor:
+          type: number
+          format: double
+        valorUnit:
+          type: number
+          format: double
+        valorTotal:
+          type: number
+          format: double
+        percentualIcms:
+          type: number
+        percentualIpi:
+          type: number
+        valorIpi:
+          type: number
+        valorIcms:
+          type: number
+        aliquotaReducaoIcms:
+          type: number
+        valorBaseIcmsSt:
+          type: number
+        valorIcmsSt:
+          type: number
+        quantidadeItem:
+          type: number
+        qtdePecas:
+          type: number
+        medida1:
+          type: number
+        sequenciaLote:
+          type: integer
+        nrPedidoCliente:
+          type: string
+        codItemPedidoCliente:
+          type: string
+        codProdutoCliente:
+          type: string
+
+    OfertaRegistrar:
+      type: object
+      properties:
+        params:
+          type: object
+          properties:
+            almacenDespacho:
+              type: string
+            monto_total:
+              type: number
+              format: double
+            monto_total_bruto:
+              type: number
+              format: double
+            peso_total:
+              type: number
+              format: double
+            descuento_total:
+              type: number
+              format: double
+            cantidad_total:
+              type: number
+              format: double
+            id_forma_pago:
+              type: integer
+            id_lista_precio:
+              type: integer
+            id_moneda:
+              type: integer
+            id_iva:
+              type: integer
+            id_cliente:
+              type: integer
+            categoria:
+              type: string
+            id_vendedor:
+              type: integer
+            id_contacto:
+              type: integer
+            nodocumento:
+              type: string
+            observacion:
+              type: string
+            razonsocial:
+              type: string
+            logistica:
+              type: object
+              properties:
+                modoEntrega:
+                  type: integer
+                id_centro_logistico:
+                  type: integer
+                destino:
+                  type: string
+                destinarioFactura:
+                  type: string
+                despachoMercaderia:
+                  type: string
+                fechaEntrega:
+                  type: string
+                  format: date
+                cordenadas:
+                  type: string
+            forma_contacto:
+              type: integer
+            id_propietario:
+              type: integer
+            qr:
+              type: string
+            autorizacion:
+              type: boolean
+            fecha_inicial:
+              type: string
+              format: date
+            fecha_final:
+              type: string
+              format: date
+            firma:
+              type: string
+              description: SHA256 hash para deteccion de duplicados
+            carrinho:
+              type: object
+              properties:
+                materiales:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id_material:
+                        type: integer
+                      cantidad:
+                        type: number
+                      precio:
+                        type: number
+                        format: double
+                      descuento:
+                        type: number
+                      peso:
+                        type: number
+                      almacen:
+                        type: string
+                      modoEntrega:
+                        type: integer
+                      tonelada:
+                        type: number
+
+    GuardarCotizacion:
+      type: object
+      properties:
+        id_oferta:
+          type: integer
+          description: Si se envia, edita la oferta existente. Si no, crea nueva.
+        id_forma_pago:
+          type: integer
+        id_lista_precio:
+          type: integer
+        id_cliente:
+          type: integer
+        id_vendedor:
+          type: integer
+        id_persona_contacto:
+          type: integer
+        id_almacen:
+          type: integer
+        tipo_entrega:
+          type: integer
+        centroLogisticoControl:
+          type: integer
+        fecha_final:
+          type: string
+          format: date
+        fecha_inicial:
+          type: string
+          format: date
+        monto_total:
+          type: number
+          format: double
+        monto_total_bruto:
+          type: number
+          format: double
+        peso_total:
+          type: number
+          format: double
+        descuento_total:
+          type: number
+          format: double
+        cantidad_total:
+          type: number
+          format: double
+        direccion_cliente:
+          type: string
+        latitud:
+          type: string
+        longitud:
+          type: string
+        direccion_entrega:
+          type: string
+        observacion:
+          type: string
+        formaContacto:
+          type: integer
+        tipoContacto:
+          type: integer
+        celular:
+          type: string
+        telefono:
+          type: string
+        correo_electronico:
+          type: string
+        nombre_factura:
+          type: string
+        carrinho:
+          type: array
+          items:
+            type: object
+            properties:
+              id_material:
+                type: integer
+              cantidad:
+                type: number
+              precio:
+                type: number
+                format: double
+              descuento:
+                type: number
+              peso:
+                type: number
+
+    Descuento:
+      type: object
+      properties:
+        id:
+          type: integer
+        codigomaterial:
+          type: string
+        id_material:
+          type: integer
+        id_departamento:
+          type: integer
+        id_tipo_cliente:
+          type: integer
+        rango_inicial:
+          type: number
+        rango_final:
+          type: number
+        descuento:
+          type: number
+
+paths:
+  # ============================================================
+  # PERMISOS DE ACCESO
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/permissoes-acesso:
+    get:
+      tags: [Cotizaciones - Permisos]
+      summary: Obtener permisos de acceso a cotizaciones
+      description: Retorna permisos del usuario para acceso a clientes, historial de exclusion y duplicatas.
+      responses:
+        '200':
+          description: Permisos obtenidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      acessoClientes:
+                        type: boolean
+                      historicoExclusao:
+                        type: boolean
+                      duplicataCarteira:
+                        type: boolean
+
+  # ============================================================
+  # LISTADO DE COTIZACIONES
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/lista:
+    get:
+      tags: [Cotizaciones - Listados]
+      summary: Listar cotizaciones/pedidos
+      description: Lista cotizaciones con paginacion, filtros y travas. Usa `PRC_PEDI_CONS`.
+      parameters:
+        - name: tipoData
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: dataInicial
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dataFinal
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: codSituacao
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: nrPedido
+          in: query
+          schema:
+            type: string
+        - name: codEmpresa
+          in: query
+          schema:
+            type: integer
+        - name: codDeposito
+          in: query
+          schema:
+            type: integer
+        - name: cliente
+          in: query
+          schema:
+            type: string
+        - name: codVendedor
+          in: query
+          schema:
+            type: integer
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+            default: nrPedido
+        - name: orderType
+          in: query
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: DESC
+        - name: pagina
+          in: query
+          schema:
+            type: integer
+        - name: registros
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de cotizaciones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cotizacion'
+
+  /comercial/ciclo-vendas/cotacoes/lista_cotizacion:
+    get:
+      tags: [Cotizaciones - Listados]
+      summary: Listar cotizaciones/ofertas (vista espanol)
+      description: Lista ofertas con joins completos (cliente, vendedor, lista precios, modo entrega, autorizacion). Filtrado por rol de vendedor.
+      parameters:
+        - name: pagina
+          in: query
+          schema:
+            type: integer
+        - name: registros
+          in: query
+          schema:
+            type: integer
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+        - name: orderType
+          in: query
+          schema:
+            type: string
+        - name: tipoData
+          in: query
+          schema:
+            type: integer
+        - name: dataInicial1
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dataInicial2
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: status
+          in: query
+          schema:
+            type: integer
+        - name: id_oferta
+          in: query
+          schema:
+            type: integer
+        - name: codigo_oferta
+          in: query
+          schema:
+            type: string
+        - name: cliente
+          in: query
+          schema:
+            type: string
+        - name: codVendedor
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ofertas y clientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Oferta'
+                  clientes:
+                    type: array
+                    items:
+                      type: object
+                  estado:
+                    type: boolean
+
+  /comercial/ciclo-vendas/cotacoes/cliente_oferta:
+    post:
+      tags: [Cotizaciones - Listados]
+      summary: Obtener clientes con ofertas
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Clientes con ofertas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id_cliente:
+                          type: integer
+                        nombre:
+                          type: string
+
+  # ============================================================
+  # VERIFICACION DE OFERTAS
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/verifica-oferta/{idContato}:
+    get:
+      tags: [Cotizaciones - Verificacion]
+      summary: Verificar si un contacto tiene oferta registrada
+      parameters:
+        - name: idContato
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Resultado de verificacion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensagem:
+                    type: string
+                  data:
+                    type: integer
+                    nullable: true
+
+  # ============================================================
+  # DETALLE DE COTIZACIONES
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/detalhes/{codEmpresa}/{nrPedido}:
+    get:
+      tags: [Cotizaciones - Detalle]
+      summary: Obtener detalles de una cotizacion
+      description: Retorna contactos y materiales con totales para una cotizacion.
+      parameters:
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: nrPedido
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalles de la cotizacion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      contatos:
+                        type: array
+                        items:
+                          type: object
+                      itens:
+                        type: object
+                        properties:
+                          materiais:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Material'
+                          total:
+                            type: object
+                            properties:
+                              quantidade:
+                                type: number
+                              valor:
+                                type: number
+                              qtdePecas:
+                                type: number
+
+  /comercial/ciclo-vendas/cotacoes/oferta_detalle:
+    get:
+      tags: [Cotizaciones - Detalle]
+      summary: Obtener detalle de oferta con materiales
+      parameters:
+        - name: id_oferta
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de oferta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: object
+                    properties:
+                      oferta:
+                        type: array
+                        items:
+                          type: object
+                      analitico:
+                        type: array
+                        items:
+                          type: object
+                      total:
+                        type: object
+                        properties:
+                          cantidad:
+                            type: number
+                  estado:
+                    type: boolean
+
+  /comercial/ciclo-vendas/cotacoes/materiais/detalhes/{codEmpresa}/{nrPedido}:
+    get:
+      tags: [Cotizaciones - Detalle]
+      summary: Obtener materiales de una cotizacion
+      parameters:
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: nrPedido
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Materiales de la cotizacion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Material'
+
+  /comercial/ciclo-vendas/cotacoes/{codCotacao}/{idEmpresa}:
+    get:
+      tags: [Cotizaciones - Detalle]
+      summary: Obtener cotizacion individual con carrito
+      parameters:
+        - name: codCotacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cotizacion con carrito de materiales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      carrinho:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Material'
+
+  # ============================================================
+  # SITUACION Y LIBERACION
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/situacao-liberacao:
+    get:
+      tags: [Cotizaciones - Liberacion]
+      summary: Estado de liberacion de cotizacion
+      parameters:
+        - name: nrPedido
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: codEmpresa
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estado de liberacion con travas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      travas:
+                        type: array
+                        items:
+                          type: object
+
+  # ============================================================
+  # OPERACIONES CON COTIZACIONES
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/salvar:
+    post:
+      tags: [Cotizaciones - CRUD]
+      summary: Guardar cotizacion completa (sistema legacy)
+      description: Guarda una cotizacion completa con carrito de materiales. Usado por el sistema legacy con PRC_PEDI_CONS.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codCotacao:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                codDeposito:
+                  type: integer
+                codSituacao:
+                  type: integer
+                codCliente:
+                  type: integer
+                codContato:
+                  type: integer
+                codEndereco:
+                  type: integer
+                codFormaPagamento:
+                  type: integer
+                dataEntrega:
+                  type: string
+                  format: date
+                dataValidade:
+                  type: string
+                  format: date
+                notaFiscalMae:
+                  type: string
+                duplicatasSomenteCarteira:
+                  type: boolean
+                codFormaContato:
+                  type: integer
+                codOrigemContato:
+                  type: integer
+                observacoes:
+                  type: string
+                dadosAdicionais:
+                  type: string
+                freteConta:
+                  type: integer
+                codTransportadora:
+                  type: integer
+                carrinho:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/MaterialCarrinho'
+      responses:
+        '200':
+          description: Cotizacion guardada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+
+  /comercial/ciclo-vendas/cotacoes/guardar:
+    post:
+      tags: [Cotizaciones - CRUD]
+      summary: Guardar/editar cotizacion (sistema nuevo)
+      description: |
+        Crea o edita una oferta/cotizacion. Si `id_oferta` esta presente, edita la existente.
+        Puede actualizar info de contacto del cliente. Envia a SAP automaticamente.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuardarCotizacion'
+      responses:
+        '200':
+          description: Cotizacion guardada/editada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+                  data_sap:
+                    type: object
+
+  /comercial/ciclo-vendas/cotacoes/reservar:
+    get:
+      tags: [Cotizaciones - CRUD]
+      summary: Reservar ID de cotizacion
+      parameters:
+        - name: codEmpresa
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ID reservado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      nrProposta:
+                        type: integer
+
+  /comercial/ciclo-vendas/cotacoes/transfere-faturamento:
+    post:
+      tags: [Cotizaciones - Operaciones]
+      summary: Transferir cotizacion a facturacion
+      description: Transfiere una propuesta a facturacion via TID Software linked server.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nrPedido
+                - codEmpresa
+              properties:
+                nrPedido:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                nomeLinha:
+                  type: string
+      responses:
+        '200':
+          description: Transferencia realizada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: integer
+
+  /comercial/ciclo-vendas/cotacoes/trocar/cliente:
+    post:
+      tags: [Cotizaciones - Operaciones]
+      summary: Cambiar cliente de una cotizacion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nrPedido
+                - codEmpresa
+                - selectedCodCliente
+              properties:
+                nrPedido:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                selectedCodCliente:
+                  type: integer
+      responses:
+        '200':
+          description: Cliente cambiado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: integer
+                    description: Numero de propuesta
+
+  /comercial/ciclo-vendas/cotacoes/duplicar-proposta:
+    post:
+      tags: [Cotizaciones - Operaciones]
+      summary: Duplicar propuesta/cotizacion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nrPedido
+                - codEmpresa
+              properties:
+                nrPedido:
+                  type: integer
+                codEmpresa:
+                  type: integer
+      responses:
+        '200':
+          description: Propuesta duplicada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: integer
+
+  /comercial/ciclo-vendas/cotacoes/desdobrar-proposta:
+    post:
+      tags: [Cotizaciones - Operaciones]
+      summary: Dividir propuesta por materiales seleccionados
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nrPedido
+                - codEmpresa
+                - selectedMateriais
+              properties:
+                codDeposito:
+                  type: integer
+                nrPedido:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                selectedMateriais:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      codMaterial:
+                        type: integer
+      responses:
+        '200':
+          description: Propuesta dividida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: integer
+
+  /comercial/ciclo-vendas/cotacoes/trocar/empresa:
+    post:
+      tags: [Cotizaciones - Operaciones]
+      summary: Transferir pedido a otra empresa/almacen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nrPedido:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                codDeposito:
+                  type: integer
+                selectedCodEmpresa:
+                  type: integer
+                selectedCodDeposito:
+                  type: integer
+      responses:
+        '200':
+          description: Pedido transferido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: integer
+
+  /comercial/ciclo-vendas/cotacoes/editar:
+    post:
+      tags: [Cotizaciones - CRUD]
+      summary: Editar cotizacion/oferta existente
+      description: Edita una oferta existente, actualiza datos de oferta, elimina items antiguos e inserta nuevos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                params:
+                  type: object
+                  properties:
+                    codigo_oferta:
+                      type: string
+                    nombre_oferta:
+                      type: string
+                    id_oferta:
+                      type: integer
+                    codCotacao:
+                      type: integer
+                    autorizacion:
+                      type: boolean
+                    fecha_inicial:
+                      type: string
+                      format: date
+                    observacion:
+                      type: string
+                    carrinho:
+                      type: object
+                      properties:
+                        materiales:
+                          type: array
+                          items:
+                            type: object
+      responses:
+        '200':
+          description: Cotizacion editada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+
+  /comercial/ciclo-vendas/cotacoes/perdida/salvar:
+    post:
+      tags: [Cotizaciones - CRUD]
+      summary: Registrar cotizacion perdida
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Cotizacion perdida registrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+  # ============================================================
+  # IMPRESION Y EMAIL
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/imprimir-cotacao/{nrPedido}:
+    get:
+      tags: [Cotizaciones - Impresion]
+      summary: Obtener datos para imprimir cotizacion
+      parameters:
+        - name: nrPedido
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos de impresion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      dadosManetoni:
+                        type: object
+                      pedido:
+                        type: object
+                      contatos:
+                        type: array
+                        items:
+                          type: object
+                      enderecos:
+                        type: array
+                        items:
+                          type: object
+                      materiais:
+                        type: array
+                        items:
+                          type: object
+                      parcelas:
+                        type: array
+                        items:
+                          type: object
+                      dadosVendedor:
+                        type: object
+
+  /comercial/ciclo-vendas/cotacoes/imprimir-separacao/{nrPedido}/{codEmpresa}:
+    get:
+      tags: [Cotizaciones - Impresion]
+      summary: Imprimir orden de separacion (picking)
+      parameters:
+        - name: nrPedido
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos de separacion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      dados:
+                        type: object
+                      materiais:
+                        type: array
+                        items:
+                          type: object
+
+  /comercial/ciclo-vendas/cotacoes/email-cotacao:
+    post:
+      tags: [Cotizaciones - Impresion]
+      summary: Enviar cotizacion por email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codCotacao:
+                  type: integer
+                pdf:
+                  type: string
+                  format: byte
+                  description: PDF en base64
+                emails:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      nome:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+      responses:
+        '200':
+          description: Email enviado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+  # ============================================================
+  # MATERIALES
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/materiais:
+    get:
+      tags: [Cotizaciones - Materiales]
+      summary: Listar materiales/productos
+      parameters:
+        - name: codCliente
+          in: query
+          schema:
+            type: integer
+        - name: codLinha
+          in: query
+          schema:
+            type: integer
+        - name: codEndereco
+          in: query
+          schema:
+            type: integer
+        - name: codClasse
+          in: query
+          schema:
+            type: integer
+        - name: codMaterial
+          in: query
+          schema:
+            type: integer
+        - name: codDeposito
+          in: query
+          schema:
+            type: integer
+        - name: comEstoque
+          in: query
+          schema:
+            type: boolean
+        - name: codFormaPagamento
+          in: query
+          schema:
+            type: integer
+        - name: freteConta
+          in: query
+          schema:
+            type: integer
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de materiales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Material'
+
+  /comercial/ciclo-vendas/cotacoes/materiais/estoque-depositos/{codMaterial}/{codDeposito}:
+    get:
+      tags: [Cotizaciones - Materiales]
+      summary: Stock por almacen de un material
+      parameters:
+        - name: codMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codDeposito
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock por deposito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        codDeposito:
+                          type: integer
+                        nomeDeposito:
+                          type: string
+                        quantidade:
+                          type: number
+                        unidade:
+                          type: string
+
+  /comercial/ciclo-vendas/cotacoes/materiais/combo/{codEmpresa}/{codMaterial}:
+    get:
+      tags: [Cotizaciones - Materiales]
+      summary: Materiales combo asociados
+      parameters:
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codCliente
+          in: query
+          schema:
+            type: integer
+        - name: codEndereco
+          in: query
+          schema:
+            type: integer
+        - name: codFormaPagamento
+          in: query
+          schema:
+            type: integer
+        - name: freteConta
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Materiales combo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/materiais/excluir:
+    delete:
+      tags: [Cotizaciones - Materiales]
+      summary: Eliminar material de cotizacion
+      parameters:
+        - name: codDeposito
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: nrPedido
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: codMaterial
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Material eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+  # ============================================================
+  # MATERIALES RELACIONADOS
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/materiais/relacionados/vendas:
+    post:
+      tags: [Cotizaciones - Materiales Relacionados]
+      summary: Materiales relacionados por ventas cruzadas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codEmpresa:
+                  type: integer
+                codMaterial:
+                  type: integer
+                codCliente:
+                  type: integer
+                codEndereco:
+                  type: integer
+                codFormaPagamento:
+                  type: integer
+                freteConta:
+                  type: integer
+      responses:
+        '200':
+          description: Materiales relacionados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/materiais/relacionados/cliente:
+    post:
+      tags: [Cotizaciones - Materiales Relacionados]
+      summary: Materiales relacionados por compras del cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codEmpresa:
+                  type: integer
+                codMaterial:
+                  type: integer
+                codCliente:
+                  type: integer
+                codEndereco:
+                  type: integer
+                codFormaPagamento:
+                  type: integer
+                freteConta:
+                  type: integer
+      responses:
+        '200':
+          description: Materiales relacionados por cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/materiais/relacionados:
+    post:
+      tags: [Cotizaciones - Materiales Relacionados]
+      summary: Materiales relacionados con similaridad e imagenes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codEmpresa:
+                  type: integer
+                codMaterial:
+                  type: integer
+                codCliente:
+                  type: integer
+                codEndereco:
+                  type: integer
+                codFormaPagamento:
+                  type: integer
+                freteConta:
+                  type: integer
+      responses:
+        '200':
+          description: Materiales relacionados con imagenes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/materiales/relacionados:
+    post:
+      tags: [Cotizaciones - Materiales Relacionados]
+      summary: Materiales relacionados (filtrado por material)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codEmpresa:
+                  type: integer
+                codMaterial:
+                  type: integer
+                codCliente:
+                  type: integer
+                codEndereco:
+                  type: integer
+                codFormaPagamento:
+                  type: integer
+                id_vendedor:
+                  type: integer
+                id_lista:
+                  type: integer
+      responses:
+        '200':
+          description: Materiales filtrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: object
+                    properties:
+                      materiales:
+                        type: array
+                        items:
+                          type: object
+                      filtro:
+                        type: object
+                  estado:
+                    type: boolean
+
+  # ============================================================
+  # FICHA MATERIAL Y CALCULO
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/material/ficha-cadastral/{codMaterial}:
+    get:
+      tags: [Cotizaciones - Material Info]
+      summary: Ficha tecnica del material
+      parameters:
+        - name: codMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ficha del material con imagen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      imgMaterial:
+                        type: string
+                        format: uri
+
+  /comercial/ciclo-vendas/cotacoes/material/similaridade/{codEmpresa}/{codMaterial}:
+    get:
+      tags: [Cotizaciones - Material Info]
+      summary: Materiales similares/sustitutos
+      parameters:
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codCliente
+          in: query
+          schema:
+            type: integer
+        - name: codEndereco
+          in: query
+          schema:
+            type: integer
+        - name: codFormaPagamento
+          in: query
+          schema:
+            type: integer
+        - name: freteConta
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Materiales similares
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/material/tipo-calculo/{codMaterial}:
+    get:
+      tags: [Cotizaciones - Material Info]
+      summary: Tipo de calculo del material
+      parameters:
+        - name: codMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codFormaPagamento
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Configuracion de calculo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/material/calculo:
+    post:
+      tags: [Cotizaciones - Material Info]
+      summary: Calcular precio/cantidad/peso de material
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codMaterial:
+                  type: integer
+                codTipoLancamento:
+                  type: integer
+                tipoCalculo:
+                  type: string
+                codCliente:
+                  type: integer
+                quantidade:
+                  type: number
+                preco:
+                  type: number
+                medida:
+                  type: number
+                codEmpresa:
+                  type: integer
+                codEndereco:
+                  type: integer
+      responses:
+        '200':
+          description: Resultado del calculo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/material/lote/{codMaterial}/{codEmpresa}:
+    get:
+      tags: [Cotizaciones - Material Info]
+      summary: Lotes de fabricacion del material
+      parameters:
+        - name: codMaterial
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Informacion de lotes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ============================================================
+  # HISTORIAL Y DUPLICATAS
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/historico-compras:
+    get:
+      tags: [Cotizaciones - Historial]
+      summary: Historial de compras del cliente
+      parameters:
+        - name: codCliente
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: query
+          schema:
+            type: integer
+        - name: codEndereco
+          in: query
+          schema:
+            type: integer
+        - name: codFormaPagamento
+          in: query
+          schema:
+            type: integer
+        - name: freteConta
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ultimas compras y mas comprados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      ultimasCompras:
+                        type: array
+                        items:
+                          type: object
+                      maisComprados:
+                        type: array
+                        items:
+                          type: object
+
+  /comercial/ciclo-vendas/cotacoes/historico-exclusao:
+    get:
+      tags: [Cotizaciones - Historial]
+      summary: Historial de exclusiones de cotizacion
+      parameters:
+        - name: nrPedido
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Historial de exclusiones
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/duplicatas/gerar:
+    post:
+      tags: [Cotizaciones - Duplicatas/Cuotas]
+      summary: Generar cuotas/duplicatas de pago
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codCotacao:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                codFormaPagamento:
+                  type: integer
+                valorProposta:
+                  type: number
+                  format: double
+                valorIcmsSt:
+                  type: number
+                  format: double
+      responses:
+        '200':
+          description: Cuotas generadas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/duplicatas/alterar:
+    post:
+      tags: [Cotizaciones - Duplicatas/Cuotas]
+      summary: Modificar fecha de vencimiento de cuota
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codCotacao:
+                  type: integer
+                codEmpresa:
+                  type: integer
+                parcelaIndex:
+                  type: integer
+                dataVencimento:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Cuota modificada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/duplicatas/consulta:
+    get:
+      tags: [Cotizaciones - Duplicatas/Cuotas]
+      summary: Consultar cuotas de una cotizacion
+      parameters:
+        - name: codCotacao
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de cuotas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/validade-duplicata/{codCotacao}/{codEmpresa}:
+    get:
+      tags: [Cotizaciones - Duplicatas/Cuotas]
+      summary: Validar vencimiento de cuotas
+      parameters:
+        - name: codCotacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Validacion de vencimiento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ============================================================
+  # DESCUENTOS
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/descuentos/lista:
+    get:
+      tags: [Cotizaciones - Descuentos]
+      summary: Listar reglas de descuento
+      description: Lista todas las reglas de descuento de `TB_DESCUENTO` ordenadas por material, tipo cliente y rango.
+      responses:
+        '200':
+          description: Reglas de descuento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Descuento'
+                  estado:
+                    type: boolean
+
+  /comercial/ciclo-vendas/cotacoes/descuento_cliente:
+    get:
+      tags: [Cotizaciones - Descuentos]
+      summary: Calcular descuento aplicable por cliente
+      parameters:
+        - name: id_tipo_cliente
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: cantidad
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: id_material
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: id_ciudad
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Descuento calculado
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # COMISION Y PROGRESO
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/comissao/{codCotacao}/{codEmpresa}:
+    get:
+      tags: [Cotizaciones - Comision]
+      summary: Comision de una cotizacion
+      parameters:
+        - name: codCotacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos de comision
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/cotacoes/progresso/{codCotacao}/{codEmpresa}:
+    get:
+      tags: [Cotizaciones - Progreso]
+      summary: Progreso de la cotizacion
+      description: Retorna metricas de progreso (tonelaje %, clientes %, extras %).
+      parameters:
+        - name: codCotacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: codEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Metricas de progreso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      toneladas:
+                        type: number
+                      clientes:
+                        type: number
+                      extras:
+                        type: number
+
+  # ============================================================
+  # ANEXOS/DOCUMENTOS
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/anexo/documentos/{codCotacao}:
+    get:
+      tags: [Cotizaciones - Anexos]
+      summary: Listar documentos adjuntos
+      parameters:
+        - name: codCotacao
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de documentos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        linkAnexo:
+                          type: string
+                          format: uri
+
+  /comercial/ciclo-vendas/cotacoes/anexo/documentos/salvar:
+    post:
+      tags: [Cotizaciones - Anexos]
+      summary: Subir documento adjunto
+      parameters:
+        - name: codCotacao
+          in: query
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Documento guardado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensagem:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      codAnexo:
+                        type: integer
+
+  /comercial/ciclo-vendas/cotacoes/anexo/documentos/excluir:
+    put:
+      tags: [Cotizaciones - Anexos]
+      summary: Eliminar documento adjunto (soft delete)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - codAnexo
+              properties:
+                codAnexo:
+                  type: integer
+      responses:
+        '200':
+          description: Documento eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensagem:
+                    type: string
+
+  # ============================================================
+  # INTEGRACION SAP
+  # ============================================================
+  /comercial/ciclo-vendas/cotacoes/enviar_sap/{nrPedido}:
+    get:
+      tags: [Cotizaciones - SAP]
+      summary: Enviar oferta a SAP
+      description: Envia oferta a SAP. Solo funciona si la oferta no tiene codigo SAP, tipo_estado=14 y estado_oferta=1.
+      parameters:
+        - name: nrPedido
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Oferta enviada a SAP
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+                  data_sap:
+                    type: object
+
+  /comercial/ciclo-vendas/cotacoes/vigencia_oferta/{codigo_oferta}:
+    get:
+      tags: [Cotizaciones - SAP]
+      summary: Verificar vigencia de oferta en SAP
+      description: Consulta y actualiza el estado de vigencia de la oferta desde SAP.
+      parameters:
+        - name: codigo_oferta
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estado de vigencia
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CodigoRespuesta:
+                    type: integer
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+
+  /comercial/ciclo-vendas/cotacoes/oferta_id:
+    get:
+      tags: [Cotizaciones - SAP]
+      summary: Obtener siguiente ID de oferta
+      responses:
+        '200':
+          description: ID de oferta disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: integer
+                  estado:
+                    type: boolean
+
+  # ============================================================
+  # OFERTAS (OfertaController)
+  # ============================================================
+  /comercial/ciclo-vendas/ofeta/{codCotacao}/{idEmpresa}:
+    get:
+      tags: [Ofertas]
+      summary: Obtener oferta individual con carrito
+      description: "Nota: La ruta tiene un typo ('ofeta' en lugar de 'oferta')."
+      parameters:
+        - name: codCotacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: idEmpresa
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Oferta con carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getlistsacliente:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Buscar clientes
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getlistsaclienteCajaTexto:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Buscar clientes para autocomplete (min 3 chars)
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 3
+      responses:
+        '200':
+          description: Top 5 clientes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getListaMateriales:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Buscar materiales para autocomplete (min 4 chars)
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 4
+      responses:
+        '200':
+          description: Top 5 materiales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ID_CODIGOMATERIAL:
+                          type: integer
+                        CODIGOMATERIAL:
+                          type: string
+                        DESCRICAO:
+                          type: string
+                        STOCK:
+                          type: number
+                        id_unidad:
+                          type: integer
+                        SIGLAS_UNI:
+                          type: string
+                        PESO:
+                          type: number
+
+  /comercial/ciclo-vendas/ofertas/getlistamaterial:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Listar todos los materiales
+      responses:
+        '200':
+          description: Lista completa de materiales
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/PostCodigoCliente:
+    post:
+      tags: [Ofertas - Catalogos]
+      summary: Obtener datos del cliente por codigo
+      description: Retorna datos basicos, extendidos y contactos del cliente usando `PRC_DATOSCLIENTESOFERTA`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - codigo
+              properties:
+                codigo:
+                  type: string
+      responses:
+        '200':
+          description: Datos del cliente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      basicData:
+                        type: array
+                        items:
+                          type: object
+                      extendedData:
+                        type: array
+                        items:
+                          type: object
+                      contacts:
+                        type: array
+                        items:
+                          type: object
+
+  /comercial/ciclo-vendas/ofertas/getAlmacenes:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Listar almacenes (ALM-V*)
+      responses:
+        '200':
+          description: Lista de almacenes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        DEPOSITOS:
+                          type: string
+
+  /comercial/ciclo-vendas/ofertas/getTipoContacto:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Listar tipos de contacto
+      responses:
+        '200':
+          description: Tipos de contacto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getRubros:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Listar rubros/categorias de negocio
+      responses:
+        '200':
+          description: Lista de rubros
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getCondicionPago:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Listar condiciones de pago
+      responses:
+        '200':
+          description: Condiciones de pago
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getEjecutivos:
+    get:
+      tags: [Ofertas - Catalogos]
+      summary: Listar ejecutivos de venta
+      responses:
+        '200':
+          description: Lista de ejecutivos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/ofertas/getStockMaterial:
+    get:
+      tags: [Ofertas - Stock]
+      summary: Stock de material en un almacen
+      description: Consulta stock local y refresca desde SAP (timeout 5s).
+      parameters:
+        - name: codDepo
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: codMate
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock del material
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      StockDisponible:
+                        type: number
+                      StockTotal:
+                        type: number
+                      Comprometido:
+                        type: number
+                      Pedido:
+                        type: number
+
+  /comercial/ciclo-vendas/ofertas/getStockAll:
+    get:
+      tags: [Ofertas - Stock]
+      summary: Stock de material en TODOS los almacenes
+      description: Refresca desde SAP y muestra stock en todos los depositos.
+      parameters:
+        - name: codMate
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock por almacen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id_deposito:
+                          type: string
+                        cantidad:
+                          type: number
+                        NOMBRE_DEPOSITO:
+                          type: string
+                        stock:
+                          type: number
+                        comprometido:
+                          type: number
+                        pedido:
+                          type: number
+
+  /comercial/ciclo-vendas/ofertas/getMaterialDatosMaestros:
+    get:
+      tags: [Ofertas - Stock]
+      summary: Datos maestros de un material
+      parameters:
+        - name: codigo
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: lista
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Lista de precios
+      responses:
+        '200':
+          description: Datos maestros del material
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/ciclo-vendas/oferta/registrar:
+    post:
+      tags: [Ofertas - CRUD]
+      summary: Registrar nueva oferta
+      description: |
+        Registra una nueva oferta con soporte transaccional y deteccion de duplicados via SHA256.
+        Si no requiere autorizacion, envia directamente a SAP.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfertaRegistrar'
+      responses:
+        '200':
+          description: Oferta registrada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+                  data_sap:
+                    type: object
+        '409':
+          description: Oferta duplicada detectada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+
+  /comercial/ciclo-vendas/ofertas/listar:
+    post:
+      tags: [Ofertas - Listados]
+      summary: Buscar/listar ofertas con filtros
+      description: Usa `PRC_BUSCADOR_OFERTA` con multiples filtros.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codigo_oferta:
+                  type: string
+                nombre_cliente:
+                  type: string
+                nombre_vendedor:
+                  type: string
+                modo_entrega:
+                  type: integer
+                fecha_inicial:
+                  type: string
+                  format: date
+                fecha_final:
+                  type: string
+                  format: date
+                estado_oferta:
+                  type: integer
+                tipo_estado:
+                  type: integer
+      responses:
+        '200':
+          description: Lista de ofertas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Oferta'
+
+  /comercial/ciclo-vendas/ofertas/get_historial_oferta_cliente:
+    get:
+      tags: [Ofertas - Listados]
+      summary: Historial de ofertas por cliente (ultimas 10)
+      parameters:
+        - name: codigo_cliente
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ultimas 10 ofertas del cliente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        codigo_oferta:
+                          type: string
+                        peso_total:
+                          type: number
+                        cantidad_total:
+                          type: number
+                        fecha_creacion:
+                          type: string
+                        monto_total:
+                          type: number
+                        descripcion:
+                          type: string
+                  success:
+                    type: boolean
+
+  /comercial/ciclo-vendas/ofertas/get_oferta_editar:
+    get:
+      tags: [Ofertas - CRUD]
+      summary: Obtener oferta completa para edicion
+      parameters:
+        - name: id_oferta
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Oferta con detalle de materiales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      ofertaDetalle:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tonelada:
+                              type: number
+                            id_material:
+                              type: integer
+                            cantidad:
+                              type: number
+                            descripcion:
+                              type: string
+                            articulo:
+                              type: string
+                            unidad:
+                              type: string
+                            descuento:
+                              type: number
+                            peso:
+                              type: number
+                            precioUnitario:
+                              type: number
+                            precioTotal:
+                              type: number
+                            almacen:
+                              type: string
+
+  /comercial/ciclo-vendas/ofertas/getOfertaApp:
+    get:
+      tags: [Ofertas - Mobile]
+      summary: Verificar oferta por firma SHA256 (App movil)
+      parameters:
+        - name: firma
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Hash SHA256 de la oferta
+      responses:
+        '200':
+          description: Estado de la oferta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        estado_oferta:
+                          type: integer
+                        tipo_estado:
+                          type: integer
+
+  /comercial/ciclo-vendas/ofertas/insertClientesTemp:
+    get:
+      tags: [Ofertas - Utilidades]
+      summary: Refrescar tabla temporal de clientes
+      description: Ejecuta `sp_InsertClientesTemp` para actualizar la cache de clientes.
+      responses:
+        '200':
+          description: Tabla refrescada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true

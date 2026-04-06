@@ -1,0 +1,99 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: services/* }
+
+parameters:
+
+services:
+    App\Services\Helper: ~
+    App\Services\MailerService:
+        arguments:
+            $mailer: '@mailer.mailer'
+            $defaultFrom: '%env(default::MAIL_USERNAME)%'
+
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false
+        bind:
+            $projectDir: '%kernel.project_dir%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # ============================================================
+    # Module Services (Microservicios extraidos de Helper.php)
+    # ============================================================
+    App\Module\:
+        resource: '../src/Module/*'
+        exclude: '../src/Module/{Entity,Migrations}'
+
+    # Comercial Module
+    App\Module\Comercial\Service\ClienteService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\VendedorService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\AlmacenService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\MaterialService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\OfertaService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\PrecioService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    # Core Module
+    App\Module\Core\Service\UsuarioService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    # Shared Module
+    App\Module\Shared\Service\CatalogService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Shared\Service\NotificationService:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    Symfony\Component\Serializer\Normalizer\PropertyNormalizer:
+        arguments:
+            $nameConverter: '@serializer.name_converter.camel_case_to_snake_case'
+            $propertyTypeExtractor: '@property_info.php_doc_extractor'
+        tags: [serializer.normalizer]
+
+    # headers validation
+    before_action_subscriber:
+        class: App\Security\Core\BeforeActionSubscriber
+
+    # JWT validation
+    jwt_authenticator:
+        class: App\Security\Core\JwtAuthenticator

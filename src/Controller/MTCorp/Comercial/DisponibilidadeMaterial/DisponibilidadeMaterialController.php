@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\DisponibilidadeMaterial;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
@@ -21,11 +21,6 @@ use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 class DisponibilidadeMaterialController extends AbstractController
 {
   /**
-  * @Route(
-  *  "/comercial/disponibilidade-material/solicitacoes",
-  *  name="comercial.disponibilidade-material-solicitacoes", 
-  *  methods={"GET"}
-  * )
   * @param Connection $connection
   * @param Request $request
   * @return JsonResponse
@@ -62,7 +57,7 @@ class DisponibilidadeMaterialController extends AbstractController
         $idVendedor = VendedorController::idVendedor($connection, $infoUsuario);
       }
 
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_DISP_MATE_CONS] 
           @ID_PARA = 1,
@@ -77,7 +72,7 @@ class DisponibilidadeMaterialController extends AbstractController
           @ORDE_BY = '{$orderBy}',
           @ORDE_TYPE = '{$orderType}'
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
         return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -97,25 +92,19 @@ class DisponibilidadeMaterialController extends AbstractController
   }
 
   /**
-  * @Route(
-  *  "/comercial/disponibilidade-material/solicitacao/{id}",
-  *  name="comercial.disponibilidade-material-solicitacao", 
-  *  methods={"GET"},
-  *  requirements={"id"="\d+"}
-  * )
   * @param Connection $connection
   * @return JsonResponse
   */
   public function getSolicitacao(Connection $connection, $id)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_DISP_MATE_CONS] 
           @ID_PARA = 1,
           @ID = '{$id}'
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
         return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -135,11 +124,6 @@ class DisponibilidadeMaterialController extends AbstractController
   }
 
   /**
-  * @Route(
-  *  "/comercial/disponibilidade-material/solicitacao/salvar",
-  *  name="comercial.disponibilidade-material-solicitacao-salvar", 
-  *  methods={"POST"}
-  * )
   * @param Connection $connection
   * @param Request $request
   * @return JsonResponse
@@ -151,7 +135,7 @@ class DisponibilidadeMaterialController extends AbstractController
       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       if (!empty($infoUsuario->matricula)) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_DISP_MATE_CADA]
             @ID_PARA = 1,
@@ -166,7 +150,7 @@ class DisponibilidadeMaterialController extends AbstractController
             @DT_INIC_PARA = '{$data['dataInicialParametrizacao']}',
             @DT_FINA_PARA = '{$data['dataFinalParametrizacao']}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
   
         if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(
@@ -194,11 +178,6 @@ class DisponibilidadeMaterialController extends AbstractController
   }
 
   /**
-  * @Route(
-  *  "/comercial/disponibilidade-material/solicitacao/atualizar",
-  *  name="comercial.disponibilidade-material-solicitacao-atualizar", 
-  *  methods={"PUT"}
-  * )
   * @param Connection $connection
   * @param Request $request
   * @return JsonResponse
@@ -210,7 +189,7 @@ class DisponibilidadeMaterialController extends AbstractController
       $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
       if (!empty($infoUsuario->matriculaTid)) {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_DISP_MATE_CADA]
             @ID_PARA = 2,
@@ -226,7 +205,7 @@ class DisponibilidadeMaterialController extends AbstractController
             @DT_INIC_PARA = '{$data['dataInicialParametrizacao']}',
             @DT_FINA_PARA = '{$data['dataFinalParametrizacao']}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
   
         if (count($res) > 0 && !isset($res[0]['msg']) && $res[0]['id'] == $data['id']) {
           return FunctionsController::Retorno(
@@ -254,12 +233,6 @@ class DisponibilidadeMaterialController extends AbstractController
   }
 
   /**
-  * @Route(
-  *  "/comercial/disponibilidade-material/solicitacao/excluir/{id}",
-  *  name="comercial.disponibilidade-material-solicitacao-excluir", 
-  *  methods={"DELETE"},
-  *  requirements={"id"="\d+"}
-  * )
   * @param Connection $connection
   * @param Request $request
   * @return JsonResponse
@@ -267,14 +240,14 @@ class DisponibilidadeMaterialController extends AbstractController
   public function deleteSolicitacao(Connection $connection, $id)
   {
     try {
-      $res = $connection->query(
+      $res = $connection->executeQuery(
         "
           EXEC [PRC_DISP_MATE_CADA]
           @ID_PARA = 3,
           @ID = '{$id}',
           @ID_SITU = 2
         "
-      )->fetchAll();
+      )->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg']) && isset($res[0]['codigo']) && $res[0]['codigo'] == $id) {
         return FunctionsController::Retorno(

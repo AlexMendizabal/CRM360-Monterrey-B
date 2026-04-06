@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Kanban\VisaoRo;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 
 /**
@@ -20,11 +20,6 @@ use App\Controller\Common\Services\FunctionsController;
 class KanbanVisaoRoController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/kanban/visao-ro/abertas",
-    *  name="comercial.kanban-visao-ro-abertas", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -66,7 +61,7 @@ class KanbanVisaoRoController extends AbstractController
             // ");
             // exit(0);
         
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_RO_KANB] 
                     @ID_EMPR = {$codEmpresa},
                     @ID_VEND = {$codVendedor},
@@ -75,7 +70,7 @@ class KanbanVisaoRoController extends AbstractController
                     @DT_INIC = '{$dataInicial}',
                     @DT_FINA = '{$dataFinal}',
                     @ID_SITU = 1
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);
@@ -93,11 +88,6 @@ class KanbanVisaoRoController extends AbstractController
     }
 
        /**
-     * @Route(
-     *  "/comercial/kanban/visao-ro/fechadas",
-    *  name="comercial.kanban-visao-ro-fechadas", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -139,7 +129,7 @@ class KanbanVisaoRoController extends AbstractController
             // ");
             // exit(0);
         
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_RO_KANB] 
                     @ID_EMPR = {$codEmpresa},
                     @ID_VEND = {$codVendedor},
@@ -148,7 +138,7 @@ class KanbanVisaoRoController extends AbstractController
                     @DT_INIC = '{$dataInicial}',
                     @DT_FINA = '{$dataFinal}',
                     @ID_SITU = 2
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);

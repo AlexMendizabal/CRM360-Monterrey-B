@@ -4,7 +4,7 @@ namespace App\Factory\MTCorp\Logistica\Integracoes\Fusion\SteelLog;
 
 use App\Repository\MTCorp\Logistica\Integracoes\Fusion\SteelLog\{CteRepository, NotaFiscalRepository};
 use App\Factory\MTCorp\Logistica\Integracoes\Fusion\{ClienteFactory, VeiculoFactory, MotoristaFactory, PedidoFactory};
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
 class EntregaFactory
 {

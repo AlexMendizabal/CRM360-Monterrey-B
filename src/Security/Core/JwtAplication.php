@@ -3,6 +3,7 @@
 namespace App\Security\Core;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class JwtAplication
 {
@@ -13,7 +14,7 @@ class JwtAplication
         $tokenParam = [
             'iat'   => $issuedAt,
             'iss'   => 'mtcorp.com.br',
-            'exp'   => $issuedAt + 3600,
+            'exp'   => $issuedAt + 28800,
             'nbf'   => $issuedAt - 1,
             'data'  => $options['userdata']
         ];
@@ -22,6 +23,6 @@ class JwtAplication
 
     public static function decode($jwt)
     {
-        return JWT::decode($jwt, $_ENV['JWT_SECRET'], ['HS256']);
+        return JWT::decode($jwt, new Key($_ENV['JWT_SECRET'], 'HS256'));
     }
 }

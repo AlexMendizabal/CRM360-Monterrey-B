@@ -2,16 +2,15 @@
 
 namespace App\Controller\MTCorp\Logistica\Dashboards\AnaliseFrete;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class AnaliseFreteController
 {
     /**
-     * @Route("/logistica/dashboards/analise-frete", methods={"GET"})
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -80,9 +79,9 @@ class AnaliseFreteController
             $stmt->bindValue(":orderBy",        $orderBy);
             $stmt->bindValue(":inMedia",        $inMedia);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response   =  $stmt->fetchAllAssociative();
+            $response   =  $result_stmt->fetchAllAssociative();
 
             if (empty($response)) {
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);
@@ -126,7 +125,6 @@ class AnaliseFreteController
     }
 
     /**
-     * @Route("/logistica/dashboards/analise-frete/rotulos", methods={"GET"})
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -136,13 +134,12 @@ class AnaliseFreteController
 
         try {
 
-
             $query = <<<SQL
                 EXEC PRC_LOGI_DASH
                      @PARAMETRO     = 5
             SQL;
 
-            $response   =  $connection->query($query)->fetch();
+            $response   =  $connection->executeQuery($query)->fetchAssociative();
 
             if (empty($response)) {
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\ControleEntregas;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use App\Controller\Common\UsuarioController;
 
 /**
@@ -19,11 +19,6 @@ use App\Controller\Common\UsuarioController;
 class ControleEntregasController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/controle-entregas/lista",
-     *  name="comercial.controle-entregas-lista",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getLista(Connection $connection, Request $request)
@@ -73,7 +68,7 @@ class ControleEntregasController extends AbstractController
                     ,@IN_PAGI                   = '{$inPagi}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query = <<<SQL
                 EXECUTE PRC_COME_CONT_ENTR
@@ -93,7 +88,7 @@ class ControleEntregasController extends AbstractController
                     ,@IN_PAGI                   = '0'
             SQL;
 
-            $total = ($connection->query($query)->fetch())["TT_REGI"];
+            $total = ($connection->executeQuery($query)->fetchAssociative())["TT_REGI"];
 
             if (!is_array($response)) {
                 throw new \Exception($response);
@@ -121,11 +116,6 @@ class ControleEntregasController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/controle-entregas/detalhes-pedido",
-     *  name="comercial.controle-entregas-detalhesPedido",
-     *  methods={"GET"}
-     * )
      * @return Response
      */
     public function getDetalhesListaPedido(Connection $connection, Request $request)
@@ -146,7 +136,7 @@ class ControleEntregasController extends AbstractController
                     ,@ID_LOGI_FUSI_PEDI = '{$pedidoId}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (!is_array($response)) {
                 throw new \Exception($response);
@@ -173,11 +163,6 @@ class ControleEntregasController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/controle-entregas/detalhes-romaneio",
-     *  name="comercial.controle-entregas-detalhesRomaneio",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getDetalhesRomaneio(Connection $connection, Request $request)
@@ -192,7 +177,7 @@ class ControleEntregasController extends AbstractController
                     @CD_ROMA    = '{$romaneio}'
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (!is_array($response)) {
                 throw new \Exception($response);
@@ -219,11 +204,6 @@ class ControleEntregasController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/controle-entregas/situacoes",
-     *  name="comercial.controle-entregas-situacoes",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getSituacoes(Connection $connection, Request $request)
@@ -235,7 +215,7 @@ class ControleEntregasController extends AbstractController
                     @PARAMETRO      = 4
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (empty($response))
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);

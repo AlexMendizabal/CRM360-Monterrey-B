@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 
@@ -21,11 +21,6 @@ use App\Controller\Common\UsuarioController;
 class ProducaoTelasController extends AbstractController
 {
     /**
-    * @Route(
-    *  "/comercial/ciclo-vendas/pedidos-producao-telas/salvar",
-    *  name="comercial.ciclo-vendas-pedidos-producao-telas-salvar", 
-    *  methods={"POST"}
-    * )
     * @return JsonResponse
     */
     public function postProducaoTelas(Connection $connection, Request $request)
@@ -51,8 +46,7 @@ class ProducaoTelasController extends AbstractController
             if (isset($params['codPrioridade'])) $codPrioridade = $params['codPrioridade'];
             if (isset($params['codEndereco'])) $codEndereco = $params['codEndereco'];
 
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_ALAM_CADA]
                     @ID_PARA = 1,
                     @ID_CLIE = {$codCliente},
@@ -62,7 +56,7 @@ class ProducaoTelasController extends AbstractController
                     @DS_OBSE = '{$observacoes}',
                     @ID_PRIO = '{$codPrioridade}',
                     @ID_ENDE = '{$codEndereco}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrPedido'])) {
 
@@ -72,7 +66,7 @@ class ProducaoTelasController extends AbstractController
                 for ($i=0; $i < count($carrinho); $i++) {  
                     
                     
-                    $resCarrinho = $connection->query("
+                    $resCarrinho = $connection->executeQuery("
                         EXEC [PRC_PEDI_ALAM_CADA] 
                             @ID_PARA = 2,
                             @ID_MATE = {$carrinho[$i]['codMaterial']},
@@ -81,7 +75,7 @@ class ProducaoTelasController extends AbstractController
                             @NR_PEDI = {$res[0]['nrPedido']},
                             @ID_USUA_CADA = {$infoUsuario->matricula},
                             @ID_COR = 1
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
     
                     if (isset($resCarrinho[0]['nrPedido'])) {
@@ -90,7 +84,6 @@ class ProducaoTelasController extends AbstractController
                    
                 }
             } 
-
 
             if ((count($res) > 0) && ($assocSuccess == count($carrinho))){
                 return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -104,11 +97,6 @@ class ProducaoTelasController extends AbstractController
   
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/pedidos-producao-telas/atualizar",
-     *  name="comercial.ciclo-vendas-pedidos-producao-telas-atualizar", 
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
     */
     public function putProducaoTelas(Connection $connection, Request $request)
@@ -136,7 +124,7 @@ class ProducaoTelasController extends AbstractController
             if (isset($params['codPrioridade'])) $codPrioridade = $params['codPrioridade'];
             if (isset($params['codEndereco'])) $codEndereco = $params['codEndereco'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_PEDI_ALAM_CADA]
                     @ID_PARA = 1,
                     @NR_PEDI = {$nrPedido},                 
@@ -147,8 +135,7 @@ class ProducaoTelasController extends AbstractController
                     @DS_OBSE = '{$observacoes}',
                     @ID_PRIO = '{$codPrioridade}',
                     @ID_ENDE = '{$codEndereco}'
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrPedido'])) {
 
@@ -157,7 +144,7 @@ class ProducaoTelasController extends AbstractController
                 for ($i=0; $i < count($carrinho); $i++) {  
 
                      if (isset($carrinho[$i]['nrItem'])) {
-                        $resCarrinho = $connection->query("
+                        $resCarrinho = $connection->executeQuery("
                         EXEC [PRC_PEDI_ALAM_CADA] 
                             @ID_PARA = 2,
                             @NR_ITEM = '{$carrinho[$i]['nrItem']}',              
@@ -167,10 +154,10 @@ class ProducaoTelasController extends AbstractController
                             @NR_PEDI = {$res[0]['nrPedido']},
                             @ID_USUA_CADA = {$infoUsuario->matricula},
                             @ID_COR = 1
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
                     } else {
-                        $resCarrinho = $connection->query("
+                        $resCarrinho = $connection->executeQuery("
                         EXEC [PRC_PEDI_ALAM_CADA] 
                             @ID_PARA = 2,          
                             @ID_MATE = {$carrinho[$i]['codMaterial']},
@@ -179,7 +166,7 @@ class ProducaoTelasController extends AbstractController
                             @NR_PEDI = {$res[0]['nrPedido']},
                             @ID_USUA_CADA = {$infoUsuario->matricula},
                             @ID_COR = 1
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
                     }
                     
     
@@ -189,7 +176,6 @@ class ProducaoTelasController extends AbstractController
                    
                 }
             }            
-
 
             if ((count($res) > 0) && ($assocSuccess == count($carrinho))){
                 return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -201,12 +187,6 @@ class ProducaoTelasController extends AbstractController
         }
     }
              /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/pedidos-producao-telas/lista",
-    *  name="comercial.ciclo-vendas-pedidos-producao-telas-lista", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -226,7 +206,6 @@ class ProducaoTelasController extends AbstractController
             $cliente = NULL;
             $codSituacao = 'NULL';
 
-
             if (isset($params['dataInicial'])) $dataInicial = $params['dataInicial'];
             if (isset($params['dataFinal'])) $dataFinal = $params['dataFinal'];
             if (isset($params['nrPedido'])) $nrPedido = $params['nrPedido'];
@@ -243,7 +222,7 @@ class ProducaoTelasController extends AbstractController
             // ");
             // exit(0);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CONS
                         @ID_PARA = 1,
                         @DT_INIC_CADA = '{$dataInicial}',
@@ -251,7 +230,7 @@ class ProducaoTelasController extends AbstractController
                         @NR_PEDI = {$nrPedido},
                         @DS_CLIE = '{$cliente}',
                         @ID_SITU = {$codSituacao}
-                ")->fetchAll();
+                ")->fetchAllAssociative();
 
             // print_r($res);
             // exit(0);
@@ -269,12 +248,6 @@ class ProducaoTelasController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/pedidos-producao-telas/detalhes/{nrPedido}",
-    *  name="comercial.ciclo-vendas-pedidos-producao-telas-detalhes", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -284,22 +257,20 @@ class ProducaoTelasController extends AbstractController
     {
         try {
 
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CONS 
                     @ID_PARA = 1,
                     @NR_PEDI = {$nrPedido}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $carrinho = $res[0];
   
-                    $carrinho['carrinho'] = $connection->query("
+                    $carrinho['carrinho'] = $connection->executeQuery("
                         EXEC PRC_PEDI_ALAM_CONS 
                             @ID_PARA = 2,
                             @NR_PEDI = {$nrPedido}
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
             }
 
@@ -317,12 +288,6 @@ class ProducaoTelasController extends AbstractController
     }
 
       /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/pedidos-producao-telas/detail-panel/{nrPedido}",
-    *  name="comercial.ciclo-vendas-pedidos-producao-telas-detail-panel", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -332,28 +297,25 @@ class ProducaoTelasController extends AbstractController
     {
         try {
 
-
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CONS 
                     @ID_PARA = 1,
                     @NR_PEDI = {$nrPedido}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $carrinho = $res[0];
   
-                    $carrinho['carrinho'] = $connection->query("
+                    $carrinho['carrinho'] = $connection->executeQuery("
                         EXEC PRC_PEDI_ALAM_CONS 
                             @ID_PARA = 2,
                             @NR_PEDI = {$nrPedido}
-                    ")->fetchAll();
+                    ")->fetchAllAssociative();
 
             }
 
             // print_r($carrinho);
             // exit(0);
-
 
             if (count($res) > 0) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -366,13 +328,7 @@ class ProducaoTelasController extends AbstractController
         }
     }
 
-
      /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/pedidos-producao-telas/materiais/excluir/{nrPedido}/{index}",
-     *  name="comercial.ciclo-vendas-pedidos-producao-telas-materiais-excluir",
-     *  methods={"DELETE"}
-     * )
      * @return JsonResponse
      */
     public function deleteItens(Connection $connection, Request $request, $nrPedido, $index)
@@ -380,13 +336,12 @@ class ProducaoTelasController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CADA 
                     @ID_PARA = 3,
                     @NR_PEDI = {$nrPedido},
                     @NR_ITEM = {$index}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrPedido']) && $res[0]['nrPedido'] == $nrPedido) {
                 return FunctionsController::Retorno(true, 'Material deletado com sucesso.', null, Response::HTTP_OK);
@@ -401,12 +356,6 @@ class ProducaoTelasController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/ciclo-vendas/pedidos-producao-telas/material/calculo", 
-     *  name="comercial.ciclo-vendas-pedidos-producao-telas-material-calculo",
-     *  methods={"GET"},
-     *  requirements={"codigo"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -422,14 +371,12 @@ class ProducaoTelasController extends AbstractController
             if (isset($params['codMaterial'])) $codMaterial = $params['codMaterial'];
             if (isset($params['quantidade'])) $quantidade = $params['quantidade'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CONS 
                     @ID_PARA = 3,
                     @ID_MATE = {$codMaterial},
                     @QT_ITEM = {$quantidade}
-            ")->fetchAll();
-
-
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -444,11 +391,6 @@ class ProducaoTelasController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/comercial/ciclo-vendas/pedidos-producao-telas/producao",
-     *  name="comercial.ciclo-vendas-pedidos-producao-telas-producao", 
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postProducao(Connection $connection, Request $request)
@@ -463,14 +405,13 @@ class ProducaoTelasController extends AbstractController
             if (isset($params['nrPedido'])) $nrPedido = $params['nrPedido'];
             if (isset($params['observacao'])) $observacao = $params['observacao'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CADA 
                     @ID_PARA = 4,
                     @NR_PEDI = {$nrPedido},
                     @ID_USUA_CADA = {$infoUsuario->matricula},
                     @DS_OBSE = '{$observacao}'
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrPedido']) && $nrPedido == $res[0]['nrPedido']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -485,11 +426,6 @@ class ProducaoTelasController extends AbstractController
     }
 
      /**
-     * @Route(
-     * "/comercial/ciclo-vendas/pedidos-producao-telas/expedicao",
-     *  name="comercial.ciclo-vendas-pedidos-producao-telas-expedicao", 
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postExpedicao(Connection $connection, Request $request)
@@ -504,14 +440,13 @@ class ProducaoTelasController extends AbstractController
             if (isset($params['nrPedido'])) $nrPedido = $params['nrPedido'];
             if (isset($params['codLocalizacao'])) $codLocalizacao = $params['codLocalizacao'];
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_PEDI_ALAM_CADA 
                     @ID_PARA = 5,
                     @NR_PEDI = {$nrPedido},
                     @ID_USUA_CADA = '{$infoUsuario->matricula}',
                     @ID_LOCA_EXPE = {$codLocalizacao}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['nrPedido']) && $nrPedido == $res[0]['nrPedido']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

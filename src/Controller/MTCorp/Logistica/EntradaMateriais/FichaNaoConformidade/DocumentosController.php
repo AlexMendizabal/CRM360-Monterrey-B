@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 
 use App\Controller\MTCorp\Logistica\Services\Traits\ResponseTrait;
@@ -20,8 +20,6 @@ class DocumentosController
     use ResponseTrait;
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/documentos", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -57,9 +55,9 @@ class DocumentosController
             $stmt->bindValue(":link",            $link);
             $stmt->bindValue(":inStat",          $inStat);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
 
             if(empty($response)){
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);
@@ -77,7 +75,6 @@ class DocumentosController
                 ->setData($response)
                 ->getResponse(Response::HTTP_OK, JSON_UNESCAPED_SLASHES);
 
-
         } catch (\Throwable $th) {
             
             return $this
@@ -88,8 +85,6 @@ class DocumentosController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/documentos", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -109,7 +104,7 @@ class DocumentosController
                 ], Response::HTTP_BAD_REQUEST);
 
             $document   = new ParseFileFromRequestController();
-            $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\logistica\\entrada-materiais\\ficha-nao-conformidade\\anexos\\" . $fichaId . "\\";
+            $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\logistica\\entrada-materiais\\ficha-nao-conformidade\\anexos\\" . $fichaId . "\\";
             
             $document
                 ->setRequest($request)
@@ -130,7 +125,7 @@ class DocumentosController
 
             $documentoTipo  = $match ? "IMAGEM" : "DOCUMENTO";
 
-            $link           = str_replace("C:\\inetpub\\wwwroot\\MTCorp", "", $documentoLocalFisico);
+            $link           = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", "", $documentoLocalFisico);
             $link           = str_replace("\\", "/", $link);
 
             $query = <<<SQL
@@ -160,9 +155,9 @@ class DocumentosController
             $stmt->bindValue(":usuarioNome",             $usuarioNome);
             $stmt->bindValue(":usuarioIP",               $usuarioIP);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             return $this
                 ->setMessage($response["message"])
@@ -178,8 +173,6 @@ class DocumentosController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/documentos", methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -226,9 +219,9 @@ class DocumentosController
             $stmt->bindValue(":usuarioNome",         $usuarioNome);
             $stmt->bindValue(":usuarioIP",           $usuarioIP);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             return $this
                 ->setMessage($response["message"])

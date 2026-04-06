@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
@@ -21,11 +21,6 @@ use App\Controller\Common\Services\ParseFileFromRequestController;
 class FichaCadastralController extends AbstractController
 { 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/lista",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -45,14 +40,14 @@ class FichaCadastralController extends AbstractController
       if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXECUTE [dbo].[PRC_FICH_CADA_MATE_CONS]
               @ID_PARAM = 1
               ,@MATE = '{$material}'
               ,@IN_SITU = {$codSituacao}
               ,@ORDE_BY = '{$orderBy}'
               ,@ORDE_TYPE = '{$orderType}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -67,12 +62,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/alteracoes/{codFichaCadastral}",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-alteracoes",
-   *  methods={"GET"},
-   *  requirements={"codFichaCadastral"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -80,11 +69,11 @@ class FichaCadastralController extends AbstractController
   public function getAlteracoes(Connection $connection, Request $request, $codFichaCadastral)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXEC [PRC_FICH_CADA_LOG_CONS] 
             @ID_PARAM = 1
             ,@ID_SETO_ATIV = '{$codFichaCadastral}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0 && !isset($res[0]['msg'])) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -100,12 +89,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/detalhes/{codFichaCadastral}",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codFichaCadastral"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -113,11 +96,11 @@ class FichaCadastralController extends AbstractController
   public function getDetalhes(Connection $connection, Request $request, $codFichaCadastral)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC [PRC_FICH_CADA_MATE_CONS]
             @ID_PARAM = 1
             ,@ID_FICH_CADA = '{$codFichaCadastral}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -131,12 +114,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/documentos/{codMaterial}",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-documentos",
-   *  methods={"GET"},
-   *  requirements={"codMaterial"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -144,16 +121,16 @@ class FichaCadastralController extends AbstractController
   public function getDocuments(Connection $connection, Request $request, $codMaterial)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC [PRC_FICH_CADA_MATE_ASSO_CONS]
             @ID_PARA = 1
             ,@ID_MATE = '{$codMaterial}'
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
 
             foreach ($res as $key => $value) {
-                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey", $_SERVER['LOCAL_ADDR'], $value["linkAnexo"]);
+                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER['LOCAL_ADDR'], $value["linkAnexo"]);
                 $res[$key]["linkAnexo"] = str_replace("\\", "/", $res[$key]["linkAnexo"] );
                 $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"]; 
             }
@@ -169,11 +146,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/salvar",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-salvar",
-   *  methods={"POST"}
-   * )
    * 
    * @param Connection $connection
    * @param Request $request
@@ -197,14 +169,14 @@ class FichaCadastralController extends AbstractController
       if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
       /* if (isset($params['anexos'])) $anexos = $params['anexos']; */
       
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXECUTE [dbo].[PRC_FICH_CADA_MATE_CADA] 
           @ID_PARAM = 1
           ,@ID_MATE = {$codMaterial}
           ,@DS_MATE = '{$nomeMaterial}'
           ,@DESCRICAO = '{$descMaterial}'
           ,@IN_SITU = '{$codSituacao}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codFichaCadastral'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -219,11 +191,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/anexos/salvar",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-anexos-salvar",
-   *  methods={"POST"}
-   * )
    * 
    * @param Connection $connection
    * @param Request $request
@@ -237,7 +204,7 @@ class FichaCadastralController extends AbstractController
       $codFichaCadastral = $request->query->get("codFichaCadastral");
 
       $document   = new ParseFileFromRequestController();
-      $path       = "C:\\inetpub\\wwwroot\\Monterrey\\uploads\\comercial\\materiais\\ficha-cadastral\\" . $codMaterial . "\\anexos\\";
+      $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\materiais\\ficha-cadastral\\" . $codMaterial . "\\anexos\\";
       
       $document
           ->setRequest($request)
@@ -247,19 +214,18 @@ class FichaCadastralController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $linkAnexo       = $document->getFileLink();
 
-
       $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXECUTE [dbo].[PRC_FICH_CADA_MATE_ASSO] 
           @ID_PARA = 1
           ,@ID_FICH = {$codFichaCadastral}
           ,@ID_MATE = {$codMaterial}
           ,@DS_ANEXO = '{$descAnexo}'
           ,@LINK_ANEXO = '{$linkAnexo}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAnexo'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -274,11 +240,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/atualizar",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putFichaCadastral(Connection $connection, Request $request)
@@ -299,7 +260,7 @@ class FichaCadastralController extends AbstractController
       if (isset($params['descMaterial'])) $descMaterial = $params['descMaterial'];
       if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXECUTE [dbo].[PRC_FICH_CADA_MATE_CADA] 
           @ID_PARAM = 2
           ,@ID_FICH_CADA = '{$codFichaCadastral}'
@@ -307,7 +268,7 @@ class FichaCadastralController extends AbstractController
           ,@DS_MATE = '{$nomeMaterial}'
           ,@DESCRICAO = '{$descMaterial}'
           ,@IN_SITU = '{$codSituacao}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codFichaCadastral']) && $res[0]['codFichaCadastral'] == $codFichaCadastral) {
           return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -322,11 +283,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/anexos/excluir",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-anexos-excluir",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function delAnexo(Connection $connection, Request $request)
@@ -338,11 +294,11 @@ class FichaCadastralController extends AbstractController
 
       if (isset($params['codAnexo'])) $codAnexo = $params['codAnexo'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXECUTE [dbo].[PRC_FICH_CADA_MATE_ASSO] 
           @ID_PARA = 2
           ,@ID = {$codAnexo}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAnexo']) && $res[0]['codAnexo'] == $codAnexo) {
           return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -357,11 +313,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/ativar",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-ativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function activeFichaCadastral(Connection $connection, Request $request)
@@ -370,12 +321,12 @@ class FichaCadastralController extends AbstractController
         $codigo = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_FICH_CADA_MATE_CADA] 
                 @ID_PARAM = 3
                 ,@ID_FICH_CADA = '{$codigo}'
                 ,@IN_SITU = 1
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
             return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -390,11 +341,6 @@ class FichaCadastralController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/materiais/ficha-cadastral/inativar",
-   *  name="comercial.cadastros-materiais-ficha-cadastral-inativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function inactiveFichaCadastral(Connection $connection, Request $request)
@@ -403,13 +349,12 @@ class FichaCadastralController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           /* $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info')); */
 
-
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_FICH_CADA_MATE_CADA] 
                 @ID_PARAM = 3
                 ,@ID_FICH_CADA = '{$codigo}'
                 ,@IN_SITU = 0
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

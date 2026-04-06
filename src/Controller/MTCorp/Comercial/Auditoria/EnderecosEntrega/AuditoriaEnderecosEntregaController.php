@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\DateController;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\MTCorp\Comercial\ComercialController;
@@ -24,11 +24,6 @@ use App\Controller\Common\Services\ParseFileFromRequestController;
 class AuditoriaEnderecosEntregaController extends AbstractController
 {
   /**
-  * @Route(
-  *  "/comercial/auditoria/enderecos-entrega/lista",
-  *  name="comercial.auditoria-enderecos-entrega-lista",
-  *  methods={"GET"}
-  * )
   * @param Connection $connection
   * @param Request $request
   * @return 
@@ -56,7 +51,7 @@ class AuditoriaEnderecosEntregaController extends AbstractController
       /* if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
       if (isset($params['orderType'])) $orderType = $params['orderType']; */
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_CLIE_ENDE_ENTR_CONS 
           @ID_CLIE = {$idCliente}
           ,@NM_CLIE = '{$dsCliente}'
@@ -65,7 +60,7 @@ class AuditoriaEnderecosEntregaController extends AbstractController
           ,@DT_INIC = '{$dataInicial}'
           ,@DT_FINA = '{$dataFinal}'
           ,@ID_SITU = {$situacao}
-      ")->fetchAll();  
+      ")->fetchAllAssociative();  
 
       $e = 0;
       $enderecos = array();
@@ -183,12 +178,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/auditoria/enderecos-entrega/anexos/{codEndereco}",
-   *  name="comercial.auditoria-enderecos-entrega-anexos",
-   *  methods={"GET"},
-   *  requirements={"codEndereco"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -196,16 +185,16 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   public function getAnexos(Connection $connection, Request $request, $codEndereco)
   {
     try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_CLIE_ENDE_ENTR_ANEX_CONS
             @ID_ENDE = {$codEndereco},
             @IN_SITU = 1
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
 
             foreach ($res as $key => $value) {
-                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
+                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
                 $res[$key]["linkAnexo"] = str_replace("\\", "/", $res[$key]["linkAnexo"] );
                 $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"]; 
             }
@@ -223,23 +212,18 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   public function diasEntrega($connection, $codCliente, $idEndereco)
   {
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [PRC_CLIE_ENDE_DIAS_CONS]
         @ID_CLIENTE = {$codCliente},
         @ID_ENDERECO = {$idEndereco}
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     return count($res) > 0 ? $res : [];
   }
 
         /**
-     * @Route(
-     *  "/comercial/auditoria/enderecos-entrega/excecoes",
-    *  name="comercial.auditoria-enderecos-entrega-excecoes", 
-    *  methods={"GET"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -248,9 +232,9 @@ class AuditoriaEnderecosEntregaController extends AbstractController
     public function getExcecao(Connection $connection, Request $request)
     {
         try {      
-            $res = $connection->query("
+            $res = $connection->executeQuery("
               EXEC PRC_EXCE_ENDE_ENTR_CONS
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -265,11 +249,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
     }
 
   /**
-  * @Route(
-  *  "/comercial/auditoria/enderecos-entrega/aprova-reprova-endereco",
-  *  name="comercial.auditoria-enderecos-entrega-aprova-reprova-endereco",
-  *  methods={"PUT"}
-  * )
   * @param Connection $connection
   * @param Request $request
   * @return 
@@ -303,16 +282,16 @@ class AuditoriaEnderecosEntregaController extends AbstractController
       if (isset($data['situacao'])) $situacao = $data['situacao'];
 
       if ($excecao != '' || $excecao != null || $excecao != 0) {
-          $resExcecao = $connection->query("
+          $resExcecao = $connection->executeQuery("
               EXEC PRC_EXCE_ENDE_ENTR_CONS
                 @ID_EXCE = {$excecao}
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           $excecaoMensagem = $resExcecao[0]['excecao'];
 
       }
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_CLIE_ENDE_ENTR_APRO]
           @ID_CLIE_ERP = {$idCliente},
           @ID_ENDE = {$idEndereco},
@@ -322,7 +301,7 @@ class AuditoriaEnderecosEntregaController extends AbstractController
           @LAT = {$latitude},
           @LONG = {$longitude},
           @ID_USUA = {$matricula}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
       
       if (count($res) > 0 && !isset($res[0]['Message'])) {
         if ($situacao == 1) {
@@ -364,12 +343,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   }
 
        /**
-   * @Route(
-   *  "/comercial/auditoria/enderecos-entrega/anexo/documentos/{codEndereco}",
-   *  name="comercial.auditoria-enderecos-entrega-anexo-documentos",
-   *  methods={"GET"},
-   *  requirements={"codMaterial"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -380,26 +353,23 @@ class AuditoriaEnderecosEntregaController extends AbstractController
     try {
         $params = $request->query->all();
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC PRC_CLIE_ENDE_ENTR_APRO_ANEX_CONS 
               @ID_ENDE = {$codEndereco}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
 
-
             foreach ($res as $key => $value) {
-                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
+                $res[$key]["linkAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER["SERVER_NAME"], $value["linkAnexo"]);
                 $res[$key]["linkAnexo"] = str_replace("\\", "/", $res[$key]["linkAnexo"] );
                 $res[$key]["linkAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $res[$key]["linkAnexo"] : "https://" . $res[$key]["linkAnexo"]; 
             }
-
 
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
         } else {
             return FunctionsController::Retorno(false, null, $res, Response::HTTP_OK);
         }
-
 
         if (count($res) > 0 && !isset($res[0]['msg'])) {
             return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -414,11 +384,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
 }
 
    /**
-   * @Route(
-  *  "/comercial/auditoria/enderecos-entrega/anexo/documentos/salvar",
-  *  name="comercial.auditoria-enderecos-entrega-anexo-documentos-salvar",
-   *  methods={"POST"}
-   * )
    * 
    * @param Connection $connection
    * @param Request $request
@@ -433,7 +398,7 @@ class AuditoriaEnderecosEntregaController extends AbstractController
         $codEndereco = $request->query->get("codEndereco");
 
       $document   = new ParseFileFromRequestController();
-      $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\comercial\\auditoria\\enderecos-entrega\\" . $codEndereco . "\\anexos\\";
+      $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\auditoria\\enderecos-entrega\\" . $codEndereco . "\\anexos\\";
       
       $document
           ->setRequest($request)
@@ -443,21 +408,18 @@ class AuditoriaEnderecosEntregaController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $urlAnexo       = $document->getFileLink();
 
-
       $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $matricula      = $infoUsuario->matricula;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
-
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_CLIE_ENDE_ENTR_APRO_ANEX_CADA 
             @ID_PARA = 1,
             @ID_ENDE = '{$codEndereco}',
             @DS_ANEX = '{$descAnexo}',
             @LINK_ANEX = '{$urlAnexo}',
             @ID_USUA = {$matricula}
-      ")->fetchAll();
-
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAnexo'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -472,11 +434,6 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   }
 
    /**
-   * @Route(
-   *  "/comercial/auditoria/enderecos-entrega/anexo/documentos/excluir",
-   *  name="comercial.auditoria-enderecos-entrega-anexo-documentos-excluir",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function delAnexo(Connection $connection, Request $request)
@@ -491,14 +448,13 @@ class AuditoriaEnderecosEntregaController extends AbstractController
 
       $matricula      = $infoUsuario->matricula;
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
           EXEC PRC_CLIE_ENDE_ENTR_APRO_ANEX_CADA 
             @ID_PARA = 2
             @ID_ANEX = {$codAnexo},
             @ID_USUA = {$matricula}    
 
-      ")->fetchAll();
-
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAnexo']) && $res[0]['codAnexo'] == $codAnexo) {
           return FunctionsController::Retorno(true, 'Anexo excluido com sucesso.', null, Response::HTTP_OK);
@@ -512,14 +468,7 @@ class AuditoriaEnderecosEntregaController extends AbstractController
     }
   }
 
-
   /**
-   * @Route(
-   *  "/comercial/auditoria/enderecos-entrega/ultima-compra/{codCliente}",
-   *  name="comercial.auditoria-enderecos-entrega-ultima-compra",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -527,11 +476,11 @@ class AuditoriaEnderecosEntregaController extends AbstractController
   public function getUltimaCompra(Connection $connection, Request $request, $codCliente)
   {
     try {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_CLIE_GRUP_CONS]
           @ID_CLIENTE = '{$codCliente}',
           @ID_PARAM = 2
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0) {
           return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);

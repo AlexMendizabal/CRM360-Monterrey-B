@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class CombosController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/lista",
-     *  name="comercial.cadastros-materiais-combos-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -54,7 +49,7 @@ class CombosController extends AbstractController
 
             $order = $orderBy . ' ' . $orderType;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CONS]
                     @ID_PARA = 1
                     ,@ID_COMB = ''
@@ -65,7 +60,7 @@ class CombosController extends AbstractController
                     ,@DS_ORDE = '{$order}'
                     ,@ID_PAGI = {$pagina}
                     ,@QT_REGI = {$registros}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -80,12 +75,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/associacoes/{codCombo}",
-     *  name="comercial.cadastros-materiais-combos-associacoes",
-     *  methods={"GET"},
-     *  requirements={"codigo"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -119,18 +108,18 @@ class CombosController extends AbstractController
     private function associacoesMateriais($connection, $codCombo, $tipoConsulta = 0, $codMaterial = NULL, $codEmpresa = NULL)
     {
         if ($tipoConsulta === 0) {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CONS]
                     @ID_PARA = 2
                     ,@ID_COMB = {$codCombo}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
         } else if ($tipoConsulta === 1) {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CONS]
                     @ID_PARA = 2
                     ,@ID_MATE = {$codMaterial}
                     ,@ID_EMPR = {$codEmpresa}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
         }
 
         if (count($res) > 0 && !isset($res[0]['message'])) {
@@ -141,12 +130,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/detalhes/{codCombo}",
-     *  name="comercial.cadastros-materiais-combos-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codigo"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -154,11 +137,11 @@ class CombosController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codCombo)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CONS]
                     @ID_PARA = 1
                     ,@ID_COMB = {$codCombo}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             
             if (count($res) > 0 && !isset($res[0]['message'])) {
                 $detalhes = $res[0];
@@ -175,11 +158,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/salvar",
-     *  name="comercial.cadastros-materiais-combos-salvar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postCombo(Connection $connection, Request $request)
@@ -222,11 +200,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/atualizar",
-     *  name="comercial.cadastros-materiais-combos-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putCombo(Connection $connection, Request $request)
@@ -305,7 +278,7 @@ class CombosController extends AbstractController
     private function saveAssociacao($connection, $combo, $associacao, $infoUsuario)
     {
         if (!isset($combo->codCombo)) {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
                     @ID_PARA = 1
                     ,@ID_MATE = {$combo->codMaterial}
@@ -314,7 +287,7 @@ class CombosController extends AbstractController
                     ,@QT_MATE_ASSO = {$associacao['quantidade']}
                     ,@IN_SITU = {$combo->codSituacao}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
             
             if (isset($res[0]['codCombo'])) {
                 return TRUE;
@@ -328,7 +301,7 @@ class CombosController extends AbstractController
                 $idParam = 1;
             }
     
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
                     @ID_PARA = {$idParam}
                     ,@ID_COMB = {$combo->codCombo}
@@ -338,8 +311,7 @@ class CombosController extends AbstractController
                     ,@QT_MATE_ASSO = {$associacao['quantidade']}
                     ,@IN_SITU = {$combo->codSituacao}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
-
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codCombo']) && $res[0]['codCombo'] === $combo->codCombo) {
                 return TRUE;
@@ -350,11 +322,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/associacao/remover/{codCombo}/{codAssociacao}",
-     *  name="comercial.cadastros-materiais-combos-associacao-remover",
-     *  methods={"DELETE"}
-     * )
      * @return JsonResponse
      */
     public function deleteAssociacao(Connection $connection, Request $request, $codCombo, $codAssociacao)
@@ -362,12 +329,12 @@ class CombosController extends AbstractController
         try {
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
                     @ID_PARA = 2
                     ,@ID_COMB = {$codAssociacao}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codCombo']) && $res[0]['codCombo'] == $codCombo) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -382,11 +349,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/ativar",
-     *  name="comercial.cadastros-materiais-combos-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeCombo(Connection $connection, Request $request)
@@ -395,13 +357,13 @@ class CombosController extends AbstractController
             $codCombo = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
                     @ID_PARA = 4
                     ,@ID_COMB = {$codCombo}
                     ,@IN_SITU = 1
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codCombo']) && $codCombo == $res[0]['codCombo']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -416,11 +378,6 @@ class CombosController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/combos/inativar",
-     *  name="comercial.cadastros-materiais-combos-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveCombo(Connection $connection, Request $request)
@@ -429,13 +386,13 @@ class CombosController extends AbstractController
             $codCombo = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_COMB_MATE_ASSO_CADA]
                     @ID_PARA = 4
                     ,@ID_COMB = {$codCombo}
                     ,@IN_SITU = 0
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codCombo']) && $codCombo == $res[0]['codCombo']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

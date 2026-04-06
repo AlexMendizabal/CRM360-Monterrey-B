@@ -2,12 +2,12 @@
 
 namespace App\Controller\MTCorp\Logistica\Veiculos;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Mailson Teles Borges <mailson.borges@mtcorp.com.br>
@@ -16,8 +16,6 @@ class VeiculoTipoController
 {
 
     /**
-     * @Route("/logistica/tipo-veiculo", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -50,7 +48,7 @@ class VeiculoTipoController
                     ,@NM_USUA		    = '{$nomeUsuario}'		
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if (!is_array($response))
                 throw new \Exception($response);
@@ -77,10 +75,7 @@ class VeiculoTipoController
         }
     }
 
-
     /**
-     * @Route("/logistica/tipo-veiculo", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResonse
@@ -110,7 +105,7 @@ class VeiculoTipoController
                     ,@IN_PAGI           = 1
             SQL;
             
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             $query = <<<SQL
                 EXECUTE PRC_LOGI_VEIC_TIPO
@@ -125,7 +120,7 @@ class VeiculoTipoController
                     ,@IN_COUNT          = 1
             SQL;
             
-            $total = ($connection->query($query)->fetch())["TT_REGI"];
+            $total = ($connection->executeQuery($query)->fetchAssociative())["TT_REGI"];
 
             if(!is_array($response))
                 throw new \Exception($response);

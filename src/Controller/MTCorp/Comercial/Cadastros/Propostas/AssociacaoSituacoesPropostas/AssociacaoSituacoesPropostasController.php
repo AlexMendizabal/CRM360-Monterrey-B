@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class AssociacaoSituacoesPropostasController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/lista",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-lista",
-   *  methods={"GET"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -42,12 +37,12 @@ class AssociacaoSituacoesPropostasController extends AbstractController
           /* if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
           if (isset($params['orderType'])) $orderType = $params['orderType']; */
           
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_GRUP_SITU_PROP_CONS]
               @ID_PARA = 1,
               @DS_LEGENDA = '{$situacaoProposta}',
               @IN_SITU = {$codSituacao}
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (count($res) > 0 && !isset($res[0]['message'])) {
               return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -62,12 +57,6 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/associacoes/{codAssociacao}",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-associacoes",
-   *  methods={"GET"},
-   *  requirements={"codigo"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -90,11 +79,11 @@ class AssociacaoSituacoesPropostasController extends AbstractController
 
   private function associacoesSituacoes($connection, $codAssociacao)
   {
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_GRUP_SITU_PROP_CONS]
           @ID_PARA = 2,
           @ID_GRUP_SITU_PROP = {$codAssociacao}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (count($res) > 0) {
           return $res;
@@ -104,12 +93,6 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/detalhes/{codAssociacao}",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-detalhes",
-   *  methods={"GET"},
-   *  requirements={"codAssociacao"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -117,11 +100,11 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   public function getDetalhes(Connection $connection, Request $request, $codAssociacao)
   {
       try {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC [PRC_GRUP_SITU_PROP_CONS]
             @ID_PARA = 1,
             @ID_GRUP_SITU_PROP = {$codAssociacao}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (count($res) > 0) {
             $similares = $res[0];
@@ -138,11 +121,6 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/salvar",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-salvar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postAssociacao(Connection $connection, Request $request)
@@ -164,7 +142,7 @@ class AssociacaoSituacoesPropostasController extends AbstractController
 
       $situacoes = implode(',', $situacoes);
       
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_GRUP_SITU_PROP_CADA]
           @ID_PARA = 1,
           @DS_LEGENDA = '{$descLegenda}',
@@ -173,7 +151,7 @@ class AssociacaoSituacoesPropostasController extends AbstractController
           @ID_SITU_PROP_ASSO = '{$situacoes}',
           @IN_SITU = {$codSituacao},
           @ID_USUA = {$infoUsuario->matricula}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAssociacao'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -188,11 +166,6 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/atualizar",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-atualizar",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function putAssociacao(Connection $connection, Request $request)
@@ -215,7 +188,7 @@ class AssociacaoSituacoesPropostasController extends AbstractController
 
       $situacoes = implode(',', $situacoes);
       
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC [PRC_GRUP_SITU_PROP_CADA]
           @ID_PARA = 2,
           @ID_GRUP_SITU_PROP = {$codAssociacao},
@@ -225,7 +198,7 @@ class AssociacaoSituacoesPropostasController extends AbstractController
           @ID_SITU_PROP_ASSO = '{$situacoes}',
           @IN_SITU = {$codSituacao},
           @ID_USUA = {$infoUsuario->matricula}
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['codAssociacao']) && $res[0]['codAssociacao'] == $codAssociacao) {
           return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -240,11 +213,6 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/ativar",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-ativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function activeAssociacao(Connection $connection, Request $request)
@@ -253,13 +221,13 @@ class AssociacaoSituacoesPropostasController extends AbstractController
           $codAssociacao = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_GRUP_SITU_PROP_CADA]
               @ID_PARA = 3,
               @ID_GRUP_SITU_PROP = {$codAssociacao},
               @IN_SITU = 1,
               @ID_USUA = {$infoUsuario->matricula}
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codAssociacao']) && $codAssociacao == $res[0]['codAssociacao']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -274,11 +242,6 @@ class AssociacaoSituacoesPropostasController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/propostas/associacao-situacoes-proposta/inativar",
-   *  name="comercial.cadastros-propostas-associacao-situacoes-proposta-inativar",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function inactiveAssociacao(Connection $connection, Request $request)
@@ -287,13 +250,13 @@ class AssociacaoSituacoesPropostasController extends AbstractController
           $codAssociacao = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXEC [PRC_GRUP_SITU_PROP_CADA]
               @ID_PARA = 3,
               @ID_GRUP_SITU_PROP = {$codAssociacao},
               @IN_SITU = 0,
               @ID_USUA = {$infoUsuario->matricula}
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codAssociacao']) && $codAssociacao == $res[0]['codAssociacao']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

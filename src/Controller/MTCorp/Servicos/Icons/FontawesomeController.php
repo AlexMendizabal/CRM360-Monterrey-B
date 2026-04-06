@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Servicos\Icons;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\DBAL\Driver\Connection;
-
 
 /**
  * Class ContatosController
@@ -20,7 +19,6 @@ class FontawesomeController
 {
     /**
      * Fornece os icones cadastrados para a FontAwesome
-     * @Route("/servicos/icons", methods={"GET"})
      * @param Connection $connection
      * @param Request $request
      * @param pagina valor inteiro referente a página que deverá ser retornada
@@ -37,7 +35,7 @@ class FontawesomeController
 
             $query = "SELECT id_icon_foaw , class as classe FROM tb_icon_foaw";
             
-            $icons = $connection->query($query)->fetchall();
+            $icons = $connection->executeQuery($query)->fetchAllAssociative();
           
             if (is_array($icons)) {
                 if (count($icons)) {
@@ -53,7 +51,7 @@ class FontawesomeController
 
             $query = "SELECT id_icon_foaw, class as classe FROM tb_icon_foaw";
 
-            $qtIcones = $connection->query($query)->fetch();
+            $qtIcones = $connection->executeQuery($query)->fetchAssociative();
 
             $response["qtIcones"] = isset($qtIcones["qtIcones"]) ? $qtIcones["qtIcones"] : 0;
 
@@ -68,10 +66,7 @@ class FontawesomeController
         return $jr->setEncodingOptions(JSON_NUMERIC_CHECK);
     }
 
-
     /**
-     * @Route("/servicos/icons/fontawesome", methods={"GET"})
-     *
      * @param Connection $connection
      * @return JsonResponse
      */
@@ -107,7 +102,7 @@ class FontawesomeController
                   @class = '$class';
               SQL;
 
-                            $arr[] = $connection->query($query)->fetch();
+                            $arr[] = $connection->executeQuery($query)->fetchAssociative();
                         }
                     }
                 }

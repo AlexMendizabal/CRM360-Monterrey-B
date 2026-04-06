@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Abastecimento\Cadastros;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\Exception as DBALException;
 
 class NivelEstoqueMaterialDepositoController extends AbstractController
 {
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-materiais", name="abastecimento.cadastros.nivel-estoque-materiais-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -145,7 +143,7 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -179,8 +177,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                     $stmt->bindValue(9, $ttRegiPagi);
                     $stmt->bindValue(10, $ordeBy);
                     $stmt->bindValue(11, $ordeType);
-                    $stmt->execute();
-                    $nivelEstoqueMateriaisAssociados = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $nivelEstoqueMateriaisAssociados = $result_stmt->fetchAllAssociative();
 
                     if (count($nivelEstoqueMateriaisAssociados) > 0) {
                         $result = array(
@@ -212,10 +210,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-classes-depositos", name="abastecimento.cadastros.nivel-estoque-classes-depósitos-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -244,7 +238,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                     $response = new JsonResponse($result);
                     return $response;
                 }
-
 
                 $idEmpr = (string)(isset($params['ID_EMPR']) && !empty($params['ID_EMPR'])) ? (string)$params['ID_EMPR'] : NULL;
                 $idDepo = (string)(isset($params['ID_DEPO']) && !empty($params['ID_DEPO'])) ? (string)$params['ID_DEPO'] : NULL;
@@ -307,8 +300,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(11, $ttRegiPagi);
                 $stmt->bindValue(12, $ordeBy);
                 $stmt->bindValue(13, $ordeType);
-                $stmt->execute();
-                $nivelEstoqueClassesDepositos = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $nivelEstoqueClassesDepositos = $result_stmt->fetchAllAssociative();
 
                 if (count($nivelEstoqueClassesDepositos) > 1) {
                     $result = array(
@@ -339,10 +332,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-material-depositos", name="abastecimento.cadastros.nivel-estoque-material-depósitos-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -400,8 +389,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(3, $ttRegiPagi);
                 $stmt->bindValue(4, $ordeBy);
                 $stmt->bindValue(5, $ordeType);
-                $stmt->execute();
-                $nivelEstoqueMaterialDepositos = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $nivelEstoqueMaterialDepositos = $result_stmt->fetchAllAssociative();
 
                 if (count($nivelEstoqueMaterialDepositos) > 0) {
                     $result = array(
@@ -432,10 +421,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-material-depositos", name="abastecimento.cadastros.nivel-estoque-material-depósitos-gravar", methods={"POST"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -529,7 +514,7 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(5, $ttEstoMaxi);
                 $stmt->bindValue(6, $idUsua);
                 $stmt->bindValue(7, $_SERVER['REMOTE_ADDR']);
-                $stmt->execute();
+                $stmt->executeStatement();
 
                 $result = array(
                     'responseCode' => 201,
@@ -553,10 +538,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-materiais-deposito", name="abastecimento.cadastros.nivel-estoque-materiais-depósito-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -648,8 +629,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(7, $ttRegiPagi);
                 $stmt->bindValue(8, $ordeBy);
                 $stmt->bindValue(9, $ordeType);
-                $stmt->execute();
-                $nivelEstoqueMateriaisDeposito = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $nivelEstoqueMateriaisDeposito = $result_stmt->fetchAllAssociative();
 
                 if (count($nivelEstoqueMateriaisDeposito) > 1) {
                     $result = array(
@@ -680,10 +661,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-material-deposito", name="abastecimento.cadastros.nivel-estoque-material-depósito-gravar", methods={"POST"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -877,7 +854,7 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                     $stmt->bindValue(14, $inStat);
                     $stmt->bindValue(15, $idUsua);
                     $stmt->bindValue(16, $_SERVER['REMOTE_ADDR']);
-                    $stmt->execute();
+                    $stmt->executeStatement();
                 }
 
                 $result = array(
@@ -902,10 +879,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-totais", name="abastecimento.cadastros.nivel-estoque-totais-gravar", methods={"POST"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1048,7 +1021,7 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(10, $ttDiasEstoMaxi);
                 $stmt->bindValue(11, $idUsua);
                 $stmt->bindValue(12, $_SERVER['REMOTE_ADDR']);
-                $stmt->execute();
+                $stmt->executeStatement();
 
                 $result = array(
                     'responseCode' => 201,
@@ -1072,10 +1045,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
      }
  
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-material-deposito", name="abastecimento.cadastros.nivel-estoque-material-deposito-excluir", methods={"DELETE"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1129,7 +1098,7 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(1, $idAssoMateDepo);
                 $stmt->bindValue(2, $idUsua);
                 $stmt->bindValue(3, $_SERVER['REMOTE_ADDR']);
-                $stmt->execute();
+                $stmt->executeStatement();
 
                 $result = array(
                     'responseCode' => 200,
@@ -1153,10 +1122,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/nivel-estoque-material-deposito-auditoria", name="abastecimento.cadastros.nivel-estoque-material-deposito-auditoria-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1249,8 +1214,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(6, $ttRegiPagi);
                 $stmt->bindValue(7, $ordeBy);
                 $stmt->bindValue(8, $ordeType);
-                $stmt->execute();
-                $nivelEstoqueMaterialDepositoAuditoria = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $nivelEstoqueMaterialDepositoAuditoria = $result_stmt->fetchAllAssociative();
 
                 if (count($nivelEstoqueMaterialDepositoAuditoria) > 0) {
                     $result = array(
@@ -1281,10 +1246,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/vendas-realizadas-classe-periodo", name="abastecimento.cadastros.vendas-realizadas-classe-periodo", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1355,8 +1316,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(2, $idClas);
                 $stmt->bindValue(3, $idApoiTipoMate);
                 $stmt->bindValue(4, $ttMesePeriVend);
-                $stmt->execute();
-                $vendasRealizadasClassePeriodo = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $vendasRealizadasClassePeriodo = $result_stmt->fetchAllAssociative();
 
                 if (count($vendasRealizadasClassePeriodo) > 0) {
                     $result = array(
@@ -1387,10 +1348,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/vendas-realizadas-classe-material-periodo", name="abastecimento.cadastros.vendas-realizadas-classe-material-periodo", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1451,8 +1408,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(1, $idClas);
                 $stmt->bindValue(2, $idApoiTipoMate);
                 $stmt->bindValue(3, $ttMesePeriVend);
-                $stmt->execute();
-                $vendasRealizadasClasseMaterialPeriodo = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $vendasRealizadasClasseMaterialPeriodo = $result_stmt->fetchAllAssociative();
 
                 if (count($vendasRealizadasClasseMaterialPeriodo) > 0) {
                     $result = array(
@@ -1483,10 +1440,6 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/vendas-realizadas-material-periodo", name="abastecimento.cadastros.vendas-realizadas-material-periodo", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -1547,8 +1500,8 @@ class NivelEstoqueMaterialDepositoController extends AbstractController
                 $stmt->bindValue(1, $idDepo);
                 $stmt->bindValue(2, $idMate);
                 $stmt->bindValue(3, $ttMesePeriVend);
-                $stmt->execute();
-                $vendasRealizadasMaterialPeriodo = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $vendasRealizadasMaterialPeriodo = $result_stmt->fetchAllAssociative();
 
                 if (count($vendasRealizadasMaterialPeriodo) > 0) {
                     $result = array(

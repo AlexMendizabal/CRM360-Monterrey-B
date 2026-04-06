@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Abastecimento\Cadastros;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\Exception as DBALException;
 
 class MaterialAssociadoDepositoController extends AbstractController
 {
     /**
-     * @Route(
-     * "/abastecimento/cadastros/depositos-associados-materiais", name="abastecimento.cadastros.depositos-associados-materiais-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -118,7 +116,7 @@ class MaterialAssociadoDepositoController extends AbstractController
                     $stmtGravParaRelaServ->bindValue(6, $sqlExcel);
                     $stmtGravParaRelaServ->bindValue(7, $idUsua);
                     $stmtGravParaRelaServ->bindValue(8, $_SERVER['REMOTE_ADDR']);
-                    $stmtGravParaRelaServ->execute();
+                    $stmtGravParaRelaServ->executeStatement();
 
                     $result = array(
                         'responseCode' => 200,
@@ -149,8 +147,8 @@ class MaterialAssociadoDepositoController extends AbstractController
                     $stmt->bindValue(7, $ttRegiPagi);
                     $stmt->bindValue(8, $ordeBy);
                     $stmt->bindValue(9, $ordeType);
-                    $stmt->execute();
-                    $depositosAssociadosMateriais = $stmt->fetchAll();
+                    $result_stmt = $stmt->executeQuery();
+                    $depositosAssociadosMateriais = $result_stmt->fetchAllAssociative();
 
                     $depositos = array_unique(array_column($depositosAssociadosMateriais, 'ID_DEPO'));
                     $empresaDeposito = array();
@@ -211,10 +209,6 @@ class MaterialAssociadoDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/deposito-associado-material", name="abastecimento.cadastros.deposito-associado-material-gravar", methods={"POST"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -297,7 +291,7 @@ class MaterialAssociadoDepositoController extends AbstractController
                 $stmt->bindValue(4, $inStat);
                 $stmt->bindValue(5, $idUsua);
                 $stmt->bindValue(6, $_SERVER['REMOTE_ADDR']);
-                $stmt->execute();
+                $stmt->executeStatement();
 
                 $result = array(
                     'responseCode' => 201,
@@ -321,10 +315,6 @@ class MaterialAssociadoDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/deposito-associado-material-alterar", name="abastecimento.cadastros.deposito-associado-material-alterar", methods={"POST"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -417,7 +407,7 @@ class MaterialAssociadoDepositoController extends AbstractController
                 $stmt->bindValue(5, $inStat);
                 $stmt->bindValue(6, $idUsua);
                 $stmt->bindValue(7, $_SERVER['REMOTE_ADDR']);
-                $stmt->execute();
+                $stmt->executeStatement();
 
                 $result = array(
                     'responseCode' => 200,
@@ -441,10 +431,6 @@ class MaterialAssociadoDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/materiais-disponiveis-associacao-depositos", name="abastecimento.cadastros.materiais-disponiveis-associacao-depositos-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -522,8 +508,8 @@ class MaterialAssociadoDepositoController extends AbstractController
                 $stmt->bindValue(8, $ttRegiPagi);
                 $stmt->bindValue(9, $ordeBy);
                 $stmt->bindValue(10, $ordeType);
-                $stmt->execute();
-                $materiaisDisponiveisAssociacao = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $materiaisDisponiveisAssociacao = $result_stmt->fetchAllAssociative();
 
                 if (count($materiaisDisponiveisAssociacao) > 0) {
                     $result = array(
@@ -554,10 +540,6 @@ class MaterialAssociadoDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/deposito-associado-material", name="abastecimento.cadastros.deposito-associado-material-excluir", methods={"DELETE"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -611,7 +593,7 @@ class MaterialAssociadoDepositoController extends AbstractController
                 $stmt->bindValue(1, $idAssoDepoMate);
                 $stmt->bindValue(2, $idUsua);
                 $stmt->bindValue(3, $_SERVER['REMOTE_ADDR']);
-                $stmt->execute();
+                $stmt->executeStatement();
 
                 $result = array(
                     'responseCode' => 200,
@@ -635,10 +617,6 @@ class MaterialAssociadoDepositoController extends AbstractController
     }
 
     /**
-     * @Route(
-     * "/abastecimento/cadastros/depositos-associados-materiais-auditoria", name="abastecimento.cadastros.depositos-associados-materiais-auditoria-listar", methods={"GET"}
-     * )
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -721,8 +699,8 @@ class MaterialAssociadoDepositoController extends AbstractController
                 $stmt->bindValue(5, $ttRegiPagi);
                 $stmt->bindValue(6, $ordeBy);
                 $stmt->bindValue(7, $ordeType);
-                $stmt->execute();
-                $depositosAssociadosMateriaisAuditoria = $stmt->fetchAll();
+                $result_stmt = $stmt->executeQuery();
+                $depositosAssociadosMateriaisAuditoria = $result_stmt->fetchAllAssociative();
 
                 if (count($depositosAssociadosMateriaisAuditoria) > 0) {
                     $result = array(

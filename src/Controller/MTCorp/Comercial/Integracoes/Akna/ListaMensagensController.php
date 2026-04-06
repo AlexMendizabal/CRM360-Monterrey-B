@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\Akna;
 
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +21,6 @@ class ListaMensagensController extends AknaConfig
     }
 
     /**
-     * @Route(
-     *  "/comercial/integracoes/akna/lista-mensagens",
-     *  name="comercial.integracoes-akna-lista-mensagens",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getListasMensagens(Request $request)
@@ -43,7 +37,7 @@ class ListaMensagensController extends AknaConfig
 
             if ($statusCode === 200){
                 $content = $response->getContent();
-                $xmlContent= simplexml_load_string($content);
+                $xmlContent= simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_NONET);
                 $jsonContent = json_encode($xmlContent);
                 $objContent = json_decode($jsonContent, true);
                 $result = $objContent['EMKT']['MENSAGEM'];

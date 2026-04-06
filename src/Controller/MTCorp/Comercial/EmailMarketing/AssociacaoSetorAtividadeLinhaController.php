@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\EmailMarketing;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 
@@ -20,8 +20,6 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
 {
   /**
      * Consultar linhas para associação
-     * @Route("/comercial/emailMarketing/associacao/linhas", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -40,7 +38,7 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
                 @UUID       = '{$UUID}'
         SQL;
 
-        $response = $connection->query($query)->fetchAll();
+        $response = $connection->executeQuery($query)->fetchAllAssociative();
         
         if (empty($response))
             return new JsonResponse(null, Response::HTTP_NO_CONTENT); 
@@ -66,8 +64,6 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
 
   /**
      * Consultar setores de atividades para associação
-     * @Route("/comercial/emailMarketing/associacao/setor-atividade", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -84,7 +80,7 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
                 @ID_SETO_ATIV = '{$ID_SETO_ATIV}'
         SQL;
 
-        $response = $connection->query($query)->fetchAll();
+        $response = $connection->executeQuery($query)->fetchAllAssociative();
         
         if (empty($response))
             return new JsonResponse(null, Response::HTTP_NO_CONTENT); 
@@ -110,8 +106,6 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
 
   /**
    * Consultar associações realizadas
-   * @Route("/comercial/emailMarketing/associacao/lista-associacoes", 
-   * methods={"GET"})
    * @param Request $request
    * @param Connection $connection
    * @return Response
@@ -133,7 +127,7 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
               @IN_STAT        = '{$IN_STAT}'
       SQL;
 
-      $response = $connection->query($query)->fetchAll();
+      $response = $connection->executeQuery($query)->fetchAllAssociative();
 
       $code = empty($response) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
 
@@ -158,8 +152,6 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
 
   /**
    * Cadastrar associações
-   * @Route("/comercial/emailMarketing/associacao/lista-associacoes", 
-   * methods={"POST"})
    * @param Request $request
    * @param Connection $connection
    * @return Response
@@ -182,8 +174,8 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
         SQL;
 
         $stmt = $em->prepare($query);
-        $stmt->execute();
-        $stmt->fetch();
+        $result_stmt = $stmt->executeQuery();
+        $result_stmt->fetchAssociative();
 
         $response = [];
 
@@ -199,8 +191,8 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
             SQL;
                 
             $stmt = $em->prepare($query);
-            $stmt->execute();
-            $response[] = array_merge($stmt->fetch(), ["ID_SETO_ATIV" => $SETOR, "ID_LINH" => $ID_LINH]);
+            $result_stmt = $stmt->executeQuery();
+            $response[] = array_merge($result_stmt->fetchAssociative(), ["ID_SETO_ATIV" => $SETOR, "ID_LINH" => $ID_LINH]);
         }
 
         $em->commit();
@@ -214,8 +206,6 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
 
   /**
    * Editar associações
-   * @Route("/comercial/emailMarketing/associacao/lista-associacoes",
-   * methods={"PUT"})
    * @param Request $request
    * @param Connection $connection
    * @return Response
@@ -238,7 +228,7 @@ class AssociacaoSetorAtividadeLinhaController extends AbstractController
             @ID_ASSO    = '{$ID_ASSO}'
         SQL;
 
-        $response = $connection->query($query)->fetch();
+        $response = $connection->executeQuery($query)->fetchAssociative();
 
         if ($response['SUCCESS'] == 200)
             return FunctionsController::Retorno(true, "Associação {$response['MESSAGE']} alterada com sucesso", null, Response::HTTP_OK);

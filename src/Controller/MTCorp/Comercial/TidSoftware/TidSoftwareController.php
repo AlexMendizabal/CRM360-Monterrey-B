@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\TidSoftware;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Filesystem\Filesystem;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\Common\UsuarioController;
 
@@ -126,7 +126,7 @@ class TidSoftwareController extends AbstractController
     $tidExe = $params->tidExe;
     $tidParam = $params->tidParam;
 
-    $res = $connection->query(
+    $res = $connection->executeQuery(
       "
         EXEC [{$this->linkedServerTID}].[EXETPS].[DBO].[PRC_MTCORP_SERV_VALI_CONE] 
         @MATRICULA_TID = '{$matriculaTid}', 
@@ -135,7 +135,7 @@ class TidSoftwareController extends AbstractController
         @TID_EXE = N'{$tidExe}',
         @PARAMETRO = N'{$tidParam}'
       "
-    )->fetchAll();
+    )->fetchAllAssociative();
 
     if (count($res) > 0) {
       return $res[0]['ccHASH'];
@@ -217,24 +217,19 @@ class TidSoftwareController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/tid-software/empresas/{acao}",
-   *  name="comercial.tid-software-empresas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getEmpresas(Connection $connection, Request $request, $acao)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_BASE_EMPR]
             @PARAM =  1,
             @EMPRESAS = '1' 
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if ($acao === 'vendas') {
           $empresas = $this->verificaPermissao($acao, $res, $request, $connection);
@@ -460,11 +455,6 @@ class TidSoftwareController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/tid-software/linhas",
-   *  name="comercial.tid-software-linhas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getLinhas(Connection $connection, Request $request)
@@ -472,7 +462,7 @@ class TidSoftwareController extends AbstractController
     if ($request->isMethod('GET')) {
       try {
        
-        /* $res = $connection->query(
+        /* $res = $connection->executeQuery(
           "
             SELECT
               ID_LINHA [id],
@@ -484,15 +474,15 @@ class TidSoftwareController extends AbstractController
             ORDER BY
               descricao
           "
-        )->fetchAll(); */
+        )->fetchAllAssociative(); */
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             Exec [PRC_MATE_LINH_CONS]
               @TP_LINHA = 'comercial',
               @ORDER_BY = 'descricao'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $retorno = array();
 
@@ -525,18 +515,13 @@ class TidSoftwareController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/tid-software/modulos/vendas",
-   *  name="comercial.tid-software-modulos/vendas",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getModulosVendas(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        // $res = $connection->query("")->fetchAll();
+        // $res = $connection->executeQuery("")->fetchAllAssociative();
 
         $res = array(
           array(
@@ -575,18 +560,13 @@ class TidSoftwareController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/tid-software/modulos/producao-tela",
-   *  name="comercial.tid-software-modulos/producao-tela",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getModulosProducaoTela(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        // $res = $connection->query("")->fetchAll();
+        // $res = $connection->executeQuery("")->fetchAllAssociative();
 
         $res = array(
           array(
@@ -621,11 +601,6 @@ class TidSoftwareController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/tid-software/gerar-acesso",
-   *  name="comercial.tid-software-gerar-acesso",
-   *  methods={"POST"}
-   * )
    * @return JsonResponse
    */
   public function postGerarAcesso(Connection $connection, Request $request)

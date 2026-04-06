@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\UsuarioController;
 
@@ -19,8 +19,6 @@ class MateriaisController
     use ResponseTrait;
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/materiais", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -76,16 +74,16 @@ class MateriaisController
             $stmt->bindValue(":inPagina",                $inPagina);
             $stmt->bindValue(":inTotalRegistros",        "0");
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
             
-            $response = $stmt->fetchAllAssociative();
+            $response = $result_stmt->fetchAllAssociative();
             
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
             
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = (int) $stmt->fetchOne();
+            $total = (int) $result_stmt->fetchOne();
                
             if(empty($response))
                 return new JsonResponse(null, Response::HTTP_NO_CONTENT);
@@ -105,8 +103,6 @@ class MateriaisController
     }
 
     /**
-     * @Route("/logistica/entrada-materiais/ficha-nao-conformidade/materiais", methods={"POST", "PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -176,9 +172,9 @@ class MateriaisController
             $stmt->bindValue("usuarioNome",             $usuarioNome);
             $stmt->bindValue("usuarioIP",               $usuarioIP);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             return $this
                 ->setData($response["id"])

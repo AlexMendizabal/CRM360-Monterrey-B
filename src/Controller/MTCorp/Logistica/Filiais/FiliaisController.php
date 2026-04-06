@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Logistica\Filiais;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -18,11 +18,6 @@ class FiliaisController
     use ResponseTrait;
 
     /**
-     * @Route(
-     *  "/logistica/filiais",
-     *  name="logistica.filiais.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -51,9 +46,9 @@ class FiliaisController
             $stmt->bindValue(":nome",               $nome);
             $stmt->bindValue(":idFilial",           $idFilial);
             $stmt->bindValue(":stat",               $status);
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $ID !== null ? $stmt->fetchAssociative() : $stmt->fetchAllAssociative();
+            $response = $ID !== null ? $result_stmt->fetchAssociative() : $result_stmt->fetchAllAssociative();
             $response = $ID !== null ?
                 array(
                     "id"                   => $response["ID"],
@@ -84,13 +79,6 @@ class FiliaisController
     }
 
     /**
-     * 
-     * @Route(
-     *  "/logistica/filiais/{uuid}",
-     *  name="logistica.filiais.uuid.show",
-     *  requirements={"uuid"="[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}"},
-     *  methods={"GET"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -100,13 +88,7 @@ class FiliaisController
         return $this->index($connection, $request, $uuid);
     }
 
-
     /**
-     * @Route(
-     *  "/logistica/filiais",
-     *  name="logistica.filiais.store",
-     *  methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -142,16 +124,15 @@ class FiliaisController
             $stmt->bindValue(":idFilial",           $idFilial);
             $stmt->bindValue(":usuarioID",          $usuarioID);
             $stmt->bindValue(":stat",               $status);
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             return $this
                 ->setData($response)
                 ->setMessage("sucesso")
                 ->setEncodingOptions(JSON_NUMERIC_CHECK|JSON_UNESCAPED_SLASHES)
                 ->getResponse();
-
 
         } catch (NoUserAtHeaderException $th) {
 
@@ -171,11 +152,6 @@ class FiliaisController
     }
 
     /**
-     * @Route(
-     *  "/logistica/filiais/{ID}",
-     *  name="logistica.filiais.update",
-     *  methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse

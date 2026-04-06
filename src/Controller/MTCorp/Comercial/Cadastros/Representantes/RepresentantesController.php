@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Representantes;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
 use App\Controller\Common\Services\ParseFileFromRequestController;
@@ -27,11 +27,6 @@ class RepresentantesController extends AbstractController
     use ResponseTrait;
 
     /**
-    * @Route(
-    *  "/comercial/cadastros/representantes/save",
-    *  name="comercial.cadastros-representantes-save", 
-    *  methods={"POST"}
-    * )
     * @return JsonResponse
     */
     public function postRepresentantes(Connection $connection, Request $request)
@@ -117,7 +112,7 @@ class RepresentantesController extends AbstractController
 
             $cep = FunctionsController::limpaMascara($params['cep']);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC PRC_VEND_GRAV
                 @ID_PARA = 1,
                 @TP_PESS = 'J',
@@ -158,7 +153,7 @@ class RepresentantesController extends AbstractController
                 @NR_CONT_CORR = '{$contaCorrente}',
 
                 @ID_USUA = '{$infoUsuario->id}'    
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -183,11 +178,6 @@ class RepresentantesController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/update",
-     *  name="comercial.cadastros-representantes-update", 
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
     */
    
@@ -271,7 +261,7 @@ class RepresentantesController extends AbstractController
 
             $cep = FunctionsController::limpaMascara($params['cep']);
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC PRC_VEND_GRAV
                     @ID_PARA = 1,
                     @ID_VEND = '{$codRepresentante}',
@@ -313,7 +303,7 @@ class RepresentantesController extends AbstractController
                     @NR_CONT_CORR = '{$contaCorrente}',
 
                     @ID_USUA = '{$infoUsuario->id}' 
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -336,12 +326,6 @@ class RepresentantesController extends AbstractController
     }
 
              /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/lista",
-    *  name="comercial.cadastros-representantes-lista", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -368,14 +352,14 @@ class RepresentantesController extends AbstractController
 
             $order = $orderBy . ' ' . $orderType;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_VEND_CONS] 
                     @ID_TIPO_VEND = 2,              
                     @NM_VEND = '{$nome}',
                     @IN_EMIT_NF = {$emiteNota}, 
                     @IN_STAT = {$codSituacao},
                     @ORDE_BY = '{$orderBy}'                                                               
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -409,12 +393,6 @@ class RepresentantesController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/detalhes/{codRepresentante}",
-    *  name="comercial.cadastros-representantes-detalhes", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -426,10 +404,10 @@ class RepresentantesController extends AbstractController
             $params = $request->query->all();
             $resLoop = array();
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_VEND_CONS] 
                     @ID_VEND = '{$codRepresentante}'                               
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -487,12 +465,6 @@ class RepresentantesController extends AbstractController
     }
 
        /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/tipo-vendedor",
-    *  name="comercial.cadastros-representantes-tipo-vendedor", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -504,9 +476,9 @@ class RepresentantesController extends AbstractController
             $params = $request->query->all();
             $resLoop = array();
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_TIPO_VEND_CONS]                
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
              foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -534,12 +506,6 @@ class RepresentantesController extends AbstractController
     }
 
        /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/bancos",
-    *  name="comercial.cadastros-representantes-bancos", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -551,9 +517,9 @@ class RepresentantesController extends AbstractController
             $params = $request->query->all();
             $resLoop = array();
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_BANC_CONS]                
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
              foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -582,12 +548,6 @@ class RepresentantesController extends AbstractController
     }
 
        /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/tipo-comissionamento",
-    *  name="comercial.cadastros-representantes-tipo-comissionamento", 
-    *  methods={"GET"},
-    *  requirements={"codigo"="\d+"}
-    * )
     * @param Connection $connection
     * @param Request $request
     * @return JsonResponse
@@ -599,10 +559,10 @@ class RepresentantesController extends AbstractController
             $params = $request->query->all();
             $resLoop = array();
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_TIPO_PAGA_COMI_VEND_CONS]
                     @IN_STAT = 1              
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
              foreach($res as $key => $value) { 
                 $resLoop[] = array(
@@ -779,11 +739,6 @@ class RepresentantesController extends AbstractController
     }
 
         /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/ativar",
-     *  name="comercial.cadastros-representantes-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeERP(Connection $connection, Request $request)
@@ -792,13 +747,13 @@ class RepresentantesController extends AbstractController
             $codRepresentante = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_VEND_GRAV]
                     @ID_PARA = 2,
                     @ID_VEND = {$codRepresentante},
                     @IN_STAT = 1,      
                     @ID_USUA = '{$infoUsuario->id}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['ID_VEND']) && $codRepresentante == $res[0]['ID_VEND']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -817,11 +772,6 @@ class RepresentantesController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/representantes/inativar",
-     *  name="comercial.cadastros-representantes-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveERP(Connection $connection, Request $request)
@@ -830,13 +780,13 @@ class RepresentantesController extends AbstractController
             $codRepresentante = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_VEND_GRAV]
                     @ID_PARA = 2,
                     @ID_VEND = {$codRepresentante},
                     @IN_STAT = 0,      
                     @ID_USUA = '{$infoUsuario->id}'
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['ID_VEND']) && $codRepresentante == $res[0]['ID_VEND']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -855,12 +805,6 @@ class RepresentantesController extends AbstractController
     }
 
     /**
-   * @Route(
-   *  "/comercial/cadastros/representantes/anexo/documentos/{codRepresentante}",
-   *  name="comercial.cadastros-representantes-anexo-documentos",
-   *  methods={"GET"},
-   *  requirements={"codMaterial"="\d+"}
-   * )
    * @param Connection $connection
    * @param Request $request
    * @return 
@@ -871,11 +815,11 @@ class RepresentantesController extends AbstractController
     try {
         $params = $request->query->all();
 
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_VEND_CONT_ANEX_CONS]
                 @ID_VEND = {$codRepresentante},
                 @IN_STAT = 1
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if(count($res) > 0) {
             foreach($res as $key => $value) { 
@@ -891,7 +835,7 @@ class RepresentantesController extends AbstractController
             if (count($resLoop) > 0) {
     
                 foreach ($resLoop as $key => $value) {
-                    $resLoop[$key]["urlAnexo"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER["SERVER_NAME"], $value["urlAnexo"]);
+                    $resLoop[$key]["urlAnexo"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER["SERVER_NAME"], $value["urlAnexo"]);
                     $resLoop[$key]["urlAnexo"] = str_replace("\\", "/", $resLoop[$key]["urlAnexo"] );
                     $resLoop[$key]["urlAnexo"] = $_SERVER["HTTPS"] == "off" ? "http://" . $resLoop[$key]["urlAnexo"] : "https://" . $resLoop[$key]["urlAnexo"]; 
                 }
@@ -912,11 +856,6 @@ class RepresentantesController extends AbstractController
 }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/representantes/anexo/documentos/salvar",
-   *  name="comercial.cadastros-representantes-anexo-documentos-salvar",
-   *  methods={"POST"}
-   * )
    * 
    * @param Connection $connection
    * @param Request $request
@@ -929,9 +868,8 @@ class RepresentantesController extends AbstractController
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));  
         $codRepresentante = $request->query->get("codRepresentante");
 
-
       $document   = new ParseFileFromRequestController();
-      $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\comercial\\cadastros\\representantes\\" . $codRepresentante . "\\anexos\\";
+      $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\comercial\\cadastros\\representantes\\" . $codRepresentante . "\\anexos\\";
       
       $document
           ->setRequest($request)
@@ -941,12 +879,11 @@ class RepresentantesController extends AbstractController
       $descAnexo     = $document->getFileName();               
       $urlAnexo       = $document->getFileLink();
 
-
       $infoUsuario    = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
       $id      = $infoUsuario->id;
       $nomeUsuario    = $infoUsuario->nomeCompleto;
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_VEND_CONT_ANEX_GRAV 
             @ID_PARA = 1,
             @ID_VEND = {$codRepresentante},
@@ -954,8 +891,7 @@ class RepresentantesController extends AbstractController
             @DS_URL = '{$urlAnexo}',
             @IN_STAT = '1',
             @ID_USUA = {$id}
-      ")->fetchAll();
-
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['ID_ANEX'])) {
           return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', $res[0], Response::HTTP_OK);
@@ -974,11 +910,6 @@ class RepresentantesController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/cadastros/representantes/anexo/documentos/excluir",
-   *  name="comercial.cadastros-representantes-anexo-documentos-excluir",
-   *  methods={"PUT"}
-   * )
    * @return JsonResponse
    */
   public function delAnexo(Connection $connection, Request $request)
@@ -991,13 +922,13 @@ class RepresentantesController extends AbstractController
 
       if (isset($params['codAnexo'])) $codAnexo = $params['codAnexo'];
 
-      $res = $connection->query("
+      $res = $connection->executeQuery("
         EXEC PRC_VEND_CONT_ANEX_GRAV
             @ID_PARA = 2,
             @ID_ANEX = {$codAnexo},
             @IN_STAT = 0,
             @ID_USUA = '{$infoUsuario->id}'
-      ")->fetchAll();
+      ")->fetchAllAssociative();
 
       if (isset($res[0]['ID_ANEX']) && $res[0]['ID_ANEX'] == $codAnexo) {
           return FunctionsController::Retorno(true, 'Anexo excluido com sucesso.', null, Response::HTTP_OK);

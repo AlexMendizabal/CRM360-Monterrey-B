@@ -2,21 +2,19 @@
 
 namespace App\Controller\MTCorp\Logistica\Integracoes\Fusion;
 
+use Doctrine\DBAL\Connection;
+
 use App\Factory\MTCorp\Logistica\Integracoes\Fusion\MotoristaFactory;
-use Doctrine\DBAL\Driver\Connection;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Classe para integração de motoristas
- * @deprecated 1.0.0
+ * @deprecated 1.0.0 Este controller esta deprecated. Usar el modulo Logistica directamente.
+ * TODO: Eliminar cuando se confirme que no hay consumidores activos.
  */
 class MotoristaController extends FusionController
 {
 
     /**
-     * @Route("/logistica/integracoes/fusion/motoristas", methods={"GET"})
-     *
      * @return JsonResponse
      */
     public function sendMotoristas(Connection $connection): JsonResponse
@@ -25,7 +23,7 @@ class MotoristaController extends FusionController
             SELECT NrCPF [CPF], DsNome [NOME], InFuncionario [IN_FUNC] FROM [SOFTRAN_IDEAL].dbo.GtcFunDp
         SQL;
 
-        $dados = $connection->query($query)->fetchAll();
+        $dados = $connection->executeQuery($query)->fetchAllAssociative();
 
         // Cria uma lista de motoristas tendo por base o layout de integração Fusion
         $motoristas = MotoristaFactory::create($dados);

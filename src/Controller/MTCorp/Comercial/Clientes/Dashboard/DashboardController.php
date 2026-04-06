@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Clientes\Dashboard;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\Services\DateController;
 use App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController;
 
@@ -20,12 +20,6 @@ use App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanc
 class DashboardController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/faturamento/grafico/{codCliente}",
-   *  name="comercial.clientes-dashboard-faturamento-grafico",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFaturamentoGrafico(Connection $connection, Request $request, $codCliente)
@@ -33,12 +27,12 @@ class DashboardController extends AbstractController
     
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_FATU_COMP]
             @ID_CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
 
@@ -78,12 +72,6 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/faturamento/analitico/{codCliente}",
-   *  name="comercial.clientes-dashboard-faturamento-analitico",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFaturamentoAnalitico(Connection $connection, Request $request, $codCliente)
@@ -94,14 +82,14 @@ class DashboardController extends AbstractController
         $dataInicial = $anoAnterior .'/01/01' ;
         $dataFinal = date('Y/m/d');
         
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_FATU_LINHA]
             @DTINI = '{$dataInicial}',
             @DTFIM = '{$dataFinal}',
             @ID_CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
        
         if (count($res) > 0) {
           $faturamento = new \stdClass;
@@ -148,12 +136,6 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/faturamento/mais-comprados/{codCliente}",
-   *  name="comercial.clientes-dashboard-faturamento-mais-comprados",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFaturamentoMaisComprados(Connection $connection, Request $request, $codCliente)
@@ -163,14 +145,14 @@ class DashboardController extends AbstractController
         $anoAnterior = date('Y') - 1;
         $dataInicial = $anoAnterior .'/01/01';
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_FATU_MATE]
             @ID_PARAM = 1,
             @DTINI = '{$dataInicial}',
             @ID_CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $maisComprados = new \stdClass;
@@ -217,25 +199,19 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/faturamento/comparativo/{codCliente}",
-   *  name="comercial.clientes-dashboard-faturamento-comparativo",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getFaturamentoComparativo(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_CLIE_FATU_COMP]
             @ID_CLIENTE = $codCliente,
             @ID_PARAM = 3 
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
 
@@ -284,27 +260,21 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/propostas/grafico/{codCliente}",
-   *  name="comercial.clientes-dashboard-propostas-grafico",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getPropostasGrafico(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_COTA_HIST_CONS]
             @ID_CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
-          /* $resSituacao = $connection->query(
+          /* $resSituacao = $connection->executeQuery(
             "
               SELECT
                 LTRIM(RTRIM(SITUACAO)) [SITUACAO]
@@ -313,15 +283,15 @@ class DashboardController extends AbstractController
               WHERE
                 CODIGOCLIENTE = {$codCliente}
             "
-          )->fetchAll(); */
+          )->fetchAllAssociative(); */
 
-          $resSituacao = $connection->query(
+          $resSituacao = $connection->executeQuery(
             "
               EXEC [PRC_CLIE_CONS]
                 @ID_CLIENTE = {$codCliente},
                 @ID_PARAM = 5 
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
 
           if (count($res) > 0) {
             $situacaoCliente = $res[0]['descripcion'];
@@ -414,24 +384,18 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/propostas/analitico/{codCliente}",
-   *  name="comercial.clientes-dashboard-propostas-analitico",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getPropostasAnalitico(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_COTA_HIST_CONS]
             @ID_CLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $propostas = new \stdClass;
@@ -478,12 +442,6 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/duplicatas-atraso/{codCliente}",
-   *  name="comercial.clientes-dashboard-duplicatas-atraso",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDuplicatasAtraso(Connection $connection, Request $request, $codCliente)
@@ -512,12 +470,6 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/notas-debito/{codCliente}",
-   *  name="comercial.clientes-dashboard-notas-debito",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getNotasDebito(Connection $connection, Request $request, $codCliente)
@@ -544,24 +496,18 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/credito-disponivel/{codCliente}",
-   *  name="comercial.clientes-dashboard-credito-disponivel",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getCreditoDisponivel(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_LIMI_CRED_CONS]
             @ID_CLIENTE = '{$codCliente}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
        
         $limiteCredito = count($res) > 0 ? $res[0]['limiteCredito'] : 0 ;
         $historicoFinanceiro = new HistoricoFinanceiroController();
@@ -599,25 +545,19 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/duplicatas-vencer/{codCliente}",
-   *  name="comercial.clientes-dashboard-duplicatas-vencer",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getDuplicatasVencer(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_DUPL_ABER_CONS]
             @ID_PARAM = 2,
             @ID_CLIENTE = '{$codCliente}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $duplicatasVencer = new \stdClass;
@@ -644,12 +584,6 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/ultima-compra/{codCliente}",
-   *  name="comercial.clientes-dashboard-ultima-compra",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getUltimaCompra(Connection $connection, Request $request, $codCliente)
@@ -657,7 +591,7 @@ class DashboardController extends AbstractController
     
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
 
            "
            SELECT CONVERT(DATE, MAX(fecha_creacion)) AS ultimaCompraGrupo
@@ -669,7 +603,7 @@ class DashboardController extends AbstractController
           //    @ID_CLIENTE = '{$codCliente}',
           //    @ID_PARAM = 2
           //  "
-        )->fetchAll();
+        )->fetchAllAssociative();
          
         if (count($res) > 0) {
           $ultimaCompra = new \stdClass;
@@ -696,12 +630,6 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/ultimos-precos/{codCliente}",
-   *  name="comercial.clientes-dashboard-ultimos-precos",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getUltimosPrecos(Connection $connection, Request $request, $codCliente)
@@ -709,7 +637,7 @@ class DashboardController extends AbstractController
     
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_PREC_ULTM_MATE]
             @ID_PARA = 1,
@@ -719,7 +647,7 @@ class DashboardController extends AbstractController
             @ORDEM = 3,
             @ORDEM_DESCR = 'DESC'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $message = array(
@@ -743,24 +671,18 @@ class DashboardController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/clientes/dashboard/registro-ocorrencias/{codCliente}",
-   *  name="comercial.clientes-dashboard-registro-ocorrencias",
-   *  methods={"GET"},
-   *  requirements={"codCliente"="\d+"}
-   * )
    * @return JsonResponse
    */
   public function getRegistroOcorrencias(Connection $connection, Request $request, $codCliente)
   {
     if ($request->isMethod('GET')) {
       try {
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_MTCORP_MODU_CLIE_CONS_RO]
             @IDCLIENTE = {$codCliente}
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0) {
           $registroOcorrencias = new \stdClass;

@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\TipoPersona;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
-
 
 //particular, gobierno, sociedades
 
@@ -23,11 +22,6 @@ use App\Controller\Common\UsuarioController;
 class TipoPersonaController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/tipopersona/generar_persona",
-     *  name="comercial.TipoPersonas-lista-tipopersona",
-     *  methods={"GET"}
-     * )
      * @return JsonResponse
      */
     public function getPersonas(Connection $connection, Request $request)
@@ -37,10 +31,10 @@ class TipoPersonaController extends AbstractController
             $infoUsuario = $usuarioController->infoUsuario($request->headers->get('X-User-Info'));
             $id_usuario = $infoUsuario->id;;
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
             EXEC [PCR_TIPO_PERSONA] 
             @usuario = $id_usuario
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 for ($i = 0; $i < count($res); $i++) {

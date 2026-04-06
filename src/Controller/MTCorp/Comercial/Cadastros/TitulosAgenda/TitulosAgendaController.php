@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Common\Services\FunctionsController;
 use App\Controller\Common\UsuarioController;
@@ -20,11 +20,6 @@ use App\Controller\Common\UsuarioController;
 class TitulosAgendaController extends AbstractController
 { 
     /**
-     * @Route(
-     *  "/comercial/cadastros/titulos-agenda/lista",
-     *  name="comercial.cadastros-titulos-agenda-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -51,7 +46,7 @@ class TitulosAgendaController extends AbstractController
 
             
 
-            $res = $connection->query($query)->fetchAll();
+            $res = $connection->executeQuery($query)->fetchAllAssociative();
 
             if (count($res) > 0 && !isset($res[0]['msg'])) {
                 return FunctionsController::Retorno(true, null, $res, Response::HTTP_OK);
@@ -66,12 +61,6 @@ class TitulosAgendaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/titulos-agenda/detalhes/{codTitulo}",
-     *  name="comercial.cadastros-titulos-agenda-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codTitulo"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -79,10 +68,10 @@ class TitulosAgendaController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codTitulo)
     {
       try {
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_AGEN_TITU_CONS] 
                 @ID_TITU = '{$codTitulo}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (count($res) > 0) {
               return FunctionsController::Retorno(true, null, $res[0], Response::HTTP_OK);
@@ -96,11 +85,6 @@ class TitulosAgendaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/titulos-agenda/salvar",
-     *  name="comercial.cadastros-titulos-agenda-salvar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function postTitulosAgenda(Connection $connection, Request $request)
@@ -115,13 +99,13 @@ class TitulosAgendaController extends AbstractController
           if (isset($params['descricaoTitulo'])) $descricaoTitulo = $params['descricaoTitulo'];
           if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
           
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_AGEN_TITU_CADA] 
                   @ID_PARA = 1
                   ,@DS_TITU = '{$descricaoTitulo}'
                   ,@IN_SITU = '{$codSituacao}'
                   ,@ID_USUA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codTitulo'])) {
               return FunctionsController::Retorno(true, 'Cadastro realizado com sucesso.', null, Response::HTTP_OK);
@@ -136,11 +120,6 @@ class TitulosAgendaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/titulos-agenda/atualizar",
-     *  name="comercial.cadastros-titulos-agenda-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putTitulosAgenda(Connection $connection, Request $request)
@@ -154,19 +133,18 @@ class TitulosAgendaController extends AbstractController
           $codSituacao = null;
           
 
-
           if (isset($params['codTitulo'])) $codTitulo = $params['codTitulo'];
           if (isset($params['descricaoTitulo'])) $descricaoTitulo = $params['descricaoTitulo'];
           if (isset($params['codSituacao'])) $codSituacao = $params['codSituacao'];
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_AGEN_TITU_CADA] 
                   @ID_PARA = 2
                   ,@ID_TITU = '{$codTitulo}'
                   ,@DS_TITU = '{$descricaoTitulo}'
                   ,@IN_SITU = '{$codSituacao}'
                   ,@ID_USUA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codTitulo']) && $res[0]['codTitulo'] == $codTitulo) {
               return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -181,11 +159,6 @@ class TitulosAgendaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/titulos-agenda/ativar",
-     *  name="comercial.cadastros-titulos-agenda-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeTitulosAgenda(Connection $connection, Request $request)
@@ -194,13 +167,13 @@ class TitulosAgendaController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
               EXECUTE [dbo].[PRC_AGEN_TITU_CADA] 
                   @ID_PARA = 3
                   ,@ID_TITU = '{$codigo}'
                   ,@IN_SITU = '1'
                   ,@ID_USUA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -215,11 +188,6 @@ class TitulosAgendaController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/titulos-agenda/inativar",
-     *  name="comercial.cadastros-titulos-agenda-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveTitulosAgenda(Connection $connection, Request $request)
@@ -228,13 +196,13 @@ class TitulosAgendaController extends AbstractController
           $codigo = json_decode($request->getContent(), true);
           $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-          $res = $connection->query("
+          $res = $connection->executeQuery("
             EXECUTE [dbo].[PRC_AGEN_TITU_CADA] 
                 @ID_PARA = 3
                 ,@ID_TITU = '{$codigo}'
                 ,@IN_SITU = '0'
                 ,@ID_USUA = '{$infoUsuario->matricula}'
-          ")->fetchAll();
+          ")->fetchAllAssociative();
 
           if (isset($res[0]['codigo']) && $codigo == $res[0]['codigo']) {
               return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

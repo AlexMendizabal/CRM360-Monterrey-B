@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Integracoes\Dagda;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\DBAL\Connection;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\MTCorp\Logistica\Services\Exceptions\NoUserAtHeaderException;
 use App\Controller\MTCorp\Logistica\Services\Traits\{RequestTrait, ResponseTrait};
@@ -20,10 +20,6 @@ class PedidosController
     use ResponseTrait;
 
     /**
-     * @Route(
-     *  "/comercial/integracoes/dagda",
-     *  name="comercial.integracoes.dagda.index",
-     *  methods={"GET"})
      *
      * @param Connection $connection
      * @param Request $request
@@ -55,10 +51,10 @@ class PedidosController
             $stmt->bindValue(":status",               $status);
 
             // executa procedure
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
             
             // Pega os valores que vocês filtraram e foram devolvidos
-            $result = $stmt->fetchAllAssociative();
+            $result = $result_stmt->fetchAllAssociative();
 
             // muda o nome da procedure para o nome desejado
             $response = array_map(function($item){
@@ -98,12 +94,6 @@ class PedidosController
 
     /**
      * 
-     * @Route(
-     *  "/comercial/integracoes/dagda/{uuid}",
-     *  name="comercial.integracoes.dagda.uuid.show",
-     *  requirements={"uuid"="[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}"},
-     *  methods={"GET"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -113,12 +103,7 @@ class PedidosController
         return $this->index($connection, $request, $id, true);
     }
 
-
     /**
-     * @Route(
-     *  "/comercial/integracoes/dagda",
-     *  name="comercial.integracoes.dagda.store",
-     *  methods={"POST"})
      *
      * @param Connection $connection
      * @param Request $request
@@ -155,11 +140,11 @@ class PedidosController
 
             $stmt->bindValue(":id",             $idTidDag);
             $stmt->bindValue(":pedidoTid",      $pedidoTid);
-            $stmt->execute();
+            $_result = $stmt->executeQuery();
 
             $this->postMiddleware($connection, $data);
-        
-            $response   = $stmt->fetchAssociative();
+
+            $response   = $_result->fetchAssociative();
 
             // $response = array_map(function($item){
             //     return [
@@ -206,10 +191,6 @@ class PedidosController
     }
 
     /**
-     * @Route(
-     *  "/comercial/integracoes/dagda",
-     *  name="comercial.integracoes.dagda.update",
-     *  methods={"PUT"})
      *
      * @param Connection $connection
      * @param Request $request
@@ -261,13 +242,11 @@ class PedidosController
         $stmt->bindValue(":dsIntegracao",              $dsIntegracao);
         $stmt->bindValue(":status",                    2);
         $stmt->bindValue(":idUsuario",                 $idUsuario);
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
     /**
      * Consultar Status Integração Pedidos Dagda
-     * @Route("/comercial/integracoes/dagda/status", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -286,9 +265,9 @@ class PedidosController
             $stmt = $connection->prepare($query);
 
             $stmt->bindValue(":status", 1);
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $result = $stmt->fetchAllAssociative();
+            $result = $result_stmt->fetchAllAssociative();
 
             $response = array_map(function($item){
                 return [
@@ -308,8 +287,6 @@ class PedidosController
 
     /**
      * Consultar Logs Integração Pedidos Dagda
-     * @Route("/comercial/integracoes/dagda/logs", 
-     * methods={"GET"})
      * @param Request $request
      * @param Connection $connection
      * @return Response
@@ -333,9 +310,9 @@ class PedidosController
 
             $stmt->bindValue(":idEmpresa",      $idEmpresa);
             $stmt->bindValue(":pedidoTid",      $pedidoTid);
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $result = $stmt->fetchAllAssociative();
+            $result = $result_stmt->fetchAllAssociative();
 
             $response = array_map(function($item){
                 return [

@@ -1,4 +1,5 @@
 <?php
+// TODO: Este archivo deberia ser un Service, no un Controller. Mover a src/Services/ o src/Module/Shared/Service/
 
 declare(strict_types=1);
 
@@ -19,7 +20,8 @@ class CurlController
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
       }
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
       curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($ch, CURLOPT_COOKIEJAR, $path . "cookie.txt");

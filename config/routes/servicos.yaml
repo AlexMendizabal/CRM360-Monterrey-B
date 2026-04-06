@@ -1,0 +1,9 @@
+servicos.icons.getIcons:
+    path: /servicos/icons
+    controller: App\Controller\MTCorp\Servicos\Icons\FontawesomeController::getIcons
+    methods: [GET]
+
+servicos.icons.getIconsFontsAwesome:
+    path: /servicos/icons/fontawesome
+    controller: App\Controller\MTCorp\Servicos\Icons\FontawesomeController::getIconsFontsAwesome
+    methods: [GET]

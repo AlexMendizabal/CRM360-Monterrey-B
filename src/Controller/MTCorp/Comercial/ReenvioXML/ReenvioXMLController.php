@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\ReenvioXML;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
@@ -22,20 +22,15 @@ use App\Controller\MTCorp\Comercial\Vendedor\VendedorController;
 class ReenvioXMLController extends AbstractController
 {
   /**
-   * @Route(
-   *  "/comercial/reenvio-xml/contadores",
-   *  name="comercial.reenvio-xml-contadores",
-   *  methods={"GET"}
-   * )
    * @return JsonResponse
    */
   public function getContadores(Connection $connection, Request $request)
   {
     if ($request->isMethod('GET')) {
       try {
-        $mes = $connection->query("EXEC [PRC_FATU_ENVI_XML_CONS] @PARAM = 1")->fetchAll();
-        $enviosTotal = $connection->query("EXEC [PRC_FATU_ENVI_XML_CONS] @PARAM = 0")->fetchAll();
-        $ultimoEnvio = $connection->query("EXEC [PRC_FATU_ENVI_XML_CONS] @PARAM = 2")->fetchAll();
+        $mes = $connection->executeQuery("EXEC [PRC_FATU_ENVI_XML_CONS] @PARAM = 1")->fetchAllAssociative();
+        $enviosTotal = $connection->executeQuery("EXEC [PRC_FATU_ENVI_XML_CONS] @PARAM = 0")->fetchAllAssociative();
+        $ultimoEnvio = $connection->executeQuery("EXEC [PRC_FATU_ENVI_XML_CONS] @PARAM = 2")->fetchAllAssociative();
 
         if ($enviosTotal[0]['QTD'] == null) {
           $enviosTotal = 0;
@@ -78,12 +73,6 @@ class ReenvioXMLController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/reenvio-xml/lista/{codEmpresa}/{numNota}",
-   *  name="comercial.reenvio-xml-dados",
-   *  methods={"GET"},
-   *  requirements={"empresa"="\d+", "empresa"="\d+"}
-   * )
    * @return Response
    */
   public function getLista(Connection $connection, Request $request, $codEmpresa, $numNota)
@@ -115,13 +104,13 @@ class ReenvioXMLController extends AbstractController
         $usuariosLiberados = ComercialController::verificaSiglaPerfil($connection, $infoUsuario->matricula, 'ACES_GERA_CLIE');
         $idVendedores = VendedorController::vinculoOperadores($connection, $infoUsuario);
 
-        $res = $connection->query(
+        $res = $connection->executeQuery(
           "
             EXEC [PRC_FATU_XML_CONS]
             @ID_EMPR = '{$codEmpresa}',
             @NR_NOTA = '{$notaFiscal}'
           "
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         if (count($res) > 0 ) {
           $arrNotasFiscais = [];
@@ -132,13 +121,13 @@ class ReenvioXMLController extends AbstractController
               in_array($res[$i]['idVendedorNF'], $idVendedores) ||
               $usuariosLiberados
             ) {
-              $contatos = $connection->query(
+              $contatos = $connection->executeQuery(
                 "
                   EXEC [PRC_FATU_XML_DETA_CONS]
                   @NR_PEDIDO = '{$res[$i]['pedido']}',
                   @EMP = {$res[$i]['idEmpresa']}
                 "
-              )->fetchAll();
+              )->fetchAllAssociative();
 
               $res[$i]['contatos'] = array();
               $res[$i]['contatos']['email1'] = '';
@@ -188,11 +177,6 @@ class ReenvioXMLController extends AbstractController
   }
 
   /**
-   * @Route(
-   *  "/comercial/reenvio-xml/reagendar-envio",
-   *  name="comercial.reenvio-xml-reagendar-envio",
-   *  methods={"PUT"}
-   * )
    * @return Response
    */
    public function putReagendarEnvio(Connection $connection, Request $request)
@@ -201,7 +185,7 @@ class ReenvioXMLController extends AbstractController
        $data = json_decode($request->getContent(), true);
 
        if (!empty($data['idEmpresa'])) {
-         $res = $connection->query(
+         $res = $connection->executeQuery(
            "
               EXEC [PRC_FATU_XML_UPDT]
               @NR_PEDIDO = '{$data['pedido']}',
@@ -211,7 +195,7 @@ class ReenvioXMLController extends AbstractController
               @DESCRICAO2 = '{$data['email2']}',
               @DESCRICAO3 = '{$data['email3']}'
             "
-          )->fetchAll();
+          )->fetchAllAssociative();
 
           if (isset($res[0]['numPedido']) && $res[0]['numPedido'] == $data['pedido']) {
             $message = array('responseCode' => 200);

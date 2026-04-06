@@ -51,7 +51,9 @@ trait RequestTrait {
 
         try {
             
-            $usuario                = json_decode(utf8_encode(base64_decode($this->request->headers->get('X-User-Info'))));
+            $headerValue = $this->request->headers->get('X-User-Info');
+            $decoded = $headerValue ? base64_decode($headerValue, true) : false;
+            $usuario = ($decoded !== false) ? json_decode($decoded) : null;
     
             $matricula       = $usuario->matricula;
             $nome            = $usuario->nomeCompleto;

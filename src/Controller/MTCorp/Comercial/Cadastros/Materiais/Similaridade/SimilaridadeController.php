@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade;
 
+use Doctrine\DBAL\Connection;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +22,6 @@ use App\Services\Helper;
 class SimilaridadeController extends AbstractController
 {
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/lista",
-     *  name="comercial.cadastros-materiais-similaridade-lista",
-     *  methods={"GET"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -48,13 +43,13 @@ class SimilaridadeController extends AbstractController
             if (isset($params['orderBy'])) $orderBy = $params['orderBy'];
             if (isset($params['orderType'])) $orderType = $params['orderType'];
             
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CONS]
                     @ID_PARA = 1
                     ,@MATE_DE = '{$de}'
                     ,@MATE_para = '{$para}'
                     ,@IN_SITU = {$codSituacao}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             /* dd($res); */
 
@@ -71,12 +66,6 @@ class SimilaridadeController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/associacoes/{codSimilaridade}",
-     *  name="comercial.cadastros-materiais-similaridade-associacoes",
-     *  methods={"GET"},
-     *  requirements={"codigo"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -97,13 +86,34 @@ class SimilaridadeController extends AbstractController
         }
     }
 
+    /**
+     * @param Connection $connection
+     * @param Request $request
+     * @return 
+     */
+    public function getSimiMate(Connection $connection, Request $request)
+    {
+        $params = $request->query->all(); 
+        $id_mate = $params['id_mate'];
+        if (isset($id_mate)); {
+            $res = $connection->executeQuery("
+            EXEC SP_SIMILARES_MATE
+            @ID_MATE = '{$id_mate}'
+            ")->fetchAllAssociative();
+            return FunctionsController::Retorno(true, null,  $res, Response::HTTP_OK);
+        }
+        if (isset($res)) {
+            return FunctionsController::Retorno(false, null, null, Response::HTTP_OK);
+        }
+    }
+
     private function associacoesMateriais($connection, $codSimilaridade)
     {
-        $res = $connection->query("
+        $res = $connection->executeQuery("
           EXEC [PRC_SIMI_MATE_CONS]
             @ID_PARA = 2
             ,@ID_SIMI_MATE = {$codSimilaridade}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
       if (count($res) > 0) {
             return $res;
         } else {
@@ -112,12 +122,6 @@ class SimilaridadeController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/detalhes/{codSimilaridade}",
-     *  name="comercial.cadastros-materiais-similaridade-detalhes",
-     *  methods={"GET"},
-     *  requirements={"codigo"="\d+"}
-     * )
      * @param Connection $connection
      * @param Request $request
      * @return 
@@ -125,11 +129,11 @@ class SimilaridadeController extends AbstractController
     public function getDetalhes(Connection $connection, Request $request, $codSimilaridade)
     {
         try {
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CONS]
                     @ID_PARA = 1
                     ,@ID_SIMI_MATE = {$codSimilaridade}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (count($res) > 0) {
                 $similares = $res[0];
@@ -146,11 +150,6 @@ class SimilaridadeController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/salvar",
-     *  name="comercial.cadastros-materiais-similaridade-salvar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
      public function postSimilaridade(Connection $connection, Request $request)
@@ -159,7 +158,7 @@ class SimilaridadeController extends AbstractController
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $helper = new Helper();
         $codigoMaterialAsociado = '';
-
+       
         $data_similar["ID_MATE"] = (int)$this->buscaIDmate($connection, $params["codMaterial"]);
         !empty($params['nomeMaterial']) ? $data_similar["DS_MATE"] = $params['nomeMaterial'] : $data_error['nomeMaterial'] = 'es requerido';
         !empty($params['codSituacao']) ? $data_similar["IN_SITU"] = (int)$params['codSituacao'] : $data_error['codSituacao'] = 'es requerido';
@@ -167,23 +166,33 @@ class SimilaridadeController extends AbstractController
         $data_similar["ID_USUA"] = (int)$infoUsuario->matricula;
         !empty($params['codMaterial']) ? $data_similar["COD_MATE"] = $params['codMaterial']: $data_error['codigo material'] = 'es requerido';
         !empty($params['assocMateriais']) ? $assocMateriais = $params['assocMateriais'] : $data_error['assocMateriais'] = 'es requerido';
+        
+        //dd($params);
         try {
             $resp = $connection->insert('TB_SIMI_MATE', $data_similar);
             $ID_SIMI_MATE = $connection->lastInsertId();
            if(!empty($resp)) {
-                foreach($assocMateriais as $materialasociado)
-                {
-                    /* dd($materialasociado); */
-                    $codigoMaterial = $helper->buscarCodMaterial($connection, (int)$materialasociado["codMaterial"]);
-                    if($codigoMaterial !== false){
-                        $codigoMaterialAsociado = $codigoMaterial;
-                    }
-                    $data_asociado['ID_SIMI_MATE'] = (int)$ID_SIMI_MATE;
-                    $data_asociado['ID_MATE'] = (int)$materialasociado["codMaterial"];
-                    $data_asociado['COD_MATE'] = $codigoMaterialAsociado;
-                    $resp2 = $connection->insert('TB_SIMI_MATE_ASSO', $data_asociado);
-                   
+            foreach($assocMateriais as $materialasociado)
+            {
+                // Obtener ambos valores (CODIGOMATERIAL y ID_CODIGOMATERIAL)
+                $materialData = $helper->buscarMaterialCompleto($connection, $materialasociado["codMaterial"]);
+                
+                if ($materialData !== false) {
+                    $codigoMaterialAsociado = $materialData['codigo_material']; // CODIGOMATERIAL
+                    $idMaterialAsociado = $materialData['id_codigomaterial'];  // ID_CODIGOMATERIAL
+                } else {
+                    // Manejar el caso de material no encontrado (opcional)
+                    continue;
                 }
+            
+                // Rellenar los datos para la inserción
+                $data_asociado['ID_SIMI_MATE'] = (int)$ID_SIMI_MATE;
+                $data_asociado['ID_MATE'] = (int)$idMaterialAsociado; // Llenar con ID_CODIGOMATERIAL
+                $data_asociado['COD_MATE'] = $codigoMaterialAsociado; // Llenar con CODIGOMATERIAL
+            
+                // Insertar en la tabla
+                $resp2 = $connection->insert('TB_SIMI_MATE_ASSO', $data_asociado);
+            }
                 if(!empty($resp2))
                 {
                     return FunctionsController::Retorno(true, 'Registro completado con éxitoo.', null, Response::HTTP_OK);
@@ -197,7 +206,6 @@ class SimilaridadeController extends AbstractController
             return FunctionsController::Retorno(false, 'Error al registrarse.', $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
      }
-
 
      public function buscaIDmate($connection, $data)
      {
@@ -223,7 +231,7 @@ class SimilaridadeController extends AbstractController
       
         $materiais = implode(',', $materiais);
        
-        $res = $connection->query("
+        $res = $connection->executeQuery("
             EXEC [PRC_SIMI_MATE_CADA]
               @ID_PARA        = 1
               ,@ID_MATE       = '{$codMaterial}'
@@ -232,7 +240,7 @@ class SimilaridadeController extends AbstractController
               ,@IN_SITU       = {$codSituacao}
               ,@ID_USUA       = {$infoUsuario->matricula}
               ,@COD_MATE      = {$codigoMaterial}
-        ")->fetchAll();
+        ")->fetchAllAssociative();
 
         if (isset($res[0]['codSimilaridade'])) {
             return FunctionsController::Retorno(true, 'Registro completado con éxitoo.', null, Response::HTTP_OK);
@@ -247,11 +255,6 @@ class SimilaridadeController extends AbstractController
     } */
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/atualizar",
-     *  name="comercial.cadastros-materiais-similaridade-atualizar",
-     *  methods={"PUT"}
-     * )
      * @return JsonResponse
      */
     public function putSimilaridade(Connection $connection, Request $request)
@@ -307,7 +310,7 @@ class SimilaridadeController extends AbstractController
 
             $materiais = implode(',', $materiais);
             
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CADA]
                     @ID_PARA = 2
                     ,@ID_SIMI_MATE = {$codSimilaridade}
@@ -316,7 +319,7 @@ class SimilaridadeController extends AbstractController
                     ,@ID_MATE_ASSO = '{$materiais}'
                     ,@IN_SITU = {$codSituacao}
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
  */
             if (isset($res[0]['codSimilaridade']) && $res[0]['codSimilaridade'] == $codSimilaridade) {
                 return FunctionsController::Retorno(true, 'Cadastro atualizado com sucesso.', null, Response::HTTP_OK);
@@ -331,11 +334,6 @@ class SimilaridadeController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/ativar",
-     *  name="comercial.cadastros-materiais-similaridade-ativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function activeSimilaridade(Connection $connection, Request $request)
@@ -344,13 +342,13 @@ class SimilaridadeController extends AbstractController
             $codSimilaridade = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CADA]
                     @ID_PARA = 3
                     ,@ID_SIMI_MATE = '{$codSimilaridade}'
                     ,@IN_SITU = 1
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codSimilaridade']) && $codSimilaridade == $res[0]['codSimilaridade']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);
@@ -365,11 +363,6 @@ class SimilaridadeController extends AbstractController
     }
 
     /**
-     * @Route(
-     *  "/comercial/cadastros/materiais/similaridade/inativar",
-     *  name="comercial.cadastros-materiais-similaridade-inativar",
-     *  methods={"POST"}
-     * )
      * @return JsonResponse
      */
     public function inactiveSimilaridade(Connection $connection, Request $request)
@@ -378,13 +371,13 @@ class SimilaridadeController extends AbstractController
             $codSimilaridade = json_decode($request->getContent(), true);
             $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-            $res = $connection->query("
+            $res = $connection->executeQuery("
                 EXEC [PRC_SIMI_MATE_CADA]
                     @ID_PARA = 3
                     ,@ID_SIMI_MATE = '{$codSimilaridade}'
                     ,@IN_SITU = 0
                     ,@ID_USUA = {$infoUsuario->matricula}
-            ")->fetchAll();
+            ")->fetchAllAssociative();
 
             if (isset($res[0]['codSimilaridade']) && $codSimilaridade == $res[0]['codSimilaridade']) {
                 return FunctionsController::Retorno(true, null, null, Response::HTTP_OK);

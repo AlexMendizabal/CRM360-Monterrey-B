@@ -2,22 +2,18 @@
 
 namespace App\Controller\MTCorp\Core\Atividades;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Connection;
 
 class AtividadesController
 {
 
     /**
-     * @Route(
-     *  "/core/atividades",
-     *  name="core.atividades.index",
-     *  methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -91,14 +87,14 @@ class AtividadesController
             $stmt->bindValue(":orderType",              $orderType);
             $stmt->bindValue(":inPagina",               $inPagina);
             $stmt->bindValue(":inTotalRegistros",       "0");
-            $stmt->execute();
-            $response = $stmt->fetchAllAssociative();
+            $result_stmt = $stmt->executeQuery();
+            $response = $result_stmt->fetchAllAssociative();
            
             $stmt->bindValue(":inPagina",           0);
             $stmt->bindValue(":inTotalRegistros",   1);
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $total = $stmt->fetchOne();
+            $total = $result_stmt->fetchOne();
          
             if(!is_array($response))
                 throw new \Exception($response);
@@ -127,11 +123,6 @@ class AtividadesController
     }
 
     /**
-     * @Route(
-     *  "/core/atividades",
-     *  name="core.atividades.store",
-     *  methods={"POST"})
-     * 
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -192,9 +183,9 @@ class AtividadesController
             $stmt->bindValue(":exibeNovaAba",       $exibeNovaAba);
             $stmt->bindValue(":situacao",           $situacao);
 
-            $stmt->execute();
+            $result_stmt = $stmt->executeQuery();
 
-            $response = $stmt->fetchAssociative();
+            $response = $result_stmt->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);

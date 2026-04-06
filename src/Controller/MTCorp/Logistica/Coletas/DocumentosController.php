@@ -2,20 +2,18 @@
 
 namespace App\Controller\MTCorp\Logistica\Coletas;
 
+use Doctrine\DBAL\Connection;
+
 use App\Controller\Common\UsuarioController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Driver\Connection;
 use App\Controller\Common\Services\ParseFileFromRequestController;
 
 class DocumentosController
 {
 
         /**
-     * @Route("/logistica/coletas/documentos", methods={"POST"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -31,7 +29,7 @@ class DocumentosController
             if($request->getContent()){
 
                 $document   = new ParseFileFromRequestController();
-                $path       = "C:\\inetpub\\wwwroot\\MTCorp\\uploads\\logistica\\coletas\\anexos\\" . $coletaId . "\\";
+                $path       = "C:\\inetpub\\wwwroot\\Monterrey_App\\uploads\\logistica\\coletas\\anexos\\" . $coletaId . "\\";
                 
                 $document
                     ->setRequest($request)
@@ -55,7 +53,7 @@ class DocumentosController
                     ,@IN_STAT				= '{$inStat}'	
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -88,8 +86,6 @@ class DocumentosController
     }
 
     /**
-     * @Route("/logistica/coletas/documentos", methods={"PUT"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -116,7 +112,7 @@ class DocumentosController
                     ,@IN_STAT				 = '{$inStat}'	
             SQL;
 
-            $response = $connection->query($query)->fetch();
+            $response = $connection->executeQuery($query)->fetchAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -149,8 +145,6 @@ class DocumentosController
     }
 
     /**
-     * @Route("/logistica/coletas/documentos", methods={"GET"})
-     *
      * @param Connection $connection
      * @param Request $request
      * @return JsonResponse
@@ -175,7 +169,7 @@ class DocumentosController
                     ,@IN_STAT				= '{$inStat}'	
             SQL;
 
-            $response = $connection->query($query)->fetchAll();
+            $response = $connection->executeQuery($query)->fetchAllAssociative();
 
             if(!is_array($response))
                 throw new \Exception($response);
@@ -183,7 +177,7 @@ class DocumentosController
             $code = empty($response) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
 
             foreach ($response as $key => $value) {
-                $response[$key]["LINK"] = str_replace("C:\\inetpub\\wwwroot\\MTCorp", $_SERVER['LOCAL_ADDR'], $value["LINK"]);
+                $response[$key]["LINK"] = str_replace("C:\\inetpub\\wwwroot\\Monterrey_App", $_SERVER['LOCAL_ADDR'], $value["LINK"]);
                 $response[$key]["LINK"] = str_replace("\\", "/", $response[$key]["LINK"] );
                 
                 $response[$key]["LINK"] = $_SERVER["HTTPS"] == "off" ? "http://" . $response[$key]["LINK"] : "https://" . $response[$key]["LINK"]; 
