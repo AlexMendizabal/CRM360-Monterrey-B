@@ -20,9 +20,25 @@ class Helper
 {
     public $url_sap;
 
-    public function __construct()
-    {
-        $this->url_sap = $_ENV['SAP_API_URL'] ?? 'http://172.20.20.7:4100/api';
+    private string $mailHost;
+    private string $mailUsername;
+    private string $mailPassword;
+    private int $mailPort;
+    private string $mailEncryption;
+
+    public function __construct(
+        string $mailHost = '',
+        string $mailUsername = '',
+        string $mailPassword = '',
+        int $mailPort = 465,
+        string $mailEncryption = 'ssl'
+    ) {
+        $this->url_sap = $_ENV['SAP_API_URL'] ?? '';
+        $this->mailHost = $mailHost;
+        $this->mailUsername = $mailUsername;
+        $this->mailPassword = $mailPassword;
+        $this->mailPort = $mailPort;
+        $this->mailEncryption = $mailEncryption;
     }
     public function calcularDesc($connection, $id_tipo_cliente, $cantidad, $id_material, $id_departamento)
     {
@@ -2640,12 +2656,12 @@ class Helper
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host       = 'mail.ingbolivia.com'; /* 'mail.monterreysrl.com.bo' */
+            $mail->Host       = $this->mailHost;
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'testcrm@ingbolivia.com'; /* 'crm360@monterreysrl.com.bo' */
-            $mail->Password   = 'Barja1994*';/* 'cccRRRmmm360' */
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port       = 465;
+            $mail->Username   = $this->mailUsername;
+            $mail->Password   = $this->mailPassword;
+            $mail->SMTPSecure = $this->mailEncryption;
+            $mail->Port       = $this->mailPort;
             $mail->CharSet = 'UTF-8';
             $mail->SMTPKeepAlive = true;
             $mail->SMTPDebug = false;

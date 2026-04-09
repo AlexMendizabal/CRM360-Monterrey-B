@@ -7,9 +7,24 @@ imports:
     - { resource: services/* }
 
 parameters:
+    app.mail.host: '%env(default::MAIL_HOST)%'
+    app.mail.port: '%env(int:default::MAIL_PORT)%'
+    app.mail.username: '%env(default::MAIL_USERNAME)%'
+    app.mail.password: '%env(default::MAIL_PASSWORD)%'
+    app.mail.encryption: '%env(default::MAIL_ENCRYPTION)%'
+    app.sap.api_url: '%env(default::SAP_API_URL)%'
+    app.sap.auth_user: '%env(default::SAP_AUTH_USER)%'
+    app.sap.auth_password: '%env(default::SAP_AUTH_PASSWORD)%'
+    app.url: '%env(default::APP_URL)%'
 
 services:
-    App\Services\Helper: ~
+    App\Services\Helper:
+        arguments:
+            $mailHost: '%app.mail.host%'
+            $mailUsername: '%app.mail.username%'
+            $mailPassword: '%app.mail.password%'
+            $mailPort: '%app.mail.port%'
+            $mailEncryption: '%app.mail.encryption%'
     App\Services\MailerService:
         arguments:
             $mailer: '@mailer.mailer'
@@ -85,6 +100,11 @@ services:
     App\Module\Shared\Service\NotificationService:
         arguments:
             $connection: '@doctrine.dbal.default_connection'
+            $mailHost: '%app.mail.host%'
+            $mailUsername: '%app.mail.username%'
+            $mailPassword: '%app.mail.password%'
+            $mailPort: '%app.mail.port%'
+            $mailEncryption: '%app.mail.encryption%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

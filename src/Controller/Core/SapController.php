@@ -330,8 +330,8 @@ class SapController extends AbstractController
             $helper = new Helper();
             $ruta = '/VerificarConectividad';
             $data = array(
-                'Usuario' => 'crm360',
-                'Password' => 'M1ddlewareCRM360$/'
+                'Usuario' => $_ENV['SAP_AUTH_USER'] ?? '',
+                'Password' => $_ENV['SAP_AUTH_PASSWORD'] ?? ''
             );
 
             // Crear múltiples manejadores cURL

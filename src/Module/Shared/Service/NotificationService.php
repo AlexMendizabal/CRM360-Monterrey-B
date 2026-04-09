@@ -11,10 +11,26 @@ use PHPMailer\PHPMailer\Exception;
 class NotificationService
 {
     private Connection $connection;
+    private string $mailHost;
+    private string $mailUsername;
+    private string $mailPassword;
+    private int $mailPort;
+    private string $mailEncryption;
 
-    public function __construct(Connection $connection)
-    {
+    public function __construct(
+        Connection $connection,
+        string $mailHost = '',
+        string $mailUsername = '',
+        string $mailPassword = '',
+        int $mailPort = 465,
+        string $mailEncryption = 'ssl'
+    ) {
         $this->connection = $connection;
+        $this->mailHost = $mailHost;
+        $this->mailUsername = $mailUsername;
+        $this->mailPassword = $mailPassword;
+        $this->mailPort = $mailPort;
+        $this->mailEncryption = $mailEncryption;
     }
 
     public function enviarCorreo($arrayDatos)
@@ -27,12 +43,12 @@ class NotificationService
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host       = 'mail.ingbolivia.com'; /* 'mail.monterreysrl.com.bo' */
+            $mail->Host       = $this->mailHost;
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'testcrm@ingbolivia.com'; /* 'crm360@monterreysrl.com.bo' */
-            $mail->Password   = 'Barja1994*';/* 'cccRRRmmm360' */
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port       = 465;
+            $mail->Username   = $this->mailUsername;
+            $mail->Password   = $this->mailPassword;
+            $mail->SMTPSecure = $this->mailEncryption;
+            $mail->Port       = $this->mailPort;
             $mail->CharSet = 'UTF-8';
             $mail->SMTPKeepAlive = true;
             $mail->SMTPDebug = false;

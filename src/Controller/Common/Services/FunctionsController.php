@@ -153,7 +153,7 @@ class FunctionsController extends AbstractController
       $contentType = $isHtml ? 'text/html' : 'text/plain';
 
       $email = (new \Symfony\Component\Mime\Email())
-          ->from(new \Symfony\Component\Mime\Address('ws@manetoni.com.br'))
+          ->from(new \Symfony\Component\Mime\Address($_ENV['MAIL_USERNAME'] ?? 'noreply@crm360.local'))
           ->subject($msg);
 
       foreach ($recipients as $recipient) {
@@ -170,7 +170,7 @@ class FunctionsController extends AbstractController
           $email->attachFromPath($path);
       }
 
-      $dsn = $_ENV['MAILER_DSN'] ?? 'smtp://ws@manetoni.com.br:oo%40%21sspp88ngj5@outlook.office365.com:587';
+      $dsn = $_ENV['MAILER_DSN'] ?? '';
       $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
       $mailer = new \Symfony\Component\Mailer\Mailer($transport);
       $mailer->send($email);
@@ -188,7 +188,7 @@ class FunctionsController extends AbstractController
       }
 
       $email = (new \Symfony\Component\Mime\Email())
-          ->from(new \Symfony\Component\Mime\Address('ws@manetoni.com.br'))
+          ->from(new \Symfony\Component\Mime\Address($_ENV['MAIL_USERNAME'] ?? 'noreply@crm360.local'))
           ->subject($msg);
 
       if (is_array($recipients)) {
@@ -205,7 +205,7 @@ class FunctionsController extends AbstractController
           $email->text($body);
       }
 
-      $dsn = $_ENV['MAILER_DSN'] ?? 'smtp://ws@manetoni.com.br:oo%40%21sspp88ngj5@outlook.office365.com:587';
+      $dsn = $_ENV['MAILER_DSN'] ?? '';
       $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
       $mailer = new \Symfony\Component\Mailer\Mailer($transport);
       $mailer->send($email);
