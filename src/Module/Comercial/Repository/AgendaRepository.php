@@ -16,38 +16,28 @@ class AgendaRepository
 
     public function listarCompromissos(int|string $idVendedor, string $inicio, string $fim, string $tipoCompromiso = ''): array
     {
-        $stmt = $this->connection->prepare("
+        return $this->connection->fetchAllAssociative("
+            DECLARE @di DATETIME = CONVERT(DATETIME, ?, 120),
+                    @df DATETIME = CONVERT(DATETIME, ?, 120);
             EXEC [PRC_AGEN_VEND_CONS]
-                @VENDEDOR = :vendedor,
-                @DATA_INICIAL = CONVERT(DATETIME, :inicio, 120),
-                @DATA_FINAL = CONVERT(DATETIME, :fim, 120),
-                @TIPO_REGISTRO = :tipo_compromiso
-        ");
-
-        return $stmt->executeQuery([
-            'vendedor' => $idVendedor,
-            'inicio' => $inicio,
-            'fim' => $fim,
-            'tipo_compromiso' => $tipoCompromiso,
-        ])->fetchAllAssociative();
+                @VENDEDOR = ?,
+                @DATA_INICIAL = @di,
+                @DATA_FINAL = @df,
+                @TIPO_REGISTRO = ?
+        ", [$inicio, $fim, $idVendedor, $tipoCompromiso]);
     }
 
     public function listarCompromissosApi(int|string $idVendedor, string $inicio, string $fim, string $tipoCompromiso = ''): array
     {
-        $stmt = $this->connection->prepare("
+        return $this->connection->fetchAllAssociative("
+            DECLARE @di DATETIME = CONVERT(DATETIME, ?, 120),
+                    @df DATETIME = CONVERT(DATETIME, ?, 120);
             EXEC PROC_AGEN_COMP_STA
-                @id_vendedor = :vendedor,
-                @DATA_INICIAL = CONVERT(DATETIME, :inicio, 120),
-                @DATA_FINAL = CONVERT(DATETIME, :fim, 120),
-                @TIPO_REGISTRO = :tipo_compromiso
-        ");
-
-        return $stmt->executeQuery([
-            'vendedor' => $idVendedor,
-            'inicio' => $inicio,
-            'fim' => $fim,
-            'tipo_compromiso' => $tipoCompromiso,
-        ])->fetchAllAssociative();
+                @id_vendedor = ?,
+                @DATA_INICIAL = @di,
+                @DATA_FINAL = @df,
+                @TIPO_REGISTRO = ?
+        ", [$inicio, $fim, $idVendedor, $tipoCompromiso]);
     }
 
     public function obtenerCompromisso(int $id): array

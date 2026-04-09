@@ -75,10 +75,10 @@ class AgendaController extends AbstractController
 
     public function saveCompromisso(Request $request): JsonResponse
     {
-        $dto = $this->validator->validateRequest($request, CompromissoCreateDTO::class);
+        $data = json_decode($request->getContent(), true) ?? [];
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $result = $this->agendaService->crearCompromisso($dto->toArray(), $infoUsuario);
+        $result = $this->agendaService->crearCompromisso($data, $infoUsuario);
 
         if (!$result['success']) {
             return ApiResponse::error($result['message']);
@@ -111,10 +111,10 @@ class AgendaController extends AbstractController
 
     public function rescheduleCompromisso(Request $request): JsonResponse
     {
-        $dto = $this->validator->validateRequest($request, CompromissoReagendarDTO::class);
+        $data = json_decode($request->getContent(), true) ?? [];
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $success = $this->agendaService->reagendarCompromisso($dto->toArray(), $infoUsuario);
+        $success = $this->agendaService->reagendarCompromisso($data, $infoUsuario);
 
         return $success
             ? ApiResponse::success(null, message: 'Compromiso reagendado')
@@ -133,8 +133,8 @@ class AgendaController extends AbstractController
 
     public function reporteAgenda(Request $request): JsonResponse
     {
-        $dto = $this->validator->validateRequest($request, ReporteAgendaDTO::class);
-        $resultado = $this->agendaService->reporteAgenda($dto->toArray());
+        $data = json_decode($request->getContent(), true) ?? [];
+        $resultado = $this->agendaService->reporteAgenda($data);
         return ApiResponse::success($resultado);
     }
 
