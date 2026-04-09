@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Comercial\Controller;
 
 use App\Module\Comercial\Service\AgendaService;
+use App\Module\Comercial\DTO\CompromissoCreateDTO;
+use App\Module\Comercial\DTO\CompromissoReagendarDTO;
+use App\Module\Comercial\DTO\ReporteAgendaDTO;
 use App\Module\Shared\Response\ApiResponse;
+use App\Module\Shared\Validation\RequestValidator;
 use App\Controller\Common\UsuarioController;
 use App\Controller\MTCorp\Comercial\ComercialController;
 use Doctrine\DBAL\Connection;
@@ -16,7 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 class AgendaController extends AbstractController
 {
     public function __construct(
-        private readonly AgendaService $agendaService
+        private readonly AgendaService $agendaService,
+        private readonly RequestValidator $validator
     ) {}
 
     public function getAcessos(Connection $connection, Request $request): JsonResponse
@@ -70,10 +75,10 @@ class AgendaController extends AbstractController
 
     public function saveCompromisso(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
+        $dto = $this->validator->validateRequest($request, CompromissoCreateDTO::class);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $result = $this->agendaService->crearCompromisso($data, $infoUsuario);
+        $result = $this->agendaService->crearCompromisso($dto->toArray(), $infoUsuario);
 
         if (!$result['success']) {
             return ApiResponse::error($result['message']);
@@ -106,10 +111,10 @@ class AgendaController extends AbstractController
 
     public function rescheduleCompromisso(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
+        $dto = $this->validator->validateRequest($request, CompromissoReagendarDTO::class);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
 
-        $success = $this->agendaService->reagendarCompromisso($data, $infoUsuario);
+        $success = $this->agendaService->reagendarCompromisso($dto->toArray(), $infoUsuario);
 
         return $success
             ? ApiResponse::success(null, message: 'Compromiso reagendado')
@@ -128,8 +133,8 @@ class AgendaController extends AbstractController
 
     public function reporteAgenda(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
-        $resultado = $this->agendaService->reporteAgenda($data);
+        $dto = $this->validator->validateRequest($request, ReporteAgendaDTO::class);
+        $resultado = $this->agendaService->reporteAgenda($dto->toArray());
         return ApiResponse::success($resultado);
     }
 

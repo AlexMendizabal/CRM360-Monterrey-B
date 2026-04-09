@@ -87,6 +87,11 @@ services:
             $connection: '@doctrine.dbal.MONTERREY_connection'
             $storedProcedureService: '@App\Services\StoredProcedureService'
 
+    # Shared — Request Validator (Phase 5)
+    App\Module\Shared\Validation\RequestValidator:
+        arguments:
+            $validator: '@validator'
+
     # Agenda (Phase 2 pilot module)
     App\Module\Comercial\Repository\AgendaRepository:
         arguments:
@@ -102,6 +107,7 @@ services:
     App\Module\Comercial\Controller\AgendaController:
         arguments:
             $agendaService: '@App\Module\Comercial\Service\AgendaService'
+            $validator: '@App\Module\Shared\Validation\RequestValidator'
         tags: ['controller.service_arguments']
 
     # Infrastructure — SAP Gateway

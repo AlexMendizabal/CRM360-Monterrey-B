@@ -136,6 +136,26 @@ $result = $this->spService->execute('PRC_SOME_PROCEDURE', [
 ]);
 ```
 
+## Input Validation Pattern (Phase 5)
+
+Every POST/PUT endpoint that receives user data MUST:
+1. Create a DTO with `#[Assert\...]` constraints
+2. Use `RequestValidator::validateRequest()` in the controller
+3. Pass `$dto->toArray()` to the service
+
+```php
+// In Controller:
+public function save(Request $request): JsonResponse
+{
+    $dto = $this->validator->validateRequest($request, MyDTO::class);
+    $result = $this->service->save($dto->toArray());
+    return ApiResponse::success($result);
+}
+```
+
+If validation fails, `ValidationException` is thrown automatically and
+`ExceptionSubscriber` converts it to a 422 response with error details.
+
 ## Security Rules
 
 1. NEVER hardcode credentials — all secrets in `.env`
