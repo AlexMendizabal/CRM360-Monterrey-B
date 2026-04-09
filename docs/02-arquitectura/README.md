@@ -10,6 +10,8 @@
 - [Configuracion del Framework](#configuracion-del-framework)
 
 **Documentacion relacionada:**
+- [Arquitectura Target (nueva)](arquitectura-target.md)
+- [Convenciones de Codigo](convenciones.md)
 - [Docker: Configuracion y Despliegue](docker.md)
 
 ---

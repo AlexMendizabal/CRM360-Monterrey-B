@@ -122,3 +122,9 @@ services:
     # JWT validation
     jwt_authenticator:
         class: App\Security\Core\JwtAuthenticator
+
+    # Global exception handler — convierte excepciones en ApiResponse
+    App\Infrastructure\Http\ExceptionSubscriber:
+        arguments:
+            $appEnv: '%kernel.environment%'
+        tags: ['kernel.event_subscriber']
