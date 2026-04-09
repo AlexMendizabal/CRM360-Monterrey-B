@@ -124,6 +124,39 @@ services:
     # Shared — Email templates
     App\Module\Shared\Service\EmailTemplateService: ~
 
+    # Comercial — Cotacoes (Phase 4)
+    App\Module\Comercial\Repository\CotacoesRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\CotacoesService:
+        arguments:
+            $repository: '@App\Module\Comercial\Repository\CotacoesRepository'
+            $sapGateway: '@App\Infrastructure\SAP\SapGatewayService'
+            $logger: '@logger'
+            $projectDir: '%kernel.project_dir%'
+
+    App\Module\Comercial\Controller\CotacoesController:
+        arguments:
+            $service: '@App\Module\Comercial\Service\CotacoesService'
+        tags: ['controller.service_arguments']
+
+    # Comercial — Clientes (Phase 4)
+    App\Module\Comercial\Repository\ClientesCrudRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Comercial\Service\ClientesCrudService:
+        arguments:
+            $repository: '@App\Module\Comercial\Repository\ClientesCrudRepository'
+            $logger: '@logger'
+            $projectDir: '%kernel.project_dir%'
+
+    App\Module\Comercial\Controller\ClientesController:
+        arguments:
+            $service: '@App\Module\Comercial\Service\ClientesCrudService'
+        tags: ['controller.service_arguments']
+
     # Comercial — Autorizaciones
     App\Module\Comercial\Repository\AutorizacionRepository:
         arguments:
