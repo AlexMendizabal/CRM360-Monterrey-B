@@ -1,5 +1,5 @@
 # Routes for Agenda module
-# Extracted from AgendaController, AgendaDatosController, FormularioController
+# Migrated to Module\Comercial\Controller\AgendaController (Phase 2)
 
 # =============================================================================
 # AgendaController (19 routes)
@@ -7,106 +7,100 @@
 
 comercial.agenda-acessos:
     path: /comercial/agenda/acessos
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::getAcessos
+    controller: App\Module\Comercial\Controller\AgendaController::getAcessos
     methods: [GET]
 
 comercial.agenda-compromissos-lista:
     path: /comercial/agenda/compromissos/lista
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::getCompromissos
+    controller: App\Module\Comercial\Controller\AgendaController::getCompromissos
     methods: [GET]
 
 comercial.agenda-compromiso-getcompromiso_api:
     path: /comercial/agenda/compromiso/getcompromiso_api
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::getCompromiso_api
+    controller: App\Module\Comercial\Controller\AgendaController::getCompromisoApi
     methods: [GET]
 
 comercial.agenda-compromissos-detalhes:
     path: /comercial/agenda/compromissos/detalhes/{id}
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::getCompromisso
+    controller: App\Module\Comercial\Controller\AgendaController::getCompromisso
     methods: [GET]
     requirements:
         id: '\d+'
 
 comercial.agenda-compromisso-salvar:
     path: /comercial/agenda/compromisso/salvar
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::saveCompromisso
+    controller: App\Module\Comercial\Controller\AgendaController::saveCompromisso
     methods: [POST]
 
 comercial.agenda-compromiso-actualizar:
     path: /comercial/agenda/compromiso/actualizar
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::actualizarCompromiso
+    controller: App\Module\Comercial\Controller\AgendaController::actualizarCompromiso
     methods: [POST]
 
 comercial.agenda-compromiso-eliminar:
     path: /comercial/agenda/compromiso/eliminar
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::eliminarCompromiso
+    controller: App\Module\Comercial\Controller\AgendaController::eliminarCompromiso
     methods: [POST]
-
-# Ruta deshabilitada: metodo updateCompromisso esta comentado en AgendaController
-# comercial.agenda-compromisso-atualizar:
-#     path: /comercial/agenda/compromisso/atualizar
-#     controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::updateCompromisso
-#     methods: [PUT]
 
 comercial.agenda-compromisso-reagendar:
     path: /comercial/agenda/compromisso/reagendar
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::rescheduleCompromisso
+    controller: App\Module\Comercial\Controller\AgendaController::rescheduleCompromisso
     methods: [POST]
 
 comercial.agenda-compromisso/excluir:
     path: /comercial/agenda/compromisso/excluir/{id}
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::deleteCompromisso
+    controller: App\Module\Comercial\Controller\AgendaController::deleteCompromisso
     methods: [POST]
     requirements:
         id: '\d+'
 
 comercial.reporte:
     path: /comercial/agenda/reporte
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::reporteAgenda
+    controller: App\Module\Comercial\Controller\AgendaController::reporteAgenda
     methods: [POST]
 
 comercial.reporte-cliente:
     path: /comercial/agenda/reportecliente
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::reporteCliente
+    controller: App\Module\Comercial\Controller\AgendaController::reporteCliente
     methods: [POST]
 
 comercial.agenda-estados:
     path: /comercial/agenda/estados
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::estadosAgenda
+    controller: App\Module\Comercial\Controller\AgendaController::estadosAgenda
     methods: [GET]
 
 comercial.agenda-getimagenes:
     path: /comercial/agenda/getimagenes/{id}
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::getImagenes
+    controller: App\Module\Comercial\Controller\AgendaController::getImagenes
     methods: [GET]
 
 comercial.agenda-compromisso-finalizar:
     path: /comercial/agenda/compromisso/finalizar
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::finalizarCompromisso
+    controller: App\Module\Comercial\Controller\AgendaController::finalizarCompromisso
     methods: [POST]
 
 comercial.agenda-getruta:
     path: /comercial/agenda/getruta/{id}
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::getrutasVendedor
+    controller: App\Module\Comercial\Controller\AgendaController::getrutasVendedor
     methods: [GET]
 
 comercial.agenda-ruta:
     path: /comercial/agenda/ruta
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::rutasVendedor
+    controller: App\Module\Comercial\Controller\AgendaController::rutasVendedor
     methods: [POST]
 
 comercial.agenda-compromiso-proceso:
     path: /comercial/agenda/compromiso/proceso
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::procesoCompromiso
+    controller: App\Module\Comercial\Controller\AgendaController::procesoCompromiso
     methods: [POST]
 
 comercial.agenda-compromiso-verificar_inicio:
     path: /comercial/agenda/compromiso/verificar_inicio
-    controller: App\Controller\MTCorp\Comercial\Agenda\AgendaController::verificarInicio
+    controller: App\Module\Comercial\Controller\AgendaController::verificarInicio
     methods: [GET]
 
 # =============================================================================
-# AgendaDatosController (1 route)
+# AgendaDatosController (1 route) — legacy, no migrado aun
 # =============================================================================
 
 comercial.agenda-datos-create:
@@ -115,20 +109,20 @@ comercial.agenda-datos-create:
     methods: [POST]
 
 # =============================================================================
-# FormularioController (3 routes)
+# FormularioController (3 routes) — migrado a AgendaController
 # =============================================================================
 
 comercial.agenda-formas-contato:
     path: /comercial/agenda/formulario/formas-contato
-    controller: App\Controller\MTCorp\Comercial\Agenda\FormularioController::getFormasContato
+    controller: App\Module\Comercial\Controller\AgendaController::getFormasContato
     methods: [GET]
 
 comercial.agenda-origens-contato:
     path: /comercial/agenda/formulario/origens-contato
-    controller: App\Controller\MTCorp\Comercial\Agenda\FormularioController::getOrigensContato
+    controller: App\Module\Comercial\Controller\AgendaController::getOrigensContato
     methods: [GET]
 
 comercial.agenda-motivos-reagendamento:
     path: /comercial/agenda/formulario/motivos-reagendamento
-    controller: App\Controller\MTCorp\Comercial\Agenda\FormularioController::getMotivosReagendamento
+    controller: App\Module\Comercial\Controller\AgendaController::getMotivosReagendamento
     methods: [GET]

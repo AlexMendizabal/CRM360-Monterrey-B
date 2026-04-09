@@ -87,6 +87,23 @@ services:
             $connection: '@doctrine.dbal.MONTERREY_connection'
             $storedProcedureService: '@App\Services\StoredProcedureService'
 
+    # Agenda (Phase 2 pilot module)
+    App\Module\Comercial\Repository\AgendaRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+            $storedProcedureService: '@App\Services\StoredProcedureService'
+
+    App\Module\Comercial\Service\AgendaService:
+        arguments:
+            $repository: '@App\Module\Comercial\Repository\AgendaRepository'
+            $logger: '@logger'
+            $projectDir: '%kernel.project_dir%'
+
+    App\Module\Comercial\Controller\AgendaController:
+        arguments:
+            $agendaService: '@App\Module\Comercial\Service\AgendaService'
+        tags: ['controller.service_arguments']
+
     # Core Module
     App\Module\Core\Service\UsuarioService:
         arguments:
