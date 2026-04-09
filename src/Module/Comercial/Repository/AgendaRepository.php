@@ -19,8 +19,8 @@ class AgendaRepository
         $stmt = $this->connection->prepare("
             EXEC [PRC_AGEN_VEND_CONS]
                 @VENDEDOR = :vendedor,
-                @DATA_INICIAL = :inicio,
-                @DATA_FINAL = :fim,
+                @DATA_INICIAL = CONVERT(DATETIME, :inicio, 120),
+                @DATA_FINAL = CONVERT(DATETIME, :fim, 120),
                 @TIPO_REGISTRO = :tipo_compromiso
         ");
 
@@ -37,8 +37,8 @@ class AgendaRepository
         $stmt = $this->connection->prepare("
             EXEC PROC_AGEN_COMP_STA
                 @id_vendedor = :vendedor,
-                @DATA_INICIAL = :inicio,
-                @DATA_FINAL = :fim,
+                @DATA_INICIAL = CONVERT(DATETIME, :inicio, 120),
+                @DATA_FINAL = CONVERT(DATETIME, :fim, 120),
                 @TIPO_REGISTRO = :tipo_compromiso
         ");
 
@@ -122,8 +122,8 @@ class AgendaRepository
                 ,@CLIENTE = :codCliente
                 ,@FORMA_CONTATO = :formaContato
                 ,@MEIO_CONTATO = :meioContato
-                ,@DATA_INICIAL = :dataInicial
-                ,@DATA_FINAL = :dataFinal
+                ,@DATA_INICIAL = CONVERT(DATETIME, :dataInicial, 120)
+                ,@DATA_FINAL = CONVERT(DATETIME, :dataFinal, 120)
                 ,@DIA_INTEIRO = :diaInteiro
                 ,@STATUS = :status
                 ,@OBSERVACAO = :observacao
@@ -229,8 +229,8 @@ class AgendaRepository
         $stmt = $this->connection->prepare("
             EXEC [CRM360].[dbo].[PRC_MODU_AGE_REPORT]
                 @vendedor = :idVendedor,
-                @fecha_inicio = :fechaInicio,
-                @fecha_final = :fechaFinal,
+                @fecha_inicio = CONVERT(DATETIME, :fechaInicio, 120),
+                @fecha_final = CONVERT(DATETIME, :fechaFinal, 120),
                 @estados = :idStatus,
                 @motivo = :motivo,
                 @sucursal = :sucursal
