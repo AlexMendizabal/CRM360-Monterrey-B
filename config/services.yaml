@@ -60,27 +60,27 @@ services:
     # Comercial Module
     App\Module\Comercial\Service\ClienteService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\VendedorService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\AlmacenService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\MaterialService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\OfertaService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\PrecioService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\CalculoMaterialService:
         arguments:
@@ -90,7 +90,7 @@ services:
     # Shared — RBAC (Phase 6)
     App\Module\Shared\Security\RoleRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Shared\Security\AuthorizationService:
         arguments:
@@ -109,8 +109,8 @@ services:
     # Agenda (Phase 2 pilot module)
     App\Module\Comercial\Repository\AgendaRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
-            $storedProcedureService: '@App\Services\StoredProcedureService'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
+            $spService: '@App\Services\StoredProcedureService'
 
     App\Module\Comercial\Service\AgendaService:
         arguments:
@@ -134,12 +134,12 @@ services:
     # Shared — Geo lookups
     App\Module\Shared\Repository\GeoRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     # Shared — Notificaciones
     App\Module\Shared\Repository\NotificacionRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     # Shared — Email templates
     App\Module\Shared\Service\EmailTemplateService: ~
@@ -147,12 +147,11 @@ services:
     # Comercial — Cotacoes (Phase 4)
     App\Module\Comercial\Repository\CotacoesRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\CotacoesService:
         arguments:
             $repository: '@App\Module\Comercial\Repository\CotacoesRepository'
-            $sapGateway: '@App\Infrastructure\SAP\SapGatewayService'
             $logger: '@logger'
             $projectDir: '%kernel.project_dir%'
 
@@ -164,7 +163,7 @@ services:
     # Comercial — Clientes (Phase 4)
     App\Module\Comercial\Repository\ClientesCrudRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Comercial\Service\ClientesCrudService:
         arguments:
@@ -175,26 +174,27 @@ services:
     App\Module\Comercial\Controller\ClientesController:
         arguments:
             $service: '@App\Module\Comercial\Service\ClientesCrudService'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
         tags: ['controller.service_arguments']
 
     # Comercial — Autorizaciones
     App\Module\Comercial\Repository\AutorizacionRepository:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     # Core Module
     App\Module\Core\Service\UsuarioService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     # Shared Module
     App\Module\Shared\Service\CatalogService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
 
     App\Module\Shared\Service\NotificationService:
         arguments:
-            $connection: '@doctrine.dbal.default_connection'
+            $connection: '@doctrine.dbal.MONTERREY_connection'
             $mailHost: '%app.mail.host%'
             $mailUsername: '%app.mail.username%'
             $mailPassword: '%app.mail.password%'
