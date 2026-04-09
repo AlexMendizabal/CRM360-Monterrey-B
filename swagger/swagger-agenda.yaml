@@ -1,0 +1,1002 @@
+openapi: 3.0.3
+info:
+  title: CRM360 Monterrey - API Agenda (Compromisos)
+  description: |
+    API REST para la gestion de agenda comercial del CRM360 Monterrey.
+    Incluye gestion de compromisos, citas, rutas GPS, reportes y formularios de contacto.
+
+    **Autenticacion:** Todas las rutas requieren el header `X-User-Info` con token JWT
+    y `Authorization: Bearer {token}`.
+  version: 1.0.0
+  contact:
+    name: CRM360 Monterrey
+servers:
+  - url: http://172.20.20.12
+    description: Servidor de Produccion (IIS - Windows Server)
+
+security:
+  - bearerAuth: []
+  - userInfo: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    userInfo:
+      type: apiKey
+      in: header
+      name: X-User-Info
+      description: Token JWT con informacion del usuario (matricula, perfil, etc.)
+
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        mensagem:
+          type: string
+          nullable: true
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        mensagem:
+          type: string
+        data:
+          type: string
+          description: Mensaje de error detallado
+
+    Compromiso:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID unico de la agenda
+        color:
+          type: string
+          description: Color hex para el calendario
+        title:
+          type: string
+          description: Titulo del compromiso
+        codClient:
+          type: integer
+          description: Codigo del cliente
+        client:
+          type: string
+          description: Nombre del cliente
+        formContactId:
+          type: integer
+          description: ID forma de contacto
+        formContactDesc:
+          type: string
+          description: Descripcion forma de contacto
+        typeContactId:
+          type: integer
+          description: ID medio de contacto
+        typeContactDesc:
+          type: string
+          description: Descripcion medio de contacto
+        start:
+          type: string
+          format: date-time
+          description: Fecha y hora de inicio
+        end:
+          type: string
+          format: date-time
+          description: Fecha y hora de fin
+        promotor:
+          type: string
+          description: Nombre completo del vendedor/promotor
+        fecha_inicial:
+          type: string
+          example: "23-03-2026"
+        fecha_final:
+          type: string
+          example: "23-03-2026"
+        hora_inicial:
+          type: string
+          example: "09:00"
+        hora_final:
+          type: string
+          example: "10:30"
+        allDay:
+          type: boolean
+          description: Si es evento de dia completo
+        description:
+          type: string
+          description: Observaciones del compromiso
+        status:
+          type: integer
+          description: "ID del estado (1=Registrado, 2=En proceso, 3=Finalizado, 4=Reagendado)"
+        statusnome:
+          type: string
+          description: Nombre del estado
+
+    CompromisoDetalle:
+      allOf:
+        - $ref: '#/components/schemas/Compromiso'
+        - type: object
+          properties:
+            codTitulo:
+              type: integer
+            id_vendedor:
+              type: integer
+            motivo:
+              type: string
+            id_motivo:
+              type: integer
+            direccion:
+              type: string
+            latitud:
+              type: string
+            longitud:
+              type: string
+            latitud_final:
+              type: string
+            longitud_final:
+              type: string
+            codigo_cliente:
+              type: string
+            id_status:
+              type: integer
+            anexo:
+              type: string
+            observacionFinal:
+              type: string
+            id_vend_asig:
+              type: integer
+            vend_asig:
+              type: string
+            color_status:
+              type: string
+
+    CompromisoCrear:
+      type: object
+      required:
+        - codTitulo
+        - codClient
+        - formContactId
+        - typeContactId
+        - start
+        - end
+      properties:
+        codTitulo:
+          type: integer
+          description: Codigo del titulo/motivo
+        codClient:
+          type: integer
+          description: Codigo del cliente
+        formContactId:
+          type: integer
+          description: ID de forma de contacto
+        typeContactId:
+          type: integer
+          description: ID de medio de contacto
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        allDay:
+          type: boolean
+          default: false
+        direccion:
+          type: string
+        description:
+          type: string
+        latitud:
+          type: string
+        longitud:
+          type: string
+        id_promotorasignado:
+          type: integer
+          description: ID del promotor asignado
+        promotorparaasignar:
+          type: integer
+          description: ID del promotor a reasignar
+        idVendedor:
+          type: integer
+          description: ID del vendedor (opcional, usa matricula del token si no se envia)
+
+    CompromisoActualizar:
+      allOf:
+        - $ref: '#/components/schemas/CompromisoCrear'
+        - type: object
+          required:
+            - id
+            - status
+          properties:
+            id:
+              type: integer
+              description: ID del compromiso a actualizar
+            status:
+              type: integer
+              enum: [1, 2, 3, 4]
+              description: "1=Registrado, 2=En proceso, 3=Finalizar, 4=Reagendar"
+            obsFinalizar:
+              type: string
+              description: Observacion al finalizar
+            idVendedor:
+              type: integer
+
+    ReporteAgendaRequest:
+      type: object
+      properties:
+        fechaInicial:
+          type: string
+          format: date
+        fechaFinal:
+          type: string
+          format: date
+        id_vendedor:
+          type: integer
+        estado:
+          type: integer
+        titulo:
+          type: integer
+        sucursal:
+          type: integer
+
+    AgendaDatosCrear:
+      type: object
+      required:
+        - correo
+        - codigo_cliente
+        - data_inicio
+        - data_final
+        - titulo
+      properties:
+        id_agenda:
+          type: integer
+        correo:
+          type: string
+          format: email
+          description: Correo del vendedor para buscar su matricula
+        codigo_cliente:
+          type: string
+          description: Codigo del cliente
+        data_inicio:
+          type: string
+          format: date-time
+        data_final:
+          type: string
+          format: date-time
+        titulo:
+          type: string
+        id_meio_contato:
+          type: integer
+        id_forma_contato:
+          type: integer
+        id_status:
+          type: integer
+          default: 1
+        id_reagendado:
+          type: integer
+        id_reagendado_motivo:
+          type: integer
+        observacao:
+          type: string
+        cor:
+          type: string
+        id_dia_inteiro:
+          type: integer
+          enum: [0, 1]
+        id_titulo:
+          type: integer
+        obs_final:
+          type: string
+        anexo:
+          type: string
+        latitud_inicial:
+          type: string
+        longitud_inicial:
+          type: string
+        latitud_final:
+          type: string
+        longitud_final:
+          type: string
+
+    FinalizarRequest:
+      type: object
+      required:
+        - id_agenda
+      properties:
+        id_agenda:
+          type: integer
+        latitud:
+          type: string
+        longitud:
+          type: string
+        observacion_final:
+          type: string
+        imagen:
+          type: array
+          items:
+            type: object
+            properties:
+              base64:
+                type: string
+                format: byte
+              nombre:
+                type: string
+
+    RutaGPS:
+      type: object
+      properties:
+        latitud:
+          type: string
+        longitud:
+          type: string
+
+paths:
+  # ============================================================
+  # ACCESOS Y PERMISOS
+  # ============================================================
+  /comercial/agenda/acessos:
+    get:
+      tags: [Agenda - Permisos]
+      summary: Obtener permisos de acceso del usuario
+      description: Verifica si el usuario tiene el perfil `HOMO_CICL_VEND` para simulador de ventas.
+      responses:
+        '200':
+          description: Permisos obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      simuladorVendas:
+                        type: boolean
+        '400':
+          description: Error al obtener permisos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ============================================================
+  # COMPROMISOS - CONSULTAS
+  # ============================================================
+  /comercial/agenda/compromissos/lista:
+    get:
+      tags: [Agenda - Compromisos]
+      summary: Listar compromisos de la agenda
+      description: Retorna lista de compromisos/citas para un rango de fechas y vendedor. Usa stored procedure `PRC_AGEN_VEND_CONS`.
+      parameters:
+        - name: inicio
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Fecha de inicio del rango
+        - name: fim
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Fecha final del rango
+        - name: idVendedor
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: ID del vendedor (si no se envia, usa la matricula del token)
+        - name: tipo_compromiso
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filtro por tipo de compromiso
+      responses:
+        '200':
+          description: Lista de compromisos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                    enum: [200, 204]
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Compromiso'
+
+  /comercial/agenda/compromiso/getcompromiso_api:
+    get:
+      tags: [Agenda - Compromisos]
+      summary: Obtener compromisos con estados (API alternativa)
+      description: Endpoint alternativo que usa `PROC_AGEN_COMP_STA`. Retorna compromisos con formato de fechas.
+      parameters:
+        - name: idVendedor
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: inicio
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: fim
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: tipo_compromiso
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de compromisos con estados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Compromiso'
+
+  /comercial/agenda/compromissos/detalhes/{id}:
+    get:
+      tags: [Agenda - Compromisos]
+      summary: Obtener detalle de un compromiso
+      description: Retorna el detalle completo de un compromiso incluyendo geolocalizacion, documentos adjuntos y color de estado.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID del compromiso
+      responses:
+        '200':
+          description: Detalle del compromiso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    $ref: '#/components/schemas/CompromisoDetalle'
+
+  # ============================================================
+  # COMPROMISOS - OPERACIONES CRUD
+  # ============================================================
+  /comercial/agenda/compromisso/salvar:
+    post:
+      tags: [Agenda - Compromisos]
+      summary: Crear nuevo compromiso
+      description: Crea un nuevo compromiso/cita en la agenda. Guarda datos de geolocalizacion y asigna al vendedor.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompromisoCrear'
+      responses:
+        '200':
+          description: Compromiso creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  estado:
+                    type: boolean
+
+  /comercial/agenda/compromiso/actualizar:
+    post:
+      tags: [Agenda - Compromisos]
+      summary: Actualizar compromiso existente
+      description: |
+        Actualiza un compromiso. Segun el status:
+        - **1-2**: Actualiza datos generales y direccion del cliente si hay lat/lng
+        - **3**: Finaliza el compromiso
+        - **4**: Reagenda (crea nuevo compromiso y archiva el actual)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompromisoActualizar'
+      responses:
+        '200':
+          description: Compromiso actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+
+  /comercial/agenda/compromiso/eliminar:
+    post:
+      tags: [Agenda - Compromisos]
+      summary: Eliminar compromiso
+      description: Elimina un compromiso por ID usando `PRC_AGEN_VEND_CADA_DELETE`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: Compromiso eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+
+  /comercial/agenda/compromisso/reagendar:
+    post:
+      tags: [Agenda - Compromisos]
+      summary: Reagendar compromiso
+      description: Crea un nuevo compromiso y archiva el anterior con motivo de reagendamiento.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rescheduleId:
+                  type: integer
+                  description: ID del compromiso a reagendar
+                idVendedor:
+                  type: integer
+                promotorparaasignar:
+                  type: integer
+                codTitulo:
+                  type: integer
+                codClient:
+                  type: integer
+                formContactId:
+                  type: integer
+                typeContactId:
+                  type: integer
+                start:
+                  type: string
+                  format: date-time
+                end:
+                  type: string
+                  format: date-time
+                allDay:
+                  type: boolean
+                description:
+                  type: string
+                id:
+                  type: integer
+                status:
+                  type: integer
+      responses:
+        '200':
+          description: Compromiso reagendado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  estado:
+                    type: boolean
+
+  /comercial/agenda/compromisso/excluir/{id}:
+    post:
+      tags: [Agenda - Compromisos]
+      summary: Excluir compromiso por path param
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Compromiso excluido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+
+  # ============================================================
+  # PROCESO Y FINALIZACION
+  # ============================================================
+  /comercial/agenda/compromiso/proceso:
+    post:
+      tags: [Agenda - Proceso]
+      summary: Iniciar proceso de compromiso
+      description: Cambia el estado del compromiso a "En proceso" usando `PRC_AGEN_VEND_PRO`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id_agenda
+              properties:
+                id_agenda:
+                  type: integer
+      responses:
+        '200':
+          description: Proceso iniciado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  estado:
+                    type: boolean
+                  message:
+                    type: string
+
+  /comercial/agenda/compromisso/finalizar:
+    post:
+      tags: [Agenda - Proceso]
+      summary: Finalizar compromiso
+      description: Finaliza un compromiso guardando observacion final, ubicacion GPS y opcionalmente imagenes en base64.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinalizarRequest'
+      responses:
+        '200':
+          description: Compromiso finalizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  estado:
+                    type: boolean
+
+  /comercial/agenda/compromiso/verificar_inicio:
+    get:
+      tags: [Agenda - Proceso]
+      summary: Verificar si hay compromiso en proceso
+      description: Verifica si el vendedor ya tiene un compromiso en estado "en proceso" para evitar multiples simultaneos.
+      parameters:
+        - name: id_vendedor
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: id_agenda
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Resultado de verificacion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  estado:
+                    type: boolean
+                  message:
+                    type: string
+
+  # ============================================================
+  # REPORTES
+  # ============================================================
+  /comercial/agenda/reporte:
+    post:
+      tags: [Agenda - Reportes]
+      summary: Generar reporte de agenda
+      description: Genera reporte filtrado por vendedor, rango de fechas, estado, motivo y sucursal.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReporteAgendaRequest'
+      responses:
+        '200':
+          description: Reporte generado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      type: object
+
+  /comercial/agenda/reportecliente:
+    post:
+      tags: [Agenda - Reportes]
+      summary: Reporte de agenda por cliente
+      description: Genera reporte de compromisos especifico para un cliente.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  description: ID del cliente
+      responses:
+        '200':
+          description: Reporte del cliente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      type: object
+
+  # ============================================================
+  # ESTADOS E IMAGENES
+  # ============================================================
+  /comercial/agenda/estados:
+    get:
+      tags: [Agenda - Catalogos]
+      summary: Listar estados de la agenda
+      description: Retorna los estados disponibles (Registrado, En proceso, Finalizado, Reagendado).
+      responses:
+        '200':
+          description: Lista de estados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nombre:
+                          type: string
+
+  /comercial/agenda/getimagenes/{id}:
+    get:
+      tags: [Agenda - Adjuntos]
+      summary: Obtener imagenes de un compromiso
+      description: Retorna imagenes adjuntas en formato base64.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Imagenes del compromiso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url_imagen:
+                          type: string
+                          format: byte
+                          description: Imagen en base64
+                        url_web:
+                          type: string
+                        nom_imagen:
+                          type: string
+                        fecha:
+                          type: string
+
+  # ============================================================
+  # RUTAS GPS
+  # ============================================================
+  /comercial/agenda/getruta/{id}:
+    get:
+      tags: [Agenda - Rutas GPS]
+      summary: Obtener ruta GPS de un compromiso
+      description: Retorna las coordenadas GPS de la ruta del vendedor para un compromiso.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Coordenadas de la ruta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  estado:
+                    type: boolean
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RutaGPS'
+                  message:
+                    type: string
+
+  /comercial/agenda/ruta:
+    post:
+      tags: [Agenda - Rutas GPS]
+      summary: Guardar ruta GPS
+      description: Guarda datos de tracking GPS para los compromisos de la agenda.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lista:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id_agenda:
+                        type: integer
+                      latitud:
+                        type: string
+                      longitud:
+                        type: string
+      responses:
+        '200':
+          description: Ruta guardada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: integer
+                  success:
+                    type: boolean
+
+  # ============================================================
+  # FORMULARIO - CATALOGOS
+  # ============================================================
+  /comercial/agenda/formulario/formas-contato:
+    get:
+      tags: [Agenda - Formulario/Catalogos]
+      summary: Listar formas de contacto
+      description: Retorna todas las formas de contacto disponibles desde `PRC_FORM_CONT_CONS`.
+      responses:
+        '200':
+          description: Lista de formas de contacto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/agenda/formulario/origens-contato:
+    get:
+      tags: [Agenda - Formulario/Catalogos]
+      summary: Listar medios de contacto
+      description: Retorna los medios/origenes de contacto desde `PRC_CORE_AGEN_MEIO_CONT_CONS`.
+      responses:
+        '200':
+          description: Lista de medios de contacto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /comercial/agenda/formulario/motivos-reagendamento:
+    get:
+      tags: [Agenda - Formulario/Catalogos]
+      summary: Listar motivos de reagendamiento
+      description: Retorna los motivos disponibles para reagendar un compromiso desde `PRC_CORE_AGEN_REAG_MOTI_CONS`.
+      responses:
+        '200':
+          description: Lista de motivos de reagendamiento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ============================================================
+  # AGENDA DATOS (API EXTERNA)
+  # ============================================================
+  /comercial/agenda_datos/create:
+    post:
+      tags: [Agenda - Datos Externos]
+      summary: Crear registro de agenda (API externa)
+      description: |
+        Endpoint para crear registros de agenda desde sistemas externos.
+        Busca el vendedor por correo electronico y el cliente por codigo.
+        No requiere token JWT del header X-User-Info.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgendaDatosCrear'
+      responses:
+        '201':
+          description: Registro creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "inserto correctamente"
+        '400':
+          description: Error de validacion o insercion
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "error al insertar"

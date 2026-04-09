@@ -1,0 +1,2974 @@
+# Comercial routes - auto-generated from @Route annotations
+# Total routes: 530
+
+comercial.almacen-get_almacen:
+    path: /comercial/almacen/get_almacen
+    controller: App\Controller\MTCorp\Comercial\Almacen\AlmacenController::getAlmacen
+    methods: [GET]
+
+comercial.almacen-centro_logistico:
+    path: /comercial/almacen/centros_logisticos
+    controller: App\Controller\MTCorp\Comercial\Almacen\AlmacenController::getCentroLogistico
+    methods: [GET]
+
+comercial.auditoria-enderecos-entrega-lista:
+    path: /comercial/auditoria/enderecos-entrega/lista
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::getListaEnderecosEntrega
+    methods: [GET]
+
+comercial.auditoria-enderecos-entrega-anexos:
+    path: /comercial/auditoria/enderecos-entrega/anexos/{codEndereco}
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::getAnexos
+    methods: [GET]
+    requirements:
+        codEndereco: '\d+'
+
+comercial.auditoria-enderecos-entrega-excecoes:
+    path: /comercial/auditoria/enderecos-entrega/excecoes
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::getExcecao
+    methods: [GET]
+
+comercial.auditoria-enderecos-entrega-aprova-reprova-endereco:
+    path: /comercial/auditoria/enderecos-entrega/aprova-reprova-endereco
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::putAprovacaoEndereco
+    methods: [PUT]
+
+comercial.auditoria-enderecos-entrega-anexo-documentos:
+    path: /comercial/auditoria/enderecos-entrega/anexo/documentos/{codEndereco}
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::getDocuments
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.auditoria-enderecos-entrega-anexo-documentos-salvar:
+    path: /comercial/auditoria/enderecos-entrega/anexo/documentos/salvar
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::postAnexo
+    methods: [POST]
+
+comercial.auditoria-enderecos-entrega-anexo-documentos-excluir:
+    path: /comercial/auditoria/enderecos-entrega/anexo/documentos/excluir
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::delAnexo
+    methods: [PUT]
+
+comercial.auditoria-enderecos-entrega-ultima-compra:
+    path: /comercial/auditoria/enderecos-entrega/ultima-compra/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Auditoria\EnderecosEntrega\AuditoriaEnderecosEntregaController::getUltimaCompra
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.cadastros-campanhas-lista:
+    path: /comercial/cadastros/Campanhas/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Campanhas\CampanhasController::getListaCampanhas
+    methods: [GET]
+
+comercial.cadastros-cnaes-lista:
+    path: /comercial/cadastros/cnaes/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::getListaCnaes
+    methods: [GET]
+
+comercial.cadastros-cnaes-alteracoes:
+    path: /comercial/cadastros/cnaes/alteracoes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-cnaes-detalhes:
+    path: /comercial/cadastros/cnaes/detalhes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-cnaes-salvar:
+    path: /comercial/cadastros/cnaes/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::postCnae
+    methods: [POST]
+
+comercial.cadastros-cnaes-atualizar:
+    path: /comercial/cadastros/cnaes/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::putCnae
+    methods: [PUT]
+
+comercial.cadastros-cnaes-ativar:
+    path: /comercial/cadastros/cnaes/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::activeCnae
+    methods: [POST]
+
+comercial.cadastros-cnaes-inativar:
+    path: /comercial/cadastros/cnaes/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Cnaes\CnaesController::inactiveCnae
+    methods: [POST]
+
+comercial.cadastros-concorrentes-lista:
+    path: /comercial/cadastros/concorrentes/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::getListaConcorrentes
+    methods: [GET]
+
+comercial.cadastros-concorrentes-detalhes:
+    path: /comercial/cadastros/concorrentes/detalhes/{id}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::getConcorrente
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+comercial.cadastros-concorrentes-salvar:
+    path: /comercial/cadastros/concorrentes/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::postConcorrente
+    methods: [POST]
+
+comercial.cadastros-concorrentes-atualizar:
+    path: /comercial/cadastros/concorrentes/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::putConcorrente
+    methods: [PUT]
+
+comercial.cadastros-concorrentes-alteracoes:
+    path: /comercial/cadastros/concorrentes/alteracoes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-concorrentes-ativar:
+    path: /comercial/cadastros/concorrentes/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::activeConcorrentes
+    methods: [POST]
+
+comercial.cadastros-concorrentes-inativar:
+    path: /comercial/cadastros/concorrentes/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Concorrentes\ConcorrentesController::inactiveConcorrentes
+    methods: [POST]
+
+comercial.cadastros-contato-forma-contato-lista:
+    path: /comercial/cadastros/contato/forma-contato/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::getListaFormaContato
+    methods: [GET]
+
+comercial.cadastros-contato-forma-contato-alteracoes:
+    path: /comercial/cadastros/contato/forma-contato/alteracoes/{codFormaContato}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codFormaContato: '\d+'
+
+comercial.cadastros-contato-forma-contato-detalhes:
+    path: /comercial/cadastros/contato/forma-contato/detalhes/{codFormaContato}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::getDetalhes
+    methods: [GET]
+    requirements:
+        codFormaContato: '\d+'
+
+comercial.cadastros-contato-forma-contato-salvar:
+    path: /comercial/cadastros/contato/forma-contato/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::postFormaContato
+    methods: [POST]
+
+comercial.cadastros-contato-forma-contato-atualizar:
+    path: /comercial/cadastros/contato/forma-contato/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::putFormaContato
+    methods: [PUT]
+
+comercial.cadastros-contato-forma-contato-ativar:
+    path: /comercial/cadastros/contato/forma-contato/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::activeFormaContato
+    methods: [POST]
+
+comercial.cadastros-contato-forma-contato-inativar:
+    path: /comercial/cadastros/contato/forma-contato/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::inactiveFormaContato
+    methods: [POST]
+
+comercial.cadastros-contato-forma-contato-erp-lista:
+    path: /comercial/cadastros/contato/forma-contato/erp/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\FormasContato\FormasContatoController::getListaFormasERP
+    methods: [GET]
+
+comercial.cadastros-contato-origem-contato-lista:
+    path: /comercial/cadastros/contato/origem-contato/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::getListaOrigemContato
+    methods: [GET]
+
+comercial.cadastros-contato-origem-contato-alteracoes:
+    path: /comercial/cadastros/contato/origem-contato/alteracoes/{codOrigemContato}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codOrigemContato: '\d+'
+
+comercial.cadastros-contato-origem-contato-detalhes:
+    path: /comercial/cadastros/contato/origem-contato/detalhes/{codOrigemContato}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::getDetalhes
+    methods: [GET]
+    requirements:
+        codOrigemContato: '\d+'
+
+comercial.cadastros-contato-origem-contato-salvar:
+    path: /comercial/cadastros/contato/origem-contato/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::postOrigemContato
+    methods: [POST]
+
+comercial.cadastros-contato-origem-contato-atualizar:
+    path: /comercial/cadastros/contato/origem-contato/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::putOrigemContato
+    methods: [PUT]
+
+comercial.cadastros-contato-origem-contato-ativar:
+    path: /comercial/cadastros/contato/origem-contato/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::activeOrigemContato
+    methods: [POST]
+
+comercial.cadastros-contato-origem-contato-inativar:
+    path: /comercial/cadastros/contato/origem-contato/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::inactiveOrigemContato
+    methods: [POST]
+
+comercial.cadastros-contato-origem-contato-erp-lista:
+    path: /comercial/cadastros/contato/origem-contato/erp/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Contato\OrigemContato\OrigemContatoController::getListaOrigemERP
+    methods: [GET]
+
+comercial.cadastros-dias-nao-uteis-lista:
+    path: /comercial/cadastros/dias-nao-uteis/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::getListaDiasNaoUteis
+    methods: [GET]
+
+comercial.cadastros-dias-nao-uteis-alteracoes:
+    path: /comercial/cadastros/dias-nao-uteis/alteracoes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-dias-nao-uteis-detalhes:
+    path: /comercial/cadastros/dias-nao-uteis/detalhes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-dias-nao-uteis-salvar:
+    path: /comercial/cadastros/dias-nao-uteis/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::postDiaNaoUtil
+    methods: [POST]
+
+comercial.cadastros-dias-nao-uteis-atualizar:
+    path: /comercial/cadastros/dias-nao-uteis/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::putDiaNaoUtil
+    methods: [PUT]
+
+comercial.cadastros-dias-nao-uteis-ativar:
+    path: /comercial/cadastros/dias-nao-uteis/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::activeDiaNaoUtil
+    methods: [POST]
+
+comercial.cadastros-dias-nao-uteis-inativar:
+    path: /comercial/cadastros/dias-nao-uteis/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\DiasNaoUteis\DiasNaoUteisController::inactiveDiaNaoUtil
+    methods: [POST]
+
+comercial.cadastros-equipe-venda-lista:
+    path: /comercial/cadastros/equipe-venda/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::getListaEquipeVenda
+    methods: [GET]
+
+comercial.cadastros-equipe-venda-alteracoes:
+    path: /comercial/cadastros/equipe-venda/alteracoes/{codEquipeVenda}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codEquipeVenda: '\d+'
+
+comercial.cadastros-equipe-venda-detalhes:
+    path: /comercial/cadastros/equipe-venda/detalhes/{codEquipeVenda}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::getDetalhes
+    methods: [GET]
+    requirements:
+        codEquipeVenda: '\d+'
+
+comercial.cadastros-equipe-venda-salvar:
+    path: /comercial/cadastros/equipe-venda/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::postEquipeVenda
+    methods: [POST]
+
+comercial.cadastros-equipe-venda-atualizar:
+    path: /comercial/cadastros/equipe-venda/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::putEquipeVenda
+    methods: [PUT]
+
+comercial.cadastros-equipe-venda-ativar:
+    path: /comercial/cadastros/equipe-venda/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::activeEquipeVenda
+    methods: [POST]
+
+comercial.cadastros-equipe-venda-inativar:
+    path: /comercial/cadastros/equipe-venda/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::inactiveEquipeVenda
+    methods: [POST]
+
+comercial.cadastros-equipe-venda-erp-lista:
+    path: /comercial/cadastros/equipe-venda/erp/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\EquipeVenda\EquipeVendaController::getListaEquipeERP
+    methods: [GET]
+
+comercial.cadastros-escritorio-lista:
+    path: /comercial/cadastros/escritorio/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::getListaEscritorios
+    methods: [GET]
+
+comercial.cadastros-datossucursal:
+    path: /comercial/cadastros/datossucursal/{id_sucursal}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::getSucursalVend
+    methods: [GET]
+
+comercial.cadastros-escritorio-alteracoes:
+    path: /comercial/cadastros/escritorio/alteracoes/{codEscritorio}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codEscritorio: '\d+'
+
+comercial.cadastros-escritorio-detalhes:
+    path: /comercial/cadastros/escritorio/detalhes/{codEscritorio}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::getDetalhes
+    methods: [GET]
+    requirements:
+        codEscritorio: '\d+'
+
+comercial.cadastros-escritorio-salvar:
+    path: /comercial/cadastros/escritorio/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::postEscritorio
+    methods: [POST]
+
+comercial.cadastros-escritorio-atualizar:
+    path: /comercial/cadastros/escritorio/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::putEscritorio
+    methods: [PUT]
+
+comercial.cadastros-escritorio-ativar:
+    path: /comercial/cadastros/escritorio/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::activateEscritorio
+    methods: [POST]
+
+comercial.cadastros-escritorio-inativar:
+    path: /comercial/cadastros/escritorio/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Escritorios\EscritoriosController::inactivateEscritorio
+    methods: [POST]
+
+comercial.cadastros-formas-pagamento-lista:
+    path: /comercial/cadastros/formas-pagamento/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::getListaFormasPagamento
+    methods: [GET]
+
+comercial.cadastros-formas-pagamento-alteracoes:
+    path: /comercial/cadastros/formas-pagamento/alteracoes/{codFormaPagamento}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codFormaPagamento: '\d+'
+
+comercial.cadastros-formas-pagamento-detalhes:
+    path: /comercial/cadastros/formas-pagamento/detalhes/{codFormaPagamento}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::getDetalhes
+    methods: [GET]
+    requirements:
+        codFormaPagamento: '\d+'
+
+comercial.cadastros-formas-pagamento-salvar:
+    path: /comercial/cadastros/formas-pagamento/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::postFormasPagamento
+    methods: [POST]
+
+comercial.cadastros-formas-pagamento-atualizar:
+    path: /comercial/cadastros/formas-pagamento/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::putFormasPagamento
+    methods: [PUT]
+
+comercial.cadastros-formas-pagamento-ativar:
+    path: /comercial/cadastros/formas-pagamento/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::activeFormasPagamento
+    methods: [POST]
+
+comercial.cadastros-formas-pagamento-inativar:
+    path: /comercial/cadastros/formas-pagamento/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::inactiveFormasPagamento
+    methods: [POST]
+
+comercial.cadastros-formas-pagamento-erp-lista:
+    path: /comercial/cadastros/formas-pagamento/erp/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\FormasPagamento\FormasPagamentoController::getListaFormasERP
+    methods: [GET]
+
+comercial.cadastros-materiais-combos-lista:
+    path: /comercial/cadastros/materiais/combos/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::getListaCombos
+    methods: [GET]
+
+comercial.cadastros-materiais-combos-associacoes:
+    path: /comercial/cadastros/materiais/combos/associacoes/{codCombo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::getAssociacoesMateriais
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-combos-detalhes:
+    path: /comercial/cadastros/materiais/combos/detalhes/{codCombo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-combos-salvar:
+    path: /comercial/cadastros/materiais/combos/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::postCombo
+    methods: [POST]
+
+comercial.cadastros-materiais-combos-atualizar:
+    path: /comercial/cadastros/materiais/combos/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::putCombo
+    methods: [PUT]
+
+comercial.cadastros-materiais-combos-delete-associacao:
+    path: /comercial/cadastros/materiais/combos/delete-associacao
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::deleteAssociacao
+    methods: [PUT]
+
+comercial.cadastros-materiais-combos-ativar:
+    path: /comercial/cadastros/materiais/combos/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::activeCombo
+    methods: [POST]
+
+comercial.cadastros-materiais-combos-inativar:
+    path: /comercial/cadastros/materiais/combos/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Combos\CombosController::inactiveCombo
+    methods: [POST]
+
+comercial.cadastros-materiais-cross-sell-lista:
+    path: /comercial/cadastros/materiais/cross-sell/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::getListaCrossSell
+    methods: [GET]
+
+comercial.cadastros-materiais-cross-sell-cs_materiales:
+    path: /comercial/cadastros/materiais/cross-sell/cs_materiales
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::getCrossSellMate
+    methods: [GET]
+
+comercial.cadastros-materiais-cross-sell-lista-materiais:
+    path: /comercial/cadastros/materiais/cross-sell/lista-materiais
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::getListaMateriaisMaisVendidos
+    methods: [GET]
+
+comercial.cadastros-materiais-cross-sell-associacoes:
+    path: /comercial/cadastros/materiais/cross-sell/associacoes/{codCrossSell}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::getAssociacoesMateriais
+    methods: [GET]
+    requirements:
+        codCrossSell: '\d+'
+
+comercial.cadastros-materiais-cross-sell-detalhes:
+    path: /comercial/cadastros/materiais/cross-sell/detalhes/{codCrossSell}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::getDetalhes
+    methods: [GET]
+    requirements:
+        codCrossSell: '\d+'
+
+comercial.cadastros-materiais-cross-sell-salvar:
+    path: /comercial/cadastros/materiais/cross-sell/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::postCrossSell
+    methods: [POST]
+
+comercial.cadastros-materiais-cross-sell-atualizar:
+    path: /comercial/cadastros/materiais/cross-sell/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::putCrossSell
+    methods: [PUT]
+
+comercial.cadastros-materiais-cross-sell-desassociar:
+    path: /comercial/cadastros/materiais/cross-sell/desassociar/{codCrossSell}/{codAssociacao}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::desassociaMaterial
+    methods: [DELETE]
+    requirements:
+        codCrossSell: '\d+'
+        codAssociacao: '\d+'
+
+comercial.cadastros-materiais-cross-sell-ativar:
+    path: /comercial/cadastros/materiais/cross-sell/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::activeCrossSell
+    methods: [POST]
+
+comercial.cadastros-materiais-cross-sell-inativar:
+    path: /comercial/cadastros/materiais/cross-sell/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\CrossSell\CrossSellController::inactiveCrossSell
+    methods: [POST]
+
+comercial.cadastros-materiais-ficha-cadastral-lista:
+    path: /comercial/cadastros/materiais/ficha-cadastral/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::getListaFichaCadastral
+    methods: [GET]
+
+comercial.cadastros-materiais-ficha-cadastral-alteracoes:
+    path: /comercial/cadastros/materiais/ficha-cadastral/alteracoes/{codFichaCadastral}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codFichaCadastral: '\d+'
+
+comercial.cadastros-materiais-ficha-cadastral-detalhes:
+    path: /comercial/cadastros/materiais/ficha-cadastral/detalhes/{codFichaCadastral}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::getDetalhes
+    methods: [GET]
+    requirements:
+        codFichaCadastral: '\d+'
+
+comercial.cadastros-materiais-ficha-cadastral-documentos:
+    path: /comercial/cadastros/materiais/ficha-cadastral/documentos/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::getDocuments
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.cadastros-materiais-ficha-cadastral-salvar:
+    path: /comercial/cadastros/materiais/ficha-cadastral/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::postFichaCadastral
+    methods: [POST]
+
+comercial.cadastros-materiais-ficha-cadastral-anexos-salvar:
+    path: /comercial/cadastros/materiais/ficha-cadastral/anexos/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::postAnexo
+    methods: [POST]
+
+comercial.cadastros-materiais-ficha-cadastral-atualizar:
+    path: /comercial/cadastros/materiais/ficha-cadastral/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::putFichaCadastral
+    methods: [PUT]
+
+comercial.cadastros-materiais-ficha-cadastral-anexos-excluir:
+    path: /comercial/cadastros/materiais/ficha-cadastral/anexos/excluir
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::delAnexo
+    methods: [PUT]
+
+comercial.cadastros-materiais-ficha-cadastral-ativar:
+    path: /comercial/cadastros/materiais/ficha-cadastral/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::activeFichaCadastral
+    methods: [POST]
+
+comercial.cadastros-materiais-ficha-cadastral-inativar:
+    path: /comercial/cadastros/materiais/ficha-cadastral/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\FichaCadastral\FichaCadastralController::inactiveFichaCadastral
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-lista:
+    path: /comercial/cadastros/materiais/grupos/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::getListaGrupos
+    methods: [GET]
+
+comercial.cadastros-materiais-grupos-associacoes:
+    path: /comercial/cadastros/materiais/grupos/associacoes/{codGrupo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::getAssociacoesMateriais
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-grupos-detalhes:
+    path: /comercial/cadastros/materiais/grupos/detalhes/{codGrupo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-grupos-salvar:
+    path: /comercial/cadastros/materiais/grupos/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::postGrupo
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-atualizar:
+    path: /comercial/cadastros/materiais/grupos/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::putGrupo
+    methods: [PUT]
+
+comercial.cadastros-materiais-grupos-ativar:
+    path: /comercial/cadastros/materiais/grupos/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::activeGrupo
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-inativar:
+    path: /comercial/cadastros/materiais/grupos/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Grupos\GruposController::inactiveGrupo
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-materiais-associados-lista:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::getListaGrupos
+    methods: [GET]
+
+comercial.cadastros-materiais-grupos-materiais-associados-associacoes:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/associacoes/{codGrupo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::getAssociacoesMateriais
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-grupos-materiais-associados-detalhes:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/detalhes/{codGrupo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-grupos-materiais-associados-salvar:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::postGrupo
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-materiais-associados-atualizar:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::putGrupo
+    methods: [PUT]
+
+comercial.cadastros-materiais-grupos-materiais-associados-ativar:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::activeGrupo
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-materiais-associados-inativar:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::inactiveGrupo
+    methods: [POST]
+
+comercial.cadastros-materiais-grupos-materiais-associados-remover:
+    path: /comercial/cadastros/materiais/grupos-materiais-associados/remover/{codGrupo}/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\GruposMateriaisAssociados\GruposMateriaisAssociadosController::deleteMaterialGrupo
+    methods: [DELETE]
+
+comercial.cadastros-materiais-similaridade-lista:
+    path: /comercial/cadastros/materiais/similaridade/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::getListaSimilaridades
+    methods: [GET]
+
+comercial.cadastros-materiais-similaridade-associacoes:
+    path: /comercial/cadastros/materiais/similaridade/associacoes/{codSimilaridade}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::getAssociacoesMateriais
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-Similaridade-s_materiales:
+    path: /comercial/cadastros/materiais/Similaridade/s_materiales
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::getSimiMate
+    methods: [GET]
+
+comercial.cadastros-materiais-similaridade-detalhes:
+    path: /comercial/cadastros/materiais/similaridade/detalhes/{codSimilaridade}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-materiais-similaridade-salvar:
+    path: /comercial/cadastros/materiais/similaridade/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::postSimilaridade
+    methods: [POST]
+
+comercial.cadastros-materiais-similaridade-atualizar:
+    path: /comercial/cadastros/materiais/similaridade/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::putSimilaridade
+    methods: [PUT]
+
+comercial.cadastros-materiais-similaridade-ativar:
+    path: /comercial/cadastros/materiais/similaridade/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::activeSimilaridade
+    methods: [POST]
+
+comercial.cadastros-materiais-similaridade-inativar:
+    path: /comercial/cadastros/materiais/similaridade/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Materiais\Similaridade\SimilaridadeController::inactiveSimilaridade
+    methods: [POST]
+
+comercial.cadastros-motivo-associacao-lista:
+    path: /comercial/cadastros/motivo-associacao/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::getListaMotivoAssociacao
+    methods: [GET]
+
+comercial.cadastros-motivo-associacao-alteracoes:
+    path: /comercial/cadastros/motivo-associacao/alteracoes/{codMotivoAssociacao}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codMotivoAssociacao: '\d+'
+
+comercial.cadastros-motivo-associacao-detalhes:
+    path: /comercial/cadastros/motivo-associacao/detalhes/{codMotivoAssociacao}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::getDetalhes
+    methods: [GET]
+    requirements:
+        codMotivoAssociacao: '\d+'
+
+comercial.cadastros-motivo-associacao-salvar:
+    path: /comercial/cadastros/motivo-associacao/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::postMotivoAssociacao
+    methods: [POST]
+
+comercial.cadastros-motivo-associacao-atualizar:
+    path: /comercial/cadastros/motivo-associacao/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::putMotivoAssociacao
+    methods: [PUT]
+
+comercial.cadastros-motivo-associacao-ativar:
+    path: /comercial/cadastros/motivo-associacao/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::activeMotivoAssociacao
+    methods: [POST]
+
+comercial.cadastros-motivo-associacao-inativar:
+    path: /comercial/cadastros/motivo-associacao/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\MotivoAssociacao\MotivoAssociacaoController::inactiveMotivoAssociacao
+    methods: [POST]
+
+comercial.cadastros-operador-comercial-lista:
+    path: /comercial/cadastros/operador-comercial/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::getListaOperadoresComerciais
+    methods: [GET]
+
+comercial.cadastros-operador-comercial-detalhes:
+    path: /comercial/cadastros/operador-comercial/detalhes/{codOperador}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::getDetalhes
+    methods: [GET]
+    requirements:
+        codOperador: '\d+'
+
+comercial.cadastros-operador-comercial-salvar:
+    path: /comercial/cadastros/operador-comercial/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::postOperadorComercial
+    methods: [POST]
+
+comercial.cadastros-operador-comercial-atualizar:
+    path: /comercial/cadastros/operador-comercial/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::putOperadorComercial
+    methods: [PUT]
+
+comercial.cadastros-operador-comercial-ativar:
+    path: /comercial/cadastros/operador-comercial/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::activateperadorComercial
+    methods: [POST]
+
+comercial.cadastros-operador-comercial-inativar:
+    path: /comercial/cadastros/operador-comercial/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::inactivateOperadorComercial
+    methods: [POST]
+
+comercial.cadastros-operador-comercial-associacoes:
+    path: /comercial/cadastros/operador-comercial/associacoes/{codOperador}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::getAssociacoes
+    methods: [GET]
+    requirements:
+        codOperador: '\d+'
+
+comercial.cadastros-operador-comercial-historico-associacoes:
+    path: /comercial/cadastros/operador-comercial/historico-associacoes/{codOperador}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::getHistoricoAssociacoes
+    methods: [GET]
+    requirements:
+        codOperador: '\d+'
+
+comercial.cadastros-operador-comercial-salvar-associacao:
+    path: /comercial/cadastros/operador-comercial/salvar-associacao
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::postAssociacaoOperador
+    methods: [POST]
+
+comercial.cadastros-operador-comercial-excluir-associacao:
+    path: /comercial/cadastros/operador-comercial/excluir-associacao
+    controller: App\Controller\MTCorp\Comercial\Cadastros\OperadoresComerciais\OperadoresComerciaisController::deleteAssociacaoOperador
+    methods: [POST]
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-lista:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::getListaAssociacoes
+    methods: [GET]
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-associacoes:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/associacoes/{codAssociacao}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::getAssociacoesSituacoes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-detalhes:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/detalhes/{codAssociacao}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::getDetalhes
+    methods: [GET]
+    requirements:
+        codAssociacao: '\d+'
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-salvar:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::postAssociacao
+    methods: [POST]
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-atualizar:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::putAssociacao
+    methods: [PUT]
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-ativar:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::activeAssociacao
+    methods: [POST]
+
+comercial.cadastros-propostas-associacao-situacoes-proposta-inativar:
+    path: /comercial/cadastros/propostas/associacao-situacoes-proposta/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Propostas\AssociacaoSituacoesPropostas\AssociacaoSituacoesPropostasController::inactiveAssociacao
+    methods: [POST]
+
+comercial.cadastros-representantes-save:
+    path: /comercial/cadastros/representantes/save
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::postRepresentantes
+    methods: [POST]
+
+comercial.cadastros-representantes-update:
+    path: /comercial/cadastros/representantes/update
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::putRepresentantes
+    methods: [PUT]
+
+comercial.cadastros-representantes-lista:
+    path: /comercial/cadastros/representantes/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::getListaRepresentantes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-representantes-detalhes:
+    path: /comercial/cadastros/representantes/detalhes/{codRepresentante}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-representantes-tipo-vendedor:
+    path: /comercial/cadastros/representantes/tipo-vendedor
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::getTipoVendedor
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-representantes-bancos:
+    path: /comercial/cadastros/representantes/bancos
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::getBancos
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-representantes-tipo-comissionamento:
+    path: /comercial/cadastros/representantes/tipo-comissionamento
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::getTipoComissao
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-representantes-ativar:
+    path: /comercial/cadastros/representantes/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::activeERP
+    methods: [POST]
+
+comercial.cadastros-representantes-inativar:
+    path: /comercial/cadastros/representantes/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::inactiveERP
+    methods: [POST]
+
+comercial.cadastros-representantes-anexo-documentos:
+    path: /comercial/cadastros/representantes/anexo/documentos/{codRepresentante}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::getDocuments
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.cadastros-representantes-anexo-documentos-salvar:
+    path: /comercial/cadastros/representantes/anexo/documentos/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::postAnexo
+    methods: [POST]
+
+comercial.cadastros-representantes-anexo-documentos-excluir:
+    path: /comercial/cadastros/representantes/anexo/documentos/excluir
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Representantes\RepresentantesController::delAnexo
+    methods: [PUT]
+
+comercial.cadastros-setor-atividade-lista:
+    path: /comercial/cadastros/setor-atividade/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::getListaSetorAtividade
+    methods: [GET]
+
+comercial.cadastros-setor-atividade-tid-lista:
+    path: /comercial/cadastros/setor-atividade/tid/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::getListaSetorAtividadeTid
+    methods: [GET]
+
+comercial.cadastros-setor-atividade-alteracoes:
+    path: /comercial/cadastros/setor-atividade/alteracoes/{codSetorAtividade}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codSetorAtividade: '\d+'
+
+comercial.cadastros-setor-atividade-detalhes:
+    path: /comercial/cadastros/setor-atividade/detalhes/{codSetorAtividade}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::getDetalhes
+    methods: [GET]
+    requirements:
+        codSetorAtividade: '\d+'
+
+comercial.cadastros-setor-atividade-salvar:
+    path: /comercial/cadastros/setor-atividade/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::postSetorAtividade
+    methods: [POST]
+
+comercial.cadastros-setor-atividade-atualizar:
+    path: /comercial/cadastros/setor-atividade/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::putSetorAtividade
+    methods: [PUT]
+
+comercial.cadastros-setor-atividade-ativar:
+    path: /comercial/cadastros/setor-atividade/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::activeSetorAtividade
+    methods: [POST]
+
+comercial.cadastros-setor-atividade-inativar:
+    path: /comercial/cadastros/setor-atividade/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SetorAtividade\SetorAtividadeController::inactiveSetorAtividade
+    methods: [POST]
+
+comercial.cadastros-situacao-proposta-lista:
+    path: /comercial/cadastros/situacao-proposta/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::getListaSituacaoProposta
+    methods: [GET]
+
+comercial.cadastros-situacao-proposta-tid-lista:
+    path: /comercial/cadastros/situacao-proposta/tid/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::getListaSituacaoPropostaTid
+    methods: [GET]
+
+comercial.cadastros-situacao-proposta-alteracoes:
+    path: /comercial/cadastros/situacao-proposta/alteracoes/{codSituacaoProposta}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codSituacaoProposta: '\d+'
+
+comercial.cadastros-situacao-proposta-detalhes:
+    path: /comercial/cadastros/situacao-proposta/detalhes/{codSituacaoProposta}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::getDetalhes
+    methods: [GET]
+    requirements:
+        codSituacaoProposta: '\d+'
+
+comercial.cadastros-situacao-proposta-salvar:
+    path: /comercial/cadastros/situacao-proposta/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::postSituacaoProposta
+    methods: [POST]
+
+comercial.cadastros-situacao-proposta-atualizar:
+    path: /comercial/cadastros/situacao-proposta/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::putSituacaoProposta
+    methods: [PUT]
+
+comercial.cadastros-situacao-proposta-ativar:
+    path: /comercial/cadastros/situacao-proposta/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::activeSituacaoProposta
+    methods: [POST]
+
+comercial.cadastros-situacao-proposta-inativar:
+    path: /comercial/cadastros/situacao-proposta/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\SituacaoProposta\SituacaoPropostaController::inactiveSituacaoProposta
+    methods: [POST]
+
+comercial.cadastros-tipo-comissionamento-lista:
+    path: /comercial/cadastros/tipo-comissionamento/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::getListaTipoComissionamento
+    methods: [GET]
+
+comercial.cadastros-tipo-comissionamento-detalhes:
+    path: /comercial/cadastros/tipo-comissionamento/detalhes/{codTipoComissionamento}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::getDetalhes
+    methods: [GET]
+    requirements:
+        codTipoComissionamento: '\d+'
+
+comercial.cadastros-tipo-comissionamento-salvar:
+    path: /comercial/cadastros/tipo-comissionamento/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::postFormasPagamento
+    methods: [POST]
+
+comercial.cadastros-tipo-comissionamento-atualizar:
+    path: /comercial/cadastros/tipo-comissionamento/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::putFormasPagamento
+    methods: [PUT]
+
+comercial.cadastros-tipo-comissionamento-delete:
+    path: /comercial/cadastros/tipo-comissionamento/delete
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::deleteFaixaPercentual
+    methods: [PUT]
+
+comercial.cadastros-tipo-comissionamento-linhas:
+    path: /comercial/cadastros/tipo-comissionamento/linhas
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::getLinhas
+    methods: [GET]
+
+comercial.cadastros-tipo-comissionamento-classes:
+    path: /comercial/cadastros/tipo-comissionamento/classes
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::getClasses
+    methods: [GET]
+
+comercial.cadastros-tipo-comissionamento-faixa-percentual:
+    path: /comercial/cadastros/tipo-comissionamento/faixa-percentual/{codTipoComissionamento}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::getDetailTipoComissionamento
+    methods: [GET]
+
+comercial.cadastros-tipo-comissionamento-ativar:
+    path: /comercial/cadastros/tipo-comissionamento/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::activeFormasPagamento
+    methods: [POST]
+
+comercial.cadastros-tipo-comissionamento-inativar:
+    path: /comercial/cadastros/tipo-comissionamento/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoComissionamento\TipoComissionamentoController::inactiveFormasPagamento
+    methods: [POST]
+
+comercial.cadastros-tipo-operador-lista:
+    path: /comercial/cadastros/tipo-operador/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::getListaTipoOperador
+    methods: [GET]
+
+comercial.cadastros-tipo-operador-alteracoes:
+    path: /comercial/cadastros/tipo-operador/alteracoes/{codTipoOperador}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::getAlteracoes
+    methods: [GET]
+    requirements:
+        codTipoOperador: '\d+'
+
+comercial.cadastros-tipo-operador-detalhes:
+    path: /comercial/cadastros/tipo-operador/detalhes/{codTipoOperador}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::getDetalhes
+    methods: [GET]
+    requirements:
+        codTipoOperador: '\d+'
+
+comercial.cadastros-tipo-operador-salvar:
+    path: /comercial/cadastros/tipo-operador/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::postTipoOperador
+    methods: [POST]
+
+comercial.cadastros-tipo-operador-atualizar:
+    path: /comercial/cadastros/tipo-operador/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::putTipoOperador
+    methods: [PUT]
+
+comercial.cadastros-tipo-operador-ativar:
+    path: /comercial/cadastros/tipo-operador/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::activateTipoOperador
+    methods: [POST]
+
+comercial.cadastros-tipo-operador-inativar:
+    path: /comercial/cadastros/tipo-operador/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TipoOperadores\TipoOperadoresController::inactivateTipoOperador
+    methods: [POST]
+
+comercial.cadastros-tipos-frete-lista:
+    path: /comercial/cadastros/tipos-frete/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TiposFrete\TiposFreteController::getListaTiposFrete
+    methods: [GET]
+
+comercial.cadastros-tipos-frete-detalhes:
+    path: /comercial/cadastros/tipos-frete/detalhes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TiposFrete\TiposFreteController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.cadastros-tipos-frete-salvar:
+    path: /comercial/cadastros/tipos-frete/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TiposFrete\TiposFreteController::postTipoFrete
+    methods: [POST]
+
+comercial.cadastros-tipos-frete-atualizar:
+    path: /comercial/cadastros/tipos-frete/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TiposFrete\TiposFreteController::putTipoFrete
+    methods: [PUT]
+
+comercial.cadastros-tipos-frete-ativar:
+    path: /comercial/cadastros/tipos-frete/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TiposFrete\TiposFreteController::activeTipoFrete
+    methods: [POST]
+
+comercial.cadastros-tipos-frete-inativar:
+    path: /comercial/cadastros/tipos-frete/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TiposFrete\TiposFreteController::inactiveTipoFrete
+    methods: [POST]
+
+comercial.cadastros-titulos-agenda-lista:
+    path: /comercial/cadastros/titulos-agenda/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda\TitulosAgendaController::getListaTitulosAgenda
+    methods: [GET]
+
+comercial.cadastros-titulos-agenda-detalhes:
+    path: /comercial/cadastros/titulos-agenda/detalhes/{codTitulo}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda\TitulosAgendaController::getDetalhes
+    methods: [GET]
+    requirements:
+        codTitulo: '\d+'
+
+comercial.cadastros-titulos-agenda-salvar:
+    path: /comercial/cadastros/titulos-agenda/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda\TitulosAgendaController::postTitulosAgenda
+    methods: [POST]
+
+comercial.cadastros-titulos-agenda-atualizar:
+    path: /comercial/cadastros/titulos-agenda/atualizar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda\TitulosAgendaController::putTitulosAgenda
+    methods: [PUT]
+
+comercial.cadastros-titulos-agenda-ativar:
+    path: /comercial/cadastros/titulos-agenda/ativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda\TitulosAgendaController::activeTitulosAgenda
+    methods: [POST]
+
+comercial.cadastros-titulos-agenda-inativar:
+    path: /comercial/cadastros/titulos-agenda/inativar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\TitulosAgenda\TitulosAgendaController::inactiveTitulosAgenda
+    methods: [POST]
+
+comercial.cadastros-transportadora-lista:
+    path: /comercial/cadastros/transportadora/lista
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Transportadoras\TransportadorasController::getListaTransportadoras
+    methods: [GET]
+
+comercial.cadastros-transportadora-editar:
+    path: /comercial/cadastros/transportadora/editar/{id}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Transportadoras\TransportadorasController::editarTransportadora
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+comercial.cadastros-transportadora-salvar:
+    path: /comercial/cadastros/transportadora/salvar
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Transportadoras\TransportadorasController::postTransportadora
+    methods: [POST]
+
+comercial.cadastros-transportadora-contato-excluir:
+    path: /comercial/cadastros/transportadora/contato/excluir/{codTransportadora}/{codSequencia}
+    controller: App\Controller\MTCorp\Comercial\Cadastros\Transportadoras\TransportadorasController::deleteContato
+    methods: [DELETE]
+    requirements:
+        codTransportadora: '\d+'
+        codSequencia: '\d+'
+
+autorizaciones-post_autorizaciones:
+    path: /comercial/ciclo-vendas/autorizaciones/post_autorizaciones
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController::post_autorizaciones
+    methods: [POST]
+
+Autorizaciones-estado:
+    path: /comercial/CicloVendas/autorizaciones/estado
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController::autorizaEstado
+    methods: [post]
+
+Autorizaciones:
+    path: /comercial/ciclo-vendas/autorizaciones/get_autorizaciones
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController::getAutorizaciones
+    methods: [GET]
+
+traer_autorizacion:
+    path: /comercial/ciclo-vendas/autorizaciones/traer_autorizacion/{id_autorizacion}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController::devolverAutorizacion
+    methods: [GET]
+
+update_autorizacion:
+    path: /comercial/ciclo-vendas/autorizaciones/update_autorizacion
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController::update_autorizacion
+    methods: [POST]
+
+autorizaciones-historial:
+    path: /comercial/ciclo-vendas/autorizaciones/get_historialoferta
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController::getHistorialofertal
+    methods: [GET]
+
+comercial.ciclo-vendas-painel-bobinas-lista:
+    path: /comercial/ciclo-vendas/painel-bobinas/lista
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\PainelBobinas\PainelBobinasController::getListaBobinas
+    methods: [GET]
+
+comercial.ciclo-vendas-painel-bobinas-salvar:
+    path: /comercial/ciclo-vendas/painel-bobinas/salvar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\PainelBobinas\PainelBobinasController::postPainelBobinas
+    methods: [POST]
+
+comercial.ciclo-vendas-pedidos-producao-telas-salvar:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/salvar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::postProducaoTelas
+    methods: [POST]
+
+comercial.ciclo-vendas-pedidos-producao-telas-atualizar:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/atualizar
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::putProducaoTelas
+    methods: [PUT]
+
+comercial.ciclo-vendas-pedidos-producao-telas-lista:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/lista
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::getListaProducaoTelas
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.ciclo-vendas-pedidos-producao-telas-detalhes:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/detalhes/{nrPedido}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::getDetalhesCotacao
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.ciclo-vendas-pedidos-producao-telas-detail-panel:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/detail-panel/{nrPedido}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::getDetailPanel
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.ciclo-vendas-pedidos-producao-telas-materiais-excluir:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/materiais/excluir/{nrPedido}/{index}
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::deleteItens
+    methods: [DELETE]
+
+comercial.ciclo-vendas-pedidos-producao-telas-material-calculo:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/material/calculo
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::getTipoCalculo
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.ciclo-vendas-pedidos-producao-telas-producao:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/producao
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::postProducao
+    methods: [POST]
+
+comercial.ciclo-vendas-pedidos-producao-telas-expedicao:
+    path: /comercial/ciclo-vendas/pedidos-producao-telas/expedicao
+    controller: App\Controller\MTCorp\Comercial\CicloVendas\ProducaoTelas\ProducaoTelasController::postExpedicao
+    methods: [POST]
+
+comercial.clientes-cadastro-carregar-dados-faturamento:
+    path: /comercial/clientes/cadastro/carregar/dados-faturamento/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getDadosFaturamento
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-salvar-dados-faturamento:
+    path: /comercial/clientes/cadastro/salvar/dados-faturamento
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::putDadosFaturamento
+    methods: [PUT]
+
+comercial.clientes-cadastro-excluir-atividade-secundaria:
+    path: /comercial/clientes/cadastro/excluir/atividade-secundaria/{codCliente}/{codCnae}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::deleteAtividadeSecundaria
+    methods: [DELETE]
+    requirements:
+        codCliente: '\d+'
+        codCnae: '\d+'
+
+comercial.clientes-cadastro-carregar-enderecos:
+    path: /comercial/clientes/cadastro/carregar/enderecos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getEnderecos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-carregar-endereco:
+    path: /comercial/clientes/cadastro/carregar/endereco/{codCliente}/{idEndereco}/{idSituacao}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getEndereco
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+        idEndereco: '\d+'
+        idSituacao: '\d+'
+
+comercial.clientes-cadastro-salvar-endereco:
+    path: /comercial/clientes/cadastro/salvar/endereco
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::putEndereco
+    methods: [PUT]
+
+comercial.clientes-cadastro-excluir-endereco:
+    path: /comercial/clientes/cadastro/excluir/endereco/{codCliente}/{id}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::deleteEndereco
+    methods: [DELETE]
+    requirements:
+        codCliente: '\d+'
+        id: '\d+'
+
+comercial.clientes-cadastro-carregar-contatos:
+    path: /comercial/clientes/cadastro/carregar/contatos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getContatos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-carregar-contato:
+    path: /comercial/clientes/cadastro/carregar/contato/{codCliente}/{idContato}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getContato
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+        idContato: '\d+'
+
+comercial.clientes-cadastro-salvar-contato:
+    path: /comercial/clientes/cadastro/salvar/contato
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::putContato
+    methods: [PUT]
+
+comercial.clientes-cadastro-excluir-contato:
+    path: /comercial/clientes/cadastro/excluir/contato/{codCliente}/{id}/{idSeqTid}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::deleteContato
+    methods: [DELETE]
+    requirements:
+        codCliente: '\d+'
+        idSeqTid: '\d+'
+
+comercial.clientes-cadastro-excluir-meio-contato:
+    path: /comercial/clientes/cadastro/excluir/meio-contato/{codCliente}/{id}/{idSeqTid}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::deleteMeioContato
+    methods: [DELETE]
+    requirements:
+        codCliente: '\d+'
+        id: '\d+'
+        idSeqTid: '\d+'
+
+comercial.clientes-cadastro-excluir-filho:
+    path: /comercial/clientes/cadastro/excluir/filho/{idFilho}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::deleteFilho
+    methods: [DELETE]
+    requirements:
+        idFilho: '\d+'
+
+comercial.clientes-cadastro-carregar-dados-relacionamento:
+    path: /comercial/clientes/cadastro/carregar/dados-relacionamento/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getDadosRelacionamento
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-salvar-dados-relacionamento:
+    path: /comercial/clientes/cadastro/salvar/dados-relacionamento
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::putDadosRelacionamento
+    methods: [PUT]
+
+comercial.clientes-cadastro-carregar-potencial-compra:
+    path: /comercial/clientes/cadastro/carregar/potencial-compra/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getPotencialCompra
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-salvar-potencial-compra:
+    path: /comercial/clientes/cadastro/salvar/potencial-compra
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::putPotencialCompra
+    methods: [PUT]
+
+comercial.clientes-cadastro-carregar-anexos:
+    path: /comercial/clientes/cadastro/carregar/anexos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getAnexos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-upload-anexo-legacy:
+    path: /comercial/clientes/cadastro/carregar/anexos/{codCliente}/upload
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::uploadAnexo
+    methods: [POST]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-upload-anexo:
+    path: /comercial/clientes/cadastro/upload/anexo
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::deleteAnexo
+    methods: [POST]
+
+comercial.clientes-cadastro-carregar-filial:
+    path: /comercial/clientes/cadastro/carregar/filial/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getFilial
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-carregar-travas:
+    path: /comercial/clientes/cadastro/carregar/travas/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getTravas
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-carregar-informacoes-financeiras:
+    path: /comercial/clientes/cadastro/carregar/informacoes-financeiras/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getInformacoesFinanceiras
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-carregar-informacoes-comerciais:
+    path: /comercial/clientes/cadastro/carregar/informacoes-comerciais/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\CadastroController::getInformacoesComerciais
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-cadastro-formulario-dados-faturamento-tipos-cadastro:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/tipos-cadastro
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getTiposCadastro
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-faturamento-ciudades:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/ciudades
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getCiudades
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-faturamento-regimes-tributacao:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/regimes-tributacao
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getRegimesTributacao
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-faturamento-contribuintes:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/contribuintes
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getContribuintes
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-faturamento-setor-atividades:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/setor-atividades
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getSetorAtividades
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-faturamento-finalidades-material:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/finalidades-material
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getFinalidadesMaterial
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-faturamento-cnaes:
+    path: /comercial/clientes/cadastro/formulario/dados-faturamento/cnaes
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getCnaes
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-regioes-atuacao-comercial:
+    path: /comercial/clientes/cadastro/formulario/enderecos/regioes-atuacao-comercial
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getRegioesAtuacaoComercial
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-ibge:
+    path: /comercial/clientes/cadastro/formulario/enderecos/ibge
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getIbgeCidades
+    methods: [POST]
+
+comercial.clientes-cadastro-formulario-enderecos-regioes-entrega:
+    path: /comercial/clientes/cadastro/formulario/enderecos/regioes-entrega
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getRegioesEntrega
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-regiao-entrega:
+    path: /comercial/clientes/cadastro/formulario/enderecos/regiao-entrega/{codIBGE}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getRegiaoEntrega
+    methods: [GET]
+    requirements:
+        codIBGE: '\d+'
+
+comercial.clientes-cadastro-formulario-enderecos-tipos-material:
+    path: /comercial/clientes/cadastro/formulario/enderecos/tipos-material
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getTiposMaterial
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-tipos-descarga:
+    path: /comercial/clientes/cadastro/formulario/enderecos/tipos-descarga
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getTiposDescarga
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-modos-descarga:
+    path: /comercial/clientes/cadastro/formulario/enderecos/modos-descarga
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getModosDescarga
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-tipos-veiculos:
+    path: /comercial/clientes/cadastro/formulario/enderecos/tipos-veiculos
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getTiposVeiculos
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-dados-especiais:
+    path: /comercial/clientes/cadastro/formulario/enderecos/dados-especiais
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getDadosEspeciais
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-anexos:
+    path: /comercial/clientes/cadastro/formulario/enderecos/anexos/{codEndereco}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getAnexos
+    methods: [GET]
+    requirements:
+        codEndereco: '\d+'
+
+comercial.clientes-cadastro-formulario-contatos-funcoes:
+    path: /comercial/clientes/cadastro/formulario/contatos/funcoes
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getFuncoes
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-contatos-setores:
+    path: /comercial/clientes/cadastro/formulario/contatos/setores
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getSetores
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-contatos-times-futebol:
+    path: /comercial/clientes/cadastro/formulario/contatos/times-futebol
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getTimesFutebol
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-relacionamento-tipos-atendimento:
+    path: /comercial/clientes/cadastro/formulario/dados-relacionamento/tipos-atendimento
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getTiposAtendimento
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-relacionamento-periodos:
+    path: /comercial/clientes/cadastro/formulario/dados-relacionamento/periodos
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getPeriodos
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-relacionamento-frequencia-contatos:
+    path: /comercial/clientes/cadastro/formulario/dados-relacionamento/frequencia-contatos
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getFrequenciaContatos
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-relacionamento-frequencia-visitas:
+    path: /comercial/clientes/cadastro/formulario/dados-relacionamento/frequencia-visitas
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getFrequenciaVisitas
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-dados-relacionamento-origens-contato:
+    path: /comercial/clientes/cadastro/formulario/dados-relacionamento/origens-contato
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::getOrigensContato
+    methods: [GET]
+
+comercial.clientes-cadastro-formulario-enderecos-anexos-salvar:
+    path: /comercial/clientes/cadastro/formulario/enderecos/anexos/salvar
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::postAnexo
+    methods: [POST]
+
+comercial.clientes-cadastro-formulario-enderecos-anexos-excluir:
+    path: /comercial/clientes/cadastro/formulario/enderecos/anexos/excluir
+    controller: App\Controller\MTCorp\Comercial\Clientes\Cadastro\FormularioController::delAnexo
+    methods: [PUT]
+
+comercial.clientes-permissao-acesso:
+    path: /comercial/clientes/permissao-acesso/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::getPermissaoAcesso
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-todosclientes:
+    path: /comercial/clientes/todosclientes/{id}
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::getClientesAll
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+comercial.clientes-verificar-cpf-cnpj:
+    path: /comercial/clientes/verificar-cpf-cnpj/{documento}
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::getExisteCpfCnpj
+    methods: [GET]
+    requirements:
+        documento: '\d+'
+
+comercial.clientes-detalhes:
+    path: /comercial/clientes/detalhes/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::getDetalhes
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-emails/lista:
+    path: /comercial/clientes/emails/lista/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::getListaEmails
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-getvendedorporcliente:
+    path: /comercial/clientes/getvendedorporcliente/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::getvendedorporcliente
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-insertar:
+    path: /comercial/clientes/insertar
+    controller: App\Controller\MTCorp\Comercial\Clientes\ClientesController::insertarCliente
+    methods: [POST]
+
+comercial.clientes-dashboard-faturamento-grafico:
+    path: /comercial/clientes/dashboard/faturamento/grafico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getFaturamentoGrafico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-faturamento-analitico:
+    path: /comercial/clientes/dashboard/faturamento/analitico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getFaturamentoAnalitico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-faturamento-mais-comprados:
+    path: /comercial/clientes/dashboard/faturamento/mais-comprados/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getFaturamentoMaisComprados
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-faturamento-comparativo:
+    path: /comercial/clientes/dashboard/faturamento/comparativo/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getFaturamentoComparativo
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-propostas-grafico:
+    path: /comercial/clientes/dashboard/propostas/grafico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getPropostasGrafico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-propostas-analitico:
+    path: /comercial/clientes/dashboard/propostas/analitico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getPropostasAnalitico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-duplicatas-atraso:
+    path: /comercial/clientes/dashboard/duplicatas-atraso/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getDuplicatasAtraso
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-notas-debito:
+    path: /comercial/clientes/dashboard/notas-debito/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getNotasDebito
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-credito-disponivel:
+    path: /comercial/clientes/dashboard/credito-disponivel/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getCreditoDisponivel
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-duplicatas-vencer:
+    path: /comercial/clientes/dashboard/duplicatas-vencer/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getDuplicatasVencer
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-ultima-compra:
+    path: /comercial/clientes/dashboard/ultima-compra/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getUltimaCompra
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-ultimos-precos:
+    path: /comercial/clientes/dashboard/ultimos-precos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getUltimosPrecos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-dashboard-registro-ocorrencias:
+    path: /comercial/clientes/dashboard/registro-ocorrencias/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Dashboard\DashboardController::getRegistroOcorrencias
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-resumo-sintetico:
+    path: /comercial/clientes/historico-financeiro/resumo/sintetico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getResumoSintetico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-grupo-economico:
+    path: /comercial/clientes/historico-financeiro/grupo-economico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getGrupoEconomico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-resumo-pedidos:
+    path: /comercial/clientes/historico-financeiro/resumo/pedidos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getResumoPedidos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-detalhes-pedidos:
+    path: /comercial/clientes/historico-financeiro/detalhes/pedidos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getDetalhesPedidos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-materiais-duplicata:
+    path: /comercial/clientes/historico-financeiro/materiais-duplicata
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getMateriaisDuplicata
+    methods: [GET]
+
+comercial.clientes-historico-financeiro-acumulos-mensais:
+    path: /comercial/clientes/historico-financeiro/acumulos-mensais/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getAcumulosMensais
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-notas-promissorias:
+    path: /comercial/clientes/historico-financeiro/notas-promissorias/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getNotasPromissorias
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-debitos:
+    path: /comercial/clientes/historico-financeiro/debitos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getDebitos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-historico-financeiro-corte-dobra:
+    path: /comercial/clientes/historico-financeiro/corte-dobra/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\HistoricoFinanceiro\HistoricoFinanceiroController::getCorteDobra
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-pesquisa-status:
+    path: /comercial/clientes/pesquisa/status
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getStatus
+    methods: [GET]
+
+comercial.clientes-pesquisa-lista:
+    path: /comercial/clientes/pesquisa/lista
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getClientes
+    methods: [GET]
+
+comercial.clientes_api:
+    path: /comercial/clientes/pesquisa/lista_api
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getClientes_api
+    methods: [GET]
+
+comercial.clientes-pesquisa-grupo-economico:
+    path: /comercial/clientes/pesquisa/grupo-economico/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getClientesGrupoEconomico
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-pesquisa-detalhes:
+    path: /comercial/clientes/pesquisa/detalhes/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getDetalhes
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-pesquisa-verificaoferta:
+    path: /comercial/clientes/pesquisa/verificaoferta/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::verificaOferta
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-pesquisa-contatos:
+    path: /comercial/clientes/pesquisa/contatos/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getContatos
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.vendedor-buscador-clientes:
+    path: /comercial/vendedor/buscador-clientes
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getBuscadorDeClientes
+    methods: [GET]
+
+comercial.clientes-pesquisa-contactodetalle:
+    path: /comercial/clientes/pesquisa/contactodetalle/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::getContatosResumido
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-updatesap:
+    path: /comercial/clientes/pesquisa/updatesap
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::sapUpdateClient
+    methods: [POST]
+
+comercial.clientes-updatesapcontacto:
+    path: /comercial/clientes/pesquisa/updatesapcontacto
+    controller: App\Controller\MTCorp\Comercial\Clientes\Pesquisa\PesquisaController::sapUpdateContacto
+    methods: [POST]
+
+comercial.clientes-pre-cadastro:
+    path: /comercial/clientes/pre-cadastro
+    controller: App\Controller\MTCorp\Comercial\Clientes\PreCadastro\PreCadastroController::postCliente
+    methods: [POST]
+
+comercial.clientes-postsap:
+    path: /comercial/clientes/postsap
+    controller: App\Controller\MTCorp\Comercial\Clientes\PreCadastro\PreCadastroController::sapPostClient
+    methods: [POST]
+
+comercial.clientes-tipo-cliente:
+    path: /comercial/clientes/tipo_cliente
+    controller: App\Controller\MTCorp\Comercial\Clientes\PreCadastro\PreCadastroController::obtenerTiposClientes
+    methods: [GET]
+
+comercial.clientes-tipo-persona:
+    path: /comercial/clientes/tipo_persona
+    controller: App\Controller\MTCorp\Comercial\Clientes\PreCadastro\PreCadastroController::obtenerTiposPersonas
+    methods: [GET]
+
+comercial.clientes-tipo-documento:
+    path: /comercial/clientes/tipo_documento
+    controller: App\Controller\MTCorp\Comercial\Clientes\PreCadastro\PreCadastroController::obtenerTiposDocumentos
+    methods: [GET]
+
+comercial.clientes-obtenerHistorial:
+    path: /comercial/clientes/obtenerHistorial/{idCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\PreCadastro\PreCadastroController::obtenerHistorial
+    methods: [GET]
+
+comercial.clientes-proposta-analise-credito:
+    path: /comercial/clientes/proposta-analise-credito/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Clientes\PropostaAnaliseCredito\PropostaAnaliseCreditoController::getPropostaAnaliseCredito
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.clientes-ultimos-precos-lista:
+    path: /comercial/clientes/ultimos-precos/lista
+    controller: App\Controller\MTCorp\Comercial\Clientes\UltimosPrecos\UltimosPrecosController::getListaUltimosPrecos
+    methods: [GET]
+
+comercial.empresas:
+    path: /comercial/empresas
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getEmpresas
+    methods: [GET]
+
+comercial.estoque:
+    path: /comercial/estoque
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getAlmacen
+    methods: [GET]
+
+comercial.depositos:
+    path: /comercial/depositos
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getDepositos
+    methods: [GET]
+
+comercial.escritorios:
+    path: /comercial/escritorios
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getEscritorios
+    methods: [GET]
+
+comercial.linhas:
+    path: /comercial/linhas
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getLinhas
+    methods: [GET]
+
+comercial.linhas_id:
+    path: /comercial/linhas/{id}
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getLinhasId
+    methods: [GET]
+
+comercial.sublineas:
+    path: /comercial/sublineas/{id}
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getSubLineasId
+    methods: [GET]
+
+comercial.classes:
+    path: /comercial/classes
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getClasses
+    methods: [GET]
+
+comercial.grupos:
+    path: /comercial/grupos
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getGrupo
+    methods: [GET]
+
+comercial.materiais:
+    path: /comercial/materiais
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getMateriais
+    methods: [GET]
+
+comercial.perfil:
+    path: /comercial/perfil
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getPerfil
+    methods: [GET]
+
+comercial.materiales_suplementarios:
+    path: /comercial/materiales_suplementarios
+    controller: App\Controller\MTCorp\Comercial\ComercialController::materialesContratipos
+    methods: [GET]
+
+comercial.almacen:
+    path: /comercial/materiales/lista_almacen
+    controller: App\Controller\MTCorp\Comercial\ComercialController::getListaAlmacen
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-lista:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/lista
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getListaComissoes
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-lista-edicao:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/lista-edicao
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getListaEdicaoComissoes
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-detalhes:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/detalhes/{idAnoMes}
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getDetalhesComissoes
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-dados-comissoes:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/dados-comissoes
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getDadosComissoes
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-modelos:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/modelos/{codGestao}
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getModelos
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-salvar:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/salvar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::postComissoes
+    methods: [POST]
+
+comercial.comissoes-representantes-gestao-comissionamentos-atualizar:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/atualizar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::putComissoes
+    methods: [PUT]
+    requirements:
+        codigo: '\d+'
+
+comercial.comissoes-representantes-gestao-comissionamentos-formulario:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/formulario
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getFormComissoes
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-historico:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/historico/{codComissaoRepresentante}
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getHistorico
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-situacao:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/situacao
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getSituacao
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-representantes:
+    path: comercial/comissoes/representantes/gestao-comissionamentos/representantes/{codEscritorio}
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getRepresentantes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.comissoes-representantes-gestao-comissionamentos-escritorios:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/escritorios
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getEscritorios
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-representantes-detalhes:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/representantes-detalhes
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getDetalhesRepresentantes
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-unidade-detalhes:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/unidade-detalhes
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getDetalhesUnidades
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-permissoes-acesso:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/permissoes-acesso
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::getPermissoesAcesso
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-solicitar-nf-escritorio:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/solicitar-nf-escritorio
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::sendEmailNotaFiscalEscritorio
+    methods: [GET]
+
+comercial.comissoes-representantes-gestao-comissionamentos-solicitar-nf-representante:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/solicitar-nf-representante
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::sendEmailNotaFiscalRepresentante
+    methods: [POST]
+
+comercial.comissoes-representantes-gestao-comissionamentos-salvar-valores:
+    path: comercial/comissoes/representantes/gestao-comissionamentos/salvar-valores
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::postValores
+    methods: [POST]
+
+comercial.comissoes-representantes-gestao-comissionamentos-aprovar:
+    path: comercial/comissoes/representantes/gestao-comissionamentos/aprovar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::postAprovar
+    methods: [POST]
+
+comercial.comissoes-representantes-gestao-comissionamentos-reprovar:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/reprovar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::postReprovar
+    methods: [POST]
+
+comercial.comissoes-representantes-gestao-comissionamentos-anexo-documentos-salvar:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/anexo/documentos/salvar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::postAnexo
+    methods: [POST]
+
+comercial.comissoes-representantes-gestao-comissionamentos-anexo-documentos-excluir:
+    path: /comercial/comissoes/representantes/gestao-comissionamentos/anexo/documentos/excluir
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\GestaoComissionamentos\GestaoComissionamentosController::delAnexo
+    methods: [PUT]
+
+comercial.comissoes-representantes-programacao-pagamentos-lista:
+    path: /comercial/comissoes/representantes/programacao-pagamentos/lista
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\ProgramacaoPagamentos\ProgramacaoPagamentosController::getListaProgramacao
+    methods: [GET]
+
+comercial.comissoes-representantes-programacao-pagamentos-situacao:
+    path: /comercial/comissoes/representantes/programacao-pagamentos/situacao
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\ProgramacaoPagamentos\ProgramacaoPagamentosController::getSituacao
+    methods: [GET]
+
+comercial.comissoes-representantes-programacao-pagamentos:
+    path: /comercial/comissoes/representantes/programacao-pagamentos/conta/{codRepresentante}
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\ProgramacaoPagamentos\ProgramacaoPagamentosController::getConta
+    methods: [GET]
+
+comercial.comissoes-representantes-programacao-pagamentos-programacao-datas-salvar:
+    path: /comercial/comissoes/representantes/programacao-pagamentos/programacao-datas/salvar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\ProgramacaoPagamentos\ProgramacaoPagamentosController::postProgramacaoDatas
+    methods: [POST]
+
+comercial.comissoes-representantes-programacao-pagamentos-pagamento-salvar:
+    path: /comercial/comissoes/representantes/programacao-pagamentos/pagamento/salvar
+    controller: App\Controller\MTCorp\Comercial\Comissoes\Representantes\ProgramacaoPagamentos\ProgramacaoPagamentosController::postPagamento
+    methods: [POST]
+
+comercial.comissoes-vendedores-internos-gestao-comissionamentos-permissoes-acesso:
+    path: /comercial/comissoes/vendedores-internos/gestao-comissionamentos/permissoes-acesso
+    controller: App\Controller\MTCorp\Comercial\Comissoes\VendedoresInternos\GestaoComissionamentos\GestaoComissionamentosController::getPermissoesAcesso
+    methods: [GET]
+
+comercial.controle-entregas-lista:
+    path: /comercial/controle-entregas/lista
+    controller: App\Controller\MTCorp\Comercial\ControleEntregas\ControleEntregasController::getLista
+    methods: [GET]
+
+comercial.controle-entregas-detalhesPedido:
+    path: /comercial/controle-entregas/detalhes-pedido
+    controller: App\Controller\MTCorp\Comercial\ControleEntregas\ControleEntregasController::getDetalhesListaPedido
+    methods: [GET]
+
+comercial.controle-entregas-detalhesRomaneio:
+    path: /comercial/controle-entregas/detalhes-romaneio
+    controller: App\Controller\MTCorp\Comercial\ControleEntregas\ControleEntregasController::getDetalhesRomaneio
+    methods: [GET]
+
+comercial.controle-entregas-situacoes:
+    path: /comercial/controle-entregas/situacoes
+    controller: App\Controller\MTCorp\Comercial\ControleEntregas\ControleEntregasController::getSituacoes
+    methods: [GET]
+
+comercial.dashboard-vendedor-desempenho-toneladas:
+    path: /comercial/dashboard/vendedor/desempenho/toneladas/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getDesempenhoToneladas
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-desempenho-linhas:
+    path: /comercial/dashboard/vendedor/desempenho/linhas/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getDesempenhoLinhas
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-concentracao-vendas:
+    path: /comercial/dashboard/vendedor/concentracao-vendas/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getConcentracaoVendas
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-metas:
+    path: /comercial/dashboard/vendedor/metas/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getMetas
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-carteira-clientes:
+    path: /comercial/dashboard/vendedor/carteira-clientes/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getCarteiraClientes
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-registro-ocorrencias:
+    path: /comercial/dashboard/vendedor/registro-ocorrencias/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getRegistroOcorrencias
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-representantes:
+    path: /comercial/dashboard/vendedor/financeiro/representantes/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getComissaoRepresentante
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-financeiro-inadimplentes:
+    path: /comercial/dashboard/vendedor/financeiro/inadimplentes/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getFinanceiroInadimplentes
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-financeiro-notas-debito:
+    path: /comercial/dashboard/vendedor/financeiro/notas-debito/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getFinanceiroNotasDebito
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-representante-valor-manetoni:
+    path: /comercial/dashboard/vendedor/representante/valor-manetoni/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getRepresentanteValorManetoni
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-representante-valor-dba:
+    path: /comercial/dashboard/vendedor/representante/valor-dba/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getRepresentanteValorDba
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.dashboard-vendedor-representante-valor-total:
+    path: /comercial/dashboard/vendedor/representante/valor-total/{idEscritorio}/{idVendedor}
+    controller: App\Controller\MTCorp\Comercial\Dashboard\Vendedor\DashboardVendedorController::getRepresentanteValorTotal
+    methods: [GET]
+    requirements:
+        idVendedor: '\d+'
+
+comercial.disponibilidade-material-solicitacoes:
+    path: /comercial/disponibilidade-material/solicitacoes
+    controller: App\Controller\MTCorp\Comercial\DisponibilidadeMaterial\DisponibilidadeMaterialController::getSolicitacoes
+    methods: [GET]
+
+comercial.disponibilidade-material-solicitacao:
+    path: /comercial/disponibilidade-material/solicitacao/{id}
+    controller: App\Controller\MTCorp\Comercial\DisponibilidadeMaterial\DisponibilidadeMaterialController::getSolicitacao
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+comercial.disponibilidade-material-solicitacao-salvar:
+    path: /comercial/disponibilidade-material/solicitacao/salvar
+    controller: App\Controller\MTCorp\Comercial\DisponibilidadeMaterial\DisponibilidadeMaterialController::postSolicitacao
+    methods: [POST]
+
+comercial.disponibilidade-material-solicitacao-atualizar:
+    path: /comercial/disponibilidade-material/solicitacao/atualizar
+    controller: App\Controller\MTCorp\Comercial\DisponibilidadeMaterial\DisponibilidadeMaterialController::putSolicitacao
+    methods: [PUT]
+
+comercial.disponibilidade-material-solicitacao-excluir:
+    path: /comercial/disponibilidade-material/solicitacao/excluir/{id}
+    controller: App\Controller\MTCorp\Comercial\DisponibilidadeMaterial\DisponibilidadeMaterialController::deleteSolicitacao
+    methods: [DELETE]
+    requirements:
+        id: '\d+'
+
+comercial.estoque-estoque-atual:
+    path: /comercial/estoque/estoque-atual
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstoqueAtual
+    methods: [GET]
+
+comercial.materiales:
+    path: /comercial/materiales
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getMateriales
+    methods: [GET]
+
+comercial.materiales/lista:
+    path: /comercial/materiales/lista
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getMaterialesLista
+    methods: [GET]
+
+comercial.materiales_lista_precio_vendedor:
+    path: /comercial/materiales_lista_precio_vendedor
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getMaterialesPrecioVendedor
+    methods: [GET]
+
+comercial.materiales_lista_precio:
+    path: /comercial/materiales_lista_precio
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getMaterialesPrecio
+    methods: [GET]
+
+comercial.sincronizar:
+    path: /comercial/sincronizar
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::sincMateriales
+    methods: [GET]
+
+comercial.presentacion_materiales:
+    path: /comercial/presentacion_materiales
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getPresentacionMateriales
+    methods: [GET]
+
+comercial.estoque-outrasUnidades:
+    path: /comercial/estoque/outras-unidades/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstoqueOutrasUnidades
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.estoque-pedidosCompra:
+    path: /comercial/estoque/pedidos-compra/{codMaterial}/{idEmpresa}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getPedidosCompra
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+        idEmpresa: '\d+'
+
+comercial.estoque-estoqueComprometido:
+    path: /comercial/estoque/estoque-comprometido/{codMaterial}/{idEmpresa}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstoqueComprometido
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+        idEmpresa: '\d+'
+
+comercial.estoque-lote:
+    path: /comercial/estoque/lote/{codMaterial}/{idEmpresa}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstoqueLote
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+        idEmpresa: '\d+'
+
+comercial.estoque-estoqueSuspenso:
+    path: /comercial/estoque/estoque-suspenso/{codMaterial}/{idEmpresa}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstoqueSuspenso
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+        idEmpresa: '\d+'
+
+comercial.estoque-actualizar_item:
+    path: /comercial/estoque/actualizar_item
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::actualizarItem
+    methods: [POST]
+
+comercial.estoque-estoque.Suspenso:
+    path: /comercial/estoque/estoquesuspenso/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstockSuspenso
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.estoque.estoqueComprometido:
+    path: /comercial/estoque/estoquecomprometido/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getStockComprometido
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.estoque.estoquealmacen:
+    path: /comercial/estoque/estoquealmacen/{codMaterial}
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getEstoqueAlmacen
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.estoque.lista_precio:
+    path: /comercial/estoque/lista-precio
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::traerLista
+    methods: [GET]
+
+comercial.vendedor-lista-precio-completa:
+    path: /comercial/vendedor/lista_precio_completa
+    controller: App\Controller\MTCorp\Comercial\Estoque\EstoqueController::getListaPrecioCompletaVendedor
+    methods: [GET]
+
+comercial.gestao/associacao-coordenadores-lista:
+    path: /comercial/gestao/associacao-coordenadores/lista
+    controller: App\Controller\MTCorp\Comercial\Gestao\AssociacaoCoordenadores\AssociacaoCoordenadoresController::getAssociacoesCoordenadores
+    methods: [GET]
+
+comercial.gestao/associacao-coordenadores-salvar:
+    path: /comercial/gestao/associacao-coordenadores/salvar
+    controller: App\Controller\MTCorp\Comercial\Gestao\AssociacaoCoordenadores\AssociacaoCoordenadoresController::putAssociacaoCoordenador
+    methods: [PUT]
+
+comercial.gestao-contratos-comerciais-lista:
+    path: /comercial/gestao/contratos-comerciais/lista
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getListaContratos
+    methods: [GET]
+
+comercial.gestao-contratos-comerciais-detail-panel:
+    path: /comercial/gestao/contratos-comerciais/detail-panel/{codContrato}
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getDetailPanel
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.gestao-contratos-comerciais-detalhes:
+    path: /comercial/gestao/contratos-comerciais/detalhes/{codContrato}
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.gestao-contratos-comerciais-situacao:
+    path: /comercial/gestao/contratos-comerciais/situacao
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getSituacao
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.gestao-contratos-comerciais-tipos-frete:
+    path: /comercial/gestao/contratos-comerciais/tipos-frete
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getTiposFrete
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.gestao-contratos-comerciais-tipo-servico:
+    path: /comercial/gestao/contratos-comerciais/tipo-servico
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getTipoServico
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.gestao-contratos-comerciais-save:
+    path: /comercial/gestao/contratos-comerciais/save
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::postContrato
+    methods: [POST]
+
+comercial.gestao-contratos-comerciais-atualizar:
+    path: /comercial/gestao/contratos-comerciais/atualizar
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::putContrato
+    methods: [PUT]
+
+comercial.gestao-contratos-comerciais-associacao-remover:
+    path: /comercial/gestao/contratos-comerciais/associacao/remover/{codContrato}/{codAssociacao}
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::deleteAssociacao
+    methods: [DELETE]
+
+comercial.gestao-contratos-comerciais-aprovar:
+    path: comercial/gestao/contratos-comerciais/aprovar
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::postAprovar
+    methods: [POST]
+
+comercial.gestao-contratos-comerciais-reprovar:
+    path: /comercial/gestao/contratos-comerciais/reprovar
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::postReprovar
+    methods: [POST]
+
+comercial.gestao-contratos-comerciais-anexo-documentos:
+    path: /comercial/gestao/contratos-comerciais/anexo/documentos/{codContrato}
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getDocuments
+    methods: [GET]
+    requirements:
+        codMaterial: '\d+'
+
+comercial.gestao-contratos-comerciais-anexo-documentos-salvar:
+    path: /comercial/gestao/contratos-comerciais/anexo/documentos/salvar
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::postAnexo
+    methods: [POST]
+
+comercial.gestao-contratos-comerciais-anexo-documentos-excluir:
+    path: /comercial/gestao/contratos-comerciais/anexo/documentos/excluir
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::delAnexo
+    methods: [PUT]
+
+comercial.gestao-contratos-comerciais-materiais:
+    path: /comercial/gestao/contratos-comerciais/materiais
+    controller: App\Controller\MTCorp\Comercial\Gestao\ContratosComerciais\ContratosComerciaisController::getMateriais
+    methods: [GET]
+
+comercial.gestao-liberacoes-permissoes-acesso:
+    path: /comercial/gestao/liberacoes/permissoes-acesso
+    controller: App\Controller\MTCorp\Comercial\Gestao\Liberacoes\LiberacoesController::getPermissoesAcesso
+    methods: [GET]
+
+comercial.gestao-liberacoes-lista:
+    path: /comercial/gestao/liberacoes/lista
+    controller: App\Controller\MTCorp\Comercial\Gestao\Liberacoes\LiberacoesController::getListaLiberacoes
+    methods: [GET]
+
+comercial.gestao-liberacoes-detalhes:
+    path: /comercial/gestao/liberacoes/detalhes/{nrPedido}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\Gestao\Liberacoes\LiberacoesController::getDetalhesLiberacoes
+    methods: [GET]
+
+comercial.gestao-liberacoes-motivos-trava:
+    path: /comercial/gestao/liberacoes/motivos-trava/{nrPedido}/{codEmpresa}
+    controller: App\Controller\MTCorp\Comercial\Gestao\Liberacoes\LiberacoesController::getMotivosTrava
+    methods: [GET]
+
+comercial.gestao-liberacoes-aprovacao:
+    path: /comercial/gestao/liberacoes/aprovacao
+    controller: App\Controller\MTCorp\Comercial\Gestao\Liberacoes\LiberacoesController::aprovaLiberacao
+    methods: [POST]
+
+comercial.gestao-liberacoes-reprovacao:
+    path: /comercial/gestao/liberacoes/reprovacao
+    controller: App\Controller\MTCorp\Comercial\Gestao\Liberacoes\LiberacoesController::reprovaLiberacao
+    methods: [POST]
+
+comercial.gestao-ranking-clientes-lista:
+    path: /comercial/gestao/ranking-clientes/lista
+    controller: App\Controller\MTCorp\Comercial\Gestao\RankingClientes\RankingClientesController::getListaRanking
+    methods: [GET]
+
+comercial.gestao-ranking-clientes-detalhes:
+    path: /comercial/gestao/ranking-clientes/detalhes/{codigo}
+    controller: App\Controller\MTCorp\Comercial\Gestao\RankingClientes\RankingClientesController::getDetalhes
+    methods: [GET]
+    requirements:
+        codigo: '\d+'
+
+comercial.gestao-ranking-clientes-salvar:
+    path: /comercial/gestao/ranking-clientes/salvar
+    controller: App\Controller\MTCorp\Comercial\Gestao\RankingClientes\RankingClientesController::postRanking
+    methods: [POST]
+
+comercial.gestao-ranking-clientes-atualizar:
+    path: /comercial/gestao/ranking-clientes/atualizar
+    controller: App\Controller\MTCorp\Comercial\Gestao\RankingClientes\RankingClientesController::putRanking
+    methods: [PUT]
+
+comercial.gestao-ranking-clientes-ativar:
+    path: /comercial/gestao/ranking-clientes/ativar
+    controller: App\Controller\MTCorp\Comercial\Gestao\RankingClientes\RankingClientesController::activeRanking
+    methods: [POST]
+
+comercial.gestao-ranking-clientes-inativar:
+    path: /comercial/gestao/ranking-clientes/inativar
+    controller: App\Controller\MTCorp\Comercial\Gestao\RankingClientes\RankingClientesController::inactiveRanking
+    methods: [POST]
+
+comercial.gestao-tabela-precos-tabelas:
+    path: /comercial/gestao/tabela-precos/tabelas
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getTabelas
+    methods: [GET]
+
+comercial.gestao-tabela-precos-lista-grupos:
+    path: /comercial/gestao/tabela-precos/lista/grupos
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getListaGrupos
+    methods: [GET]
+
+comercial.gestao-tabela-precos-lista:
+    path: /comercial/gestao/tabela-precos/lista
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getListaPrecos
+    methods: [GET]
+
+comercial.gestao-tabela-precos-detail-panel:
+    path: /comercial/gestao/tabela-precos/detail-panel
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getDetailPanel
+    methods: [GET]
+
+comercial.gestao-tabela-precos-detalhes:
+    path: /comercial/gestao/tabela-precos/detalhes/{codPreco}
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getDetalhes
+    methods: [GET]
+    requirements:
+        codTabela: '\d+'
+
+comercial.gestao-tabela-precos-salvar:
+    path: /comercial/gestao/tabela-precos/salvar
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::postTabelaPrecos
+    methods: [POST]
+
+comercial.gestao-tabela-precos-atualizar:
+    path: /comercial/gestao/tabela-precos/atualizar
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::putTabelaPrecos
+    methods: [PUT]
+
+comercial.gestao-tabela-precos-grupo-remover:
+    path: /comercial/gestao/tabela-precos/grupo/remover/{codGrupo}/{codTabela}
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::deleteAssociacaoGrupo
+    methods: [DELETE]
+
+comercial.gestao-tabela-precos-associacao-precos-remover:
+    path: /comercial/gestao/tabela-precos/associacao-precos/remover/{codAssociacao}/{codTabela}/{codGrupo}
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::deleteAssociacaoPreco
+    methods: [DELETE]
+
+comercial.gestao-tabela-precos-ativar:
+    path: /comercial/gestao/tabela-precos/ativar
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::activeGrupo
+    methods: [POST]
+
+comercial.gestao-tabela-precos-inativar:
+    path: /comercial/gestao/tabela-precos/inativar
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::inactiveGrupo
+    methods: [POST]
+
+comercial.gestao-tabela-precos-materiais:
+    path: /comercial/gestao/tabela-precos/materiais
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getMateriais
+    methods: [GET]
+
+comercial.gestao-tabela-precos-materiais-detalhes:
+    path: /comercial/gestao/tabela-precos/materiais/detalhes
+    controller: App\Controller\MTCorp\Comercial\Gestao\TabelaDePrecos\TabelaDePrecosController::getMateriaisDetalhes
+    methods: [GET]
+
+comercial.integracoes-akna-lista-mensagens:
+    path: /comercial/integracoes/akna/lista-mensagens
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Akna\ListaMensagensController::getListasMensagens
+    methods: [GET]
+
+comercial.integracoes-akna-listas-contatos:
+    path: /comercial/integracoes/akna/listas-contatos
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Akna\ListasContatosController::getListasContatos
+    methods: [GET]
+
+comercial.integracoes-arcelor-mittal-classes-materiais-lista:
+    path: /comercial/integracoes/arcelor-mittal/classes-materiais/lista
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\ClasseMateriaisController::getLista
+    methods: [GET]
+
+comercial.integracoes-arcelor-mittal-classes-materiais-associacoes:
+    path: /comercial/integracoes/arcelor-mittal/classes-materiais/associacoes/{idArcelorMittal}
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\ClasseMateriaisController::getAssociacoes
+    methods: [GET]
+    requirements:
+        idArcelorMittal: '\d+'
+
+comercial.integracoes-arcelor-mittal-classes-materiais-classes:
+    path: /comercial/integracoes/arcelor-mittal/classes-materiais/classes
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\ClasseMateriaisController::getClasses
+    methods: [GET]
+
+comercial.integracoes-arcelor-mittal-classes-materiais-salvar:
+    path: /comercial/integracoes/arcelor-mittal/classes-materiais/salvar
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\ClasseMateriaisController::putAssociacao
+    methods: [PUT]
+
+comercial.integracoes-arcelor-mittal-vendedores-lista:
+    path: /comercial/integracoes/arcelor-mittal/vendedores/lista
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\VendedoresController::getLista
+    methods: [GET]
+
+comercial.integracoes-arcelor-mittal-vendedores-associacoes:
+    path: /comercial/integracoes/arcelor-mittal/vendedores/associacoes/{idArcelorMittal}
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\VendedoresController::getAssociacoes
+    methods: [GET]
+    requirements:
+        idArcelorMittal: '\d+'
+
+comercial.integracoes-arcelor-mittal-vendedores-vendedores:
+    path: /comercial/integracoes/arcelor-mittal/vendedores/vendedores
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\VendedoresController::getVendedores
+    methods: [GET]
+
+comercial.integracoes-arcelor-mittal-vendedores-salvar:
+    path: /comercial/integracoes/arcelor-mittal/vendedores/salvar
+    controller: App\Controller\MTCorp\Comercial\Integracoes\ArcelorMittal\VendedoresController::putAssociacao
+    methods: [PUT]
+
+comercial.integracoes.dagda.index:
+    path: /comercial/integracoes/dagda
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\PedidosController::index
+    methods: [GET]
+
+comercial.integracoes.dagda.uuid.show:
+    path: /comercial/integracoes/dagda/{uuid}
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\PedidosController::show
+    methods: [GET]
+    requirements:
+        uuid: '[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}'
+
+comercial.integracoes.dagda.store:
+    path: /comercial/integracoes/dagda
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\PedidosController::store
+    methods: [POST]
+
+comercial.integracoes.dagda.update:
+    path: /comercial/integracoes/dagda
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\PedidosController::update
+    methods: [PUT]
+
+comercial.kanban-contratos-contratos-vigentes:
+    path: /comercial/kanban/contratos/contratos-vigentes
+    controller: App\Controller\MTCorp\Comercial\Kanban\Contratos\KanbanContratosController::getContratos
+    methods: [GET]
+
+comercial.kanban-contratos-quantidade-faturada:
+    path: /comercial/kanban/contratos/quantidade-faturada
+    controller: App\Controller\MTCorp\Comercial\Kanban\Contratos\KanbanContratosController::getFaturados
+    methods: [GET]
+
+comercial.kanban-contratos-quantidade-pendente:
+    path: /comercial/kanban/contratos/quantidade-pendente
+    controller: App\Controller\MTCorp\Comercial\Kanban\Contratos\KanbanContratosController::getPendentes
+    methods: [GET]
+
+comercial.kanban-pedidos-aberto:
+    path: /comercial/kanban/pedidos/aberto
+    controller: App\Controller\MTCorp\Comercial\Kanban\Pedidos\KanbanPedidosController::getAberto
+    methods: [GET]
+
+comercial.kanban-pedidos-transferidos:
+    path: /comercial/kanban/pedidos/transferidos
+    controller: App\Controller\MTCorp\Comercial\Kanban\Pedidos\KanbanPedidosController::getTransferidos
+    methods: [GET]
+
+comercial.kanban-pedidos-em-liberacao:
+    path: /comercial/kanban/pedidos/em-liberacao
+    controller: App\Controller\MTCorp\Comercial\Kanban\Pedidos\KanbanPedidosController::getEmLiberacao
+    methods: [GET]
+
+comercial.kanban-pedidos-aguardando-faturamento:
+    path: /comercial/kanban/pedidos/aguardando-faturamento
+    controller: App\Controller\MTCorp\Comercial\Kanban\Pedidos\KanbanPedidosController::getAguardandoFaturamento
+    methods: [GET]
+
+comercial.kanban-pedidos-aguardando-entrega:
+    path: /comercial/kanban/pedidos/aguardando-entrega
+    controller: App\Controller\MTCorp\Comercial\Kanban\Pedidos\KanbanPedidosController::getAguardandoEntrega
+    methods: [GET]
+
+comercial.kanban-visao-ro-abertas:
+    path: /comercial/kanban/visao-ro/abertas
+    controller: App\Controller\MTCorp\Comercial\Kanban\VisaoRo\KanbanVisaoRoController::getAbertas
+    methods: [GET]
+
+comercial.kanban-visao-ro-fechadas:
+    path: /comercial/kanban/visao-ro/fechadas
+    controller: App\Controller\MTCorp\Comercial\Kanban\VisaoRo\KanbanVisaoRoController::getFechadas
+    methods: [GET]
+
+comercial.materiais-perdidos-lista:
+    path: /comercial/materiais-perdidos/lista
+    controller: App\Controller\MTCorp\Comercial\MateriaisPerdidos\MateriaisPerdidosController::getListaMateriaisPerdidos
+    methods: [GET]
+
+comercial.materiais-familia:
+    path: /comercial/materiais/familia
+    controller: App\Controller\MTCorp\Comercial\MateriaisPerdidos\MateriaisPerdidosController::insertFamilia
+    methods: [POST]
+
+comercial.materiais-grupo:
+    path: /comercial/materiais/grupo
+    controller: App\Controller\MTCorp\Comercial\MateriaisPerdidos\MateriaisPerdidosController::insertGrupo
+    methods: [POST]
+
+comercial.materiais-linea:
+    path: /comercial/materiais/linea
+    controller: App\Controller\MTCorp\Comercial\MateriaisPerdidos\MateriaisPerdidosController::insertLinea
+    methods: [POST]
+
+comercial.materiais-insert:
+    path: /comercial/materiais/insert
+    controller: App\Controller\MTCorp\Comercial\MateriaisPerdidos\MateriaisPerdidosController::insertMaterial
+    methods: [POST]
+
+comercial.reenvio-xml-contadores:
+    path: /comercial/reenvio-xml/contadores
+    controller: App\Controller\MTCorp\Comercial\ReenvioXML\ReenvioXMLController::getContadores
+    methods: [GET]
+
+comercial.reenvio-xml-dados:
+    path: /comercial/reenvio-xml/lista/{codEmpresa}/{numNota}
+    controller: App\Controller\MTCorp\Comercial\ReenvioXML\ReenvioXMLController::getLista
+    methods: [GET]
+    requirements:
+        empresa: '\d+'
+
+comercial.reenvio-xml-reagendar-envio:
+    path: /comercial/reenvio-xml/reagendar-envio
+    controller: App\Controller\MTCorp\Comercial\ReenvioXML\ReenvioXMLController::putReagendarEnvio
+    methods: [PUT]
+
+comercialrelatorios-comissoes-representantes-dados-representante:
+    path: /comercial/relatorios/comissoes-representantes/dados-representante
+    controller: App\Controller\MTCorp\Comercial\Relatorios\ComissoesRepresentantes\ComissoesRepresentantesController::getDadosRepresentante
+    methods: [GET]
+
+comercial.relatorios-faturamento-detalhado-lista:
+    path: /comercial/relatorios/faturamento-detalhado/lista
+    controller: App\Controller\MTCorp\Comercial\Relatorios\FaturamentoDetalhado\FaturamentoDetalhadoController::getFaturamentoDetalhado
+    methods: [GET]
+
+comercial.relatorios-faturamento-detalhado-duque-lista:
+    path: /comercial/relatorios/faturamento-detalhado-duque/lista/{data}
+    controller: App\Controller\MTCorp\Comercial\Relatorios\FaturamentoDetalhadoDuque\FaturamentoDetalhadoDuqueController::getLinhas
+    methods: [GET]
+
+comercial.relatorios-faturamento-detalhado-duque-detalhes:
+    path: /comercial/relatorios/faturamento-detalhado-duque/detalhes/{data}/{ordem}
+    controller: App\Controller\MTCorp\Comercial\Relatorios\FaturamentoDetalhadoDuque\FaturamentoDetalhadoDuqueController::getDetalhesLinhas
+    methods: [GET]
+
+comercial.relatorios-posicao-diaria-perfis:
+    path: /comercial/relatorios/posicao-diaria/perfis
+    controller: App\Controller\MTCorp\Comercial\Relatorios\PosicaoDiaria\PosicaoDiariaController::getPerfis
+    methods: [GET]
+
+comercial.relatorios-posicao-diaria-lista:
+    path: /comercial/relatorios/posicao-diaria/lista/{data}
+    controller: App\Controller\MTCorp\Comercial\Relatorios\PosicaoDiaria\PosicaoDiariaController::getListaManetoni
+    methods: [GET]
+
+comercial.relatorios-posicao-diaria-lista-dba:
+    path: /comercial/relatorios/posicao-diaria/lista-dba/{data}
+    controller: App\Controller\MTCorp\Comercial\Relatorios\PosicaoDiaria\PosicaoDiariaController::getListaDBA
+    methods: [GET]
+
+comercial.relatorios-posicao-diaria-detalhes:
+    path: /comercial/relatorios/posicao-diaria/detalhes/{data}/{ordem}
+    controller: App\Controller\MTCorp\Comercial\Relatorios\PosicaoDiaria\PosicaoDiariaController::getDetalhesManetoni
+    methods: [GET]
+
+comercial.relatorios-posicao-diaria-salvar:
+    path: /comercial/relatorios/posicao-diaria/salvar
+    controller: App\Controller\MTCorp\Comercial\Relatorios\PosicaoDiaria\PosicaoDiariaController::postRitmoEditado
+    methods: [POST]
+
+comercial.ruta-clientes:
+    path: /comercial/ruta/clientes
+    controller: App\Controller\MTCorp\Comercial\Ruta\RutaController::getClientes
+    methods: [GET]
+
+comercial.ruta-compromisoSalvar:
+    path: /comercial/ruta/compromiso/salvar
+    controller: App\Controller\MTCorp\Comercial\Ruta\RutaController::saveCompromisso
+    methods: [POST]
+
+comercial.sucursal.lista_sucursal:
+    path: /comercial/sucursal/generar_sucursal
+    controller: App\Controller\MTCorp\Comercial\Sucursal\SucursalController::getSucursales
+    methods: [GET]
+
+comercial.tid-software-empresas:
+    path: /comercial/tid-software/empresas/{acao}
+    controller: App\Controller\MTCorp\Comercial\TidSoftware\TidSoftwareController::getEmpresas
+    methods: [GET]
+
+comercial.tid-software-linhas:
+    path: /comercial/tid-software/linhas
+    controller: App\Controller\MTCorp\Comercial\TidSoftware\TidSoftwareController::getLinhas
+    methods: [GET]
+
+comercial.tid-software-modulos/vendas:
+    path: /comercial/tid-software/modulos/vendas
+    controller: App\Controller\MTCorp\Comercial\TidSoftware\TidSoftwareController::getModulosVendas
+    methods: [GET]
+
+comercial.tid-software-modulos/producao-tela:
+    path: /comercial/tid-software/modulos/producao-tela
+    controller: App\Controller\MTCorp\Comercial\TidSoftware\TidSoftwareController::getModulosProducaoTela
+    methods: [GET]
+
+comercial.tid-software-gerar-acesso:
+    path: /comercial/tid-software/gerar-acesso
+    controller: App\Controller\MTCorp\Comercial\TidSoftware\TidSoftwareController::postGerarAcesso
+    methods: [POST]
+
+comercial.TipoPersonas-lista-tipopersona:
+    path: /comercial/tipopersona/generar_persona
+    controller: App\Controller\MTCorp\Comercial\TipoPersona\TipoPersonaController::getPersonas
+    methods: [GET]
+
+comercial.vendedor-detalhes-cadastro:
+    path: /comercial/vendedor/detalhes-cadastro
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getDetalhesCadastro
+    methods: [GET]
+
+comercial.vendedor-lista:
+    path: /comercial/vendedor/lista
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getVendedores
+    methods: [GET]
+
+comercial.vendedor-lista-app:
+    path: /comercial/vendedor/lista_app
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getVendedoresApp
+    methods: [GET]
+
+comercial.vendedor-carteira-clientes:
+    path: /comercial/vendedor/carteira-clientes
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getClientesCarteira
+    methods: [GET]
+
+comercial.vendedor-carteira-clientes-cotizacion:
+    path: /comercial/vendedor/carteira-clientes-cotizacion
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getClientescoreAtividadesCotizacion
+    methods: [GET]
+
+comercial.vendedor-lista-precio:
+    path: /comercial/vendedor/lista_precio
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getlistaprecio
+    methods: [GET]
+
+comercial.vendedor-allvendedor:
+    path: /comercial/vendedor/allvendedor
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getVendedor
+    methods: [GET]
+
+comercial.vendedor-detalles_vendedor:
+    path: /comercial/vendedor/detalles_vendedor
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getDetalleVendedor
+    methods: [GET]
+
+comercial.vendedor-valida-cliente-carteira:
+    path: /comercial/vendedor/valida-cliente-carteira/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getValidaClienteCarteira
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+comercial.vendedor-vinculo-operadores:
+    path: /comercial/vendedor/vinculo-operadores
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getVinculoOperadores
+    methods: [GET]
+
+comercial.vendedor-todosVendedores:
+    path: /comercial/clientes/vendedor/todosVendedores
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::todosVendedores
+    methods: [GET]
+
+comercial.vendedor-datosvendedor:
+    path: /comercial/vendedor/datosvendedor/{id}
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getVend
+    methods: [GET]
+
+comercial.vendedor-sucursal-vendedor:
+    path: /comercial/vendedor/sucursal-vendedor/{id}
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::FiltrarSucursalVendedor
+    methods: [GET]
+
+comercial.vendedor-rubros:
+    path: /comercial/vendedor/rubros
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getRubros
+    methods: [GET]
+
+comercial.vendedor-ciudad:
+    path: /comercial/clientes/vendedor/ciudad
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::getVendedorCiudad
+    methods: [GET]
+
+comercial.vendedor-cliente-ubicacionescliente:
+    path: /comercial/vendedor/cliente/ubicacionescliente/{codCliente}
+    controller: App\Controller\MTCorp\Comercial\Vendedor\VendedorController::clientUbicacion
+    methods: [GET]
+    requirements:
+        codCliente: '\d+'
+
+
+# === Additional routes (pass 2 - routes without name= parameter) ===
+
+comercial.emailMarketing.associacao.linhas:
+    path: /comercial/emailMarketing/associacao/linhas
+    controller: App\Controller\MTCorp\Comercial\EmailMarketing\AssociacaoSetorAtividadeLinhaController::getLinhas
+    methods: [GET]
+
+comercial.emailMarketing.associacao.setor_atividade:
+    path: /comercial/emailMarketing/associacao/setor-atividade
+    controller: App\Controller\MTCorp\Comercial\EmailMarketing\AssociacaoSetorAtividadeLinhaController::getSetorAtividade
+    methods: [GET]
+
+comercial.emailMarketing.associacao.lista_associacoes:
+    path: /comercial/emailMarketing/associacao/lista-associacoes
+    controller: App\Controller\MTCorp\Comercial\EmailMarketing\AssociacaoSetorAtividadeLinhaController::getListaAssociacoes
+    methods: [GET]
+
+comercial.emailMarketing.associacao.lista_associacoes.post:
+    path: /comercial/emailMarketing/associacao/lista-associacoes
+    controller: App\Controller\MTCorp\Comercial\EmailMarketing\AssociacaoSetorAtividadeLinhaController::postListaAssociacoes
+    methods: [POST]
+
+comercial.emailMarketing.associacao.lista_associacoes.put:
+    path: /comercial/emailMarketing/associacao/lista-associacoes
+    controller: App\Controller\MTCorp\Comercial\EmailMarketing\AssociacaoSetorAtividadeLinhaController::putListaAssociacoes
+    methods: [PUT]
+
+comercial.integracoes.akna.listas_contatos.post:
+    path: /comercial/integracoes/akna/listas-contatos
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Akna\ListasContatosController::postListaContatos
+    methods: [POST]
+
+comercial.integracoes.dagda.associacao:
+    path: /comercial/integracoes/dagda/associacao
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\AssociacaoMateriaisDagdaTidController::getAssociacao
+    methods: [GET]
+
+comercial.integracoes.dagda.detalhes:
+    path: /comercial/integracoes/dagda/detalhes
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\AssociacaoMateriaisDagdaTidController::getDetalhes
+    methods: [GET]
+
+comercial.integracoes.dagda.associacao_altera_integracao.post:
+    path: /comercial/integracoes/dagda/associacao-altera-integracao
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\AssociacaoMateriaisDagdaTidController::postAlteraIntegracao
+    methods: [POST]
+
+comercial.integracoes.dagda.associacao.post:
+    path: /comercial/integracoes/dagda/associacao
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\AssociacaoMateriaisDagdaTidController::postIntegracaoMateriaisDagda
+    methods: [POST]
+
+comercial.integracoes.dagda.delete_associacao.post:
+    path: /comercial/integracoes/dagda/delete-associacao
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\AssociacaoMateriaisDagdaTidController::deleteIntegracao
+    methods: [POST]
+
+comercial.integracoes.dagda.condicao_pagamento:
+    path: /comercial/integracoes/dagda/condicao-pagamento
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\CondicoesPagamentoController::getCondicoes
+    methods: [GET]
+
+comercial.integracoes.dagda.condicao_pagamento_tid:
+    path: /comercial/integracoes/dagda/condicao-pagamento-tid
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\CondicoesPagamentoController::getCondicoesTid
+    methods: [GET]
+
+comercial.integracoes.dagda.condicao_pagamento_dagda:
+    path: /comercial/integracoes/dagda/condicao-pagamento-dagda
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\CondicoesPagamentoController::getCondicoesDagda
+    methods: [GET]
+
+comercial.integracoes.dagda.condicao_pagamento.post:
+    path: /comercial/integracoes/dagda/condicao-pagamento
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\CondicoesPagamentoController::postCondicoesDagda
+    methods: [POST]
+
+comercial.integracoes.dagda.materiais_dagda:
+    path: /comercial/integracoes/dagda/materiais-dagda
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\MateriaisDagdaController::getMateriaisDagda
+    methods: [GET]
+
+comercial.integracoes.dagda.status:
+    path: /comercial/integracoes/dagda/status
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\PedidosController::getStatus
+    methods: [GET]
+
+comercial.integracoes.dagda.logs:
+    path: /comercial/integracoes/dagda/logs
+    controller: App\Controller\MTCorp\Comercial\Integracoes\Dagda\PedidosController::getLogs
+    methods: [GET]
+

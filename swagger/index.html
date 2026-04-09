@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM360 Monterrey - API Documentation</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fafafa; }
+
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .header p { font-size: 14px; opacity: 0.8; }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            background: #263238;
+            padding: 0 40px;
+        }
+        .nav-tabs button {
+            padding: 14px 28px;
+            border: none;
+            background: transparent;
+            color: #90a4ae;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        .nav-tabs button:hover {
+            color: white;
+            background: rgba(255,255,255,0.05);
+        }
+        .nav-tabs button.active {
+            color: #42a5f5;
+            border-bottom-color: #42a5f5;
+            background: rgba(66,165,245,0.08);
+        }
+
+        .api-info {
+            display: flex;
+            gap: 20px;
+            padding: 15px 40px;
+            background: #e3f2fd;
+            border-bottom: 1px solid #bbdefb;
+            font-size: 13px;
+            color: #1565c0;
+        }
+        .api-info span { display: flex; align-items: center; gap: 6px; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-agenda { background: #e8f5e9; color: #2e7d32; }
+        .badge-cotizaciones { background: #fff3e0; color: #e65100; }
+        .badge-count { background: #e3f2fd; color: #1565c0; }
+
+        #swagger-container { max-width: 1400px; margin: 0 auto; }
+
+        .swagger-ui .topbar { display: none; }
+        .swagger-ui .info { margin: 20px 0; }
+        .swagger-ui .scheme-container { display: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CRM360 Monterrey - API Documentation</h1>
+        <p>Documentacion interactiva de las APIs REST del sistema CRM360</p>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="active" onclick="loadSpec('agenda', this)">
+            <span class="badge badge-agenda">24</span>&nbsp; API Agenda
+        </button>
+        <button onclick="loadSpec('cotizaciones', this)">
+            <span class="badge badge-cotizaciones">51+</span>&nbsp; API Cotizaciones
+        </button>
+    </div>
+
+    <div class="api-info" id="api-info">
+        <span><strong>Servidor:</strong> 172.20.20.12 (IIS - Windows Server)</span>
+        <span><strong>Auth:</strong> JWT Bearer + X-User-Info</span>
+        <span><strong>DB:</strong> SQL Server (CRM360)</span>
+        <span><strong>SAP:</strong> 172.20.20.7:4100</span>
+    </div>
+
+    <div id="swagger-container"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+    <script>
+        const specs = {
+            agenda: './swagger-agenda.yaml',
+            cotizaciones: './swagger-cotizaciones.yaml'
+        };
+
+        let currentUI = null;
+
+        function loadSpec(name, btn) {
+            // Update active tab
+            document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            // Destroy previous instance
+            const container = document.getElementById('swagger-container');
+            container.innerHTML = '';
+
+            // Create new Swagger UI
+            currentUI = SwaggerUIBundle({
+                url: specs[name],
+                dom_id: '#swagger-container',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.SwaggerUIStandalonePreset
+                ],
+                layout: 'BaseLayout',
+                defaultModelsExpandDepth: 1,
+                defaultModelExpandDepth: 2,
+                docExpansion: 'list',
+                filter: true,
+                showExtensions: true,
+                showCommonExtensions: true,
+                tryItOutEnabled: true
+            });
+        }
+
+        // Load agenda by default
+        loadSpec('agenda', document.querySelector('.nav-tabs button'));
+    </script>
+</body>
+</html>

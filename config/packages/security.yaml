@@ -1,0 +1,18 @@
+security:
+    # Symfony 5.4: enable_authenticator_manager reemplaza el sistema Guard
+    # Nuestro JwtAuthenticator es un EventSubscriber, no usa Guard
+    enable_authenticator_manager: true
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            stateless: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }

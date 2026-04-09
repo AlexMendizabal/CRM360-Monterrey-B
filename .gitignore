@@ -1,0 +1,42 @@
+
+###> symfony/framework-bundle ###
+/.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/.env.docker
+/.env.produccion
+/.env.test
+/public/bundles/
+/var/
+/vendor/
+/public/
+/config_bkp/
+/frontend/
+/V1.0.rar/
+###< symfony/framework-bundle ###
+
+# Docker volumes
+/docker/mssql/data/
+
+# IDE
+.idea/
+.vs/
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# PHP
+info.php
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

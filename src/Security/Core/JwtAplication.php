@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Security\Core;
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+class JwtAplication
+{
+    public function encode(array $options)
+    {
+        $issuedAt = time();
+
+        $tokenParam = [
+            'iat'   => $issuedAt,
+            'iss'   => 'mtcorp.com.br',
+            'exp'   => $issuedAt + 28800,
+            'nbf'   => $issuedAt - 1,
+            'data'  => $options['userdata']
+        ];
+        return JWT::encode($tokenParam, $_ENV['JWT_SECRET'], 'HS256');
+    }
+
+    public static function decode($jwt)
+    {
+        return JWT::decode($jwt, new Key($_ENV['JWT_SECRET'], 'HS256'));
+    }
+}

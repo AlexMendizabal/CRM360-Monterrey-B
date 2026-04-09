@@ -1,0 +1,74 @@
+# =============================================================
+# CRM360 Monterrey Backend
+# =============================================================
+# PHP 8.1 + Apache + Symfony 5.4 LTS + SQL Server drivers
+# Se conecta a un SQL Server externo (no incluido en Docker)
+#
+# Uso:
+#   1. cp .env.docker .env.local   (editar con tus credenciales)
+#   2. docker-compose up -d --build
+#   3. http://localhost:8080
+#
+# Comandos:
+#   Logs:         docker-compose logs -f
+#   Shell:        docker-compose exec app bash
+#   Composer:     docker-compose exec app composer install
+#   Cache clear:  docker-compose exec app php bin/console cache:clear
+#   SQL Server:   docker-compose exec app sqlcmd -S $DB_HOST -U $DB_USER -P $DB_PASSWORD
+#   Detener:      docker-compose down
+#   Reconstruir:  docker-compose up -d --build --force-recreate
+# =============================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crm360-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      # Codigo fuente montado (cambios en vivo)
+      - .:/var/www/html:cached
+      # vendor dentro del container (evita conflicto con Windows)
+      - vendor_data:/var/www/html/vendor
+      # Persistir cache, logs y uploads
+      - symfony_var:/var/www/html/var
+    environment:
+      # Symfony
+      APP_ENV: ${APP_ENV:-dev}
+      APP_DEBUG: ${APP_DEBUG:-1}
+      APP_SECRET: ${APP_SECRET:-change_me}
+      JWT_SECRET: ${JWT_SECRET:-change_me}
+      # SQL Server (externo)
+      DB_DRIVER: ${DB_DRIVER:-pdo_sqlsrv}
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-1433}
+      DB_NAME: ${DB_NAME:-CRM360}
+      DB_USER: ${DB_USER:-sa}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+      # SAP
+      SAP_API_URL: ${SAP_API_URL:-http://192.168.0.123:4100/api}
+      # Mail
+      MAIL_HOST: ${MAIL_HOST:-localhost}
+      MAIL_PORT: ${MAIL_PORT:-465}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-ssl}
+      # Akna
+      AKNA_USER: ${AKNA_USER:-}
+      AKNA_PASSWORD: ${AKNA_PASSWORD:-}
+      AKNA_CLIENT: ${AKNA_CLIENT:-}
+      AKNA_URL: ${AKNA_URL:-https://app.akna.com.br/emkt/int/integracao.php}
+      # PHP
+      PHP_OPCACHE_ENABLE: ${PHP_OPCACHE_ENABLE:-0}
+      PHP_OPCACHE_VALIDATE: ${PHP_OPCACHE_VALIDATE:-1}
+    extra_hosts:
+      # host.docker.internal permite conectar a servicios del host (Windows)
+      # Util si SQL Server corre en la misma maquina fuera de Docker
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  vendor_data:
+  symfony_var:

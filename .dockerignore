@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vs
+.vscode
+
+# Docker (no copiarse a si mismo)
+docker-compose.yml
+compose-dev.yaml
+
+# Documentacion
+docs/
+README.md
+
+# Frontend
+frontend/
+
+# Temporales y cache
+var/cache
+var/log
+node_modules
+
+# Backup de config
+config_bkp/
+
+# Archivos sensibles
+.env.local
+.env.*.local
+.env.docker
+
+# Otros
+V1.0.rar
+info.php

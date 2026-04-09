@@ -1,0 +1,52 @@
+{
+    "nombres": "nombre prueba 255",
+    "telefono": "12345678",
+    "celular": "73030302",
+    "nit": "8124512",
+    "razonSocial": "Prueba SRl",
+    "rubro": "Contructora",
+    "sap_vendedor": "14",
+    "codigo_cliente": "",
+    "ubicacion": [
+        {
+            "ubicacion": "Contruccion",
+            "id_cliente": "4432",
+            "direccion": "hola direc",
+            "latitud": 0,
+            "longitud": 0,
+            "ciudad": "Santa Cruz"
+        },
+        {
+            "ubicacion": "Contruccion 3",
+            "id_cliente": "4432",
+            "direccion": "hola direc",
+            "latitud": 0,
+            "longitud": 0,
+            "ciudad": "Santa Cruz"
+        }
+    ],
+    "Contactos": [
+        {
+            "contacto": "contac2",
+            "nombres": "nombre de contacto",
+            "apellido1": "apellido",
+            "apellido2": "apellido 2",
+            "telefone": "66666",
+            "celular": "99999",
+            "direccion": "hola direc",
+            "latitud": 0,
+            "longitud": 0
+        },
+        {
+            "contacto": "conta1c",
+            "nombres": "nombre de contacto",
+            "apellido1": "apellido",
+            "apellido2": "apellido 2",
+            "telefone": "66666",
+            "celular": "123212",
+            "direccion": "hola direc",
+            "latitud": 0,
+            "longitud": 0
+        }
+    ]
+}

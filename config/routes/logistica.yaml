@@ -1,0 +1,537 @@
+logistica.coletas.post:
+    path: /logistica/coletas
+    controller: App\Controller\MTCorp\Logistica\Coletas\ColetasController::postPedido
+    methods: [POST]
+
+logistica.coletas.get:
+    path: /logistica/coletas
+    controller: App\Controller\MTCorp\Logistica\Coletas\ColetasController::getPedidos
+    methods: [GET]
+
+logistica.coletas.documentos.post:
+    path: /logistica/coletas/documentos
+    controller: App\Controller\MTCorp\Logistica\Coletas\DocumentosController::postDocumento
+    methods: [POST]
+
+logistica.coletas.documentos.put:
+    path: /logistica/coletas/documentos
+    controller: App\Controller\MTCorp\Logistica\Coletas\DocumentosController::putDocumento
+    methods: [PUT]
+
+logistica.coletas.documentos.get:
+    path: /logistica/coletas/documentos
+    controller: App\Controller\MTCorp\Logistica\Coletas\DocumentosController::getDocumentos
+    methods: [GET]
+
+logistica.controle-entregas.vendedores.index:
+    path: /logistica/controle-entregas/vendedores
+    controller: App\Controller\MTCorp\Logistica\ControleEntregas\VendedoresController::index
+    methods: [GET]
+
+logistica.dashboards.analise_frete.get:
+    path: /logistica/dashboards/analise-frete
+    controller: App\Controller\MTCorp\Logistica\Dashboards\AnaliseFrete\AnaliseFreteController::getIndicadores
+    methods: [GET]
+
+logistica.dashboards.analise_frete.rotulos.get:
+    path: /logistica/dashboards/analise-frete/rotulos
+    controller: App\Controller\MTCorp\Logistica\Dashboards\AnaliseFrete\AnaliseFreteController::getRotulos
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.documentos.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/documentos
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\DocumentosController::index
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.documentos.post:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/documentos
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\DocumentosController::store
+    methods: [POST]
+
+logistica.entrada_materiais.ficha_nao_conformidade.documentos.put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/documentos
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\DocumentosController::update
+    methods: [PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\FichaNaoConformidadeController::index
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\FichaNaoConformidadeController::store
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.materiais.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/materiais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\MateriaisController::index
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.materiais.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/materiais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\MateriaisController::store
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.documentos.post:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/documentos
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\DocumentosController::postDocumento
+    methods: [POST]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.documentos.put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/documentos
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\DocumentosController::putDocumento
+    methods: [PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.documentos.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/documentos
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\DocumentosController::getDocumentos
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\OcorrenciasController::getOcorrencia
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\OcorrenciasController::postOcorrencia
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.parecer.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/parecer
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\ParecerController::getParecer
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.parecer.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/parecer
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\ParecerController::postParecer
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.responsaveis.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/responsaveis
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\ResponsavelController::getResponsavel
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.ocorrencias.responsaveis.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/ocorrencias/responsaveis
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Ocorrencias\ResponsavelController::postResponsavel
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.relatorio.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/relatorio
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\RelatoriosController::index
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.responsaveis.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/responsaveis
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\ResponsaveisController::index
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.tipo.responsaveis.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/tipo/responsaveis
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Tipo\ResponsavelController::getResponsavel
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.tipo.responsaveis.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/tipo/responsaveis
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Tipo\ResponsavelController::postTipo
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.ficha_nao_conformidade.tipo.get:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/tipo
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Tipo\TipoController::getTipo
+    methods: [GET]
+
+logistica.entrada_materiais.ficha_nao_conformidade.tipo.post_put:
+    path: /logistica/entrada-materiais/ficha-nao-conformidade/tipo
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FichaNaoConformidade\Tipo\TipoController::postTipo
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.fornecedores.get:
+    path: /logistica/entrada-materiais/fornecedores
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\FornecedoresController::getFornecedores
+    methods: [GET]
+
+logistica.entrada_materiais.informe_recebimento.get:
+    path: /logistica/entrada-materiais/informe-recebimento
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\InformeRecebimento\InformeRecebimentoController::getInformeRecebimento
+    methods: [GET]
+
+logistica.entrada_materiais.informe_recebimento.post_put:
+    path: /logistica/entrada-materiais/informe-recebimento
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\InformeRecebimento\InformeRecebimentoController::post
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.materiais.get:
+    path: /logistica/entrada-materiais/materiais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\MateriaisController::getMateriais
+    methods: [GET]
+
+logistica.entrada_materiais.notas_fiscais.historico.get:
+    path: /logistica/entrada-materiais/notas-fiscais/historico
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\HistoricoController::getNotasFiscais
+    methods: [GET]
+
+logistica.entrada_materiais.notas_fiscais.materiais.historico.get:
+    path: /logistica/entrada-materiais/notas-fiscais/materiais/historico
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\HistoricoController::getMateriais
+    methods: [GET]
+
+logistica.entrada_materiais.notas_fiscais.materiais.lotes_duplicados.get:
+    path: /logistica/entrada-materiais/notas-fiscais/materiais/lotes-duplicados
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\LotesDuplicadosController::show
+    methods: [GET]
+
+logistica.entrada_materiais.notas_fiscais.materiais.lotes_duplicados.post_put:
+    path: /logistica/entrada-materiais/notas-fiscais/materiais/lotes-duplicados
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\LotesDuplicadosController::store
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.notas_fiscais.materiais.get:
+    path: /logistica/entrada-materiais/notas-fiscais/materiais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\MateriaisController::getMateriais
+    methods: [GET]
+
+logistica.entrada_materiais.notas_fiscais.materiais.post_put:
+    path: /logistica/entrada-materiais/notas-fiscais/materiais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\MateriaisController::postMateriais
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.notas_fiscais.get:
+    path: /logistica/entrada-materiais/notas-fiscais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\NotasFiscaisController::getNotasFiscais
+    methods: [GET]
+
+logistica.entrada_materiais.notas_fiscais.post_put:
+    path: /logistica/entrada-materiais/notas-fiscais
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\NotasFiscaisController::postNotasFiscais
+    methods: [POST, PUT]
+
+logistica.entrada_materiais.notas_fiscais.relatorio.get:
+    path: /logistica/entrada-materiais/notas-fiscais/relatorio
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\NotasFiscais\RelatoriosController::getNotasFiscais
+    methods: [GET]
+
+logistica.entrada_materiais.status.get:
+    path: /logistica/entrada-materiais/status
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\StatusController::getStatus
+    methods: [GET]
+
+logistica.entrada_materiais.status.post_put:
+    path: /logistica/entrada-materiais/status
+    controller: App\Controller\MTCorp\Logistica\EntradaMateriais\StatusController::postStatus
+    methods: [POST, PUT]
+
+logistica.filiais.index:
+    path: /logistica/filiais
+    controller: App\Controller\MTCorp\Logistica\Filiais\FiliaisController::index
+    methods: [GET]
+
+logistica.filiais.uuid.show:
+    path: /logistica/filiais/{uuid}
+    controller: App\Controller\MTCorp\Logistica\Filiais\FiliaisController::show
+    methods: [GET]
+    requirements:
+        uuid: '[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}'
+
+logistica.filiais.store:
+    path: /logistica/filiais
+    controller: App\Controller\MTCorp\Logistica\Filiais\FiliaisController::store
+    methods: [POST]
+
+logistica.filiais.update:
+    path: /logistica/filiais/{ID}
+    controller: App\Controller\MTCorp\Logistica\Filiais\FiliaisController::update
+    methods: [PUT]
+
+logistica.entrega.formacao_carga.pedido.materiais.get:
+    path: /logistica/entrega/formacao-carga/pedido/{pedido}/materiais
+    controller: App\Controller\MTCorp\Logistica\FormacaoCarga\MateriaisController::getMateriais
+    methods: [GET]
+
+logistica.entrega.formacao_carga.pedidos.get:
+    path: /logistica/entrega/formacao-carga/pedidos
+    controller: App\Controller\MTCorp\Logistica\FormacaoCarga\PedidosController::getPedidos
+    methods: [GET]
+
+logistica.entrega.formacao_carga.romaneio.pedidos.post:
+    path: /logistica/entrega/formacao-carga/romaneio/pedidos
+    controller: App\Controller\MTCorp\Logistica\FormacaoCarga\PedidosController::postPedidos
+    methods: [POST]
+
+logistica.entrega.formacao_carga.pedidos.relatorio.get:
+    path: /logistica/entrega/formacao-carga/pedidos/relatorio
+    controller: App\Controller\MTCorp\Logistica\FormacaoCarga\RelatoriosController::pedidos
+    methods: [GET]
+
+logistica.entrega.formacao_carga.romaneio.post:
+    path: /logistica/entrega/formacao-carga/romaneio
+    controller: App\Controller\MTCorp\Logistica\FormacaoCarga\RomaneiosController::postRomaneio
+    methods: [POST]
+
+logistica.entrega.formacao_carga.romaneios.get:
+    path: /logistica/entrega/formacao-carga/romaneios
+    controller: App\Controller\MTCorp\Logistica\FormacaoCarga\RomaneiosController::getRomaneios
+    methods: [GET]
+
+logistica.integracoes.fusion.desvios.post:
+    path: /logistica/integracoes/fusion/desvios
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\DesviosController::store
+    methods: [POST]
+
+logistica.integracoes.fusion.eventos.get:
+    path: /logistica/integracoes/fusion/eventos
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\EventosController::getEventos
+    methods: [GET]
+
+logistica.integracoes.fusion.wdsl.funcoes.get:
+    path: /logistica/integracoes/fusion/wdsl/funcoes
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\FusionController::getFunctionsWsdl
+    methods: [GET]
+
+logistica.integracoes.fusion.motoristas.get:
+    path: /logistica/integracoes/fusion/motoristas
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\MotoristaController::sendMotoristas
+    methods: [GET]
+
+logistica.integracoes.fusion.pedidos.post:
+    path: /logistica/integracoes/fusion/pedidos
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\PedidosController::postPedidos
+    methods: [POST]
+
+logistica.integracoes.fusion.pedidos.get:
+    path: /logistica/integracoes/fusion/pedidos
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\PedidosController::getPedidos
+    methods: [GET]
+
+logistica.integracoes.fusion.romaneios.post:
+    path: /logistica/integracoes/fusion/romaneios
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\RomaneiosController::romaneiosFusion
+    methods: [POST]
+
+logistica.integracoes.fusion.romaneios.put:
+    path: /logistica/integracoes/fusion/romaneios
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\RomaneiosController::putRomaneio
+    methods: [PUT]
+
+logistica.integracoes.fusion.veiculos.post:
+    path: /logistica/integracoes/fusion/veiculos
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\VeiculosController::sendVeiculos
+    methods: [POST]
+
+logistica.integracoes.fusion.sincroniza_veiculos.post:
+    path: /logistica/integracoes/fusion/sincroniza-veiculos
+    controller: App\Controller\MTCorp\Logistica\Integracoes\Fusion\VeiculosController::sincronizaVeiculosComAFusion
+    methods: [POST]
+
+logistica.motorista.post:
+    path: /logistica/motorista
+    controller: App\Controller\MTCorp\Logistica\Motoristas\MotoristaController::postMotorista
+    methods: [POST]
+
+logistica.motoristas.get:
+    path: /logistica/motoristas
+    controller: App\Controller\MTCorp\Logistica\Motoristas\MotoristaController::getMotoristas
+    methods: [GET]
+
+logistica.tipo_motorista.post:
+    path: /logistica/tipo-motorista
+    controller: App\Controller\MTCorp\Logistica\Motoristas\MotoristaTipoController::postTipoMotorista
+    methods: [POST]
+
+logistica.tipo_motorista.get:
+    path: /logistica/tipo-motorista
+    controller: App\Controller\MTCorp\Logistica\Motoristas\MotoristaTipoController::getTipoMotoristas
+    methods: [GET]
+
+logistica.painel_romaneios.ctes.get:
+    path: /logistica/painel-romaneios/ctes
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\CtesController::getCtes
+    methods: [GET]
+
+logistica.painel_romaneios.entregas.get:
+    path: /logistica/painel-romaneios/entregas
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\EntregasController::getEntregas
+    methods: [GET]
+
+logistica.painel_romaneios.romaneios.pedidos.materiais.get:
+    path: /logistica/painel-romaneios/romaneios/pedidos/materiais
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\MateriaisController::getMateriais
+    methods: [GET]
+
+logistica.painel_romaneios.romaneios.pedidos.get:
+    path: /logistica/painel-romaneios/romaneios/pedidos
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\PedidosController::getPedidos
+    methods: [GET]
+
+logistica.painel_romaneios.relatorios.get:
+    path: /logistica/painel-romaneios/relatorios
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\RelatoriosController::getMateriais
+    methods: [GET]
+
+logistica.painel_romaneios.romaneios.get:
+    path: /logistica/painel-romaneios/romaneios
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\RomaneiosController::getRomaneios
+    methods: [GET]
+
+logistica.painel_romaneios.finaliza_romaneio.post:
+    path: /logistica/painel-romaneios/finaliza-romaneio
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\RomaneiosController::finalizaRomaneio
+    methods: [POST]
+
+logistica.painel_romaneios.romaneio.faturamento.post:
+    path: /logistica/painel-romaneios/romaneio/faturamento
+    controller: App\Controller\MTCorp\Logistica\PainelRomaneios\RomaneiosController::enviarParaFaturamento
+    methods: [POST]
+
+logistica.pedidos.desmembramento.store:
+    path: /logistica/pedidos/desmembramento
+    controller: App\Controller\MTCorp\Logistica\Pedidos\DesmembramentoController::store
+    methods: [POST]
+
+logistica.pedidos.desmembramento.update:
+    path: /logistica/pedidos/desmembramento
+    controller: App\Controller\MTCorp\Logistica\Pedidos\DesmembramentoController::update
+    methods: [PUT]
+
+logistica.pedidos.produtos.index:
+    path: /logistica/pedidos/produtos
+    controller: App\Controller\MTCorp\Logistica\Pedidos\ProdutosController::index
+    methods: [GET]
+
+logistica.pedidos.tipo-operacao.index:
+    path: /logistica/pedidos/tipo-operacao
+    controller: App\Controller\MTCorp\Logistica\Pedidos\TipoOperacaoController::index
+    methods: [GET]
+
+logistica.prazos-entrega.index:
+    path: /logistica/prazos-entrega
+    controller: App\Controller\MTCorp\Logistica\PrazosEntrega\PrazosEntregaController::index
+    methods: [GET]
+
+logistica.prazos-entrega_uuid.show:
+    path: /logistica/prazos-entrega/{uuid}
+    controller: App\Controller\MTCorp\Logistica\PrazosEntrega\PrazosEntregaController::show
+    methods: [GET]
+    requirements:
+        uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+
+logistica.prazos-entrega.store:
+    path: /logistica/prazos-entrega
+    controller: App\Controller\MTCorp\Logistica\PrazosEntrega\PrazosEntregaController::store
+    methods: [POST]
+
+logistica.prazos-entrega.update:
+    path: /logistica/prazos-entrega
+    controller: App\Controller\MTCorp\Logistica\PrazosEntrega\PrazosEntregaController::update
+    methods: [PUT]
+
+logistica.regioes-entrega.index:
+    path: /logistica/regioes-entrega
+    controller: App\Controller\MTCorp\Logistica\RegioesEntrega\RegioesEntregaController::index
+    methods: [GET]
+
+logistica.regioes-entrega_uuid.show:
+    path: /logistica/regioes-entrega/{uuid}
+    controller: App\Controller\MTCorp\Logistica\RegioesEntrega\RegioesEntregaController::show
+    methods: [GET]
+    requirements:
+        uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+
+logistica.regioes-entrega.store:
+    path: /logistica/regioes-entrega
+    controller: App\Controller\MTCorp\Logistica\RegioesEntrega\RegioesEntregaController::store
+    methods: [POST]
+
+logistica.regioes-entrega.update:
+    path: /logistica/regioes-entrega
+    controller: App\Controller\MTCorp\Logistica\RegioesEntrega\RegioesEntregaController::update
+    methods: [PUT]
+
+logistica.restricoes-transporte.materiais.index:
+    path: /logistica/restricoes-transporte/materiais
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\MateriaisController::index
+    methods: [GET]
+
+logistica.restricoes-transporte.materiais_uuid.show:
+    path: /logistica/restricoes-transporte/materiais/{uuid}
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\MateriaisController::show
+    methods: [GET]
+    requirements:
+        uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+
+logistica.restricoes-transporte.materiais.store:
+    path: /logistica/restricoes-transporte/materiais
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\MateriaisController::store
+    methods: [POST]
+
+logistica.restricoes-transporte.materiais.update:
+    path: /logistica/restricoes-transporte/materiais
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\MateriaisController::update
+    methods: [PUT]
+
+logistica.restricoes-transporte.index:
+    path: /logistica/restricoes-transporte
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\RestricoesTransporteController::index
+    methods: [GET]
+
+logistica.restricoes-transporte_uuid.show:
+    path: /logistica/restricoes-transporte/{uuid}
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\RestricoesTransporteController::show
+    methods: [GET]
+    requirements:
+        uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+
+logistica.restricoes-transporte.store:
+    path: /logistica/restricoes-transporte
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\RestricoesTransporteController::store
+    methods: [POST]
+
+logistica.restricoes-transporte.update:
+    path: /logistica/restricoes-transporte
+    controller: App\Controller\MTCorp\Logistica\RestricoesTransporte\RestricoesTransporteController::update
+    methods: [PUT]
+
+logistica.transportadoras.index:
+    path: /logistica/transportadoras
+    controller: App\Controller\MTCorp\Logistica\Transportadoras\TransportadorasController::index
+    methods: [GET]
+
+logistica.transportadoras.id.show:
+    path: /logistica/transportadoras/{id}
+    controller: App\Controller\MTCorp\Logistica\Transportadoras\TransportadorasController::show
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+logistica.transportadoras.store:
+    path: /logistica/transportadoras
+    controller: App\Controller\MTCorp\Logistica\Transportadoras\TransportadorasController::store
+    methods: [POST]
+
+logistica.transportadoras.update:
+    path: /logistica/transportadoras
+    controller: App\Controller\MTCorp\Logistica\Transportadoras\TransportadorasController::update
+    methods: [PUT]
+
+logistica.veiculo.post:
+    path: /logistica/veiculo
+    controller: App\Controller\MTCorp\Logistica\Veiculos\VeiculoController::postVeiculo
+    methods: [POST]
+
+logistica.veiculos.get:
+    path: /logistica/veiculos
+    controller: App\Controller\MTCorp\Logistica\Veiculos\VeiculoController::getVeiculos
+    methods: [GET]
+
+logistica.tipo_veiculo.post:
+    path: /logistica/tipo-veiculo
+    controller: App\Controller\MTCorp\Logistica\Veiculos\VeiculoTipoController::postTipoVeiculo
+    methods: [POST]
+
+logistica.tipo_veiculo.get:
+    path: /logistica/tipo-veiculo
+    controller: App\Controller\MTCorp\Logistica\Veiculos\VeiculoTipoController::getTipoVeiculos
+    methods: [GET]
+

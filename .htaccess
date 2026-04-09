@@ -1,0 +1,43 @@
+# CRM360 Monterrey - Apache Rewrite Rules
+# Redirige todas las requests a index.php (front controller de Symfony)
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Pasar header Authorization a PHP (necesario para JWT)
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Permitir archivos y directorios que existen fisicamente
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redirigir todo a index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Seguridad: bloquear acceso a archivos sensibles
+# (excluir swagger/ que necesita servir .yaml)
+<FilesMatch "\.(env|lock|gitignore|dockerignore)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+# Bloquear yaml/yml EXCEPTO en swagger/
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} !^/swagger/
+    RewriteRule \.(yaml|yml|md)$ - [F,L]
+</IfModule>
+
+# Bloquear acceso a directorios sensibles
+<IfModule mod_rewrite.c>
+    RewriteRule ^(config|config_bkp|docker|docs|bin|var|vendor|\.git|\.idea|\.vs|\.vscode)/ - [F,L]
+</IfModule>
+
+# Headers de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
