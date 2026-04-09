@@ -145,6 +145,6 @@ Cuando se modifica funcionalidad existente:
 | 1    | ApiResponse + Exception Handler    | Completada  |
 | 2    | Modulo piloto (Agenda)             | Completada  |
 | 3    | Descomponer Helper.php             | Completada  |
-| 4    | Migrar controllers grandes         | Pendiente   |
-| 5    | Input validation con DTOs          | Pendiente   |
-| 6    | Role-based access control          | Pendiente   |
+| 4    | Migrar controllers grandes         | Completada  |
+| 5    | Input validation con DTOs          | Completada  |
+| 6    | Role-based access control          | Completada  |

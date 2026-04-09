@@ -87,6 +87,20 @@ services:
             $connection: '@doctrine.dbal.MONTERREY_connection'
             $storedProcedureService: '@App\Services\StoredProcedureService'
 
+    # Shared — RBAC (Phase 6)
+    App\Module\Shared\Security\RoleRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Module\Shared\Security\AuthorizationService:
+        arguments:
+            $roleRepository: '@App\Module\Shared\Security\RoleRepository'
+
+    App\Module\Shared\Security\RoleCheckerSubscriber:
+        arguments:
+            $authService: '@App\Module\Shared\Security\AuthorizationService'
+        tags: ['kernel.event_subscriber']
+
     # Shared — Request Validator (Phase 5)
     App\Module\Shared\Validation\RequestValidator:
         arguments:
