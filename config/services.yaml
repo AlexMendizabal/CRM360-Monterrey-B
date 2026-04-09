@@ -104,6 +104,31 @@ services:
             $agendaService: '@App\Module\Comercial\Service\AgendaService'
         tags: ['controller.service_arguments']
 
+    # Infrastructure — SAP Gateway
+    App\Infrastructure\SAP\SapGatewayService:
+        arguments:
+            $httpClient: '@http_client'
+            $logger: '@logger'
+            $sapApiUrl: '%app.sap.api_url%'
+
+    # Shared — Geo lookups
+    App\Module\Shared\Repository\GeoRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    # Shared — Notificaciones
+    App\Module\Shared\Repository\NotificacionRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    # Shared — Email templates
+    App\Module\Shared\Service\EmailTemplateService: ~
+
+    # Comercial — Autorizaciones
+    App\Module\Comercial\Repository\AutorizacionRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
     # Core Module
     App\Module\Core\Service\UsuarioService:
         arguments:

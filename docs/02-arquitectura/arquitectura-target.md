@@ -142,9 +142,9 @@ Cuando se modifica funcionalidad existente:
 | Fase | Que                                | Estado      |
 |------|------------------------------------|-------------|
 | 0    | Sacar credenciales hardcodeadas    | Completada  |
-| 1    | ApiResponse + Exception Handler    | En progreso |
-| 2    | Modulo piloto (Agenda)             | Pendiente   |
-| 3    | Descomponer Helper.php             | Pendiente   |
+| 1    | ApiResponse + Exception Handler    | Completada  |
+| 2    | Modulo piloto (Agenda)             | Completada  |
+| 3    | Descomponer Helper.php             | Completada  |
 | 4    | Migrar controllers grandes         | Pendiente   |
 | 5    | Input validation con DTOs          | Pendiente   |
 | 6    | Role-based access control          | Pendiente   |
