@@ -15,11 +15,13 @@ class OfertaService
     private Connection $connection;
 
     private string $url_sap;
+    private bool $sapEnabled;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
         $this->url_sap = $_ENV['SAP_API_URL'] ?? 'http://172.20.20.7:4100/api';
+        $this->sapEnabled = filter_var($_ENV['SAP_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function idOferta()
@@ -695,7 +697,10 @@ class OfertaService
 
     private function insertarServicio($ruta, $data)
     {
-        // TODO: Delegate to Helper::insertarServicio($ruta, $data)
+        if (!$this->sapEnabled) {
+            return ['CodigoRespuesta' => 0, 'Mensaje' => 'SAP no esta habilitado'];
+        }
+
         $client = HttpClient::create();
         $url = $this->url_sap . $ruta;
         $options = [
@@ -711,7 +716,10 @@ class OfertaService
 
     private function conexionSap($ruta, $data)
     {
-        // TODO: Delegate to Helper::conexionSap($ruta, $data)
+        if (!$this->sapEnabled) {
+            return ['CodigoRespuesta' => 0, 'Mensaje' => 'SAP no esta habilitado'];
+        }
+
         $url = $this->url_sap . $ruta;
         $data = json_encode($data);
         $curl = curl_init($url);

@@ -25,8 +25,8 @@ class UsuariosController
             $nome                   = $request->query->get("nome");
             $situacao               = $request->query->get("situacao");
             $matricula              = $request->query->get("matricula");
-            $pagina                 = $request->query->get("pagina");
-            $totalRegistrosPagina   = $request->query->get("totalRegistrosPagina");
+            $pagina                 = $request->query->get("pagina", 1);
+            $registrosPorPagina     = $request->query->get("registrosPorPagina", 10);
             $orderBy                = $request->query->get("orderBy");
             $orderType              = $request->query->get("orderType");
             $inPagina               = $request->query->get("inPagina");
@@ -40,7 +40,7 @@ class UsuariosController
                     ,@IN_STAT               = :situacao
                     ,@NR_MATR               = :matricula
                     ,@PAGI                  = :pagina
-                    ,@TT_REGI_PAGI          = :totalRegistrosPagina
+                    ,@TT_REGI_PAGI          = :registrosPorPagina
                     ,@ORDE_BY               = :orderBy
                     ,@ORDE_TYPE             = :orderType
                     ,@IN_PAGI               = :inPagina
@@ -55,7 +55,7 @@ class UsuariosController
             $stmt->bindValue(":situacao",               $situacao);
             $stmt->bindValue(":matricula",              $matricula);
             $stmt->bindValue(":pagina",                 $pagina);
-            $stmt->bindValue(":totalRegistrosPagina",   $totalRegistrosPagina);
+            $stmt->bindValue(":registrosPorPagina",     $registrosPorPagina);
             $stmt->bindValue(":orderBy",                $orderBy);
             $stmt->bindValue(":orderType",              $orderType);
             $stmt->bindValue(":inPagina",               $inPagina);
@@ -79,11 +79,13 @@ class UsuariosController
                 return new JsonResponse(null, Response::HTTP_NO_CONTENT);
 
             $jr = new JsonResponse([
-                "data"      => $response,
-                "error"     => null,
-                "message"   => null,
-                "success"   => true,
-                "total"     => $total
+                "data"              => $response,
+                "error"             => null,
+                "message"           => null,
+                "success"           => true,
+                "total"             => $total,
+                "pagina"            => (int) $pagina,
+                "registrosPorPagina" => (int) $registrosPorPagina
             ], Response::HTTP_OK);
 
             return $jr->setEncodingOptions(JSON_NUMERIC_CHECK|JSON_UNESCAPED_SLASHES);

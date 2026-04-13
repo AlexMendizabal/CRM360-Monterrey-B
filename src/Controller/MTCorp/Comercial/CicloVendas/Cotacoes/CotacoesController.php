@@ -2451,92 +2451,182 @@ if (!isset($params['codVendedor'])) {
         $data = json_decode($request->getContent(), true);
         $infoUsuario = UsuarioController::infoUsuario($request->headers->get('X-User-Info'));
         $cargo = $infoUsuario->none_cargo;
-        if (!empty($data)) {
-            !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
-            !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
-            !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
-
-            if (!empty($id_oferta) && !empty($codigo_oferta) && !empty($nombre_oferta)) {
-                $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
-                $oferta = json_decode($oferta->getContent(), true);
-
-                    // Obtener todos los materiales de la oferta para comparar
-                    $materials_oferta = $connection->fetchAllAssociative('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id_oferta = ?', [$id_oferta]);
-                    $materials_oferta = array_column($materials_oferta, 'id_material');
-                    // Recorrer los elementos de la oferta y eliminar los que no están en el carrito
-                    foreach ($materials_oferta as $material_oferta) {
-                        $found = false;
-                        foreach ($data['carrinho'] as $carrito) {
-                            if ($carrito['codMaterial'] == $material_oferta) {
-                                $found = true;
-                                break;
-                            }
-                        }
-                        if (!$found) {
-                            // El material de la oferta no está presente en el carrito, eliminarlo
-                            $connection->delete('TB_OFERTA_DETALLE', ['id' => $id_oferta, 'id_material' => $material_oferta]);
-                        }
-                    }
-
-                    $tieneAutorizacion = false;
-                    foreach($data['carrinho'] as $carrito)
-                    {
-                        $codMaterial = $connection->fetchOne('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id_oferta = ? AND id_material = ?', [$id_oferta, $carrito['codMaterial']]);
-                        if(!empty($codMaterial))
-                        {
-                        $data_edit = $this->editDetalleOferta($connection, $carrito, $id_oferta);
-                        $detalleOferta[] = $data_edit;
-                        $data_editResp = json_decode($data_edit->getContent(), true);
-                        if (!empty($data_editResp['autorizacion']) && $data_editResp['autorizacion'] == 1) {
-                            $tieneAutorizacion = true;
-                        }
-                        }
-                        else
-                        {
-                        $data_detalle = $this->insertItemsOferta($connection, $carrito, $id_oferta);
-                        $detalleOferta[] = $data_detalle;
-                        $data_detalleResp = json_decode($data_detalle->getContent(), true);
-                        if (!empty($data_detalleResp['autorizacion']) && $data_detalleResp['autorizacion'] == 1) {
-                            $tieneAutorizacion = true;
-                        }
-                        }
-                    }
-
-                    // Si algún item requiere autorización, actualizar oferta y crear solicitud
-                    if ($tieneAutorizacion) {
-                        // Verificar si ya existe una autorización pendiente para esta oferta
-                        $autorizacionExistente = $connection->fetchOne(
-                            'SELECT id FROM tb_autorizaciones WHERE id_oferta = ? AND estado = 10',
-                            [$id_oferta]
-                        );
-                        $helper = new \App\Services\Helper();
-                        $helper->actualizaOfertaA($connection, $id_oferta);
-                        if (!$autorizacionExistente) {
-                            $autorizacionesController = new \App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController();
-                            $autorizacionesController->post_autorizacion($connection, [
-                                'id_oferta' => $id_oferta,
-                                'fecha_solicitud' => date('Y-m-d H:i:s'),
-                                'descripcion_vend' => $data['observacion'] ?? 'Descuento requiere autorizacion',
-                                'autorizacion' => 1
-                            ]);
-                        }
-                    }
-
-                $message = [
-                    "responseCode" => 200,
-                    "message" => 'Registro Correctamente',
-                    "success" => true,
-                    "data_sap" => $oferta,
-                    "autorizacion" => $tieneAutorizacion ? 1 : 0
-                ];
-            }
+        if (empty($data)) {
+            return new JsonResponse($message);
         }
+
+        !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
+        !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
+        !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
+
+        if (empty($id_oferta) || empty($codigo_oferta) || empty($nombre_oferta)) {
+            return new JsonResponse($message);
+        }
+
+        $connection->beginTransaction();
+
+        try {
+            $oferta = $this->editoferta($connection, $data, $id_oferta, $cargo);
+            $oferta = json_decode($oferta->getContent(), true);
+
+            // Obtener todos los materiales de la oferta para comparar
+            $materials_oferta = $connection->fetchAllAssociative('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id_oferta = ?', [$id_oferta]);
+            $materials_oferta = array_column($materials_oferta, 'id_material');
+            // Recorrer los elementos de la oferta y eliminar los que no están en el carrito
+            foreach ($materials_oferta as $material_oferta) {
+                $found = false;
+                foreach ($data['carrinho'] as $carrito) {
+                    if ($carrito['codMaterial'] == $material_oferta) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    $connection->delete('TB_OFERTA_DETALLE', ['id_oferta' => $id_oferta, 'id_material' => $material_oferta]);
+                }
+            }
+
+            $tieneAutorizacion = false;
+            foreach ($data['carrinho'] as $carrito) {
+                $codMaterial = $connection->fetchOne('SELECT id_material FROM TB_OFERTA_DETALLE WHERE id_oferta = ? AND id_material = ?', [$id_oferta, $carrito['codMaterial']]);
+                if (!empty($codMaterial)) {
+                    $data_edit = $this->editDetalleOferta($connection, $carrito, $id_oferta);
+                    $detalleOferta[] = $data_edit;
+                    $data_editResp = json_decode($data_edit->getContent(), true);
+                    if (!empty($data_editResp['autorizacion']) && $data_editResp['autorizacion'] == 1) {
+                        $tieneAutorizacion = true;
+                    }
+                } else {
+                    $data_detalle = $this->insertItemsOferta($connection, $carrito, $id_oferta);
+                    $detalleOferta[] = $data_detalle;
+                    $data_detalleResp = json_decode($data_detalle->getContent(), true);
+                    if (!empty($data_detalleResp['autorizacion']) && $data_detalleResp['autorizacion'] == 1) {
+                        $tieneAutorizacion = true;
+                    }
+                }
+            }
+
+            // Si algún item requiere autorización, actualizar oferta y crear solicitud
+            if ($tieneAutorizacion) {
+                $autorizacionExistente = $connection->fetchOne(
+                    'SELECT id FROM tb_autorizaciones WHERE id_oferta = ? AND estado = 10',
+                    [$id_oferta]
+                );
+                $helper = new \App\Services\Helper();
+                $helper->actualizaOfertaA($connection, $id_oferta);
+                if (!$autorizacionExistente) {
+                    $autorizacionesController = new \App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController();
+                    $autorizacionesController->post_autorizacion($connection, [
+                        'id_oferta' => $id_oferta,
+                        'fecha_solicitud' => date('Y-m-d H:i:s'),
+                        'descripcion_vend' => $data['observacion'] ?? 'Descuento requiere autorizacion',
+                        'autorizacion' => 1
+                    ]);
+                }
+            }
+
+            $connection->commit();
+
+            $message = [
+                "responseCode" => 200,
+                "message" => 'Registro Correctamente',
+                "success" => true,
+                "data_sap" => $oferta,
+                "autorizacion" => $tieneAutorizacion ? 1 : 0
+            ];
+        } catch (\Throwable $e) {
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
+            }
+            $message = [
+                'responseCode' => 500,
+                'message' => $e->getMessage(),
+                'success' => false
+            ];
+        }
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;
     }
 
-    
+    /**
+     * Verifica si una oferta existe y puede ser editada.
+     */
+    public function estadoOferta($connection, $id_oferta): bool
+    {
+        $estados = $connection->fetchAssociative(
+            'SELECT tipo_estado, estado_oferta FROM TB_OFERTA WHERE id = ?',
+            [$id_oferta]
+        );
+
+        if (empty($estados)) {
+            return false;
+        }
+
+        $tipo   = (int)$estados['tipo_estado'];
+        $estado = (int)$estados['estado_oferta'];
+
+        // Abierto+Pendiente(10), Abierto+Borrador(1), Cerrado+Rechazado(11)
+        return ($tipo === 14 && ($estado === 10 || $estado === 1))
+            || ($tipo === 13 && $estado === 11);
+    }
+
+    /**
+     * Elimina todos los ítems de detalle de una oferta.
+     */
+    public function eliminaItemsOferta($connection, $id_oferta): bool
+    {
+        $eliminados = $connection->delete('TB_OFERTA_DETALLE', ['id_oferta' => (int)$id_oferta]);
+        return $eliminados > 0;
+    }
+
+    /**
+     * Envía la oferta a SAP (creación o edición según envio_sap previo).
+     */
+    public function envioSAp($connection, $id_oferta): JsonResponse
+    {
+        $helper = new \App\Services\Helper();
+        $envio_sap = $connection->fetchOne('SELECT envio_sap FROM TB_OFERTA WHERE id = ?', [$id_oferta]);
+
+        if ($envio_sap == 1) {
+            $repSap = $helper->editar_oferta_sap($connection, $id_oferta);
+            $sapresp = json_decode($repSap->getContent(), true);
+
+            if (isset($sapresp['CodigoRespuesta']) && $sapresp['CodigoRespuesta'] == 200) {
+                $connection->update('TB_OFERTA', [
+                    'codigo_oferta'  => $sapresp['Oferta'],
+                    'nombre_oferta'  => $sapresp['Mensaje'],
+                    'vencimiento'    => $sapresp['Vencimiento'],
+                    'envio_sap_edit' => 1
+                ], ['id' => (int)$id_oferta]);
+            } else {
+                $connection->update('TB_OFERTA', ['envio_sap_edit' => 0], ['id' => (int)$id_oferta]);
+            }
+        } else {
+            $repSap = $helper->autorizacion_estado_sap($connection, $id_oferta);
+            $sapresp = json_decode($repSap->getContent(), true);
+
+            if (isset($sapresp['CodigoRespuesta']) && $sapresp['CodigoRespuesta'] == 200) {
+                $connection->update('TB_OFERTA', [
+                    'codigo_oferta' => $sapresp['Oferta'],
+                    'nombre_oferta' => $sapresp['Mensaje'],
+                    'vencimiento'   => $sapresp['Vencimiento'],
+                    'envio_sap'     => 1
+                ], ['id' => (int)$id_oferta]);
+            } else {
+                $connection->update('TB_OFERTA', ['envio_sap' => 0], ['id' => (int)$id_oferta]);
+            }
+        }
+
+        return new JsonResponse([
+            'responseCode' => 200,
+            'message'      => $envio_sap == 1 ? 'Actualizo Correctamente' : 'Registro Correctamente',
+            'success'      => true,
+            'data_sap'     => $sapresp ?? null
+        ]);
+    }
+
     public function editoferta($connection, $data,  $id_oferta, $cargo)
     {
         $data_oferta = [];
@@ -2608,10 +2698,22 @@ if (!isset($params['codVendedor'])) {
         !empty($data['percuntualDesc']) ? $data_deta_oferta['percuntualDesc'] = $data['percuntualDesc'] : null;
         !empty($data['descuento_permitido']) ? $data_deta_oferta['descuento_permitido'] = $data['descuento_permitido'] : $data_error['descuento_permitido'] = 'es requerido';
 
-        // Detectar si requiere autorización: descuento excede el permitido
+        // Detectar si requiere autorización
         $descuentoSolicitado = (float)($data['percentualDesc'] ?? $data['percuntualDesc'] ?? $data['descuento'] ?? 0);
-        $descuentoPermitido = (float)($data['descuento_permitido_valor'] ?? $data['descuento_permitido'] ?? 0);
+        $descuentoPermitidoRaw = $data['descuento_permitido'] ?? null;
+        $descuentoPermitido = (float)($data['descuento_permitido_valor'] ?? $descuentoPermitidoRaw ?? 0);
+
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
+            $descuentoPermitido = (float)($data['descuento_permitido_valor'] ?? 0);
+        }
+
+        // Caso 1: descuento excede el permitido
         if ($descuentoSolicitado > 0 && $descuentoSolicitado > $descuentoPermitido) {
+            $autorizacion = 1;
+        }
+
+        // Caso 2: material sin regla de descuento válida ("Invalido")
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
             $autorizacion = 1;
         }
 
@@ -2710,12 +2812,8 @@ if (!isset($params['codVendedor'])) {
                 }
             }
 
-            // 4. COMMIT: oferta + todos los items insertados correctamente
-            $connection->commit();
-
-            // 5. Post-commit: autorizacion o SAP
+            // 4. Autorización o SAP (DENTRO de la transacción)
             if ($tieneAutorizacion) {
-                // Descuento excede el permitido: cambiar estado y crear solicitud de autorizacion
                 $helper->actualizaOfertaA($connection, $id_oferta);
                 $autorizacionesController = new \App\Controller\MTCorp\Comercial\CicloVendas\Autorizaciones\AutorizacionesController();
                 $autorizacionesController->post_autorizacion($connection, [
@@ -2760,6 +2858,9 @@ if (!isset($params['codVendedor'])) {
                     'data_sap' => $sapresp ?? null
                 ];
             }
+
+            // 5. COMMIT: oferta + items + auth/SAP son atómicos
+            $connection->commit();
         } catch (\Throwable $e) {
             // Rollback si la transaccion sigue activa
             if ($connection->isTransactionActive()) {
@@ -2931,19 +3032,26 @@ if (!isset($params['codVendedor'])) {
         if ($data_items['cantidad'] === null) $data_error['qtdeItem'] = 'es necesario';
 
         $descuentoSolicitado = round((float)($data['percentualDesc'] ?? $data['descuento'] ?? 0), 4);
-        $descuentoPermitido = round((float)($data['descuento_permitido_valor'] ?? $data['descuento_permitido'] ?? 0), 4);
+        $descuentoPermitidoRaw = $data['descuento_permitido'] ?? null;
+        $descuentoPermitido = round((float)($data['descuento_permitido_valor'] ?? $descuentoPermitidoRaw ?? 0), 4);
 
-        // Si descuento_permitido es string no numerico ("Invalido", "Valido"), extraer el valor numerico
-        if (isset($data['descuento_permitido']) && !is_numeric($data['descuento_permitido'])) {
+        // Si descuento_permitido es string no numerico ("Invalido"), extraer el valor numerico
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
             $descuentoPermitido = round((float)($data['descuento_permitido_valor'] ?? 0), 4);
         }
 
         $data_items['percentualDesc'] = $descuentoSolicitado;
         $data_items['descuento_permitido'] = $descuentoPermitido;
 
-        // Detectar si requiere autorizacion: descuento excede el permitido
+        // Detectar si requiere autorizacion
+        // Caso 1: descuento excede el permitido
         if ($descuentoSolicitado > 0 && $descuentoSolicitado > $descuentoPermitido) {
-            $autorizacion = 1; // Requiere autorizacion
+            $autorizacion = 1;
+        }
+
+        // Caso 2: material sin regla de descuento válida ("Invalido")
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
+            $autorizacion = 1;
         }
 
         // Redondeo de montos a 4 decimales

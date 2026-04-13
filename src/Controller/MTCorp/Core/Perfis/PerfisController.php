@@ -27,8 +27,8 @@ class PerfisController
             $sigla                  = $request->query->get("sigla");
             $situacao               = $request->query->get("situacao");
             $matricula              = $request->query->get("matricula");
-            $pagina                 = $request->query->get("pagina");
-            $registrosPorPagina   = $request->query->get("registrosPorPagina");
+            $pagina                 = $request->query->get("pagina", 1);
+            $registrosPorPagina   = $request->query->get("registrosPorPagina", 10);
             $orderBy                = $request->query->get("orderBy");
             $orderType              = $request->query->get("orderType");
             $inPagina               = $request->query->get("inPagina");
@@ -83,11 +83,13 @@ class PerfisController
                 return new JsonResponse(null, Response::HTTP_NO_CONTENT);
 
             $jr = new JsonResponse([
-                "data"      => $response,
-                "error"     => null,
-                "message"   => null,
-                "success"   => true,
-                "total"     => $total
+                "data"              => $response,
+                "error"             => null,
+                "message"           => null,
+                "success"           => true,
+                "total"             => $total,
+                "pagina"            => (int) $pagina,
+                "registrosPorPagina" => (int) $registrosPorPagina
             ], Response::HTTP_OK);
 
             return $jr->setEncodingOptions(JSON_NUMERIC_CHECK|JSON_UNESCAPED_SLASHES);

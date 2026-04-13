@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 class CotacoesService
 {
     private string $sapUrl;
+    private bool $sapEnabled;
 
     public function __construct(
         private readonly CotacoesRepository $repository,
@@ -31,6 +32,7 @@ class CotacoesService
         private readonly string             $projectDir = ''
     ) {
         $this->sapUrl = $_ENV['SAP_API_URL'] ?? 'http://172.20.20.7:4100/api';
+        $this->sapEnabled = filter_var($_ENV['SAP_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN);
     }
 
     // =========================================================================
@@ -1436,9 +1438,10 @@ class CotacoesService
         }
 
         $descuentoSolicitado = round((float)($item['percentualDesc'] ?? $item['descuento'] ?? 0), 4);
-        $descuentoPermitido  = round((float)($item['descuento_permitido_valor'] ?? $item['descuento_permitido'] ?? 0), 4);
+        $descuentoPermitidoRaw = $item['descuento_permitido'] ?? null;
+        $descuentoPermitido  = round((float)($item['descuento_permitido_valor'] ?? $descuentoPermitidoRaw ?? 0), 4);
 
-        if (isset($item['descuento_permitido']) && !is_numeric($item['descuento_permitido'])) {
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
             $descuentoPermitido = round((float)($item['descuento_permitido_valor'] ?? 0), 4);
         }
 
@@ -1447,7 +1450,13 @@ class CotacoesService
         $d['subtotal_bruto']       = isset($item['valorTotalBruto']) ? round((float)$item['valorTotalBruto'], 4) : null;
         $d['subtotal']             = isset($item['valorTotal'])       ? round((float)$item['valorTotal'], 4)      : null;
 
+        // Caso 1: descuento excede el permitido
         $requiresAuth = $descuentoSolicitado > 0 && $descuentoSolicitado > $descuentoPermitido;
+
+        // Caso 2: material sin regla de descuento válida ("Invalido")
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
+            $requiresAuth = true;
+        }
 
         return [$d, $requiresAuth];
     }
@@ -1551,6 +1560,10 @@ class CotacoesService
      */
     private function sapPost(string $route, array $data): array
     {
+        if (!$this->sapEnabled) {
+            return ['CodigoRespuesta' => 0, 'Mensaje' => 'SAP no esta habilitado'];
+        }
+
         $url     = $this->sapUrl . $route;
         $payload = json_encode($data);
 

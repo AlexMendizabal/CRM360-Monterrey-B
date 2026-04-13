@@ -151,17 +151,20 @@ class OfertaController extends AbstractController
      */
     public function postOfertaRegistrar(Connection $connection, Request $request)
     {
-        // Iniciar una transacción para evitar condiciones de carrera
+        $params = json_decode($request->getContent(), true);
+        $helper = new Helper();
+        $autorizacionesController = new AutorizacionesController();
+        $data = $params['params'];
+
+        // Delegación a edición ANTES de iniciar transacción
+        if (!empty($data['codCotacao']) && $data['action'] == 'editar') {
+            return $this->editCotizacion($connection, $request);
+        }
+
+        // Iniciar transacción solo para creación
         $connection->beginTransaction();
-        
+
         try {
-            $params = json_decode($request->getContent(), true); 
-            $helper = new Helper();
-            $autorizacionesController = new AutorizacionesController();
-            $data = $params['params'];
-            if (!empty($data['codCotacao']) && $data['action'] == 'editar') {
-                return $this->editCotizacion($connection, $request);
-            }
             $data_items = [];
             $data_error = [];
             $data_detalle = 0;
@@ -286,6 +289,17 @@ class OfertaController extends AbstractController
                     foreach ($data['carrinho']['materiales'] as $dataItems) {
                         $itemResp = $this->insertarItems($connection, $dataItems, $id_almacen, $id_oferta);
                         $itemData = json_decode($itemResp->getContent(), true);
+
+                        if ($itemData['responseCode'] != 200) {
+                            $connection->rollBack();
+                            return new JsonResponse([
+                                'responseCode' => 500,
+                                'message' => 'Error al registrar item: ' . ($itemData['message'] ?? 'desconocido'),
+                                'success' => false,
+                                'data' => $itemData
+                            ]);
+                        }
+
                         if (!empty($itemData['autorizacion']) && $itemData['autorizacion'] == 1) {
                             $tieneAutorizacion = true;
                         }
@@ -383,13 +397,21 @@ class OfertaController extends AbstractController
         if ($data_items['cantidad'] === null) $data_error['cantidad'] = 'es necesario';
 
         $descuentoSolicitado = isset($data['descuento']) ? round((float)$data['descuento'], 4) : round(0, 4);
+        $descuentoPermitidoRaw = $data['descuento_permitido'] ?? null;
         $descuentoPermitido = isset($data['descuento_permitido_valor']) ? round((float)$data['descuento_permitido_valor'], 4) : round(0, 4);
         $data_items['percentualDesc'] = $descuentoSolicitado;
         $data_items['descuento_permitido'] = $descuentoPermitido;
 
         // Detectar si requiere autorización
         $autorizacion = 0;
+
+        // Caso 1: descuento solicitado excede el permitido
         if ($descuentoSolicitado > 0 && $descuentoSolicitado > $descuentoPermitido) {
+            $autorizacion = 1;
+        }
+
+        // Caso 2: material sin regla de descuento válida ("Invalido")
+        if (is_string($descuentoPermitidoRaw) && !is_numeric($descuentoPermitidoRaw)) {
             $autorizacion = 1;
         }
 
@@ -712,6 +734,10 @@ class OfertaController extends AbstractController
         try {
             $helper = new Helper();
             $helperSap = new HelperSap();
+
+            if (!$helper->isSapEnabled()) {
+                throw new \RuntimeException('SAP no esta habilitado');
+            }
 
             $client = \Symfony\Component\HttpClient\HttpClient::create(['timeout' => 3]);
             $sapUrl = $_ENV['SAP_API_URL'] ?? 'http://172.20.20.7:4100/api';
@@ -1140,72 +1166,95 @@ class OfertaController extends AbstractController
             'message' => 'Datos insuficientes para editar',
             'success' => false
         ];
-        if (!empty($data)) {
-            !empty($data['codigo_oferta']) ? $codigo_oferta = $data['codigo_oferta'] : null;
-            !empty($data['nombre_oferta']) ? $nombre_oferta = $data['nombre_oferta'] : null;
-            !empty($data['id_oferta']) ? $id_oferta = $data['id_oferta'] : null;
-            !empty($data['codCotacao']) ? $id_oferta = $data['codCotacao'] : null;
-            // abierto y pendiente editar
-            // abierto y borrador editar
-            // cerrado y rechazado editar
-            //  tipo_estado = situacion
-            //  estado_oferta = estado
-            $situacion = $CotacoesController->estadoOferta($connection, $id_oferta);
-            $carrito = $data['carrinho']['materiales'] ?? $data['carrinho'] ?? null;
-            if (!empty($id_oferta) && $situacion == true) {
-                $oferta = $CotacoesController->editoferta($connection, $data, $id_oferta, $cargo);
-                $oferta_realizada = json_decode($oferta->getContent(), true);
 
-                if ($oferta_realizada['responseCode'] == 200 && $carrito != null) {
-                    $detaEliminado = $CotacoesController->eliminaItemsOferta($connection, $id_oferta);
-                    //$detaEliminado = true;
-                    if ($detaEliminado == true) {
-                        foreach ($carrito as $items) {
-                            $id_almacen = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO Where CODIGO_ALMACEN = ?', [$items['almacen']]);
-                            $data_detalle = $this->insertarItems($connection, $items, $id_almacen, $id_oferta);
-                            $data_detalleoferta[] = json_decode($data_detalle->getContent(), true);
-                        }
+        if (empty($data)) {
+            return new JsonResponse($message);
+        }
 
-                        $resp = false;
-                        if ($data['autorizacion'] == 1) {
-                            if ($resp = $helper->actualizaOfertaA($connection, $id_oferta)) {
-                                $datos  = [
-                                    "id_oferta" => $id_oferta,
-                                    "fecha_solicitud" => $data['fecha_inicial'],
-                                    "descripcion_vend" => $data['observacion'],
-                                    "autorizacion" => $data['autorizacion']
-                                ];
-                                $autorizacionesController->post_autorizacion($connection, $datos);
-                                $message = [
-                                    "responseCode" => 200,
-                                    "message" => 'Registro Correctamente',
-                                    "success" => true,
-                                    "data" => $id_oferta
-                                ];
-                            }
-                        }
+        $id_oferta = $data['id_oferta'] ?? $data['codCotacao'] ?? null;
+        $carrito = $data['carrinho']['materiales'] ?? $data['carrinho'] ?? null;
 
-                        if ($resp) {
-                            $message = [
-                                "responseCode" => 200,
-                                "message" => 'Actualizo Correctamente',
-                                "success" => true,
-                                "data" => $id_oferta
-                            ];
-                        } else {
-                            $sapmsj = $CotacoesController->envioSAp($connection, $id_oferta);
-                            $message = json_decode($sapmsj->getContent(), true);
-                        }
-                    }
-                } else {
-                    $message = [
-                        "responseCode" => 204,
-                        "message" => 'No esta bien los datos!!!',
-                        "success" => false,
-                    ];
+        if (empty($id_oferta)) {
+            return new JsonResponse($message);
+        }
+
+        $situacion = $CotacoesController->estadoOferta($connection, $id_oferta);
+        if (!$situacion) {
+            return new JsonResponse([
+                'responseCode' => 400,
+                'message' => 'La oferta no se encuentra en un estado editable',
+                'success' => false
+            ]);
+        }
+
+        $connection->beginTransaction();
+
+        try {
+            $oferta = $CotacoesController->editoferta($connection, $data, $id_oferta, $cargo);
+            $oferta_realizada = json_decode($oferta->getContent(), true);
+
+            if ($oferta_realizada['responseCode'] != 200 || $carrito === null) {
+                $connection->rollBack();
+                return new JsonResponse([
+                    'responseCode' => 204,
+                    'message' => 'Error al editar oferta',
+                    'success' => false,
+                ]);
+            }
+
+            $CotacoesController->eliminaItemsOferta($connection, $id_oferta);
+
+            $tieneAutorizacion = false;
+            foreach ($carrito as $items) {
+                $id_almacen = $connection->fetchOne('SELECT id FROM TB_DEPO_FISI_ESTO Where CODIGO_ALMACEN = ?', [$items['almacen']]);
+                $itemResp = $this->insertarItems($connection, $items, $id_almacen, $id_oferta);
+                $itemData = json_decode($itemResp->getContent(), true);
+
+                if ($itemData['responseCode'] != 200) {
+                    $connection->rollBack();
+                    return new JsonResponse([
+                        'responseCode' => 500,
+                        'message' => 'Error al registrar item: ' . ($itemData['message'] ?? 'desconocido'),
+                        'success' => false,
+                    ]);
+                }
+
+                if (!empty($itemData['autorizacion']) && $itemData['autorizacion'] == 1) {
+                    $tieneAutorizacion = true;
                 }
             }
+
+            if ($tieneAutorizacion || (isset($data['autorizacion']) && $data['autorizacion'] == 1)) {
+                $helper->actualizaOfertaA($connection, $id_oferta);
+                $autorizacionesController->post_autorizacion($connection, [
+                    'id_oferta' => $id_oferta,
+                    'fecha_solicitud' => $data['fecha_inicial'] ?? date('Y-m-d H:i:s'),
+                    'descripcion_vend' => $data['observacion'] ?? 'Descuento requiere autorizacion',
+                    'autorizacion' => 1
+                ]);
+                $message = [
+                    'responseCode' => 200,
+                    'message' => 'Actualizo Correctamente. Requiere autorizacion.',
+                    'success' => true,
+                    'data' => $id_oferta
+                ];
+            } else {
+                $sapmsj = $CotacoesController->envioSAp($connection, $id_oferta);
+                $message = json_decode($sapmsj->getContent(), true);
+            }
+
+            $connection->commit();
+        } catch (\Throwable $e) {
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
+            }
+            $message = [
+                'responseCode' => 500,
+                'message' => $e->getMessage(),
+                'success' => false
+            ];
         }
+
         $response = new JsonResponse($message);
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         return $response;

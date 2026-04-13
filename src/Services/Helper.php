@@ -19,6 +19,7 @@ use DateTime;
 class Helper
 {
     public $url_sap;
+    private bool $sapEnabled;
 
     private string $mailHost;
     private string $mailUsername;
@@ -34,11 +35,17 @@ class Helper
         string $mailEncryption = 'ssl'
     ) {
         $this->url_sap = $_ENV['SAP_API_URL'] ?? '';
+        $this->sapEnabled = filter_var($_ENV['SAP_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $this->mailHost = $mailHost;
         $this->mailUsername = $mailUsername;
         $this->mailPassword = $mailPassword;
         $this->mailPort = $mailPort;
         $this->mailEncryption = $mailEncryption;
+    }
+
+    public function isSapEnabled(): bool
+    {
+        return $this->sapEnabled;
     }
     public function calcularDesc($connection, $id_tipo_cliente, $cantidad, $id_material, $id_departamento)
     {
@@ -2844,6 +2851,10 @@ class Helper
     }
     public function insertarServicio($ruta, $data)
     {
+        if (!$this->sapEnabled) {
+            return ['CodigoRespuesta' => 0, 'Mensaje' => 'SAP no esta habilitado'];
+        }
+
         $client = HttpClient::create();
         // Define la URL de destino
         $url = $this->url_sap . $ruta;
@@ -2864,6 +2875,10 @@ class Helper
     }
     public function conexionSap($ruta, $data)
     {
+    if (!$this->sapEnabled) {
+        return ['CodigoRespuesta' => 0, 'Mensaje' => 'SAP no esta habilitado'];
+    }
+
     $url = $this->url_sap . $ruta;
     $data = json_encode($data);
     $curl = curl_init($url);
