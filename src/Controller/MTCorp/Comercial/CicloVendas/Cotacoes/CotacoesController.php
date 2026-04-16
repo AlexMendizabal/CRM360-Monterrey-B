@@ -108,7 +108,7 @@ class CotacoesController extends AbstractController
             $dataFinal = NULL;
             $codSituacao = 0;
             $nrPedido = NULL;
-            $codEmpresa = NULL;
+            $codEmpresa = 1;
             $codDeposito = NULL;
             $cliente = NULL;
             $codVendedor = NULL;
@@ -1918,8 +1918,8 @@ if (!isset($params['codVendedor'])) {
             $quantidade = $codTipoLancamento != 6 ? (float)($params['quantidade'] ?? 0) : 0;
             $preco = (float)($params['preco'] ?? $params['valorUnitario'] ?? $params['totalbruto'] ?? 0);
             $medida = $codTipoLancamento == 3 ? (float)($params['medida'] ?? 0) : 0;
-            $codEmpresa = (int)($params['codEmpresa'] ?? 0);
-            $codEndereco = (int)($params['codEndereco'] ?? 0);
+            $codEmpresa = (int)($params['codEmpresa'] ?? 1);
+            $codEndereco = (int)($params['codEndereco'] ?? 1);
 
             // Si el material es un código alfanumérico, buscar su ID numérico
             if (!is_numeric($codMaterialParam)) {
